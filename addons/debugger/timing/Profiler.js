@@ -72,7 +72,7 @@ class Profiler {
 
     if (this.config.showLineByLine && this.currentBlock !== null) this.tm.stopTimer(this.currentBlock);
 
-    if (this.config.showRTC) this.totalRTC += this.getRTCofBlockLine(blockId, this.thread.blockContainer._blocks, this.thread.target.variables);
+    if (this.config.showRTC) this.totalRTC += this.getRTCofBlockLine(blockId, this.thread.blockContainer._blocks, this.thread.target);
 
     this.currentBlock = blockId;
   }
@@ -91,7 +91,7 @@ class Profiler {
     return 0;
   }
 
-  getRTCofBlockLine(rootBlockId, blocks, variables) {
+  getRTCofBlockLine(rootBlockId, blocks, target) {
     if (this.rtcCache.has(rootBlockId)) {
       return this.rtcCache.get(rootBlockId);
     }
@@ -100,13 +100,19 @@ class Profiler {
     const inputs = Object.values(block.inputs);
     const fields = Object.values(block.fields);
     const fieldKeys = Object.keys(block.fields);
-    const field =
+    let field =
       fields.length && ["EFFECT", "OPERATOR"].includes(fieldKeys[0]) ? ":" + fields[0].value.toLowerCase() : "";
+
+    if( block.opcode == "pen_stamp"){
+      // if the block is stamp then RTC depends on whether we are stamping bitmap or vector
+      field = target.sprite.costumes[target.currentCostume].dataFormat == "svg" ? ":vector" : ":bitmap";
+    }
     let rtc = this.rtcTable[block.opcode + field];
 
     // If RTC is given by two values in the table then the operation has O(n) time complexity and depends on the string/list length
-    const input_dependent = Array.isArray(rtc)
-    rtc = input_dependent ? rtc[1] + rtc[0] * this.getN(block, variables) : rtc
+    rtc = Array.isArray(rtc) ? rtc[1] + rtc[0] * this.getN(block, target.variables) : rtc;
+
+
     let ownRTC = block?.opcode && rtc && rtc != "N/A" ? rtc : 0;
     const childrenRTC =
       inputs.length !== 0
@@ -116,6 +122,9 @@ class Profiler {
             .reduce((acc, curr) => acc + curr, 0)
         : 0;
     const totalRTC = ownRTC + childrenRTC;
+
+    // If the RTC is independent of the input then it never changes and we can cache it
+    const input_dependent = Array.isArray(rtc) || block.opcode == "pen_stamp";
     if(!input_dependent) this.rtcCache.set(rootBlockId, totalRTC);
 
     return totalRTC;
