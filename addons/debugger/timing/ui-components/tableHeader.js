@@ -5,12 +5,12 @@ export function createTableHeader(config, msg) {
   });
 
   tableHeader.innerHTML = `
-      <span class = 'timing-label'>${msg('timing-label')}</span>
-      <span class = 'timing-total-time'>${msg('timing-total-time')}</span>
-      <span class = 'timing-average-time'>${msg('timing-average-time')}</span>
-      <span class = 'timing-percent-time'>${msg('timing-percent-time')}</span>
-      <span class = 'timing-call-count'>${msg('timing-call-count')}</span>
-      <span class = 'timing-rtc'>${msg('timing-rtc')}</span>
+      <span class = 'timing-label'>${msg("timing-label")}</span>
+      <span class = 'timing-total-time'>${msg("timing-total-time")}</span>
+      <span class = 'timing-average-time'>${msg("timing-average-time")}</span>
+      <span class = 'timing-percent-time'>${msg("timing-percent-time")}</span>
+      <span class = 'timing-call-count'>${msg("timing-call-count")}</span>
+      <span class = 'timing-rtc'>${msg("timing-rtc")}</span>
     `;
 
   const rtcHeader = tableHeader.querySelector(".timing-rtc");
@@ -19,12 +19,12 @@ export function createTableHeader(config, msg) {
 
   // Mapping from table header textContent to timer keys
   const headerClassKeyMapping = {
-    'timing-label': "idx",
+    "timing-label": "idx",
     "timing-total-time": "totalTime",
     "timing-average-time": "avgTime",
     "timing-percent-time": "totalTime",
     "timing-call-count": "callCount",
-    'timing-rtc': "rtc",
+    "timing-rtc": "rtc",
   };
 
   tableHeader.querySelectorAll("span, a").forEach((headerElement) => {
