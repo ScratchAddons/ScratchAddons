@@ -2,7 +2,7 @@
   "name": "Highlight mentions",
   "description": "Highlight when you are mentioned (e.g. @username).",
   "tags": ["community", "profiles", "comments", "forums"],
-  "versionAdded": "1.34.0",
+  "versionAdded": "1.40.0",
   "customCssVariables": [
     {
       "name": "button-text",
