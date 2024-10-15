@@ -65,8 +65,8 @@
       "default": true
     },
     {
-      "name": "Fix Footer",
-      "id": "showFooter",
+      "name": "Search and Explore",
+      "id": "searchExploreScroll",
       "type": "boolean",
       "default": true
     }
@@ -85,28 +85,13 @@
         "projects",
         "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/messages"
+        "https://scratch.mit.edu/messages",
+        "https://scratch.mit.edu/search/*",
+        "https://scratch.mit.edu/explore/*"
       ]
-    },
-    {
-      "url": "moveDonor.js",
-      "matches": ["https://scratch.mit.edu/"],
-      "if": {
-        "settings": {
-          "showFooter": true
-        }
-      },
-      "runAtComplete": false
     }
   ],
   "userstyles": [
-    {
-      "url": "footer.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "if": {
-        "settings": { "showFooter": true }
-      }
-    },
     {
       "url": "discuss.css",
       "matches": ["https://scratch.mit.edu/discuss/*/"],
@@ -116,6 +101,10 @@
     }
   ],
   "tags": ["community", "featured"],
+  "latestUpdate": {
+    "newSettings": ["searchExploreScroll"],
+    "version": "1.36.0"
+  },
   "versionAdded": "1.2.0",
   "enabledByDefault": false
 }

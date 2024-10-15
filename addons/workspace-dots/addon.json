@@ -1,0 +1,35 @@
+{
+  "name": "Customizable code editor grid",
+  "description": "Change the style of the grid pattern in the code editor.",
+  "tags": ["editor", "codeEditor", "theme"],
+  "versionAdded": "1.39.0",
+  "userscripts": [{ "url": "userscript.js", "matches": ["projects"] }],
+  "settings": [
+    {
+      "name": "Grid style",
+      "id": "theme",
+      "type": "select",
+      "default": "dots",
+      "potentialValues": [
+        { "id": "dots", "name": "Default dots" },
+        { "id": "crosshairs", "name": "Crosshairs" },
+        { "id": "lines", "name": "Solid lines" },
+        { "id": "vertical", "name": "Vertical lines" },
+        { "id": "horizontal", "name": "Horizontal lines" },
+        { "id": "none", "name": "None" }
+      ]
+    },
+    {
+      "name": "Grid density",
+      "id": "spacingDivisor",
+      "type": "integer",
+      "default": 1,
+      "min": 1,
+      "max": 5,
+      "if": { "settings": { "theme": ["dots", "crosshairs", "lines", "vertical", "horizontal"] } }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }]
+}

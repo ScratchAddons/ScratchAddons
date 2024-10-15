@@ -18,7 +18,7 @@
       "name": "Border Color",
       "id": "bordercolor",
       "type": "color",
-      "default": "#28A5DA",
+      "default": "#855cd6",
       "allowTransparency": true
     }
   ],

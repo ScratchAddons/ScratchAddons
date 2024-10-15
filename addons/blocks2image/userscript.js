@@ -1,21 +1,26 @@
 export default async function ({ addon, console, msg }) {
+  const Blockly = await addon.tab.traps.getBlockly();
+
   function makeStyle() {
     let style = document.createElement("style");
     style.textContent = `
     .blocklyText {
-        fill: #fff;
+        fill: ${Blockly.Colours.text};
         font-family: "Helvetica Neue", Helvetica, sans-serif;
         font-size: 12pt;
         font-weight: 500;
     }
     .blocklyNonEditableText>text, .blocklyEditableText>text {
-        fill: #575E75;
+        fill: ${Blockly.Colours.textFieldText};
     }
     .blocklyDropdownText {
-        fill: #fff !important;
+        fill: ${Blockly.Colours.text} !important;
     }
     `;
-    for (let userstyle of document.querySelectorAll(".scratch-addons-style[data-addon-id='editor-theme3']")) {
+    for (let userstyle of document.querySelectorAll(`
+      .scratch-addons-style[data-addon-id="editor-theme3"],
+      .sa-custom-block-text-style
+    `)) {
       if (userstyle.disabled) continue;
       style.textContent += userstyle.textContent;
     }
@@ -24,7 +29,7 @@ export default async function ({ addon, console, msg }) {
 
   function setCSSVars(element) {
     for (let property of document.documentElement.style) {
-      if (property.startsWith("--editorTheme3-"))
+      if (property.startsWith("--editorTheme3-") || property.startsWith("--customBlockText-"))
         element.style.setProperty(property, document.documentElement.style.getPropertyValue(property));
     }
   }
@@ -34,28 +39,7 @@ export default async function ({ addon, console, msg }) {
   exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
   exSVG.setAttribute("version", "1.1");
 
-  // blocks-media as base64 for svg inline image
-  let blocksMedia = new Map();
-  blocksMedia.set(
-    "repeat.svg",
-    "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9InJlcGVhdCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDI0IDI0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNCAyNDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiNDRjhCMTc7fQoJLnN0MXtmaWxsOiNGRkZGRkY7fQo8L3N0eWxlPgo8dGl0bGU+cmVwZWF0PC90aXRsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTIzLjMsMTFjLTAuMywwLjYtMC45LDEtMS41LDFoLTEuNmMtMC4xLDEuMy0wLjUsMi41LTEuMSwzLjZjLTAuOSwxLjctMi4zLDMuMi00LjEsNC4xCgljLTEuNywwLjktMy42LDEuMi01LjUsMC45Yy0xLjgtMC4zLTMuNS0xLjEtNC45LTIuM2MtMC43LTAuNy0wLjctMS45LDAtMi42YzAuNi0wLjYsMS42LTAuNywyLjMtMC4ySDdjMC45LDAuNiwxLjksMC45LDIuOSwwLjkKCXMxLjktMC4zLDIuNy0wLjljMS4xLTAuOCwxLjgtMi4xLDEuOC0zLjVoLTEuNWMtMC45LDAtMS43LTAuNy0xLjctMS43YzAtMC40LDAuMi0wLjksMC41LTEuMmw0LjQtNC40YzAuNy0wLjYsMS43LTAuNiwyLjQsMEwyMyw5LjIKCUMyMy41LDkuNywyMy42LDEwLjQsMjMuMywxMXoiLz4KPHBhdGggY2xhc3M9InN0MSIgZD0iTTIxLjgsMTFoLTIuNmMwLDEuNS0wLjMsMi45LTEsNC4yYy0wLjgsMS42LTIuMSwyLjgtMy43LDMuNmMtMS41LDAuOC0zLjMsMS4xLTQuOSwwLjhjLTEuNi0wLjItMy4yLTEtNC40LTIuMQoJYy0wLjQtMC4zLTAuNC0wLjktMC4xLTEuMmMwLjMtMC40LDAuOS0wLjQsMS4yLTAuMWwwLDBjMSwwLjcsMi4yLDEuMSwzLjQsMS4xczIuMy0wLjMsMy4zLTFjMC45LTAuNiwxLjYtMS41LDItMi42CgljMC4zLTAuOSwwLjQtMS44LDAuMi0yLjhoLTIuNGMtMC40LDAtMC43LTAuMy0wLjctMC43YzAtMC4yLDAuMS0wLjMsMC4yLTAuNGw0LjQtNC40YzAuMy0wLjMsMC43LTAuMywwLjksMEwyMiw5LjgKCWMwLjMsMC4zLDAuNCwwLjYsMC4zLDAuOVMyMiwxMSwyMS44LDExeiIvPgo8L3N2Zz4K"
-  );
-  blocksMedia.set(
-    "green-flag.svg",
-    "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9ImdyZWVuZmxhZyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDI0IDI0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNCAyNDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiM0NTk5M0Q7fQoJLnN0MXtmaWxsOiM0Q0JGNTY7fQo8L3N0eWxlPgo8dGl0bGU+Z3JlZW5mbGFnPC90aXRsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTIwLjgsMy43Yy0wLjQtMC4yLTAuOS0wLjEtMS4yLDAuMmMtMiwxLjYtNC44LDEuNi02LjgsMGMtMi4zLTEuOS01LjYtMi4zLTguMy0xVjIuNWMwLTAuNi0wLjUtMS0xLTEKCXMtMSwwLjQtMSwxdjE4LjhjMCwwLjUsMC41LDEsMSwxaDAuMWMwLjUsMCwxLTAuNSwxLTF2LTYuNGMxLTAuNywyLjEtMS4yLDMuNC0xLjNjMS4yLDAsMi40LDAuNCwzLjQsMS4yYzIuOSwyLjMsNywyLjMsOS44LDAKCWMwLjMtMC4yLDAuNC0wLjUsMC40LTAuOVY0LjdDMjEuNiw0LjIsMjEuMywzLjgsMjAuOCwzLjd6IE0yMC41LDEzLjlDMjAuNSwxMy45LDIwLjUsMTMuOSwyMC41LDEzLjlDMTgsMTYsMTQuNCwxNiwxMS45LDE0CgljLTEuMS0wLjktMi41LTEuNC00LTEuNGMtMS4yLDAuMS0yLjMsMC41LTMuNCwxLjFWNEM3LDIuNiwxMCwyLjksMTIuMiw0LjZjMi40LDEuOSw1LjcsMS45LDguMSwwYzAuMSwwLDAuMSwwLDAuMiwwCgljMCwwLDAuMSwwLjEsMC4xLDAuMUwyMC41LDEzLjl6Ii8+CjxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0yMC42LDQuOGwtMC4xLDkuMWMwLDAsMCwwLjEsMCwwLjFjLTIuNSwyLTYuMSwyLTguNiwwYy0xLjEtMC45LTIuNS0xLjQtNC0xLjRjLTEuMiwwLjEtMi4zLDAuNS0zLjQsMS4xVjQKCUM3LDIuNiwxMCwyLjksMTIuMiw0LjZjMi40LDEuOSw1LjcsMS45LDguMSwwYzAuMSwwLDAuMSwwLDAuMiwwQzIwLjUsNC43LDIwLjYsNC43LDIwLjYsNC44eiIvPgo8L3N2Zz4K"
-  );
-  blocksMedia.set(
-    "rotate-left.svg",
-    "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIGlkPSJyb3RhdGUtY2xvY2t3aXNlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHN0eWxlPi5jbHMtMXtmaWxsOiMzZDc5Y2M7fS5jbHMtMntmaWxsOiNmZmY7fTwvc3R5bGU+PHRpdGxlPnJvdGF0ZS1jbG9ja3dpc2U8L3RpdGxlPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTIwLjM0LDE4LjIxYTEwLjI0LDEwLjI0LDAsMCwxLTguMSw0LjIyLDIuMjYsMi4yNiwwLDAsMS0uMTYtNC41MmgwYTUuNTgsNS41OCwwLDAsMCw0LjI1LTIuNTMsNS4wNiw1LjA2LDAsMCwwLC41NC00LjYyQTQuMjUsNC4yNSwwLDAsMCwxNS41NSw5YTQuMzEsNC4zMSwwLDAsMC0yLS44QTQuODIsNC44MiwwLDAsMCwxMC40LDlsMS4xMiwxLjQxQTEuNTksMS41OSwwLDAsMSwxMC4zNiwxM0gyLjY3YTEuNTYsMS41NiwwLDAsMS0xLjI2LS42M0ExLjU0LDEuNTQsMCwwLDEsMS4xMywxMUwyLjg1LDMuNTdBMS41OSwxLjU5LDAsMCwxLDQuMzgsMi40LDEuNTcsMS41NywwLDAsMSw1LjYyLDNMNi43LDQuMzVhMTAuNjYsMTAuNjYsMCwwLDEsNy43Mi0xLjY4QTkuODgsOS44OCwwLDAsMSwxOSw0LjgxLDkuNjEsOS42MSwwLDAsMSwyMS44Myw5LDEwLjA4LDEwLjA4LDAsMCwxLDIwLjM0LDE4LjIxWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTE5LjU2LDE3LjY1YTkuMjksOS4yOSwwLDAsMS03LjM1LDMuODMsMS4zMSwxLjMxLDAsMCwxLS4wOC0yLjYyLDYuNTMsNi41MywwLDAsMCw1LTIuOTIsNi4wNSw2LjA1LDAsMCwwLC42Ny01LjUxLDUuMzIsNS4zMiwwLDAsMC0xLjY0LTIuMTYsNS4yMSw1LjIxLDAsMCwwLTIuNDgtMUE1Ljg2LDUuODYsMCwwLDAsOSw4Ljg0TDEwLjc0LDExYS41OS41OSwwLDAsMS0uNDMsMUgyLjdhLjYuNiwwLDAsMS0uNi0uNzVMMy44MSwzLjgzYS41OS41OSwwLDAsMSwxLS4yMWwxLjY3LDIuMWE5LjcxLDkuNzEsMCwwLDEsNy43NS0yLjA3LDguODQsOC44NCwwLDAsMSw0LjEyLDEuOTIsOC42OCw4LjY4LDAsMCwxLDIuNTQsMy43MkE5LjE0LDkuMTQsMCwwLDEsMTkuNTYsMTcuNjVaIi8+PC9zdmc+"
-  );
-  blocksMedia.set(
-    "rotate-right.svg",
-    "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIGlkPSJyb3RhdGUtY291bnRlci1jbG9ja3dpc2UiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDI0IDI0Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzNkNzljYzt9LmNscy0ye2ZpbGw6I2ZmZjt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPnJvdGF0ZS1jb3VudGVyLWNsb2Nrd2lzZTwvdGl0bGU+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjIuNjgsMTIuMmExLjYsMS42LDAsMCwxLTEuMjcuNjNIMTMuNzJhMS41OSwxLjU5LDAsMCwxLTEuMTYtMi41OGwxLjEyLTEuNDFhNC44Miw0LjgyLDAsMCwwLTMuMTQtLjc3LDQuMzEsNC4zMSwwLDAsMC0yLC44LDQuMjUsNC4yNSwwLDAsMC0xLjM0LDEuNzMsNS4wNiw1LjA2LDAsMCwwLC41NCw0LjYyQTUuNTgsNS41OCwwLDAsMCwxMiwxNy43NGgwYTIuMjYsMi4yNiwwLDAsMS0uMTYsNC41MkExMC4yNSwxMC4yNSwwLDAsMSwzLjc0LDE4LDEwLjE0LDEwLjE0LDAsMCwxLDIuMjUsOC43OCw5LjcsOS43LDAsMCwxLDUuMDgsNC42NCw5LjkyLDkuOTIsMCwwLDEsOS42NiwyLjVhMTAuNjYsMTAuNjYsMCwwLDEsNy43MiwxLjY4bDEuMDgtMS4zNWExLjU3LDEuNTcsMCwwLDEsMS4yNC0uNiwxLjYsMS42LDAsMCwxLDEuNTQsMS4yMWwxLjcsNy4zN0ExLjU3LDEuNTcsMCwwLDEsMjIuNjgsMTIuMloiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0yMS4zOCwxMS44M0gxMy43N2EuNTkuNTksMCwwLDEtLjQzLTFsMS43NS0yLjE5YTUuOSw1LjksMCwwLDAtNC43LTEuNTgsNS4wNyw1LjA3LDAsMCwwLTQuMTEsMy4xN0E2LDYsMCwwLDAsNywxNS43N2E2LjUxLDYuNTEsMCwwLDAsNSwyLjkyLDEuMzEsMS4zMSwwLDAsMS0uMDgsMi42Miw5LjMsOS4zLDAsMCwxLTcuMzUtMy44MkE5LjE2LDkuMTYsMCwwLDEsMy4xNyw5LjEyLDguNTEsOC41MSwwLDAsMSw1LjcxLDUuNCw4Ljc2LDguNzYsMCwwLDEsOS44MiwzLjQ4YTkuNzEsOS43MSwwLDAsMSw3Ljc1LDIuMDdsMS42Ny0yLjFhLjU5LjU5LDAsMCwxLDEsLjIxTDIyLDExLjA4QS41OS41OSwwLDAsMSwyMS4zOCwxMS44M1oiLz48L3N2Zz4="
-  );
-  blocksMedia.set(
-    "dropdown-arrow.svg",
-    "data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4="
-  );
+  const enabledAddons = await addon.self.getEnabledAddons("codeEditor");
 
   addon.tab.createBlockContextMenu(
     (items) => {
@@ -70,26 +54,14 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        {
-          enabled: !!svgchild?.childNodes?.length,
-          text: msg("export_all_to_SVG"),
-          callback: () => {
-            exportBlock(false);
-          },
-          separator: true,
+      items.splice(insertBeforeIndex, 0, {
+        enabled: !!svgchild?.childNodes?.length,
+        text: msg("saveAll"),
+        callback: () => {
+          exportPopup();
         },
-        {
-          enabled: !!svgchild?.childNodes?.length,
-          text: msg("export_all_to_PNG"),
-          callback: () => {
-            exportBlock(true);
-          },
-          separator: false,
-        }
-      );
+        separator: true,
+      });
 
       return items;
     },
@@ -106,33 +78,105 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        {
-          enabled: true,
-          text: msg("export_selected_to_SVG"),
-          callback: () => {
-            exportBlock(false, block);
-          },
-          separator: true,
+      items.splice(insertBeforeIndex, 0, {
+        enabled: true,
+        text: msg("save"),
+        callback: () => {
+          exportPopup(block);
         },
-        {
-          enabled: true,
-          text: msg("export_selected_to_PNG"),
-          callback: () => {
-            exportBlock(true, block);
-          },
-          separator: false,
-        }
-      );
+        separator: true,
+      });
 
       return items;
     },
     { blocks: true }
   );
 
-  function exportBlock(isExportPNG, block) {
+  async function exportPopup(block) {
+    const modal = addon.tab.createModal(msg("modalTitle"), {
+      isOpen: true,
+      useEditorClasses: true,
+    });
+
+    const { backdrop, container, content, closeButton } = modal;
+    let remove = modal.remove;
+    container.classList.add("sa-export-container");
+    content.classList.add("sa-export-content");
+
+    backdrop.addEventListener("click", remove);
+    closeButton.addEventListener("click", remove);
+
+    const imageContainer = document.createElement("div");
+    imageContainer.classList.add("sa-export-image-container");
+    const image = document.createElement("img");
+    image.classList.add("sa-export-image");
+
+    const loadingText = document.createElement("div");
+    loadingText.classList.add("sa-export-loading-text");
+    loadingText.textContent = msg("loading");
+    content.append(loadingText);
+
+    exportBlock(true, false, true, block).then((result) => {
+      image.src = result;
+      content.removeChild(loadingText);
+    });
+
+    image.onload = function () {
+      const aspect = image.width / image.height;
+      if (aspect >= 1) image.classList.add("wide");
+      else image.classList.add("tall");
+    };
+
+    imageContainer.append(image);
+    content.append(imageContainer);
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.className = addon.tab.scratchClass("prompt_button-row", { others: "sa-export-button-container" });
+
+    const copyButton = document.createElement("button");
+    const svgButton = document.createElement("button");
+    const pngButton = document.createElement("button");
+
+    copyButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-copy-button" });
+    copyButton.textContent = msg("clipboard");
+    svgButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-svg-button" });
+    svgButton.textContent = msg("svg");
+    pngButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-png-button" });
+    pngButton.textContent = msg("png");
+
+    buttonContainer.append(copyButton);
+    buttonContainer.append(svgButton);
+    buttonContainer.append(pngButton);
+
+    content.append(buttonContainer);
+
+    function handleCopyClick() {
+      exportBlock(true, true, false, block);
+      remove();
+    }
+    function handleSVGClick() {
+      exportBlock(false, false, false, block);
+      remove();
+    }
+    function handlePNGClick() {
+      exportBlock(true, false, false, block);
+      remove();
+    }
+
+    copyButton.addEventListener("click", handleCopyClick);
+    svgButton.addEventListener("click", handleSVGClick);
+    pngButton.addEventListener("click", handlePNGClick);
+  }
+
+  /**
+   *
+   * @param {boolean} isExportPNG - Export as a PNG file
+   * @param {boolean} copyToClipboard - Copy to clipboard
+   * @param {boolean} returnData - Return the imageURL
+   * @param {block object} block - The block object returned by createBlockContextMenu
+   * @returns {dataURL} - DataURL of the image
+   */
+  async function exportBlock(isExportPNG, copyToClipboard, returnData, block) {
     let svg;
     if (block) {
       svg = selectedBlocks(isExportPNG, block);
@@ -143,29 +187,40 @@ export default async function ({ addon, console, msg }) {
     svg.querySelectorAll("text").forEach((text) => {
       text.innerHTML = text.innerHTML.replace(/&nbsp;/g, " ");
     });
-    // resolve image path
-    let scratchURL = window.location.origin;
 
-    svg.querySelectorAll("image").forEach((item) => {
-      let builtinSvgData = blocksMedia.get(
-        item.getAttribute("xlink:href").substring(item.getAttribute("xlink:href").lastIndexOf("/") + 1)
-      );
-      if (builtinSvgData) {
-        // replace svg file path (official) to inline svg
-        item.setAttribute("xlink:href", builtinSvgData);
-      } else if (item.getAttribute("xlink:href").indexOf("/static/") === 0) {
-        // replace link path for third party website
-        item.setAttribute("xlink:href", scratchURL + item.getAttribute("xlink:href").slice(0));
-      } else if (item.getAttribute("xlink:href").indexOf("./static/") === 0) {
-        item.setAttribute("xlink:href", scratchURL + item.getAttribute("xlink:href").slice(1));
-      } else if (item.getAttribute("xlink:href").indexOf("static/") === 0) {
-        item.setAttribute("xlink:href", scratchURL + "/" + item.getAttribute("xlink:href"));
-      }
+    const groupBy = (arr, callback) => {
+      // This is a rough Object.groupBy polyfill
+      return arr.reduce((acc = {}, ...args) => {
+        const key = callback(...args);
+        acc[key] ??= [];
+        acc[key].push(args[0]);
+        return acc;
+      }, {});
+    };
+
+    const externalImages = /*Object.*/ groupBy(Array.from(svg.querySelectorAll("image")), (item) => {
+      const iconUrl = item.getAttribute("xlink:href");
+      if (iconUrl.startsWith("data:")) return "data:";
+      else return iconUrl;
     });
+    delete externalImages["data:"];
+
+    // replace external images with data URIs
+    await Promise.all(
+      Object.keys(externalImages).map(async (iconUrl) => {
+        const blob = await (await fetch(iconUrl)).blob();
+        const reader = new FileReader();
+        const dataUri = await new Promise((resolve) => {
+          reader.addEventListener("load", () => resolve(reader.result));
+          reader.readAsDataURL(blob);
+        });
+        externalImages[iconUrl].forEach((item) => item.setAttribute("xlink:href", dataUri));
+      })
+    );
     if (!isExportPNG) {
       exportData(new XMLSerializer().serializeToString(svg));
     } else {
-      exportPNG(svg);
+      return exportPNG(svg, copyToClipboard, returnData);
     }
   }
 
@@ -175,10 +230,18 @@ export default async function ({ addon, console, msg }) {
     let svgchild = block.svgGroup_;
     svgchild = svgchild.cloneNode(true);
     let dataShapes = svgchild.getAttribute("data-shapes");
-    svgchild.setAttribute(
-      "transform",
-      `translate(0,${dataShapes === "hat" ? "18" : "0"}) ${isExportPNG ? "scale(2)" : ""}`
-    );
+    let translateY = 0; // blocks no hat
+    const scale = isExportPNG ? 2 : 1;
+    if (dataShapes === "c-block c-1 hat") {
+      translateY = 20; // for My block
+    }
+    if (dataShapes === "hat") {
+      translateY = 16; // for Events
+      if (enabledAddons.includes("cat-blocks")) {
+        translateY += 16; // for cat ears
+      }
+    }
+    svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
@@ -230,41 +293,51 @@ export default async function ({ addon, console, msg }) {
     document.body.removeChild(saveLink);
   }
 
-  function exportPNG(svg) {
-    const serializer = new XMLSerializer();
+  function exportPNG(svg, copy, returnData) {
+    return new Promise((resolve, reject) => {
+      const serializer = new XMLSerializer();
 
-    const iframe = document.createElement("iframe");
-    // iframe.style.display = "none"
-    document.body.append(iframe);
-    iframe.contentDocument.write(serializer.serializeToString(svg));
-    let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-    height = height + 20 * 2; //  hat block height restore
-    svg.setAttribute("width", width + "px");
-    svg.setAttribute("height", height + "px");
+      const iframe = document.createElement("iframe");
+      document.body.append(iframe);
+      iframe.contentDocument.write(serializer.serializeToString(svg));
+      let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
+      svg.setAttribute("width", width + "px");
+      svg.setAttribute("height", height + "px");
 
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext("2d");
+      let canvas = document.createElement("canvas");
+      let ctx = canvas.getContext("2d");
 
-    let img = document.createElement("img");
+      let img = document.createElement("img");
 
-    img.setAttribute(
-      "src",
-      "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(serializer.serializeToString(svg))))
-    );
-    img.onload = function () {
-      canvas.height = img.height;
-      canvas.width = img.width;
-      ctx.drawImage(img, 0, 0, img.width, img.height);
-      // Now is done
-      let dataURL = canvas.toDataURL("image/png");
-      let link = document.createElement("a");
-      const date = new Date();
-      const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
+      img.setAttribute(
+        "src",
+        "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(serializer.serializeToString(svg))))
+      );
+      img.onload = function () {
+        canvas.height = img.height;
+        canvas.width = img.width;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        // Now is done
+        let dataURL = canvas.toDataURL("image/png");
+        let link = document.createElement("a");
+        const date = new Date();
+        const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
 
-      link.download = `block_${timestamp}.png`;
-      link.href = dataURL;
-      link.click();
-      iframe.remove();
-    };
+        if (!returnData) {
+          if (copy) {
+            addon.tab.copyImage(dataURL).catch((e) => console.error(`Image could not be copied: ${e}`));
+          } else {
+            link.download = `block_${timestamp}.png`;
+            link.href = dataURL;
+            link.click();
+          }
+        }
+
+        resolve(dataURL);
+
+        iframe.remove();
+      };
+      img.onerror = reject;
+    });
   }
 }

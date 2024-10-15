@@ -10,7 +10,14 @@
  * @author Tacodiva
  */
 
-import { BlockInputType, BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
+import {
+  BlockInputType,
+  BlockInstance,
+  BlockShape,
+  BlockTypeInfo,
+  BlockInputEnum,
+  BlockInputString,
+} from "./BlockTypeInfo.js";
 
 /**
  *
@@ -43,12 +50,17 @@ class Token {
    * @param {number} end
    * @param {TokenType} type
    * @param {*} value
-   * @param {number} score
    * @param {number} precedence
    * @param {boolean} isTruncated
    * @param {boolean} isLegal
    */
-  constructor(start, end, type, value, score = 100, precedence = -1, isTruncated = false, isLegal = true) {
+  constructor(
+    start,
+    end,
+    type,
+    value,
+    { precedence = -1, isProper = true, isTruncated = false, isLegal = true, isDefiningFeature = false } = {}
+  ) {
     /** @type {number} The index of the first letter of this token in the query */
     this.start = start;
     /** @type {number} The index of the last letter of this token in the query */
@@ -58,15 +70,6 @@ class Token {
     /** @type {*} Additional information about this token, controlled and interpreted by the token type. */
     this.value = value;
     /**
-     * A number which represents how 'good' this interpretation of the query is. This value is used
-     * to order the results once the query is finished from best to worst ('best' being the result we
-     * think is most likely the interpretation the user intended).
-     * The score of a parent block incorporates the scores of its children so results are ordered based
-     * on the score of their root token.
-     * @type {number}
-     */
-    this.score = score;
-    /**
      * The precedence of this token, used to implement order of operations. Tokens with a higher
      * precedence should be evaluated *after* those with a lower precedence. Brackets have a
      * precedence of 0 so they are always evaluated first. A precedence of -1 means that precedence
@@ -74,6 +77,13 @@ class Token {
      * @type {number}
      */
     this.precedence = precedence;
+    /**
+     * True if this token is fully written out. For example, in the query "m v = 10" where "m v"
+     * expands to "my variable", the token "m v" is not proper, as it is not fully written.
+     * Note that unlike trauncation, parent tokens do not inherit this property (so in the above
+     * example, the '=' block token would still be proper).
+     */
+    this.isProper = isProper;
     /**
      * Sometimes, tokens are truncated. Imagine the query 'say Hello for 10 se', here the last
      * token should be 'seconds', but it's truncated. For this token, the isTruncated value is set
@@ -91,6 +101,19 @@ class Token {
      * but it would be marked as illegal.
      */
     this.isLegal = isLegal;
+    /**
+     * If we see this token, should we know what block it's connected to?
+     *
+     * For example, in the query 'say Hi', 'say' is a defining feature because
+     * we can narrow down what block it's from based only the fact that it's present.
+     * 'Hi', however, is not a defining feature as it could be a part of lots of
+     * different blocks.
+     *
+     * This is used to help eliminate some dodgey interpretations of queries, if a block
+     * has no subtokens marked a defining feature it's disguarded.
+     * @type {boolean}
+     */
+    this.isDefiningFeature = isDefiningFeature;
   }
 
   /**
@@ -131,11 +154,13 @@ class TokenProvider {
    * Return the tokens found by this token provider in `query` at character `idx`.
    * @param {QueryInfo} query The query to search
    * @param {number} idx The index to start the search at
+   * @param {number} depth The number of blocks this token is inside of.
+   *  For the query 1 + 1, the `+` block token would have a depth of 0 and the `1` tokens would have a depth of 1.
    * @yields {Token} All the tokens found
    * @abstract
    */
-  *parseTokens(query, idx) {
-    // eslint-disable-line require-yield
+  // eslint-disable-next-line require-yield
+  *parseTokens(query, idx, depth) {
     throw new Error("Sub-class must override abstract method.");
   }
 }
@@ -158,9 +183,9 @@ class TokenProviderOptional extends TokenProvider {
     this.inner = inner;
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     yield TokenTypeBlank.INSTANCE.createToken(idx);
-    yield* this.inner.parseTokens(query, idx);
+    yield* this.inner.parseTokens(query, idx, depth);
   }
 }
 
@@ -184,9 +209,9 @@ class TokenProviderSingleCache extends TokenProvider {
     }
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     if (!this.inner.shouldCache) {
-      yield* this.inner.parseTokens();
+      yield* this.inner.parseTokens(query, idx, depth);
       return;
     }
     if (this.cacheQueryID !== query.id) {
@@ -198,9 +223,9 @@ class TokenProviderSingleCache extends TokenProvider {
       yield* cacheEntry;
       return;
     }
-    this.cacheEntry = [];
-    for (const token of this.inner.parseTokens(query, idx)) {
-      this.cacheEntry.push(token);
+    this.cache[idx] = cacheEntry = [];
+    for (const token of this.inner.parseTokens(query, idx, depth)) {
+      cacheEntry.push(token);
       yield token;
     }
   }
@@ -249,10 +274,10 @@ class TokenProviderGroup extends TokenProvider {
     else this.illegalProviders.push(...providers);
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     // If none of our providers are cacheable, just parse all the tokens again
     if (!this.hasCacheable) {
-      for (const provider of this.providers) yield* provider.parseTokens(query, idx, false);
+      for (const provider of this.providers) yield* provider.parseTokens(query, idx, depth);
       return;
     }
 
@@ -270,7 +295,7 @@ class TokenProviderGroup extends TokenProvider {
         for (let i = 0; i < tokenCaches.length; i++) {
           const tokenCache = tokenCaches[i];
           const providerCache = providerCaches[i];
-          for (const provider of providerCache) yield* provider.parseTokens(query, idx, false);
+          for (const provider of providerCache) yield* provider.parseTokens(query, idx, depth);
           yield* tokenCache;
         }
         return;
@@ -289,7 +314,7 @@ class TokenProviderGroup extends TokenProvider {
 
     for (const provider of this.providers) {
       if (provider.shouldCache) {
-        for (const token of provider.parseTokens(query, idx, false)) {
+        for (const token of provider.parseTokens(query, idx, depth)) {
           tokenCache.push(token);
           yield token;
         }
@@ -301,11 +326,11 @@ class TokenProviderGroup extends TokenProvider {
           providerCaches.push(providerCache);
         }
         providerCache.push(provider);
-        yield* provider.parseTokens(query, idx, false);
+        yield* provider.parseTokens(query, idx, depth);
       }
     }
     for (const provider of this.illegalProviders) {
-      for (let token of provider.parseTokens(query, idx, false)) {
+      for (let token of provider.parseTokens(query, idx, depth)) {
         token = { ...token, isLegal: false };
         tokenCache.push(token);
         yield token;
@@ -328,19 +353,6 @@ class TokenType extends TokenProvider {
 
     if (this.constructor === TokenType) throw new Error("Abstract classes can't be instantiated.");
 
-    /**
-     * If we see this token, should we know what block it's connected to?
-     *
-     * For example, in the query 'say Hi', 'say' is a defining feature because
-     * we can narrow down what block it's from based only the fact that it's present.
-     * 'Hi', however, is not a defining feature as it could be a part of lots of
-     * different blocks.
-     *
-     * This is used to help eliminate some dodgey interpretations of queries, if a block
-     * has no subtokens marked a defining feature it's disguarded.
-     * @type {boolean}
-     */
-    this.isDefiningFeature = false;
     /** @type {boolean} Is this token type always represented by the same string of characters? */
     this.isConstant = false;
   }
@@ -393,7 +405,7 @@ class TokenTypeBlank extends TokenType {
     this.isConstant = true;
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     yield this.createToken(idx);
   }
 
@@ -403,7 +415,7 @@ class TokenTypeBlank extends TokenType {
    * @returns {Token}
    */
   createToken(idx) {
-    return new Token(idx, idx, this, null, -5000);
+    return new Token(idx, idx, this, null);
   }
 
   createText(token, query) {
@@ -433,14 +445,11 @@ class TokenTypeStringEnum extends TokenType {
   constructor(values) {
     super();
     this.isConstant = values.length === 1;
-    this.isDefiningFeature = true;
 
     /** @type {StringEnumValue[]} */
     this.values = [];
     for (const value of values) {
       let lower = value.string.toLowerCase();
-      // Strip emoji
-      lower = lower.replaceAll(/\p{Extended_Pictographic}/gu, "");
       const parts = [];
       {
         let lastPart = 0;
@@ -457,24 +466,27 @@ class TokenTypeStringEnum extends TokenType {
     }
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
       const valueInfo = this.values[valueIdx];
       let yieldedToken = false;
 
       const remainingChar = query.length - idx;
+      const substr = query.lowercase.substring(idx);
+
+      // If all we have is a string which could be a number, it doesn't count as a defining feature.
+      // This is to get rid of "10" constantly suggesting "10 ^ of ()"
+      let isDefiningFeature = !TokenTypeNumberLiteral.isValidNumber(substr);
+
       if (remainingChar < valueInfo.lower.length) {
-        if (valueInfo.lower.startsWith(query.lowercase.substring(idx))) {
+        if (valueInfo.lower.startsWith(substr)) {
           const end = remainingChar < 0 ? 0 : query.length;
-          yield new Token(idx, end, this, valueInfo, 100000, undefined, true);
+          yield new Token(idx, end, this, valueInfo, { isTruncated: true, isDefiningFeature });
           yieldedToken = true;
         }
       } else {
-        if (
-          query.lowercase.startsWith(valueInfo.lower, idx) &&
-          TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1
-        ) {
-          yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo, 100000);
+        if (query.lowercase.startsWith(valueInfo.lower, idx)) {
+          yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo, { isDefiningFeature });
           yieldedToken = true;
         }
       }
@@ -497,6 +509,10 @@ class TokenTypeStringEnum extends TokenType {
 class TokenTypeStringLiteral extends TokenType {
   static TERMINATORS = [undefined, " ", "+", "-", "*", "/", "=", "<", ">", ")"];
 
+  static isTerminator(char) {
+    return this.TERMINATORS.includes(char);
+  }
+
   /**
    * Each time we encounter a 'terminator' we have to return the string we've read so far as a
    * possible interpretation. If we didn't, when looking for a string at index 4 of 'say Hello
@@ -506,34 +522,36 @@ class TokenTypeStringLiteral extends TokenType {
    * Hello World for 10 seconds', but that's just the price we pay for trying to enumerate every
    * interpretation.
    */
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     // First, look for strings in quotes
     let quoteEnd = -1;
-    if (query.str[idx] === '"' || query.str[idx] === '"') {
+    if (query.str[idx] === '"' || query.str[idx] === "'") {
       const quote = query.str[idx];
+      let value = "";
+      let valueStart = idx + 1;
       for (let i = idx + 1; i <= query.length; i++) {
         if (query.str[i] === "\\") {
-          ++i;
+          value += query.str.substring(valueStart, i);
+          valueStart = ++i;
         } else if (query.str[i] === quote) {
-          yield new Token(idx, i + 1, this, query.str.substring(idx + 1, i), 100000);
+          yield new Token(idx, i + 1, this, value + query.str.substring(valueStart, i));
           quoteEnd = i + 1;
           break;
         }
       }
     }
     // Then all the other strings
-    let wasTerminator = false,
-      wasIgnorable = false;
+    let wasTerminator = false;
+    let wasIgnorable = false;
     for (let i = idx; i <= query.length; i++) {
-      const isTerminator = TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1;
-      if (wasTerminator !== isTerminator && !wasIgnorable && i !== idx && i !== quoteEnd) {
+      const isTerminator = TokenTypeStringLiteral.isTerminator(query.str[i]);
+      const isIgnorable = QueryInfo.IGNORABLE_CHARS.includes(query.str[i]);
+      if ((wasTerminator !== isTerminator || i == query.length) && !wasIgnorable && i !== idx && i !== quoteEnd) {
         const value = query.str.substring(idx, i);
-        let score = -10;
-        if (TokenTypeNumberLiteral.isValidNumber(value)) score = 1000;
-        yield new Token(idx, i, this, value, score);
+        yield new Token(idx, i, this, value);
       }
       wasTerminator = isTerminator;
-      wasIgnorable = QueryInfo.IGNORABLE_CHARS.indexOf(query.str[i]) !== -1;
+      wasIgnorable = isIgnorable;
     }
   }
 
@@ -549,15 +567,15 @@ class TokenTypeStringLiteral extends TokenType {
  */
 class TokenTypeNumberLiteral extends TokenType {
   static isValidNumber(str) {
-    return !isNaN(str) && !isNaN(parseFloat(str));
+    return !isNaN(+str) || !isNaN(parseFloat(+str));
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     for (let i = idx; i <= query.length; i++) {
-      if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1 && i !== idx) {
+      if (TokenTypeStringLiteral.isTerminator(query.str[i]) && i !== idx) {
         const value = query.str.substring(idx, i);
         if (TokenTypeNumberLiteral.isValidNumber(value)) {
-          yield new Token(idx, i, this, value, 100000);
+          yield new Token(idx, i, this, value);
           break;
         }
       }
@@ -576,7 +594,7 @@ class TokenTypeColor extends TokenType {
   static INSTANCE = new TokenProviderOptional(new TokenTypeColor());
   static HEX_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     if (!query.str.startsWith("#", idx)) return;
     for (let i = 0; i < 6; i++) {
       if (TokenTypeColor.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1) return;
@@ -602,11 +620,11 @@ class TokenTypeBrackets extends TokenType {
     this.tokenProvider = tokenProvider;
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     const start = idx;
     if (query.str[idx++] !== "(") return;
     idx = query.skipIgnorable(idx);
-    for (const token of this.tokenProvider.parseTokens(query, idx)) {
+    for (const token of this.tokenProvider.parseTokens(query, idx, depth)) {
       if (token.type instanceof TokenTypeBlank) continue; // Do not allow empty brackets like '()'
       var tokenEnd = query.skipIgnorable(token.end);
       let isTruncated = token.isTruncated;
@@ -616,7 +634,11 @@ class TokenTypeBrackets extends TokenType {
         else continue;
       }
       // Note that for bracket tokens, precedence = 0
-      const newToken = new Token(start, tokenEnd, this, token.value, token.score + 100, 0, isTruncated, token.isLegal);
+      const newToken = new Token(start, tokenEnd, this, token.value, {
+        precedence: 0,
+        isTruncated,
+        isLegal: token.isLegal,
+      });
       newToken.innerToken = token;
       yield newToken;
     }
@@ -646,7 +668,7 @@ class TokenTypeBrackets extends TokenType {
 class TokenTypeBlock extends TokenType {
   /**
    * @param {WorkspaceQuerier} querier
-   * @param {BlockInstance} block
+   * @param {BlockTypeInfo} block
    * @private
    */
   constructor(querier, block) {
@@ -699,21 +721,23 @@ class TokenTypeBlock extends TokenType {
     }
 
     /**
-     * @type {{strings: string[], inputs: [], score: number}[]}
+     * @type {{strings: string[], inputs: [], length: number}[]}
      */
     this.stringForms = [];
 
-    const enumerateStringForms = (partIdx = 0, strings = [], inputs = []) => {
+    const enumerateStringForms = (partIdx = 0, strings = [], inputs = [], length = 0) => {
       for (; partIdx < block.parts.length; partIdx++) {
         let blockPart = block.parts[partIdx];
         if (typeof blockPart === "string") {
+          length += blockPart.length;
           strings.push(...blockPart.toLowerCase().split(" "));
         } else if (blockPart.type === BlockInputType.ENUM) {
           for (const enumValue of blockPart.values) {
             enumerateStringForms(
               partIdx + 1,
               [...strings, ...enumValue.string.toLowerCase().split(" ")],
-              [...inputs, enumValue]
+              [...inputs, enumValue],
+              length + enumValue.string.length
             );
           }
           return;
@@ -721,20 +745,21 @@ class TokenTypeBlock extends TokenType {
           inputs.push(null);
         }
       }
-      const score = -10 * strings.flatMap((s) => s.length).reduce((a, b) => a + b + 1);
-      this.stringForms.push({ strings, inputs, score });
+      this.stringForms.push({ strings, inputs, length });
     };
 
     enumerateStringForms();
   }
 
   /**
-   *
    * @param {QueryInfo} query
-   * @param {*} idx
+   * @param {number} idx
+   * @param {number} depth
    * @returns
    */
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
+    if (depth !== 0 && !query.canCreateMoreNestedBlocks()) return;
+
     let yieldedTokens = false;
 
     for (const subtokens of this._parseSubtokens(query, idx, this.fullTokenProviders)) {
@@ -752,13 +777,15 @@ class TokenTypeBlock extends TokenType {
       let i = idx;
       let hasDefiningFeature = false;
 
-      while (i < query.length) {
+      while (true) {
         i = query.skipIgnorable(i);
 
         const wordEnd = query.skipUnignorable(i);
 
         if (wordEnd === i) {
-          yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, stringForm.score, -1, false);
+          if (hasDefiningFeature)
+            yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, { isProper: false });
+          break;
         } else {
           const word = query.lowercase.substring(i, wordEnd);
           let match = -1;
@@ -777,8 +804,10 @@ class TokenTypeBlock extends TokenType {
 
           hasDefiningFeature ||= !TokenTypeNumberLiteral.isValidNumber(word);
 
-          if (hasDefiningFeature)
-            yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, stringForm.score, -1, false);
+          if (query.skipIgnorable(wordEnd) < query.length) {
+            if (hasDefiningFeature)
+              yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, { isProper: false });
+          }
           i = wordEnd;
         }
       }
@@ -795,26 +824,21 @@ class TokenTypeBlock extends TokenType {
    */
   _createToken(query, idx, subtokenProviders, subtokens) {
     subtokens.reverse();
-    let score = 0;
     let isLegal = true;
     let isTruncated = subtokens.length < subtokenProviders.length;
     let hasDefiningFeature = false;
 
-    // Calculate the score of this block, through a lot of arbitrary math that seems to work ok.
-
     for (const subtoken of subtokens) {
       isTruncated |= subtoken.isTruncated; // If any of our kids are truncated, so are we
       isLegal &&= subtoken.isLegal; // If any of our kids are illegal, so are we
-      if (!subtoken.isTruncated) score += subtoken.score;
-      else score += subtoken.score / 100000 - 10; // Big score penalty if truncated
-      if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
+      if (subtoken.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
     }
-    score += Math.floor(1000 * (subtokens.length / subtokenProviders.length));
 
-    /** See {@link TokenType.isDefiningFeature} */
+    /** See {@link Token.isDefiningFeature} */
     if (!hasDefiningFeature) return null;
+
     const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
-    return new Token(idx, end, this, { subtokens }, score, this.block.precedence, isTruncated, isLegal);
+    return new Token(idx, end, this, { subtokens }, { precedence: this.block.precedence, isTruncated, isLegal });
   }
 
   /**
@@ -829,39 +853,51 @@ class TokenTypeBlock extends TokenType {
    * @param {QueryInfo} query
    * @param {number} idx
    * @param {TokenProvider[]} subtokenProviders
+   * @param {number} depth
    * @param {number} tokenProviderIdx
-   * @param {boolean} parseSubSubTokens
+   * @param {boolean} parseNextToken
    * @yields {Token[]}
    */
-  *_parseSubtokens(query, idx, subtokenProviders, tokenProviderIdx = 0, parseSubSubTokens = true) {
+  *_parseSubtokens(query, idx, subtokenProviders, depth, tokenProviderIdx = 0, parseNextToken = true) {
     idx = query.skipIgnorable(idx);
     let tokenProvider = subtokenProviders[tokenProviderIdx];
 
-    for (const token of tokenProvider.parseTokens(query, idx)) {
+    for (const token of tokenProvider.parseTokens(query, idx, depth + 1)) {
       ++query.tokenCount;
+
       if (!query.canCreateMoreTokens()) break;
+      if (depth !== 0 && !query.canCreateMoreNestedBlocks()) break;
 
       if (this.block.precedence !== -1) {
-        // If we care about the precedence of this block
-        // Discard this token if its precedence is higher than ours, meaning it should be calculated
-        //  before us not afterward.
-        if (token.precedence > this.block.precedence) continue;
+        if (
+          // If we care about the precedence of this block
+          // Discard this token if its precedence is higher than ours, meaning it should be calculated
+          //  before us not afterward.
+          token.precedence > this.block.precedence &&
+          // See https://github.com/ScratchAddons/ScratchAddons/issues/5981
+          (tokenProviderIdx === 0 || !(token.type instanceof TokenTypeBlock) || token.type.block.id !== "operator_not")
+        )
+          continue;
         /**
          * This check eliminates thousands of results by making sure blocks with equal precedence
          * can only contain themselves as their own first input. Without this, the query '1 + 2 + 3'
          * would have two interpretations '(1 + 2) + 3' and '1 + (2 + 3)'. This rule makes the second
          * of those invalid because the root '+' block contains itself as its third token.
          */
-        if (token.precedence === this.block.precedence && tokenProviderIdx !== 0) continue;
+        if (token.precedence === this.block.precedence) {
+          const inputIndex = this.block.parts[tokenProviderIdx].inputIdx;
+          if (inputIndex !== 0) continue;
+        }
       }
 
-      if (!parseSubSubTokens || !token.isLegal || tokenProviderIdx === subtokenProviders.length - 1) {
+      if (!parseNextToken || !token.isLegal || tokenProviderIdx === subtokenProviders.length - 1) {
         yield [token];
       } else {
         for (const subTokenArr of this._parseSubtokens(
           query,
           token.end,
           subtokenProviders,
+          depth,
           tokenProviderIdx + 1,
           !token.isTruncated
         )) {
@@ -894,7 +930,7 @@ class TokenTypeBlock extends TokenType {
   createText(token, query, endOnly) {
     if (token.value.stringForm) {
       if (endOnly) {
-        if (token.value.lastPartIdx === -1) {
+        if (token.value.lastPartIdx === -1 || token.end <= query.length) {
           return query.str.substring(token.start, token.end);
         } else {
           return (
@@ -917,6 +953,7 @@ class TokenTypeBlock extends TokenType {
     let i;
     for (i = 0; i < subtokens.length; i++) {
       const subtoken = subtokens[i];
+      if (!token.isLegal && subtoken.start >= query.length) break;
       const subtokenText = subtoken.type.createText(subtoken, query, endOnly) ?? "";
       text += subtokenText;
       if (i !== subtokens.length - 1) {
@@ -933,12 +970,6 @@ class TokenTypeBlock extends TokenType {
             text += " ";
         }
       }
-    }
-    for (; i < this.fullTokenProviders.length; i++) {
-      const provider = this.fullTokenProviders[i];
-      if (!provider.isConstant) break;
-      if (!text.endsWith(" ")) text += " ";
-      text += provider.createText();
     }
     return text;
   }
@@ -982,8 +1013,50 @@ export class QueryResult {
   /**
    * @returns {BlockInstance}
    */
-  createBlock() {
-    return this.token.createBlockValue(this.query);
+  getBlock() {
+    if (!this.block) this.block = this.token.createBlockValue(this.query);
+    return this.block;
+  }
+
+  /**
+   * @returns {{stringLength: number, tokenLength: number}}
+   */
+  getLengths() {
+    if (this.lengths) return this.lengths;
+
+    let stringLength = 0;
+    let tokenLength = 0;
+
+    /** @type {(block: BlockInstance) => void} */
+    const getBlockLengths = (block) => {
+      let inputIdx = 0;
+
+      for (const part of block.typeInfo.parts) {
+        ++tokenLength;
+
+        if (typeof part === "string") {
+          stringLength += part.length;
+        } else {
+          const input = block.inputs[inputIdx++];
+          if (input instanceof BlockInstance) {
+            getBlockLengths(input);
+          } else if (part instanceof BlockInputEnum) {
+            stringLength += input.string.length;
+          } else if (part instanceof BlockInputString && input !== part.defaultValue) {
+            // Make string inputs 100x their real length so they appear at the bottom
+            stringLength += ("" + input).length * 100;
+          } else if (input != null) {
+            stringLength += ("" + input).length;
+          }
+        }
+      }
+
+      // Account for the spaces between inputs
+      stringLength += block.typeInfo.parts.length - 1;
+    };
+
+    getBlockLengths(this.getBlock());
+    return (this.lengths = { stringLength, tokenLength });
   }
 }
 
@@ -1004,8 +1077,10 @@ class QueryInfo {
     this.lowercase = this.str.toLowerCase();
     /** @type {number} A unique identifier for this query */
     this.id = id;
-    /** @type{number} The number of tokens we've found so far */
+    /** @type {number} The number of tokens we've found so far */
     this.tokenCount = 0;
+    /** @type {number} The number of query results we've found so far */
+    this.resultCount = 0;
   }
 
   /**
@@ -1052,6 +1127,10 @@ class QueryInfo {
   canCreateMoreTokens() {
     return this.tokenCount < WorkspaceQuerier.MAX_TOKENS;
   }
+
+  canCreateMoreNestedBlocks() {
+    return this.canCreateMoreTokens() && this.resultCount < WorkspaceQuerier.MAX_RESULTS;
+  }
 }
 
 /**
@@ -1061,6 +1140,7 @@ class QueryInfo {
 export default class WorkspaceQuerier {
   static ORDER_OF_OPERATIONS = [
     null, // brackets
+    "operator_join",
     "operator_round",
     "operator_mathop",
     "operator_mod",
@@ -1076,19 +1156,8 @@ export default class WorkspaceQuerier {
     "operator_not",
   ];
 
-  static CATEGORY_PRIORITY = ["control", "events", "data", "operators"];
-
   /**
-   * An artificial way to increase the score of common blocks so they show up first.
-   */
-  static SCORE_BUMP = {
-    control_if: 100000,
-    control_if_else: 100000,
-    data_setvariableto: 99999,
-  };
-
-  /**
-   * The maximum number of results to find before giving up.
+   * The maximum number of results to find before we give up searching sub-blocks.
    */
   static MAX_RESULTS = 1000;
 
@@ -1111,7 +1180,7 @@ export default class WorkspaceQuerier {
   /**
    * Queries the indexed workspace for blocks matching the query string.
    * @param {string} queryStr The query.
-   * @returns {{results: QueryResult[], illegalResult: QueryResult | null, limited: boolean}} A list of the results of the query, sorted by their relevance score.
+   * @returns {{results: QueryResult[], illegalResult: QueryResult | null, limited: boolean}} A list of the results of the query, sorted by their relevance.
    */
   queryWorkspace(queryStr) {
     if (!this.workspaceIndexed) throw new Error("A workspace must be indexed before it can be queried!");
@@ -1120,24 +1189,29 @@ export default class WorkspaceQuerier {
     const query = new QueryInfo(this, queryStr, this._queryCounter++);
     const results = [];
     let foundTokenCount = 0;
-    let bestIllegalResult = null;
     let limited = false;
 
-    for (const option of this.tokenGroupBlocks.parseTokens(query, 0)) {
+    let bestIllegalResult = null;
+    let bestIllegalResultText = "";
+
+    for (const option of this.tokenGroupBlocks.parseTokens(query, 0, 0)) {
       if (option.end >= queryStr.length) {
         if (option.isLegal) {
-          option.score += WorkspaceQuerier.SCORE_BUMP[option.type.block.id] ?? 0;
           results.push(new QueryResult(query, option));
-        } else if (!bestIllegalResult || option.score >= bestIllegalResult.token.score) {
-          bestIllegalResult = new QueryResult(query, option);
+        } else {
+          const text = option.type.createText(option, query, true);
+          if (!bestIllegalResult || text.length < text) {
+            bestIllegalResult = new QueryResult(query, option);
+            bestIllegalResultText = text;
+          }
         }
       }
-      ++foundTokenCount;
-      if (foundTokenCount > WorkspaceQuerier.MAX_RESULTS) {
+      ++query.resultCount;
+      if (!limited && query.resultCount >= WorkspaceQuerier.MAX_RESULTS) {
         console.log("Warning: Workspace query exceeded maximum result count.");
         limited = true;
-        break;
       }
+
       if (!query.canCreateMoreTokens()) {
         console.log("Warning: Workspace query exceeded maximum token count.");
         limited = true;
@@ -1145,18 +1219,20 @@ export default class WorkspaceQuerier {
       }
     }
 
-    // Eliminate blocks who's strings can be parsed as something else.
+    // Used to eliminate blocks whos strings can be parsed as something else.
     //  This step removes silly suggestions like `if <(1 + 1) = "2 then"> then`
     const canBeString = Array(queryStr.length).fill(true);
+
     function searchToken(token) {
       const subtokens = token.type.getSubtokens(token, query);
       if (subtokens) for (const subtoken of subtokens) searchToken(subtoken);
-      else if (!(token.type instanceof TokenTypeStringLiteral) && !token.isTruncated)
+      else if (!(token.type instanceof TokenTypeStringLiteral) && token.isProper && !token.isTruncated)
         for (let i = token.start; i < token.end; i++) {
           canBeString[i] = false;
         }
     }
     for (const result of results) searchToken(result.token);
+
     function checkValidity(token) {
       const subtokens = token.type.getSubtokens(token, query);
       if (subtokens) {
@@ -1166,12 +1242,19 @@ export default class WorkspaceQuerier {
       }
       return true;
     }
-    const validResults = [];
+    let validResults = [];
     for (const result of results) if (checkValidity(result.token)) validResults.push(result);
 
+    validResults = validResults.sort((a, b) => {
+      const aLengths = a.getLengths();
+      const bLengths = b.getLengths();
+      if (aLengths.stringLength != bLengths.stringLength) return aLengths.stringLength - bLengths.stringLength;
+      return aLengths.tokenLength - bLengths.tokenLength;
+    });
+
     return {
-      results: validResults.sort((a, b) => b.token.score - a.token.score),
-      illegalResult: bestIllegalResult,
+      results: validResults,
+      illegalResult: validResults.length === 0 ? bestIllegalResult : null,
       limited,
     };
   }
@@ -1271,12 +1354,6 @@ export default class WorkspaceQuerier {
    * @private
    */
   _populateTokenGroups(blocks) {
-    blocks.sort(
-      (a, b) =>
-        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category.name) -
-        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category.name)
-    );
-
     // Apply order of operations
     for (const block of blocks) {
       block.precedence = WorkspaceQuerier.ORDER_OF_OPERATIONS.indexOf(block.id);

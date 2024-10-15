@@ -1,0 +1,1 @@
+{"script-snap/@name":"把积木吸附到网格","script-snap/@description":"积木拖动之后会自动和积木区的格点对齐。","script-snap/@preset-name-whole-block":"整个积木的高度","script-snap/@preset-name-half-block":"半个积木的高度","script-snap/@preset-name-default":"默认","script-snap/@settings-name-grid":"格点距离（像素）"}

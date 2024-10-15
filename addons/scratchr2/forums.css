@@ -1,4 +1,4 @@
-@import url("%addon-self-dir%/../../libraries/common/css/spinner.css");
+@import url("%addon-self-dir%/../../libraries/common/cs/spinner.css");
 
 body > #pagewrapper {
   min-height: 0;
@@ -66,11 +66,17 @@ body > #pagewrapper {
   background: none;
   border-top: none;
 }
-#forum-search-input {
-  width: calc(85% - 8px);
+#forum-search-input,
+#forum-search-filter-input {
   margin-right: 8px;
   height: 48px;
   padding: 4px 20px;
+}
+#forum-search-dropdown {
+  margin-right: 8px;
+}
+#forum-search-form .button {
+  padding: 4px 16px;
 }
 .forum-search-list {
   width: 942px;
@@ -156,6 +162,7 @@ body > #pagewrapper {
   line-height: 18px;
   font-weight: bold;
   text-align: center;
+  text-decoration: none;
 }
 .linkst li:not(:last-child) a:hover,
 .linksb li:not(:last-child) a:hover,
@@ -192,7 +199,7 @@ body > #pagewrapper {
 }
 .follow-topic .loading:not([style="display: none;"]) {
   /* Spinner animation code */
-  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  /* From https://github.com/scratchfoundation/scratch-www/blob/develop/src/components/spinner/spinner.scss */
   animation-name: spin-intro, spin;
   animation-duration: 0.25s, 1s;
   animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);

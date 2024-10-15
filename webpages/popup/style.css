@@ -20,8 +20,17 @@ body {
   display: flex;
   height: 60px;
 }
+.header-button {
+  cursor: pointer;
+  padding: 18px;
+  line-height: 0;
+  transition: 0.2s ease;
+}
+.header-button:hover {
+  background: var(--header-hover-darken);
+}
 #title-text,
-#settings {
+.header-button {
   font-size: 18px;
   font-weight: 400;
 }
@@ -32,23 +41,14 @@ body {
   padding: 0 20px;
 }
 #logo {
-  width: 30px;
-  height: 30px;
+  height: 25px;
   margin-inline-end: 20px;
   vertical-align: middle;
 }
-#settings {
-  padding: 0 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#settings > img {
+#settings-icon {
   width: 24px;
   height: 24px;
 }
-
 #popups {
   background-color: var(--content-background);
   width: 100%;
@@ -56,34 +56,32 @@ body {
 }
 
 #popup-bar {
-  padding: 10px;
-  padding-bottom: 0px;
   display: flex;
+  background-color: var(--navigation-background);
   border-bottom: 1px solid var(--control-border);
 }
 
 #popup-chooser {
+  flex-grow: 1;
   display: flex;
   color: var(--content-text);
-  height: 35px;
+  height: 45px;
   overflow: hidden;
 }
 .popup-name {
+  flex-grow: 1;
   display: flex;
   height: 100%;
-  box-sizing: border-box;
+  justify-content: center;
   align-items: center;
+  position: relative;
   font-size: 12px;
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
-  background-color: var(--button-background);
-  border: 1px solid var(--control-border);
-  border-bottom: none;
-  border-radius: 12px 12px 0 0;
   transition: 0.2s ease;
 }
 .popup-name:hover {
-  background-color: var(--button-hover-background);
+  background-color: var(--hover-darken);
 }
 .popup-name:not(.sel):hover {
   cursor: pointer;
@@ -92,17 +90,30 @@ body {
   border-inline-end: none;
 }
 .popup-name.sel {
-  background-color: var(--brand-orange);
-  color: var(--white-text);
+  background-color: var(--hover-darken);
+  font-weight: bold;
+}
+.popup-name::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  height: 4px;
+  background-color: var(--orange);
+  border-radius: 4px 4px 0 0;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+.popup-name.sel::before {
+  opacity: 1;
 }
 .popup-name img {
   vertical-align: middle;
   filter: var(--content-icon-filter);
   width: 18px;
   height: 18px;
-}
-.popup-name.sel img {
-  filter: brightness(0) invert(1);
 }
 .popup-title {
   padding-inline-start: 5px;
@@ -118,8 +129,7 @@ body {
   border-radius: 2px;
 }
 .popout:hover > .popout-img {
-  background-color: var(--white-text);
-  filter: none;
+  background-color: var(--hover-highlight);
 }
 [dir="rtl"] .popout > .popout-img {
   transform: scaleX(-1);

@@ -30,6 +30,9 @@ export default async function ({ template }) {
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];
       },
+      devMode() {
+        return this.$root.devMode;
+      },
       showUpdateNotice() {
         if (!this.addon.latestUpdate || !this.addon.latestUpdate.temporaryNotice) return false;
         const [extMajor, extMinor, _] = this.$root.version.split(".");
@@ -40,11 +43,6 @@ export default async function ({ template }) {
     methods: {
       getDefaultExpanded() {
         return isIframe ? false : this.groupId === "enabled";
-      },
-      devShowAddonIds(event) {
-        if (!this.$root.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
-        event.stopPropagation();
-        Vue.set(this.addon, "_displayedAddonId", this.addon._addonId);
       },
       loadPreset(preset) {
         if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
@@ -78,8 +76,8 @@ export default async function ({ template }) {
             isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
               : event.shiftKey
-              ? false
-              : newState;
+                ? false
+                : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
         };

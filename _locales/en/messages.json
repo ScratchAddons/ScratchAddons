@@ -26,14 +26,17 @@
   "1hour": {
     "message": "For 1 hour"
   },
+  "4hours": {
+    "message": "For 4 hours"
+  },
   "8hours": {
     "message": "For 8 hours"
   },
-  "24hours": {
-    "message": "For 24 hours"
+  "untilTomorrow": {
+    "message": "Until tomorrow"
   },
   "untilEnabled": {
-    "message": "Until I turn it back on"
+    "message": "Until turned off"
   },
   "muteFor": {
     "message": "Do not disturb"
@@ -170,6 +173,9 @@
   "dark": {
     "message": "Dark"
   },
+  "loading": {
+    "message": "Loading..."
+  },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
   },
@@ -242,15 +248,18 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_33_2": {
-    "message": "Scratch just released an update that changes some of the colors around the website. If you'd like to update your settings to use these new colors, go back, or otherwise customize the colors, you can reset or change any themes from $1.",
+  "extensionUpdateInfo1_v1_39": {
+    "message": "New addon: \"delete other costumes or sounds\", which adds an option to the right click context menu for costumes and sounds to delete all items except for the selected one. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_33_2": {
-    "message": "Scratch Addons' developers have been working hard to support the changes, but you might still experience small bugs for some time."
+  "sendFeedbackNotification": {
+    "message": "send feedback"
+  },
+  "extensionUpdateInfo2_v1_39": {
+    "message": "Other new addons added this update are \"asset conflict dialog\", \"customizable code editor grid\", \"customizable stage monitors\", and  \"remaining reply counter\"."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",

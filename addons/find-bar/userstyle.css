@@ -10,8 +10,7 @@
   margin-left: 1em;
 }
 .sa-find-bar[hidden] {
-  /* !important to override displayNoneWhileDisabled */
-  display: none !important;
+  display: none;
 }
 
 .sa-find-wrapper {

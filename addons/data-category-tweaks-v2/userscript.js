@@ -1,3 +1,5 @@
+import updateToolboxXML from "../../libraries/common/cs/update-toolbox-xml.js";
+
 export default async function ({ addon, console, msg, safeMsg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
@@ -136,7 +138,7 @@ export default async function ({ addon, console, msg, safeMsg }) {
   };
 
   // Each time a new workspace is made, these callbacks are reset, so re-register whenever a flyout is shown.
-  // https://github.com/LLK/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
+  // https://github.com/scratchfoundation/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
   const oldShow = ScratchBlocks.Flyout.prototype.show;
   ScratchBlocks.Flyout.prototype.show = function (xmlList) {
     this.workspace_.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
@@ -145,9 +147,9 @@ export default async function ({ addon, console, msg, safeMsg }) {
   };
 
   // Use Scratch's extension category mechanism to replace the data category with our own.
-  // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
-  // https://github.com/LLK/scratch-gui/blob/2ceab00370ad7bd8ecdf5c490e70fd02152b3e2a/src/lib/make-toolbox-xml.js#L763
-  // https://github.com/LLK/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
+  // https://github.com/scratchfoundation/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
+  // https://github.com/scratchfoundation/scratch-gui/blob/2ceab00370ad7bd8ecdf5c490e70fd02152b3e2a/src/lib/make-toolbox-xml.js#L763
+  // https://github.com/scratchfoundation/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
   const originalGetBlocksXML = vm.runtime.getBlocksXML;
   vm.runtime.getBlocksXML = function (target) {
     const result = originalGetBlocksXML.call(this, target);
@@ -184,19 +186,11 @@ export default async function ({ addon, console, msg, safeMsg }) {
     return result;
   };
 
-  // If editingTarget is set, the editor has already rendered and we have to tell it to rerender.
-  if (vm.editingTarget) {
-    vm.emitWorkspaceUpdate();
-  }
-
   addon.settings.addEventListener("change", (e) => {
-    // When the separate list category option changes, we need to do a workspace update.
+    // When the separate list category option changes, we need to update the toolbox XML.
     // For all other options, just refresh the toolbox.
-    // Always doing both of these in response to a settings change causes many issues.
     if (addon.settings.get("separateListCategory") !== hasSeparateListCategory) {
-      if (vm.editingTarget) {
-        vm.emitWorkspaceUpdate();
-      }
+      updateToolboxXML(addon.tab);
     } else {
       const workspace = Blockly.getMainWorkspace();
       if (workspace) {
@@ -205,14 +199,12 @@ export default async function ({ addon, console, msg, safeMsg }) {
     }
   });
 
-  const dynamicEnableOrDisable = () => {
+  const updateToolbox = () => {
     // Enabling/disabling is similar to changing settings.
-    // If separate list category is enabled, a workspace update is needed.
+    // If separate list category is enabled, a toolbox XML update is needed.
     // If any other setting is enabled, refresh the toolbox.
     if (addon.settings.get("separateListCategory")) {
-      if (vm.editingTarget) {
-        vm.emitWorkspaceUpdate();
-      }
+      updateToolboxXML(addon.tab);
     }
     if (addon.settings.get("separateLocalVariables") || addon.settings.get("moveReportersDown")) {
       const workspace = Blockly.getMainWorkspace();
@@ -221,11 +213,11 @@ export default async function ({ addon, console, msg, safeMsg }) {
       }
     }
   };
-
+  updateToolbox();
   addon.self.addEventListener("disabled", () => {
-    dynamicEnableOrDisable();
+    updateToolbox();
   });
   addon.self.addEventListener("reenabled", () => {
-    dynamicEnableOrDisable();
+    updateToolbox();
   });
 }
