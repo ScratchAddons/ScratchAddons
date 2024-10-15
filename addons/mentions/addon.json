@@ -3,20 +3,6 @@
   "description": "Highlight when you are mentioned (e.g. @username).",
   "tags": ["community", "profiles", "comments", "forums"],
   "versionAdded": "1.40.0",
-  "customCssVariables": [
-    {
-      "name": "button-text",
-      "value": {
-        "type": "textColor",
-        "black": "#000",
-        "white": "#fff",
-        "source": {
-          "type": "settingValue",
-          "settingId": "color"
-        }
-      }
-    }
-  ],
   "userscripts": [
     {
       "matches": ["projects", "studios", "profiles", "forums"],
@@ -27,15 +13,13 @@
     {
       "matches": ["projects", "studios", "profiles", "forums"],
       "url": "userstyle.css"
+    },
+    {
+      "matches": ["profiles", "forums"],
+      "url": "scratchr2.css"
     }
   ],
   "settings": [
-    {
-      "name": "Highlight color",
-      "id": "color",
-      "type": "color",
-      "default": "#855cd6"
-    },
     {
       "name": "Highlight direct links",
       "id": "direct",
@@ -47,10 +31,6 @@
     {
       "name": "mybearworld",
       "link": "https://scratch.mit.edu/users/mybearworld"
-    },
-    {
-      "name": "DNin01",
-      "link": "https://github.com/DNin01"
     }
   ],
   "dynamicDisable": true,
