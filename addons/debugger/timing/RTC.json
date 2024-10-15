@@ -115,10 +115,7 @@
   "operator_join": 0.7,
   "operator_letter_of": 0.6,
   "operator_length": 0.5,
-  "operator_contains": [
-    0.0038,
-    1.1
-  ],
+  "operator_contains": [0.0038, 1.1],
   "operator_mod": 1.4,
   "operator_round": 0.5,
   "operator_mathop:abs": 0.8,
@@ -144,28 +141,16 @@
   "data_addtolist": 4.6,
   "data_deleteoflist": 4.2,
   "data_deletealloflist": 3.4,
-  "data_insertatlist": [
-    0.0107,
-    6.4
-  ],
+  "data_insertatlist": [0.0107, 6.4],
   "data_replaceitemoflist": 3.7,
   "data_itemoflist": 2.8,
-  "data_itemnumoflist": [
-    1,
-    2.8
-  ],
+  "data_itemnumoflist": [1, 2.8],
   "data_lengthoflist": 2,
-  "data_listcontainsitem": [
-    1.09,
-    2.8
-  ],
+  "data_listcontainsitem": [1.09, 2.8],
   "data_showlist": 7.1,
   "data_hidelist": 6.7,
   "procedures_definition": 7.7,
-  "procedures_call": [
-    0.271,
-    1.1
-  ],
+  "procedures_call": [0.271, 1.1],
   "argument_reporter_string_number": 0.6,
   "argument_reporter_boolean": 0.6,
   "pen_clear": 6.6,
