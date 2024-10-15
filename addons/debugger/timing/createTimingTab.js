@@ -49,7 +49,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   function updatePercentageHeader() {
     const value = addon.settings.get("show_ratio_time");
     config.showRatioTime = value;
-    percentHeader.textContent = value ? "Ratio Time" : "Percent Time";
+    percentHeader.textContent = value ? msg("timing-ratio-time") : msg("timing-percent-time");
   }
 
   // config for our block scope settings that can be modified in the toolbar
@@ -62,7 +62,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     sortDirection: "descending",
     isStepThreadPolluted: false,
   };
-  const { tableHeader, rtcHeader, percentHeader } = createTableHeader(config);
+  const { tableHeader, rtcHeader, percentHeader } = createTableHeader(config, msg);
   const tableRows = new TableRows(config, debug, msg, tableHeader);
 
   const profiler = new Profiler(config);
@@ -71,7 +71,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   const timingManager = new TimingManager(addon.settings, config, profiler);
   const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows);
-  const toolbar = createToolbar(heatmapManager, rtcHeader, config, polluteStepThread);
+  const toolbar = createToolbar(heatmapManager, rtcHeader, config, polluteStepThread, msg);
   profiler.tm = timingManager;
 
   const content = createContent();

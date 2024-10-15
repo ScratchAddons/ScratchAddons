@@ -15,7 +15,7 @@ class TableRows extends LogView {
     this.debug = debug;
     this.tableHeader = tableHeader;
 
-    this.placeholderElement.textContent = msg("no-timers");
+    this.placeholderElement.textContent = msg("timing-no-timers");
   }
 
   getRowValues(timer) {
