@@ -317,7 +317,7 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target.classList[0] === "toggle") return;
+        if (event?.target.id === "sidebar-toggle") return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
@@ -493,6 +493,11 @@ let fuse;
           manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
           manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
         }
+      }
+
+      if (addonId === "msg-count-badge" && manifest._enabled) {
+        // v1.39: only feature msg-count-badge if it is disabled
+        manifest._groups = manifest._groups.filter((g) => g !== "featuredNew");
       }
 
       // Sort tags to preserve consistent order

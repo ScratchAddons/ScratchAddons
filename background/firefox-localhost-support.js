@@ -1,4 +1,4 @@
-if (typeof browser === "object") {
+if (typeof browser === "object" && chrome.scripting) {
   const manifest = chrome.runtime.getManifest();
   const manifestScripts = manifest.content_scripts.filter((script) =>
     script.matches.includes("http://localhost:8602/*")

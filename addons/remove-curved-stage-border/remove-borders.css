@@ -1,7 +1,7 @@
-[class*="stage_stage"] {
-  border-radius: 0rem !important;
-}
-
-[class*="stage_green-flag-overlay-wrapper"] {
-  border-radius: 0rem !important;
+[class*="stage_stage"],
+[class*="stage_green-flag-overlay-wrapper"],
+/* Override player-thumb */
+body:not(.sa-body-editor) div[class*="loader_background_"],
+.sa-project-thumb {
+  border-radius: 0rem;
 }
