@@ -1,6 +1,6 @@
 {
-  "name": "Copy scratchblocks code from editor",
-  "description": "Adds a right-click option for blocks in the project editor to convert them into scratchblocks text form, for sharing code on the Scratch Forums or Wiki.",
+  "name": "Copy scratchblocks text from editor",
+  "description": "Adds a right-click option to blocks in the project editor to convert them into scratchblocks text form and copy to the clipboard, for sharing code on places like the Discussion Forums or Scratch Wiki.",
   "credits": [
     {
       "name": "pumpkinhasapatch",
