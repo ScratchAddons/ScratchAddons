@@ -12,5 +12,6 @@
   "Sora": "OFL",
   "sortable": "MIT",
   "fuse": "Apache-2.0",
-  "idb": "ISC"
+  "idb": "ISC",
+  "parse-sb3-blocks": "BSD-3-Clause"
 }

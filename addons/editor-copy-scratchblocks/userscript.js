@@ -1,5 +1,5 @@
 // From https://github.com/apple502j/parse-sb3-blocks/releases/tag/v0.5.2
-import { toScratchblocks } from "./parse-sb3-blocks.module.js";
+import { toScratchblocks } from "../../libraries/thirdparty/cs/parse-sb3-blocks.module.js";
 
 // Some code referenced from blocks2image, block-switching and editor-devtools
 export default async function ({ addon, console, msg }) {
