@@ -51,6 +51,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.39.0",
+  "versionAdded": "1.40.0",
   "tags": ["editor", "codeEditor"]
 }
