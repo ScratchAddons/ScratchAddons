@@ -39,10 +39,18 @@ export default async function ({ addon, console, msg }) {
 
     // Send ID and current blocks to parse-sb3-blocks, set indent spacing and fix variables that have the same name as reporters.
     // Only outputs English blocks, TODO: Detect editor language and pass it to third input for multilingual scratchblocks.
-    const scratchblocks = toScratchblocks(blockId, blocksJSON, language, {
+    let scratchblocks = toScratchblocks(blockId, blocksJSON, language, {
       tabs: " ".repeat(4),
       variableStyle: "as-needed",
     });
+
+    let codeTags = addon.settings.get("codeTags");
+    // Add square or angled code tags around scratchblocks for Forums and Wiki formatting
+    if (codeTags == "square") {
+      scratchblocks = "[scratchblocks]\n" + scratchblocks + "\n[/scratchblocks]";
+    } else if (codeTags == "angled") {
+      scratchblocks = "<scratchblocks>\n" + scratchblocks + "\n</scratchblocks>";
+    }
 
     console.log(scratchblocks);
     navigator.clipboard.writeText(scratchblocks);

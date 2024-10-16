@@ -27,6 +27,26 @@
   ],
   "settings": [
     {
+      "name": "Include code tags",
+      "id": "codeTags",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "square",
+          "name": "[scratchblocks]"
+        },
+        {
+          "id": "angled",
+          "name": "<scratchblocks>"
+        }
+      ],
+      "default": "none"
+    },
+    {
       "name": "Always copy block text in English",
       "id": "forceEnglish",
       "type": "boolean",
