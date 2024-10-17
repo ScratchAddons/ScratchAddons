@@ -60,5 +60,10 @@
     "license": "ISC",
     "year": "2016,",
     "fullname": "Jake Archibald <jaffathecake@gmail.com>"
+  },
+  "parse-sb3-blocks": {
+    "license": "BSD-3-Clause",
+    "year": "2020",
+    "fullname": "apple502j"
   }
 }
