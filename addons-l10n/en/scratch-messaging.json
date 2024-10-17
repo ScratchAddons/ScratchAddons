@@ -57,5 +57,8 @@
   "scratch-messaging/studio-host-transfers": "Studio host transfers",
   "scratch-messaging/studio-host-transfer": "{actor} made you the host of the studio \"{title}\"",
   "scratch-messaging/st": "A Scratch Team member",
-  "scratch-messaging/welcome-to-scratch": "Welcome to Scratch! After you make projects and comments, you'll get messages about them here."
+  "scratch-messaging/welcome-to-scratch": "Welcome to Scratch! After you make projects and comments, you'll get messages about them here.",
+  "scratch-messaging/accept": "Accept Invite",
+  "scratch-messaging/accepted": "Accepted",
+  "scratch-messaging/failed": "Failed to add you to the studio"
 }
