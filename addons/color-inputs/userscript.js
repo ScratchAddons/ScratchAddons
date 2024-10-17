@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   while (true) {
     const swatchRow = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
