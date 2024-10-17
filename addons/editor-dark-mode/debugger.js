@@ -20,6 +20,7 @@ export default async function ({ addon, console }) {
     }
   };
 
+  if (document.querySelector(".sa-debugger-chart")) updateCharts();
   window.addEventListener("saDebuggerPerformanceTabShown", updateCharts);
   addon.settings.addEventListener("change", updateCharts);
   addon.self.addEventListener("disabled", updateCharts);
