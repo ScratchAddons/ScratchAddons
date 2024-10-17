@@ -622,7 +622,7 @@ export default async function ({ addon, console, msg }) {
     while (true) {
       // Wait until "Make a block" popup is opened and icon elements are created
       const iconElement = await addon.tab.waitForElement("[class^=custom-procedures_option-icon_]", {
-          markAsSeen: true,
+        markAsSeen: true,
       });
       // Get img.src, remove data:image... header, then atob() decodes base64 to get the actual <svg> tags.
       let svg = atob(iconElement.src.replace(uriHeader, ""));
