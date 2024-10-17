@@ -615,6 +615,29 @@ export default async function ({ addon, console, msg }) {
     Object.assign(originalColors, newColors);
   };
 
+  (async () => {
+    // Custom colors for "Add an input/label" block icons in the "Make a block" popup menu, by pumpkinhasapatch
+    const uriHeader = "data:image/svg+xml;base64,";
+    const myBlocksCategory = categories[9];
+    while (true) {
+      // Wait until "Make a block" popup is opened and icon elements are created
+      const iconElement = await addon.tab.waitForElement("[class^=custom-procedures_option-icon_]", {
+          markAsSeen: true,
+      });
+      // Get img.src, remove data:image... header, then atob() decodes base64 to get the actual <svg> tags.
+      let svg = atob(iconElement.src.replace(uriHeader, ""));
+
+      // Find and replace the default color codes in the svg with our custom ones
+      svg = svg.replace("#ff6680", primaryColor(myBlocksCategory));
+      svg = svg.replace("#ff4d6a", secondaryColor(myBlocksCategory));
+      svg = svg.replace("#f35", tertiaryColor(myBlocksCategory));
+      svg = svg.replace("#fff", uncoloredTextColor()); // Text color for "Add a label" icon
+
+      //console.log(svg);
+      iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
+    }
+  })();
+
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(
       "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2) ul",
