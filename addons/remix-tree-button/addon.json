@@ -1,11 +1,15 @@
 {
-  "name": "Remix tree button",
-  "description": "Brings back the remix tree button to project pages, next to the Copy Link button.",
+  "name": "Remix tree link",
+  "description": "Brings back the option to open the remix tree, a feature from Scratch 2.0.",
   "tags": ["community", "recommended", "projectPage"],
   "credits": [
     {
       "name": "Ucrash",
       "link": "https://github.com/gducrash"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "userscripts": [
@@ -21,7 +25,36 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Link location",
+      "id": "type",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "new",
+          "name": "Add button next to \"Copy Link\""
+        },
+        {
+          "id": "replace",
+          "name": "Replace \"Remixes \u2192 View all\" link"
+        }
+      ],
+      "default": "new"
+    },
+    {
+      "name": "Open in new tab",
+      "id": "new-tab",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.2.0"
+  "versionAdded": "1.2.0",
+  "latestUpdate": {
+    "version": "1.36.0",
+    "temporaryNotice": "The remix tree link can now be moved to the Remixes list (next to the comments) so it doesn't take up space.",
+    "newSettings": ["type", "new-tab"]
+  }
 }
