@@ -628,10 +628,15 @@ export default async function ({ addon, console, msg }) {
       let svg = atob(iconElement.src.replace(uriHeader, ""));
 
       // Find and replace the default color codes in the svg with our custom ones
-      svg = svg.replace("#ff6680", primaryColor(myBlocksCategory));
-      svg = svg.replace("#ff4d6a", secondaryColor(myBlocksCategory));
-      svg = svg.replace("#f35", tertiaryColor(myBlocksCategory));
-      svg = svg.replace("#fff", uncoloredTextColor()); // Text color for "Add a label" icon
+      // Placeholder values are used to prevent hex codes replacing each other (see PR #7545 changes)
+      svg = svg.replace("#ff6680", "%primary%") // Primary block color
+      .replace("#ff4d6a", "%inner%") // Inside empty boolean/reporter input slots
+      .replace("#f35", "%outline%") // Border around edges of block
+      .replace("#fff", "%labeltext%") // Text color for "Add a label" icon
+      .replace("%primary%", primaryColor(myBlocksCategory))
+      .replace("%inner%", secondaryColor(myBlocksCategory))
+      .replace("%outline%", tertiaryColor(myBlocksCategory))
+      .replace("%labeltext%", uncoloredTextColor());
 
       //console.log(svg);
       iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
