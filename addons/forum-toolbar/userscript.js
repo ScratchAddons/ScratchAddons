@@ -173,4 +173,38 @@ export default async ({ addon, console, msg }) => {
     }),
     2
   );
+
+  // Code for removing separators if needed (as buttons can be removed now)
+  const updateSeparators = () => {
+    document.querySelectorAll(".markItUpSeparator").forEach((separator) => {
+      separator.style.display = "";
+      let previousSibling = separator;
+      while (
+        (previousSibling = previousSibling.previousElementSibling) &&
+        !previousSibling.classList.contains("markItUpSeparator")
+      ) {
+        if (getComputedStyle(previousSibling).display !== "none") {
+          return;
+        }
+      }
+      separator.style.display = "none";
+    });
+  };
+  updateSeparators();
+  addon.self.addEventListener("disabled", () =>
+    document.querySelectorAll(".markItUpSeparator").forEach((separator) => {
+      separator.style.display = "";
+    })
+  );
+  addon.self.addEventListener("reenabled", updateSeparators);
+  addon.settings.addEventListener("change", updateSeparators);
+  let latestAddons = await addon.self.getEnabledAddons();
+  // Necessary for addons that add to the toolbar
+  setInterval(async () => {
+    const newLatestAddons = await addon.self.getEnabledAddons();
+    if (latestAddons !== newLatestAddons) {
+      latestAddons = newLatestAddons;
+      updateSeparators();
+    }
+  });
 };
