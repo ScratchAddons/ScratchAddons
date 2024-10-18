@@ -58,23 +58,23 @@ export function createToolbar(heatmapManager, rtcHeader, config, polluteStepThre
       textSpan.textContent = textSpan.textContent === initialText ? toggledText : initialText;
     });
 
-    // For the second item, replace the tooltip with a "See Chart" link
+    // For the second item, replace the tooltip with a "See Table" link
     if (index === 1) {
       const tooltip = document.createElement("div");
       tooltip.className = "sa-timing-tooltip-outer";
       tooltip.innerHTML = `
         <div class = "sa-timing-tooltip-content">
         <p>
-          ${msg("timing-rtc-info", { chart: `<a href="#" id="seeChartLink">${msg("timing-rtc-info-chart")}</a>` })}
+          ${msg("timing-rtc-info", { table: `<a href="#" id="seeTableLink">${msg("timing-rtc-info-table")}</a>` })}
         </p>
         </div>
       `;
 
-      // Add event listener for the "chart" link to open the full-screen pop-up
-      const seeChartLink = tooltip.querySelector("#seeChartLink");
-      seeChartLink.addEventListener("click", (event) => {
+      // Add event listener for the "table" link to open the full-screen pop-up
+      const seeTableLink = tooltip.querySelector("#seeTableLink");
+      seeTableLink.addEventListener("click", (event) => {
         event.preventDefault();
-        openChartPopup(addon.self.dir + "/timing/RTC.json", msg); // Open the chart in a new window
+        openTablePopup(addon.self.dir + "/timing/RTC.json", msg); // Open the table in a new window
       });
 
       li.classList.add("sa-timing-tooltip-container");
@@ -90,7 +90,7 @@ export function createToolbar(heatmapManager, rtcHeader, config, polluteStepThre
 }
 
 // Function to open a new pop-up window and render the RTC table
-function openChartPopup(rtcDir, msg) {
+function openTablePopup(rtcDir, msg) {
   // Open a new window
   const popupWindow = window.open(
     "",
