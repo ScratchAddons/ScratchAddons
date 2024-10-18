@@ -442,7 +442,7 @@
 
 /* Tooltip arrow */
 .sa-timing-tooltip-content::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -11px;
   left: 50%;
@@ -455,14 +455,12 @@
   z-index: -1;
 }
 
-
 /* Show tooltip when hovering over the container */
 .sa-timing-tooltip-container:hover .sa-timing-tooltip-outer,
 .sa-timing-tooltip-outer:hover {
   visibility: visible;
 }
 
-
-.sa-timing-tooltip-content a{
+.sa-timing-tooltip-content a {
   pointer-events: auto;
 }

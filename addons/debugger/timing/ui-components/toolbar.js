@@ -58,7 +58,6 @@ export function createToolbar(heatmapManager, rtcHeader, config, polluteStepThre
       textSpan.textContent = textSpan.textContent === initialText ? toggledText : initialText;
     });
 
-
     // For the second item, replace the tooltip with a "See Chart" link
     if (index === 1) {
       const tooltip = document.createElement("div");
@@ -90,11 +89,14 @@ export function createToolbar(heatmapManager, rtcHeader, config, polluteStepThre
   return toolbar;
 }
 
-
 // Function to open a new pop-up window and render the RTC table
 function openChartPopup(rtcDir, msg) {
   // Open a new window
-  const popupWindow = window.open("", "_blank", "toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600");
+  const popupWindow = window.open(
+    "",
+    "_blank",
+    "toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600"
+  );
 
   // Set the title and initial layout for the new window
   popupWindow.document.title = msg("timing-rtc");
@@ -151,6 +153,6 @@ function openChartPopup(rtcDir, msg) {
     height: 100%;
     overflow: auto; /* Enable scrolling if the table overflows the container */
   }
-  `
+  `;
   popupWindow.document.head.appendChild(style);
 }

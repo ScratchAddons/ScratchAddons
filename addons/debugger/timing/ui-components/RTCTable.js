@@ -21,17 +21,17 @@ export default class RTCTableComponent {
       const data = await response.json();
 
       const colorDict = {
-        "motion": { backgroundColor: "rgb(75, 153, 253)" },
-        "looks": { backgroundColor: "rgb(152, 103, 252)" },
-        "sound": { backgroundColor: "rgb(207, 97, 205)" },
-        "event": { backgroundColor: "rgb(255, 189, 32)" },
-        "control": { backgroundColor: "rgb(255, 168, 40)" },
-        "sensing": { backgroundColor: "rgb(92, 178, 213)" },
-        "operator": { backgroundColor: "rgb(90, 193, 93)" },
-        "data": { backgroundColor: "rgb(255, 136, 37)" },
-        "procedures": { backgroundColor: "rgb(255, 96, 128)" },
-        "argument": { backgroundColor: "rgb(255, 96, 128)" },
-        "pen": { backgroundColor: "rgb(20, 190, 141)" },
+        motion: { backgroundColor: "rgb(75, 153, 253)" },
+        looks: { backgroundColor: "rgb(152, 103, 252)" },
+        sound: { backgroundColor: "rgb(207, 97, 205)" },
+        event: { backgroundColor: "rgb(255, 189, 32)" },
+        control: { backgroundColor: "rgb(255, 168, 40)" },
+        sensing: { backgroundColor: "rgb(92, 178, 213)" },
+        operator: { backgroundColor: "rgb(90, 193, 93)" },
+        data: { backgroundColor: "rgb(255, 136, 37)" },
+        procedures: { backgroundColor: "rgb(255, 96, 128)" },
+        argument: { backgroundColor: "rgb(255, 96, 128)" },
+        pen: { backgroundColor: "rgb(20, 190, 141)" },
       };
 
       const entries = Object.entries(data);
@@ -52,7 +52,7 @@ export default class RTCTableComponent {
           const timeCell = document.createElement("td");
 
           // Apply the background color from the color dictionary
-          const opcodeParts = opcode.split('_');
+          const opcodeParts = opcode.split("_");
           if (colorDict[opcodeParts[0]]) {
             Object.assign(opcodeCell.style, colorDict[opcodeParts[0]]);
             Object.assign(timeCell.style, colorDict[opcodeParts[0]]);
@@ -60,7 +60,7 @@ export default class RTCTableComponent {
 
           // Handle array values (e.g., [D, E]) or normal values
           if (Array.isArray(timeValue)) {
-            timeCell.textContent = timeValue[1] + ' + ' + timeValue[0] + 'n';
+            timeCell.textContent = timeValue[1] + " + " + timeValue[0] + "n";
           } else {
             timeCell.textContent = timeValue;
           }
@@ -80,7 +80,7 @@ export default class RTCTableComponent {
   renderInto(containerElement) {
     const { table, tbody } = this.createTableElement();
     this.populateTable(tbody).then(() => {
-      containerElement.innerHTML = ''; // Clear any existing content
+      containerElement.innerHTML = ""; // Clear any existing content
       containerElement.appendChild(table); // Insert the table
     });
   }
