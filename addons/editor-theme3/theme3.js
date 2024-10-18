@@ -629,14 +629,15 @@ export default async function ({ addon, console, msg }) {
 
       // Find and replace the default color codes in the svg with our custom ones
       // Placeholder values are used to prevent hex codes replacing each other (see PR #7545 changes)
-      svg = svg.replace("#ff6680", "%primary%") // Primary block color
-      .replace("#ff4d6a", "%inner%") // Inside empty boolean/reporter input slots
-      .replace("#f35", "%outline%") // Border around edges of block
-      .replace("#fff", "%labeltext%") // Text color for "Add a label" icon
-      .replace("%primary%", primaryColor(myBlocksCategory))
-      .replace("%inner%", isColoredTextMode() ? fieldBackground(myBlocksCategory) : tertiaryColor(myBlocksCategory))
-      .replace("%outline%", tertiaryColor(myBlocksCategory))
-      .replace("%labeltext%", isColoredTextMode() ? tertiaryColor(myBlocksCategory) : uncoloredTextColor());
+      svg = svg
+        .replace("#ff6680", "%primary%") // Primary block color
+        .replace("#ff4d6a", "%inner%") // Inside empty boolean/reporter input slots
+        .replace("#f35", "%outline%") // Border around edges of block
+        .replace("#fff", "%labeltext%") // Text color for "Add a label" icon
+        .replace("%primary%", primaryColor(myBlocksCategory))
+        .replace("%inner%", isColoredTextMode() ? fieldBackground(myBlocksCategory) : tertiaryColor(myBlocksCategory))
+        .replace("%outline%", tertiaryColor(myBlocksCategory))
+        .replace("%labeltext%", isColoredTextMode() ? tertiaryColor(myBlocksCategory) : uncoloredTextColor());
 
       //console.log(svg);
       iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
