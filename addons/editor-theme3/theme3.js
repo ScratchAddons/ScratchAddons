@@ -634,9 +634,9 @@ export default async function ({ addon, console, msg }) {
       .replace("#f35", "%outline%") // Border around edges of block
       .replace("#fff", "%labeltext%") // Text color for "Add a label" icon
       .replace("%primary%", primaryColor(myBlocksCategory))
-      .replace("%inner%", secondaryColor(myBlocksCategory))
+      .replace("%inner%", isColoredTextMode() ? fieldBackground(myBlocksCategory) : tertiaryColor(myBlocksCategory))
       .replace("%outline%", tertiaryColor(myBlocksCategory))
-      .replace("%labeltext%", uncoloredTextColor());
+      .replace("%labeltext%", isColoredTextMode() ? tertiaryColor(myBlocksCategory) : uncoloredTextColor());
 
       //console.log(svg);
       iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
