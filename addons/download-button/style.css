@@ -48,7 +48,8 @@
   animation-iteration-count: 1, infinite;
 }
 
-@media (max-width: 767px) { /* $tablet-portrait - 1px */
+@media (max-width: 767px) {
+  /* $tablet-portrait - 1px */
   #sa-download-button {
     display: none;
   }
