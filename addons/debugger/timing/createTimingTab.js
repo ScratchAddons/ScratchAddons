@@ -71,7 +71,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   const timingManager = new TimingManager(addon.settings, config, profiler);
   const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows);
-  const toolbar = createToolbar(heatmapManager, rtcHeader, config, polluteStepThread, msg);
+  const toolbar = createToolbar(heatmapManager, rtcHeader, config, polluteStepThread, msg, addon);
   profiler.tm = timingManager;
 
   const content = createContent();

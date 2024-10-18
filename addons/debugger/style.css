@@ -381,6 +381,7 @@
   color: white;
   border-radius: 0 0 0.75rem 0.75rem;
   margin-bottom: -51px;
+  z-index: 1000;
 }
 
 .sa-timing-toolbar.show {
@@ -394,4 +395,74 @@
   width: 100px;
   text-wrap: nowrap;
   text-align: center;
+}
+
+/* Tooltip container (the second item) */
+.sa-timing-tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* invisible container to use as a hit box */
+.sa-timing-tooltip-outer {
+  visibility: hidden;
+  position: absolute;
+  transform: translate(-25%, 96px);
+  padding-top: 22px;
+  cursor: default;
+}
+
+/* Tooltip content (hidden by default, positioned above the container) */
+.sa-timing-tooltip-content {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
+  width: 240px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+}
+
+/* Tooltip content text */
+.sa-timing-tooltip-content p {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+
+/* Tooltip image placeholder */
+.sa-timing-tooltip-image {
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+  height: auto;
+}
+
+/* Tooltip arrow */
+.sa-timing-tooltip-content::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 20px;
+  height: 20px;
+  background: inherit;
+  border-left: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  z-index: -1;
+}
+
+
+/* Show tooltip when hovering over the container */
+.sa-timing-tooltip-container:hover .sa-timing-tooltip-outer,
+.sa-timing-tooltip-outer:hover {
+  visibility: visible;
+}
+
+
+.sa-timing-tooltip-content a{
+  pointer-events: auto;
 }

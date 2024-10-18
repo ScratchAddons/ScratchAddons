@@ -10,7 +10,7 @@ export function createTableHeader(config, msg) {
       <span class = 'timing-average-time'>${msg("timing-average-time")}</span>
       <span class = 'timing-percent-time'>${msg("timing-percent-time")}</span>
       <span class = 'timing-call-count'>${msg("timing-call-count")}</span>
-      <span class = 'timing-rtc'>${msg("timing-rtc")}</span>
+      <span class = 'timing-rtc'>${msg("timing-rtc-short")}</span>
     `;
 
   const rtcHeader = tableHeader.querySelector(".timing-rtc");
