@@ -691,9 +691,14 @@ export default async function ({ addon, console, msg }) {
       const logProc = "\u200B\u200Blog\u200B\u200B %s";
       const warnProc = "\u200B\u200Bwarn\u200B\u200B %s";
       const errorProc = "\u200B\u200Berror\u200B\u200B %s";
+      const starttimerProc = "\u200B\u200Bstart timer\u200B\u200B %s";
+      const stoptimerProc = "\u200B\u200Bstop timer\u200B\u200B %s";
       const logMessage = msg("debugger_log");
       const warnMessage = msg("debugger_warn");
       const errorMessage = msg("debugger_error");
+      const starttimerMessage = msg("debugger_starttimer");
+      const stoptimerMessage = msg("debugger_stoptimer");
+
       const logSwitch = {
         mutate: {
           proccode: logProc,
@@ -711,6 +716,18 @@ export default async function ({ addon, console, msg }) {
           proccode: errorProc,
         },
         msg: errorMessage,
+      };
+      const starttimerSwitch = {
+        mutate: {
+          proccode: starttimerProc,
+        },
+        msg: starttimerMessage,
+      };
+      const stoptimerSwitch = {
+        mutate: {
+          proccode: stoptimerProc,
+        },
+        msg: stoptimerMessage,
       };
       procedureSwitches[logProc] = [
         {
@@ -735,6 +752,20 @@ export default async function ({ addon, console, msg }) {
           msg: errorMessage,
           isNoop: true,
         },
+      ];
+      procedureSwitches[stoptimerProc] = [
+        starttimerSwitch,
+        {
+          msg: stoptimerMessage,
+          isNoop: true,
+        },
+      ];
+      procedureSwitches[starttimerProc] = [
+        {
+          msg: starttimerMessage,
+          isNoop: true,
+        },
+        stoptimerSwitch,
       ];
     }
 
