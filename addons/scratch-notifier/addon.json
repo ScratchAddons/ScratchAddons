@@ -117,7 +117,7 @@
     }
   ],
   "versionAdded": "1.0.0",
-  "tags": ["community", "recommended"],
+  "tags": ["community", "beta"],
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true
