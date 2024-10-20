@@ -1,7 +1,7 @@
 root = true
 
 [*]
-end_of_line = lf
+end_of_line = auto ; As long as Git auto-converts line endings to LF on commit, we don't have to set our preferred line ending here
 indent_style = space
 indent_size = 2
 charset = utf-8
