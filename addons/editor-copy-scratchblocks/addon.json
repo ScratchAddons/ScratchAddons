@@ -1,0 +1,56 @@
+{
+  "name": "Copy scratchblocks text from editor",
+  "description": "Adds a right-click option to blocks in the project editor to convert them into scratchblocks text form and copy to the clipboard, for sharing code on places like the Discussion Forums or Scratch Wiki.",
+  "credits": [
+    {
+      "name": "pumpkinhasapatch",
+      "link": "https://github.com/pumpkinhasapatch"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "libraries": ["parse-sb3-blocks"],
+  "info": [
+    {
+      "type": "notice",
+      "text": "Blocks in languages other than English may not display correctly in the Discussion Forums and other places. If you use Scratch in another language and have problems with the output text, try enabling the \"Always copy block text in English\" option.",
+      "id": "forceEnglishNotice"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Include code tags",
+      "id": "codeTags",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "square",
+          "name": "[scratchblocks]"
+        },
+        {
+          "id": "angled",
+          "name": "<scratchblocks>"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "name": "Always copy block text in English",
+      "id": "forceEnglish",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.40.0",
+  "tags": ["editor", "codeEditor"]
+}
