@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon }) {
   if (addon.tab.clientVersion === "scratchr2") return;
   let span;

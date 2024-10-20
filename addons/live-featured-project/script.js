@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
   const player = addon.settings.get("alternativePlayer");

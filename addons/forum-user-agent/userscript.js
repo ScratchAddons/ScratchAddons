@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   if (!window.mySettings) return;
   const ua = window.mySettings.markupSet.find((x) => x.className);
