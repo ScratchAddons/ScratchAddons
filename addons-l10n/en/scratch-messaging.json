@@ -15,7 +15,7 @@
   "scratch-messaging/chars-left": "{num, plural, one {1 character left} other {# characters left}}",
   "scratch-messaging/follows": "Follows",
   "scratch-messaging/stMessages": "Messages from the Scratch Team",
-  "scratch-messaging/stMessagesConfirm": "Dismiss this message?",
+  "scratch-messaging/stMessagesConfirm": "Delete this message permanently?",
   "scratch-messaging/studio-invites": "Studio invites",
   "scratch-messaging/curate-invite": "{actor} invited you to curate {title}",
   "scratch-messaging/forum": "Forum activity",
