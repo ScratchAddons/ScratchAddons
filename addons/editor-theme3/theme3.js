@@ -2,6 +2,12 @@ import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/com
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
+const uriHeader = "data:image/svg+xml;base64,";
+const myBlocksCategory = {
+  id: "myBlocks",
+  settingId: "custom-color",
+  colorId: "more",
+};
 const extensionsCategory = {
   id: null,
   settingId: "Pen-color",
@@ -57,11 +63,7 @@ const categories = [
     settingId: "data-lists-color",
     colorId: "data_lists",
   },
-  {
-    id: "myBlocks",
-    settingId: "custom-color",
-    colorId: "more",
-  },
+  myBlocksCategory,
   extensionsCategory,
   saCategory,
 ];
@@ -617,8 +619,6 @@ export default async function ({ addon, console, msg }) {
 
   (async () => {
     // Custom colors for "Add an input/label" block icons in the "Make a block" popup menu, by pumpkinhasapatch
-    const uriHeader = "data:image/svg+xml;base64,";
-    const myBlocksCategory = categories[9];
     while (true) {
       // Wait until "Make a block" popup is opened and icon elements are created
       const iconElement = await addon.tab.waitForElement("[class^=custom-procedures_option-icon_]", {
