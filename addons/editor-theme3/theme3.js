@@ -623,6 +623,8 @@ export default async function ({ addon, console, msg }) {
       // Wait until "Make a block" popup is opened and icon elements are created
       const iconElement = await addon.tab.waitForElement("[class^=custom-procedures_option-icon_]", {
         markAsSeen: true,
+        reduxEvents: ["scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES"],
+        reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 0 && !state.scratchGui.mode.isPlayerOnly,
       });
       // Get img.src, remove data:image... header, then atob() decodes base64 to get the actual <svg> tags.
       let svg = atob(iconElement.src.replace(uriHeader, ""));
