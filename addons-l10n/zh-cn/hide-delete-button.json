@@ -1,0 +1,1 @@
+{"hide-delete-button/@name":"隐藏删除按钮","hide-delete-button/@description":"隐藏了角色、造型和声音中的删除按钮（垃圾桶图标）。它们仍然可以使用右键菜单删除。","hide-delete-button/@info-restoretip":"提示：如果你不小心删除了角色、造型或声音，你可以通过点击菜单栏中的“编辑”按钮，然后单击“还原”来恢复删除。","hide-delete-button/@settings-name-sprites":"角色","hide-delete-button/@settings-name-costumes":"造型和背景","hide-delete-button/@settings-name-sounds":"声音"}

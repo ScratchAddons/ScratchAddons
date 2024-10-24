@@ -15,9 +15,6 @@ label,
 #email-resend-box .email-resend-subsection {
   color: var(--darkWww-page-scratchr2LabelText);
 }
-.list a /* mobile forums */ {
-  color: var(--darkWww-page-scratchr2Text);
-}
 
 /* Navigation bar background */
 #topnav .innerwrap,
@@ -241,22 +238,33 @@ input::placeholder {
 .postfootright {
   box-shadow: 1px 0 inset var(--darkWww-box-scratchr2Border);
 }
+.modal-header {
+  border-color: var(--darkWww-box-divider5);
+}
+.nvd3 .nv-axis line /* statistics */ {
+  stroke: var(--darkWww-box-tab);
+}
+.djangobb hr /* signature divider */ {
+  background-color: var(--darkWww-box-tabHover);
+}
+.nvd3 line.nv-guideline /* statistics */ {
+  stroke: var(--darkWww-box-tabHover);
+}
 button,
 .button.grey {
+  background-color: transparent;
   background-image: linear-gradient(
     var(--darkWww-box-scratchr2ButtonGradientTop),
     var(--darkWww-box-scratchr2ButtonGradientBottom)
   );
+  background-clip: padding-box;
   border-color: var(--darkWww-box-scratchr2ButtonBorder);
   color: var(--darkWww-box-scratchr2ButtonText);
   text-shadow: 0 1px var(--darkWww-box);
 }
-ul.pagination a:active:not(.current) span /* mobile forums */ {
-  background-color: var(--darkWww-box-scratchr2ButtonGradientBottom);
-  color: var(--darkWww-box-scratchr2InputText);
-}
 button:hover,
 .button.grey:hover {
+  background-color: transparent;
   background-image: linear-gradient(var(--darkWww-box-scratchr2ButtonHover), var(--darkWww-box-scratchr2ButtonHover));
 }
 .dropdown .dropdown-menu li:hover {
@@ -264,10 +272,6 @@ button:hover,
 }
 
 /* Gray background */
-.my-ocular-reaction-button {
-  background-color: var(--darkWww-gray);
-  color: var(--darkWww-gray-scratchr2Text);
-}
 .box,
 .postleft,
 .postfootleft,
@@ -326,11 +330,12 @@ button:hover,
 .v-tabs li:hover {
   border-top-color: var(--darkWww-gray-boxHighlight);
 }
-.modal-footer,
-ul.pagination span /* mobile forums */,
-.post-content blockquote /* mobile forums */,
-.post-content div.code /* mobile forums */ {
+.modal-footer {
   box-shadow: 0 1px inset var(--darkWww-gray-boxHighlight);
+}
+.header-text .profile-details .group,
+.profile-details span.sa-ocular-status {
+  border-color: var(--darkWww-gray-divider15);
 }
 .v-tabs li.active,
 .v-tabs li.active:hover {
@@ -338,15 +343,9 @@ ul.pagination span /* mobile forums */,
 }
 .box .box-content .action-bar .inner,
 .contact #block-message,
-.djangobb th,
-.post-content blockquote /* mobile forums */,
-.post-content div.code /* mobile forums */ {
+.djangobb th {
   background-color: var(--darkWww-gray-scratchr2TableHeader);
   color: var(--darkWww-gray-scratchr2Text);
-}
-ul.pagination span /* mobile forums */ {
-  background-color: var(--darkWww-gray-scratchr2TableHeader);
-  color: var(--darkWww-gray-mobilePaginationText);
 }
 .tc2,
 .tc3 {
@@ -371,13 +370,9 @@ ul.pagination span /* mobile forums */ {
 }
 
 /* Input background */
-.my-ocular-popup,
 #comments .more-replies .pulldown {
   background-color: var(--darkWww-input);
   color: var(--darkWww-input-scratchr2Text);
-}
-.my-ocular-popup::after {
-  border-top-color: var(--darkWww-input);
 }
 #comments .more-replies {
   box-shadow: 0 -25px 20px -10px var(--darkWww-input);
@@ -425,13 +420,6 @@ textarea:focus,
   background-color: var(--darkWww-button-scratchr2PostHeader);
   border-top-color: var(--darkWww-button-scratchr2PostHeader);
 }
-.my-ocular-reaction-button {
-  box-shadow: 0 0 2px var(--darkWww-button-scratchr2PostHeader);
-}
-.my-ocular-reaction-button.selected {
-  background-color: var(--darkWww-button-scratchr2PostHeader);
-  color: var(--darkWww-button-scratchr2PostHeaderText);
-}
 .blockpost .box-head {
   border-top-color: rgba(255, 255, 255, 0.15);
 }
@@ -474,7 +462,6 @@ input.link.black:active,
 }
 
 /* Border color */
-.modal-header,
 #profile-box .player,
 .nvtooltip h3 /* statistics */ {
   border-color: var(--darkWww-border-5);
@@ -488,16 +475,11 @@ input.link.black:active,
 #email-resend-box {
   border-color: var(--darkWww-border);
 }
-.nvd3 .nv-axis line /* statistics */ {
-  stroke: var(--darkWww-border);
-}
 .sa-collapse-footer #footer,
 .thumb img,
 .djangobb blockquote,
-.my-ocular-popup,
 .media-list li,
 .media-item-content .media-thumb img,
-.header-text .profile-details .group,
 .slider-carousel .thumb img,
 #comments #comments-enabled-box,
 .table td,
@@ -507,9 +489,6 @@ input.link.black:active,
 }
 .markItUpHeader ul ul li:hover {
   border-color: var(--darkWww-border-15) !important;
-}
-.my-ocular-popup::before {
-  border-top-color: var(--darkWww-border-15);
 }
 .v-tabs li:hover {
   border-bottom-color: var(--darkWww-border-15);
@@ -548,21 +527,12 @@ select,
   border-color: var(--darkWww-border-20);
   border-top-color: var(--darkWww-border-5);
 }
-.djangobb hr {
-  background-color: var(--darkWww-border-20);
-}
 .markItUpHeader ul .markItUpSeparator {
   background-color: var(--darkWww-border-20) !important;
   color: transparent;
 }
-.nvd3 line.nv-guideline /* statistics */ {
-  stroke: var(--darkWww-border-20);
-}
 .modal,
-.markItUpHeader ul ul,
-ul.pagination span /* mobile forums */,
-.post-content blockquote /* mobile forums */,
-.post-content div.code /* mobile forums */ {
+.markItUpHeader ul ul {
   border-color: var(--darkWww-border-33) !important;
 }
 
@@ -616,9 +586,6 @@ body {
 }
 #footer {
   box-shadow: 0 0 10px inset rgba(0, 0, 0, 0.14);
-}
-div.content > article > header /* mobile forums */ {
-  box-shadow: 0 1px inset rgba(255, 255, 255, 0.29);
 }
 ul.pagination a:active:not(.current) span {
   box-shadow: 0 1px inset rgba(255, 255, 255, 0.33);
