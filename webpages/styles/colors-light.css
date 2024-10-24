@@ -1,7 +1,7 @@
 :root {
   --brand-orange-min-font-weight: 600;
   --green-text: var(--green);
-  --blue-text: var(--blue);
+  --blue-text: #175ef8;
 
   --page-background: #fcfcfc;
   --content-background: #f7f7f7;
@@ -28,6 +28,7 @@
   --hover-highlight: rgba(0, 0, 0, 0.05);
   --hover-highlight-reduced: rgba(0, 0, 0, 0.02);
   --hover-darken: var(--hover-highlight);
+  --header-hover-darken: rgba(0, 0, 0, 0.1);
 
   --content-border: #cfcfcf;
   --content-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

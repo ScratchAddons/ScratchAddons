@@ -1,11 +1,3 @@
-function scaleSVG(svg, factor) {
-  if (svg.classList.contains("scaled")) return;
-
-  svg.setAttribute("width", svg.getAttribute("width") * factor);
-  svg.setAttribute("height", svg.getAttribute("height") * factor);
-
-  svg.classList.add("scaled");
-}
 async function getLocales(addon) {
   const forumIdToLang = {
     13: "de",
@@ -53,8 +45,8 @@ export default async function ({ addon, msg }) {
   oldScript.remove();
 
   const [sb, loadTranslations] = await Promise.all([
-    import(addon.self.lib + "/thirdparty/cs/scratchblocks.min.es.js").then((mod) => mod.default),
-    import(addon.self.lib + "/thirdparty/cs/translations-all-es.js").then((mod) => mod.default),
+    import("../../libraries/thirdparty/cs/scratchblocks.min.es.js").then((mod) => mod.default),
+    import("../../libraries/thirdparty/cs/translations-all-es.js").then((mod) => mod.default),
   ]);
   window.scratchblocks = sb;
   loadTranslations(sb);
@@ -68,6 +60,7 @@ export default async function ({ addon, msg }) {
       parse: scratchblocks.parse,
       render: scratchblocks.render,
       document: options.doc || document,
+      scale: 0.675,
     };
     const elements = Array.from(opts.document.querySelectorAll(selector));
     elements.forEach((element) => {
@@ -75,7 +68,6 @@ export default async function ({ addon, msg }) {
       let code = element.innerText.replace(/<br>\s?|\n|\r\n|\r/gi, "\n");
       let parsed = opts.parse(code, opts);
       let svg = opts.render(parsed, opts);
-      scaleSVG(svg, 0.75);
 
       let container = opts.document.createElement("div");
       container.className = "scratchblocks3 scratchblocks-style-scratch3";

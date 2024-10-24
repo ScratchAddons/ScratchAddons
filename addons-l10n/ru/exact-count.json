@@ -1,1 +1,1 @@
-{"exact-count/@name":"Показывать точный счёт","exact-count/@description":"Показывает точный счёт для информации о пользователе и студии. Использует ScratchDB для информации о форуме.","exact-count/@settings-name-user":"Точный счёт для профилей","exact-count/@settings-name-studio":"Точный счёт для студий","exact-count/@settings-name-forumuser":"Точный счёт для пользователя форума"}
+{"exact-count/@name":"Показывать точный счёт","exact-count/@settings-name-user":"Точный счёт для профилей"}

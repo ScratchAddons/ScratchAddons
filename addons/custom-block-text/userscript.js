@@ -1,18 +1,23 @@
-import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 import { clearTextWidthCache } from "../middle-click-popup/module.js";
 
 export default async function ({ addon, console }) {
   let currentTextSize = 100;
 
-  const vm = addon.tab.traps.vm;
   const blocklyInstance = await addon.tab.traps.getBlockly();
+
+  const createStyle = () => {
+    const style = document.createElement("style");
+    style.className = "sa-custom-block-text-style"; // blocks2image compatibility
+    return style;
+  };
 
   // Handling the CSS from here instead of a userstyle is much more stable, as
   // there's no code outside of this addon dynamically toggling the styles.
   // This way, we can clearly control the execution order of style operations.
   // For example, we always want to call updateAllBlocks() after the styles
   // were updated according to the user's settings, not before.
-  const fontSizeCss = document.createElement("style");
+  const fontSizeCss = createStyle();
   // Be careful with specificity because we're adding this userstyle manually
   // to the <head> without checking if other styles are above or below.
   fontSizeCss.textContent = `
@@ -26,7 +31,7 @@ export default async function ({ addon, console }) {
   fontSizeCss.disabled = true;
   document.head.appendChild(fontSizeCss);
   //
-  const boldCss = document.createElement("style");
+  const boldCss = createStyle();
   boldCss.textContent = `
     .blocklyText,
     .blocklyHtmlInput {
@@ -35,7 +40,7 @@ export default async function ({ addon, console }) {
   boldCss.disabled = true;
   document.head.appendChild(boldCss);
   //
-  const textShadowCss = document.createElement("style");
+  const textShadowCss = createStyle();
   textShadowCss.textContent = `
     .blocklyDraggable > .blocklyText,
     .blocklyDraggable > g > text {
@@ -49,7 +54,7 @@ export default async function ({ addon, console }) {
     // If font size has changed, middle click popup needs to clear it's cache too
     clearTextWidthCache();
 
-    updateAllBlocks(vm, addon.tab.traps.getWorkspace(), blocklyInstance);
+    updateAllBlocks(addon.tab);
   };
 
   const setFontSize = (wantedSize) => {

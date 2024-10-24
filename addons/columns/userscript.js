@@ -52,6 +52,13 @@ export default async function ({ addon, msg, console }) {
         y
       );
       this.scrollbar_.resize();
+      Blockly.unbindEvent_(this.scrollbar_.onMouseDownBarWrapper_);
+      this.scrollbar_.onMouseDownBarWrapper_ = Blockly.bindEventWithChecks_(
+        this.scrollbar_.svgBackground_,
+        "mousedown",
+        this.scrollbar_,
+        this.scrollbar_.onMouseDownBar_
+      );
     }
 
     // Set CSS variables for the userstyle.
@@ -130,6 +137,22 @@ export default async function ({ addon, msg, console }) {
       this.secondTable.remove();
       this.secondTable = null;
     }
+  };
+
+  // https://github.com/scratchfoundation/scratch-blocks/blob/d374085e42a84d8aaf10f1ef3fb6ec6e9f1b7cf4/core/scrollbar.js#L700
+  const _ScrollbarOnMouseDownBar = Blockly.Scrollbar.prototype.onMouseDownBar_;
+  Blockly.Scrollbar.prototype.onMouseDownBar_ = function (e) {
+    // Scratch doesn't add the scrollbar origin coordinates when comparing mouse position with handle position
+    const newEvent = new MouseEvent("mousedown", {
+      // used by Blockly.utils.isRightButton:
+      button: e.button,
+      // used by Blockly.utils.mouseToSvg:
+      clientX: e.clientX + this.origin_.x,
+      clientY: e.clientY + this.origin_.y,
+    });
+    newEvent.stopPropagation = () => e.stopPropagation();
+    newEvent.preventDefault = () => e.preventDefault();
+    _ScrollbarOnMouseDownBar.call(this, newEvent);
   };
 
   function updateToolbox() {
