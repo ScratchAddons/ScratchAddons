@@ -8,13 +8,21 @@ export default async function ({ addon, console }) {
     long: "0.5s",
   };
 
+  const getElementAtPoint = (e) => {
+    e.target.style.pointerEvents = "none";
+    const elementAtPoint = document.elementFromPoint(e.x, e.y);
+    e.target.style.pointerEvents = "auto";
+    return elementAtPoint;
+  };
+
   const customZoomAreaElement = document.createElement("div");
   customZoomAreaElement.className = "sa-custom-zoom-area";
   customZoomAreaElement.addEventListener("mousedown", (e) => {
-    customZoomAreaElement.style.pointerEvents = "none";
-    const elementAtPoint = document.elementFromPoint(e.x, e.y);
-    customZoomAreaElement.style.pointerEvents = "auto";
-    elementAtPoint.dispatchEvent(new MouseEvent("mousedown", e));
+    getElementAtPoint(e).dispatchEvent(new MouseEvent("mousedown", e));
+  });
+  customZoomAreaElement.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    getElementAtPoint(e).dispatchEvent(new WheelEvent("wheel", e));
   });
 
   function update() {
