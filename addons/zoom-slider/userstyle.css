@@ -17,7 +17,7 @@
 }
 
 /* custom-zoom compatibility */
-.sa-custom-zoom-hidden > * {
+.sa-custom-zoom-area:not(:hover) + .blocklySvg.sa-custom-zoom-autohide .blocklyZoom > * {
   transform: translate(0, 90px);
 }
 .sa-custom-zoom-area {
