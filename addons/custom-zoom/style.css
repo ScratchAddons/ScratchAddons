@@ -10,6 +10,6 @@
 .blocklyZoom > * {
   transition: transform var(--sa-custom-zoom-speed, 0) ease-in-out;
 }
-.sa-custom-zoom-area:not(:hover) + .blocklySvg.sa-custom-zoom-autohide .blocklyZoom * {
+.sa-custom-zoom-area:not(:hover) + .blocklySvg.sa-custom-zoom-autohide .blocklyZoom > * {
   transform: translateX(80px);
 }
