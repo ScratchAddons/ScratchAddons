@@ -53,6 +53,8 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+      resizeEvent: true,
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
     addbutton();
