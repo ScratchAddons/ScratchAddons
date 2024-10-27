@@ -1,1 +1,1 @@
-{"stage-monitor/@name":"ステージモニターのカスタマイズ","stage-monitor/@description":"ステージ上の変数モニターやリストモニターの色や丸みを変更する。"}
+{"stage-monitor/@name":"ステージモニターのカスタマイズ","stage-monitor/@description":"ステージ上の変数モニターやリストモニターの色や丸みを変更する。","stage-monitor/@settings-name-monitor":"モニターの色","stage-monitor/@settings-name-listHeader":"リストのヘッダーの色","stage-monitor/@settings-name-monitorRadius":"モニターの角の丸み(px)","stage-monitor/@settings-name-valueRadius":"変数の角の丸み(px)","stage-monitor/@settings-name-customValueColor":"定義の変数の色","stage-monitor/@settings-name-monitorValueBg":"変数の色"}
