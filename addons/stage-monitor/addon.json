@@ -1,0 +1,147 @@
+{
+  "name": "Customizable stage monitors",
+  "description": "Changes the color and roundness of variable and list monitors on the stage.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://github.com/Samq64"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "monitors.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "monitor-values.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "customValueColor": true }
+      }
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "monitorLabel",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "monitor"
+        }
+      }
+    },
+    {
+      "name": "monitorValueText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "monitorValueBg"
+        }
+      }
+    },
+    {
+      "name": "listHeaderText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "listHeader"
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Monitor color",
+      "id": "monitor",
+      "type": "color",
+      "allowTransparency": true,
+      "default": "#e5f0ff"
+    },
+    {
+      "name": "List header color",
+      "id": "listHeader",
+      "type": "color",
+      "allowTransparency": true,
+      "default": "#ffffff"
+    },
+    {
+      "name": "Monitor roundness (px)",
+      "id": "monitorRadius",
+      "type": "integer",
+      "min": 0,
+      "max": 11,
+      "default": 4
+    },
+    {
+      "name": "Value roundness (px)",
+      "id": "valueRadius",
+      "type": "integer",
+      "min": 0,
+      "max": 11,
+      "default": 4
+    },
+    {
+      "name": "Custom value color",
+      "id": "customValueColor",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Value color",
+      "id": "monitorValueBg",
+      "type": "color",
+      "allowTransparency": true,
+      "default": "#575e75",
+      "if": {
+        "settings": { "customValueColor": true }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "Transparent values",
+      "id": "transparent",
+      "description": "Scratch's default monitor colors without value backgrounds.",
+      "values": {
+        "monitor": "#e5f0ff",
+        "listHeader": "#e5f0ff",
+        "customValueColor": true,
+        "monitorValueBg": "#ffffff00"
+      }
+    },
+    {
+      "name": "2.0 monitors",
+      "id": "scratch2",
+      "description": "Makes monitors the same colors as in Scratch 2.0",
+      "values": {
+        "monitor": "#c1c4c7",
+        "listHeader": "#c1c4c7",
+        "customValueColor": false
+      }
+    },
+    {
+      "name": "Translucent black",
+      "id": "translucent",
+      "description": "Translucent black monitors like in HTMLifier.",
+      "values": {
+        "monitor": "#00000040",
+        "listHeader": "#00000040",
+        "customValueColor": true,
+        "monitorValueBg": "#00000040"
+      }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "injectAsStyleElt": true,
+  "tags": ["editor", "theme", "projectPlayer"],
+  "versionAdded": "1.39.0"
+}

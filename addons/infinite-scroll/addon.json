@@ -63,6 +63,12 @@
       "id": "messageScroll",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Search and Explore",
+      "id": "searchExploreScroll",
+      "type": "boolean",
+      "default": true
     }
   ],
   "userscripts": [
@@ -79,7 +85,9 @@
         "projects",
         "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/messages"
+        "https://scratch.mit.edu/messages",
+        "https://scratch.mit.edu/search/*",
+        "https://scratch.mit.edu/explore/*"
       ]
     }
   ],
@@ -93,6 +101,10 @@
     }
   ],
   "tags": ["community", "featured"],
+  "latestUpdate": {
+    "newSettings": ["searchExploreScroll"],
+    "version": "1.36.0"
+  },
   "versionAdded": "1.2.0",
   "enabledByDefault": false
 }
