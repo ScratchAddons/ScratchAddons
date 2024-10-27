@@ -15,6 +15,7 @@
 }
 .sb-define-hat-cap {
   fill: var(--sa-block-color);
+  fill: color-mix(in srgb, white 20%, var(--sa-block-color));
   stroke: var(--sa-block-color);
 }
 .sb3-motion,
