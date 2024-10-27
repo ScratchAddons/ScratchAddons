@@ -144,7 +144,7 @@
 .sb3-custom-arg ~ .sb3-label,
 .sb-outline,
 .sb-outline ~ .sb-label,
-.sb-label:only-of-type:not(:last-child):not(.sb-literal-dropdown),
+.sb-label:only-of-type:not(:last-child):not(.sb-literal-dropdown), /* define text */
 .sb-define-hat-cap {
   --sa-block-color: var(--editorTheme3-customColor);
 }
