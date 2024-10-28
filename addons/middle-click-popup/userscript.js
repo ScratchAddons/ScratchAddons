@@ -111,7 +111,7 @@ export default async function ({ addon, msg, console }) {
 
     Blockly.hideChaff();
 
-    blockTypes = BlockTypeInfo.getBlocks(Blockly, vm, Blockly.getMainWorkspace(), msg);
+    blockTypes = BlockTypeInfo.getBlocks(Blockly, vm, addon.tab.traps.getWorkspace(), msg);
     querier.indexWorkspace([...blockTypes]);
     blockTypes.sort((a, b) => {
       const prio = (block) => ["operators", "data"].indexOf(block.category.name) - block.id.startsWith("data_");
@@ -340,7 +340,7 @@ export default async function ({ addon, msg, console }) {
     const selectedPreview = queryPreviews[selectedPreviewIdx];
     if (!selectedPreview) return;
 
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     // This is mostly copied from https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
     // Some bits were removed or changed to fit our needs.
     workspace.setResizesEnabled(false);

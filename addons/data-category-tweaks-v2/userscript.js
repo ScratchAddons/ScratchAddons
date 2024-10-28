@@ -192,7 +192,7 @@ export default async function ({ addon, console, msg, safeMsg }) {
     if (addon.settings.get("separateListCategory") !== hasSeparateListCategory) {
       updateToolboxXML(addon.tab);
     } else {
-      const workspace = Blockly.getMainWorkspace();
+      const workspace = addon.tab.traps.getWorkspace();
       if (workspace) {
         workspace.refreshToolboxSelection_();
       }
@@ -207,7 +207,7 @@ export default async function ({ addon, console, msg, safeMsg }) {
       updateToolboxXML(addon.tab);
     }
     if (addon.settings.get("separateLocalVariables") || addon.settings.get("moveReportersDown")) {
-      const workspace = Blockly.getMainWorkspace();
+      const workspace = addon.tab.traps.getWorkspace();
       if (workspace) {
         workspace.refreshToolboxSelection_();
       }
