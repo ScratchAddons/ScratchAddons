@@ -34,6 +34,8 @@ let fuse;
     "webpages/settings/components/modal",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
+    "webpages/settings/components/previews/stage-monitor",
+    "webpages/settings/components/previews/stage-monitor-preset",
     "webpages/settings/components/previews/workspace-dots",
   ]);
 
