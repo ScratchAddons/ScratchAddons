@@ -28,7 +28,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     get workspace() {
-      return Blockly.getMainWorkspace();
+      return addon.tab.traps.getWorkspace();
     }
 
     createDom(root) {
@@ -156,7 +156,7 @@ export default async function ({ addon, msg, console }) {
         }
 
         if (this.selectedTab === 0) {
-          this.utils.navigationHistory.goBack();
+          this.utils.goBack();
           e.cancelBubble = true;
           e.preventDefault();
           return true;
@@ -170,7 +170,7 @@ export default async function ({ addon, msg, console }) {
         }
 
         if (this.selectedTab === 0) {
-          this.utils.navigationHistory.goForward();
+          this.utils.goForward();
           e.cancelBubble = true;
           e.preventDefault();
           return true;
@@ -436,7 +436,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     get workspace() {
-      return Blockly.getMainWorkspace();
+      return addon.tab.traps.getWorkspace();
     }
 
     createDom() {

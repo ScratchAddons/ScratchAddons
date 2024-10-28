@@ -18,11 +18,6 @@ export default class Utils {
     // this._myFlash = { block: null, timerID: null, colour: null };
     this.offsetX = 32;
     this.offsetY = 32;
-    this.navigationHistory = new NavigationHistory();
-    /**
-     * The workspace
-     */
-    this._workspace = null;
   }
 
   /**
@@ -44,25 +39,11 @@ export default class Utils {
   }
 
   /**
-   * Returns the main workspace
-   * @returns !Blockly.Workspace
-   */
-  getWorkspace() {
-    const currentWorkspace = Blockly.getMainWorkspace();
-    if (currentWorkspace.getToolbox()) {
-      // Sadly get get workspace does not always return the 'real' workspace... Not sure how to get that at the moment,
-      //  but we can work out whether it's the right one by whether it has a toolbox.
-      this._workspace = currentWorkspace;
-    }
-    return this._workspace;
-  }
-
-  /**
    * Based on wksp.centerOnBlock(li.data.labelID);
    * @param blockOrId {Blockly.Block|{id}|BlockInstance} A Blockly Block, a block id, or a BlockInstance
    */
   scrollBlockIntoView(blockOrId) {
-    let workspace = this.getWorkspace();
+    let workspace = this.addon.tab.traps.getWorkspace();
     /** @type {Blockly.Block} */
     let block; // or is it really a Blockly.BlockSvg?
 
@@ -103,11 +84,11 @@ export default class Utils {
         // sy = s.contentTop - y + Math.max(Math.min(32, 32 * scale), (s.viewHeight - yh) / 2);
         sy = y - s.contentTop - this.offsetY;
 
-      this.navigationHistory.storeView(this.navigationHistory.peek(), 64);
+      this.storeView(this.peek(), 64);
 
       // workspace.hideChaff(),
       workspace.scrollbar.set(sx, sy);
-      this.navigationHistory.storeView({ left: sx, top: sy }, 64);
+      this.storeView({ left: sx, top: sy }, 64);
     }
     this.blockly?.hideChaff();
     BlockFlasher.flash(block);
@@ -125,15 +106,13 @@ export default class Utils {
     }
     return base;
   }
-}
 
-class NavigationHistory {
   /**
    * Keep a record of the scroll and zoom position
    */
   storeView(next, dist) {
     forward = [];
-    let workspace = Blockly.getMainWorkspace(),
+    let workspace = this.addon.tab.traps.getWorkspace(),
       s = workspace.getMetrics();
 
     let pos = { left: s.viewLeft, top: s.viewTop };
@@ -147,7 +126,7 @@ class NavigationHistory {
   }
 
   goBack() {
-    const workspace = Blockly.getMainWorkspace(),
+    const workspace = this.addon.tab.traps.getWorkspace(),
       s = workspace.getMetrics();
 
     let pos = { left: s.viewLeft, top: s.viewTop };
@@ -199,7 +178,7 @@ class NavigationHistory {
     }
     views.push(view);
 
-    let workspace = Blockly.getMainWorkspace(),
+    let workspace = this.addon.tab.traps.getWorkspace(),
       s = workspace.getMetrics();
 
     let sx = view.left - s.contentLeft,
