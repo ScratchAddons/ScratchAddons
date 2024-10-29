@@ -32,6 +32,7 @@ let fuse;
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
     "webpages/settings/components/modal",
+    "webpages/settings/components/previews/dark-www",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
     "webpages/settings/components/previews/stage-monitor",

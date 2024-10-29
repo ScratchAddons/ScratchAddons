@@ -2607,6 +2607,9 @@
       }
     }
   ],
+  "addonPreview": {
+    "type": "dark-www"
+  },
   "presetPreview": {
     "type": "palette",
     "colors": ["button", "navbar", "page", "box", "gray", "blue"]
