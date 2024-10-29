@@ -2,6 +2,7 @@
   <div
     role="presentation"
     class="monitor-preview"
+    :data-setting-hovered="hoveredSettingId"
     :style="cssVariables({
       '--monitor': settings.monitor,
       '--monitor-label': colors.monitorLabel,
@@ -15,15 +16,35 @@
       '--value-radius': settings.valueRadius + 'px',
     })"
   >
-    <div class="monitor monitor-variable">
+    <div
+      class="monitor monitor-variable"
+      @mouseenter="$emit('areahover', 'monitor')"
+      @mouseleave="$emit('areahover', null)"
+    >
       <div class="monitor-variable-label">{{ msg("myVariable") }}</div>
-      <div class="monitor-variable-value">123</div>
+      <div
+        class="monitor-variable-value"
+        @mouseenter="$emit('areahover', 'customValueColor')"
+        @mouseleave="$emit('areahover', 'monitor')"
+      >123</div>
     </div>
-    <div class="monitor monitor-list">
-      <div class="monitor-list-header">{{ msg("myList") }}</div>
+    <div
+      class="monitor monitor-list"
+      @mouseenter="$emit('areahover', 'monitor')"
+      @mouseleave="$emit('areahover', null)"
+    >
+      <div
+        class="monitor-list-header"
+        @mouseenter="$emit('areahover', 'listHeader')"
+        @mouseleave="$emit('areahover', 'monitor')"
+      >{{ msg("myList") }}</div>
       <div class="monitor-list-row">
         <div class="monitor-list-index">1</div>
-        <div class="monitor-list-value">{{ msg("thing") }}</div>
+        <div
+          class="monitor-list-value"
+          @mouseenter="$emit('areahover', 'customValueColor')"
+          @mouseleave="$emit('areahover', 'monitor')"
+        >{{ msg("thing") }}</div>
       </div>
     </div>
   </div>
@@ -46,6 +67,22 @@
     border: 1px solid var(--control-border);
     border-radius: 4px;
     user-select: none;
+  }
+
+  .monitor-preview * {
+    transition: box-shadow 0.2s ease;
+  }
+
+  .monitor-preview[data-setting-hovered="monitor"] .monitor,
+  .monitor-preview[data-setting-hovered="listHeader"] .monitor-list-header {
+    box-shadow: 0 0 8px inset var(--orange);
+  }
+
+  .monitor-preview[data-setting-hovered="customValueColor"] .monitor-variable-value,
+  .monitor-preview[data-setting-hovered="customValueColor"] .monitor-list-value,
+  .monitor-preview[data-setting-hovered="monitorValueBg"] .monitor-variable-value,
+  .monitor-preview[data-setting-hovered="monitorValueBg"] .monitor-list-value {
+    box-shadow: 0 0 8px var(--blue);
   }
 
   .monitor {
