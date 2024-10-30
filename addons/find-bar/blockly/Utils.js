@@ -18,6 +18,7 @@ export default class Utils {
     // this._myFlash = { block: null, timerID: null, colour: null };
     this.offsetX = 32;
     this.offsetY = 32;
+    this.navigationHistory = new NavigationHistory(addon);
   }
 
   /**
@@ -84,11 +85,11 @@ export default class Utils {
         // sy = s.contentTop - y + Math.max(Math.min(32, 32 * scale), (s.viewHeight - yh) / 2);
         sy = y - s.contentTop - this.offsetY;
 
-      this.storeView(this.peek(), 64);
+      this.navigationHistory.storeView(this.navigationHistory.peek(), 64);
 
       // workspace.hideChaff(),
       workspace.scrollbar.set(sx, sy);
-      this.storeView({ left: sx, top: sy }, 64);
+      this.navigationHistory.storeView({ left: sx, top: sy }, 64);
     }
     this.blockly?.hideChaff();
     BlockFlasher.flash(block);
@@ -105,6 +106,12 @@ export default class Utils {
       base = base.getSurroundParent();
     }
     return base;
+  }
+}
+
+class NavigationHistory {
+  constructor(addon) {
+    this.addon = addon;
   }
 
   /**
