@@ -166,6 +166,7 @@
 [class*="stage-selector_header_"],
 [class*="drag-layer_image_"],
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
+.scratchColourSlider::-webkit-slider-thumb,
 [class*="asset-panel_wrapper_"],
 [class*="color-button_outline-swatch_"]::after,
 [class*="slider_handle_"],
@@ -205,7 +206,9 @@
 .blocklyFlyoutButton:hover {
   fill: var(--editorDarkMode-accent);
 }
-.blocklyFlyoutButton:hover .blocklyText {
+.blocklyFlyoutButton:hover .blocklyText,
+.scratch-renderer.default-theme .blocklyFlyoutButton:hover .blocklyText,
+.scratch-renderer.high-contrast-theme .blocklyFlyoutButton:hover .blocklyText {
   fill: var(--editorDarkMode-accent-text);
 }
 [class*="selector_new-buttons_"]::before {
@@ -281,6 +284,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="input_input-form_"],
 [class*="context-menu_context-menu_"],
 .blocklyWidgetDiv .goog-menu,
+.blocklyWidgetDiv .blocklyMenu,
 [class*="filter_filter_"],
 [class*="prompt_button-row_"] button,
 [class*="prompt_variable-name-text-input_"],
@@ -306,7 +310,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="filter_filter-input_"],
 [class*="filter_filter-input_"]::placeholder,
 .blocklyWidgetDiv .goog-menuitem,
-.scratchColourPickerLabel {
+.blocklyMenuItem,
+.scratchColourPickerLabel,
+.valueReportBox {
   color: var(--editorDarkMode-input-text);
 }
 .Popover-tipShape,
@@ -315,7 +321,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyFlyoutCheckbox {
   fill: var(--editorDarkMode-input);
 }
-.blocklyBlockCanvas g:not(.checked) .blocklyFlyoutCheckboxPath {
+.blocklyBlockCanvas g:not(.checked) .blocklyFlyoutCheckboxPath,
+.blocklyBubbleCanvas > g:not(.checked) .blocklyFlyoutCheckboxPath {
   stroke: var(--editorDarkMode-input);
 }
 .blocklyDropDownDiv[style*="background-color: rgb(255, 255, 255)"] {
@@ -335,14 +342,19 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-content {
   color: var(--editorDarkMode-input-transparentText) !important;
 }
+.blocklyMenuItemDisabled {
+  color: var(--editorDarkMode-input-transparentText);
+}
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
+.scratchColourSlider::-webkit-slider-thumb,
 [class*="slider_handle_"] {
   box-shadow: 0 0 0 4px var(--editorDarkMode-input-foregroundShadow);
 }
 [class*="context-menu_menu-item-bordered_"] {
   border-color: var(--editorDarkMode-input-divider);
 }
-.blocklyWidgetDiv .goog-menuitem {
+.blocklyWidgetDiv .goog-menuitem,
+.blocklyMenuItem {
   border-color: var(--editorDarkMode-input-divider) !important;
 }
 [class*="question_question-input_"] [class*="input_input-form_"] {
@@ -373,6 +385,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 .scratchCategoryMenu {
   background: var(--editorDarkMode-categoryMenu);
   color: var(--editorDarkMode-categoryMenu-text);
+  --colour-toolboxSelected: var(--editorDarkMode-categoryMenu-selection);
+  --colour-toolboxText: var(--editorDarkMode-categoryMenu-text);
 }
 .scratchCategoryMenuItem.categorySelected {
   background-color: var(--editorDarkMode-categoryMenu-selection);
@@ -381,6 +395,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .scratchCategoryMenuItem:hover {
   color: var(--editorDarkMode-categoryMenu-hoverText) !important;
 }
+.blocklyToolboxCategory:hover {
+  color: var(--editorDarkMode-categoryMenu-hoverText);
+}
 
 /* Block palette background */
 .blocklyFlyoutBackground {
@@ -388,7 +405,11 @@ img[class*="tool-select-base_tool-select-icon_"],
   fill-opacity: 1;
 }
 .blocklyFlyoutLabelText,
-.blocklyFlyoutButton .blocklyText {
+.scratch-renderer.default-theme .blocklyFlyoutLabelText,
+.scratch-renderer.high-contrast-theme .blocklyFlyoutLabelText,
+.blocklyFlyoutButton .blocklyText,
+.scratch-renderer.default-theme .blocklyFlyoutButton .blocklyText,
+.scratch-renderer.high-contrast-theme .blocklyFlyoutButton .blocklyText {
   fill: var(--editorDarkMode-palette-text);
 }
 .blocklyFlyoutScrollbar .blocklyScrollbarHandle,
@@ -458,6 +479,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyWidgetDiv .goog-menuitem-highlight,
 .blocklyWidgetDiv .goog-menuitem-hover {
   background-color: var(--editorDarkMode-primary-transparent15);
+}
+:root {
+  --colour-contextualMenuHover: var(--editorDarkMode-primary-transparent15);
 }
 [class*="library_filter-bar_"],
 .sa-body-editor [class*="stage-header_stage-button_"]:active,
@@ -615,6 +639,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="library-item_library-item_"],
 [class*="context-menu_context-menu_"],
 .blocklyWidgetDiv .goog-menu,
+.blocklyWidgetDiv .blocklyMenu,
 .scratchEyedropper,
 .Popover-body,
 .sa-onion-settings,
@@ -660,6 +685,10 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
   /* Make backpack items have a white background,
   otherwise they would be too dark in dark mode. */
   mix-blend-mode: normal;
+}
+.blocklyToolboxCategory:not(.blocklyToolboxSelected):hover {
+  /* Remove Blockly's default hover highlight from categories. */
+  background-color: transparent;
 }
 .blocklyWidgetDiv .goog-menuitem-highlight {
   border: none;
