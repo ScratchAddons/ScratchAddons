@@ -207,9 +207,11 @@
   fill: var(--editorDarkMode-accent);
 }
 .blocklyFlyoutButton:hover .blocklyText,
-.scratch-renderer.default-theme .blocklyFlyoutButton:hover .blocklyText,
-.scratch-renderer.high-contrast-theme .blocklyFlyoutButton:hover .blocklyText {
+.scratch-renderer.default-theme .blocklyFlyoutButton:hover .blocklyText {
   fill: var(--editorDarkMode-accent-text);
+}
+.scratch-renderer.high-contrast-theme .blocklyFlyoutButton:hover .blocklyText {
+  fill: var(--editorDarkMode-accent-text) !important;
 }
 [class*="selector_new-buttons_"]::before {
   background: linear-gradient(var(--editorDarkMode-accent-gradient-opacity0), var(--editorDarkMode-accent-gradient));
@@ -408,9 +410,11 @@ img[class*="tool-select-base_tool-select-icon_"],
 .scratch-renderer.default-theme .blocklyFlyoutLabelText,
 .scratch-renderer.high-contrast-theme .blocklyFlyoutLabelText,
 .blocklyFlyoutButton .blocklyText,
-.scratch-renderer.default-theme .blocklyFlyoutButton .blocklyText,
-.scratch-renderer.high-contrast-theme .blocklyFlyoutButton .blocklyText {
+.scratch-renderer.default-theme .blocklyFlyoutButton .blocklyText {
   fill: var(--editorDarkMode-palette-text);
+}
+.scratch-renderer.high-contrast-theme .blocklyFlyoutButton .blocklyText {
+  fill: var(--editorDarkMode-palette-text) !important;
 }
 .blocklyFlyoutScrollbar .blocklyScrollbarHandle,
 .blocklyFlyoutScrollbar .blocklyScrollbarBackground:hover + .blocklyScrollbarHandle,
