@@ -24,8 +24,17 @@ export async function updateAllBlocks(
       }
       if (updateCategories) {
         const selectedItemId = toolbox.getSelectedItem().id_;
-        toolbox.categoryMenu_.populate(workspace.options.languageTree);
-        toolbox.selectCategoryById(selectedItemId, false);
+        if (blockly.registry) {
+          // new Blockly
+          toolbox.render(workspace.options.languageTree);
+          toolbox.selectItem_(
+            null,
+            toolbox.contents_.find((item) => item.id_ === selectedItemId)
+          );
+        } else {
+          toolbox.categoryMenu_.populate(workspace.options.languageTree);
+          toolbox.selectCategoryById(selectedItemId, false);
+        }
       }
       toolbox.refreshSelection();
     }
