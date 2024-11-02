@@ -158,6 +158,7 @@
 .sa-body-editor [class*="stage-header_stage-size-row_"] > *,
 .sa-body-editor [class*="stage-header_unselect-wrapper_"],
 [class*="sprite-info_sprite-info_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="stage-selector_stage-selector_"],
 [class*="stage-selector_header_"],
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
@@ -376,6 +377,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 /* Primary color */
 [class*="sprite-selector-item_is-selected_"] [class*="sprite-selector-item_sprite-info_"],
 [class*="delete-button_delete-button-visible_"],
+[class*="delete-confirmation-prompt_body_"],
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header_"],
 [class*="font-dropdown_mod-menu-item_"]:hover:not(:active),
 [class*="tool-select-base_mod-tool-select_"][class*="tool-select-base_is-selected_"],
@@ -393,6 +395,7 @@ img[class*="tool-select-base_tool-select-icon_"],
   background-color: var(--editorDarkMode-primary);
   color: var(--editorDarkMode-primary-text);
 }
+[class*="delete-button_delete-button-clicked_"],
 [class*="context-menu_menu-item-danger_"]:hover {
   background-color: hsla(30, 100%, 55%, 1);
 }
@@ -465,6 +468,11 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="action-menu_main-button_"]:hover {
   box-shadow: 0 0 0 6px var(--editorDarkMode-primary-transparent35);
 }
+[class*="dial_gauge-path_"] {
+  fill: var(--editorDarkMode-primary-transparent35);
+  stroke: var(--editorDarkMode-primary);
+}
+[class*="delete-confirmation-prompt_label_"],
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header-title_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
@@ -482,6 +490,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .sa-paint-snap-button[data-enabled="true"] .sa-paint-snap-image,
 .sa-onion-button[data-enabled="true"] .sa-onion-image {
   filter: var(--editorDarkMode-primary-filter2);
+}
+[class*="delete-confirmation-prompt_arrow-container_"] [class*="delete-confirmation-prompt_delete-icon_"] {
+  filter: var(--editorDarkMode-primary-iconFilter);
 }
 [class*="action-menu_more-buttons-outer_"],
 [class*="action-menu_more-button_"] {
@@ -502,6 +513,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 /* Text and icon highlight color */
 .sa-body-editor a:link,
 [class*="gui_tab_"][class*="gui_is-selected_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="dropdown_dropdown_"],
 [class*="record-modal_playing-text_"],
 [class*="record-modal_button-row_"] button,
@@ -511,6 +523,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="gui_tab_"][class*="gui_is-selected_"] img,
 [class*="toggle-buttons_button_"][aria-pressed="true"] > img,
 [class*="sprite-info_is-active_"] [class*="sprite-info_icon_"],
+[class*="delete-confirmation-prompt_button-row_"] [class*="delete-confirmation-prompt_delete-icon_"],
 [class*="fixed-tools_button-group-button-icon_"],
 [class*="color-picker_swap-button_"] [class*="labeled-icon-button_edit-field-icon_"],
 [class*="dropdown_dropdown-icon_"],
@@ -545,6 +558,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="input_input-form_"],
 [class*="sprite-info_sprite-info_"],
 [class*="sprite-selector-item_sprite-selector-item_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="stage-selector_stage-selector_"],
 [class*="stage-selector_header_"],
 [class*="stage-selector_costume-canvas_"],
