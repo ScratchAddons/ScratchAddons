@@ -1,5 +1,4 @@
 export default async function ({ addon, console }) {
-  await addon.tab.traps.getBlockly();
 
   const speeds = {
     none: "0s",
