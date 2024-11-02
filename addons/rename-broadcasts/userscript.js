@@ -172,7 +172,7 @@ export default async function ({ addon, msg, console }) {
   };
 
   const updateExistingMenuGenerators = () => {
-    const workspace = addon.tab.traps.getWorkspace();
+    const workspace = Blockly.getMainWorkspace();
     const flyout = workspace && workspace.getFlyout();
     if (workspace && flyout) {
       const allBlocks = [...workspace.getAllBlocks(), ...flyout.getWorkspace().getAllBlocks()];

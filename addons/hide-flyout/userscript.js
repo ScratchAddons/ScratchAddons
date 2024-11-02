@@ -156,14 +156,14 @@ export default async function ({ addon, console, msg }) {
     });
 
     if (addon.self.enabledLate && getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
-      addon.tab.traps.getWorkspace().getToolbox().selectedItem_.setSelected(false);
+      Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
     }
     addon.self.addEventListener("disabled", () => {
-      addon.tab.traps.getWorkspace().getToolbox().selectedItem_.setSelected(true);
+      Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
     });
     addon.self.addEventListener("reenabled", () => {
       if (getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
-        addon.tab.traps.getWorkspace().getToolbox().selectedItem_.setSelected(false);
+        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
         closeFlyout(null, 0);
         toggle = false;
       }
@@ -179,7 +179,7 @@ export default async function ({ addon, console, msg }) {
           flyoutLocked = false;
           updateLockDisplay();
         } else {
-          addon.tab.traps.getWorkspace().getToolbox().selectedItem_.setSelected(false);
+          Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
           closeFlyout(null, 0);
           toggle = false;
         }
@@ -191,7 +191,7 @@ export default async function ({ addon, console, msg }) {
         } else {
           closeFlyout();
         }
-        addon.tab.traps.getWorkspace().getToolbox().selectedItem_.setSelected(true);
+        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
     });
 
@@ -323,6 +323,6 @@ export default async function ({ addon, console, msg }) {
 
     doOneTimeSetup();
     initFlyoutState();
-    Blockly.svgResize(addon.tab.traps.getWorkspace());
+    Blockly.svgResize(Blockly.getMainWorkspace());
   }
 }

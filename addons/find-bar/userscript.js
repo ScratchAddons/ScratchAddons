@@ -28,7 +28,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     get workspace() {
-      return addon.tab.traps.getWorkspace();
+      return Blockly.getMainWorkspace();
     }
 
     createDom(root) {
@@ -436,7 +436,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     get workspace() {
-      return addon.tab.traps.getWorkspace();
+      return Blockly.getMainWorkspace();
     }
 
     createDom() {
