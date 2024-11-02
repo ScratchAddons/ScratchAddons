@@ -1,5 +1,4 @@
 export default async function ({ addon, console }) {
-
   const speeds = {
     none: "0s",
     short: "0.2s",
