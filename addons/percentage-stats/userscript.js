@@ -1,4 +1,6 @@
 export default async function ({ addon, console }) {
+  let els = null;
+
   function getStats() {
     const stats = {
       views: els.views.innerHTML,
@@ -29,25 +31,14 @@ export default async function ({ addon, console }) {
     return percentages;
   }
 
-  await addon.tab.waitForElement(".stats");
-  const els = {
-    views: document.querySelector(".project-views"),
-    loves: document.querySelector(".project-loves"),
-    favs: document.querySelector(".project-favorites"),
-    remixes: document.querySelector(".project-remixes"),
-  };
-
   const modalL = document.createElement("div");
   modalL.className = "loves-modal";
-  document.body.appendChild(modalL);
 
   const modalF = document.createElement("div");
   modalF.className = "favs-modal";
-  document.body.appendChild(modalF);
 
   const modalR = document.createElement("div");
   modalR.className = "remixes-modal";
-  document.body.appendChild(modalR);
 
   function showModal(showKey) {
     let showModal;
@@ -78,16 +69,29 @@ export default async function ({ addon, console }) {
     hideModal.style.opacity = 0;
   }
 
-  for (const key in els) {
-    if (els.hasOwnProperty(key) && key !== "views") {
-      els[key].addEventListener("mouseover", () => showModal(key));
-      els[key].addEventListener("mouseout", () => hideModal(key));
-      els[key].addEventListener("mousedown", () => {
-        // Update modal on click of stat
-        setTimeout(() => {
-          showModal(key);
-        }, 300);
-      });
+  while (true) {
+    await addon.tab.waitForElement(".stats", { markAsSeen: true });
+    els = {
+      views: document.querySelector(".project-views"),
+      loves: document.querySelector(".project-loves"),
+      favs: document.querySelector(".project-favorites"),
+      remixes: document.querySelector(".project-remixes"),
+    };
+    document.body.appendChild(modalL);
+    document.body.appendChild(modalF)
+    document.body.appendChild(modalR);
+
+    for (const key in els) {
+      if (els.hasOwnProperty(key) && key !== "views") {
+        els[key].addEventListener("mouseover", () => showModal(key));
+        els[key].addEventListener("mouseout", () => hideModal(key));
+        els[key].addEventListener("mousedown", () => {
+          // Update modal on click of stat
+          setTimeout(() => {
+            showModal(key);
+          }, 300);
+        });
+      }
     }
   }
 }
