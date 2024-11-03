@@ -9,7 +9,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.37.0",
+  "versionAdded": "1.40.0",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -22,6 +22,5 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["community", "recommended"],
-  "enabledByDefault": true
+  "tags": ["community", "projectPage"]
 }
