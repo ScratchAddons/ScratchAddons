@@ -51,11 +51,89 @@
       }
     },
     {
+      "name": "page-purpleText",
+      "value": {
+        "type": "textColor",
+        "black": "#855cd6",
+        "white": "#ccb3ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-purpleIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "textColor",
+          "black": "#855cd6",
+          "white": "#ccb3ff",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          }
+        }
+      }
+    },
+    {
+      "name": "page-lightBlueText",
+      "value": {
+        "type": "textColor",
+        "black": "#2e8eb8",
+        "white": "#85c4e0",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-pinkText",
+      "value": {
+        "type": "textColor",
+        "black": "#ff3355",
+        "white": "#ff99aa",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-pinkIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "textColor",
+          "black": "#ff3355",
+          "white": "#ff99aa",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          }
+        }
+      }
+    },
+    {
       "name": "page-tabHoverFilter",
       "value": {
         "type": "textColor",
         "black": "grayscale(100%)",
         "white": "brightness(0) invert(1) opacity(0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
         "source": {
           "type": "settingValue",
           "settingId": "page"
@@ -136,6 +214,28 @@
         "type": "textColor",
         "black": "none",
         "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
+      "name": "primary-filter3",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0) invert(0.4)",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
+      "name": "primary-iconFilter",
+      "value": {
+        "type": "recolorFilter",
         "source": {
           "type": "settingValue",
           "settingId": "primary"
@@ -458,6 +558,17 @@
       }
     },
     {
+      "name": "accent-formControlText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "accent-filter",
       "value": {
         "type": "textColor",
@@ -494,6 +605,18 @@
       }
     },
     {
+      "name": "accent-divider",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "accent-colorScheme",
       "value": {
         "type": "textColor",
@@ -507,14 +630,41 @@
       }
     },
     {
-      "name": "accent-opacity0",
+      "name": "accent-gradient",
       "value": {
         "type": "multiply",
         "source": {
           "type": "settingValue",
           "settingId": "accent"
         },
+        "r": 0.91,
+        "g": 0.93,
+        "b": 0.95
+      }
+    },
+    {
+      "name": "accent-gradient-opacity0",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "r": 0.91,
+        "g": 0.93,
+        "b": 0.95,
         "a": 0
+      }
+    },
+    {
+      "name": "accent-transparent75",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "a": 0.75
       }
     },
     {
@@ -613,6 +763,17 @@
       }
     },
     {
+      "name": "accent-dropHighlight",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#4d97ffa8"
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
@@ -656,6 +817,18 @@
         "source": {
           "type": "settingValue",
           "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-divider",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
         }
       }
     },
@@ -714,18 +887,6 @@
           "settingId": "input"
         },
         "a": 0.25
-      }
-    },
-    {
-      "name": "workspace-codeZoomFilter",
-      "value": {
-        "type": "textColor",
-        "black": "none",
-        "white": "invert(1) hue-rotate(180deg)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "workspace"
-        }
       }
     },
     {
@@ -955,7 +1116,19 @@
       "matches": ["projects"]
     },
     {
+      "url": "zoom_icons.js",
+      "matches": ["projects"]
+    },
+    {
       "url": "paint_icons.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "dial.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "debugger.js",
       "matches": ["projects"]
     }
   ],
@@ -963,13 +1136,6 @@
     {
       "url": "experimental_editor.css",
       "matches": ["projects"]
-    },
-    {
-      "url": "hide_dots.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "dots": false }
-      }
     },
     {
       "url": "paper.css",
@@ -1107,12 +1273,6 @@
       "allowTransparency": true
     },
     {
-      "name": "Show workspace dots",
-      "id": "dots",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "name": "Change the costume editor background",
       "id": "affectPaper",
       "type": "boolean",
@@ -1148,8 +1308,7 @@
         "palette": "#202020cc",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
-        "border": "#ffffff0d",
-        "dots": false
+        "border": "#ffffff0d"
       }
     },
     {
@@ -1174,8 +1333,7 @@
         "palette": "#202020cc",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
-        "border": "#ffffff0d",
-        "dots": false
+        "border": "#ffffff0d"
       }
     },
     {
@@ -1200,8 +1358,7 @@
         "palette": "#2f4066cc",
         "fullscreen": "#051638",
         "stageHeader": "#051638",
-        "border": "#00000026",
-        "dots": false
+        "border": "#00000026"
       }
     },
     {
@@ -1226,8 +1383,7 @@
         "palette": "#222222cc",
         "fullscreen": "#222222",
         "stageHeader": "#222222",
-        "border": "#111111",
-        "dots": false
+        "border": "#111111"
       }
     },
     {
@@ -1252,8 +1408,7 @@
         "palette": "#333333cc",
         "fullscreen": "#282828",
         "stageHeader": "#333333",
-        "border": "#444444",
-        "dots": true
+        "border": "#444444"
       }
     },
     {
@@ -1278,8 +1433,7 @@
         "palette": "#111111cc",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
-        "border": "#ffffff26",
-        "dots": true
+        "border": "#ffffff26"
       }
     },
     {
@@ -1304,8 +1458,7 @@
         "palette": "#e6e8e8cc",
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
-        "border": "#d0d1d2",
-        "dots": true
+        "border": "#d0d1d2"
       }
     },
     {
@@ -1330,8 +1483,7 @@
         "palette": "#7c8083cc",
         "fullscreen": "#000001",
         "stageHeader": "#000001",
-        "border": "#0000006b",
-        "dots": false
+        "border": "#0000006b"
       }
     },
     {
@@ -1356,8 +1508,7 @@
         "palette": "#f9f9f9cc",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
-        "border": "#00000026",
-        "dots": true
+        "border": "#00000026"
       }
     },
     {
@@ -1382,8 +1533,7 @@
         "palette": "#f9f9f9cc",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
-        "border": "#00000026",
-        "dots": true
+        "border": "#00000026"
       }
     }
   ],

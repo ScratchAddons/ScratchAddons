@@ -3,10 +3,8 @@ export default async function ({ addon, console, msg }) {
   let spriteSelectorContainer;
 
   const container = document.createElement("div");
-  container.className = "sa-search-sprites-container";
-  addon.tab.displayNoneWhileDisabled(container, {
-    display: "flex",
-  });
+  container.className = "sa-search-sprites-container sa-search-sprites-empty";
+  addon.tab.displayNoneWhileDisabled(container);
 
   const searchBox = document.createElement("input");
   searchBox.className = "sa-search-sprites-box";
@@ -34,21 +32,38 @@ export default async function ({ addon, console, msg }) {
   };
 
   searchBox.addEventListener("input", (e) => {
+    container.classList.toggle("sa-search-sprites-empty", !e.target.value);
     search(e.target.value);
   });
+
+  const searchIcon = document.createElement("img");
+  searchIcon.className = "sa-search-sprites-icon";
+  searchIcon.src = addon.self.dir + "/search-icon.svg";
+  searchIcon.alt = "";
+  searchIcon.draggable = false;
 
   const reset = () => {
     search("");
     searchBox.value = "";
+    container.classList.add("sa-search-sprites-empty");
   };
 
   const resetButton = document.createElement("button");
   resetButton.className = "sa-search-sprites-reset";
-  resetButton.addEventListener("click", reset);
-  resetButton.textContent = "×";
+  resetButton.addEventListener("click", () => {
+    reset();
+    searchBox.focus();
+  });
   addon.self.addEventListener("disabled", reset);
 
+  const resetIcon = document.createElement("img");
+  resetIcon.src = addon.self.dir + "/reset-icon.svg";
+  resetIcon.alt = msg("clear");
+  resetIcon.draggable = false;
+  resetButton.appendChild(resetIcon);
+
   container.appendChild(searchBox);
+  container.appendChild(searchIcon);
   container.appendChild(resetButton);
 
   while (true) {
@@ -59,8 +74,9 @@ export default async function ({ addon, console, msg }) {
     });
 
     spritesContainer = document.querySelector('[class^="sprite-selector_items-wrapper"]');
-    spriteSelectorContainer = document.querySelector('[class^="sprite-selector_scroll-wrapper"]');
-    spriteSelectorContainer.insertBefore(container, spritesContainer);
+    spriteSelectorContainer = document.querySelector('[class^="sprite-selector_sprite-selector"]');
+    const addButton = document.querySelector('[class*="sprite-selector_add-button"]');
+    spriteSelectorContainer.insertBefore(container, addButton);
     reset(); // Clear search box after going outside then inside
   }
 }
