@@ -78,7 +78,7 @@ export default async function ({ addon, console }) {
       remixes: document.querySelector(".project-remixes"),
     };
     document.body.appendChild(modalL);
-    document.body.appendChild(modalF)
+    document.body.appendChild(modalF);
     document.body.appendChild(modalR);
 
     for (const key in els) {
