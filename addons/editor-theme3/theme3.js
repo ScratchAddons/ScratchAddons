@@ -2,6 +2,12 @@ import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/com
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
+const uriHeader = "data:image/svg+xml;base64,";
+const myBlocksCategory = {
+  id: "myBlocks",
+  settingId: "custom-color",
+  colorId: "more",
+};
 const extensionsCategory = {
   id: null,
   settingId: "Pen-color",
@@ -57,11 +63,7 @@ const categories = [
     settingId: "data-lists-color",
     colorId: "data_lists",
   },
-  {
-    id: "myBlocks",
-    settingId: "custom-color",
-    colorId: "more",
-  },
+  myBlocksCategory,
   extensionsCategory,
   saCategory,
 ];
@@ -615,6 +617,36 @@ export default async function ({ addon, console, msg }) {
     if (!newColors) return;
     Object.assign(originalColors, newColors);
   };
+
+  (async () => {
+    // Custom colors for "Add an input/label" block icons in the "Make a block" popup menu, by pumpkinhasapatch
+    while (true) {
+      // Wait until "Make a block" popup is opened and icon elements are created
+      const iconElement = await addon.tab.waitForElement("[class^=custom-procedures_option-icon_]", {
+        markAsSeen: true,
+        reduxEvents: ["scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES"],
+        reduxCondition: (state) =>
+          state.scratchGui.editorTab.activeTabIndex === 0 && !state.scratchGui.mode.isPlayerOnly,
+      });
+      // Get img.src, remove data:image... header, then atob() decodes base64 to get the actual <svg> tags.
+      let svg = atob(iconElement.src.replace(uriHeader, ""));
+
+      // Find and replace the default color codes in the svg with our custom ones
+      // Placeholder values are used to prevent hex codes replacing each other (see PR #7545 changes)
+      svg = svg
+        .replace("#ff6680", "%primary%") // Primary block color
+        .replace("#ff4d6a", "%inner%") // Inside empty boolean/reporter input slots
+        .replace("#f35", "%outline%") // Border around edges of block
+        .replace("#fff", "%labeltext%") // Text color for "Add a label" icon
+        .replace("%primary%", primaryColor(myBlocksCategory))
+        .replace("%inner%", isColoredTextMode() ? fieldBackground(myBlocksCategory) : tertiaryColor(myBlocksCategory))
+        .replace("%outline%", tertiaryColor(myBlocksCategory))
+        .replace("%labeltext%", isColoredTextMode() ? tertiaryColor(myBlocksCategory) : uncoloredTextColor());
+
+      //console.log(svg);
+      iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
+    }
+  })();
 
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(

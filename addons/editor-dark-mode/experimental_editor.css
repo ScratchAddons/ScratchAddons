@@ -162,10 +162,12 @@
 .sa-body-editor [class*="stage-header_stage-size-row_"] > *,
 .sa-body-editor [class*="stage-header_unselect-wrapper_"],
 [class*="sprite-info_sprite-info_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="stage-selector_stage-selector_"],
 [class*="stage-selector_header_"],
 [class*="drag-layer_image_"],
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
+.scratchColourSlider::-webkit-slider-thumb,
 [class*="asset-panel_wrapper_"],
 [class*="color-button_outline-swatch_"]::after,
 [class*="slider_handle_"],
@@ -205,8 +207,12 @@
 .blocklyFlyoutButton:hover {
   fill: var(--editorDarkMode-accent);
 }
-.blocklyFlyoutButton:hover .blocklyText {
+.blocklyFlyoutButton:hover .blocklyText,
+.scratch-renderer.default-theme .blocklyFlyoutButton:hover .blocklyText {
   fill: var(--editorDarkMode-accent-text);
+}
+.scratch-renderer.high-contrast-theme .blocklyFlyoutButton:hover .blocklyText {
+  fill: var(--editorDarkMode-accent-text) !important;
 }
 [class*="selector_new-buttons_"]::before {
   background: linear-gradient(var(--editorDarkMode-accent-gradient-opacity0), var(--editorDarkMode-accent-gradient));
@@ -281,6 +287,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="input_input-form_"],
 [class*="context-menu_context-menu_"],
 .blocklyWidgetDiv .goog-menu,
+.blocklyWidgetDiv .blocklyMenu,
 [class*="filter_filter_"],
 [class*="prompt_button-row_"] button,
 [class*="prompt_variable-name-text-input_"],
@@ -306,7 +313,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="filter_filter-input_"],
 [class*="filter_filter-input_"]::placeholder,
 .blocklyWidgetDiv .goog-menuitem,
-.scratchColourPickerLabel {
+.blocklyMenuItem,
+.scratchColourPickerLabel,
+.valueReportBox {
   color: var(--editorDarkMode-input-text);
 }
 .Popover-tipShape,
@@ -315,7 +324,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyFlyoutCheckbox {
   fill: var(--editorDarkMode-input);
 }
-.blocklyBlockCanvas g:not(.checked) .blocklyFlyoutCheckboxPath {
+.blocklyBlockCanvas g:not(.checked) .blocklyFlyoutCheckboxPath,
+.blocklyBubbleCanvas > g:not(.checked) .blocklyFlyoutCheckboxPath {
   stroke: var(--editorDarkMode-input);
 }
 .blocklyDropDownDiv[style*="background-color: rgb(255, 255, 255)"] {
@@ -335,14 +345,19 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-content {
   color: var(--editorDarkMode-input-transparentText) !important;
 }
+.blocklyMenuItemDisabled {
+  color: var(--editorDarkMode-input-transparentText);
+}
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
+.scratchColourSlider::-webkit-slider-thumb,
 [class*="slider_handle_"] {
   box-shadow: 0 0 0 4px var(--editorDarkMode-input-foregroundShadow);
 }
 [class*="context-menu_menu-item-bordered_"] {
   border-color: var(--editorDarkMode-input-divider);
 }
-.blocklyWidgetDiv .goog-menuitem {
+.blocklyWidgetDiv .goog-menuitem,
+.blocklyMenuItem {
   border-color: var(--editorDarkMode-input-divider) !important;
 }
 [class*="question_question-input_"] [class*="input_input-form_"] {
@@ -373,6 +388,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 .scratchCategoryMenu {
   background: var(--editorDarkMode-categoryMenu);
   color: var(--editorDarkMode-categoryMenu-text);
+  --colour-toolboxSelected: var(--editorDarkMode-categoryMenu-selection);
+  --colour-toolboxText: var(--editorDarkMode-categoryMenu-text);
 }
 .scratchCategoryMenuItem.categorySelected {
   background-color: var(--editorDarkMode-categoryMenu-selection);
@@ -381,6 +398,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .scratchCategoryMenuItem:hover {
   color: var(--editorDarkMode-categoryMenu-hoverText) !important;
 }
+.blocklyToolboxCategory:hover {
+  color: var(--editorDarkMode-categoryMenu-hoverText);
+}
 
 /* Block palette background */
 .blocklyFlyoutBackground {
@@ -388,8 +408,14 @@ img[class*="tool-select-base_tool-select-icon_"],
   fill-opacity: 1;
 }
 .blocklyFlyoutLabelText,
-.blocklyFlyoutButton .blocklyText {
+.scratch-renderer.default-theme .blocklyFlyoutLabelText,
+.scratch-renderer.high-contrast-theme .blocklyFlyoutLabelText,
+.blocklyFlyoutButton .blocklyText,
+.scratch-renderer.default-theme .blocklyFlyoutButton .blocklyText {
   fill: var(--editorDarkMode-palette-text);
+}
+.scratch-renderer.high-contrast-theme .blocklyFlyoutButton .blocklyText {
+  fill: var(--editorDarkMode-palette-text) !important;
 }
 .blocklyFlyoutScrollbar .blocklyScrollbarHandle,
 .blocklyFlyoutScrollbar .blocklyScrollbarBackground:hover + .blocklyScrollbarHandle,
@@ -411,6 +437,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="backpack_more_"],
 [class*="sprite-selector-item_is-selected_"] [class*="sprite-selector-item_sprite-info_"],
 [class*="delete-button_delete-button-visible_"],
+[class*="delete-confirmation-prompt_body_"],
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header_"],
 [class*="font-dropdown_mod-menu-item_"]:hover:not(:active),
 [class*="tool-select-base_mod-tool-select_"][class*="tool-select-base_is-selected_"],
@@ -426,6 +453,7 @@ img[class*="tool-select-base_tool-select-icon_"],
   background-color: var(--editorDarkMode-primary);
   color: var(--editorDarkMode-primary-text);
 }
+[class*="delete-button_delete-button-clicked_"],
 [class*="context-menu_menu-item-danger_"]:hover {
   background-color: hsla(30, 100%, 55%, 1);
 }
@@ -458,6 +486,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyWidgetDiv .goog-menuitem-highlight,
 .blocklyWidgetDiv .goog-menuitem-hover {
   background-color: var(--editorDarkMode-primary-transparent15);
+}
+:root {
+  --colour-contextualMenuHover: var(--editorDarkMode-primary-transparent15);
 }
 [class*="library_filter-bar_"],
 .sa-body-editor [class*="stage-header_stage-button_"]:active,
@@ -507,6 +538,7 @@ img[class*="tool-select-base_tool-select-icon_"],
   fill: var(--editorDarkMode-primary-transparent35);
   stroke: var(--editorDarkMode-primary);
 }
+[class*="delete-confirmation-prompt_label_"],
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header-title_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
@@ -524,6 +556,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .sa-paint-snap-button[data-enabled="true"] .sa-paint-snap-image,
 .sa-onion-button[data-enabled="true"] .sa-onion-image {
   filter: var(--editorDarkMode-primary-filter2);
+}
+[class*="delete-confirmation-prompt_arrow-container_"] [class*="delete-confirmation-prompt_delete-icon_"] {
+  filter: var(--editorDarkMode-primary-iconFilter);
 }
 [class*="action-menu_more-buttons-outer_"],
 [class*="action-menu_more-button_"] {
@@ -544,6 +579,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 /* Text and icon highlight color */
 .sa-body-editor a:link,
 [class*="gui_tab_"][class*="gui_is-selected_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="dropdown_dropdown_"],
 [class*="record-modal_playing-text_"],
 [class*="record-modal_button-row_"] button,
@@ -553,6 +589,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="gui_tab_"][class*="gui_is-selected_"] img,
 [class*="toggle-buttons_button_"][aria-pressed="true"] > img,
 [class*="sprite-info_is-active_"] [class*="sprite-info_icon_"],
+[class*="delete-confirmation-prompt_button-row_"] [class*="delete-confirmation-prompt_delete-icon_"],
 [class*="fixed-tools_button-group-button-icon_"],
 [class*="color-picker_swap-button_"] [class*="labeled-icon-button_edit-field-icon_"],
 [class*="dropdown_dropdown-icon_"],
@@ -587,6 +624,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="input_input-form_"],
 [class*="sprite-info_sprite-info_"],
 [class*="sprite-selector-item_sprite-selector-item_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="stage-selector_stage-selector_"],
 [class*="stage-selector_header_"],
 [class*="stage-selector_costume-canvas_"],
@@ -615,6 +653,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="library-item_library-item_"],
 [class*="context-menu_context-menu_"],
 .blocklyWidgetDiv .goog-menu,
+.blocklyWidgetDiv .blocklyMenu,
 .scratchEyedropper,
 .Popover-body,
 .sa-onion-settings,
@@ -660,6 +699,10 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
   /* Make backpack items have a white background,
   otherwise they would be too dark in dark mode. */
   mix-blend-mode: normal;
+}
+.blocklyToolboxCategory:not(.blocklyToolboxSelected):hover {
+  /* Remove Blockly's default hover highlight from categories. */
+  background-color: transparent;
 }
 .blocklyWidgetDiv .goog-menuitem-highlight {
   border: none;

@@ -5,7 +5,8 @@ export default async ({ addon, console, msg }) => {
   if (!vm) return;
   const oldDeleteSprite = vm.deleteSprite;
   const newDeleteSprite = function (...args) {
-    if (addon.self.disabled) return oldDeleteSprite.apply(this, args);
+    const scratchConfirmation = document.querySelector("[class*='delete-confirmation-prompt_body_']");
+    if (addon.self.disabled || scratchConfirmation) return oldDeleteSprite.apply(this, args);
     const canDelete = confirm(msg("confirm"));
     if (canDelete) return oldDeleteSprite.apply(this, args);
     const restoreDeletionState = Object.assign({}, addon.tab.redux.state.scratchGui.restoreDeletion);
