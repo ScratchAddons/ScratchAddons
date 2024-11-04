@@ -14,7 +14,24 @@
       "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
+  "settings": [
+    {
+      "id": "display-type",
+      "name": "Display type",
+      "type": "select",
+      "potentialValues": [
+        { "id": "source", "name": "Show source in post" },
+        { "id": "new-tab", "name": "Open in new tab" }
+      ],
+      "default": "source"
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.9.0"
+  "versionAdded": "1.9.0",
+  "latestUpdate": {
+    "isMajor": false,
+    "version": "1.36.0",
+    "newSettings": ["display-type"]
+  }
 }
