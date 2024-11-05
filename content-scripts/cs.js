@@ -788,12 +788,14 @@ if (isProfile || isStudio || isProject || isForums) {
       .split("")
       .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
       .join("");
-
   const shouldCaptureComment = (value) => {
-    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
-    const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
-    const regex = /scratchadons/;
-    return regex.test(limitedValue);
+    const limitedValue = removeReiteratedChars(
+      value
+        .toLowerCase()
+        .match(/[a-z]+/g)
+        .join("")
+    );
+    return limitedValue.includes("scratchadon");
   };
   const extensionPolicyLink = document.createElement("a");
   extensionPolicyLink.href = "https://scratch.mit.edu/discuss/topic/284272/";
