@@ -237,15 +237,14 @@ function appendSearch(box, query, filter, page, term, msg) {
         box.appendChild(postElem);
       }
       scratchblocks.renderMatching(".forum-search-list pre.blocks", {
-        style: 'scratch3',
-        scale: 0.675
+        style: "scratch3",
+        scale: 0.675,
       });
       isCurrentlyProcessing = false;
     });
 }
 
 export default async function ({ addon, console, msg }) {
-
   // create the search bar
   let search = document.createElement("form");
   addon.tab.displayNoneWhileDisabled(search);
