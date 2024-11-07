@@ -565,7 +565,8 @@ if (location.pathname.startsWith("/discuss/")) {
   if (document.readyState !== "loading") {
     setTimeout(preserveBlocks, 0);
   } else {
-    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
+    // { capture: true } is needed to run before jQuery's listener
+    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true, capture: true });
   }
 }
 
