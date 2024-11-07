@@ -886,7 +886,12 @@ export default async function ({ addon, console, msg }) {
   });
 
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
-    for (const method of ["handleDeleteButtonClick", "handleDeleteSpriteModalConfirm", "handleDuplicate", "handleExport"]) {
+    for (const method of [
+      "handleDeleteButtonClick",
+      "handleDeleteSpriteModalConfirm",
+      "handleDuplicate",
+      "handleExport",
+    ]) {
       const original = SpriteSelectorItem.prototype[method];
       SpriteSelectorItem.prototype[method] = function (...args) {
         if (typeof this.props.id === "number") {
