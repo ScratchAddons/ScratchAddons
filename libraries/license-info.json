@@ -9,10 +9,6 @@
     "year": "",
     "fullname": "Federico Brigante <me@fregante.com> (https://fregante.com)"
   },
-  "scratchblocks": {
-    "license": "MIT",
-    "filename": "MIT-scratchblocks"
-  },
   "scratch-blocks": {
     "license": "Apache-2.0"
   },
