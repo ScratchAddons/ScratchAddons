@@ -297,7 +297,7 @@ export default async function ({ addon, console, msg }) {
       typeof SpriteSelectorItem.prototype.setRef === "function" &&
       typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
       typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDelete === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDeleteButtonClick === "function" &&
       typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
       typeof SpriteSelectorItem.prototype.handleExport === "function"
     )
@@ -885,7 +885,7 @@ export default async function ({ addon, console, msg }) {
   });
 
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
-    for (const method of ["handleDelete", "handleDuplicate", "handleExport"]) {
+    for (const method of ["handleDeleteButtonClick", "handleDuplicate", "handleExport"]) {
       const original = SpriteSelectorItem.prototype[method];
       SpriteSelectorItem.prototype[method] = function (...args) {
         if (typeof this.props.id === "number") {
