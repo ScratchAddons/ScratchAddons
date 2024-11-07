@@ -556,7 +556,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
 if (location.pathname.startsWith("/discuss/")) {
-  // We do this first as sb2 runs fast.
+  // We do this first as scratchblocks runs fast.
+  // Used by better-quoter.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
