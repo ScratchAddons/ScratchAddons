@@ -181,6 +181,12 @@ body:not(.sa-body-editor) .button.white,
 .initiatives-section .initiatives-subsection-content .bubble.inverted {
   background-color: var(--darkWww-box);
 }
+.ReactModal__Content[style*="background: rgb(255, 255, 255)"] {
+  /* Community Guidelines modal */
+  background-color: var(--darkWww-box) !important;
+  border-color: transparent !important;
+  color: var(--darkWww-box-text);
+}
 .expect .keynote .card {
   background-color: transparent;
 }
