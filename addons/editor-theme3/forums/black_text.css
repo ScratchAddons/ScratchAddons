@@ -10,7 +10,9 @@ svg .sb3-list,
 svg .sb3-custom,
 svg .sb3-custom-arg,
 svg .sb3-extension,
-svg .sb3-pen {
+svg .sb3-pen,
+svg .sb3-grey,
+svg .sb3-obsolete {
   stroke: rgba(0, 0, 0, 0.35);
 }
 
@@ -26,7 +28,9 @@ svg .sb3-list-alt,
 svg .sb3-custom-alt,
 svg .sb3-custom-arg-alt,
 svg .sb3-extension-alt,
-svg .sb3-pen-alt {
+svg .sb3-pen-alt,
+svg .sb3-grey-alt,
+svg .sb3-obsolete-alt {
   fill: rgba(255, 255, 255, 0.4);
   stroke: rgba(0, 0, 0, 0.4);
 }
@@ -42,7 +46,9 @@ svg .sb3-list-dark,
 svg .sb3-custom-dark,
 svg .sb3-custom-arg-dark,
 svg .sb3-extension-dark,
-svg .sb3-pen-dark {
+svg .sb3-pen-dark,
+svg .sb3-grey-dark,
+svg .sb3-obsolete-dark {
   fill: rgba(0, 0, 0, 0.35);
 }
 
@@ -59,6 +65,8 @@ svg .sb3-custom ~ .sb3-label,
 svg .sb3-custom-arg ~ .sb3-label,
 svg .sb3-extension ~ .sb3-label,
 svg .sb3-pen ~ .sb3-label,
+svg .sb3-grey ~ .sb3-label,
+svg .sb3-obsolete ~ .sb3-label,
 #sb3-dropdownArrow path,
 #sb3-loopArrow path[fill="#fff"],
 #sb3-turnLeft path[fill="#fff"],
@@ -69,4 +77,10 @@ svg .sb3-pen ~ .sb3-label,
 .sb3-input ~ .sb3-label.sb3-literal-number,
 .sb3-input ~ .sb3-label.sb3-literal-string {
   fill: var(--editorTheme3-inputColor-blackText);
+}
+
+svg .sb3-obsolete,
+svg .sb3-obsolete-dark,
+svg .sb3-obsolete ~ .sb3-label {
+  --sa-block-color: #fc6666;
 }

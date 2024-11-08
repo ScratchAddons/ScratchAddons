@@ -27,3 +27,9 @@ svg .sb3-label,
 .sb3-label.sb3-comment-label {
   fill: white;
 }
+
+svg .sb3-obsolete,
+svg .sb3-obsolete-dark,
+svg .sb3-obsolete ~ .sb3-label {
+  --sa-block-color: #fc6666;
+}

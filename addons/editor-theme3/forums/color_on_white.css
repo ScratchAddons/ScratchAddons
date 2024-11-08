@@ -25,3 +25,9 @@ svg .sb3-obsolete {
 #sb3-dropdownArrow path {
   fill: #575e75;
 }
+
+svg .sb3-grey,
+svg .sb3-grey-dark,
+svg .sb3-grey ~ .sb3-label {
+  --sa-block-color: #909090;
+}

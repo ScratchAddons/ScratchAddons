@@ -10,14 +10,10 @@ svg .sb3-list,
 svg .sb3-custom,
 svg .sb3-custom-arg,
 svg .sb3-extension,
-svg .sb3-pen {
-  stroke: var(--sa-block-color);
-}
-svg .sb3-grey {
-  stroke: #949494;
-}
+svg .sb3-pen,
+svg .sb3-grey,
 svg .sb3-obsolete {
-  stroke: #ed4242;
+  stroke: var(--sa-block-color);
 }
 
 svg .sb3-motion ~ .sb3-label,
@@ -32,14 +28,10 @@ svg .sb3-list ~ .sb3-label,
 svg .sb3-custom ~ .sb3-label,
 svg .sb3-custom-arg ~ .sb3-label,
 svg .sb3-extension ~ .sb3-label,
-svg .sb3-pen ~ .sb3-label {
-  fill: var(--sa-block-color);
-}
-svg .sb3-grey ~ .sb3-label {
-  fill: #949494;
-}
+svg .sb3-pen ~ .sb3-label,
+svg .sb3-grey ~ .sb3-label,
 svg .sb3-obsolete ~ .sb3-label {
-  fill: #ed4242;
+  fill: var(--sa-block-color);
 }
 
 svg .sb3-motion-alt,
@@ -54,7 +46,9 @@ svg .sb3-list-alt,
 svg .sb3-custom-alt,
 svg .sb3-custom-arg-alt,
 svg .sb3-extension-alt,
-svg .sb3-pen-alt {
+svg .sb3-pen-alt,
+svg .sb3-grey-alt,
+svg .sb3-obsolete-alt {
   fill: var(--sa-block-color) !important;
   fill-opacity: 0.15;
 }
@@ -70,7 +64,15 @@ svg .sb3-list-dark,
 svg .sb3-custom-dark,
 svg .sb3-custom-arg-dark,
 svg .sb3-extension-dark,
-svg .sb3-pen-dark {
+svg .sb3-pen-dark,
+svg .sb3-grey-dark,
+svg .sb3-obsolete-dark {
   fill: var(--sa-block-color);
   fill-opacity: 0.25;
+}
+
+svg .sb3-obsolete,
+svg .sb3-obsolete-dark,
+svg .sb3-obsolete ~ .sb3-label {
+  --sa-block-color: #fc6666;
 }
