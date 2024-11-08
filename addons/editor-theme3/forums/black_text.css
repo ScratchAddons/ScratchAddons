@@ -47,6 +47,7 @@ svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete-dark {
   fill: rgba(0, 0, 0, 0.35);
 }
 
+svg[class*="scratchblocks-style-scratch3"] .sb3-label,
 svg[class*="scratchblocks-style-scratch3"] .sb3-motion ~ .sb3-label,
 svg[class*="scratchblocks-style-scratch3"] .sb3-looks ~ .sb3-label,
 svg[class*="scratchblocks-style-scratch3"] .sb3-sound ~ .sb3-label,
