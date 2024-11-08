@@ -113,7 +113,8 @@
   background-color: var(--editorDarkMode-selector);
   color-scheme: var(--editorDarkMode-selector-colorScheme);
 }
-[class*="sprite-selector-item_sprite-info_"] {
+[class*="sprite-selector-item_sprite-info_"],
+[class*="library_library-category-title_"] {
   color: var(--editorDarkMode-selector-text);
 }
 [class*="card_card_"] {
