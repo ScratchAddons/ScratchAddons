@@ -1,19 +1,19 @@
 @import "%addon-self-dir%/forums/colored_text.css";
 
-svg .sb3-motion,
-svg .sb3-looks,
-svg .sb3-sound,
-svg .sb3-events,
-svg .sb3-control,
-svg .sb3-sensing,
-svg .sb3-operators,
-svg .sb3-variables,
-svg .sb3-list,
-svg .sb3-custom,
-svg .sb3-custom-arg,
-svg .sb3-extension,
-svg .sb3-grey,
-svg .sb3-obsolete {
+svg[class*="scratchblocks-style-scratch3"] .sb3-motion,
+svg[class*="scratchblocks-style-scratch3"] .sb3-looks,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sound,
+svg[class*="scratchblocks-style-scratch3"] .sb3-events,
+svg[class*="scratchblocks-style-scratch3"] .sb3-control,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sensing,
+svg[class*="scratchblocks-style-scratch3"] .sb3-operators,
+svg[class*="scratchblocks-style-scratch3"] .sb3-variables,
+svg[class*="scratchblocks-style-scratch3"] .sb3-list,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom-arg,
+svg[class*="scratchblocks-style-scratch3"] .sb3-extension,
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete {
   fill: #282828;
 }
 
@@ -22,13 +22,13 @@ svg .sb3-obsolete {
   stroke: var(--editorTheme3-commentColor);
 }
 
-svg .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-label,
 .sb3-label.sb3-comment-label {
   fill: white;
 }
 
-svg .sb3-obsolete,
-svg .sb3-obsolete-dark,
-svg .sb3-obsolete ~ .sb3-label {
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete ~ .sb3-label {
   --sa-block-color: #fc6666;
 }
