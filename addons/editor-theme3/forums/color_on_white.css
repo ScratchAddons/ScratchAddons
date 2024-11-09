@@ -1,49 +1,40 @@
 @import "%addon-self-dir%/forums/colored_text.css";
 
-.sb-motion,
-.sb-looks,
-.sb-sound,
-.sb-events,
-.sb-control,
-.sb-sensing,
-.sb-operators,
-.sb-variables,
-.sb-list,
-.sb-custom,
-.sb-custom-arg,
-.sb-extension,
-.sb-pen,
-.sb-grey,
-.sb-obsolete,
-.sb3-motion,
-.sb3-looks,
-.sb3-sound,
-.sb3-events,
-.sb3-control,
-.sb3-sensing,
-.sb3-operators,
-.sb3-variables,
-.sb3-list,
-.sb3-custom,
-.sb3-custom-arg,
-.sb3-extension,
-.sb3-pen,
-.sb3-grey,
-.sb3-obsolete {
+svg[class*="scratchblocks-style-scratch3"] .sb3-motion,
+svg[class*="scratchblocks-style-scratch3"] .sb3-looks,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sound,
+svg[class*="scratchblocks-style-scratch3"] .sb3-events,
+svg[class*="scratchblocks-style-scratch3"] .sb3-control,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sensing,
+svg[class*="scratchblocks-style-scratch3"] .sb3-operators,
+svg[class*="scratchblocks-style-scratch3"] .sb3-variables,
+svg[class*="scratchblocks-style-scratch3"] .sb3-list,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom-arg,
+svg[class*="scratchblocks-style-scratch3"] .sb3-extension,
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete {
   fill: white;
 }
 
-#bevelFilter feFlood[flood-color="#fff"],
-#inputBevelFilter feFlood[flood-color="#fff"] {
-  flood-color: black;
-  flood-opacity: 0.3;
-}
-
-.sb-comment,
 .sb3-comment {
   fill: white;
   stroke: var(--editorTheme3-commentColor);
 }
-#sb3-dropdownArrow path {
+svg[class*="scratchblocks-style-scratch3"] .sb3-label,
+#sb3-dropdownArrow path,
+#sb3-loopArrow path[fill="#fff"],
+#sb3-turnLeft path[fill="#fff"],
+#sb3-turnRight path[fill="#fff"],
+#sb3-dropdownArrow-high-contrast path,
+#sb3-loopArrow-high-contrast path,
+#sb3-turnLeft-high-contrast path,
+#sb3-turnRight-high-contrast path {
   fill: #575e75;
+}
+
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey,
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey ~ .sb3-label {
+  --sa-block-color: #909090;
 }
