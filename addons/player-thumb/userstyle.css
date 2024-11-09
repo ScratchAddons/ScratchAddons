@@ -4,6 +4,10 @@
   background-color: var(--darkWww-page, #fcfcfc);
 }
 
+.sa-body-editor .sa-project-thumb {
+  display: none;
+}
+
 .sa-controls-disabled > img {
   pointer-events: none;
   opacity: 0.5;
