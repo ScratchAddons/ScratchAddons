@@ -1,3 +1,4 @@
+const blockTheme = getCookie("scratchtheme") === "high-contrast" ? "scratch3-high-contrast" : "scratch3";
 let isCurrentlyProcessing = false;
 let currentPage = 0;
 let hits = 10000; // elastic default
@@ -236,7 +237,10 @@ function appendSearch(box, query, filter, page, term, msg) {
 
         box.appendChild(postElem);
       }
-      scratchblocks.renderMatching(".forum-search-list pre.blocks");
+      scratchblocks.renderMatching(".forum-search-list pre.blocks", {
+        style: blockTheme,
+        scale: 0.675,
+      });
       isCurrentlyProcessing = false;
     });
 }
