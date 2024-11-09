@@ -1,6 +1,6 @@
 .sa-project-thumb {
+  display: none; /* For editor only, not fullscreen */
   position: absolute;
-  display: none;
   background-color: var(--darkWww-page, #fcfcfc);
 }
 
