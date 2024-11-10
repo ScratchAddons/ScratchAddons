@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   await addon.tab.loadScript("/libraries/thirdparty/cs/tinycolor-min.js");
 

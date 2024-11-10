@@ -1,5 +1,6 @@
 import { linkifyTextNode as linkifyNode, linkifyTag as _linkifyTag } from "../../libraries/common/cs/fast-linkify.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const pageType = document.location.pathname.substring(1).split("/")[0];
   const linkified = [];

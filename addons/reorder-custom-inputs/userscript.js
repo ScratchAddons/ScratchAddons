@@ -1,5 +1,6 @@
 import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./modified-funcs.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   function createArrow(direction, callback) {
     const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";

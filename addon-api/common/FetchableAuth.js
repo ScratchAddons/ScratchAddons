@@ -6,15 +6,19 @@ export default class FetchableAuth extends AuthCommon {
     this._refresh();
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _refresh(requestFetchFn) {
+    /** @private */
     this._lastUsername = undefined;
+    /** @private */
     this._lastUserId = undefined;
+    /** @private */
     this._lastIsLoggedIn = undefined;
+    /** @private */
     this._lastXToken = undefined;
-    if (requestFetchFn) this._requestFetchFn = requestFetchFn; // A function to call when data is requested
+    if (requestFetchFn)
+      /** @private */
+      this._requestFetchFn = requestFetchFn; // A function to call when data is requested
   }
 
   /**
@@ -25,9 +29,7 @@ export default class FetchableAuth extends AuthCommon {
     throw new Error("Subclasses must implement this.");
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _waitUntilFetched() {
     const prom = new Promise((resolve) => this.addEventListener("session", resolve, { once: true }));
     if (this._requestFetchFn) {
@@ -37,9 +39,7 @@ export default class FetchableAuth extends AuthCommon {
     return prom;
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _update(d) {
     this._lastUsername = d.user?.username || null;
     this._lastUserId = d.user?.id || null;
@@ -49,9 +49,7 @@ export default class FetchableAuth extends AuthCommon {
     this.dispatchEvent(new CustomEvent("change"));
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _fetchProperty(prop) {
     if (typeof this[prop] !== "undefined") return Promise.resolve(this[prop]);
     return this._waitUntilFetched().then(() => this[prop]);
@@ -59,7 +57,7 @@ export default class FetchableAuth extends AuthCommon {
 
   /**
    * Fetch whether the user is logged in or not.
-   * @returns {Promise<boolean>} - whether the user is logged in or not.
+   * @returns {Promise<boolean>} Whether the user is logged in or not.
    */
   fetchIsLoggedIn() {
     return this._fetchProperty("_lastIsLoggedIn");
@@ -67,7 +65,7 @@ export default class FetchableAuth extends AuthCommon {
 
   /**
    * Fetch current username.
-   * @returns {Promise<?string>} - the username.
+   * @returns {Promise<?string>} The username.
    */
   fetchUsername() {
     return this._fetchProperty("_lastUsername");
@@ -75,7 +73,7 @@ export default class FetchableAuth extends AuthCommon {
 
   /**
    * Fetch current user ID.
-   * @returns {Promise<?number>} - the user ID.
+   * @returns {Promise<?number>} The user ID.
    */
   fetchUserId() {
     return this._fetchProperty("_lastUserId");
@@ -83,7 +81,7 @@ export default class FetchableAuth extends AuthCommon {
 
   /**
    * Fetch X-Token used in new APIs.
-   * @returns {Promise<?string>} - the X-Token.
+   * @returns {Promise<?string>} The X-Token.
    */
   fetchXToken() {
     return this._fetchProperty("_lastXToken");

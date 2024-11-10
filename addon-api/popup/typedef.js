@@ -6,11 +6,11 @@
  * export default async function (util)
  * Note that commonly it is done by using destructing syntax.
  * @typedef {object} PopupUtilities
- * @property {PopupAddon} addon - APIs for addons
- * @property {function} msg - Gets localized message from addons-l10n folder. Supports placeholders and plurals.
- * @property {string} msg.locale - Current locale used by msg function.
- * @property {function} safeMsg - Gets localized and HTML-escaped messages. Placeholders are NOT escaped.
- * @property {Console} console - Console API with formatting.
+ * @property {PopupAddon} addon APIs for addons.
+ * @property {function} msg Gets localized message from addons-l10n folder. Supports placeholders and plurals.
+ * @property {string} msg.locale Current locale used by msg function.
+ * @property {function} safeMsg Gets localized and HTML-escaped messages. Placeholders are NOT escaped.
+ * @property {Console} console Console API with formatting.
  */
 
 export default {};

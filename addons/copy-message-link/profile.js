@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   const oldJQueryHtml = $.fn.html;
   $.fn.html = function (...args) {
