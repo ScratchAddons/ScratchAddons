@@ -1,3 +1,4 @@
+const blockTheme = getCookie("scratchtheme") === "high-contrast" ? "scratch3-high-contrast" : "scratch3";
 let isCurrentlyProcessing = false;
 let currentPage = 0;
 let hits = 10000; // elastic default
@@ -236,17 +237,16 @@ function appendSearch(box, query, filter, page, term, msg) {
 
         box.appendChild(postElem);
       }
-      scratchblocks.renderMatching(".forum-search-list pre.blocks");
+      scratchblocks.renderMatching(".forum-search-list pre.blocks", {
+        style: blockTheme,
+        scale: 0.675,
+      });
       isCurrentlyProcessing = false;
     });
 }
 
 /** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
-  if (!window.scratchAddons._scratchblocks3Enabled) {
-    window.scratchblocks = (await import("../../libraries/thirdparty/cs/scratchblocks.min.es.js")).default;
-  }
-
   // create the search bar
   let search = document.createElement("form");
   addon.tab.displayNoneWhileDisabled(search);
