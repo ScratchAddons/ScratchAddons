@@ -166,7 +166,7 @@ const injectWorkspace = (ScratchBlocks) => {
         }
       }
       return oldApplyColour.call(this, ...args);
-    }
+    };
   } else {
     const oldUpdateColour = BlockSvg.prototype.updateColour;
     BlockSvg.prototype.updateColour = function (...args) {
@@ -247,17 +247,18 @@ const injectWorkspace = (ScratchBlocks) => {
     };
   }
 
-  const newCreateAllInputs = (originalCreateAllInputs) => function (...args) {
-    const blockData = getCustomBlock(this.procCode_);
-    if (blockData) {
-      const originalProcCode = this.procCode_;
-      this.procCode_ = blockData.displayName;
-      const ret = originalCreateAllInputs.call(this, ...args);
-      this.procCode_ = originalProcCode;
-      return ret;
-    }
-    return originalCreateAllInputs.call(this, ...args);
-  };
+  const newCreateAllInputs = (originalCreateAllInputs) =>
+    function (...args) {
+      const blockData = getCustomBlock(this.procCode_);
+      if (blockData) {
+        const originalProcCode = this.procCode_;
+        this.procCode_ = blockData.displayName;
+        const ret = originalCreateAllInputs.call(this, ...args);
+        this.procCode_ = originalProcCode;
+        return ret;
+      }
+      return originalCreateAllInputs.call(this, ...args);
+    };
   if (ScratchBlocks.registry) {
     // new Blockly
     const originalBlockDoInit = ScratchBlocks.Block.prototype.doInit_;
@@ -268,7 +269,7 @@ const injectWorkspace = (ScratchBlocks) => {
         this.createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);
         return result;
       }
-    }
+    };
   } else {
     const originalCreateAllInputs = ScratchBlocks.Blocks["procedures_call"].createAllInputs_;
     ScratchBlocks.Blocks["procedures_call"].createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);

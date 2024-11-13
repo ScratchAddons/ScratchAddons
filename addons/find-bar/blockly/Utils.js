@@ -92,10 +92,13 @@ export default class Utils {
       y < s.viewTop + this.offsetY - 4 ||
       yy > s.viewTop + s.viewHeight
     ) {
-      let { sx, sy } = this.navigationHistory.scrollPosFromOffset({
-        left: x - this.offsetX,
-        top: y - this.offsetY,
-      }, s);
+      let { sx, sy } = this.navigationHistory.scrollPosFromOffset(
+        {
+          left: x - this.offsetX,
+          top: y - this.offsetY,
+        },
+        s
+      );
 
       this.navigationHistory.storeView(this.navigationHistory.peek(), 64);
 

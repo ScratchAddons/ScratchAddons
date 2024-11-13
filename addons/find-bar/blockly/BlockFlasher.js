@@ -11,7 +11,7 @@ export default class BlockFlasher {
       if (!block) return null;
       if (block.pathObject) return block.pathObject.svgPath; // new Blockly
       return block.svgPath_;
-    }
+    };
 
     if (myFlash.timerID > 0) {
       clearTimeout(myFlash.timerID);
