@@ -18,6 +18,7 @@ body {
   color: var(--darkWww-page-text);
 }
 .subactions .share-date,
+.guidelines-page .navigation .navigation-buttons a,
 .conf2019-description {
   color: var(--darkWww-page-text);
 }
@@ -357,6 +358,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 .user-projects-modal .user-projects-modal-content,
 .congratulations-page .congratulations-image-layout,
 .credits #acknowledgements,
+.guidelines-page .navigation .navigation-buttons a:hover,
 .download .blue,
 p.callout,
 .mission-section,
@@ -707,6 +709,7 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .studio-activity .studio-messages-list,
 .developers #projects h3,
 .developers #principles h3,
+.guidelines-page .navigation .navigation-buttons a,
 .information-page .info-outer nav,
 .conf2019-panel-flag,
 .conf2017-panel-flag,
