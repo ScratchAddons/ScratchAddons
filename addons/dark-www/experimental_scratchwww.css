@@ -12,6 +12,8 @@ body {
   color-scheme: light;
 }
 #view,
+.tips,
+.physical-ideas,
 .crash-container,
 .semicolon {
   background-color: var(--darkWww-page);
