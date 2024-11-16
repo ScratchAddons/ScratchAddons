@@ -62,8 +62,7 @@
     "declarativeNetRequestWithHostAccess",
     "storage",
     "contextMenus",
-    "alarms",
-    "scripting"
+    "alarms"
   ],
   "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": [
