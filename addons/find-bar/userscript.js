@@ -34,7 +34,7 @@ export default async function ({ addon, msg, console }) {
     createDom(root) {
       this.findBarOuter = document.createElement("div");
       this.findBarOuter.className = "sa-find-bar";
-      addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
+      addon.tab.displayNoneWhileDisabled(this.findBarOuter);
       root.appendChild(this.findBarOuter);
 
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
@@ -140,7 +140,7 @@ export default async function ({ addon, msg, console }) {
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
-      if (e.key.toLowerCase() === "f" && ctrlKey && !e.shiftKey) {
+      if (e.key.toLowerCase() === "f" && ctrlKey && !e.shiftKey && !document.activeElement.closest(".sa-find-bar")) {
         // Ctrl + F (Override default Ctrl+F find)
         this.findInput.focus();
         this.findInput.select();
@@ -709,7 +709,6 @@ export default async function ({ addon, msg, console }) {
       } else {
         this.remove();
         this.blocks = blocks;
-        item.appendChild(this.createDom());
 
         this.idx = 0;
         if (instanceBlock) {
@@ -721,6 +720,7 @@ export default async function ({ addon, msg, console }) {
             }
           }
         }
+        item.appendChild(this.createDom());
 
         if (this.idx < this.blocks.length) {
           this.utils.scrollBlockIntoView(this.blocks[this.idx]);

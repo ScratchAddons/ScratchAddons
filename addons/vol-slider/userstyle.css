@@ -1,4 +1,5 @@
 .sa-vol-slider {
+  display: flex;
   /* Same lateral padding as .clone-container-container */
   padding-left: 0.25rem;
   padding-right: 0.25rem;

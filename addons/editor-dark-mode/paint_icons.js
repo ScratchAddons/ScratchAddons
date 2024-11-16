@@ -1,6 +1,6 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 
-const iconSelector = "[class*='labeled-icon-button_edit-field-icon_']";
+const iconSelector = "[class*='labeled-icon-button_edit-field-icon_'], [class*='fixed-tools_menu-item-icon_']";
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 
 export default async function ({ addon, console }) {
@@ -68,7 +68,9 @@ export default async function ({ addon, console }) {
         "scratch-gui/locales/SELECT_LOCALE",
         "scratch-gui/targets/UPDATE_TARGET_LIST",
         "scratch-paint/modes/CHANGE_MODE",
+        "scratch-paint/select/CHANGE_SELECTED_ITEMS",
       ],
+      resizeEvent: true,
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
     updateIcon(icon);
