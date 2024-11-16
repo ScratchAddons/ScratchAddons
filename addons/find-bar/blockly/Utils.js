@@ -18,7 +18,7 @@ export default class Utils {
     // this._myFlash = { block: null, timerID: null, colour: null };
     this.offsetX = 32;
     this.offsetY = 32;
-    this.navigationHistory = new NavigationHistory(addon);
+    this.navigationHistory = new NavigationHistory(this.addon);
   }
 
   /**
@@ -80,10 +80,13 @@ export default class Utils {
       y < s.viewTop + this.offsetY - 4 ||
       yy > s.viewTop + s.viewHeight
     ) {
-      // sx = s.contentLeft + s.viewWidth / 2 - x,
-      let sx = x - s.contentLeft - this.offsetX,
-        // sy = s.contentTop - y + Math.max(Math.min(32, 32 * scale), (s.viewHeight - yh) / 2);
-        sy = y - s.contentTop - this.offsetY;
+      let { sx, sy } = this.navigationHistory.scrollPosFromOffset(
+        {
+          left: x - this.offsetX,
+          top: y - this.offsetY,
+        },
+        s
+      );
 
       this.navigationHistory.storeView(this.navigationHistory.peek(), 64);
 
@@ -112,6 +115,16 @@ export default class Utils {
 class NavigationHistory {
   constructor(addon) {
     this.addon = addon;
+  }
+
+  scrollPosFromOffset({ left, top }, metrics) {
+    // New Blockly uses "scrollLeft" and "scrollTop" instead of "contentLeft" and "contentTop"
+    let scrollLeft = metrics.scrollLeft ?? metrics.contentLeft;
+    let scrollTop = metrics.scrollTop ?? metrics.contentTop;
+    return {
+      sx: left - scrollLeft,
+      sy: top - scrollTop,
+    };
   }
 
   /**
@@ -154,8 +167,7 @@ class NavigationHistory {
       return;
     }
 
-    let sx = view.left - s.contentLeft,
-      sy = view.top - s.contentTop;
+    let { sx, sy } = this.scrollPosFromOffset(view, s);
 
     // transform.setTranslate(-600,0);
 
@@ -188,8 +200,7 @@ class NavigationHistory {
     let workspace = this.addon.tab.traps.getWorkspace(),
       s = workspace.getMetrics();
 
-    let sx = view.left - s.contentLeft,
-      sy = view.top - s.contentTop;
+    let { sx, sy } = this.scrollPosFromOffset(view, s);
 
     workspace.scrollbar.set(sx, sy);
   }

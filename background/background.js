@@ -1,7 +1,5 @@
 // This file is loaded as ESM.
 
-import "./firefox-localhost-support.js";
-
 // Transition from Scratch Messaging Extension
 import "./transition.js";
 
