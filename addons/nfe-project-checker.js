@@ -7,18 +7,18 @@ function check() {
         window.location.href.split("/projects/")[1].split("/")[0]
       );
       var date = document.querySelector("div.share-date").lastChild;
-      if (!date.className.includes("scratchtools")) {
+      if (!date.className.includes("scratchaddons")) {
         if (data === "notreviewed") {
           date.textContent = `${date.textContent} · 🤔 Not Rated`;
-          date.className = date.className + " scratchtools";
+          date.className = date.className + " scratchaddons";
         }
         if (data === "safe") {
           date.textContent = `${date.textContent} · ✅ Rated FE`;
-          date.className = date.className + " scratchtools";
+          date.className = date.className + " scratchaddons";
         }
         if (data === "notsafe") {
           date.textContent = `${date.textContent} · ⛔ Rated NFE`;
-          date.className = date.className + " scratchtools";
+          date.className = date.className + " scratchaddons";
         }
       }
     }
