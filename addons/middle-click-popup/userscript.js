@@ -120,7 +120,9 @@ export default async function ({ addon, msg, console }) {
       // 2. operators
       // 3. other variable blocks
       // 4. everything else
-      const prio = (block) => ["operators", "data"].indexOf(block.category.name) - (block.id.startsWith("data_") && block.id !== "data_variable");
+      const prio = (block) =>
+        ["operators", "data"].indexOf(block.category.name) -
+        (block.id.startsWith("data_") && block.id !== "data_variable");
       return prio(b) - prio(a);
     });
 
@@ -150,7 +152,7 @@ export default async function ({ addon, msg, console }) {
         capabilities: [
           Blockly.ComponentManager.Capability.DELETE_AREA,
           Blockly.ComponentManager.Capability.DRAG_TARGET,
-        ]
+        ],
       });
       workspace.recordDragTargets();
     }

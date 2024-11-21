@@ -351,10 +351,11 @@ export class BlockTypeInfo {
     else if (block.type === "sensing_of") name = "sensing";
     else if (block.type === "event_whenbackdropswitchesto") name = "events";
     else name = block.styleName_ ?? block.category_;
-    name = {
-      event: "events",
-      data_lists: "data-lists",
-    }[name] || name;
+    name =
+      {
+        event: "events",
+        data_lists: "data-lists",
+      }[name] || name;
 
     return {
       name,
@@ -440,7 +441,7 @@ export class BlockTypeInfo {
         }
         if (
           field instanceof Blockly.FieldLabel ||
-          !Blockly.registry && field instanceof Blockly.FieldVariableGetter
+          (!Blockly.registry && field instanceof Blockly.FieldVariableGetter)
         ) {
           if (field.getText().trim().length !== 0) parts.push(field.getText());
         } else if (field instanceof FieldColour) {
