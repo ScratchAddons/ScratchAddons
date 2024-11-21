@@ -113,3 +113,8 @@
 .sa-mcp-preview-block-bg-selection {
   fill: #7774;
 }
+
+.blocklyAnimationLayer {
+  /* show delete animation above the popup */
+  z-index: 1000;
+}
