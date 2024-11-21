@@ -426,7 +426,7 @@ export default async function ({ addon, msg, console }) {
     if (Blockly.registry) {
       // new Blockly expects a pointerdown event
       fakeEvent.type = "pointerdown";
-      fakeEvent.pointerType = "mouse";
+      fakeEvent.pointerType = e.pointerType ?? "mouse";
       // If the block is being dragged using the mouse or touch, the correct pointerId
       // needs to be set so that Blockly recognizes the associated pointerup event.
       // If the block is selected using the keyboard, pointerId will be undefined and a
