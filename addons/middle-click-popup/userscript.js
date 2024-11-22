@@ -427,11 +427,15 @@ export default async function ({ addon, msg, console }) {
       // new Blockly expects a pointerdown event
       fakeEvent.type = "pointerdown";
       fakeEvent.pointerType = e.pointerType ?? "mouse";
-      // If the block is being dragged using the mouse or touch, the correct pointerId
-      // needs to be set so that Blockly recognizes the associated pointerup event.
-      // If the block is selected using the keyboard, pointerId will be undefined and a
-      // click will be necessary to end the "drag".
-      fakeEvent.pointerId = e.pointerId;
+      if ("pointerId" in e) {
+        // The block is being dragged using the mouse or touch. The correct pointerId
+        // needs to be set so that Blockly recognizes the associated pointerup event.
+        fakeEvent.pointerId = e.pointerId;
+      } else {
+        // The block was selected using the keyboard. Setting pointerId to an empty string
+        // allows any pointerup to end the "drag".
+        fakeEvent.pointerId = "";
+      }
       // Start dragging the block
       // Based on old Blockly's WorkspaceSvg.startDragWithFakeEvent() and Gesture.forceStartBlockDrag()
       Blockly.Touch.clearTouchIdentifier();
@@ -443,6 +447,13 @@ export default async function ({ addon, msg, console }) {
       gesture.hasExceededDragRadius = true;
       gesture.dragger = gesture.createDragger(newBlock, workspace);
       gesture.dragger.onDragStart(fakeEvent);
+      if (e instanceof KeyboardEvent) {
+        // Blockly gets confused when it receives two pointerdown events (the fake one
+        // and a real one) without a pointerup in between. Prevent it from canceling
+        // our gesture when that happens.
+        gesture.gestureHasStarted = false;
+        gesture.handleWsStart = () => {};
+      }
     } else {
       if (workspace.getGesture(fakeEvent)) {
         workspace.startDragWithFakeEvent(fakeEvent, newBlock);
