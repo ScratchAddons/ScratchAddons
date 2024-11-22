@@ -432,6 +432,9 @@ body:not(.sa-body-editor) .gender-radio-row:hover,
   background-color: var(--darkWww-blue-20);
   color-scheme: var(--darKWww-blue-colorScheme);
 }
+.welcome .box-content .welcome-options .welcome-option-button {
+  border-color: var(--darkWww-blue-20);
+}
 .join-flow-footer-message {
   background-color: var(--darkWww-blue-25);
 }
