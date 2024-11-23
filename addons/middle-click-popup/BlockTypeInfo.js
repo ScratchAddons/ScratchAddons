@@ -304,7 +304,7 @@ export class BlockShape {
       return BlockShape.Round;
     } else if (workspaceBlock.getOutputShape() === 1) {
       return BlockShape.Boolean;
-    } else if (workspaceBlock.hat ?? workspaceBlock.startHat_) {
+    } else if (!workspaceBlock.previousConnection) {
       return BlockShape.Hat;
     } else if (!workspaceBlock.nextConnection) {
       return BlockShape.End;
