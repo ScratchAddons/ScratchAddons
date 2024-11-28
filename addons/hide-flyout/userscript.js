@@ -235,13 +235,13 @@ export default async function ({ addon, console, msg }) {
       Blockly.BlockSvg.prototype.showContextMenu = function (...args) {
         widgetDivOwner = this;
         return oldShowContextMenu.call(this, ...args);
-      }
+      };
 
       const oldShowInlineEditor = Blockly.FieldTextInput.prototype.showInlineEditor_;
       Blockly.FieldTextInput.prototype.showInlineEditor_ = function (...args) {
         widgetDivOwner = this;
         return oldShowInlineEditor.call(this, ...args);
-      }
+      };
     } else {
       const oldShowPositionedByBlock = Blockly.DropDownDiv.showPositionedByBlock;
       Blockly.DropDownDiv.showPositionedByBlock = function (owner, block, ...args) {
@@ -275,7 +275,8 @@ export default async function ({ addon, console, msg }) {
       }
     };
 
-    const newSelectCategory = (oldSelectCategory) => function (...args) {
+    const newSelectCategory = (oldSelectCategory) =>
+      function (...args) {
         // called after populating the toolbox
         // ignore if the palette is closed
         if (!addon.self.disabled && getToggleSetting() === "category" && !toggle) {
@@ -283,7 +284,7 @@ export default async function ({ addon, console, msg }) {
           return;
         }
         return oldSelectCategory.call(this, ...args);
-    }
+      };
     if (Blockly.registry) {
       // new Blockly
       const ContinuousToolbox = workspace.getToolbox().constructor;
@@ -294,17 +295,18 @@ export default async function ({ addon, console, msg }) {
       Blockly.Toolbox.prototype.selectCategoryById = newSelectCategory(oldSelectCategoryById);
     }
 
-    const newStepScrollAnimation = (oldStepScrollAnimation) => function () {
-      // scrolling should not be animated when opening the flyout in category click mode
-      if (!scrollAnimation) {
-        if (Blockly.registry) this.workspace_.scrollbar.setY(this.scrollTarget); // new Blockly
-        else this.scrollbar_.set(this.scrollTarget);
-        this.scrollTarget = null;
-        scrollAnimation = true;
-        return;
-      }
-      oldStepScrollAnimation.call(this);
-    };
+    const newStepScrollAnimation = (oldStepScrollAnimation) =>
+      function () {
+        // scrolling should not be animated when opening the flyout in category click mode
+        if (!scrollAnimation) {
+          if (Blockly.registry) this.workspace_.scrollbar.setY(this.scrollTarget); // new Blockly
+          else this.scrollbar_.set(this.scrollTarget);
+          this.scrollTarget = null;
+          scrollAnimation = true;
+          return;
+        }
+        oldStepScrollAnimation.call(this);
+      };
     if (Blockly.registry) {
       // new Blockly
       const ContinuousFlyout = workspace.getToolbox().getFlyout().constructor;
@@ -327,14 +329,16 @@ export default async function ({ addon, console, msg }) {
 
       // the toolbox won't receive mouse events while a block is being dragged
       // we need to override its onDragEnter and onDragExit methods instead
-      const newOnDragEnter = (oldOnDragEnter) => function (...args) {
-        if (!addon.self.disabled && isHoverMode()) openFlyout();
-        return oldOnDragEnter.call(this, ...args);
-      };
-      const newOnDragExit = (oldOnDragExit) => function (...args) {
-        if (!addon.self.disabled && isHoverMode()) closeOnPointerUp = true;
-        return oldOnDragExit.call(this, ...args);
-      };
+      const newOnDragEnter = (oldOnDragEnter) =>
+        function (...args) {
+          if (!addon.self.disabled && isHoverMode()) openFlyout();
+          return oldOnDragEnter.call(this, ...args);
+        };
+      const newOnDragExit = (oldOnDragExit) =>
+        function (...args) {
+          if (!addon.self.disabled && isHoverMode()) closeOnPointerUp = true;
+          return oldOnDragExit.call(this, ...args);
+        };
       const oldToolboxOnDragEnter = Blockly.Toolbox.prototype.onDragEnter;
       Blockly.Toolbox.prototype.onDragEnter = newOnDragEnter(oldToolboxOnDragEnter);
       const oldToolboxOnDragExit = Blockly.Toolbox.prototype.onDragExit;
@@ -431,13 +435,11 @@ export default async function ({ addon, console, msg }) {
       };
       component.onDragExit = () => {
         if (!addon.self.disabled && getToggleSetting() === "hover") closeOnPointerUp = true;
-      }
+      };
       workspace.getComponentManager().addComponent({
         component,
         weight: 1,
-        capabilities: [
-          Blockly.ComponentManager.Capability.DRAG_TARGET,
-        ],
+        capabilities: [Blockly.ComponentManager.Capability.DRAG_TARGET],
       });
       workspace.recordDragTargets();
     }
