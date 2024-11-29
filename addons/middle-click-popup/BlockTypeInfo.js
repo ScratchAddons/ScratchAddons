@@ -447,9 +447,9 @@ export class BlockTypeInfo {
         } else if (field instanceof FieldColour) {
           addInput(new BlockInputColour(inputIdx, fieldIdx));
         } else if (field instanceof FieldNumber) {
-          addInput(new BlockInputNumber(inputIdx, fieldIdx, field.text_));
+          addInput(new BlockInputNumber(inputIdx, fieldIdx, field.getText()));
         } else {
-          addInput(new BlockInputString(inputIdx, fieldIdx, field.text_));
+          addInput(new BlockInputString(inputIdx, fieldIdx, field.getText()));
         }
       }
     };
