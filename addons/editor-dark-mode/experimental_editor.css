@@ -745,3 +745,6 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 .sa-comment-preview-reduce-transparency {
   background-color: var(--editorDarkMode-input);
 }
+.sa-zoom-slider {
+  color-scheme: var(--editorDarkMode-input-colorScheme);
+}

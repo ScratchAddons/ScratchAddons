@@ -1,0 +1,27 @@
+.blocklyZoom image {
+  display: none;
+}
+.blocklyZoom image:last-of-type {
+  display: block;
+}
+.sa-zoom-slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  width: 120px;
+  padding-top: 0.25rem;
+}
+.sa-zoom-slider {
+  width: 120px;
+}
+
+/* custom-zoom compatibility */
+.sa-custom-zoom-area:not(:hover) + .blocklySvg.sa-custom-zoom-autohide .blocklyZoom > * {
+  transform: translate(0, 90px);
+}
+.sa-custom-zoom-area {
+  width: 190px;
+  height: 70px;
+  --sa-custom-zoom-area-height: 70px;
+}

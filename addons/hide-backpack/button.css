@@ -50,5 +50,5 @@
 }
 
 .sa-custom-zoom-area {
-  height: 184px; /* 148px (initial) + 36px */
+  height: calc(var(--sa-custom-zoom-area-height) + 36px) !important;
 }

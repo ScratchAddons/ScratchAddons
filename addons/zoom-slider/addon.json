@@ -1,0 +1,27 @@
+{
+  "name": "Zoom slider",
+  "description": "Replaces the code area zoom buttons with a slider and number input.",
+  "tags": ["editor", "codeEditor", "featured"],
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "userstyle.css"
+    }
+  ],
+  "versionAdded": "1.40.0",
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true
+}
