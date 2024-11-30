@@ -1,0 +1,20 @@
+{
+  "name": "\"Save now\" button when updating variables",
+  "description": "Shows the \"Save now\" button when a variable or list is being edited on the stage.",
+  "tags": ["editor"],
+  "versionAdded": "1.40.0",
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
