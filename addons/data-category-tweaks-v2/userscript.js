@@ -1,6 +1,6 @@
 import updateToolboxXML from "../../libraries/common/cs/update-toolbox-xml.js";
 
-export default async function ({ addon, console, msg, safeMsg }) {
+export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const SMALL_GAP = 8;
@@ -152,6 +152,8 @@ export default async function ({ addon, console, msg, safeMsg }) {
   // https://github.com/scratchfoundation/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
   const originalGetBlocksXML = vm.runtime.getBlocksXML;
   vm.runtime.getBlocksXML = function (target) {
+    const LIST_CATEGORY_MSG = "SA_CATEGORY_LISTS";
+    ScratchBlocks.Msg[LIST_CATEGORY_MSG] = msg("list-category");
     const result = originalGetBlocksXML.call(this, target);
     hasSeparateListCategory = addon.settings.get("separateListCategory");
     if (!addon.self.disabled && hasSeparateListCategory) {
@@ -166,7 +168,7 @@ export default async function ({ addon, console, msg, safeMsg }) {
           custom="VARIABLE">
         </category>
         <category
-          name="${safeMsg("list-category")}"
+          name="%{BKY_${LIST_CATEGORY_MSG}}"
           id="lists"
           colour="${ScratchBlocks.Colours.data_lists.primary}"
           secondaryColour="${ScratchBlocks.Colours.data_lists.tertiary}"
