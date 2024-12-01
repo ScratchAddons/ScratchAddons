@@ -1,0 +1,49 @@
+{
+    "name": "Additonal Stats",
+    "description": "Displays additonal stats on the project and studio pages.",
+    "credits": [
+      {
+        "name": "AeroKoder",
+        "link": "https://scratch.mit.edu/users/AeroKoder/"
+      }
+    ],
+    "settings": [
+      {
+        "name": "Adds the date of when the project was created and last modifed on the project page.",
+        "type": "boolean",
+        "default": true,
+        "id": "projectDates"
+      },
+      {
+        "name": "Adds the date of when the studio was created in the studio page.",
+        "type": "boolean",
+        "default": true,
+        "id": "studioDates"
+      },
+      {
+        "name": "Tells the avarage amount of followers per day in the studio page.",
+        "type": "boolean",
+        "default": false,
+        "id": "studioFollowers"
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "project.js",
+        "matches": ["projects"],
+        "if": { "settings": { "projectDates": true } }
+      },
+      {
+        "url": "studioDates.js",
+        "matches": ["https://scratch.mit.edu/studios/*"],
+        "if": { "settings": { "studioDates": true } }
+      },
+      {
+        "url": "studioFollowers.js",
+        "matches": ["https://scratch.mit.edu/studios/*"],
+        "if": { "settings": { "studioFollowers": true } }
+      }
+    ],
+    "tags": ["community", "studios", "projectPage"],
+    "versionAdded": "1.40.0"
+  }
