@@ -1,4 +1,4 @@
-import { disableTabs } from "../project-notes-tabs/disable-self.js";
+import { enableTabs, eventTarget } from "../project-notes-tabs/module.js";
 
 export default async function ({ addon, console, msg }) {
   const divElement = Object.assign(document.createElement("div"), {
@@ -24,6 +24,9 @@ export default async function ({ addon, console, msg }) {
     togglePreview(false);
     checkboxInput.checked = false;
   });
+  addon.self.addEventListener("reenabled", injectToggle);
+  addon.auth.addEventListener("change", injectToggle);
+  eventTarget.addEventListener("addToggle", injectToggle);
 
   checkboxInput.addEventListener("change", () => {
     togglePreview(checkboxInput.checked);
@@ -35,6 +38,7 @@ export default async function ({ addon, console, msg }) {
   let wasEverEnabled = false;
 
   async function injectToggle() {
+    if (addon.tab.editorMode !== "projectpage") return;
     // Remove our element if it's already on the page
     // This is to ensure the toggle is always next to "instructions" when editing.
     divElement.remove();
@@ -49,9 +53,6 @@ export default async function ({ addon, console, msg }) {
     }
 
     if (document.querySelector(".sa-project-tabs-wrapper")) {
-      // Since project-notes-tabs runs on runAtComplete:false, and doesn't support
-      // dynamicEnable, it's very unlikely that it hasn't executed yet.
-      // Worst that can happen is that the "preview" toggle isn't accessible until a reload.
       document.querySelector(".sa-project-tabs-wrapper").appendChild(divElement);
     } else {
       document.querySelector(".project-notes > .description-block > .project-textlabel").append(divElement);
@@ -94,19 +95,10 @@ export default async function ({ addon, console, msg }) {
       // Manually run the injectToggle() function:
       queueMicrotask(injectToggle);
     }
+    enableTabs();
   }
 
   async function enablePreview() {
-    if (document.body.classList.contains("sa-project-tabs-on")) {
-      // Disable the project-notes-tabs addon if it's enabled.
-      disableTabs();
-
-      injectToggle();
-
-      // Just in case, wait 1 event loop cycle
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-
     forceReactRerender();
 
     if (!document.querySelector(".project-description")) {
