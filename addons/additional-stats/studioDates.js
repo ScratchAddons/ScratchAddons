@@ -11,5 +11,6 @@ export default async function ({ addon, console, msg }) {
     let dateCreatedStat = footerStats.children[0].cloneNode(true);
     let dateCreatedStatText = dateCreatedStat.getElementsByTagName("span")[0];
     dateCreatedStatText.textContent = msg("date-created", { date: dateCreatedText });
+    addon.tab.displayNoneWhileDisabled(dateCreatedStat);
     footerStats.prepend(dateCreatedStat);
   }

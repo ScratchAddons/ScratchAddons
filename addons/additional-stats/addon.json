@@ -1,6 +1,6 @@
 {
     "name": "Additional studio stats",
-    "description": "Displays additional stats about the studio on the studio page.",
+    "description": "Displays additional studio statistics under the description.",
     "credits": [
       {
         "name": "AeroKoder",
@@ -33,6 +33,8 @@
         "if": { "settings": { "studioFollowers": true } }
       }
     ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
     "tags": ["community", "studios", "projectPage"],
     "versionAdded": "1.40.0"
   }
