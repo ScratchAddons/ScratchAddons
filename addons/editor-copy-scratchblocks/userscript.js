@@ -1,4 +1,4 @@
-export default async function({ addon, console }) {
+export default async function ({ addon, console }) {
   const blockly = await addon.tab.traps.getBlockly();
 
   const blocks = {};
@@ -66,15 +66,19 @@ export default async function({ addon, console }) {
   blocks["looks_switchbackdropto"] = ["switch backdrop to ", { input: "BACKDROP" }];
   blocks["looks_backdrops"] = { numDropdownField: "BACKDROP" };
   blocks["looks_gotofrontback"] = ["go to ", { dropdownField: "FRONT_BACK" }, " layer"];
-  blocks["looks_goforwardbackwardlayers"] = ["go ", { dropdownField: "FORWARD_BACKWARD" }, " ", { input: "NUM" }, " layers"];
-  blocks["looks_backdropnumbername"] = ["(backdrop ", {dropdownField: "NUMBER_NAME"}, ")"];
-  blocks["looks_costumenumbername"] = ["(costume ", {dropdownField: "NUMBER_NAME"}, ")"];
-  blocks["looks_switchbackdroptoandwait"] = ["switch backdrop to ", {input: "BACKDROP"}, " and wait"];
+  blocks["looks_goforwardbackwardlayers"] = [
+    "go ",
+    { dropdownField: "FORWARD_BACKWARD" },
+    " ",
+    { input: "NUM" },
+    " layers",
+  ];
+  blocks["looks_backdropnumbername"] = ["(backdrop ", { dropdownField: "NUMBER_NAME" }, ")"];
+  blocks["looks_costumenumbername"] = ["(costume ", { dropdownField: "NUMBER_NAME" }, ")"];
+  blocks["looks_switchbackdroptoandwait"] = ["switch backdrop to ", { input: "BACKDROP" }, " and wait"];
   blocks["looks_nextbackdrop"] = ["next backdrop"];
 
-  const commonSanitizations = [
-    { searchValue: "\\", replacer: "\\\\" },
-  ];
+  const commonSanitizations = [{ searchValue: "\\", replacer: "\\\\" }];
 
   const strInpSanitizations = [
     ...commonSanitizations,
@@ -92,12 +96,11 @@ export default async function({ addon, console }) {
     { searchValue: "{", replacer: "\\{" },
     { searchValue: "[/scratchblocks]", replacer: "[\\/scratchblocks]" },
     { searchValue: /@(?=greenFlag|stopSign|turnLeft|turnRight|loopArrow|addInput|delInput|list)/g, replacer: "\\@" },
-    { searchValue: "//", replacer: "\//" },
+    { searchValue: "//", replacer: "//" },
   ];
 
   function sanitize(text, sanitizations) {
-    for (const sanitization of sanitizations)
-      text = text.replaceAll(sanitization.searchValue, sanitization.replacer);
+    for (const sanitization of sanitizations) text = text.replaceAll(sanitization.searchValue, sanitization.replacer);
 
     return text;
   }
@@ -134,40 +137,50 @@ export default async function({ addon, console }) {
     return output;
   }
 
-  addon.tab.createBlockContextMenu((items) => {
-    items.push({
-      enabled: true,
-      text: "Copy scripts as scratchblocks",
-      callback: () => {
-        const topBlocks = blockly.getMainWorkspace().getTopBlocks();
-        console.log(topBlocks);
-      },
-      separator: true,
-    });
+  addon.tab.createBlockContextMenu(
+    (items) => {
+      items.push({
+        enabled: true,
+        text: "Copy scripts as scratchblocks",
+        callback: () => {
+          const topBlocks = blockly.getMainWorkspace().getTopBlocks();
+          console.log(topBlocks);
+        },
+        separator: true,
+      });
 
-    return items;
-  }, { workspace: true });
+      return items;
+    },
+    { workspace: true }
+  );
 
-  addon.tab.createBlockContextMenu((items, block) => {
-    items.push({
-      enabled: true,
-      text: "Log block",
-      callback: () => {
-        console.log(block);
-      },
-      separator: true,
-    }, {
-      enabled: true,
-      text: "Log input names",
-      callback: () => {
-        console.log(block.inputList.map(input => input.name));
-      },
-    }, {
-      enabled: true,
-      text: "Log block scratchblocks",
-      callback: () => console.log(getBlockCode(block)),
-    });
+  addon.tab.createBlockContextMenu(
+    (items, block) => {
+      items.push(
+        {
+          enabled: true,
+          text: "Log block",
+          callback: () => {
+            console.log(block);
+          },
+          separator: true,
+        },
+        {
+          enabled: true,
+          text: "Log input names",
+          callback: () => {
+            console.log(block.inputList.map((input) => input.name));
+          },
+        },
+        {
+          enabled: true,
+          text: "Log block scratchblocks",
+          callback: () => console.log(getBlockCode(block)),
+        }
+      );
 
-    return items;
-  }, { blocks: true, flyout: true });
+      return items;
+    },
+    { blocks: true, flyout: true }
+  );
 }
