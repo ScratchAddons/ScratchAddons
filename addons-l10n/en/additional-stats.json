@@ -1,5 +1,4 @@
 {
-    "additional-stats/date-modifed": "Last modifed on {date}",
     "additional-stats/date-created": "Created on {date}",
     "additional-stats/followers-per-day": "{followers} followers per day"
 }
