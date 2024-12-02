@@ -8,10 +8,8 @@ export default async function ({ addon, console, msg }) {
     });
 
     let footerStats = document.getElementsByClassName("studio-info-footer-stats")[0];
-    let dateCreatedStat = document.createElement("div");
-    dateCreatedStat.innerHTML = footerStats.children[0].innerHTML;
-
+    let dateCreatedStat = footerStats.children[0].cloneNode(true);
     let dateCreatedStatText = dateCreatedStat.getElementsByTagName("span")[0];
-    dateCreatedStatText.innerHTML = msg("date-created", { date: dateCreatedText });
+    dateCreatedStatText.textContent = msg("date-created", { date: dateCreatedText });
     footerStats.prepend(dateCreatedStat);
   }

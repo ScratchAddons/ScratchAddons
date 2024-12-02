@@ -1,5 +1,5 @@
 {
-    "name": "Additional Stats",
+    "name": "Additional studio stats",
     "description": "Displays additional stats about the studio on the studio page.",
     "credits": [
       {
@@ -9,13 +9,13 @@
     ],
     "settings": [
       {
-        "name": "Adds the date of when the studio was created in the studio page.",
+        "name": "Creation date",
         "type": "boolean",
         "default": true,
         "id": "studioDates"
       },
       {
-        "name": "Tells the avarage amount of followers per day in the studio page.",
+        "name": "Average followers per day",
         "type": "boolean",
         "default": false,
         "id": "studioFollowers"
