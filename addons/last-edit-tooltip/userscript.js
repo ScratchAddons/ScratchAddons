@@ -26,8 +26,10 @@ export default async function ({ addon, console, msg }) {
     });
     let dateMod = data.history.modified ? dateFormatterWithMonthName.format(new Date(data.history.modified)) : "?";
     let dateShared = data.history.shared ? dateFormatterWithMonthName.format(new Date(data.history.shared)) : "?";
+    let dateCreated = data.history.created ? dateFormatterWithMonthName.format(new Date(data.history.created)) : "?";
     let dataTitle = `${msg("shared", { date: dateShared })}
-${msg("modified", { date: dateMod })}`;
+${msg("modified", { date: dateMod })}
+${msg("created", { date: dateCreated })}`;
     element.setAttribute("title", dataTitle);
 
     addon.self.addEventListener("disabled", () => {

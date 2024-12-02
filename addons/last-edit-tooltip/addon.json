@@ -1,6 +1,6 @@
 {
   "name": "Shared/edited dates tooltip",
-  "description": "Hover over a project's share date for information on when exactly it was shared and last edited.",
+  "description": "Hover over a project's share date for information on when exactly it was shared, last edited and created.",
   "credits": [
     {
       "name": "TheColaber",
@@ -9,6 +9,10 @@
     {
       "name": "Weredime (9gr)",
       "link": "https://scratch.mit.edu/users/9gr/"
+    },
+    {
+      "name": "AeroKoder",
+      "link": "https://scratch.mit.edu/users/AeroKoder/"
     }
   ],
   "dynamicEnable": true,
