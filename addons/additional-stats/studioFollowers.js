@@ -17,5 +17,6 @@ export default async function ({ addon, console, msg }) {
 
   let followersPerDayStatText = followersPerDayStat.getElementsByTagName("span")[0];
   followersPerDayStatText.textContent = msg("followers-per-day", { followers: Math.round(followersPerDay) });
+  addon.tab.displayNoneWhileDisabled(followersPerDayStat);
   footerStats.append(followersPerDayStat);
 }
