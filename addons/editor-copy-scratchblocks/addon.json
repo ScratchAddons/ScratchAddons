@@ -1,0 +1,37 @@
+{
+  "versionAdded": "1.39.0",
+  "name": "Copy scratchblocks code",
+  "description": "Adds an option to block context menus to copy the block's scratchblocks code to the clipboard for use in the forums.",
+  "tags": [
+    "editor",
+    "codeEditor"
+  ],
+  "permissions": [
+    "clipboardWrite"
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Include debugger blocks",
+      "id": "debugger",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "addonEnabled": "debugger"
+      }
+    }
+  ],
+  "credits": [
+    {
+      "name": "just-a-hriday",
+      "link": "https://scratch.mit.edu/users/just-a-hriday/"
+    }
+  ]
+}
