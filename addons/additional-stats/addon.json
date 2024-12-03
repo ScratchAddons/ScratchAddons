@@ -35,6 +35,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "tags": ["community", "studios", "projectPage"],
+  "tags": ["community", "studios"],
   "versionAdded": "1.40.0"
 }
