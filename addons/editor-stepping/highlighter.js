@@ -124,8 +124,12 @@ class Highlighter {
           });
           if (!childblock) {
             let svgPath;
-            if (block.pathObject) svgPath = block.pathObject.svgPath; // new Blockly
-            else svgPath = block.svgPath_;
+            if (block.pathObject) {
+              // new Blockly
+              svgPath = block.pathObject.svgPath;
+            } else {
+              svgPath = block.svgPath_;
+            }
             if (svgPath) elementsToHighlight.add(svgPath);
           }
         });

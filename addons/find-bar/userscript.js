@@ -186,8 +186,12 @@ export default async function ({ addon, msg, console }) {
       // KeyboardShortcutsHOC.handleKeyPress:
       // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
       let isTargetInput = false;
-      if (Blockly.registry) isTargetInput = Blockly.browserEvents.isTargetInput(e); // new Blockly
-      else isTargetInput = Blockly.utils.isTargetInput(e);
+      if (Blockly.registry) {
+        // new Blockly
+        isTargetInput = Blockly.browserEvents.isTargetInput(e);
+      } else {
+        isTargetInput = Blockly.utils.isTargetInput(e);
+      }
       if (!isTargetInput && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
         if (
           (ctrlKey || e.altKey) &&

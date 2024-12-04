@@ -130,7 +130,7 @@ export default [
         },
       ],
     },
-     languageOptions: {
+    languageOptions: {
       globals: {
         immediatelyRunFunctionInMainWorld: "readonly",
       },
