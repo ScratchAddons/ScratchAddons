@@ -263,7 +263,7 @@ export class BlockInstance {
     this.inputs = inputs;
 
     for (let i = 0; i < this.typeInfo.inputs.length; i++) {
-      if (this.inputs[i] == null) this.inputs[i] = this.typeInfo.inputs[i].defaultValue;
+      if (this.inputs[i] === null) this.inputs[i] = this.typeInfo.inputs[i].defaultValue;
     }
   }
 
@@ -281,7 +281,7 @@ export class BlockInstance {
     const block = this.typeInfo.Blockly.Xml.domToBlock(this.typeInfo.domForm, this.typeInfo.workspace);
     for (let i = 0; i < this.typeInfo.inputs.length; i++) {
       const inputValue = this.inputs[i];
-      if (inputValue != null) this.typeInfo.inputs[i].setValue(block, inputValue);
+      if (inputValue !== null) this.typeInfo.inputs[i].setValue(block, inputValue);
     }
 
     return block;

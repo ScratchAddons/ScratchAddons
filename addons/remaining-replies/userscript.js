@@ -13,7 +13,7 @@ export default async function ({ addon, msg }) {
     const parentCommentID = parentComment.getAttribute("id");
     const parentCommentData = addon.tab.redux.state.comments.comments.filter(
       // substring in order to remove the "comments-" prefix
-      (comment_in_list) => comment_in_list.id == parentCommentID.substring(9)
+      (comment_in_list) => comment_in_list.id === parentCommentID.substring(9)
     )[0];
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
