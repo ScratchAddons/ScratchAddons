@@ -227,6 +227,7 @@ body:not(.sa-body-editor) .button.white,
 .tabs button:hover,
 .tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.youtbe-video-button .video-info .video-title,
 .cards-modal-container .cards-modal-section-title,
 .unsupported-browser .faq-link-text,
 a.social-messages-profile-link:visited,
@@ -238,6 +239,7 @@ body:not(.sa-body-editor) .join-flow-title {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
+.youtbe-video-button .video-info .video-metadata,
 .comment .comment-body .comment-bottom-row .comment-time,
 .registration-step .help-text {
   color: var(--darkWww-box-transparentText);
@@ -257,6 +259,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
 .ttt-item img,
+.playlist .spinner,
 .tabs button:not(.active) .tab-icon,
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img,
