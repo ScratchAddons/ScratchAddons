@@ -1,5 +1,6 @@
 import * as MessageCache from "../libraries/common/message-cache.js";
 import { notifyNewMessages } from "../addons/scratch-notifier/notifier.js";
+import { onReady } from "./imports/on-ready.js";
 
 let ready = false;
 let duringBadgeUpdate = false;
@@ -36,14 +37,19 @@ export async function updateBadge(defaultStoreId) {
     ) {
       db = await MessageCache.openDatabase();
       const count = await db.get("count", defaultStoreId);
+      const tooltipCount = isLoggedIn ? (count > 0 ? ` (${String(count)})` : "") : " (?)";
+      chrome.action.setTitle({
+        title: `${chrome.i18n.getMessage("extensionName")}${tooltipCount}`,
+      });
       // Do not show 0, unless that 0 means logged out
       if (count || !isLoggedIn) {
+        const displayCount = count < 1000 ? String(count) : count <= 9000 ? Math.floor(count / 1000) + "k" : "9k+";
+        const text = isLoggedIn ? String(displayCount) : "?";
         const color = isLoggedIn ? badgeSettings.color : "#dd2222";
-        const text = isLoggedIn ? String(count) : "?";
         // The badge will show incorrect message count in other auth contexts.
         // Blocked on Chrome implementing store ID-based tab query
-        await promisify(chrome.browserAction.setBadgeBackgroundColor.bind(chrome.browserAction))({ color });
-        await promisify(chrome.browserAction.setBadgeText.bind(chrome.browserAction))({ text });
+        await promisify(chrome.action.setBadgeBackgroundColor.bind(chrome.action))({ color });
+        await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text });
         return;
       }
     }
@@ -56,7 +62,8 @@ export async function updateBadge(defaultStoreId) {
   // Hide badge when logged out and showOffline is false,
   // or when the logged-in user has no unread messages,
   // or when the addon is disabled
-  await promisify(chrome.browserAction.setBadgeText.bind(chrome.browserAction))({ text: "" });
+  chrome.action.setTitle({ title: "" });
+  await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text: "" });
 }
 
 /**
@@ -85,10 +92,36 @@ export async function startCache(defaultStoreId, forceClear) {
   });
 }
 
+async function calculateBadgeAlarmInterval() {
+  const DEFAULT_MINS = 1.5;
+  const INACTIVITY_MINS = 3.5;
+  if (!chrome.storage.session) return DEFAULT_MINS;
+  const o = await chrome.storage.session.get("inactivity");
+  return o.inactivity ? INACTIVITY_MINS : DEFAULT_MINS;
+}
+
 // Update badge without fetching messages
-chrome.alarms.create(BADGE_ALARM_NAME, {
-  periodInMinutes: 1,
-});
+export function handleBadgeAlarm() {
+  onReady(() => {
+    chrome.alarms.get(BADGE_ALARM_NAME, (currentAlarm) => {
+      const alarmExists = currentAlarm !== undefined;
+      const badgeAddonEnabled = scratchAddons.localState.addonsEnabled["msg-count-badge"];
+      if (badgeAddonEnabled) {
+        calculateBadgeAlarmInterval().then((newPeriod) => {
+          if (!alarmExists || currentAlarm.periodInMinutes !== newPeriod)
+            chrome.alarms.create(BADGE_ALARM_NAME, {
+              periodInMinutes: newPeriod,
+            });
+        });
+      }
+      if (!badgeAddonEnabled && alarmExists) {
+        // Remove unnecessary alarm
+        chrome.alarms.clear(BADGE_ALARM_NAME);
+      }
+    });
+  });
+}
+handleBadgeAlarm();
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (!ready) return;

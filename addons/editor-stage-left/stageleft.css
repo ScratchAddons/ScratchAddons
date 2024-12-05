@@ -56,6 +56,19 @@
   border-bottom-right-radius: 0.5rem;
 }
 
+/* Move delete button confirmation to the right side */
+.ReactModal__Content[style*="width: 300px"] {
+  /* 300px (popup width)
+   + 25px (padding)
+   + 70px (sprite selector item width)
+   + 25px (padding) */
+  margin-left: 420px !important;
+}
+[class*="delete-confirmation-prompt_arrow-container_"] {
+  order: -1;
+  transform: scaleX(-1);
+}
+
 .Popover {
   /* See hide-flyout */
   z-index: 51;

@@ -4,19 +4,23 @@ body {
   background-color: var(--darkWww-page);
   color-scheme: var(--darkWww-page-colorScheme);
 }
-.sa-body-editor {
+.sa-body-editor,
+[class*="stage-wrapper_stage-canvas-wrapper_"] {
   /* If website dark mode is enabled and editor dark mode
   is disabled, inputs and scrollbars in the editor should
   have a light background. */
   color-scheme: light;
 }
 #view,
+.tips,
+.physical-ideas,
 .crash-container,
 .semicolon {
   background-color: var(--darkWww-page);
   color: var(--darkWww-page-text);
 }
 .subactions .share-date,
+.guidelines-page .navigation .navigation-buttons a,
 .conf2019-description {
   color: var(--darkWww-page-text);
 }
@@ -41,6 +45,17 @@ body {
 .project-loves.loved::before,
 .project-favorites.favorited::before {
   filter: none;
+}
+.about .masthead div li:nth-child(odd) {
+  border-color: var(--darkWww-page-divider5);
+}
+.developers #donate,
+.conf2021-panel,
+.conf2019-panel,
+.conf2017-panel,
+.plan section,
+.extension-landing hr {
+  border-color: var(--darkWww-page-divider15);
 }
 
 /* Navigation bar background */
@@ -142,7 +157,6 @@ body:not(.sa-body-editor) .formik-input,
 body:not(.sa-body-editor) [class*="stage-header_stage-size-row_"] > *,
 body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .studio-adder-section .studio-adder-row input,
-.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .avatar-item img,
 .join-flow-outer-content /* username change */,
 .conf2019-panel-flag,
@@ -179,6 +193,12 @@ body:not(.sa-body-editor) .button.white,
 .donate-section .donate-button,
 .initiatives-section .initiatives-subsection-content .bubble.inverted {
   background-color: var(--darkWww-box);
+}
+.ReactModal__Content[style*="background: rgb(255, 255, 255)"] {
+  /* Community Guidelines modal */
+  background-color: var(--darkWww-box) !important;
+  border-color: transparent !important;
+  color: var(--darkWww-box-text);
 }
 .expect .keynote .card {
   background-color: transparent;
@@ -251,6 +271,9 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .os-chooser .button {
   background-color: var(--darkWww-box-tab);
 }
+.navigation .dot {
+  background-color: var(--darkWww-box-tab15);
+}
 .sub-nav button:active {
   background-color: var(--darkWww-box-tabHover);
 }
@@ -278,6 +301,9 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .transfer-host-modal .button:disabled {
   background-color: var(--darkWww-box-buttonDisabled);
   color: white;
+}
+.tips-divider {
+  border-color: var(--darkWww-box-divider5);
 }
 body:not(.sa-body-editor) .select .join-flow-select {
   background-image: var(--darkWww-box-caret);
@@ -314,6 +340,9 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 .box .box-header {
   border-top-color: var(--darkWww-gray-boxHighlight);
 }
+.outer .sort-controls {
+  border-color: var(--darkWww-gray-tab);
+}
 .toggle-switch .slider {
   background-color: var(--darkWww-gray-darker);
 }
@@ -333,9 +362,11 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 .studio-list-outer-scrollbox,
 .social-form,
 .studio-page,
+.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .user-projects-modal .user-projects-modal-content,
 .congratulations-page .congratulations-image-layout,
 .credits #acknowledgements,
+.guidelines-page .navigation .navigation-buttons a:hover,
 .download .blue,
 p.callout,
 .mission-section,
@@ -377,12 +408,15 @@ body:not(.sa-body-editor) .gender-radio-row:hover,
 .studio-info-box .studio-info-close-button {
   background-color: var(--darkWww-blue-tab);
 }
+.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
+.extension-landing .blue hr {
+  border-color: var(--darkWww-blue-tab);
+}
 .studio-list-inner-scrollbox::-webkit-scrollbar-thumb {
   background-color: var(--darkWww-blue-tabHover);
 }
 .studio-info textarea.studio-title:not(:focus),
-.studio-info textarea.studio-description:not(:focus),
-.extension-landing .blue hr {
+.studio-info textarea.studio-description:not(:focus) {
   border-color: var(--darkWww-blue-studioTextareaBorder);
 }
 .install-scratch .downloads-container .horizontal-divider::before,
@@ -487,6 +521,9 @@ body:not(.sa-body-editor) .formik-input:focus,
 .transfer-host-modal .cancel-button {
   box-shadow: 0 0 0 1px var(--darkWww-button);
 }
+body:not(.sa-body-editor) input {
+  outline-color: var(--darkWww-button);
+}
 .button img,
 .preview .see-inside-button::before,
 .subactions .action-buttons .action-button::before,
@@ -497,6 +534,7 @@ body:not(.sa-body-editor) .formik-input:focus,
 #footer .inner .media li img {
   filter: var(--darkWww-button-filter);
 }
+.banner-wrapper .banner-button img /* "Choose a tutorial" icon */,
 .forms-close-button img,
 .os-chooser .button:not(.active) img {
   filter: none;
@@ -614,10 +652,12 @@ a:hover {
 img.tips-icon {
   filter: var(--darkWww-footer-filter);
 }
+.developers #faq,
+#footer .inner .collaborators /* 2018 conference sponsors */ {
+  border-color: var(--darkWww-footer-divider10);
+}
 
 /* Border color */
-.tips-divider,
-.about .masthead div li:nth-child(odd),
 .about .body,
 .about .body img,
 .about .body iframe,
@@ -635,15 +675,12 @@ body:not(.sa-body-editor) .select select,
 .action-button.close-button,
 .sa-collapse-footer #footer,
 .empty,
-.outer .sort-controls,
 .preview .comments-container .comments-turned-off,
 .comment .comment-body .comment-bubble,
 .comment .comment-body .comment-bubble::before,
 .studio-tab-nav a.nav_link:hover > li,
 .studio-info-box,
-.developers #faq,
 p.callout,
-#footer .inner .collaborators,
 .input,
 .row .col-sm-9 input[type="radio"]:not(:checked),
 .extension-landing .tip-box {
@@ -675,26 +712,20 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .studio-tab-nav a.nav_link > li,
 .studio-project-tile,
 .studio-adder-section .studio-adder-row input,
-.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .user-projects-modal .user-projects-modal-nav button,
 .studio-member-tile,
 .studio-activity .studio-messages-list,
 .developers #projects h3,
 .developers #principles h3,
-.developers #donate,
+.guidelines-page .navigation .navigation-buttons a,
 .information-page .info-outer nav,
-.conf2021-panel,
-.conf2019-panel,
 .conf2019-panel-flag,
-.conf2017-panel,
 .conf2017-panel-flag,
 .expect .schedule table th,
 .expect .schedule table td,
-.plan section,
 .plan .faq .short,
 .supporters-section .supporters-level hr,
 body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
-.extension-landing hr,
 .extension-landing .screenshot,
 .extension-landing .project-card,
 .extension-landing .hardware-card,
@@ -705,9 +736,6 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .studio-compose-container .sa-emoji-picker,
 .sa-emoji-picker-divider {
   border-color: var(--darkWww-border-15);
-}
-.navigation .dot {
-  background-color: var(--darkWww-border-15);
 }
 .navigation .dot.active {
   background-color: #4d97ff;

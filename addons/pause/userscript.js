@@ -1,7 +1,7 @@
 import { isPaused, setPaused, onPauseChanged, setup } from "../debugger/module.js";
 
 export default async function ({ addon, console, msg }) {
-  setup(addon.tab.traps.vm);
+  setup(addon);
 
   const img = document.createElement("img");
   img.className = "pause-btn";
