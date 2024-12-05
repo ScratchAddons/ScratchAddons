@@ -263,7 +263,7 @@ export class BlockInstance {
     this.inputs = inputs;
 
     for (let i = 0; i < this.typeInfo.inputs.length; i++) {
-      if (this.inputs[i] === null) this.inputs[i] = this.typeInfo.inputs[i].defaultValue;
+      if (!this.inputs[i]) this.inputs[i] = this.typeInfo.inputs[i].defaultValue;
     }
   }
 
