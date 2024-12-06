@@ -21,7 +21,8 @@ export default async function ({ addon, console, msg }) {
   function recordDragTargets() {
     const workspace = addon.tab.traps.getWorkspace();
     if (workspace) {
-      if (Blockly.registry) workspace.recordDragTargets(); // new Blockly
+      if (Blockly.registry)
+        workspace.recordDragTargets(); // new Blockly
       else workspace.recordCachedAreas();
     }
   }
@@ -257,7 +258,8 @@ export default async function ({ addon, console, msg }) {
     const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
     Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll = true) {
       const previousSelection = this.selectedItem_;
-      if (Blockly.registry) oldSetSelectedItem.call(this, item); // new Blockly: no shouldScroll parameter
+      if (Blockly.registry)
+        oldSetSelectedItem.call(this, item); // new Blockly: no shouldScroll parameter
       else oldSetSelectedItem.call(this, item, shouldScroll);
       if (addon.self.disabled || getToggleSetting() !== "category") return;
       if (!shouldScroll) {
@@ -299,7 +301,8 @@ export default async function ({ addon, console, msg }) {
       function () {
         // scrolling should not be animated when opening the flyout in category click mode
         if (!scrollAnimation) {
-          if (Blockly.registry) this.workspace_.scrollbar.setY(this.scrollTarget); // new Blockly
+          if (Blockly.registry)
+            this.workspace_.scrollbar.setY(this.scrollTarget); // new Blockly
           else this.scrollbar_.set(this.scrollTarget);
           this.scrollTarget = null;
           scrollAnimation = true;
