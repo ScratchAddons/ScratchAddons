@@ -148,7 +148,8 @@ export default async function ({ addon, console, msg, safeMsg }) {
   const oldShow = ScratchBlocks.Flyout.prototype.show;
   ScratchBlocks.Flyout.prototype.show = function (xmlList) {
     let workspace;
-    if (ScratchBlocks.registry) workspace = this.targetWorkspace; // new Blockly
+    if (ScratchBlocks.registry)
+      workspace = this.targetWorkspace; // new Blockly
     else workspace = this.workspace_;
     workspace.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
     workspace.registerToolboxCategoryCallback("LIST", listCategoryCallback);
