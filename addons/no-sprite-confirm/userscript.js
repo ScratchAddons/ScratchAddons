@@ -3,6 +3,6 @@ export default async ({ addon, console }) => {
     setTimeout(() => {
       const confirmButton = document.querySelector("[class^='delete-confirmation-prompt_ok-button_']");
       if (!addon.self.disabled && confirmButton) confirmButton.click();
-    }, 0)
-  })
+    }, 0);
+  });
 };
