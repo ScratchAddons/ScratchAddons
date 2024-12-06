@@ -140,6 +140,7 @@ body:not(.sa-body-editor) .formik-input,
 .studio-member-tile,
 .studio-activity .studio-messages-list,
 .ttt-tile,
+.cards-modal-container,
 .about .body,
 .messages-social-list,
 .comment-text,
@@ -226,6 +227,8 @@ body:not(.sa-body-editor) .button.white,
 .tabs button:hover,
 .tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.youtbe-video-button .video-info .video-title,
+.cards-modal-container .cards-modal-section-title,
 .unsupported-browser .faq-link-text,
 a.social-messages-profile-link:visited,
 a.social-messages-profile-link:link,
@@ -236,6 +239,7 @@ body:not(.sa-body-editor) .join-flow-title {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
+.youtbe-video-button .video-info .video-metadata,
 .comment .comment-body .comment-bottom-row .comment-time,
 .registration-step .help-text {
   color: var(--darkWww-box-transparentText);
@@ -255,6 +259,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
 .ttt-item img,
+.playlist .spinner,
 .tabs button:not(.active) .tab-icon,
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img,
@@ -431,6 +436,9 @@ body:not(.sa-body-editor) .gender-radio-row:hover,
 .studio-info-box {
   background-color: var(--darkWww-blue-20);
   color-scheme: var(--darKWww-blue-colorScheme);
+}
+.welcome .box-content .welcome-options .welcome-option-button {
+  border-color: var(--darkWww-blue-20);
 }
 .join-flow-footer-message {
   background-color: var(--darkWww-blue-25);
@@ -700,6 +708,7 @@ p.callout,
 .thumbnail .thumbnail-image img,
 .video-player,
 .ttt-content-chunk + .ttt-content-chunk,
+.cards-modal-container .cards-modal-section-content .cards-modal-cards-list .card + .card,
 .messages-social-list,
 .social-message,
 .comment-text,
