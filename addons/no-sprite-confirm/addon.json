@@ -3,7 +3,7 @@
   "description": "Removes the confirmation prompt that asks if you are sure you want to delete a project sprite.",
   "info": [
     {
-      "text": "Tip: If you accidentally delete a sprite, you can undo the deletion by clicking Edit in the menu bar then Restore.",
+      "text": "Tip: If you accidentally delete a sprite, costume, or sound, you can undo the deletion by clicking Edit in the menu bar then Restore.",
       "id": "restoretip"
     }
   ],
