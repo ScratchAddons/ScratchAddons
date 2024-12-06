@@ -514,7 +514,8 @@ export default async function ({ addon, console, msg }) {
       const strokeStyle = addon.settings.get("strokeStyle");
 
       let svgPath;
-      if (Blockly.registry) svgPath = markerBlock.pathObject.svgPath; // new Blockly
+      if (Blockly.registry)
+        svgPath = markerBlock.pathObject.svgPath; // new Blockly
       else svgPath = markerBlock.svgPath_;
       svgPath.style.fill = {
         none: "transparent",

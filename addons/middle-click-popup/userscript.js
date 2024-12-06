@@ -243,12 +243,14 @@ export default async function ({ addon, msg, console }) {
       svgBackground.setAttribute("height", height * previewScale + "px");
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
-      if (Blockly.registry) svgBackground.addEventListener("pointerdown", mouseDownListener); // new Blockly
+      if (Blockly.registry)
+        svgBackground.addEventListener("pointerdown", mouseDownListener); // new Blockly
       else svgBackground.addEventListener("mousedown", mouseDownListener);
 
       const svgBlock = popupPreviewBlocks.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
       svgBlock.addEventListener("mousemove", mouseMoveListener);
-      if (Blockly.registry) svgBlock.addEventListener("pointerdown", mouseDownListener); // new Blockly
+      if (Blockly.registry)
+        svgBlock.addEventListener("pointerdown", mouseDownListener); // new Blockly
       else svgBlock.addEventListener("mousedown", mouseDownListener);
       svgBlock.classList.add("sa-mcp-preview-block");
 
@@ -402,7 +404,8 @@ export default async function ({ addon, msg, console }) {
       }
 
       let svgPath;
-      if (newBlock.pathObject) svgPath = newBlock.pathObject.svgPath; // new Blockly
+      if (newBlock.pathObject)
+        svgPath = newBlock.pathObject.svgPath; // new Blockly
       else svgPath = newBlock.svgPath_;
       let blockBounds = svgPath.getBoundingClientRect();
       let newBlockX = Math.floor((mousePosition.x - (blockBounds.left + blockBounds.right) / 2) / workspace.scale);
