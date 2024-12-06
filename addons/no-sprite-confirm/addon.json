@@ -13,6 +13,12 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "hide.css",
+      "matches": ["projects"]
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.40.0",
