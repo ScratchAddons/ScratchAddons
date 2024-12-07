@@ -1,0 +1,29 @@
+{
+  "name": "Cloud variable kill switch",
+  "description": "Allows you to cut the connection to the Cloud Data server when running projects with Cloud variables by flicking a switch, making them act as normal variables.",
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "id": "reloadToReconnect",
+      "text": "Once disconnected, a page reload is required to reconnect to Cloud Data."
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["editor", "projectPlayer"],
+  "versionAdded": "1.40.0",
+  "enabledByDefault": false
+}
