@@ -11,9 +11,9 @@ export function modifiedCreateAllInputs(connectionMap) {
   for (var i = 0, component; (component = procComponents[i]); i++) {
     var labelText;
     // Don't treat %l as an argument
-    if (component.substring(0, 1) == "%" && component.substring(1, 2) !== "l") {
+    if (component.substring(0, 1) === "%" && component.substring(1, 2) !== "l") {
       var argumentType = component.substring(1, 2);
-      if (!(argumentType == "n" || argumentType == "b" || argumentType == "s")) {
+      if (!(argumentType === "n" || argumentType === "b" || argumentType === "s")) {
         throw new Error("Found an custom procedure with an invalid type: " + argumentType);
       }
       labelText = component.substring(2).trim();
@@ -21,13 +21,13 @@ export function modifiedCreateAllInputs(connectionMap) {
       var id = this.argumentIds_[argumentCount];
 
       var input = this.appendValueInput(id);
-      if (argumentType == "b") {
+      if (argumentType === "b") {
         input.setCheck("Boolean");
       }
       this.populateArgument_(argumentType, argumentCount, connectionMap, id, input);
       argumentCount++;
     } else {
-      labelText = component == "%l" ? " " : component.replace("%l", "").trim();
+      labelText = component === "%l" ? " " : component.replace("%l", "").trim();
     }
     this.addProcedureLabel_(labelText.replace(/\\%/, "%"));
   }
@@ -42,20 +42,20 @@ export function modifiedUpdateDeclarationProcCode(prefixLabels = false) {
   this.displayNames_ = [];
   this.argumentIds_ = [];
   for (var i = 0; i < this.inputList.length; i++) {
-    if (i != 0) {
+    if (i !== 0) {
       this.procCode_ += " ";
     }
     var input = this.inputList[i];
-    if (input.type == 5) {
+    if (input.type === 5) {
       // replaced Blocky.DUMMY_VALUE with 5
       this.procCode_ += (prefixLabels ? "%l " : "") + input.fieldRow[0].getValue(); // modified to prepend %l delimiter, which prevents label merging
-    } else if (input.type == 1) {
+    } else if (input.type === 1) {
       // replaced Blocky.INPUT_VALUE with 1
       // Inspect the argument editor.
       var target = input.connection.targetBlock();
       this.displayNames_.push(target.getFieldValue("TEXT"));
       this.argumentIds_.push(input.name);
-      if (target.type == "argument_editor_boolean") {
+      if (target.type === "argument_editor_boolean") {
         this.procCode_ += "%b";
       } else {
         this.procCode_ += "%s";

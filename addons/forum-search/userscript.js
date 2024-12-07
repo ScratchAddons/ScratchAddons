@@ -1,4 +1,4 @@
-const blockTheme = getCookie("scratchtheme") === "high-contrast" ? "scratch3-high-contrast" : "scratch3";
+const blockTheme = window.getCookie("scratchtheme") === "high-contrast" ? "scratch3-high-contrast" : "scratch3";
 let isCurrentlyProcessing = false;
 let currentPage = 0;
 let hits = 10000; // elastic default
@@ -76,7 +76,7 @@ function appendSearch(box, query, filter, page, term, msg) {
       `https://scratchdb.lefty.one/search/indexes/forum_posts/search?attributesToSearchOn=content&hitsPerPage=50&q=${encodeURIComponent(
         query
       )}&filter=${encodeURIComponent(filter)}&page=${page + 1}${
-        term == "newest" ? "&sort=id:desc" : term == "oldest" ? "&sort=id:asc" : ""
+        term === "newest" ? "&sort=id:desc" : term === "oldest" ? "&sort=id:asc" : ""
       }`,
       {
         headers: {
