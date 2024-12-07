@@ -1,6 +1,8 @@
 import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./modified-funcs.js";
 
 export default async function ({ addon, console }) {
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
+
   function createArrow(direction, callback) {
     const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
 
@@ -158,9 +160,8 @@ export default async function ({ addon, console }) {
   }
 
   function getExistingProceduresDeclarationBlock() {
-    // Blockly.getMainWorkspace is required for this to work.
-    // for future reference "upgrading" to addon.tab.traps.getWorkspace() will cause bugs.
-    return Blockly.getMainWorkspace()
+    // addon.tab.traps.getWorkspace() will never return the procedure declaration editor
+    return ScratchBlocks.getMainWorkspace()
       .getAllBlocks()
       .find((block) => block.type === "procedures_declaration");
   }
