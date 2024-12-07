@@ -14,13 +14,13 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects", "projectEmbeds"]
+      "matches": ["projects"]
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects", "projectEmbeds"],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],

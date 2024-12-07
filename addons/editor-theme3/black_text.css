@@ -1,9 +1,11 @@
+.categoryBubble::after,
 .scratchCategoryItemBubble::after {
   /* block-palette-icons */
   filter: brightness(0);
 }
 
-.blocklyEditableText > text {
+.blocklyEditableText > text,
+.scratch-renderer.default-theme .blocklyEditableField > text {
   fill: var(--editorTheme3-inputColor-blackText);
 }
 .sa-theme3-editable-label .blocklyHtmlInput {
@@ -12,15 +14,18 @@
 }
 
 .blocklyDropDownDiv .goog-menuitem,
+.blocklyDropDownDiv .blocklyMenuItem,
 .blocklyNumPadButton {
   color: black;
 }
-.blocklyDropDownDiv .blocklyText {
+.blocklyDropDownDiv .blocklyText,
+.blocklyDropDownDiv.scratch-renderer.default-theme .blocklyText {
   /* "Play note" dropdown */
   fill: black;
 }
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
+.blocklyDropDownDiv .blocklyMenu .blocklyMenuItem:hover,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
   background-color: var(--editorTheme3-hoveredItem, rgba(255, 255, 255, 0.3));
 }
