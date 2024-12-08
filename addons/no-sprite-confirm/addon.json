@@ -1,5 +1,5 @@
 {
-  "name": "Remove sprite deletion confirmation",
+  "name": "Delete sprites without confirmation",
   "description": "Removes the confirmation prompt that asks if you are sure you want to delete a project sprite.",
   "info": [
     {
