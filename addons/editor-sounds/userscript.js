@@ -1,7 +1,7 @@
 export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const injectCurrent = () => {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const pathToMedia = workspace.options.pathToMedia;
     ScratchBlocks.inject.loadSounds_(pathToMedia, workspace);
   };
@@ -18,7 +18,7 @@ export default async function ({ addon, console }) {
   };
 
   addon.self.addEventListener("disabled", () => {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const audio = workspace.getAudioManager();
     delete audio.SOUNDS_.click;
     delete audio.SOUNDS_.delete;

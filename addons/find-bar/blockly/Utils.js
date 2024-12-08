@@ -19,10 +19,6 @@ export default class Utils {
     this.offsetX = 32;
     this.offsetY = 32;
     this.navigationHistory = new NavigationHistory(this.addon);
-    /**
-     * The workspace
-     */
-    this._workspace = null;
   }
 
   /**
@@ -44,19 +40,11 @@ export default class Utils {
   }
 
   /**
-   * Returns the main workspace
-   * @returns !Blockly.Workspace
-   */
-  getWorkspace() {
-    return this.addon.tab.traps.getWorkspace();
-  }
-
-  /**
    * Based on wksp.centerOnBlock(li.data.labelID);
    * @param blockOrId {Blockly.Block|{id}|BlockInstance} A Blockly Block, a block id, or a BlockInstance
    */
   scrollBlockIntoView(blockOrId) {
-    let workspace = this.getWorkspace();
+    let workspace = this.addon.tab.traps.getWorkspace();
     /** @type {Blockly.Block} */
     let block; // or is it really a Blockly.BlockSvg?
 
