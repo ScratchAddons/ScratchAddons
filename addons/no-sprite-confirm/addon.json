@@ -22,5 +22,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.40.0",
-  "tags": ["editor", "danger"]
+  "tags": ["editor", "danger", "featured"]
 }
