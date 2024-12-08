@@ -19,6 +19,12 @@
       "if": {
         "addonEnabled": "debugger"
       }
+    },
+    {
+      "name": "Include comments",
+      "id": "comments",
+      "type": "boolean",
+      "default": true
     }
   ],
   "credits": [
