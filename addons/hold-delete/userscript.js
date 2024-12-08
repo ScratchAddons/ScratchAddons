@@ -1,6 +1,11 @@
 export default async function ({ addon, console }) {
   const DELETE_BUTTON_SELECTOR =
     "[class^='sprite-selector_items-wrapper_'] [class*='sprite-selector-item_delete-button']";
+  const HOLD_SPEEDS = {
+    short: 12,
+    default: 17,
+    long: 30,
+  };
   let deleteButton;
   let holding = false;
 
@@ -45,10 +50,11 @@ export default async function ({ addon, console }) {
       holding = true;
 
       // Wait out the hold delay
+      const timeout = HOLD_SPEEDS[addon.settings.get("duration")];
       for (let i = 0; i < 100; i += 2) {
         if (!holding) break;
         deleteButton.firstElementChild.style.background = `linear-gradient(0deg, #ff8c1a, #ff8c1a ${i}%, var(--editorDarkMode-primary, #855cd6) ${i}%)`;
-        await new Promise((resolve) => setTimeout(resolve, 17));
+        await new Promise((resolve) => setTimeout(resolve, timeout));
       }
 
       deleteButton.firstElementChild.style.transition = "none";

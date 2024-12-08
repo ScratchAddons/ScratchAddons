@@ -25,6 +25,26 @@
   ],
   "settings": [
     {
+      "name": "Hold duration",
+      "id": "duration",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "short",
+          "name": "Short"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "long",
+          "name": "Long"
+        }
+      ],
+      "default": "default"
+    },
+    {
       "name": "Skip confirmation",
       "id": "noConfirm",
       "type": "boolean",
