@@ -19,7 +19,7 @@ export default async function ({ addon, console }) {
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type == "scratch-gui/project-changed/SET_PROJECT_CHANGED") {
+    if (e.detail.action.type === "scratch-gui/project-changed/SET_PROJECT_CHANGED") {
       // Move the thumbnail after the project loads
       thumb.classList.remove("loading");
       controls.classList.remove("sa-controls-disabled");
@@ -28,6 +28,6 @@ export default async function ({ addon, console }) {
       stage.insertBefore(thumb, greenFlagOverlay);
       alerts.style.display = "flex";
     }
-    if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") thumb.remove();
+    if (e.detail.action.type === "scratch-gui/vm-status/SET_STARTED_STATE") thumb.remove();
   });
 }

@@ -31,12 +31,12 @@ export default async function ({ addon, console }) {
       var input = this.inputList[n];
       if (input.connection) {
         var target = input.connection.targetBlock();
-        if (target.getField(field.name) == field) {
+        if (target.getField(field.name) === field) {
           inputNameToRemove = input.name;
         }
       } else {
         for (var j = 0; j < input.fieldRow.length; j++) {
-          if (input.fieldRow[j] == field) {
+          if (input.fieldRow[j] === field) {
             inputNameToRemove = input.name;
           }
         }
