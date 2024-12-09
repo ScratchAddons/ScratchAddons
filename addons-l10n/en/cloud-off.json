@@ -1,0 +1,6 @@
+{
+  "cloud-off/reenable": "Re-enable Cloud Variables",
+  "cloud-off/reloadRequired": "You must reload the page to reconnect Cloud variables.",
+  "cloud-off/confirm": "Reload",
+  "cloud-off/cancel": "Cancel"
+}
