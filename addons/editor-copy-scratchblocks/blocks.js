@@ -156,8 +156,12 @@ const blocks = {
   looks_show: build`show`,
   looks_hide: build`hide`,
   looks_hideallsprites: build`hide all sprites :: looks`,
-  looks_changeeffectby: build`change [${{ field: "EFFECT", sanitizations: dropdownSanitizations }} v] effect by ${{ input: "CHANGE" }}`,
-  looks_seteffectto: build`set [${{ field: "EFFECT", sanitizations: dropdownSanitizations }} v] effect to ${{ input: "VALUE" }}`,
+  looks_changeeffectby: build`change [${{ field: "EFFECT", sanitizations: dropdownSanitizations }} v] effect by ${{
+    input: "CHANGE",
+  }}`,
+  looks_seteffectto: build`set [${{ field: "EFFECT", sanitizations: dropdownSanitizations }} v] effect to ${{
+    input: "VALUE",
+  }}`,
   looks_cleargraphiceffects: build`clear graphic effects`,
   looks_changesizeby: build`change size by ${{ input: "CHANGE" }}`,
   looks_setsizeto: build`set size to ${{ input: "SIZE" }} %`,
@@ -168,7 +172,9 @@ const blocks = {
   looks_switchbackdropto: build`switch backdrop to ${{ input: "BACKDROP" }}`,
   looks_backdrops: build`(${{ field: "BACKDROP", sanitizations: repSanitizations }} v)`,
   looks_gotofrontback: build`go to [${{ field: "FRONT_BACK", sanitizations: dropdownSanitizations }} v] layer`,
-  looks_goforwardbackwardlayers: build`go [${{ field: "FORWARD_BACKWARD", sanitizations: dropdownSanitizations }} v] ${{ input: "NUM" }} layers`,
+  looks_goforwardbackwardlayers: build`go [${{ field: "FORWARD_BACKWARD", sanitizations: dropdownSanitizations }} v] ${{
+    input: "NUM",
+  }} layers`,
   looks_backdropnumbername: build`(backdrop [${{ field: "NUMBER_NAME", sanitizations: dropdownSanitizations }} v])`,
   looks_costumenumbername: build`(costume [${{ field: "NUMBER_NAME", sanitizations: dropdownSanitizations }} v])`,
   looks_switchbackdroptoandwait: build`switch backdrop to ${{ input: "BACKDROP" }} and wait`,
@@ -178,8 +184,12 @@ const blocks = {
   sound_play: build`start sound ${{ input: "SOUND_MENU" }}`,
   sound_playuntildone: build`play sound ${{ input: "SOUND_MENU" }} until done`,
   sound_stopallsounds: build`stop all sounds`,
-  sound_seteffectto: build`set [${{ field: "EFFECT", sanitizations: dropdownSanitizations }} v] effect to ${{ input: "VALUE" }}`,
-  sound_changeeffectby: build`change [${{ field: "EFFECT", sanitizations: dropdownSanitizations }} v] effect by ${{ input: "VALUE" }}`,
+  sound_seteffectto: build`set [${{ field: "EFFECT", sanitizations: dropdownSanitizations }} v] effect to ${{
+    input: "VALUE",
+  }}`,
+  sound_changeeffectby: build`change [${{ field: "EFFECT", sanitizations: dropdownSanitizations }} v] effect by ${{
+    input: "VALUE",
+  }}`,
   sound_cleareffects: build`clear sound effects`,
   sound_changevolumeby: build`change volume by ${{ input: "VOLUME" }}`,
   sound_setvolumeto: build`set volume to ${{ input: "VOLUME" }} %`,
@@ -190,9 +200,17 @@ const blocks = {
   event_whenflagclicked: build`when green flag clicked`,
   event_whenthisspriteclicked: build`when this sprite clicked`,
   event_whenstageclicked: build`when stage clicked`,
-  event_whenbroadcastreceived: build`when I receive [${{ field: "BROADCAST_OPTION", sanitizations: dropdownSanitizations }} v]`,
-  event_whenbackdropswitchesto: build`when backdrop switches to [${{ field: "BACKDROP", sanitizations: dropdownSanitizations }} v]`,
-  event_whengreaterthan: build`when [${{ field: "WHENGREATERTHANMENU", sanitizations: dropdownSanitizations }} v] > ${{ input: "VALUE" }}`,
+  event_whenbroadcastreceived: build`when I receive [${{
+    field: "BROADCAST_OPTION",
+    sanitizations: dropdownSanitizations,
+  }} v]`,
+  event_whenbackdropswitchesto: build`when backdrop switches to [${{
+    field: "BACKDROP",
+    sanitizations: dropdownSanitizations,
+  }} v]`,
+  event_whengreaterthan: build`when [${{ field: "WHENGREATERTHANMENU", sanitizations: dropdownSanitizations }} v] > ${{
+    input: "VALUE",
+  }}`,
   event_broadcast_menu: build`(${{ field: "BROADCAST_OPTION", sanitizations: repSanitizations }} v)`,
   event_broadcast: build`broadcast ${{ input: "BROADCAST_INPUT" }}`,
   event_broadcastandwait: build`broadcast ${{ input: "BROADCAST_INPUT" }} and wait`,
@@ -201,15 +219,26 @@ const blocks = {
   control_forever: build`forever\n${{ input: "SUBSTACK", substack: true }}end`,
   control_repeat: build`repeat ${{ input: "TIMES" }}\n${{ input: "SUBSTACK", substack: true }}end`,
   control_if: build`if ${{ input: "CONDITION", boolean: true }} then\n${{ input: "SUBSTACK", substack: true }}end`,
-  control_if_else: build`if ${{ input: "CONDITION", boolean: true }} then\n${{ input: "SUBSTACK", substack: true }}else\n${{ input: "SUBSTACK2", substack: true }}end`,
+  control_if_else: build`if ${{ input: "CONDITION", boolean: true }} then\n${{
+    input: "SUBSTACK",
+    substack: true,
+  }}else\n${{ input: "SUBSTACK2", substack: true }}end`,
   control_stop: build`stop [${{ field: "STOP_OPTION", sanitizations: dropdownSanitizations }} v]`,
   control_wait: build`wait ${{ input: "DURATION" }} seconds`,
   control_wait_until: build`wait until ${{ input: "CONDITION", boolean: true }}`,
-  control_repeat_until: build`repeat until ${{ input: "CONDITION", boolean: true }}\n${{ input: "SUBSTACK", substack: true }}end`,
+  control_repeat_until: build`repeat until ${{ input: "CONDITION", boolean: true }}\n${{
+    input: "SUBSTACK",
+    substack: true,
+  }}end`,
 
-  control_while: build`while ${{ input: "CONDITION", boolean: true }} {\n${{ input: "SUBSTACK", substack: true }}} @loopArrow :: control`,
+  control_while: build`while ${{ input: "CONDITION", boolean: true }} {\n${{
+    input: "SUBSTACK",
+    substack: true,
+  }}} @loopArrow :: control`,
 
-  control_for_each: build`for each [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] in ${{ input: "VALUE" }} {\n${{ input: "SUBSTACK", substack: true }}} @loopArrow :: control`,
+  control_for_each: build`for each [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] in ${{
+    input: "VALUE",
+  }} {\n${{ input: "SUBSTACK", substack: true }}} @loopArrow :: control`,
   control_start_as_clone: build`when I start as a clone`,
   control_create_clone_of_menu: build`(${{ field: "CLONE_OPTION", sanitizations: repSanitizations }} v)`,
   control_create_clone_of: build`create clone of ${{ input: "CLONE_OPTION" }}`,
@@ -264,29 +293,52 @@ const blocks = {
   operator_mathop: build`([${{ field: "OPERATOR", sanitizations: dropdownSanitizations }} v] of ${{ input: "NUM" }})`,
 
   data_variable: build`(${{ field: "VARIABLE", sanitizations: repSanitizations }}${{ override: "variables" }})`,
-  data_setvariableto: build`set [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] to ${{ input: "VALUE" }}`,
-  data_changevariableby: build`change [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] by ${{ input: "VALUE" }}`,
+  data_setvariableto: build`set [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] to ${{
+    input: "VALUE",
+  }}`,
+  data_changevariableby: build`change [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] by ${{
+    input: "VALUE",
+  }}`,
   data_showvariable: build`show variable [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v]`,
   data_hidevariable: build`hide variable [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v]`,
   data_listcontents: build`(${{ field: "LIST", sanitizations: repSanitizations }}${{ override: "list" }})`,
   data_listindexall: build`(${{ field: "INDEX", sanitizations: repSanitizations }} v)`,
   data_listindexrandom: build`(${{ field: "INDEX", sanitizations: repSanitizations }} v)`,
   data_addtolist: build`add ${{ input: "ITEM" }} to [${{ field: "LIST", sanitizations: dropdownSanitizations }} v]`,
-  data_deleteoflist: build`delete ${{ input: "INDEX" }} of [${{ field: "LIST", sanitizations: dropdownSanitizations }} v]`,
+  data_deleteoflist: build`delete ${{ input: "INDEX" }} of [${{
+    field: "LIST",
+    sanitizations: dropdownSanitizations,
+  }} v]`,
   data_deletealloflist: build`delete all of [${{ field: "LIST", sanitizations: dropdownSanitizations }} v]`,
-  data_insertatlist: build`insert ${{ input: "ITEM" }} at ${{ input: "INDEX" }} of [${{ field: "LIST", sanitizations: dropdownSanitizations }} v]`,
-  data_replaceitemoflist: build`replace item ${{ input: "INDEX" }} of [${{ field: "LIST", sanitizations: dropdownSanitizations }} v] with ${{ input: "ITEM" }}`,
-  data_itemoflist: build`(item ${{ input: "INDEX" }} of [${{ field: "LIST", sanitizations: dropdownSanitizations }} v])`,
-  data_itemnumoflist: build`(item # of ${{ input: "ITEM" }} in [${{ field: "LIST", sanitizations: dropdownSanitizations }} v])`,
+  data_insertatlist: build`insert ${{ input: "ITEM" }} at ${{ input: "INDEX" }} of [${{
+    field: "LIST",
+    sanitizations: dropdownSanitizations,
+  }} v]`,
+  data_replaceitemoflist: build`replace item ${{ input: "INDEX" }} of [${{
+    field: "LIST",
+    sanitizations: dropdownSanitizations,
+  }} v] with ${{ input: "ITEM" }}`,
+  data_itemoflist: build`(item ${{ input: "INDEX" }} of [${{
+    field: "LIST",
+    sanitizations: dropdownSanitizations,
+  }} v])`,
+  data_itemnumoflist: build`(item # of ${{ input: "ITEM" }} in [${{
+    field: "LIST",
+    sanitizations: dropdownSanitizations,
+  }} v])`,
   data_lengthoflist: build`(length of [${{ field: "LIST", sanitizations: dropdownSanitizations }} v])`,
-  data_listcontainsitem: build`<[${{ field: "LIST", sanitizations: dropdownSanitizations }} v] contains ${{ input: "ITEM" }}>`,
+  data_listcontainsitem: build`<[${{ field: "LIST", sanitizations: dropdownSanitizations }} v] contains ${{
+    input: "ITEM",
+  }}>`,
   data_showlist: build`show list [${{ field: "LIST", sanitizations: dropdownSanitizations }} v]`,
   data_hidelist: build`hide list [${{ field: "LIST", sanitizations: dropdownSanitizations }} v]`,
 
   procedures_definition: build`define ${{ input: "custom_block" }}`,
   procedures_call: procedure,
   procedures_prototype: procedure,
-  argument_reporter_string_number: build`(${{ field: "VALUE", sanitizations: repSanitizations }}${{ override: "custom" }})`,
+  argument_reporter_string_number: build`(${{ field: "VALUE", sanitizations: repSanitizations }}${{
+    override: "custom",
+  }})`,
   argument_reporter_boolean: build`<${{ field: "VALUE", sanitizations: repSanitizations }}${{ override: "custom" }}>`,
 
   pen_clear: build`erase all`,
@@ -299,7 +351,7 @@ const blocks = {
   pen_setPenColorParamTo: build`set pen ${{ input: "COLOR_PARAM" }} to ${{ input: "VALUE" }}`,
   pen_changePenSizeBy: build`change pen size by ${{ input: "SIZE" }}`,
   pen_setPenSizeTo: build`set pen size to ${{ input: "SIZE" }}`,
-  pen_setPenShadeToNumber: build`set pen shade to ${{input: "SHADE"}}`,
+  pen_setPenShadeToNumber: build`set pen shade to ${{ input: "SHADE" }}`,
   pen_changePenShadeBy: build`change pen shade by ${{ input: "SHADE" }}`,
   pen_setPenHueToNumber: build`set pen hue to ${{ input: "HUE" }}`,
   pen_changePenHueBy: build`change pen hue by ${{ input: "HUE" }}`,
@@ -314,28 +366,28 @@ const blocks = {
   music_changeTempo: build`change tempo by ${{ input: "TEMPO" }}`,
   music_getTempo: build`(tempo ${{ override: "MUSIC" }})`,
 
-  videoSensing_whenMotionGreaterThan: build`when video motion > ${{input: "REFERENCE"}}`,
-  videoSensing_videoOn: build`(video ${{input: "ATTRIBUTE"}} on ${{input: "SUBJECT"}})`,
-  videoSensing_menu_ATTRIBUTE: build`(${{field: "ATTRIBUTE", sanitizations: repSanitizations}} v)`,
-  videoSensing_menu_SUBJECT: build`(${{field: "SUBJECT", sanitizations: repSanitizations}} v)`,
-  videoSensing_videoToggle: build`turn video ${{input: "VIDEO_STATE"}}`,
-  videoSensing_menu_VIDEO_STATE: build`(${{field: "VIDEO_STATE", sanitizations: repSanitizations}} v)`,
-  videoSensing_setVideoTransparency: build`set video transparency to ${{input: "TRANSPARENCY"}}`,
+  videoSensing_whenMotionGreaterThan: build`when video motion > ${{ input: "REFERENCE" }}`,
+  videoSensing_videoOn: build`(video ${{ input: "ATTRIBUTE" }} on ${{ input: "SUBJECT" }})`,
+  videoSensing_menu_ATTRIBUTE: build`(${{ field: "ATTRIBUTE", sanitizations: repSanitizations }} v)`,
+  videoSensing_menu_SUBJECT: build`(${{ field: "SUBJECT", sanitizations: repSanitizations }} v)`,
+  videoSensing_videoToggle: build`turn video ${{ input: "VIDEO_STATE" }}`,
+  videoSensing_menu_VIDEO_STATE: build`(${{ field: "VIDEO_STATE", sanitizations: repSanitizations }} v)`,
+  videoSensing_setVideoTransparency: build`set video transparency to ${{ input: "TRANSPARENCY" }}`,
 
-  text2speech_speakAndWait: build`speak ${{input: "WORDS"}}`,
-  text2speech_setVoice: build`set voice to ${{input: "VOICE"}}`,
-  text2speech_menu_voices: build`(${{field: "voices", sanitizations: repSanitizations}} v)`,
-  text2speech_setLanguage: build`set language to ${{input: "LANGUAGE"}}`,
-  text2speech_menu_languages: build`(${{field: "languages", sanitizations: repSanitizations}} v)`,
+  text2speech_speakAndWait: build`speak ${{ input: "WORDS" }}`,
+  text2speech_setVoice: build`set voice to ${{ input: "VOICE" }}`,
+  text2speech_menu_voices: build`(${{ field: "voices", sanitizations: repSanitizations }} v)`,
+  text2speech_setLanguage: build`set language to ${{ input: "LANGUAGE" }}`,
+  text2speech_menu_languages: build`(${{ field: "languages", sanitizations: repSanitizations }} v)`,
 
-  translate_menu_languages: build`(${{field: "languages", sanitizations: repSanitizations}} v)`,
-  translate_getTranslate: build`(translate ${{input: "WORDS"}} to ${{input: "LANGUAGE"}})`,
-  translate_getViewerLanguage: build`(language${{override: "TRANSLATE"}})`,
+  translate_menu_languages: build`(${{ field: "languages", sanitizations: repSanitizations }} v)`,
+  translate_getTranslate: build`(translate ${{ input: "WORDS" }} to ${{ input: "LANGUAGE" }})`,
+  translate_getViewerLanguage: build`(language${{ override: "TRANSLATE" }})`,
 
-  makeymakey_whenMakeyKeyPressed: build`when ${{input: "KEY"}} key pressed`,
-  makeymakey_menu_KEY: build`(${{field: "KEY", sanitizations: repSanitizations}} v)`,
-  makeymakey_whenCodePressed: build`when ${{input: "SEQUENCE"}} pressed in order`,
-  makeymakey_menu_SEQUENCE: build`(${{field: "SEQUENCE", sanitizations: repSanitizations}} v)`
+  makeymakey_whenMakeyKeyPressed: build`when ${{ input: "KEY" }} key pressed`,
+  makeymakey_menu_KEY: build`(${{ field: "KEY", sanitizations: repSanitizations }} v)`,
+  makeymakey_whenCodePressed: build`when ${{ input: "SEQUENCE" }} pressed in order`,
+  makeymakey_menu_SEQUENCE: build`(${{ field: "SEQUENCE", sanitizations: repSanitizations }} v)`,
 
   // TODO: add remaining extensions
 };
