@@ -1,0 +1,58 @@
+{
+  "name": "Hold to delete sprites",
+  "description": "Require the delete button to be held down in order to delete a sprite.",
+  "tags": ["editor"],
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "hide-confirmation.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "noConfirm": true }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hold duration",
+      "id": "duration",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "short",
+          "name": "Short"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "long",
+          "name": "Long"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "name": "Skip confirmation",
+      "id": "noConfirm",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "versionAdded": "1.40.0",
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true
+}
