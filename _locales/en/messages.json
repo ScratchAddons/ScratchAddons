@@ -259,7 +259,7 @@
     "message": "send feedback"
   },
   "extensionUpdateInfo2_v1_40": {
-    "message": "The \"save blocks as image\" addon now allows copying the images directly to the clipboard. Also, the \"project video recorder\" now exports mp4 files when supported by the browser."
+    "message": "The \"save blocks as image\" addon now allows copying the images directly to the clipboard. Also, the \"project video recorder\" now exports mp4 files if supported by the browser."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
