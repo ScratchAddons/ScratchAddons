@@ -1,10 +1,13 @@
 .search-box {
-  background: var(--search-toolbar-background);
-  border-bottom: 1px solid var(--control-border);
   display: flex;
   align-items: center;
-  padding: 20px 30px;
+  padding-inline: 30px;
   user-select: none;
+}
+
+.search-box.popup-search {
+  background: var(--search-toolbar-background);
+  border-bottom: 1px solid var(--control-border);
 }
 
 .search-box input {

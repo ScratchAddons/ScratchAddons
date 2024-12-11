@@ -28,6 +28,15 @@ body {
   z-index: 10;
 }
 
+.navbar-first {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-first.wide {
+  width: 300px;
+}
+
 h1 {
   font-size: 18px;
   margin: 0;
