@@ -1,0 +1,40 @@
+{
+  "name": "Additional studio stats",
+  "description": "Displays additional studio statistics under the description.",
+  "credits": [
+    {
+      "name": "AeroKoder",
+      "link": "https://scratch.mit.edu/users/AeroKoder/"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Creation date",
+      "type": "boolean",
+      "default": true,
+      "id": "studioDates"
+    },
+    {
+      "name": "Average followers per day",
+      "type": "boolean",
+      "default": false,
+      "id": "studioFollowers"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "studioDates.js",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "if": { "settings": { "studioDates": true } }
+    },
+    {
+      "url": "studioFollowers.js",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "if": { "settings": { "studioFollowers": true } }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["community", "studios"],
+  "versionAdded": "1.40.0"
+}
