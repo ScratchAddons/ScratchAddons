@@ -1,0 +1,241 @@
+/* Toggle switch */
+.toggle-switch {
+  vertical-align: middle;
+  margin-left: 5px;
+  top: 0;
+  width: auto;
+  height: auto;
+}
+.toggle-switch input {
+  width: auto;
+  height: auto;
+  opacity: 1;
+}
+.toggle-switch .slider {
+  display: none;
+}
+
+/* Comments */
+.comments-root-reply {
+  margin: 0;
+  padding: 20px;
+}
+.comments-root-reply:empty {
+  padding: 0;
+}
+.comment .avatar {
+  margin-right: 10px;
+  width: 45px;
+  height: 45px;
+  border-radius: 0;
+  box-shadow: none;
+}
+.compose-comment {
+  margin: 0;
+}
+.comment-reply-row {
+  margin: 0;
+  width: 100%;
+}
+.compose-comment .textarea-row textarea,
+.compose-comment .textarea-row textarea:not(:focus) {
+  margin: 0;
+  width: 100%;
+  padding: 4px;
+  background-color: var(--darkWww-box, white);
+  border: 1px solid var(--darkWww-border-20, #ccc);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  color: var(--darkWww-box-scratchr2InputText, #555);
+}
+.compose-comment .textarea-row textarea:focus {
+  border-color: rgba(82, 168, 236, 0.8);
+  box-shadow:
+    inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(82, 168, 236, 0.6);
+  transition:
+    border-color 0.2s linear,
+    box-shadow 0.2s linear;
+}
+.compose-comment .compose-bottom-row {
+  margin-top: 5px;
+}
+.compose-comment .compose-bottom-row .button {
+  margin: 0 1px;
+  height: 26px;
+  padding: 0 10px;
+  line-height: 24px;
+}
+.compose-comment .compose-bottom-row .compose-post {
+  margin-right: 5px;
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+}
+.compose-comment .compose-bottom-row .compose-post:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+.compose-comment .compose-bottom-row .compose-cancel {
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+.compose-comment .compose-bottom-row .compose-cancel:hover {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+}
+.compose-comment .compose-bottom-row .compose-limit {
+  font-size: 11px;
+}
+.sa-emoji-button,
+.compose-comment .compose-bottom-row .sa-emoji-picker-see-more {
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+}
+.sa-emoji-button:hover,
+.compose-comment .compose-bottom-row .sa-emoji-picker-see-more:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+.sa-emoji-button-www .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
+  top: 105px;
+}
+.compose-comment .compose-bottom-row .sa-emoji-picker-see-more {
+  margin-top: 5px;
+}
+.comment-container {
+  border-bottom: 1px solid var(--darkWww-border-20, #ccc);
+}
+.comment-container:last-child {
+  border-bottom: none;
+}
+.comment {
+  box-sizing: border-box;
+  padding: 15px 20px 23px;
+}
+.replies .comment {
+  padding-left: 10px;
+  padding-bottom: 15px;
+  border-top: 1px solid var(--darkWww-border-20, #ccc);
+}
+.comments-root-reply > .comment {
+  padding: 0;
+}
+.comment-reply-row > .comment {
+  padding: 0;
+  padding-top: 10px;
+  border: none;
+}
+.comment.highlighted-comment {
+  background-color: var(--darkWww-gray-scratchr2, #f9f9f9);
+}
+.comment.highlighted-comment::before {
+  display: none;
+}
+.comment .comment-top-row {
+  margin-bottom: 6px;
+  line-height: 11px;
+}
+.comment .comment-top-row .username {
+  font-size: 13px;
+  font-weight: bold;
+}
+.comment .comment-top-row .username:hover {
+  color: var(--darkWww-link-scratchr2, #855cd6);
+}
+.comment.highlighted-comment .comment-top-row .username {
+  color: var(--darkWww-gray-scratchr2LabelText, #333);
+}
+.comment .comment-top-row .comment-delete,
+.comment .comment-top-row .comment-report {
+  font-size: 13px;
+  font-weight: normal;
+  opacity: 1;
+}
+.comment .comment-top-row .comment-delete {
+  margin-right: 10px;
+}
+.comment.comment.highlighted-comment .comment-top-row .comment-delete,
+.comment.comment.highlighted-comment .comment-top-row .comment-report {
+  color: var(--darkWww-gray-scratchr2GrayText, #999);
+}
+.comment .comment-top-row .comment-delete::before,
+.comment .comment-top-row .comment-report::before {
+  display: none;
+}
+.comment .comment-body {
+  margin: 0;
+}
+.comment .comment-body .comment-bubble {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
+.comment.comment.highlighted-comment .comment-body .comment-bubble {
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+}
+.comment .comment-body .comment-bubble::before {
+  display: none;
+}
+.comment .comment-body .comment-content {
+  font-size: 13px;
+  line-height: 20px;
+}
+.comment .comment-body .comment-bottom-row {
+  padding-top: 5px;
+  justify-content: flex-start;
+  font-size: 13px;
+  line-height: 20px;
+}
+.comment.comment.highlighted-comment .comment-body .comment-bottom-row .comment-time {
+  color: var(--darkWww-gray-scratchr2GrayText, #999);
+}
+.comment .comment-body .comment-bottom-row .comment-reply {
+  margin-left: 15px;
+  color: var(--darkWww-link-scratchr2, #855cd6);
+  font-weight: normal;
+}
+.comment .comment-body .comment-bottom-row .comment-reply:hover {
+  text-decoration: underline;
+}
+.comment .comment-body .comment-bottom-row .comment-reply::after {
+  display: none;
+}
+.comment .comment-body .comment-bottom-row .comment-reply > span {
+  /* Required for ::first-letter to work */
+  display: block;
+}
+.comment .comment-body .comment-bottom-row .comment-reply > span::first-letter {
+  text-transform: uppercase;
+}
+.replies.collapsed > .comment:last-of-type::after {
+  left: 0;
+  background-image: linear-gradient(transparent, var(--darkWww-input, #fbfbfb));
+}
+.expand-thread {
+  overflow: visible; /* allow child to cover border */
+  border-top: 1px solid var(--darkWww-border-20, #ccc);
+}
+.expand-thread:hover {
+  text-decoration: none;
+}
+.expand-thread::before,
+.expand-thread::after {
+  display: none;
+}
+.expand-thread > span {
+  display: inline-block;
+  position: relative;
+  top: -1px;
+  padding: 0 5px 2px;
+  background-color: var(--darkWww-input, #fbfbfb);
+  border: 1px solid var(--darkWww-border-20, #ccc);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  font-size: 13px;
+  line-height: 20px;
+}
+.expand-thread > span::after {
+  content: " \25bc"; /* U+25BC BLACK DOWN-POINTING TRIANGLE */
+}
