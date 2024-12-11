@@ -91,7 +91,7 @@ const dropdown = (field) => (block) => `(${sanitize(block.getField(field).getTex
 const simpleReporter = (text, category) => () => {
   // TODO: override checking
   return `(${text})`;
-}
+};
 
 const procedure = (block) => {
   const sanitizations = [
@@ -418,7 +418,7 @@ const blocks = {
   ev3_buttonPressed: build`<button ${{ input: "PORT" }} pressed?>`,
   ev3_getDistance: simpleReporter("distance", "EV3"),
   ev3_getBrightness: simpleReporter("brightness", "EV3"),
-  ev3_beep: build`beep note ${{input: "NOTE"}} for ${{input: "TIME"}} secs`
+  ev3_beep: build`beep note ${{ input: "NOTE" }} for ${{ input: "TIME" }} secs`,
 
   // TODO: add remaining extensions
 };
