@@ -1,7 +1,7 @@
 .search-box {
   display: flex;
   align-items: center;
-  padding-inline: 30px;
+  padding-inline: 7px; /* half as much as vertical padding */
   user-select: none;
 }
 

@@ -28,13 +28,10 @@ body {
   z-index: 10;
 }
 
-.navbar-first {
+.navbar-start {
   display: flex;
+  flex: 1 1 auto;
   align-items: center;
-}
-
-.navbar-first.wide {
-  width: 300px;
 }
 
 h1 {
@@ -151,14 +148,6 @@ h1 {
 }
 .theme-switch {
   height: 25px;
-}
-.header-end {
-  right: 0;
-  position: fixed;
-}
-[dir="rtl"] .header-end {
-  right: auto;
-  left: 0;
 }
 
 .hidden-button {
