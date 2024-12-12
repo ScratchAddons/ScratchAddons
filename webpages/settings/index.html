@@ -121,15 +121,15 @@
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
       <div class="navbar-start">
-      <img
-        :src="switchPath"
-        id="sidebar-toggle"
-        class="header-button"
-        @click="sidebarToggle()"
-        v-cloak
-        v-show="smallMode"
-        alt="Logo"
-      />
+        <img
+          :src="switchPath"
+          id="sidebar-toggle"
+          class="header-button"
+          @click="sidebarToggle()"
+          v-cloak
+          v-show="smallMode"
+          alt="Logo"
+        />
         <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
         <h1 v-cloak>{{ msg("settings") }}</h1>
       </div>
