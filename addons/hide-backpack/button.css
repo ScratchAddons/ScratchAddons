@@ -39,6 +39,14 @@
   left: 24px;
 }
 
+[dir="ltr"] .sa-backpack-button.sa-new-blockly {
+  right: 28px;
+}
+
+[dir="rtl"] .sa-backpack-button.sa-new-blockly {
+  left: 29px;
+}
+
 .sa-backpack-open .sa-backpack-button {
   background-color: #0b8e69;
   border-color: rgba(11, 142, 105, 0.35);
