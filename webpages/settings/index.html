@@ -193,7 +193,7 @@
 
       <!-- This is the main menu, where the searchbar (in the popup) and the addon items are located -->
       <div class="addons-block">
-        <div v-cloak class="search-box popup-search" v-if="isIframe">
+        <div v-cloak class="search-box" v-if="isIframe">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
           <button v-else class="search-clear-button" @click="clearSearch()"></button>
