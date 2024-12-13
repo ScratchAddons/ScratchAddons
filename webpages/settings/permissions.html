@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -16,11 +16,12 @@
        * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
       */
       @import url("../styles/colors.css");
+      @import url("../styles/components/buttons.css");
     </style>
   </head>
   <body class="permissions">
     <div class="navbar">
-      <a href="./index.html"><img src="../../images/icon-transparent.svg" class="logo" alt="Logo" /></a>
+      <a href="./index.html"><img src="../../images/icon-transparent.svg" class="logo header-button" alt="Logo" /></a>
       <h1 v-cloak>{{ msg("permissions") }}</h1>
     </div>
     <div v-cloak class="main">

@@ -3,7 +3,24 @@ import { onPauseChanged, isPaused } from "./module.js";
 export default async function createPerformanceTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
+  await addon.tab.loadScript("/libraries/thirdparty/cs/chart.min.js");
+
+  // In optimized graphs everything still looks good
+  const fancyGraphs = addon.settings.get("fancy_graphs");
+  const lineWidth = fancyGraphs ? 1 : 2;
+  const lineColor = fancyGraphs ? "hsla(178, 65%, 45%, 0.5)" : "hsla(178, 65%, 45%, 1)";
+  const textColor = "#575e75";
+  const gridColor = "rgba(0, 0, 0, 0.1)";
+  const scaleColorOptions = {
+    ticks: {
+      color: textColor,
+    },
+    grid: {
+      borderColor: textColor,
+      tickColor: textColor,
+      color: gridColor,
+    },
+  };
 
   const tab = debug.createHeaderTab({
     text: msg("tab-performance"),
@@ -45,17 +62,23 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
       datasets: [
         {
           data: Array(NUMBER_OF_POINTS).fill(-1),
-          borderWidth: 1,
-          fill: true,
+          borderWidth: lineWidth,
+          fill: fancyGraphs,
           backgroundColor: "#29beb8",
+          borderColor: lineColor,
         },
       ],
     },
     options: {
+      animation: fancyGraphs,
       scales: {
+        x: {
+          ...scaleColorOptions,
+        },
         y: {
           max: getMaxFps(),
           min: 0,
+          ...scaleColorOptions,
         },
       },
       plugins: {
@@ -81,17 +104,23 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
       datasets: [
         {
           data: Array(NUMBER_OF_POINTS).fill(-1),
-          borderWidth: 1,
-          fill: true,
+          borderWidth: lineWidth,
+          fill: fancyGraphs,
           backgroundColor: "#29beb8",
+          borderColor: lineColor,
         },
       ],
     },
     options: {
+      animation: fancyGraphs,
       scales: {
+        x: {
+          ...scaleColorOptions,
+        },
         y: {
           max: 300,
           min: 0,
+          ...scaleColorOptions,
         },
       },
       plugins: {
@@ -166,6 +195,7 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
   let isVisible = false;
   const show = () => {
     isVisible = true;
+    window.dispatchEvent(new CustomEvent("saDebuggerPerformanceTabShown"));
   };
   const hide = () => {
     isVisible = false;

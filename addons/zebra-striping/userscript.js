@@ -1,5 +1,6 @@
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+
 export default async function ({ addon, msg, console }) {
-  const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const originalRender = ScratchBlocks.BlockSvg.prototype.render;
@@ -44,9 +45,7 @@ export default async function ({ addon, msg, console }) {
     return originalRender.call(this, opt_bubble);
   };
 
-  if (vm.editingTarget) {
-    vm.emitWorkspaceUpdate();
-  }
+  updateAllBlocks(addon.tab, { updateFlyout: false });
 
   // The replacement glow filter's ID is randomly generated and changes
   // when the workspace is reloaded (which includes loading the page and
@@ -57,7 +56,12 @@ export default async function ({ addon, msg, console }) {
   while (true) {
     const replacementGlowEl = await addon.tab.waitForElement('filter[id*="blocklyReplacementGlowFilter"]', {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/theme/SET_THEME",
+      ],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     document.documentElement.style.setProperty("--zebraStriping-replacementGlow", `url(#${replacementGlowEl.id})`);

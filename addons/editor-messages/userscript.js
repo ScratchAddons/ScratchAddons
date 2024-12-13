@@ -9,9 +9,11 @@ export default async function ({ addon, console, msg }) {
   messageCount.classList.add("sa-editormessages-count");
   messages.appendChild(messageCount);
   const setMessages = async () => {
-    const msgCount = Number(await addon.account.getMsgCount());
-    messageCount.innerText = msgCount;
-    if (msgCount === 0) {
+    const username = await addon.auth.fetchUsername();
+    if (!username) return;
+    const { count } = await (await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`)).json();
+    messageCount.innerText = count;
+    if (count === 0) {
       messageCount.setAttribute("style", `display: none;`);
     } else {
       messageCount.setAttribute("style", "");
@@ -22,12 +24,12 @@ export default async function ({ addon, console, msg }) {
   function createInterval() {
     if (addon.tab.editorMode === "editor") {
       setMessages();
-      interval = setInterval(setMessages, 5000);
+      interval = setInterval(setMessages, 30000);
     } else {
       addon.tab.addEventListener("urlChange", function thisFunction() {
         if (addon.tab.editorMode === "editor") {
           setMessages();
-          interval = setInterval(setMessages, 5000);
+          interval = setInterval(setMessages, 30000);
           addon.tab.removeEventListener("urlChange", thisFunction);
         }
       });

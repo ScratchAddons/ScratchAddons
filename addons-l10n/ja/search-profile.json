@@ -1,1 +1,1 @@
-{"search-profile/profile":"プロフィール","search-profile/invalid-username":"{username}は無効なユーザー名です!","search-profile/@name":"プロフィール検索","search-profile/@description":"ユーザー名で検索時に、プロフィールページへ行くリンクを追加する。"}
+{"search-profile/profile":"プロフィール","search-profile/invalid-username":"\"{username}\" は無効なユーザー名か、アカウントが存在しません","search-profile/@name":"ユーザー名検索","search-profile/@description":"ユーザー名で検索時に、プロフィールページへ行くリンクを追加する。"}

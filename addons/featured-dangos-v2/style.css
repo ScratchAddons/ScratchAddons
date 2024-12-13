@@ -1,0 +1,4 @@
+/* Hide back and forward buttons in our row */
+.sa-featured-dangos-row button {
+  display: none !important;
+}

@@ -1,5 +1,5 @@
 {
-  "name": "Search sprites by name",
+  "name": "Sprite pane search",
   "description": "Adds a search box to the sprite pane to search for sprites by name.",
   "credits": [
     {
@@ -8,6 +8,10 @@
     },
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "userstyles": [
@@ -25,6 +29,10 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.24.0",
-  "tags": ["editor"],
+  "latestUpdate": {
+    "version": "1.40.0",
+    "temporaryNotice": "The search bar is now below the sprite list, next to the add button."
+  },
+  "tags": ["editor", "recommended"],
   "enabledByDefault": false
 }

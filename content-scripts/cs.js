@@ -11,6 +11,11 @@ try {
 if (window.frameElement && window.frameElement.getAttribute("src") === null)
   throw "Scratch Addons: iframe without src attribute ignored";
 if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
+if (new URL(location.href).hostname === "localhost") {
+  if (!["8333", "8601", "8602"].includes(new URL(location.href).port)) {
+    throw "Scratch Addons: this localhost port is not supported";
+  }
+}
 
 const MAX_USERSTYLES_PER_ADDON = 100;
 
@@ -95,8 +100,12 @@ const cs = {
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
   copyImage(dataURL) {
-    // Firefox only
+    // Firefox 109-126 only
     return new Promise((resolve, reject) => {
+      if (typeof Clipboard.prototype.write === "function") {
+        reject("Use browser API instead");
+        return;
+      }
       browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
         (res) => {
           resolve();
@@ -279,7 +288,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         // this is not even a color lol
         return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
       case "map":
-        return obj.options[getColor(addonId, obj.source)];
+        return getColor(addonId, obj.options[getColor(addonId, obj.source)] ?? obj.default);
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
@@ -350,7 +359,7 @@ function waitForDocumentHead() {
 }
 
 function getL10NURLs() {
-  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || navigator.language;
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
   if (langCode === "pt") {
     urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
@@ -400,6 +409,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         if (everLoadedUserscriptAddons.has(addonId)) {
           if (!dynamicDisable) return;
           // Addon was reenabled
+          document.querySelector(`[data-sa-hide-disabled-style=${addonId}]`).remove();
           _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
         } else {
           if (!dynamicEnable) return;
@@ -447,6 +457,10 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
           removeAddonStyles(addonId);
         }
         disabledDynamicAddons.add(addonId);
+        const style = document.createElement("style");
+        style.dataset.saHideDisabledStyle = addonId;
+        style.textContent = `[data-sa-hide-disabled=${addonId}] { display: none !important; }`;
+        document.body.appendChild(style);
         _page_.fireEvent({ name: "disabled", addonId, target: "self" });
       } else {
         everLoadedUserscriptAddons.delete(addonId);
@@ -542,7 +556,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
 if (location.pathname.startsWith("/discuss/")) {
-  // We do this first as sb2 runs fast.
+  // We do this first as scratchblocks runs fast.
+  // Used by better-quoter.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
@@ -551,7 +566,8 @@ if (location.pathname.startsWith("/discuss/")) {
   if (document.readyState !== "loading") {
     setTimeout(preserveBlocks, 0);
   } else {
-    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
+    // { capture: true } is needed to run before jQuery's listener
+    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true, capture: true });
   }
 }
 
@@ -604,7 +620,8 @@ const showBanner = () => {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-shadow: none;
     box-shadow: 0 0 20px 0px #0000009e;
-    line-height: 1em;`,
+    font-size: 14px;
+    line-height: normal;`,
   });
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
@@ -625,7 +642,7 @@ const showBanner = () => {
     style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
-    style: "font-size: 18px; line-height: 24px; display: inline-block; margin-bottom: 12px;",
+    style: "font-size: 18px; line-height: normal; display: inline-block; margin-bottom: 12px;",
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("img"), {
@@ -638,7 +655,13 @@ const showBanner = () => {
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
-  const NOTIF_TEXT_STYLE = "display: block; font-size: 14px; color: white !important;";
+  const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
+  const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
+
+  //
+  const _uiLanguage = chrome.i18n.getUILanguage();
+  const _localeSlash = _uiLanguage.startsWith("en") ? "" : `${_uiLanguage.split("-")[0]}/`;
+  //
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
@@ -648,7 +671,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_31", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_40", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -660,6 +683,7 @@ const showBanner = () => {
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
+            style: NOTIF_LINK_STYLE,
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
         ][Number(i) - 1]
@@ -667,7 +691,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_31"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_40"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -680,6 +704,7 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
@@ -687,14 +712,17 @@ const showBanner = () => {
       chrome.runtime.getManifest().version
     }&${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("feedback"),
   });
   const notifFooterTranslate = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/translate",
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("translate"),
   });
-  const notifFooterLegal = Object.assign(document.createElement("small"), {
+  const notifFooterLegal = Object.assign(document.createElement("span"), {
+    style: NOTIF_TEXT_STYLE + "font-size: 12px;",
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
@@ -727,6 +755,7 @@ const showBanner = () => {
 };
 
 const handleBanner = async () => {
+  if (window.frameElement) return;
   const currentVersion = chrome.runtime.getManifest().version;
   const [major, minor, _] = currentVersion.split(".");
   const currentVersionMajorMinor = `${major}.${minor}`;
@@ -753,13 +782,19 @@ if (document.readyState !== "loading") {
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
 const isProject = pathArr[0] === "projects";
+const isForums = pathArr[0] === "discuss";
 
-if (isProfile || isStudio || isProject) {
+if (isProfile || isStudio || isProject || isForums) {
+  const removeReiteratedChars = (string) =>
+    string
+      .split("")
+      .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+      .join("");
+
   const shouldCaptureComment = (value) => {
-    const regex = /scratch[ ]?add[ ]?ons/;
-    // Trim like scratchr2
-    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-    const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
+    const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
+    const regex = /scratchadons/;
     return regex.test(limitedValue);
   };
   const extensionPolicyLink = document.createElement("a");
@@ -768,7 +803,7 @@ if (isProfile || isStudio || isProject) {
   extensionPolicyLink.innerText = chrome.i18n.getMessage("captureCommentPolicy");
   Object.assign(extensionPolicyLink.style, {
     textDecoration: "underline",
-    color: "white",
+    color: isForums ? "" : "white",
   });
   const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
     "$1",
@@ -777,160 +812,163 @@ if (isProfile || isStudio || isProject) {
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
-  window.addEventListener("load", () => {
-    if (isProfile) {
-      window.addEventListener(
-        "click",
-        (e) => {
-          const path = e.composedPath();
-          if (
-            path[1] &&
-            path[1] !== document &&
-            path[1].getAttribute("data-control") === "post" &&
-            path[1].hasAttribute("data-commentee-id")
-          ) {
-            const form = path[3];
-            if (form.tagName !== "FORM") return;
-            if (form.hasAttribute("data-sa-send-anyway")) {
-              form.removeAttribute("data-sa-send-anyway");
-              return;
-            }
-            const textarea = form.querySelector("textarea[name=content]");
-            if (!textarea) return;
-            if (shouldCaptureComment(textarea.value)) {
-              e.stopPropagation();
-              e.preventDefault(); // Avoid location.hash being set to null
+  if (isProfile) {
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (e.target.tagName !== "A" || !e.target.parentElement.matches("div.button[data-commentee-id]")) return;
+        const form = e.target.closest("form");
+        if (!form) return;
+        if (form.hasAttribute("data-sa-send-anyway")) {
+          form.removeAttribute("data-sa-send-anyway");
+          return;
+        }
+        const textarea = form.querySelector("textarea[name=content]");
+        if (!textarea) return;
+        if (shouldCaptureComment(textarea.value)) {
+          e.stopPropagation();
+          e.preventDefault(); // Avoid location.hash being set to null
 
-              form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
-              const sendAnyway = document.createElement("a");
-              sendAnyway.onclick = () => {
-                const res = confirm(confirmMsg);
-                if (res) {
-                  form.setAttribute("data-sa-send-anyway", "");
-                  form.querySelector("[data-control=post]").click();
-                }
-              };
-              sendAnyway.textContent = sendAnywayMsg;
-              Object.assign(sendAnyway.style, {
-                textDecoration: "underline",
-                color: "white",
-              });
-              form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
-              form.querySelector(".control-group").classList.add("error");
+          form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
+          const sendAnyway = document.createElement("a");
+          sendAnyway.onclick = () => {
+            const res = confirm(confirmMsg);
+            if (res) {
+              form.setAttribute("data-sa-send-anyway", "");
+              form.querySelector("[data-control=post]").click();
             }
-          }
-        },
-        { capture: true }
-      );
-    } else if (isProject || isStudio) {
-      // For projects, we want to be careful not to hurt performance.
-      // Let's capture the event in the comments container instead
-      // of the whole window. There will be a new comment container
-      // each time the user goes inside the project then outside.
-      let observer;
-      const waitForContainer = () => {
-        if (document.querySelector(".comments-container, .studio-compose-container")) return Promise.resolve();
-        return new Promise((resolve) => {
-          observer = new MutationObserver((mutationsList) => {
-            if (document.querySelector(".comments-container, .studio-compose-container")) {
-              resolve();
-              observer.disconnect();
-            }
+          };
+          sendAnyway.textContent = sendAnywayMsg;
+          Object.assign(sendAnyway.style, {
+            textDecoration: "underline",
+            color: "white",
           });
-          observer.observe(document.documentElement, { childList: true, subtree: true });
-        });
-      };
-      const getEditorMode = () => {
-        // From addon-api/content-script/Tab.js
-        const pathname = location.pathname.toLowerCase();
-        const split = pathname.split("/").filter(Boolean);
-        if (!split[0] || split[0] !== "projects") return null;
-        if (split.includes("editor")) return "editor";
-        if (split.includes("fullscreen")) return "fullscreen";
-        if (split.includes("embed")) return "embed";
-        return "projectpage";
-      };
-      const addListener = () =>
-        document.querySelector(".comments-container, .studio-compose-container").addEventListener(
-          "click",
-          (e) => {
-            const path = e.composedPath();
-            // When clicking the post button, e.path[0] might
-            // be <span>Post</span> or the <button /> element
-            const possiblePostBtn = path[0].tagName === "SPAN" ? path[1] : path[0];
-            if (!possiblePostBtn) return;
-            if (possiblePostBtn.tagName !== "BUTTON") return;
-            if (!possiblePostBtn.classList.contains("compose-post")) return;
-            const form = path[0].tagName === "SPAN" ? path[3] : path[2];
-            if (!form) return;
-            if (form.tagName !== "FORM") return;
-            if (!form.classList.contains("full-width-form")) return;
-            // Remove error when about to send comment anyway, if it exists
-            form.parentNode.querySelector(".sa-compose-error-row")?.remove();
-            if (form.hasAttribute("data-sa-send-anyway")) {
-              form.removeAttribute("data-sa-send-anyway");
-              return;
+          form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
+          form.querySelector(".control-group").classList.add("error");
+        }
+      },
+      { capture: true }
+    );
+  } else if (isProject || isStudio) {
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (!(e.target.tagName === "SPAN" || e.target.tagName === "BUTTON")) return;
+        if (!e.target.closest("button.compose-post")) return;
+        const form = e.target.closest("form.full-width-form");
+        if (!form) return;
+        // Remove error when about to send comment anyway, if it exists
+        form.parentNode.querySelector(".sa-compose-error-row")?.remove();
+        if (form.hasAttribute("data-sa-send-anyway")) {
+          form.removeAttribute("data-sa-send-anyway");
+          return;
+        }
+        const textarea = form.querySelector("textarea[name=compose-comment]");
+        if (!textarea) return;
+        if (shouldCaptureComment(textarea.value)) {
+          e.stopPropagation();
+          const errorRow = document.createElement("div");
+          errorRow.className = "flex-row compose-error-row sa-compose-error-row";
+          const errorTip = document.createElement("div");
+          errorTip.className = "compose-error-tip";
+          const span = document.createElement("span");
+          span.innerHTML = errorMsgHtml + " ";
+          const sendAnyway = document.createElement("a");
+          sendAnyway.onclick = () => {
+            const res = confirm(confirmMsg);
+            if (res) {
+              form.setAttribute("data-sa-send-anyway", "");
+              form.querySelector(".compose-post")?.click();
             }
-            const textarea = form.querySelector("textarea[name=compose-comment]");
-            if (!textarea) return;
-            if (shouldCaptureComment(textarea.value)) {
-              e.stopPropagation();
-              const errorRow = document.createElement("div");
-              errorRow.className = "flex-row compose-error-row sa-compose-error-row";
-              const errorTip = document.createElement("div");
-              errorTip.className = "compose-error-tip";
-              const span = document.createElement("span");
-              span.innerHTML = errorMsgHtml + " ";
-              const sendAnyway = document.createElement("a");
-              sendAnyway.onclick = () => {
-                const res = confirm(confirmMsg);
-                if (res) {
-                  form.setAttribute("data-sa-send-anyway", "");
-                  possiblePostBtn.click();
-                }
-              };
-              sendAnyway.textContent = sendAnywayMsg;
-              errorTip.appendChild(span);
-              errorTip.appendChild(sendAnyway);
-              errorRow.appendChild(errorTip);
-              form.parentNode.prepend(errorRow);
+          };
+          sendAnyway.textContent = sendAnywayMsg;
+          errorTip.appendChild(span);
+          errorTip.appendChild(sendAnyway);
+          errorRow.appendChild(errorTip);
+          form.parentNode.prepend(errorRow);
 
-              // Hide error after typing like scratch-www does
-              textarea.addEventListener(
-                "input",
-                () => {
-                  errorRow.remove();
-                },
-                { once: true }
-              );
-              // Hide error after clicking cancel like scratch-www does
-              form.querySelector(".compose-cancel").addEventListener(
-                "click",
-                () => {
-                  errorRow.remove();
-                },
-                { once: true }
-              );
+          // Hide error after typing like scratch-www does
+          textarea.addEventListener(
+            "input",
+            () => {
+              errorRow.remove();
+            },
+            { once: true }
+          );
+          // Hide error after clicking cancel like scratch-www does
+          form.querySelector(".compose-cancel").addEventListener(
+            "click",
+            () => {
+              errorRow.remove();
+            },
+            { once: true }
+          );
+        }
+      },
+      { capture: true }
+    );
+  } else if (isForums) {
+    window.addEventListener("click", (e) => {
+      const potentialPostButton = e.target.closest("button[type=submit]");
+      if (!potentialPostButton) return;
+      const form = e.target.closest("form");
+      if (!form) return;
+      if (form.hasAttribute("data-sa-send-anyway")) {
+        form.removeAttribute("data-sa-send-anyway");
+        return;
+      }
+      const existingWarning = form.parentElement.querySelector(".sa-extension-policy-warning");
+      if (existingWarning) {
+        // Do nothing. The warning automatically disappears after typing into the form.
+        e.preventDefault();
+        existingWarning.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+      const textarea = form.querySelector("textarea.markItUpEditor");
+      if (!textarea) return;
+      if (shouldCaptureComment(textarea.value)) {
+        const errorTip = document.createElement("li");
+        errorTip.classList.add("errorlist", "sa-extension-policy-warning");
+        errorTip.style.scrollMarginTop = "50px";
+        errorTip.style.fontWeight = "bold";
+        errorTip.innerHTML = errorMsgHtml + " ";
+        const sendAnyway = document.createElement("a");
+        sendAnyway.onclick = () => {
+          const res = confirm(confirmMsg);
+          if (res) {
+            form.setAttribute("data-sa-send-anyway", "");
+            form.querySelector("button[type=submit]")?.click();
+          }
+        };
+        sendAnyway.textContent = sendAnywayMsg;
+        errorTip.appendChild(sendAnyway);
+
+        const postArea = form.querySelector("label");
+        if (!postArea) return;
+        let errorList = form.querySelector("label > ul");
+        if (!errorList) {
+          const typeArea = postArea.querySelector("strong");
+          errorList = document.createElement("ul");
+          errorList.classList.add("errorlist");
+          postArea.insertBefore(errorList, typeArea);
+        }
+
+        errorList.appendChild(errorTip);
+        errorTip.scrollIntoView({ behavior: "smooth" });
+        e.preventDefault();
+
+        // Hide error after typing
+        textarea.addEventListener(
+          "input",
+          () => {
+            errorTip.remove();
+            if (errorList.querySelector("li") === null) {
+              errorList.remove();
             }
           },
-          { capture: true }
+          { once: true }
         );
-
-      const check = async () => {
-        if (
-          // Note: do not use pathArr here below! pathArr is calculated
-          // on load, pathname can change dynamically with replaceState
-          (isStudio && location.pathname.split("/")[3] === "comments") ||
-          (isProject && getEditorMode() === "projectpage")
-        ) {
-          await waitForContainer();
-          addListener();
-        } else {
-          observer?.disconnect();
-        }
-      };
-      check();
-      csUrlObserver.addEventListener("change", (e) => check());
-    }
-  });
+      }
+    });
+  }
 }

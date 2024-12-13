@@ -71,12 +71,16 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     methods: {
       postComment() {
+        const removeReiteratedChars = (string) =>
+          string
+            .split("")
+            .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+            .join("");
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const regex = /scratch[ ]?add[ ]?ons/;
-          // Trim like scratchr2
-          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-          const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
+          const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
+          const regex = /scratchadons/;
           return regex.test(limitedValue);
         };
         if (shouldCaptureComment(this.replyBoxValue)) {
@@ -256,10 +260,13 @@ export default async ({ addon, msg, safeMsg }) => {
       studioHostTransfers: [],
       forumActivity: [],
       studioActivity: [],
+      studioActivityAmt: 0,
       remixes: [],
       profiles: [],
       studios: [],
       projects: [],
+      // There can't be more than one "welcome to Scratch" message
+      welcomeToScratch: false,
 
       // For UI
       messageTypeExtended: {
@@ -299,6 +306,7 @@ export default async ({ addon, msg, safeMsg }) => {
         openMessagesMsg: msg("open-messages"),
         studioPromotionsMsg: msg("studio-promotions"),
         studioHostTransfersMsg: msg("studio-host-transfers"),
+        welcomeToScratchMsg: msg("welcome-to-scratch"),
       },
     },
     watch: {
@@ -311,10 +319,12 @@ export default async ({ addon, msg, safeMsg }) => {
         this.studioHostTransfers = [];
         this.forumActivity = [];
         this.studioActivity = [];
+        this.studioActivityAmt = 0;
         this.remixes = [];
         this.profiles = [];
         this.studios = [];
         this.projects = [];
+        this.welcomeToScratch = false;
         this.analyzeMessages(newVal);
       },
     },
@@ -414,15 +424,24 @@ export default async ({ addon, msg, safeMsg }) => {
           });
       },
 
-      async updateMessageCount() {
+      async updateMessageCount(bypassCache = false) {
         const username = await addon.auth.fetchUsername();
-        const count = await MessageCache.fetchMessageCount(username);
+        const msgCountData = await MessageCache.fetchMessageCount(username, { bypassCache });
+        const count = await MessageCache.getUpToDateMsgCount(scratchAddons.cookieStoreId, msgCountData);
+
         const db = await MessageCache.openDatabase();
         try {
+          // We obtained the up-to-date message count, so we can safely override the cached count in IDB.
           await db.put("count", count, scratchAddons.cookieStoreId);
+
+          if (!bypassCache && msgCountData.resId && !(db instanceof MessageCache.IncognitoDatabase)) {
+            // Note: as of Oct 2023, this method is never called with bypassCache:false, so this never happens
+            await db.put("count", msgCountData.resId, `${scratchAddons.cookieStoreId}_resId`);
+          }
         } finally {
           await db.close();
         }
+
         chrome.runtime.sendMessage({
           forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
         });
@@ -431,7 +450,7 @@ export default async ({ addon, msg, safeMsg }) => {
       // For UI
       markAsRead() {
         MessageCache.markAsRead(addon.auth.csrfToken)
-          .then(() => this.updateMessageCount())
+          .then(() => this.updateMessageCount(true))
           .then(() => {
             this.markedAsRead = true;
           })
@@ -446,7 +465,7 @@ export default async ({ addon, msg, safeMsg }) => {
               this.stMessages.findIndex((alert) => alert.id === id),
               1
             );
-            this.updateMessageCount();
+            this.updateMessageCount(true);
           })
           .catch((e) => console.error("Dismissing alert failed:", e));
       },
@@ -512,12 +531,12 @@ export default async ({ addon, msg, safeMsg }) => {
           } else return true;
         } else return false;
       },
-      checkCommentLocation(resourceType, resourceId, commentIds, elementObject) {
+      checkCommentLocation(resourceType, resourceId, commentMessages, elementObject) {
         return Promise.all([
           API.fetchComments(addon, {
             resourceType,
             resourceId,
-            commentIds,
+            commentMessages,
           }),
           addon.self.getEnabledAddons(),
         ])
@@ -554,8 +573,8 @@ export default async ({ addon, msg, safeMsg }) => {
               resourceType === "project"
                 ? "getProjectObject"
                 : resourceType === "user"
-                ? "getProfileObject"
-                : "getStudioObject";
+                  ? "getProfileObject"
+                  : "getStudioObject";
             const resourceObject = this[resourceGetFunction](resourceId);
             for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
 
@@ -629,6 +648,7 @@ export default async ({ addon, msg, safeMsg }) => {
                 studioTitle: message.title,
               });
             }
+            this.studioActivityAmt++;
           } else if (message.type === "loveproject") {
             const projectObject = this.getProjectObject(message.project_id, message.title);
             projectObject.loveCount++;
@@ -645,10 +665,10 @@ export default async ({ addon, msg, safeMsg }) => {
             const resourceId = message.comment_type === 1 ? message.comment_obj_title : message.comment_obj_id;
             let location = commentLocations[message.comment_type].find((obj) => obj.resourceId === resourceId);
             if (!location) {
-              location = { resourceId, commentIds: [] };
+              location = { resourceId, commentMessages: [] };
               commentLocations[message.comment_type].push(location);
             }
-            location.commentIds.push(message.comment_id);
+            location.commentMessages.push(message);
             let resourceObject;
             if (message.comment_type === 0)
               resourceObject = this.getProjectObject(resourceId, message.comment_obj_title);
@@ -656,6 +676,8 @@ export default async ({ addon, msg, safeMsg }) => {
             else if (message.comment_type === 2)
               resourceObject = this.getStudioObject(resourceId, message.comment_obj_title);
             resourceObject.unreadComments++;
+          } else if (message.type === "userjoin") {
+            this.welcomeToScratch = true;
           }
         }
         this.messagesReady = true;
@@ -666,7 +688,7 @@ export default async ({ addon, msg, safeMsg }) => {
         for (const profile of this.profilesOrdered) {
           const location = commentLocations[1].find((obj) => obj.resourceId === profile.username);
           if (location) {
-            await this.checkCommentLocation("user", location.resourceId, location.commentIds, profile);
+            await this.checkCommentLocation("user", location.resourceId, location.commentMessages, profile);
             locationsChecked++;
             this.commentsProgress = Math.round((locationsChecked / locationsToCheckAmt) * 100);
           }
@@ -674,7 +696,7 @@ export default async ({ addon, msg, safeMsg }) => {
         for (const studio of this.studios) {
           const location = commentLocations[2].find((obj) => obj.resourceId === studio.id);
           if (location) {
-            await this.checkCommentLocation("gallery", location.resourceId, location.commentIds, studio);
+            await this.checkCommentLocation("gallery", location.resourceId, location.commentMessages, studio);
             locationsChecked++;
             this.commentsProgress = Math.round((locationsChecked / locationsToCheckAmt) * 100);
           }
@@ -682,7 +704,7 @@ export default async ({ addon, msg, safeMsg }) => {
         for (const project of this.projectsOrdered) {
           const location = commentLocations[0].find((obj) => obj.resourceId === project.id);
           if (location) {
-            await this.checkCommentLocation("project", location.resourceId, location.commentIds, project);
+            await this.checkCommentLocation("project", location.resourceId, location.commentMessages, project);
             locationsChecked++;
             this.commentsProgress = Math.round((locationsChecked / locationsToCheckAmt) * 100);
           }

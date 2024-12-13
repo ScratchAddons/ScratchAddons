@@ -116,27 +116,34 @@ export default async function ({ addon, console, msg }) {
           //message.style.display = "none";
         }
       }
+      // Message types without a specific filter are always visible
+      // https://github.com/ScratchAddons/ScratchAddons/issues/2853#issuecomment-1724115504
+      if (!Object.values(filter).some((className) => message.classList.contains(className))) {
+        count++;
+        message.style.display = "list-item";
+      }
     }
     // Set the localStorage item.
     localStorage.setItem("scratchAddonsMessageFiltersSettings", JSON.stringify(active));
     // Log how many messages are showing.
     console.log(`${count} messages showing.`);
-  }
-  // Add the checkboxes element.
-  document.querySelector(".messages-social-title").appendChild(container);
-  // Loop waiting for more messages then load more messages and/or display them appropriately.
-  while (true) {
+    // Load more messages if there are less than 40 (1 page).
     if (count < 40) {
       console.log("Loading more messages...");
       // Click the load more button.
       document.querySelector(".messages-social-loadmore").click();
-      await addon.tab.waitForElement(".social-message", {
-        markAsSeen: true,
-      });
     }
-    await addon.tab.waitForElement(".social-message", {
-      markAsSeen: true,
-    });
-    update();
   }
+  // Add the checkboxes element.
+  document.querySelector(".messages-social-title").appendChild(container);
+  // Handle first page of messages.
+  update();
+  // Update when more messages are loaded.
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "SET_MESSAGES") {
+      // Timeout because messages aren't rendered yet when the event is triggered
+      setTimeout(update, 0);
+    }
+  });
 }

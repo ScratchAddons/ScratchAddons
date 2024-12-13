@@ -1,4 +1,4 @@
-// From https://github.com/LLK/scratch-gui/blob/develop/src/lib/data-uri-to-blob.js
+// From https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/data-uri-to-blob.js
 export default function (dataURL, returnArrayBuffer) {
   const byteString = atob(dataURL.split(",")[1]);
   const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];

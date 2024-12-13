@@ -1,23 +1,12 @@
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
+
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   let showOnProjectPage = addon.settings.get("projectpage");
   let showIconOnly = addon.settings.get("showicononly");
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-clones-small");
-  }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
-        document.body.classList.add("sa-clones-small");
-      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
-        document.body.classList.remove("sa-clones-small");
-      }
-    },
-    { capture: true }
-  );
+  addSmallStageClass();
 
   let countContainerContainer = document.createElement("div");
 
@@ -25,6 +14,7 @@ export default async function ({ addon, console, msg }) {
   let count = document.createElement("span");
   let icon = document.createElement("span");
 
+  addon.tab.displayNoneWhileDisabled(countContainerContainer);
   countContainerContainer.className = "clone-container-container";
   countContainer.className = "clone-container";
   count.className = "clone-count";
@@ -51,9 +41,10 @@ export default async function ({ addon, console, msg }) {
       count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
     }
 
-    if (v === 0 || (addon.tab.editorMode !== "editor" && !showOnProjectPage))
-      countContainerContainer.style.display = "none";
-    else addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
+    countContainerContainer.classList.toggle(
+      "show",
+      v !== 0 && (addon.tab.editorMode === "editor" || showOnProjectPage)
+    );
   }
 
   addon.settings.addEventListener("change", () => {

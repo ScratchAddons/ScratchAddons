@@ -1,0 +1,20 @@
+{
+  "name": "Remember collapsed forum categories",
+  "description": "Categories you collapsed on the forum home page (the list of forums) will stay collapsed when you leave and come back.",
+  "credits": [
+    {
+      "name": "Steve0Greatness",
+      "link": "https://scratch.mit.edu/users/Steve0Greatness/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/"],
+      "runAtComplete": false
+    }
+  ],
+  "tags": ["community", "forums"],
+  "dynamicEnable": true,
+  "versionAdded": "1.32.0"
+}
