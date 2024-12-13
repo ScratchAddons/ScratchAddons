@@ -153,4 +153,5 @@ iframe {
   text-decoration: none;
   opacity: 0.75;
   font-size: 12px;
+  user-select: text;
 }
