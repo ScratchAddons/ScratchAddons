@@ -8,7 +8,7 @@ body {
   overflow: hidden;
   margin: 0;
   background-color: var(--brand-orange); /* Firefox popup arrow */
-  font-family: "Sora", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: var(--white-text);
 }
 
@@ -39,6 +39,7 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
+  font-family: "Sora", sans-serif;
 }
 #logo {
   height: 25px;
@@ -75,7 +76,7 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  font-size: 12px;
+  font-size: 14px;
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
   transition: 0.2s ease;
@@ -148,5 +149,6 @@ iframe {
   margin: 5px;
   text-decoration: none;
   opacity: 0.75;
-  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
 }
