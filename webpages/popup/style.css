@@ -149,5 +149,6 @@ iframe {
   margin: 5px;
   text-decoration: none;
   opacity: 0.75;
-  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
 }
