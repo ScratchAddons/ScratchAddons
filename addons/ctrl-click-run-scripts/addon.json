@@ -1,6 +1,6 @@
 {
   "name": "Ctrl+Click to run scripts",
-  "description": "Only run scripts on click if also holding the Ctrl key.",
+  "description": "Only execute clicked blocks and scripts if also holding the Ctrl key or, optionally, if double clicked.",
   "info": [
     {
       "text": "On macOS, use the Cmd key instead of the Ctrl key.",
@@ -15,6 +15,10 @@
     {
       "name": "apple502j",
       "link": "https://github.com/apple502j"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "dynamicEnable": true,
@@ -25,7 +29,20 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Execute on double click",
+      "id": "double-click",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.15.0",
+  "latestUpdate": {
+    "version": "1.36.0",
+    "newSettings": ["double-click"],
+    "temporaryNotice": "Scripts can now be executed by double clicking."
+  },
   "enabledByDefault": false
 }
