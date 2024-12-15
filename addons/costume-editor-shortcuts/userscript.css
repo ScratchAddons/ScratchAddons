@@ -7,6 +7,6 @@
   padding: 1px;
 }
 
-span[class*='tool-select-base_is-selected'] .u-paint-editor-tool-shortcut {
+span[class*="tool-select-base_is-selected"] .u-paint-editor-tool-shortcut {
   color: white;
 }
