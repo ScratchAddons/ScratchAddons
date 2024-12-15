@@ -1,0 +1,27 @@
+{
+  "name": "Costume Editor Shortcuts",
+  "description": "Enables some keyboard shortcuts in the Costume Editor.",
+  "credits": [
+    {
+      "name": "Hollow_Song's Dad",
+      "link": "https://scratch.mit.edu/users/Hollow_Song/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userscript.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.40.0",
+  "tags": ["editor", "costumeEditor"],
+  "enabledByDefault": false
+}
