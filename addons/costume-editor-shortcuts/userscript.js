@@ -1,5 +1,5 @@
 /**
- * Scratch Addons Script to add Tool Shortcuts to Costume Editor
+ * Scratch Addons Script to add Tool Shortcuts to costume editor
  */
 export default async function ({ addon, global, console, msg }) {
   const COSTUME_EDITOR_TAB_INDEX = 1;
@@ -28,12 +28,19 @@ export default async function ({ addon, global, console, msg }) {
    * Initialize redux and listen for when a new tab is active.
    */
   addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", isNewTabActive);
+  addon.tab.redux.addEventListener("statechanged", handleStateChanged);
 
   /**
    * If costume editor is open, initialize tool shortcuts, otherwise clean them up if needed.
    */
-  async function isNewTabActive() {
+  async function handleStateChanged(event) {
+    // If "Convert to Bitmap/Vector" button is pressed in the costume editor, re-draw shortcuts on the buttons.
+    if (event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
+      setTimeout(async () => await addLettersToButtons(), 0); // allow the DOM to update before calling addLettersToButtons.
+      return;
+    }
+
+    // Only initialize or cleanup when the user switches to a new tab.
     const activeIndex = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
     if (prevEditorTabIndex != activeIndex) {
       prevEditorTabIndex = activeIndex;
