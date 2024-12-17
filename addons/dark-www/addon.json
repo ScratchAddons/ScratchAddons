@@ -120,9 +120,9 @@
           "type": "settingValue",
           "settingId": "page"
         },
-        "r": 0.99,
-        "g": 0.99,
-        "b": 0.99
+        "r": 0.98,
+        "g": 0.98,
+        "b": 0.98
       }
     },
     {
@@ -514,18 +514,6 @@
         "black": "rgba(0, 0, 0, 0.05)",
         "white": "rgba(255, 255, 255, 0.05)",
         "threshold": 32,
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
-      "name": "box-divider5",
-      "value": {
-        "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.05)",
-        "white": "rgba(255, 255, 255, 0.05)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
