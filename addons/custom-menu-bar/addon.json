@@ -59,6 +59,12 @@
       "default": false
     },
     {
+      "name": "Hide Debug button",
+      "id": "hide-debug-button",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Hide My Stuff button",
       "id": "my-stuff",
       "type": "boolean",
@@ -122,11 +128,35 @@
           "hide-tutorials-button": true
         }
       }
+    },
+    {
+      "url": "debug-hide.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "hide-debug-button": true
+        }
+      }
+    },
+    {
+      "url": "divider-hide.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "hide-tutorials-button": true,
+          "hide-debug-button": true
+        }
+      }
     }
   ],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true,
   "enabledByDefault": false,
-  "versionAdded": "1.36.0"
+  "versionAdded": "1.36.0",
+  "latestUpdate": {
+    "version": "1.40.0",
+    "newSettings": ["hide-debug-button"],
+    "isMajor": true
+  }
 }
