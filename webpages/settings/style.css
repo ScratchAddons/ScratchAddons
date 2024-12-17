@@ -38,6 +38,7 @@ h1 {
   font-size: 18px;
   margin: 0;
   font-weight: 400;
+  user-select: none;
 }
 
 .navbar a {
@@ -432,4 +433,5 @@ button.setting-input.color.open {
   display: flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
 }

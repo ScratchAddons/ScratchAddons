@@ -128,9 +128,9 @@
           @click="sidebarToggle()"
           v-cloak
           v-show="smallMode"
-          alt="Logo"
+          draggable="false"
         />
-        <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
+        <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
         <h1 v-cloak>{{ msg("settings") }}</h1>
       </div>
       <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
@@ -139,7 +139,7 @@
         <button v-else class="search-clear-button" @click="clearSearch()"></button>
       </div>
       <div @click="setTheme(!theme)" class="header-button">
-        <img v-cloak class="theme-switch" :src="themePath" />
+        <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
       </div>
     </div>
     <div class="main">
@@ -159,8 +159,8 @@
           :href="sidebarUrls.contributors"
           target="_blank"
         >
-          <img src="../../images/icons/users.svg" />
-          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
+          <img src="../../images/icons/users.svg" draggable="false" />
+          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <!--
         <div class="category category-small" @click="openReview()">
@@ -169,8 +169,8 @@
         </div>
         -->
         <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
-          <img src="../../images/icons/translate.svg" />
-          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
+          <img src="../../images/icons/translate.svg" draggable="false" />
+          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <a
           v-cloak
@@ -179,16 +179,20 @@
           :href="sidebarUrls.feedback"
           target="_blank"
         >
-          <img src="../../images/icons/comment.svg" />
-          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
+          <img src="../../images/icons/comment.svg" draggable="false" />
+          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
-          <img src="../../images/icons/wrench.svg" />
+          <img src="../../images/icons/wrench.svg" draggable="false" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
       <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
+        <img
+          src="../../images/icons/left-arrow.svg"
+          :class="{flipped: categoryOpen === (direction() === 'rtl')}"
+          draggable="false"
+        />
       </div>
 
       <!-- This is the main menu, where the searchbar (in the popup) and the addon items are located -->
@@ -236,7 +240,8 @@
         <div class="addon-body">
           <div class="addon-topbar">
             <span class="addon-name"
-              ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
+              ><img src="../../images/icons/theme.svg" class="icon-type" draggable="false" /> {{
+              msg("scratchAddonsTheme") }}
             </span>
           </div>
           <div class="addon-settings">
@@ -259,7 +264,12 @@
         <div class="addon-body">
           <div class="addon-topbar">
             <span class="addon-name"
-              ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
+              ><img
+                src="../../images/icons/import-export.svg"
+                class="icon-type"
+                :class="{'dark': theme === false}"
+                draggable="false"
+              />
               {{ msg("exportAndImportSettings") }}
             </span>
           </div>
@@ -283,7 +293,7 @@
         <div class="addon-body">
           <div class="addon-topbar">
             <span class="addon-name"
-              ><img src="../../images/icons/translate.svg" class="icon-type" />{{ msg("language") }}
+              ><img src="../../images/icons/translate.svg" class="icon-type" draggable="false" />{{ msg("language") }}
             </span>
           </div>
           <div class="addon-settings">
