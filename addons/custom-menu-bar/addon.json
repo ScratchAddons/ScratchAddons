@@ -156,6 +156,7 @@
   "versionAdded": "1.36.0",
   "latestUpdate": {
     "version": "1.40.0",
-    "newSettings": ["hide-debug-button"]
+    "newSettings": ["hide-debug-button"],
+    "isMajor": true
   }
 }
