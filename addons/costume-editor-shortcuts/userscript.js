@@ -1,5 +1,5 @@
 /**
- * Scratch Addons Script to add Tool Shortcuts to costume editor
+ * Scratch Addons Script to add Tool Shortcuts to costume editor (similar to TurboWarp)
  */
 export default async function ({ addon, global, console, msg }) {
   const COSTUME_EDITOR_TAB_INDEX = 1;
@@ -10,13 +10,13 @@ export default async function ({ addon, global, console, msg }) {
     Eraser: "e",
     Fill: "f",
     Text: "t",
-    Line: "d",
+    Line: "l",
     Circle: "c",
     Rectangle: "r",
   };
 
   /**
-   * Reverse the mapping above to lookup by shortcut key
+   * Reverse the mapping above to lookup by shortcut key.
    */
   const shortcutToToolName = Object.fromEntries(Object.entries(toolNameToShortcut).map(([key, value]) => [value, key]));
 
@@ -36,7 +36,7 @@ export default async function ({ addon, global, console, msg }) {
   async function handleStateChanged(event) {
     // If "Convert to Bitmap/Vector" button is pressed in the costume editor, re-draw shortcuts on the buttons.
     if (event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
-      setTimeout(async () => await addLettersToButtons(), 0); // allow the DOM to update before calling addLettersToButtons.
+      setTimeout(async () => await addShortcutsToTitles(), 0); // allow the DOM to update before calling addLettersToButtons.
       return;
     }
 
@@ -53,19 +53,19 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   /**
-   * Setup keydown listeners for shortcuts and and update UI to display available shortcuts.
+   * Setup keydown listeners for shortcuts and and update tooltips to include shortcuts.
    */
   async function initialize() {
-    if (isInitialized) return; // Prevent double initialization
+    if (isInitialized) return; // Prevents double initialization
     isInitialized = true;
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("focusin", userStartedTyping);
     document.addEventListener("focusout", userStoppedTyping);
-    await addLettersToButtons();
+    await addShortcutsToTitles();
   }
 
   /**
-   * Remove keydown listeners
+   * Remove keydown listeners.
    */
   async function cleanup() {
     isInitialized = false;
@@ -75,7 +75,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   /**
-   * Switch costume editor tools if a valid shortcut was pressed
+   * Switch costume editor tool if a valid shortcut was pressed.
    */
   async function handleKeyDown(event) {
     if (isUserTyping) return;
@@ -85,7 +85,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   /**
-   * For selecting costume editor tools by name
+   * For selecting costume editor tools by name.
    */
   async function switchTool(toolName) {
     if (!toolName || addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== COSTUME_EDITOR_TAB_INDEX) return;
@@ -93,7 +93,7 @@ export default async function ({ addon, global, console, msg }) {
     try {
       var modeSelector = await addon.tab.waitForElement("[class^='paint-editor_mode-selector']");
       if (modeSelector) {
-        modeSelector.querySelector(`span[title='${toolName}']`)?.click();
+        modeSelector.querySelector(`span[title^='${toolName}']`)?.click();
       }
     } catch (error) {
       console.error(`Failed to switch paint tool to: '${toolName}'. `, error);
@@ -101,14 +101,13 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   /**
-   * Iterate over the costume editor tool buttons and add shortcuts
+   * Iterate over the costume editor tool buttons and update their tooltips to include shortcuts.
    */
-  async function addLettersToButtons() {
+  async function addShortcutsToTitles() {
     try {
       const container = await addon.tab.waitForElement("[class^='paint-editor_mode-selector']");
       container.querySelectorAll("span").forEach((span) => {
-        const title = span.getAttribute("title");
-        addLetterToButton(span, title);
+        updateTitle(span, span.getAttribute("title"));
       });
     } catch (error) {
       console.error("Failed to add costume editor shortcuts to buttons: ", error);
@@ -116,23 +115,17 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   /**
-   * Update tools buttons in the UI to display their shortcut
+   * Mutates button tooltip to include shortcut key.
    */
-  function addLetterToButton(button, toolName) {
-    if (!toolName || !toolNameToShortcut[toolName]) return;
+  function updateTitle(button, title) {
+    if (!title || !toolNameToShortcut[title]) return;
 
-    if (button.querySelector(".u-paint-editor-tool-shortcut")) return; // Prevent adding duplicates
-
-    const shortcutSpan = document.createElement("span");
-    shortcutSpan.textContent = toolNameToShortcut[toolName].toUpperCase();
-    shortcutSpan.classList.add("u-paint-editor-tool-shortcut");
-
-    button.style.position = "relative"; // Parent must be relative for child to use absolute positioning.
-    button.appendChild(shortcutSpan);
+    const titleWithShortcut = title + ` (${toolNameToShortcut[title].toUpperCase()})`;
+    button.setAttribute("title", titleWithShortcut);
   }
 
   /**
-   * Track if user is typing (so we can disable shortcuts)
+   * Track if user is typing (so we can disable shortcuts).
    */
   function userStartedTyping(event) {
     if (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA") {

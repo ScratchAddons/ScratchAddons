@@ -13,12 +13,6 @@
       "matches": ["projects"]
     }
   ],
-  "userstyles": [
-    {
-      "url": "userscript.css",
-      "matches": ["projects"]
-    }
-  ],
   "versionAdded": "1.40.0",
   "tags": ["editor", "costumeEditor"],
   "enabledByDefault": false
