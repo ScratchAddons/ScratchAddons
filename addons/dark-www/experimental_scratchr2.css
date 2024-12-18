@@ -192,7 +192,7 @@ span.small-text,
   color: var(--darkWww-box-scratchr2GrayText);
 }
 .dropdown span.dropdown-toggle.black span.caret {
-  border-top-color: var(--darkWww-box-scratchr2Caret);
+  border-top-color: var(--darkWww-box-blackText);
 }
 input::placeholder {
   color: var(--darkWww-box-scratchr2InputPlaceholder);

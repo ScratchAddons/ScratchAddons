@@ -358,6 +358,17 @@
       }
     },
     {
+      "name": "box-blackText",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-filter",
       "value": {
         "type": "textColor",
@@ -620,17 +631,6 @@
       "value": {
         "type": "textColor",
         "black": "#666666",
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
-      "name": "box-scratchr2Caret",
-      "value": {
-        "type": "textColor",
-        "black": "#000000",
         "source": {
           "type": "settingValue",
           "settingId": "box"

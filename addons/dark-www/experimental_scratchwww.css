@@ -223,7 +223,6 @@ body:not(.sa-body-editor) .button.white,
 .tabs button:hover,
 .tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
-.youtbe-video-button .video-info .video-title,
 .cards-modal-container .cards-modal-section-title,
 .unsupported-browser .faq-link-text,
 a.social-messages-profile-link:visited,
@@ -244,6 +243,9 @@ body:not(.sa-body-editor) .formik-input::placeholder,
 body:not(.sa-body-editor) .join-flow-privacy-message,
 .char-count {
   color: var(--darkWww-box-inputPlaceholder);
+}
+.youtbe-video-button .video-info .video-title {
+  color: var(--darkWww-box-blackText);
 }
 .comment .comment-body .comment-bubble.comment-bubble-reported,
 .comment .comment-body .comment-bubble.comment-bubble-reported::before,
