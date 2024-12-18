@@ -12,8 +12,6 @@ body {
   color-scheme: light;
 }
 #view,
-.tips,
-.physical-ideas,
 .crash-container,
 .semicolon {
   background-color: var(--darkWww-page);
@@ -24,8 +22,8 @@ body {
 .conf2019-description {
   color: var(--darkWww-page-text);
 }
-.tips-getting-started,
-.tips-activity-guides {
+.tips,
+.physical-ideas {
   background-color: var(--darkWww-page-ideas);
   color: var(--darkWww-page-text);
 }
@@ -139,7 +137,6 @@ body:not(.sa-body-editor) .formik-input,
 .studio-project-tile,
 .studio-member-tile,
 .studio-activity .studio-messages-list,
-.ttt-tile,
 .cards-modal-container,
 .about .body,
 .messages-social-list,
@@ -185,7 +182,6 @@ body:not(.sa-body-editor) .button.white,
 .feature-banner .feature-learn-more,
 .feature-banner .feature-banner-image,
 .outer .categories li,
-.banner-wrapper .banner-button /* Choose a tutorial */,
 .studio-selector-button,
 .onboarding button.go-back,
 .button.mod-2019-conf-maillist-button,
@@ -227,7 +223,6 @@ body:not(.sa-body-editor) .button.white,
 .tabs button:hover,
 .tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
-.youtbe-video-button .video-info .video-title,
 .cards-modal-container .cards-modal-section-title,
 .unsupported-browser .faq-link-text,
 a.social-messages-profile-link:visited,
@@ -249,6 +244,9 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .char-count {
   color: var(--darkWww-box-inputPlaceholder);
 }
+.youtbe-video-button .video-info .video-title {
+  color: var(--darkWww-box-blackText);
+}
 .comment .comment-body .comment-bubble.comment-bubble-reported,
 .comment .comment-body .comment-bubble.comment-bubble-reported::before,
 .react-tel-input {
@@ -258,7 +256,6 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-favorites::before,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
-.ttt-item img,
 .playlist .spinner,
 .tabs button:not(.active) .tab-icon,
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
@@ -290,7 +287,6 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
   border-color: var(--darkWww-box-greenText);
 }
 .donate-banner .donate-container .donate-button,
-.banner-wrapper .banner-button /* Choose a tutorial */,
 .donate-section .donate-button {
   color: var(--darkWww-box-greenText);
 }
@@ -306,9 +302,6 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .transfer-host-modal .button:disabled {
   background-color: var(--darkWww-box-buttonDisabled);
   color: white;
-}
-.tips-divider {
-  border-color: var(--darkWww-box-divider5);
 }
 body:not(.sa-body-editor) .select .join-flow-select {
   background-image: var(--darkWww-box-caret);
@@ -499,9 +492,6 @@ body:not(.sa-body-editor) .select select:focus {
 .banner-outer:not(.banner-danger) .banner-button /* Share */ {
   background-color: #ffab1a;
 }
-a.ttt-try-tutorial-button > span {
-  color: var(--darkWww-button-text);
-}
 .row .col-sm-9 input[type="radio"]:checked::after {
   background-color: var(--darkWww-button-text);
 }
@@ -542,7 +532,6 @@ body:not(.sa-body-editor) input {
 #footer .inner .media li img {
   filter: var(--darkWww-button-filter);
 }
-.banner-wrapper .banner-button img /* "Choose a tutorial" icon */,
 .forms-close-button img,
 .os-chooser .button:not(.active) img {
   filter: none;
@@ -695,7 +684,6 @@ p.callout,
   border-color: var(--darkWww-border);
 }
 .grid .thumbnail,
-.ttt-tile,
 .thumbnail-column .thumbnail .thumbnail-image {
   box-shadow: 0 0 0 1px var(--darkWww-border);
 }
@@ -707,7 +695,6 @@ p.callout,
 .news li:nth-child(even),
 .thumbnail .thumbnail-image img,
 .video-player,
-.ttt-content-chunk + .ttt-content-chunk,
 .cards-modal-container .cards-modal-section-content .cards-modal-cards-list .card + .card,
 .messages-social-list,
 .social-message,

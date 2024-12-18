@@ -120,9 +120,9 @@
           "type": "settingValue",
           "settingId": "page"
         },
-        "r": 0.99,
-        "g": 0.99,
-        "b": 0.99
+        "r": 0.98,
+        "g": 0.98,
+        "b": 0.98
       }
     },
     {
@@ -358,6 +358,17 @@
       }
     },
     {
+      "name": "box-blackText",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-filter",
       "value": {
         "type": "textColor",
@@ -521,18 +532,6 @@
       }
     },
     {
-      "name": "box-divider5",
-      "value": {
-        "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.05)",
-        "white": "rgba(255, 255, 255, 0.05)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
       "name": "box-caret",
       "value": {
         "type": "textColor",
@@ -632,17 +631,6 @@
       "value": {
         "type": "textColor",
         "black": "#666666",
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
-      "name": "box-scratchr2Caret",
-      "value": {
-        "type": "textColor",
-        "black": "#000000",
         "source": {
           "type": "settingValue",
           "settingId": "box"
