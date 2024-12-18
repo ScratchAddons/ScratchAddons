@@ -14,11 +14,11 @@
   "userstyles": [
     {
       "url": "monitors.css",
-      "matches": ["projects"]
+      "matches": ["projects", "projectEmbeds"]
     },
     {
       "url": "monitor-values.css",
-      "matches": ["projects"],
+      "matches": ["projects", "projectEmbeds"],
       "if": {
         "settings": { "customValueColor": true }
       }
