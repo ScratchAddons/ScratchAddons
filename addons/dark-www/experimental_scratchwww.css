@@ -705,7 +705,7 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .social-form,
 .studio-info .studio-image,
 .studio-report-modal .studio-report-tile-image,
-.studio-tab-nav a.nav_link > li,
+.studio-tab-nav li,
 .studio-project-tile,
 .studio-adder-section .studio-adder-row input,
 .user-projects-modal .user-projects-modal-nav button,
@@ -744,7 +744,7 @@ body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
 .row .checkbox input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border-20);
 }
-.studio-tab-nav a.nav_link.active > li,
+.studio-tab-nav .active > li,
 .user-projects-modal .user-projects-modal-nav button.active {
   border-color: rgba(0, 0, 0, 0.15);
 }
