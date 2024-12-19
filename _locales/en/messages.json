@@ -248,8 +248,8 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_39": {
-    "message": "New addon: \"delete other costumes or sounds\", which adds an option to the right click context menu for costumes and sounds to delete all items except for the selected one. Go to $1 to enable it.",
+  "extensionUpdateInfo1_v1_40": {
+    "message": "New addon: \"delete sprites without confirmation\", which removes the new confirmation prompt that asks if you are sure you want to delete a sprite. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
@@ -258,8 +258,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_39": {
-    "message": "Other new addons added this update are \"asset conflict dialog\", \"customizable code editor grid\", \"customizable stage monitors\", and  \"remaining reply counter\"."
+  "extensionUpdateInfo2_v1_40": {
+    "message": "The \"save blocks as image\" addon now allows copying the images directly to the clipboard. Also, the \"project video recorder\" now exports mp4 files if supported by the browser."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
