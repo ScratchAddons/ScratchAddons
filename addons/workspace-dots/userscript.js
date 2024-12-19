@@ -7,19 +7,22 @@ export default async function ({ addon, console }) {
     const spacingDivisor = addon.settings.get("spacingDivisor");
     const oldSpacing = this.getSpacing();
     if (!addon.self.disabled) {
-      if (ScratchBlocks.registry) this.spacing /= spacingDivisor; // new Blockly
+      if (ScratchBlocks.registry)
+        this.spacing /= spacingDivisor; // new Blockly
       else this.spacing_ /= spacingDivisor;
     }
     oldUpdate.call(this, scale);
     if (!addon.self.disabled) {
-      if (ScratchBlocks.registry) this.spacing = oldSpacing; // new Blockly
+      if (ScratchBlocks.registry)
+        this.spacing = oldSpacing; // new Blockly
       else this.spacing_ = oldSpacing;
     }
   };
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L167
   let setLineAttrMethodName;
-  if (ScratchBlocks.registry) setLineAttrMethodName = "setLineAttributes"; // new Blockly
+  if (ScratchBlocks.registry)
+    setLineAttrMethodName = "setLineAttributes"; // new Blockly
   else setLineAttrMethodName = "setLineAttributes_";
   const oldSetLineAttr = ScratchBlocks.Grid.prototype[setLineAttrMethodName];
   ScratchBlocks.Grid.prototype[setLineAttrMethodName] = function (line, width, x1, x2, y1, y2) {
@@ -57,7 +60,8 @@ export default async function ({ addon, console }) {
   function updateGrid() {
     const workspace = addon.tab.traps.getWorkspace();
     const grid = workspace.getGrid();
-    if (ScratchBlocks.registry) grid.update(grid.scale); // new Blockly
+    if (ScratchBlocks.registry)
+      grid.update(grid.scale); // new Blockly
     else grid.update(grid.scale_);
   }
 
