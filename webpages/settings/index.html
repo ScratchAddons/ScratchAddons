@@ -52,7 +52,7 @@
     <link rel="modulepreload" href="data/fuse-options.js" />
 
     <!-- Preload images -->
-    <link rel="preload" href="../../images/icons/switch.svg" as="image" />
+    <link rel="preload" href="../../images/icons/menu.svg" as="image" />
     <link rel="preload" href="../../images/icon-transparent.svg" as="image" />
     <link rel="preload" href="../../images/icons/list.svg" as="image" />
     <link rel="preload" href="../../images/icons/puzzle.svg" as="image" />
@@ -103,7 +103,6 @@
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
       @import url("../styles/components/tooltips.css");
-      @import url("../styles/components/smallmode.css");
       /* Modals and popups are needed last */
       @import url("../styles/components/modal.css");
       @import url("../styles/components/enablepopup.css");
@@ -121,9 +120,10 @@
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
       <img
-        :src="switchPath"
+        src="../../images/icons/menu.svg"
         id="sidebar-toggle"
         class="header-button"
+        :class="{sidebarToggleOpen: categoryOpen === true}"
         @click="sidebarToggle()"
         v-cloak
         v-show="smallMode"
@@ -139,14 +139,14 @@
       <div
         class="categories-block"
         v-click-outside="closesidebar"
-        v-show="categoryOpen && !isIframe"
-        :class="{smallMode: smallMode === true}"
+        v-show="!isIframe"
+        :class="{closed: categoryOpen === false, smallMode: smallMode === true}"
       >
         <category-selector v-for="category of categories" :category="category"></category-selector>
 
         <a
           v-cloak
-          class="category category-small"
+          class="category"
           style="margin-top: auto"
           href="https://scratchaddons.com/credits/"
           :href="sidebarUrls.contributors"
@@ -161,13 +161,13 @@
           <span v-cloak>{{ msg("review") }}</span>
         </div>
         -->
-        <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
+        <a v-cloak class="category" href="https://scratchaddons.com/translate" target="_blank">
           <img src="../../images/icons/translate.svg" draggable="false" />
           <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <a
           v-cloak
-          class="category category-small"
+          class="category"
           href="https://scratchaddons.com/feedback/"
           :href="sidebarUrls.feedback"
           target="_blank"
