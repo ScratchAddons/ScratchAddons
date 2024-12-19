@@ -20,6 +20,7 @@
 
 *.md export-ignore
 LICENSE export-ignore
+eslint.config.mjs export-ignore
 .* export-ignore
 dist export-ignore
 typedef.js export-ignore
