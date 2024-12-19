@@ -83,7 +83,6 @@ let fuse;
         theme: initialTheme,
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
-        switchPath: "../../images/icons/switch.svg",
         moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
@@ -182,11 +181,6 @@ let fuse;
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
-        if (this.categoryOpen) {
-          vue.switchPath = "../../images/icons/close.svg";
-        } else {
-          vue.switchPath = "../../images/icons/switch.svg";
-        }
       },
       msg(message, ...params) {
         return chrome.i18n.getMessage(message, ...params);
@@ -634,11 +628,9 @@ let fuse;
     if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
-      vue.switchPath = "../../images/icons/switch.svg";
     } else if (vue.smallMode !== false) {
       vue.smallMode = false;
       vue.categoryOpen = true;
-      vue.switchPath = "../../images/icons/close.svg";
     }
   }
   window.onresize = resize;
