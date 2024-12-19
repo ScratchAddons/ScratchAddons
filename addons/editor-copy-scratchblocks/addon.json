@@ -1,6 +1,6 @@
 {
-  "versionAdded": "1.39.0",
-  "name": "Copy scratchblocks code",
+  "versionAdded": "1.41.0",
+  "name": "Copy scratchblocks code from editor",
   "description": "Adds an option to block context menus to copy the block's scratchblocks code to the clipboard for use in the forums.",
   "tags": ["editor", "codeEditor"],
   "permissions": ["clipboardWrite"],
@@ -8,23 +8,6 @@
     {
       "url": "userscript.js",
       "matches": ["projects"]
-    }
-  ],
-  "settings": [
-    {
-      "name": "Include debugger blocks",
-      "id": "debugger",
-      "type": "boolean",
-      "default": false,
-      "if": {
-        "addonEnabled": "debugger"
-      }
-    },
-    {
-      "name": "Include comments",
-      "id": "comments",
-      "type": "boolean",
-      "default": true
     }
   ],
   "credits": [
