@@ -84,7 +84,7 @@ let fuse;
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
         switchPath: "../../images/icons/switch.svg",
-        moreSettingsOpen: false,
+        moreSettingsOpen: location.hash.toLocaleLowerCase() === "#moresettings",
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
@@ -344,6 +344,9 @@ let fuse;
       forceEnglishSetting(newValue, oldValue) {
         if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
       },
+      moreSettingsOpen(newValue) {
+        if (!newValue) location.hash = "#";
+      }
     },
     ready() {
       // Autofocus search bar in iframe mode for both browsers
@@ -380,15 +383,19 @@ let fuse;
       window.addEventListener(
         "hashchange",
         (e) => {
-          const addonId = location.hash.replace(/^#addon-/, "");
-          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
-          if (!groupWithAddon) return; //Don't run if hash is invalid
-          const addon = this.manifestsById[addonId];
+          if (location.hash.toLocaleLowerCase() === "#moresettings") {
+            vue.openMoreSettings();
+          } else {
+            const addonId = location.hash.replace(/^#addon-/, "");
+            const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+            if (!groupWithAddon) return; //Don't run if hash is invalid
+            const addon = this.manifestsById[addonId];
 
-          groupWithAddon.expanded = true;
-          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-          this.clearSearch();
-          setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+            groupWithAddon.expanded = true;
+            this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+            this.clearSearch();
+            setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+          }
         },
         { capture: false }
       );

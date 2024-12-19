@@ -175,10 +175,10 @@
           <img src="../../images/icons/comment.svg" draggable="false" />
           <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
-        <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
+        <a v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" href="#moresettings">
           <img src="../../images/icons/wrench.svg" draggable="false" />
           <span>{{ msg("moreSettings") }}</span>
-        </div>
+        </a>
       </div>
       <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
         <img
