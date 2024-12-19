@@ -346,7 +346,7 @@ let fuse;
       },
       moreSettingsOpen(newValue) {
         if (!newValue) location.hash = "#";
-      }
+      },
     },
     ready() {
       // Autofocus search bar in iframe mode for both browsers
