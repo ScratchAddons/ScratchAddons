@@ -1,29 +1,26 @@
 // TODO: add block comments
-// TODO: debugger blocks
 
-export default function getBlockCode(block, script) {
-  const output = blocks[block.type]?.(block);
-  return (script && block.getNextBlock() && `${output}\n${getBlockCode(block.getNextBlock(), true)}`) || output;
-}
-
-function overrideCheck(block) {
-  // TODO: this doesn't work, toString might not be reliable
-  const rootBlock = block.getRootBlock();
+export function getBlockCode(block, context = {}) {
+  const output = blocks[block.type]?.(block, context);
   return (
-    rootBlock.type === "procedures_definition" &&
-    rootBlock.getInputTargetBlock("custom_block").displayNames_.includes(block.toString())
+    (context.startBlock && block.getNextBlock() && `${output}\n${getBlockCode(block.getNextBlock(), context)}`) ||
+    output
   );
 }
 
-function processComponent(component, block, script) {
+export function getScriptsCode(...rootBlocks) {
+  return rootBlocks.map((block) => getBlockCode(block, { startBlock: block, rootBlocks: rootBlocks })).join("\n\n");
+}
+
+function processComponent(component, block, context) {
   if (component.input) {
     const inputConnection = block.getInput(component.input).connection;
     const inputBlock = inputConnection.targetBlock();
     if (inputBlock) {
       if (component.substack) {
-        return getBlockCode(inputBlock, true).replaceAll(/^/gm, "   ") + "\n";
+        return getBlockCode(inputBlock, { startBlock: block, ...context }).replaceAll(/^/gm, "   ") + "\n";
       } else {
-        return getBlockCode(inputBlock);
+        return getBlockCode(inputBlock, context);
       }
     } else if (inputConnection.check_.length === 1 && inputConnection.check_[0] === "Boolean") return "<>";
     else return "";
@@ -34,17 +31,13 @@ function processComponent(component, block, script) {
     return component.sanitizations ? sanitize(text, component.sanitizations) : text;
   }
 
-  if (script && component.override && overrideCheck(component.override)) {
-    return ` :: ${component.override}`;
-  }
-
   return "";
 }
 
 function build(labels, ...components) {
-  const func = (block, script) => {
+  const func = (block, context) => {
     return components.reduce(
-      (output, component, i) => output + processComponent(component, block, script) + labels[i + 1],
+      (output, component, i) => output + processComponent(component, block, context) + labels[i + 1],
       labels[0]
     );
   };
@@ -88,12 +81,23 @@ const numBlock = (field) => (block) => {
 
 const dropdown = (field) => (block) => `(${sanitize(block.getField(field).getText(), repSanitizations)} v)`;
 
-const simpleReporter = (text, category) => () => {
-  // TODO: override checking
-  return `(${text})`;
-};
+const simpleReporter = (text, category) => (_, context) =>
+  `(${text}${argumentConflict(text, context.startBlock) ? ` :: ${category}` : ""})`;
 
-const procedure = (block) => {
+const argumentConflict = (text, startBlock) =>
+  startBlock &&
+  startBlock.type === "procedures_definition" &&
+  startBlock
+    .getInputTargetBlock("custom_block")
+    .getChildren()
+    .some((argument) => argument.getFieldValue("VALUE") === text);
+
+const procedure = (block, context) => {
+  const isDef = (block) =>
+    block &&
+    block.type === "procedures_definition" &&
+    block.getInputTargetBlock("custom_block").getProcCode() === procCode;
+
   const sanitizations = [
       { searchValue: "\\%", replacer: "%" },
       ...blockSanitizations,
@@ -104,7 +108,8 @@ const procedure = (block) => {
   let argumentCount = 0,
     output = "";
 
-  for (const component of block.getProcCode().split(/(?<!\\)(%[nbs])/)) {
+  const procCode = block.getProcCode();
+  for (const component of procCode.split(/(?<!\\)(%[nbs])/)) {
     if (/^%[nbs]$/.test(component)) {
       const inputBlock = block.getInputTargetBlock(block.argumentIds_[argumentCount++]);
       if (!inputBlock) {
@@ -112,7 +117,7 @@ const procedure = (block) => {
           output += "<>";
         }
       } else {
-        output += getBlockCode(inputBlock);
+        output += getBlockCode(inputBlock, context);
       }
     } else {
       const labelText = sanitize(component, sanitizations);
@@ -121,8 +126,23 @@ const procedure = (block) => {
     }
   }
 
-  if (/^define(?: |$)/.test(block.toString()) || Object.values(blocks).some((block) => block.labels === labels))
-    output += " :: custom";
+  if (
+    [
+      "\u200B\u200Bbreakpoint\u200B\u200B",
+      "\u200B\u200Blog\u200B\u200B %s",
+      "\u200B\u200Bwarn\u200B\u200B %s",
+      "\u200B\u200Berror\u200B\u200B %s",
+    ].includes(procCode)
+  ) {
+    output += " :: #29beb8";
+  } else if (
+    block.type === "procedures_call" &&
+    (!(isDef(context.startBlock) || context.rootBlocks?.some((block) => isDef(block))) ||
+      /^define(?: |$)/.test(block.toString()) ||
+      Object.values(blocks).some((block) => block.labels === labels))
+  ) {
+    output += ` :: custom`;
+  }
 
   return output;
 };
@@ -307,7 +327,10 @@ const blocks = {
   operator_round: build`(round ${{ input: "NUM" }})`,
   operator_mathop: build`([${{ field: "OPERATOR", sanitizations: dropdownSanitizations }} v] of ${{ input: "NUM" }})`,
 
-  data_variable: build`(${{ field: "VARIABLE", sanitizations: repSanitizations }}${{ override: "variables" }})`,
+  data_variable: (block, context) => {
+    const text = sanitize(block.getField("VARIABLE").getText(), repSanitizations);
+    return `(${text}${argumentConflict(text, context.startBlock) || / v$/.test(text) ? " :: variables" : ""})`;
+  },
   data_setvariableto: build`set [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] to ${{
     input: "VALUE",
   }}`,
@@ -316,7 +339,7 @@ const blocks = {
   }}`,
   data_showvariable: build`show variable [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v]`,
   data_hidevariable: build`hide variable [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v]`,
-  data_listcontents: build`(${{ field: "LIST", sanitizations: repSanitizations }}${{ override: "list" }})`,
+  data_listcontents: build`(${{ field: "LIST", sanitizations: repSanitizations }} :: list)`,
   data_listindexall: dropdown("INDEX"),
   data_listindexrandom: dropdown("INDEX"),
   data_addtolist: build`add ${{ input: "ITEM" }} to [${{ field: "LIST", sanitizations: dropdownSanitizations }} v]`,
@@ -351,10 +374,17 @@ const blocks = {
   procedures_definition: build`define ${{ input: "custom_block" }}`,
   procedures_call: procedure,
   procedures_prototype: procedure,
-  argument_reporter_string_number: build`(${{ field: "VALUE", sanitizations: repSanitizations }}${{
-    override: "custom",
-  }})`,
-  argument_reporter_boolean: build`<${{ field: "VALUE", sanitizations: repSanitizations }}${{ override: "custom" }}>`,
+  argument_reporter_string_number: (block, context) => {
+    const text = sanitize(block.getField("VALUE").getText(), repSanitizations);
+    return `(${text}${argumentConflict(text, context.startBlock) || / v$/.test(text) ? "" : " :: custom-arg"})`;
+  },
+  argument_reporter_boolean: (block, context) => {
+    const text = sanitize(block.getField("VALUE").getText(), [
+      ...blockSanitizations,
+      { searchValue: ">", replacer: "\\>" },
+    ]);
+    return `(${text}${argumentConflict(text, context.startBlock) ? "" : " :: custom-arg"})`;
+  },
 
   pen_clear: build`erase all`,
   pen_stamp: build`stamp`,

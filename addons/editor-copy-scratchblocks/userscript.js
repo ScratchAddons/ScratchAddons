@@ -1,4 +1,4 @@
-import getBlockCode from "./blocks.js";
+import { getBlockCode, getScriptsCode } from "./blocks.js";
 
 export default async function ({ addon, console }) {
   const blockly = await addon.tab.traps.getBlockly();
@@ -10,7 +10,7 @@ export default async function ({ addon, console }) {
         text: "Copy scripts as scratchblocks",
         callback: () => {
           const topBlocks = blockly.getMainWorkspace().getTopBlocks();
-          console.log(topBlocks);
+          console.log(getScriptsCode(...topBlocks));
         },
         separator: true,
       });
@@ -45,14 +45,14 @@ export default async function ({ addon, console }) {
         },
         {
           enabled: true,
-          text: "Log block scratchblocks",
+          text: "Copy block as scratchblocks code",
           callback: () => console.log(getBlockCode(block)),
           separator: true,
         },
         {
-          enabled: block.getPreviousBlock() || block.getNextBlock(),
-          text: "Log script scratchblocks",
-          callback: () => console.log(getBlockCode(block.getRootBlock(), true)),
+          enabled: block.getRootBlock()?.getNextBlock(),
+          text: "Copy script as scratchblocks code",
+          callback: () => console.log(getScriptsCode(block.getRootBlock())),
         }
       );
 
