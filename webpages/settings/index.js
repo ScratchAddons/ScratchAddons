@@ -84,7 +84,7 @@ let fuse;
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
         switchPath: "../../images/icons/switch.svg",
-        moreSettingsOpen: location.hash.toLocaleLowerCase() === "#moresettings",
+        moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
@@ -179,6 +179,7 @@ let fuse;
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
+        location.hash = "";
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -343,9 +344,6 @@ let fuse;
       },
       forceEnglishSetting(newValue, oldValue) {
         if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
-      },
-      moreSettingsOpen(newValue) {
-        if (!newValue) location.hash = "#";
       },
     },
     ready() {
@@ -599,7 +597,9 @@ let fuse;
     vue.loaded = true;
     setTimeout(() => {
       const hash = window.location.hash;
-      if (hash.startsWith("#addon-")) {
+      if (location.hash.toLocaleLowerCase() === "#moresettings") {
+        vue.openMoreSettings();
+      } else if (hash.startsWith("#addon-")) {
         const addonId = hash.substring(7);
         const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
