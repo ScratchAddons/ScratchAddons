@@ -235,7 +235,8 @@ a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
 .studio-member-tile .studio-member-role,
-body:not(.sa-body-editor) .join-flow-title {
+body:not(.sa-body-editor) .join-flow-title,
+.registration-step .bold-link {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
