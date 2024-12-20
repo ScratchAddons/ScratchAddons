@@ -495,11 +495,6 @@ let fuse;
         }
       }
 
-      if (addonId === "msg-count-badge" && manifest._enabled) {
-        // v1.39: only feature msg-count-badge if it is disabled
-        manifest._groups = manifest._groups.filter((g) => g !== "featuredNew");
-      }
-
       // Sort tags to preserve consistent order
       const order = tags.map((obj) => obj.matchName);
       manifest.tags.sort((b, a) => order.indexOf(b) - order.indexOf(a));
