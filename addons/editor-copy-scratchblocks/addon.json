@@ -3,7 +3,6 @@
   "name": "Copy scratchblocks code from editor",
   "description": "Adds an option to block context menus to copy the block's scratchblocks code to the clipboard for use in the forums.",
   "tags": ["editor", "codeEditor"],
-  "permissions": ["clipboardWrite"],
   "userscripts": [
     {
       "url": "userscript.js",
