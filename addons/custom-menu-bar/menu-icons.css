@@ -1,5 +1,14 @@
 [class*="settings-menu_dropdown-label"],
 [class*="menu-bar_collapsible-label"],
-[class*="menu-bar_tutorials-label"] {
+[class*="menu-bar_tutorials-label"],
+[class*="menu-bar_debug-label_"] {
   display: none;
+}
+
+[class*="menu-bar_help-icon_"] {
+  margin: 0;
+}
+
+[class*="menu-bar_file-group_"] [class*="menu-bar_no-offset_"] {
+  padding: 0 0.75rem;
 }
