@@ -7,15 +7,15 @@ export default async function ({ addon, console }) {
     (items) => {
       if (addon.self.disabled) return items;
 
-      items.push({
-        enabled: true,
-        text: "Copy scripts as scratchblocks",
-        callback: () => {
-          const topBlocks = blockly.getMainWorkspace().getTopBlocks();
-          console.log(getScriptsCode(...topBlocks));
-        },
-        separator: true,
-      });
+      const topBlocks = blockly.getMainWorkspace().getTopBlocks();
+      if (topBlocks.length > 0) {
+        items.push({
+          enabled: true,
+          text: "Copy scripts as scratchblocks",
+          callback: () => navigator.clipboard.writeText(getScriptsCode(...topBlocks)),
+          separator: true,
+        });
+      }
 
       return items;
     },
@@ -49,8 +49,16 @@ export default async function ({ addon, console }) {
         },
         {
           enabled: true,
+          text: "Get dropdown info",
+          callback: () => {
+            const dropdown = block.getChildren()[parseInt(prompt("Child number", "0"))];
+            console.log(dropdown.type, dropdown.inputList[0].fieldRow[0].name);
+          },
+        },
+        {
+          enabled: true,
           text: "Copy block as scratchblocks code",
-          callback: () => console.log(getBlockCode(block)),
+          callback: () => navigator.clipboard.writeText(getBlockCode(block)),
           separator: true,
         }
       );
@@ -59,7 +67,7 @@ export default async function ({ addon, console }) {
         items.push({
           enabled: true,
           text: "Copy script as scratchblocks code",
-          callback: () => console.log(getScriptsCode(block.getRootBlock())),
+          callback: () => navigator.clipboard.writeText(getScriptsCode(block.getRootBlock())),
         });
       }
 

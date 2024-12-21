@@ -67,7 +67,7 @@ const blockSanitizations = [
   { searchValue: "{", replacer: "\\{" },
   { searchValue: "[/scratchblocks]", replacer: "[\\/scratchblocks]" },
   { searchValue: /^define /g, replacer: "define\\ " },
-  { searchValue: /^define$/g, replacer: "define​" }, // putting a zwsp here is the only option
+  { searchValue: /^define$/g, replacer: "define​" },
   { searchValue: /@(greenFlag|stopSign|turnLeft|turnRight|loopArrow|addInput|delInput|list)/g, replacer: "\\@$1" },
   { searchValue: "//", replacer: "\\//" },
 ];
@@ -81,8 +81,8 @@ const numBlock = (field) => (block) => {
 
 const dropdown = (field) => (block) => `(${sanitize(block.getField(field).getText(), repSanitizations)} v)`;
 
-const simpleReporter = (text, category) => (_, context) =>
-  `(${text}${argumentConflict(text, context.startBlock) ? ` :: ${category}` : ""})`;
+const simpleReporter = (text, category, isBool) => (_, context) =>
+  `${isBool ? "<" : "("}${text}${argumentConflict(text, context.startBlock) ? ` :: ${category}` : ""}${isBool ? ">" : ")"}`;
 
 const argumentConflict = (text, startBlock) =>
   startBlock &&
@@ -201,6 +201,8 @@ const blocks = {
   looks_changesizeby: build`change size by ${{ input: "CHANGE" }}`,
   looks_setsizeto: build`set size to ${{ input: "SIZE" }} %`,
   looks_size: simpleReporter("size", "looks"),
+  looks_changestretchby: build`change stretch by ${{ input: "CHANGE" }} :: looks`,
+  looks_setstretchto: build`set stretch to ${{ input: "STRETCH" }} % :: looks`,
   looks_costume: dropdown("COSTUME"),
   looks_switchcostumeto: build`switch costume to ${{ input: "COSTUME" }}`,
   looks_nextcostume: build`next costume`,
@@ -293,7 +295,7 @@ const blocks = {
   sensing_answer: simpleReporter("answer", "sensing"),
   sensing_keypressed: build`key ${{ input: "KEY_OPTION" }} pressed`,
   sensing_keyoptions: dropdown("KEY_OPTION"),
-  sensing_mousedown: build`<mouse down?${{ override: "sensing" }}>`,
+  sensing_mousedown: simpleReporter("mouse down?", "sensing", true),
   sensing_mousex: simpleReporter("mouse x", "sensing"),
   sensing_mousey: simpleReporter("mouse y", "sensing"),
   sensing_setdragmode: build`set drag mode [${{ field: "DRAG_MODE", sanitizations: dropdownSanitizations }} v]`,
@@ -410,6 +412,8 @@ const blocks = {
   music_setTempo: build`set tempo to ${{ input: "TEMPO" }}`,
   music_changeTempo: build`change tempo by ${{ input: "TEMPO" }}`,
   music_getTempo: simpleReporter("tempo", "MUSIC"),
+  music_midiPlayDrumForBeats: build`play drum ${{ input: "DRUM" }} for ${{ input: "BEATS" }} beats`,
+  music_midiSetInstrument: build`set instrument to ${{ input: "INSTRUMENT" }}`,
 
   videoSensing_whenMotionGreaterThan: build`when video motion > ${{ input: "REFERENCE" }}`,
   videoSensing_videoOn: build`(video ${{ input: "ATTRIBUTE" }} on ${{ input: "SUBJECT" }})`,
@@ -434,7 +438,23 @@ const blocks = {
   makeymakey_whenCodePressed: build`when ${{ input: "SEQUENCE" }} pressed in order`,
   makeymakey_menu_SEQUENCE: dropdown("SEQUENCE"),
 
-  // TODO: microbit
+  matrix: dropdown("MATRIX"),
+  microbit_menu_buttons: dropdown("buttons"),
+  microbit_menu_gestures: dropdown("gestures"),
+  microbit_menu_tiltDirectionAny: dropdown("tiltDirectionAny"),
+  microbit_menu_tiltDirection: dropdown("tiltDirection"),
+  microbit_menu_touchPins: dropdown("touchPins"),
+  microbit_whenButtonPressed: build`when ${{ input: "BTN" }} button pressed`,
+  microbit_isButtonPressed: build`<${{ input: "BTN" }} button pressed?>`,
+  microbit_whenGesture: build`when ${{ input: "GESTURE" }} :: microbit`,
+  microbit_displaySymbol: build`display ${{ input: "MATRIX" }}`,
+  microbit_displayText: build`display text ${{ input: "TEXT" }}`,
+  microbit_displayClear: build`clear display`,
+  microbit_whenTilted: build`when tilted ${{ input: "DIRECTION" }}`,
+  microbit_isTilted: build`<tilted ${{ input: "DIRECTION" }} ?>`,
+  microbit_getTiltAngle: build`(tilt angle ${{ input: "DIRECTION" }})}`,
+  microbit_whenPinConnected: build`when pin ${{ input: "PIN" }} connected`,
+  microbit_menu_pinState: dropdown("pinState"),
 
   ev3_menu_motorPorts: dropdown("motorPorts"),
   ev3_motorTurnClockwise: build`motor ${{ input: "PORT" }} turn this way for ${{ input: "TIME" }} seconds`,
@@ -446,9 +466,59 @@ const blocks = {
   ev3_whenDistanceLessThan: build`when distance \\< ${{ input: "DISTANCE" }}`,
   ev3_whenBrightnessLessThan: build`when brightness \\< ${{ input: "DISTANCE" }}`,
   ev3_buttonPressed: build`<button ${{ input: "PORT" }} pressed?>`,
-  ev3_getDistance: simpleReporter("distance", "EV3"),
-  ev3_getBrightness: simpleReporter("brightness", "EV3"),
+  ev3_getDistance: simpleReporter("distance", "ev3"),
+  ev3_getBrightness: simpleReporter("brightness", "ev3"),
   ev3_beep: build`beep note ${{ input: "NOTE" }} for ${{ input: "TIME" }} secs`,
 
-  // TODO: add remaining extensions
+  boost_menu_MOTOR_ID: dropdown("MOTOR_ID"),
+  boost_menu_MOTOR_DIRECTION: dropdown("MOTOR_DIRECTION"),
+  boost_menu_MOTOR_REPORTER_ID: dropdown("MOTOR_REPORTER_ID"),
+  boost_menu_COLOR: dropdown("COLOR"),
+  boost_menu_TILT_DIRECTION_ANY: dropdown("TILT_DIRECTION_ANY"),
+  boost_menu_TILT_DIRECTION: dropdown("TILT_DIRECTION"),
+  boost_motorOnFor: build`turn motor ${{ input: "MOTOR_ID" }} for ${{ input: "DURATION" }} seconds`,
+  boost_motorOnForRotation: build`turn motor ${{ input: "MOTOR_ID" }} for ${{ input: "ROTATION" }} rotations`,
+  boost_motorOn: build`turn motor ${{ input: "MOTOR_ID" }} on`,
+  boost_motorOff: build`turn motor ${{ input: "MOTOR_ID" }} off`,
+  boost_setMotorPower: build`set motor ${{ input: "MOTOR_ID" }} speed to ${{ input: "POWER" }} %`,
+  boost_setMotorDirection: build`set motor ${{ input: "MOTOR_ID" }} direction ${{ input: "MOTOR_DIRECTION" }}`,
+  boost_getMotorPosition: build`(motor ${{ input: "MOTOR_REPORTER_ID" }} position :: boost`,
+  boost_whenColor: build`when ${{ input: "COLOR" }} brick seen`,
+  boost_seeingColor: build`<seeing ${{ input: "COLOR" }} brick?>`,
+  boost_whenTilted: build`when tilted ${{ input: "TILT_DIRECTION_ANY" }} :: boost`,
+  boost_getTiltAngle: build`(tilt angle ${{ input: "TILT_DIRECTION" }} :: boost)`,
+  boost_setLightHue: build`set light color to ${{ input: "HUE" }} :: boost`,
+
+  wedo2_menu_MOTOR_ID: dropdown("MOTOR_ID"),
+  wedo2_menu_MOTOR_DIRECTION: dropdown("MOTOR_DIRECTION"),
+  wedo2_menu_OP: dropdown("OP"),
+  wedo2_menu_TILT_DIRECTION_ANY: dropdown("TILT_DIRECTION_ANY"),
+  wedo2_menu_TILT_DIRECTION: dropdown("TILT_DIRECTION"),
+  wedo2_motorOnFor: build`turn ${{ input: "MOTOR_ID" }} on for ${{ input: "DURATION" }} seconds`,
+  wedo2_motorOn: build`turn ${{ input: "MOTOR_ID" }} on`,
+  wedo2_motorOff: build`turn ${{ input: "MOTOR_ID" }} off`,
+  wedo2_startMotorPower: build`set ${{ input: "MOTOR_ID" }} power to ${{ input: "POWER" }}`,
+  wedo2_setMotorDirection: build`set ${{ input: "MOTOR_ID" }} direction to ${{ input: "MOTOR_DIRECTION" }}`,
+  wedo2_setLightHue: build`set light color to ${{ input: "HUE" }}`,
+  wedo2_whenDistance: build`when distance ${{ input: "OP" }} ${{ input: "REFERENCE" }}`,
+  wedo2_whenTilted: build`when tilted ${{ input: "TILT_DIRECTION_ANY" }} :: wedo`,
+  wedo2_getDistance: build`(distance :: wedo)`,
+  wedo2_isTilted: build`<tilted ${{ input: "TILT_DIRECTION_ANY" }} ? :: wedo>`,
+  wedo2_getTiltAngle: build`(tilt angle ${{ input: "TILT_ANGLE" }} :: wedo)`,
+  wedo2_playNoteFor: build`play note ${{ input: "NOTE" }} for ${{ input: "DURATION" }} seconds`,
+
+  gdxfor_menu_gestureOptions: dropdown("gestureOptions"),
+  gdxfor_menu_pushPullOptions: dropdown("pushPullOptions"),
+  gdxfor_menu_tiltAnyOptions: dropdown("tiltAnyOptions"),
+  gdxfor_menu_tiltOptions: dropdown(`tiltOptions`),
+  gdxfor_menu_axisOptions: dropdown("axisOptions"),
+  gdxfor_whenGesture: build`when ${{ input: "GESTURE" }}`,
+  gdxfor_whenForcePushedOrPulled: build`when force sensor ${{ input: "PUSH_PULL" }}`,
+  gdxfor_getForce: simpleReporter("force", "gdxfor"),
+  gdxfor_whenTilted: build`when tilted ${{ input: "TILT" }} :: gdxfor`,
+  gdxfor_isTilted: build`<tilted ${{ input: "TILT" }} ? :: gdxfor>`,
+  gdxfor_getTilt: build`(tilt angle ${{ input: "TILT" }} :: gdxfor)`,
+  gdxfor_isFreeFalling: simpleReporter("falling?", "gdxfor", true),
+  gdxfor_getSpinSpeed: build`(spin speed ${{ input: "DIRECTION" }})`,
+  gdxfor_getAcceleration: build`(acceleration ${{ input: "DIRECTION" }})`,
 };
