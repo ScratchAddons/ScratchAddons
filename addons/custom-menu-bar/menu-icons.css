@@ -8,7 +8,3 @@
 [class*="menu-bar_help-icon_"] {
   margin: 0;
 }
-
-[class*="menu-bar_file-group_"] [class*="menu-bar_no-offset_"] {
-  padding: 0 0.75rem;
-}
