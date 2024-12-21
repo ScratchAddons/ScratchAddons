@@ -135,6 +135,7 @@ const procedure = (block, context) => {
     ].includes(procCode)
   ) {
     output += " :: #29beb8";
+    output = output.replaceAll("\u200B", "");
   } else if (
     block.type === "procedures_call" &&
     (!(isDef(context.startBlock) || context.rootBlocks?.some((block) => isDef(block))) ||
