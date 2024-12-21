@@ -14,5 +14,7 @@
       "name": "just-a-hriday",
       "link": "https://scratch.mit.edu/users/just-a-hriday/"
     }
-  ]
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
 }

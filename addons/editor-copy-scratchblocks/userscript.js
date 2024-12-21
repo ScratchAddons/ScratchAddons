@@ -5,6 +5,8 @@ export default async function ({ addon, console }) {
 
   addon.tab.createBlockContextMenu(
     (items) => {
+      if (addon.self.disabled) return items;
+
       items.push({
         enabled: true,
         text: "Copy scripts as scratchblocks",
@@ -22,6 +24,8 @@ export default async function ({ addon, console }) {
 
   addon.tab.createBlockContextMenu(
     (items, block) => {
+      if (addon.self.disabled) return items;
+
       items.push(
         {
           enabled: true,
@@ -48,13 +52,16 @@ export default async function ({ addon, console }) {
           text: "Copy block as scratchblocks code",
           callback: () => console.log(getBlockCode(block)),
           separator: true,
-        },
-        {
-          enabled: block.getRootBlock()?.getNextBlock(),
-          text: "Copy script as scratchblocks code",
-          callback: () => console.log(getScriptsCode(block.getRootBlock())),
         }
       );
+
+      if (block.getRootBlock()?.getNextBlock()) {
+        items.push({
+          enabled: true,
+          text: "Copy script as scratchblocks code",
+          callback: () => console.log(getScriptsCode(block.getRootBlock())),
+        });
+      }
 
       return items;
     },
