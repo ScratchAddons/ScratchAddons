@@ -22,7 +22,7 @@ function processComponent(component, block, context) {
       } else {
         return getBlockCode(inputBlock, context);
       }
-    } else if (inputConnection.check_.length === 1 && inputConnection.check_[0] === "Boolean") return "<>";
+    } else if (inputConnection.check_?.length === 1 && inputConnection.check_[0] === "Boolean") return "<>";
     else return "";
   }
 
@@ -292,7 +292,7 @@ const blocks = {
   sensing_touchingobject: build`<touching ${{ input: "TOUCHINGOBJECTMENU" }} ?>`,
   sensing_touchingobjectmenu: dropdown("TOUCHINGOBJECTMENU"),
   sensing_touchingcolor: build`<touching color ${{ input: "COLOR" }} ?>`,
-  sensing_coloristouchingcolor: build`<colour ${{ input: "COLOR" }} is touching ${{ input: "COLOR2" }} ?>`,
+  sensing_coloristouchingcolor: build`<color ${{ input: "COLOR" }} is touching ${{ input: "COLOR2" }} ?>`,
   sensing_distanceto: build`(distance to ${{ input: "DISTANCETOMENU" }})`,
   sensing_distancetomenu: dropdown("DISTANCETOMENU"),
   sensing_askandwait: build`ask ${{ input: "QUESTION" }} and wait`,
@@ -312,7 +312,7 @@ const blocks = {
   sensing_current: build`(current [${{ field: "CURRENTMENU", sanitizations: dropdownSanitizations }} v])`,
   sensing_dayssince2000: simpleReporter("days since 2000", "sensing"),
   sensing_username: simpleReporter("username", "sensing"),
-  sensing_userid: simpleReporter("user id", "sensing"),
+  sensing_userid: build`(user id :: sensing)`,
 
   operator_add: build`(${{ input: "NUM1" }} + ${{ input: "NUM2" }})`,
   operator_subtract: build`(${{ input: "NUM1" }} - ${{ input: "NUM2" }})`,
@@ -437,12 +437,12 @@ const blocks = {
   translate_getTranslate: build`(translate ${{ input: "WORDS" }} to ${{ input: "LANGUAGE" }})`,
   translate_getViewerLanguage: simpleReporter("language", "TRANSLATE"),
 
-  makeymakey_whenMakeyKeyPressed: build`when ${{ input: "KEY" }} key pressed`,
+  makeymakey_whenMakeyKeyPressed: build`when ${{ input: "KEY" }} key pressed :: makeymakey`,
   makeymakey_menu_KEY: dropdown("KEY"),
   makeymakey_whenCodePressed: build`when ${{ input: "SEQUENCE" }} pressed in order`,
   makeymakey_menu_SEQUENCE: dropdown("SEQUENCE"),
 
-  matrix: dropdown("MATRIX"),
+  matrix: (block) => `(${block.getFieldValue("MATRIX")} v)`,
   microbit_menu_buttons: dropdown("buttons"),
   microbit_menu_gestures: dropdown("gestures"),
   microbit_menu_tiltDirectionAny: dropdown("tiltDirectionAny"),
@@ -456,7 +456,7 @@ const blocks = {
   microbit_displayClear: build`clear display`,
   microbit_whenTilted: build`when tilted ${{ input: "DIRECTION" }}`,
   microbit_isTilted: build`<tilted ${{ input: "DIRECTION" }} ?>`,
-  microbit_getTiltAngle: build`(tilt angle ${{ input: "DIRECTION" }})}`,
+  microbit_getTiltAngle: build`(tilt angle ${{ input: "DIRECTION" }})`,
   microbit_whenPinConnected: build`when pin ${{ input: "PIN" }} connected`,
   microbit_menu_pinState: dropdown("pinState"),
 
@@ -508,7 +508,7 @@ const blocks = {
   wedo2_whenTilted: build`when tilted ${{ input: "TILT_DIRECTION_ANY" }} :: wedo`,
   wedo2_getDistance: build`(distance :: wedo)`,
   wedo2_isTilted: build`<tilted ${{ input: "TILT_DIRECTION_ANY" }} ? :: wedo>`,
-  wedo2_getTiltAngle: build`(tilt angle ${{ input: "TILT_ANGLE" }} :: wedo)`,
+  wedo2_getTiltAngle: build`(tilt angle ${{ input: "TILT_DIRECTION" }} :: wedo)`,
   wedo2_playNoteFor: build`play note ${{ input: "NOTE" }} for ${{ input: "DURATION" }} seconds`,
 
   gdxfor_menu_gestureOptions: dropdown("gestureOptions"),
