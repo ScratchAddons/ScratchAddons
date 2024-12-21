@@ -23,7 +23,7 @@ svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete {
 }
 
 svg[class*="scratchblocks-style-scratch3"] .sb3-label,
-.sb3-label.sb3-comment-label {
+svg[class*="scratchblocks-style-scratch3"] .sb3-label.sb3-comment-label {
   fill: white;
 }
 

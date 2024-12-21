@@ -129,8 +129,7 @@ svg[class*="scratchblocks-style-scratch3"] .sb3-label,
   fill: var(--editorTheme3-commentColor);
   stroke: var(--editorTheme3-commentBorder);
 }
-.sb3-comment-label,
-.sb3-label.sb3-comment-label {
+svg[class*="scratchblocks-style-scratch3"] .sb3-label.sb3-comment-label {
   fill: var(--editorTheme3-commentText);
 }
 
