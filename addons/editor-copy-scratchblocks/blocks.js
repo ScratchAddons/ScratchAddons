@@ -140,7 +140,10 @@ const procedure = (block, context) => {
     block.type === "procedures_call" &&
     (!(isDef(context.startBlock) || context.rootBlocks?.some((block) => isDef(block))) ||
       /^define(?: |$)/.test(block.toString()) ||
-      Object.values(blocks).some((block) => block.labels === labels))
+      Object.values(blocks).some(
+        (block) =>
+          block.labels?.length === labels.length && block.labels.every((label, index) => label === labels[index])
+      ))
   ) {
     output += ` :: custom`;
   }
