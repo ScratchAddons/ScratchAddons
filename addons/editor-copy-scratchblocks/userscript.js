@@ -1,6 +1,6 @@
 import { getBlockCode, getScriptsCode } from "./blocks.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
 
   addon.tab.createBlockContextMenu(
@@ -11,7 +11,7 @@ export default async function ({ addon, console }) {
       if (topBlocks.length > 0) {
         items.push({
           enabled: true,
-          text: "Copy scripts as scratchblocks",
+          text: msg("copy-all-scripts-code"),
           callback: () => navigator.clipboard.writeText(getScriptsCode(...topBlocks)),
           separator: true,
         });
@@ -57,7 +57,7 @@ export default async function ({ addon, console }) {
         },
         {
           enabled: true,
-          text: "Copy block as scratchblocks code",
+          text: msg("copy-block-code"),
           callback: () => navigator.clipboard.writeText(getBlockCode(block)),
           separator: true,
         }
@@ -66,7 +66,7 @@ export default async function ({ addon, console }) {
       if (block.getRootBlock()?.getNextBlock()) {
         items.push({
           enabled: true,
-          text: "Copy script as scratchblocks code",
+          text: msg("copy-script-code"),
           callback: () => navigator.clipboard.writeText(getScriptsCode(block.getRootBlock())),
         });
       }
