@@ -13,7 +13,6 @@
 
 [class*="stage-wrapper_full-screen"] .sa-project-thumb {
   height: 100%;
-  top: 0;
 }
 
 [class*="stage-wrapper_full-screen"] .sa-project-thumb.loading {
