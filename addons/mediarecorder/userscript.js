@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
-  const LENGTH_LIMIT = 600;
+  const MAX_RECORD_TIME = 600; // seconds
   const DEFAULT_SETTINGS = {
     secs: 30,
     delay: 0,
@@ -25,7 +25,7 @@ export default async ({ addon, console, msg }) => {
 
   const getStoredOptions = () => {
     try {
-      return JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)) ?? DEFAULT_SETTINGS;
+      return Object.assign(DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)));
     } catch {
       return DEFAULT_SETTINGS;
     }
