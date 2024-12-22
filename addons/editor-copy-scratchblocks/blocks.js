@@ -415,7 +415,7 @@ const blocks = {
   music_setInstrument: build`set instrument to ${{ input: "INSTRUMENT" }}`,
   music_setTempo: build`set tempo to ${{ input: "TEMPO" }}`,
   music_changeTempo: build`change tempo by ${{ input: "TEMPO" }}`,
-  music_getTempo: simpleReporter("tempo", "MUSIC"),
+  music_getTempo: simpleReporter("tempo", "music"),
   music_midiPlayDrumForBeats: build`play drum ${{ input: "DRUM" }} for ${{ input: "BEATS" }} beats`,
   music_midiSetInstrument: build`set instrument to ${{ input: "INSTRUMENT" }}`,
 
@@ -435,7 +435,7 @@ const blocks = {
 
   translate_menu_languages: dropdown("languages"),
   translate_getTranslate: build`(translate ${{ input: "WORDS" }} to ${{ input: "LANGUAGE" }})`,
-  translate_getViewerLanguage: simpleReporter("language", "TRANSLATE"),
+  translate_getViewerLanguage: simpleReporter("language", "translate"),
 
   makeymakey_whenMakeyKeyPressed: build`when ${{ input: "KEY" }} key pressed :: makeymakey`,
   makeymakey_menu_KEY: dropdown("KEY"),
