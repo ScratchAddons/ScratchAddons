@@ -33,6 +33,7 @@ export default async ({ addon, console, msg }) => {
 
   const mimeType = [
     // Prefer mp4 format over webm (Chrome and Safari)
+    "video/mp4; codecs=mp4a.40.2",
     "video/mp4",
     // Chrome 125 and below and Firefox only support encoding as webm
     // VP9 is preferred as its playback is better supported across platforms
