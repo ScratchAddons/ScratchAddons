@@ -46,6 +46,14 @@ function build(labels, ...components) {
   return func;
 }
 
+const argumentConflict = (text, startBlock) =>
+  startBlock &&
+  startBlock.type === "procedures_definition" &&
+  startBlock
+    .getInputTargetBlock("custom_block")
+    .getChildren()
+    .some((argument) => argument.getFieldValue("VALUE") === text);
+
 const sanitize = (text, sanitizations) =>
   sanitizations.reduce((output, { searchValue, replacer }) => output.replace(searchValue, replacer), text);
 
@@ -87,58 +95,50 @@ const dropdown = (field) => (block) => `(${sanitize(block.getField(field).getTex
 const simpleReporter = (text, category, isBool) => (_, context) =>
   `${isBool ? "<" : "("}${text}${argumentConflict(text, context.startBlock) ? ` :: ${category}` : ""}${isBool ? ">" : ")"}`;
 
-const argumentConflict = (text, startBlock) =>
-  startBlock &&
-  startBlock.type === "procedures_definition" &&
-  startBlock
-    .getInputTargetBlock("custom_block")
-    .getChildren()
-    .some((argument) => argument.getFieldValue("VALUE") === text);
-
 const procedure = (block, context) => {
-  const isDef = (block) =>
-    block &&
-    block.type === "procedures_definition" &&
-    block.getInputTargetBlock("custom_block").getProcCode() === procCode;
+  const isDef = (checkBlock) =>
+    checkBlock &&
+    checkBlock.type === "procedures_definition" &&
+    checkBlock.getInputTargetBlock("custom_block").getProcCode() === block.getProcCode();
 
-  const sanitizations = [
-      { searchValue: "\\%", replacer: "%" },
-      ...blockSanitizations,
-      { searchValue: /^ {2,}| {2,}$/g, replacer: " " },
-    ],
-    labels = [];
-
-  let argumentCount = 0,
-    output = "";
-
-  const procCode = block.getProcCode();
-  for (const component of procCode.split(/(?<!\\)(%[nbs])/)) {
-    if (/^%[nbs]$/.test(component)) {
-      const inputBlock = block.getInputTargetBlock(block.argumentIds_[argumentCount++]);
-      if (inputBlock) {
-        output += getBlockCode(inputBlock, context);
-      } else if (component === "%b") {
-        output += "<>";
-      }
-    } else {
-      const labelText = sanitize(component, sanitizations);
-      output += labelText;
-      labels.push(labelText);
-    }
-  }
-
-  if (
+  const isDebuggerProcCode = (procCode) =>
     [
       "\u200B\u200Bbreakpoint\u200B\u200B",
       "\u200B\u200Blog\u200B\u200B %s",
       "\u200B\u200Bwarn\u200B\u200B %s",
       "\u200B\u200Berror\u200B\u200B %s",
-    ].includes(procCode)
-  ) {
-    // Debugger block
-    output += " :: #29beb8";
-    output = output.replaceAll("\u200B", "");
-  } else if (
+    ].includes(procCode);
+
+  const sanitizations = [
+    { searchValue: "\\%", replacer: "%" },
+    ...blockSanitizations,
+    { searchValue: /^ {2,}| {2,}$/g, replacer: " " },
+  ];
+
+  const labels = [];
+  let argCount = 0,
+    isLabel = true,
+    output = "";
+
+  for (const component of block.getProcCode().split(/(?<!\\)(%[nbs])/)) {
+    if (isLabel) {
+      const labelText = sanitize(component, sanitizations);
+      labels.push(labelText);
+      output += labelText;
+    } else {
+      const inputBlock = block.getInputTargetBlock(block.argumentIds_[argCount++]);
+      if (inputBlock) output += getBlockCode(inputBlock, context);
+      else if (component === "%b") output += "<>";
+    }
+
+    isLabel = !isLabel;
+  }
+
+  if (isDebuggerProcCode(block.getProcCode())) {
+    return output.replaceAll("\u200B", "") + " :: #29beb8";
+  }
+
+  if (
     block.type === "procedures_call" &&
     (!(isDef(context.startBlock) || context.rootBlocks?.some((block) => isDef(block))) ||
       /^define(?: |$)/.test(block.toString()) ||
@@ -147,7 +147,7 @@ const procedure = (block, context) => {
           block.labels?.length === labels.length && block.labels.every((label, index) => label === labels[index])
       ))
   ) {
-    output += ` :: custom`;
+    return output + ` :: custom`;
   }
 
   return output;
