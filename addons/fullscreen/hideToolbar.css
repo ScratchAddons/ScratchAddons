@@ -9,6 +9,10 @@
   transition: transform 0.3s;
 }
 
+[class*="stage-wrapper_full-screen"] div[class*="loader_background_"] {
+  top: 0; /* Override removeBorder.css */
+}
+
 .phantom-header {
   position: absolute;
   top: 0px;
@@ -16,7 +20,7 @@
   right: 0px;
   height: 8px;
   display: block;
-  z-index: 5000;
+  z-index: 5001; /* 1 above loader_background */
 }
 
 .stage-header-hover {

@@ -18,7 +18,8 @@ export default async function ({ addon, console }) {
   loaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
 
   addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
+
+  function handleStateChange(e) {
     if (e.detail.action.type === "scratch-gui/project-changed/SET_PROJECT_CHANGED") {
       // Move the thumbnail after the project loads
       thumb.classList.remove("loading");
@@ -28,6 +29,11 @@ export default async function ({ addon, console }) {
       stage.insertBefore(thumb, greenFlagOverlay);
       alerts.style.display = "flex";
     }
-    if (e.detail.action.type === "scratch-gui/vm-status/SET_STARTED_STATE") thumb.remove();
-  });
+    if (e.detail.action.type === "scratch-gui/vm-status/SET_STARTED_STATE") {
+      thumb.remove();
+      addon.tab.redux.removeEventListener("statechanged", handleStateChange);
+    }
+  }
+
+  addon.tab.redux.addEventListener("statechanged", handleStateChange);
 }
