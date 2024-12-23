@@ -2,10 +2,9 @@
 
 export function getBlockCode(block, context = {}) {
   const output = blocks[block.type]?.(block, context);
-  return (
-    (context.startBlock && block.getNextBlock() && `${output}\n${getBlockCode(block.getNextBlock(), context)}`) ||
-    output
-  );
+  return context.startBlock && block.getNextBlock()
+    ? `${output}\n${getBlockCode(block.getNextBlock(), context)}`
+    : output;
 }
 
 export function getScriptsCode(...rootBlocks) {
@@ -16,14 +15,14 @@ function processComponent(component, block, context) {
   if (component.input) {
     const inputConnection = block.getInput(component.input).connection;
     const inputBlock = inputConnection.targetBlock();
+
     if (inputBlock) {
-      if (component.substack) {
-        return getBlockCode(inputBlock, { startBlock: block, ...context }).replaceAll(/^/gm, "   ") + "\n";
-      } else {
-        return getBlockCode(inputBlock, context);
-      }
-    } else if (inputConnection.check_?.length === 1 && inputConnection.check_[0] === "Boolean") return "<>";
-    else return "";
+      return component.substack
+        ? getBlockCode(inputBlock, { startBlock: block, ...context }).replaceAll(/^/gm, "   ") + "\n"
+        : getBlockCode(inputBlock, context);
+    }
+
+    return inputConnection.check_?.length === 1 && inputConnection.check_[0] === "Boolean" ? "<>" : "";
   }
 
   if (component.field) {
@@ -50,6 +49,8 @@ function build(labels, ...components) {
 const sanitize = (text, sanitizations) =>
   sanitizations.reduce((output, { searchValue, replacer }) => output.replace(searchValue, replacer), text);
 
+// Sanitization configurations
+
 const dropdownSanitizations = [
   { searchValue: "\\", replacer: "\\\\" },
   { searchValue: /^\/scratchblocks$/g, replacer: "\\/scratchblocks" },
@@ -73,6 +74,8 @@ const blockSanitizations = [
 ];
 
 const repSanitizations = [...blockSanitizations, { searchValue: ")", replacer: "\\)" }];
+
+// Block definitions
 
 const numBlock = (field) => (block) => {
   const content = block.getFieldValue(field);
@@ -112,12 +115,10 @@ const procedure = (block, context) => {
   for (const component of procCode.split(/(?<!\\)(%[nbs])/)) {
     if (/^%[nbs]$/.test(component)) {
       const inputBlock = block.getInputTargetBlock(block.argumentIds_[argumentCount++]);
-      if (!inputBlock) {
-        if (component === "%b") {
-          output += "<>";
-        }
-      } else {
+      if (inputBlock) {
         output += getBlockCode(inputBlock, context);
+      } else if (component === "%b") {
+        output += "<>";
       }
     } else {
       const labelText = sanitize(component, sanitizations);
@@ -134,6 +135,7 @@ const procedure = (block, context) => {
       "\u200B\u200Berror\u200B\u200B %s",
     ].includes(procCode)
   ) {
+    // Debugger block
     output += " :: #29beb8";
     output = output.replaceAll("\u200B", "");
   } else if (
