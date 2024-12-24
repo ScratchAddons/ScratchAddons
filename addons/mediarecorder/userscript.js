@@ -31,6 +31,8 @@ export default async ({ addon, console, msg }) => {
 
   const getStoredOptions = () => {
     try {
+      // If any new properties get added to DEFAULT_SETTINGS,
+      // this makes sure that they are individually applied to the saved settings too
       return Object.assign(
         structuredClone(DEFAULT_SETTINGS),
         JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)) ?? DEFAULT_SETTINGS
