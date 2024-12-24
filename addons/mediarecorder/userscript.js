@@ -31,7 +31,10 @@ export default async ({ addon, console, msg }) => {
 
   const getStoredOptions = () => {
     try {
-      return Object.assign(structuredClone(DEFAULT_SETTINGS), JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)) ?? DEFAULT_SETTINGS);
+      return Object.assign(
+        structuredClone(DEFAULT_SETTINGS),
+        JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)) ?? DEFAULT_SETTINGS
+      );
     } catch {
       return DEFAULT_SETTINGS;
     }
@@ -53,7 +56,7 @@ export default async ({ addon, console, msg }) => {
     const runtime = vm.runtime;
     return [
       runtime?.stageWidth ?? runtime.constructor.STAGE_WIDTH,
-      runtime?.stageHeight ?? runtime.constructor.STAGE_HEIGHT
+      runtime?.stageHeight ?? runtime.constructor.STAGE_HEIGHT,
     ];
   }
 
@@ -62,17 +65,13 @@ export default async ({ addon, console, msg }) => {
   const initialStageSize = getStageSize();
   let actualWidth = vm.runtime.renderer.gl?.canvas?.width ?? initialStageSize[0];
   let actualHeight = vm.runtime.renderer.gl?.canvas?.height ?? initialStageSize[1];
-  vm.runtime.renderer.constructor.prototype.resize = function(pixelsWide, pixelsTall) {
+  vm.runtime.renderer.constructor.prototype.resize = function (pixelsWide, pixelsTall) {
     actualWidth = pixelsWide;
     actualHeight = pixelsTall;
     if (!isRecording) return oldResize.call(this, pixelsWide, pixelsTall);
     const stageSize = getStageSize();
     const scale = Math.max(MIN_SCALE, stageScale);
-    return oldResize.call(
-      this,
-      Math.ceil(stageSize[0] * scale),
-      Math.ceil(stageSize[1] * scale)
-    );
+    return oldResize.call(this, Math.ceil(stageSize[0] * scale), Math.ceil(stageSize[1] * scale));
   };
   function forceRendererResize() {
     vm.runtime.renderer.resize(actualWidth, actualHeight);
@@ -255,8 +254,7 @@ export default async ({ addon, console, msg }) => {
         recordOptionScaleInput.value = scale;
 
         const [stageWidth, stageHeight] = getStageSize();
-        recordOptionScalePreview.textContent =
-          `(${Math.ceil(stageWidth * scale)}x${Math.ceil(stageHeight * scale)})`;
+        recordOptionScalePreview.textContent = `(${Math.ceil(stageWidth * scale)}x${Math.ceil(stageHeight * scale)})`;
       };
       recordOptionScaleInput.addEventListener("change", onScaleInputChange);
       onScaleInputChange();
