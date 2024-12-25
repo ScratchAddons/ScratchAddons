@@ -19,7 +19,7 @@ function processComponent(component, block, context) {
     if (inputBlock) {
       return component.substack
         ? getBlockCode(inputBlock, { startBlock: block, ...context }).replaceAll(/^/gm, "   ") + "\n"
-        : getBlockCode(inputBlock, context);
+        : getBlockCode(inputBlock, { startBlock: block, ...context });
     }
 
     return inputConnection.check_?.length === 1 && inputConnection.check_[0] === "Boolean" ? "<>" : "";
@@ -49,10 +49,7 @@ function build(labels, ...components) {
 const argumentConflict = (text, startBlock) =>
   startBlock &&
   startBlock.type === "procedures_definition" &&
-  startBlock
-    .getInputTargetBlock("custom_block")
-    .getChildren()
-    .some((argument) => argument.getFieldValue("VALUE") === text);
+  startBlock.getInputTargetBlock("custom_block").displayNames_.includes(text);
 
 const sanitize = (text, sanitizations) =>
   sanitizations.reduce((output, { searchValue, replacer }) => output.replace(searchValue, replacer), text);
@@ -76,12 +73,17 @@ const blockSanitizations = [
   { searchValue: "{", replacer: "\\{" },
   { searchValue: "[/scratchblocks]", replacer: "[\\/scratchblocks]" },
   { searchValue: /^define /g, replacer: "define\\ " },
-  { searchValue: /^define$/g, replacer: "define​" },
+  { searchValue: /^define$/g, replacer: "define​" }, // ZWSP
   { searchValue: /@(greenFlag|stopSign|turnLeft|turnRight|loopArrow|addInput|delInput|list)/g, replacer: "\\@$1" },
   { searchValue: "//", replacer: "\\//" },
 ];
 
-const repSanitizations = [...blockSanitizations, { searchValue: ")", replacer: "\\)" }];
+const repSanitizations = [
+  ...blockSanitizations,
+  { searchValue: ")", replacer: "\\)" },
+  { searchValue: ">", replacer: "\\>" },
+  { searchValue: /^$/g, replacer: " " },
+];
 
 // Block definitions
 
@@ -127,7 +129,7 @@ const procedure = (block, context) => {
       output += labelText;
     } else {
       const inputBlock = block.getInputTargetBlock(block.argumentIds_[argCount++]);
-      if (inputBlock) output += getBlockCode(inputBlock, context);
+      if (inputBlock) output += getBlockCode(inputBlock, { startBlock: block, ...context });
       else if (component === "%b") output += "<>";
     }
 
@@ -383,15 +385,12 @@ const blocks = {
   procedures_call: procedure,
   procedures_prototype: procedure,
   argument_reporter_string_number: (block, context) => {
-    const text = sanitize(block.getField("VALUE").getText(), repSanitizations);
-    return `(${text}${argumentConflict(text, context.startBlock) || / v$/.test(text) ? "" : " :: custom-arg"})`;
+    const text = sanitize(block.getFieldValue("VALUE"), repSanitizations);
+    return `(${text}${argumentConflict(text, context.startBlock) && !/ v$/.test(text) ? "" : " :: custom-arg"})`;
   },
   argument_reporter_boolean: (block, context) => {
-    const text = sanitize(block.getField("VALUE").getText(), [
-      ...blockSanitizations,
-      { searchValue: ">", replacer: "\\>" },
-    ]);
-    return `(${text}${argumentConflict(text, context.startBlock) ? "" : " :: custom-arg"})`;
+    const text = sanitize(block.getFieldValue("VALUE"), repSanitizations);
+    return `<${text}${argumentConflict(text, context.startBlock) ? "" : " :: custom-arg"}>`;
   },
 
   pen_clear: build`erase all`,
