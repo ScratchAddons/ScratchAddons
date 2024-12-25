@@ -2,8 +2,8 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
   const LENGTH_LIMIT = 600;
-  const MIN_SCALE = 0.01;
-  const SCALE_LIMIT = 15;
+  const MIN_SCALE = 0.0001;
+  const SCALE_LIMIT = 20;
   const DEFAULT_SETTINGS = {
     secs: 30,
     delay: 0,
@@ -53,27 +53,25 @@ export default async ({ addon, console, msg }) => {
   ].find((i) => MediaRecorder.isTypeSupported(i));
   const fileExtension = mimeType.split(";")[0].split("/")[1];
 
-  function getStageSize() {
+  function getStageWidth() {
     // TurboWarp compatibility
-    const runtime = vm.runtime;
-    return [
-      runtime?.stageWidth ?? runtime.constructor.STAGE_WIDTH,
-      runtime?.stageHeight ?? runtime.constructor.STAGE_HEIGHT,
-    ];
+    return vm.runtime?.stageWidth ?? vm.runtime.constructor.STAGE_WIDTH;
+  }
+  function getStageHeight() {
+    // TurboWarp compatibility
+    return vm.runtime?.stageHeight ?? vm.runtime.constructor.STAGE_HEIGHT;
   }
 
   // When recording, resize stage canvas with the resolution scale
   const oldResize = vm.runtime.renderer.constructor.prototype.resize;
-  const initialStageSize = getStageSize();
-  let actualWidth = vm.runtime.renderer.gl?.canvas?.width ?? initialStageSize[0];
-  let actualHeight = vm.runtime.renderer.gl?.canvas?.height ?? initialStageSize[1];
+  let actualWidth = vm.runtime.renderer.gl?.canvas?.width ?? getStageWidth();
+  let actualHeight = vm.runtime.renderer.gl?.canvas?.height ?? getStageHeight();
   vm.runtime.renderer.constructor.prototype.resize = function (pixelsWide, pixelsTall) {
     actualWidth = pixelsWide;
     actualHeight = pixelsTall;
     if (!isRecording) return oldResize.call(this, pixelsWide, pixelsTall);
-    const stageSize = getStageSize();
     const scale = Math.max(MIN_SCALE, stageScale);
-    return oldResize.call(this, Math.ceil(stageSize[0] * scale), Math.ceil(stageSize[1] * scale));
+    return oldResize.call(this, Math.ceil(getStageWidth() * scale), Math.ceil(getStageHeight() * scale));
   };
   function forceRendererResize() {
     vm.runtime.renderer.resize(actualWidth, actualHeight);
@@ -225,41 +223,66 @@ export default async ({ addon, console, msg }) => {
         })
       );
 
-      // Resolution scale
+      // Video resolution.
+      // In the user interface this is shown as linked width/height inputs,
+      // but internally this is actually a scaling factor
+      // (which, for example, makes things simpler when storing the scale value with changing stage sizes)
+      const stageWidth = getStageWidth();
+      const stageHeight = getStageHeight();
       const recordOptionScale = document.createElement("p");
-      const recordOptionScaleInput = Object.assign(document.createElement("input"), {
+      const recordOptionScaleInputW = Object.assign(document.createElement("input"), {
         type: "number",
-        min: 0,
-        max: SCALE_LIMIT,
-        defaultValue: storedOptions.stageScale || "",
-        id: "recordOptionScaleInput",
+        min: Math.ceil(stageWidth * MIN_SCALE),
+        max: stageWidth * SCALE_LIMIT,
+        defaultValue: Math.ceil(stageWidth * (storedOptions.stageScale || 1)),
+        id: "recordOptionScaleInputW",
+        step: "any",
+        className: addon.tab.scratchClass("prompt_variable-name-text-input"),
+      });
+      const recordOptionScaleInputH = Object.assign(document.createElement("input"), {
+        type: "number",
+        min: Math.ceil(stageHeight * MIN_SCALE),
+        max: stageHeight * SCALE_LIMIT,
+        defaultValue: Math.ceil(stageHeight * (storedOptions.stageScale || 1)),
+        id: "recordOptionScaleInputH",
         step: "any",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
       });
       const recordOptionScaleLabel = Object.assign(document.createElement("label"), {
         htmlFor: "recordOptionScaleInput",
-        textContent: msg("stage-scale"),
+        textContent: msg("video-resolution"),
       });
-      const recordOptionScalePreview = document.createElement("span");
+      const recordOptionScaleX = Object.assign(document.createElement("span"), {
+        textContent: "x",
+      });
       recordOptionScale.appendChild(recordOptionScaleLabel);
-      recordOptionScale.appendChild(recordOptionScaleInput);
-      recordOptionScale.appendChild(recordOptionScalePreview);
+      recordOptionScale.appendChild(recordOptionScaleInputW);
+      recordOptionScale.appendChild(recordOptionScaleX);
+      recordOptionScale.appendChild(recordOptionScaleInputH);
       content.appendChild(recordOptionScale);
-      const onScaleInputChange = () => {
-        const _scale = Number(recordOptionScaleInput.value);
-        let scale = isNaN(_scale) ? 1 : _scale;
-        if (scale <= MIN_SCALE) {
-          scale = MIN_SCALE;
-        } else if (scale > SCALE_LIMIT) {
-          scale = SCALE_LIMIT;
+      const onScaleInputChange = (e) => {
+        const _value = Number(e.target.value);
+        let value = isNaN(_value) ? e.target.defaultValue : _value;
+        if (value <= e.target.min) {
+          value = e.target.min;
+        } else if (value > e.target.max) {
+          value = e.target.max;
         }
-        recordOptionScaleInput.value = scale;
+        e.target.value = value;
+      }
 
-        const [stageWidth, stageHeight] = getStageSize();
-        recordOptionScalePreview.textContent = `(${Math.ceil(stageWidth * scale)}x${Math.ceil(stageHeight * scale)})`;
+      // Match aspect ratio
+      const onScaleInputWChange = () => {
+        recordOptionScaleInputH.value = Math.ceil(recordOptionScaleInputW.value / (stageWidth / stageHeight));
       };
-      recordOptionScaleInput.addEventListener("change", onScaleInputChange);
-      onScaleInputChange();
+      const onScaleInputHChange = () => {
+        recordOptionScaleInputW.value = Math.floor(recordOptionScaleInputH.value * (stageWidth / stageHeight));
+        onScaleInputWChange();
+      };
+      recordOptionScaleInputW.addEventListener("change", onScaleInputChange);
+      recordOptionScaleInputH.addEventListener("change", onScaleInputChange);
+      recordOptionScaleInputW.addEventListener("change", onScaleInputWChange);
+      recordOptionScaleInputH.addEventListener("change", onScaleInputHChange);
 
       // Audio enabled
       const recordOptionAudio = Object.assign(document.createElement("p"), {
@@ -332,7 +355,7 @@ export default async ({ addon, console, msg }) => {
             micEnabled: recordOptionMicInput.checked,
             waitUntilFlag: recordOptionFlagInput.checked,
             useStopSign: !recordOptionStopInput.disabled && recordOptionStopInput.checked,
-            stageScale: Number(recordOptionScaleInput.value) || 1,
+            stageScale: Number(recordOptionScaleInputW.value) / stageWidth,
           }),
         { once: true }
       );

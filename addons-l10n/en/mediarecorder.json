@@ -4,7 +4,7 @@
   "mediarecorder/option-title": "Record Options",
   "mediarecorder/record-duration": "End recording after:",
   "mediarecorder/start-delay": "Start recording after:",
-  "mediarecorder/stage-scale": "Video scale:",
+  "mediarecorder/video-resolution": "Video resolution:",
   "mediarecorder/seconds": "seconds",
   "mediarecorder/starting-in": "Starting in {secs}...",
   "mediarecorder/record-audio": "Record project audio",

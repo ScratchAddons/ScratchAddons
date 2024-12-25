@@ -16,7 +16,7 @@
   ],
   "latestUpdate": {
     "version": "1.41.0",
-    "temporaryNotice": "A new \"Video scale\" option has been added, to allow making high resolution recordings."
+    "temporaryNotice": "A new \"Video resolution\" option has been added, to allow making high resolution recordings."
   },
   "versionAdded": "1.6.0",
   "enabledByDefault": false

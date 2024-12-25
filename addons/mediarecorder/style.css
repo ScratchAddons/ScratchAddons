@@ -51,12 +51,14 @@ p.mediaRecorderPopupOption {
 
 #recordOptionSecondsInput,
 #recordOptionDelayInput,
-#recordOptionScaleInput {
+#recordOptionScaleInputW,
+#recordOptionScaleInputH {
   width: 5rem;
   margin-bottom: 0.25rem;
 }
 
-#recordOptionScaleInput {
+#recordOptionScaleInputW,
+#recordOptionScaleInputH {
   width: 6rem;
 }
 
