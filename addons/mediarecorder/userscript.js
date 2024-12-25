@@ -269,7 +269,7 @@ export default async ({ addon, console, msg }) => {
           value = e.target.max;
         }
         e.target.value = value;
-      }
+      };
 
       // Match aspect ratio
       const onScaleInputWChange = () => {
