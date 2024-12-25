@@ -25,7 +25,10 @@ export default async ({ addon, console, msg }) => {
 
   const getStoredOptions = () => {
     try {
-      return Object.assign(DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)));
+      return Object.assign(
+        JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+        JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY))
+      );
     } catch {
       return DEFAULT_SETTINGS;
     }
