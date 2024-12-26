@@ -14,8 +14,11 @@ export default async function ({ addon, console }) {
   const loaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
   stageWrapper.insertBefore(thumb, loaderBackground);
   alerts.style.display = "none";
-  // Ensure thumbnail is injected before adding transparency
-  loaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
+  loaderBackground.classList.add("sa-loader-background");
+
+  addon.tab.addEventListener("urlChange", () => {
+    loaderBackground.classList.add("sa-loader-background");
+  });
 
   addon.tab.redux.initialize();
 
