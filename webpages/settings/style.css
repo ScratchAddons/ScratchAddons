@@ -4,12 +4,12 @@ html {
 
 body {
   background: var(--page-background);
-  font-family: "Sora", sans-serif;
+  font-family: "Roboto", sans-serif;
   margin: 0;
   height: 100vh;
   overflow: hidden;
   color: var(--content-text);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 :not(body)[v-cloak] {
@@ -29,6 +29,7 @@ body {
 }
 
 h1 {
+  font-family: "Sora", sans-serif;
   font-size: 18px;
   margin: 0;
   font-weight: 400;
@@ -337,7 +338,9 @@ body.iframe .search-box input {
 }
 
 .permissions-block h2 {
+  font-family: "Sora", sans-serif;
   font-size: 3rem;
+  font-weight: 600;
   margin: 0;
 }
 
@@ -364,6 +367,7 @@ body.iframe .search-box input {
   display: block;
   height: 6rem;
   width: 18rem;
+  font-family: "Sora", sans-serif;
   font-size: 2.5rem;
   cursor: pointer;
 }
@@ -381,7 +385,7 @@ color-picker {
   border: 1px solid var(--control-border);
   --color-picker-background-color: var(--button-background);
   --color-picker-color: var(--content-text);
-  --color-picker-font-family: Sora, sans-serif;
+  --color-picker-font-family: Roboto, sans-serif;
 }
 
 button.setting-input.color {
@@ -429,8 +433,8 @@ button.setting-input.color.open {
 }
 #iframe-fullscreen-suggestion > span {
   width: 100%;
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: bold;
+  font-size: 14px;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
