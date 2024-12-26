@@ -125,8 +125,8 @@ body {
 .popout > .popout-img {
   display: inline-block;
   vertical-align: -3px;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   padding: 2px;
   margin-inline-start: 3px;
   margin-inline-end: -2px;

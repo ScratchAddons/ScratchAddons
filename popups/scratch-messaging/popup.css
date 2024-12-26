@@ -96,7 +96,7 @@ button {
   cursor: pointer;
 }
 .small-icon {
-  height: 14px;
+  height: 16px;
   vertical-align: text-bottom;
 }
 .small-icon:not(.colored) {
@@ -106,8 +106,6 @@ button > .small-icon {
   margin-inline-start: -2px;
   margin-inline-end: 6px;
   vertical-align: middle;
-  width: 16px;
-  height: 16px;
 }
 .message-type-title-text {
   white-space: nowrap;
@@ -184,8 +182,8 @@ a.message-type-title-text {
 }
 .popout-comment {
   cursor: pointer;
-  height: 10px;
-  vertical-align: baseline;
+  height: 12px;
+  vertical-align: -1px;
   padding-left: 2px;
   filter: var(--content-icon-filter);
   user-select: none;
@@ -334,8 +332,8 @@ a.message-type-title-text {
   font-weight: bold;
 }
 .popout {
-  height: 10px;
-  vertical-align: baseline;
+  height: 12px;
+  vertical-align: -1px;
   margin-inline-start: 5px;
   opacity: 0.6;
   filter: var(--content-icon-filter);
