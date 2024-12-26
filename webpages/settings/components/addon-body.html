@@ -3,10 +3,10 @@
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
         <div class="btn-dropdown">
-          <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
+          <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" draggable="false" />
         </div>
         <div class="addon-name tooltip">
-          <img :src="addonIconSrc" class="icon-type" />
+          <img :src="addonIconSrc" class="icon-type" draggable="false" />
           <span>{{ addon.name}}</span>
           <span v-if="devMode" class="tooltiptext">{{ addon._addonId }}</span>
         </div>
@@ -21,7 +21,7 @@
           title="{{ msg('resetToDefault') }}"
           @click="loadDefaults"
         >
-          <img src="../../images/icons/undo.svg" class="icon-type" />
+          <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
         </div>
         <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
       </div>
@@ -40,6 +40,7 @@
               'notice': 'notice.svg',
               'info': 'help.svg',
             }[info.type || 'info']"
+            draggable="false"
           />{{ info.text }}
         </div>
       </div>
@@ -170,6 +171,9 @@
     background-color: var(--gray-text);
     border-radius: 3px;
   }
+  .addon-name > .icon-type {
+    user-select: none;
+  }
   .addon-topbar {
     height: 52px;
     padding-inline-end: 10px;
@@ -207,6 +211,7 @@
     cursor: pointer;
     background: none;
     border: none;
+    user-select: none;
     transition: 0.2s ease;
   }
   .addon-buttons:hover:not([disabled]),
@@ -248,6 +253,7 @@
     padding: 4px;
     border-radius: 4px;
     transition: 0.2s ease;
+    user-select: none;
   }
   .clickable-area:hover .btn-dropdown {
     background: var(--hover-highlight);
@@ -309,6 +315,7 @@
     height: 15px;
     width: 15px;
     margin-inline-end: 10px;
+    user-select: none;
   }
   .addon-notice img {
     filter: var(--notice-icon-filter);

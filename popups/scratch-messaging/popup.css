@@ -188,6 +188,7 @@ a.message-type-title-text {
   vertical-align: baseline;
   padding-left: 2px;
   filter: var(--content-icon-filter);
+  user-select: none;
 }
 [dir="rtl"] .popout-comment {
   transform: scaleX(-1);
@@ -198,6 +199,7 @@ a.message-type-title-text {
   color: var(--gray-text);
   font-size: 0.65rem;
   padding-top: 2px;
+  user-select: none;
 }
 .delete-confirm {
   font-weight: bold;
@@ -267,6 +269,7 @@ a.message-type-title-text {
   margin-inline-start: auto;
   font-weight: normal;
   font-variant: tabular-nums;
+  user-select: none;
 }
 
 .welcome-message {
@@ -284,6 +287,7 @@ a.message-type-title-text {
 .status-empty {
   display: block;
   margin-block: 10px;
+  user-select: none;
 }
 
 .buttons-container {

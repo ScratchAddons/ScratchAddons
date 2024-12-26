@@ -24,6 +24,7 @@ body {
   cursor: pointer;
   padding: 18px;
   line-height: 0;
+  user-select: none;
   transition: 0.2s ease;
 }
 .header-button:hover {
@@ -40,6 +41,7 @@ body {
   align-items: center;
   padding: 0 20px;
   font-family: "Sora", sans-serif;
+  user-select: none;
 }
 #logo {
   height: 25px;
@@ -79,6 +81,7 @@ body {
   font-size: 14px;
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
+  user-select: none;
   transition: 0.2s ease;
 }
 .popup-name:hover {
@@ -143,6 +146,7 @@ iframe {
   border: none;
   overflow-y: scroll;
   background-color: var(--page-background);
+  user-select: none;
 }
 #version {
   color: var(--white-text);
@@ -151,4 +155,5 @@ iframe {
   opacity: 0.75;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
+  user-select: text;
 }
