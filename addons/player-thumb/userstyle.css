@@ -2,6 +2,7 @@
   display: inline;
   position: absolute;
   background-color: var(--darkWww-page, #fcfcfc);
+  aspect-ratio: 4 / 3;
 }
 
 .sa-controls-disabled > img {
@@ -12,7 +13,6 @@
 body:not(.sa-body-editor) .sa-project-thumb {
   top: 1px;
   left: 1px;
-  width: calc(100% - 2px);
   height: calc(100% - 2px);
   border-radius: calc(0.5rem - 1px);
 }

@@ -10,7 +10,8 @@
 }
 
 [class*="stage-wrapper_full-screen"] div[class*="loader_background_"] {
-  top: 0; /* Override removeBorder.css */
+  height: 100%;
+  top: 0;
 }
 
 .phantom-header {
