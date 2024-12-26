@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
-  const LENGTH_LIMIT = 600;
+  const MAX_RECORD_TIME = 600; // seconds
   const DEFAULT_SETTINGS = {
     secs: 30,
     delay: 0,
@@ -25,7 +25,10 @@ export default async ({ addon, console, msg }) => {
 
   const getStoredOptions = () => {
     try {
-      return JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)) ?? DEFAULT_SETTINGS;
+      return Object.assign(
+        JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+        JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY))
+      );
     } catch {
       return DEFAULT_SETTINGS;
     }
@@ -85,7 +88,7 @@ export default async ({ addon, console, msg }) => {
       const recordOptionDelayInput = Object.assign(document.createElement("input"), {
         type: "number",
         min: 0,
-        max: LENGTH_LIMIT,
+        max: MAX_RECORD_TIME,
         defaultValue: storedOptions.delay,
         id: "recordOptionDelayInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
@@ -131,7 +134,7 @@ export default async ({ addon, console, msg }) => {
       const recordOptionSecondsInput = Object.assign(document.createElement("input"), {
         type: "number",
         min: 1,
-        max: LENGTH_LIMIT,
+        max: MAX_RECORD_TIME,
         defaultValue: storedOptions.secs,
         id: "recordOptionSecondsInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
@@ -253,8 +256,8 @@ export default async ({ addon, console, msg }) => {
         "click",
         () =>
           handleOptionClose({
-            secs: Math.min(Number(recordOptionSecondsInput.value), LENGTH_LIMIT),
-            delay: Math.min(Number(recordOptionDelayInput.value), LENGTH_LIMIT),
+            secs: Math.min(Number(recordOptionSecondsInput.value), MAX_RECORD_TIME),
+            delay: Math.min(Number(recordOptionDelayInput.value), MAX_RECORD_TIME),
             audioEnabled: recordOptionAudioInput.checked,
             micEnabled: recordOptionMicInput.checked,
             waitUntilFlag: recordOptionFlagInput.checked,
@@ -304,7 +307,7 @@ export default async ({ addon, console, msg }) => {
     };
     const startRecording = async (opts) => {
       // Timer
-      const secs = Math.min(LENGTH_LIMIT, Math.max(1, opts.secs));
+      const secs = Math.min(MAX_RECORD_TIME, Math.max(1, opts.secs));
 
       // Initialize MediaRecorder
       recordBuffer = [];
