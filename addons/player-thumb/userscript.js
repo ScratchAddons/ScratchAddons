@@ -7,6 +7,11 @@ export default async function ({ addon, console }) {
   thumb.classList = "sa-project-thumb loading";
 
   const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
+  addon.tab.redux.initialize();
+
+  // It's possible this runs after the project loads even without dynamic enable
+  if (addon.tab.redux.state?.scratchGui?.vmStatus?.started) return;
+
   const alerts = document.querySelector(".project-info-alerts");
   const controls = stageWrapper.querySelector('div[class^="controls_controls-container_"]');
   controls.classList.add("sa-controls-disabled");
@@ -20,7 +25,6 @@ export default async function ({ addon, console }) {
     loaderBackground.classList.add("sa-loader-background");
   });
 
-  addon.tab.redux.initialize();
 
   function handleStateChange(e) {
     if (e.detail.action.type === "scratch-gui/project-changed/SET_PROJECT_CHANGED") {
