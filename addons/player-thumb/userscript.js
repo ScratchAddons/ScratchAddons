@@ -25,7 +25,6 @@ export default async function ({ addon, console }) {
     loaderBackground.classList.add("sa-loader-background");
   });
 
-
   function handleStateChange(e) {
     if (e.detail.action.type === "scratch-gui/project-changed/SET_PROJECT_CHANGED") {
       // Move the thumbnail after the project loads
