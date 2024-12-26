@@ -76,6 +76,30 @@
       }
     },
     {
+      "name": "page-divider5",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.05)",
+        "white": "rgba(255, 255, 255, 0.05)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-divider15",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "page-colorScheme",
       "value": {
         "type": "textColor",
@@ -96,9 +120,9 @@
           "type": "settingValue",
           "settingId": "page"
         },
-        "r": 0.99,
-        "g": 0.99,
-        "b": 0.99
+        "r": 0.98,
+        "g": 0.98,
+        "b": 0.98
       }
     },
     {
@@ -334,6 +358,17 @@
       }
     },
     {
+      "name": "box-blackText",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-filter",
       "value": {
         "type": "textColor",
@@ -416,6 +451,18 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.1)",
         "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-tab15",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -591,17 +638,6 @@
       }
     },
     {
-      "name": "box-scratchr2Caret",
-      "value": {
-        "type": "textColor",
-        "black": "#000000",
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
       "name": "box-scratchr2InputText",
       "value": {
         "type": "textColor",
@@ -764,19 +800,28 @@
     {
       "name": "box-scratchr2ButtonBorder",
       "value": {
-        "type": "alphaBlend",
-        "opaqueSource": {
+        "type": "alphaThreshold",
+        "source": {
           "type": "settingValue",
-          "settingId": "box"
+          "settingId": "border"
         },
-        "transparentSource": {
-          "type": "brighten",
-          "source": {
+        "opaque": {
+          "type": "alphaBlend",
+          "opaqueSource": {
             "type": "settingValue",
-            "settingId": "border"
+            "settingId": "box"
           },
-          "a": 0.67
-        }
+          "transparentSource": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "border"
+            },
+            "a": 0.67
+          }
+        },
+        "transparent": "transparent",
+        "threshold": 0.05
       }
     },
     {
@@ -859,6 +904,18 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.1)",
         "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-divider15",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
         "source": {
           "type": "settingValue",
           "settingId": "gray"
@@ -1251,30 +1308,39 @@
     {
       "name": "blue-studioTextareaBorder",
       "value": {
-        "type": "makeHsv",
-        "h": {
+        "type": "alphaThreshold",
+        "source": {
           "type": "settingValue",
           "settingId": "border"
         },
-        "s": {
-          "type": "settingValue",
-          "settingId": "border"
-        },
-        "v": {
-          "type": "alphaBlend",
-          "opaqueSource": {
+        "opaque": {
+          "type": "makeHsv",
+          "h": {
             "type": "settingValue",
-            "settingId": "blue"
+            "settingId": "border"
           },
-          "transparentSource": {
-            "type": "brighten",
-            "source": {
+          "s": {
+            "type": "settingValue",
+            "settingId": "border"
+          },
+          "v": {
+            "type": "alphaBlend",
+            "opaqueSource": {
               "type": "settingValue",
-              "settingId": "border"
+              "settingId": "blue"
             },
-            "a": 0.79
+            "transparentSource": {
+              "type": "brighten",
+              "source": {
+                "type": "settingValue",
+                "settingId": "border"
+              },
+              "a": 0.79
+            }
           }
-        }
+        },
+        "transparent": "transparent",
+        "threshold": 0.05
       }
     },
     {
@@ -1776,6 +1842,18 @@
       }
     },
     {
+      "name": "footer-divider10",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "footer"
+        }
+      }
+    },
+    {
       "name": "footer-scratchr2",
       "value": {
         "type": "map",
@@ -2152,11 +2230,6 @@
     {
       "url": "profile.js",
       "matches": ["profiles"]
-    },
-    {
-      "url": "scratchstats.js",
-      "matches": ["profiles"],
-      "runAtComplete": false
     }
   ],
   "userstyles": [

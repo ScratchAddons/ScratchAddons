@@ -50,7 +50,7 @@ async function getActualCookieStore() {
   return current?.cookieStoreId || undefined;
 }
 
-async function refetchCookies(needsRequest = true) {
+async function refetchCookies(needsRequest = false) {
   if (needsRequest) {
     try {
       await fetch("https://scratch.mit.edu/csrf_token/");

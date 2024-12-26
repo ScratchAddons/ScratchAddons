@@ -10,7 +10,7 @@
     :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
     @click="onClick($event)"
   >
-    <img :src="'../../images/icons/' + category.icon + '.svg'" />
+    <img :src="'../../images/icons/' + category.icon + '.svg'" draggable="false" />
     <span>{{ category.name }}</span>
   </div>
 </template>
@@ -35,9 +35,9 @@
     color: inherit;
     text-decoration: inherit;
   }
-  a.category > span > img {
-    height: 10px;
-    vertical-align: middle;
+  a.category > span > img /* popout icon */ {
+    height: 12px;
+    vertical-align: -1px;
   }
 
   .category.sel {

@@ -1,16 +1,19 @@
 import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./modified-funcs.js";
 
 export default async function ({ addon, console }) {
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
+
   function createArrow(direction, callback) {
     const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
 
     Blockly.WidgetDiv.DIV.insertAdjacentHTML(
       "beforeend",
       `
-            <svg width="20px" height="40px" 
-                 style="left: ${direction === "left" ? "calc(50% - 20px)" : "calc(50% + 20px)"}" 
-                 class="blocklyTextShiftArrow">
-                <path d="${path}" fill="none" stroke="#FF661A" stroke-width="2"></path>
+            <svg width="20px" height="40px"
+                 style="left: ${direction === "left" ? "calc(50% - 24px)" : "calc(50% + 24px)"}"
+                 class="sa-reorder-inputs-arrow">
+                <path d="${path}" fill="none" stroke="#FF661A" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>`
     );
 
@@ -28,12 +31,12 @@ export default async function ({ addon, console }) {
       var input = this.inputList[n];
       if (input.connection) {
         var target = input.connection.targetBlock();
-        if (target.getField(field.name) == field) {
+        if (target.getField(field.name) === field) {
           inputNameToRemove = input.name;
         }
       } else {
         for (var j = 0; j < input.fieldRow.length; j++) {
-          if (input.fieldRow[j] == field) {
+          if (input.fieldRow[j] === field) {
             inputNameToRemove = input.name;
           }
         }
@@ -157,9 +160,8 @@ export default async function ({ addon, console }) {
   }
 
   function getExistingProceduresDeclarationBlock() {
-    // Blockly.getMainWorkspace is required for this to work.
-    // for future reference "upgrading" to addon.tab.traps.getWorkspace() will cause bugs.
-    return Blockly.getMainWorkspace()
+    // addon.tab.traps.getWorkspace() will never return the procedure declaration editor
+    return ScratchBlocks.getMainWorkspace()
       .getAllBlocks()
       .find((block) => block.type === "procedures_declaration");
   }
@@ -191,7 +193,7 @@ export default async function ({ addon, console }) {
     }
 
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = originalShowEditor;
-    Blockly.WidgetDiv.DIV.querySelectorAll(".blocklyTextShiftArrow").forEach((e) => e.remove());
+    Blockly.WidgetDiv.DIV.querySelectorAll(".sa-reorder-inputs-arrow").forEach((e) => e.remove());
   }
 
   const Blockly = await addon.tab.traps.getBlockly();

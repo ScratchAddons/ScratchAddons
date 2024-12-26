@@ -17,12 +17,14 @@ export default async function ({ addon, msg, console }) {
     },
   });
 
-  const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
-  Blockly.Gesture.prototype.doBlockClick_ = function () {
-    if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
+  const doBlockClickMethodName = Blockly.registry ? "doBlockClick" : "doBlockClick_";
+  const _doBlockClick_ = Blockly.Gesture.prototype[doBlockClickMethodName];
+  Blockly.Gesture.prototype[doBlockClickMethodName] = function () {
+    const event = Blockly.registry ? this.mostRecentEvent : this.mostRecentEvent_;
+    if (!addon.self.disabled && (event.button === 1 || event.shiftKey)) {
       // Wheel button...
       // Intercept clicks to allow jump to...?
-      let block = this.startBlock_;
+      let block = Blockly.registry ? this.startBlock : this.startBlock_;
       for (; block; block = block.getSurroundParent()) {
         if (block.type === "procedures_call") {
           let findProcCode = block.getProcCode();

@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.38.0",
-  "version_name": "1.38.0",
+  "version": "1.41.0",
+  "version_name": "1.41.0-prerelease",
   "default_locale": "en",
   "background": {
     "service_worker": "background/background.js",
@@ -22,7 +22,8 @@
         "https://scratch.mit.edu/*",
         "https://scratchfoundation.github.io/scratch-gui/*",
         "http://localhost:8333/*",
-        "http://localhost:8601/*"
+        "http://localhost:8601/*",
+        "http://localhost:8602/*"
       ],
       "run_at": "document_start",
       "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
@@ -33,7 +34,8 @@
         "https://scratch.mit.edu/*",
         "https://scratchfoundation.github.io/scratch-gui/*",
         "http://localhost:8333/*",
-        "http://localhost:8601/*"
+        "http://localhost:8601/*",
+        "http://localhost:8602/*"
       ],
       "run_at": "document_start",
       "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"],
@@ -51,8 +53,7 @@
     "https://api.scratch.mit.edu/*",
     "https://clouddata.scratch.mit.edu/*",
     "https://scratchfoundation.github.io/scratch-gui/*",
-    "http://localhost:8333/*",
-    "http://localhost:8601/*"
+    "http://localhost/*"
   ],
   "permissions": [
     "cookies",
@@ -61,7 +62,8 @@
     "declarativeNetRequestWithHostAccess",
     "storage",
     "contextMenus",
-    "alarms"
+    "alarms",
+    "scripting"
   ],
   "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": [
@@ -74,7 +76,12 @@
         "addons-l10n/*/*.json",
         "images/cs/*"
       ],
-      "matches": ["https://*.scratch.mit.edu/*", "https://scratchaddons.com/*"]
+      "matches": [
+        "https://*.scratch.mit.edu/*",
+        "https://scratchaddons.com/*",
+        "https://scratchfoundation.github.io/*",
+        "http://localhost/*"
+      ]
     }
   ],
   "browser_specific_settings": {

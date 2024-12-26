@@ -6,6 +6,13 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     this.loaded = [];
   }
 
+  loadFromCache({ messages, loaded }) {
+    // This will REMOVE any messages that were already loaded.
+    this.messages = messages;
+    this._reconfigure();
+    this.loaded = loaded;
+  }
+
   async load(addonIds) {
     addonIds = ["_general", ...addonIds].filter(
       (addonId) => !addonId.startsWith("//") && !this.loaded.includes(addonId)
@@ -34,5 +41,11 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     }
     this._reconfigure();
     this.loaded = this.loaded.concat(addonIds);
+
+    // Store in local session cache
+    chrome.storage.session?.set({ l10nCache: { messages: this.messages, loaded: this.loaded } }).catch((err) => {
+      // No problem. Cache is not crucial.
+      console.error(err);
+    });
   }
 }
