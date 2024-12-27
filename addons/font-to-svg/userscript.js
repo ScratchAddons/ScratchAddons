@@ -1,4 +1,4 @@
-// These are libs, look for the "BEGIN EXT" part (line 26771-ish) for the addon code.
+// These are libs, look for the "BEGIN EXT" part (line 26808-ish) for the addon code.
 // Variable Manager's code from Jeffalo and GarboMuffin helped so much with the tabs on this ext! Big thanks to them.
 
 
@@ -26522,6 +26522,30 @@ MakerJs.version = "0.18.1";
 	Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** *utility from TS* **/
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -26558,6 +26582,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+/* BEGIN APP/FUNCTIONALITY IMPL */
 var makerjs = {
 	unitType: {
 		"Centimeter": "cm",
@@ -26566,7 +26603,7 @@ var makerjs = {
 		"Meter": "m",
 		"Millimeter": "mm"
 	}
-};
+}; // Before MJS is loaded (when App.init is called after content load), fill in some basic unit data
 var App = /** @class */ (function () {
     function App() {
         var _this = this;
@@ -26769,13 +26806,13 @@ var App = /** @class */ (function () {
 
 
 /** BEGIN EXT HERE! **/
+/** The "App" structure is the most recent thing above as well. **/
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   let preventUpdate = false;
   function addTabContent(holder) {
 	  const scripts = [
-        { src: "https://cdn.jsdelivr.net/npm/bezier-js@2/bezier.js", type: "text/javascript" },
         { src: "https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js", type: "text/javascript" }
     ];
 
