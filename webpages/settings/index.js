@@ -179,6 +179,7 @@ let fuse;
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
+        location.hash = "";
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -380,15 +381,19 @@ let fuse;
       window.addEventListener(
         "hashchange",
         (e) => {
-          const addonId = location.hash.replace(/^#addon-/, "");
-          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
-          if (!groupWithAddon) return; //Don't run if hash is invalid
-          const addon = this.manifestsById[addonId];
+          if (location.hash === "#moresettings") {
+            vue.openMoreSettings();
+          } else {
+            const addonId = location.hash.replace(/^#addon-/, "");
+            const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+            if (!groupWithAddon) return; //Don't run if hash is invalid
+            const addon = this.manifestsById[addonId];
 
-          groupWithAddon.expanded = true;
-          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-          this.clearSearch();
-          setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+            groupWithAddon.expanded = true;
+            this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+            this.clearSearch();
+            setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+          }
         },
         { capture: false }
       );
@@ -595,7 +600,9 @@ let fuse;
     vue.loaded = true;
     setTimeout(() => {
       const hash = window.location.hash;
-      if (hash.startsWith("#addon-")) {
+      if (location.hash === "#moresettings") {
+        vue.openMoreSettings();
+      } else if (hash.startsWith("#addon-")) {
         const addonId = hash.substring(7);
         const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
