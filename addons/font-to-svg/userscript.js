@@ -26828,7 +26828,7 @@ export default async function ({ addon, console, msg }) {
     holder.appendChild(uploadHolder);
 
     const fontVariant = createElement('select', { id: 'sa-svg-maker-font-variant', className: 'sa-svg-maker-input' });
-    holder.appendChild(createInputHolder(`${msg('vector')}:`, fontVariant));
+    holder.appendChild(createInputHolder(`${msg('variant')}:`, fontVariant));
 
     const inputText = createElement('input', { id: 'sa-svg-maker-input-text', type: 'text', value: 'Scratch', className: 'sa-svg-maker-input sa-svg-maker-input-text' });
     holder.appendChild(createInputHolder(`${msg('text')}:`, inputText));
