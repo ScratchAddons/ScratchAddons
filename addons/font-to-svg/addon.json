@@ -20,5 +20,6 @@
     }
   ],
   "tags": ["editor", "editorMenuBar"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "versionAdded": "1.0.0"
 }
