@@ -10,7 +10,7 @@ export default async function ({ addon, console }) {
   addon.tab.redux.initialize();
 
   // It's possible this runs after the project loads even without dynamic enable
-  if (addon.tab.redux.state?.scratchGui?.vmStatus?.started) return;
+  if (addon.tab.redux.state?.scratchGui?.projectState?.loadingState === "SHOWING_WITH_ID") return;
 
   const alerts = document.querySelector(".project-info-alerts");
   const controls = stageWrapper.querySelector('div[class^="controls_controls-container_"]');
