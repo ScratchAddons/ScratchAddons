@@ -142,6 +142,6 @@
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
-  "tags": ["editor", "theme", "projectPlayer"],
+  "tags": ["player", "theme"],
   "versionAdded": "1.39.0"
 }

@@ -99,6 +99,7 @@
     <link rel="preload" href="../../images/icon-transparent.svg" as="image" />
     <link rel="preload" href="../../images/icons/list.svg" as="image" />
     <link rel="preload" href="../../images/icons/puzzle.svg" as="image" />
+    <link rel="preload" href="../../images/icons/player.svg" as="image" />
     <link rel="preload" href="../../images/icons/web.svg" as="image" />
     <link rel="preload" href="../../images/icons/brush.svg" as="image" />
     <link rel="preload" href="../../images/icons/popup.svg" as="image" />
@@ -190,7 +191,7 @@
 
         <a
           v-cloak
-          class="category category-small"
+          class="category"
           style="margin-top: auto"
           href="https://scratchaddons.com/credits/"
           :href="sidebarUrls.contributors"
@@ -205,13 +206,13 @@
           <span v-cloak>{{ msg("review") }}</span>
         </div>
         -->
-        <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
+        <a v-cloak class="category" href="https://scratchaddons.com/translate" target="_blank">
           <img src="../../images/icons/translate.svg" draggable="false" />
           <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <a
           v-cloak
-          class="category category-small"
+          class="category"
           href="https://scratchaddons.com/feedback/"
           :href="sidebarUrls.feedback"
           target="_blank"

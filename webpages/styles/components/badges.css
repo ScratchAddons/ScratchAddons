@@ -45,6 +45,10 @@
   color: #000;
   border-color: #12a39e;
 }
+.badge.lightblue {
+  background: #1394bf;
+  border-color: #0c627f;
+}
 .badge.purple {
   background: rgb(177, 23, 248);
   border-color: #b20eb8;
@@ -65,4 +69,7 @@
 }
 .filter-option.sel.darkgreen {
   background: #00b1a8;
+}
+.filer-option.sel.lightblue {
+  background: #1394bf;
 }
