@@ -3,7 +3,7 @@
   border-bottom: 1px solid var(--control-border);
   display: flex;
   align-items: center;
-  padding-inline: 7px; /* half as much as vertical padding */
+  padding-inline-start: 30px;
   user-select: none;
 }
 .navbar .search-box {

@@ -30,8 +30,10 @@ body {
 
 .navbar-start {
   display: flex;
-  flex: 1 1 auto;
   align-items: center;
+}
+.navbar-start.wide {
+  min-width: 300px;
 }
 
 h1 {
@@ -71,7 +73,6 @@ h1 {
 .addons-container {
   overflow-y: auto;
   padding: 20px;
-  padding-top: 10px;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
   height: 100vh;
@@ -149,6 +150,9 @@ h1 {
 }
 .theme-switch {
   height: 25px;
+}
+.header-end {
+  margin-inline-start: auto;
 }
 
 .hidden-button {

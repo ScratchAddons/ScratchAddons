@@ -120,7 +120,7 @@
   </head>
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
-      <div class="navbar-start">
+      <div class="navbar-start" :class="{wide: !smallMode}">
         <img
           :src="switchPath"
           id="sidebar-toggle"
@@ -138,7 +138,7 @@
         <button v-show="searchInput === ''" class="search-button"></button>
         <button v-else class="search-clear-button" @click="clearSearch()"></button>
       </div>
-      <div @click="setTheme(!theme)" class="header-button">
+      <div @click="setTheme(!theme)" class="header-button header-end">
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
       </div>
     </div>
