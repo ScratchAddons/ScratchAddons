@@ -1,13 +1,11 @@
 import { getBlockCode, getScriptsCode } from "./blocks.js";
 
 export default async function ({ addon, console, msg }) {
-  const blockly = await addon.tab.traps.getBlockly();
-
   addon.tab.createBlockContextMenu(
     (items) => {
       if (addon.self.disabled) return items;
 
-      const topBlocks = blockly.getMainWorkspace().getTopBlocks();
+      const topBlocks = addon.tab.traps.getWorkspace().getTopBlocks();
       if (topBlocks.length > 0) {
         items.push({
           enabled: true,
