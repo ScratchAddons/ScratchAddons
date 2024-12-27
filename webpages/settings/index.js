@@ -381,7 +381,7 @@ let fuse;
       window.addEventListener(
         "hashchange",
         (e) => {
-          if (location.hash.toLocaleLowerCase() === "#moresettings") {
+          if (location.hash === "#moresettings") {
             vue.openMoreSettings();
           } else {
             const addonId = location.hash.replace(/^#addon-/, "");
@@ -597,7 +597,7 @@ let fuse;
     vue.loaded = true;
     setTimeout(() => {
       const hash = window.location.hash;
-      if (location.hash.toLocaleLowerCase() === "#moresettings") {
+      if (location.hash === "#moresettings") {
         vue.openMoreSettings();
       } else if (hash.startsWith("#addon-")) {
         const addonId = hash.substring(7);
