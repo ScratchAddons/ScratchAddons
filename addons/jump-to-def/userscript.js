@@ -29,7 +29,7 @@ export default async function ({ addon, msg, console }) {
         if (block.type === "procedures_call") {
           let findProcCode = block.getProcCode();
 
-          let topBlocks = utils.getWorkspace().getTopBlocks();
+          let topBlocks = addon.tab.traps.getWorkspace().getTopBlocks();
           for (const root of topBlocks) {
             if (root.type === "procedures_definition") {
               let label = root.getChildren()[0];
