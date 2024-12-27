@@ -338,8 +338,8 @@ const blocks = {
   operator_mathop: build`([${{ field: "OPERATOR", sanitizations: dropdownSanitizations }} v] of ${{ input: "NUM" }})`,
 
   data_variable: (block, context) => {
-    const text = sanitize(block.getField("VARIABLE").getText(), repSanitizations);
-    return `(${text}${argumentConflict(text, context.startBlock) || / v$/.test(text) ? " :: variables" : ""})`;
+    const text = block.getField("VARIABLE").getText();
+    return `(${sanitize(text, repSanitizations)}${argumentConflict(text, context.startBlock) || / v$/.test(text) ? " :: variables" : ""})`;
   },
   data_setvariableto: build`set [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] to ${{
     input: "VALUE",
@@ -385,12 +385,12 @@ const blocks = {
   procedures_call: procedure,
   procedures_prototype: procedure,
   argument_reporter_string_number: (block, context) => {
-    const text = sanitize(block.getFieldValue("VALUE"), repSanitizations);
-    return `(${text}${argumentConflict(text, context.startBlock) && !/ v$/.test(text) ? "" : " :: custom-arg"})`;
+    const text = block.getFieldValue("VALUE");
+    return `(${sanitize(text, repSanitizations)}${argumentConflict(text, context.startBlock) && !/ v$/.test(text) ? "" : " :: custom-arg"})`;
   },
   argument_reporter_boolean: (block, context) => {
-    const text = sanitize(block.getFieldValue("VALUE"), repSanitizations);
-    return `<${text}${argumentConflict(text, context.startBlock) ? "" : " :: custom-arg"}>`;
+    const text = block.getFieldValue("VALUE");
+    return `<${sanitize(text, repSanitizations)}${argumentConflict(text, context.startBlock) ? "" : " :: custom-arg"}>`;
   },
 
   pen_clear: build`erase all`,
