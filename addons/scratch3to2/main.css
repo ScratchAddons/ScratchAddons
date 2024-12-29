@@ -17,6 +17,9 @@ p {
 #view {
   margin-top: 35px;
 }
+.subnavigation {
+  top: 35px;
+}
 @media (min-width: 942px) {
   .inner {
     width: 940px;
