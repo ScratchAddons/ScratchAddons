@@ -898,18 +898,6 @@
       }
     },
     {
-      "name": "gray-greenText",
-      "value": {
-        "type": "textColor",
-        "black": "#328554",
-        "white": "#13ecaf",
-        "source": {
-          "type": "settingValue",
-          "settingId": "gray"
-        }
-      }
-    },
-    {
       "name": "gray-boxHighlight",
       "value": {
         "type": "textColor",

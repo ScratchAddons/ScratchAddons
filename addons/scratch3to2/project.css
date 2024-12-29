@@ -179,7 +179,8 @@
     width: 480px;
   }
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper_"] {
+body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper_"],
+body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper-overlay_"] /* embeds */ {
   background-image: linear-gradient(white, #e6e8e8);
   border: 1px solid #d0d1d2;
   border-bottom: none;
@@ -193,6 +194,11 @@ body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper_"] {
     border-radius: 0;
   }
 }
+body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper-overlay_"] /* embeds */ {
+  top: 8px;
+  margin: auto;
+  width: max-content;
+}
 body:not(.sa-body-editor) [class*="stage-header_stage-menu-wrapper_"] {
   height: 38px;
   padding: 0 6px;
@@ -200,8 +206,7 @@ body:not(.sa-body-editor) [class*="stage-header_stage-menu-wrapper_"] {
 body:not(.sa-body-editor) [class*="green-flag_green-flag_"],
 body:not(.sa-body-editor) [class*="stop-all_stop-all_"],
 body:not(.sa-body-editor) .pause-btn {
-  /* Hide original icons */
-  padding: 1rem;
+  padding: 1rem; /* hide original icons */
   background-repeat: no-repeat;
   background-position: center center;
 }
@@ -252,6 +257,19 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"] {
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"] {
   display: none;
 }
+[class*="stage-header_embed-scratch-logo_"] img {
+  padding: 0.8rem 2.4rem; /* hide original image */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("%addon-self-dir%/assets/embed_logo.png");
+}
+[class*="stage-header_embed-scratch-logo_"] img:hover {
+  background-image: url("%addon-self-dir%/assets/embed_logo_hover.png");
+}
+body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper_"][class*="stage-wrapper_full-screen_"] {
+  /* Override dark-www */
+  background-color: transparent;
+}
 body:not(.sa-body-editor) [class*="stage_stage_"] {
   border-color: #d0d1d2;
   border-radius: 0;
@@ -262,6 +280,9 @@ body:not(.sa-body-editor) [class*="stage_stage_"] {
     border-right: none;
     border-bottom: none;
   }
+}
+body:not(.sa-body-editor) [class*="stage-wrapper_full-screen_"] [class*="stage_stage_"] /* embeds */ {
+  border: 1px solid #d0d1d2;
 }
 body:not(.sa-body-editor) [class*="stage_green-flag-overlay-wrapper_"] {
   margin: 1px;

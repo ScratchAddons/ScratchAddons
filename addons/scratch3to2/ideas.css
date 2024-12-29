@@ -3,36 +3,40 @@
   color: var(--darkWww-page-scratchr2Text, #322f31);
 }
 
-/* Header */
+/* Idea generator */
 .banner-wrapper {
-  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+  background-color: transparent;
 }
-.title-banner-h1 {
-  color: var(--darkWww-gray-greenText, #328554);
+.banner-wrapper .banner-description .title {
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+}
+.banner-wrapper .banner-description p {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.banner-wrapper .banner-description p a {
+  color: var(--darkWww-link-scratchr2, #855cd6);
   font-weight: normal;
+  text-decoration: none;
 }
-.title-banner-p > img {
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.2));
-}
-.banner-button {
-  background-color: var(--darkWww-box, white);
-  border: 1px solid var(--darkWww-border-5, #eee);
-  border-radius: 5px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.27);
-  font-size: 1rem;
-}
-.banner-button:hover span {
+.banner-wrapper .banner-description p a:hover {
   text-decoration: underline;
 }
 
-/* Section titles */
-h2 {
-  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+/* Sections */
+.tips,
+.physical-ideas {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+  text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
+}
+.tips .section-header,
+.physical-ideas .section-header,
+.physical-ideas h3 {
+  color: var(--darkWww-gray-scratchr2HeaderText, #554747);
 }
 
 /* Buttons */
-.ideas-button,
-a.ttt-try-tutorial-button {
+.button {
   background-image: linear-gradient(
     var(--darkWww-box-scratchr2ButtonGradientTop, white),
     var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
@@ -41,50 +45,48 @@ a.ttt-try-tutorial-button {
   color: var(--darkWww-box-scratchr2ButtonText, #666);
   text-shadow: 0 1px var(--darkWww-box, white);
 }
-.ideas-button:hover,
-a.ttt-try-tutorial-button:hover {
+.button:hover {
   background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
   background-image: none;
+}
+a:has(> .button):hover {
   text-decoration: none;
 }
-.ideas-button img,
-a.ttt-try-tutorial-button img {
+.button img {
   filter: var(--darkWww-box-filterInverted, brightness(0.4));
 }
 
-/* Getting Started */
-.tips-getting-started {
-  background-color: transparent;
+/* YouTube videos & written guides */
+.youtube-videos .inner .section-header div .section-title,
+.playlist .playlist-title {
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
 }
-
-/* Activity Guides */
-.tips-activity-guides {
-  background-color: transparent;
+.youtube-videos .inner .section-header div .section-description a,
+.youtube-videos .inner .download-cards span a {
+  text-decoration: none;
 }
-.ttt-tile {
-  border-radius: 9px 9px 0 0;
-  box-shadow:
-    0 0 0 1px var(--darkWww-box-scratchr2Border, #e0e0e0),
-    0 2px 3px rgba(0, 0, 0, 0.27);
-}
-.ttt-tile-image {
-  border-bottom: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
-  border-radius: 9px 9px 0 0;
-}
-.ttt-tile-image-img {
-  border-radius: 9px 9px 0 0;
-}
-.ttt-tile h3 {
-  color: var(--darkWww-link-scratchr2, #855cd6);
-}
-.ttt-tile:hover h3 {
+.youtube-videos .inner .section-header div .section-description a:hover.banner-description,
+.youtube-videos .inner .download-cards span a:hover {
   text-decoration: underline;
 }
-.ttt-modal-header {
-  display: none;
+.youtbe-video-button .video-info .video-title {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
 }
-a.ttt-try-tutorial-button > span {
-  color: var(--darkWww-box-scratchr2ButtonText, #666);
+.youtbe-video-button .video-info .video-metadata {
+  color: var(--darkWww-page-scratchr2GrayText, #999);
+}
+.youtube-video-modal-container .youtube-player {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.cards-modal-container .cards-modal-navigation .navigation-button {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+.cards-modal-container .cards-modal-navigation .navigation-button img {
+  filter: none;
 }
 
 /* Bottom area (visually part of the footer) */

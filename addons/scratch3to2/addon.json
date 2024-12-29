@@ -15,7 +15,7 @@
   "userstyles": [
     {
       "url": "main.css",
-      "matches": ["projects", "scratchWWWNoProject"]
+      "matches": ["projects", "projectEmbeds", "scratchWWWNoProject"]
     },
     {
       "url": "home.css",
@@ -35,7 +35,7 @@
     },
     {
       "url": "project.css",
-      "matches": ["projects"]
+      "matches": ["projects", "projectEmbeds"]
     },
     {
       "url": "studio.css",
