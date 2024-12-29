@@ -1,0 +1,26 @@
+{
+  "name": "Delete sprites without confirmation",
+  "description": "Removes the confirmation prompt that asks if you are sure you want to delete a sprite.",
+  "info": [
+    {
+      "text": "Tip: If you accidentally delete a sprite, costume, or sound, you can undo the deletion by clicking Edit in the menu bar then Restore.",
+      "id": "restoretip"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "hide.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.40.0",
+  "tags": ["editor", "danger", "featured"]
+}

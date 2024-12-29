@@ -26,14 +26,17 @@
   "1hour": {
     "message": "For 1 hour"
   },
+  "4hours": {
+    "message": "For 4 hours"
+  },
   "8hours": {
     "message": "For 8 hours"
   },
-  "24hours": {
-    "message": "For 24 hours"
+  "untilTomorrow": {
+    "message": "Until tomorrow"
   },
   "untilEnabled": {
-    "message": "Until I turn it back on"
+    "message": "Until turned off"
   },
   "muteFor": {
     "message": "Do not disturb"
@@ -62,6 +65,9 @@
   "forEditor": {
     "message": "For editor"
   },
+  "forPlayer": {
+    "message": "For project player"
+  },
   "forWebsite": {
     "message": "For website"
   },
@@ -89,14 +95,14 @@
   "codeEditorFeatures": {
     "message": "Code Editor"
   },
+  "playerFeatures": {
+    "message": "Project Player Features"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
   "profilesFeatures": {
     "message": "Profiles"
-  },
-  "projectPlayerFeatures": {
-    "message": "Project Player"
   },
   "projectPageFeatures": {
     "message": "Project Pages"
@@ -112,6 +118,9 @@
   },
   "websiteThemes": {
     "message": "Website Themes"
+  },
+  "playerThemes": {
+    "message": "Project Player Themes"
   },
   "popupFeatures": {
     "message": "Extension Popup Features"
@@ -245,9 +254,9 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_38": {
-    "message": "This is an experimental update that we're releasing to a portion of our user base. It contains some behind-the-scenes changes to support the new extension architecture required by browsers (Manifest V3). If you encounter any issues or unexpected behavior, please $1. There is also a button to send feedback in the settings page.",
-    "description": "!! The placeholder is \"send feedback\"."
+  "extensionUpdateInfo1_v1_40": {
+    "message": "New addon: \"delete sprites without confirmation\", which removes the new confirmation prompt that asks if you are sure you want to delete a sprite. Go to $1 to enable it.",
+    "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
@@ -255,8 +264,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_38": {
-    "message": "This update doesn't introduce any new features, but stay tuned for upcoming updates."
+  "extensionUpdateInfo2_v1_40": {
+    "message": "The \"save blocks as image\" addon now allows copying the images directly to the clipboard. Also, the \"project video recorder\" now exports mp4 files if supported by the browser."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",

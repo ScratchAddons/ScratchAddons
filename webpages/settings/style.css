@@ -4,12 +4,12 @@ html {
 
 body {
   background: var(--page-background);
-  font-family: "Sora", sans-serif;
+  font-family: "Roboto", sans-serif;
   margin: 0;
   height: 100vh;
   overflow: hidden;
   color: var(--content-text);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 :not(body)[v-cloak] {
@@ -22,7 +22,6 @@ body {
   color: var(--white-text);
   display: flex;
   align-items: center;
-  padding: 0 14px;
   box-shadow: var(--large-shadow);
   user-select: none;
   position: relative;
@@ -30,19 +29,24 @@ body {
 }
 
 h1 {
+  font-family: "Sora", sans-serif;
   font-size: 18px;
   margin: 0;
   font-weight: 400;
+  user-select: none;
 }
 
 .navbar a {
-  height: 30px;
+  line-height: 0;
 }
 
 .logo {
-  height: 30px;
-  width: 30px;
-  margin-inline-end: 9px;
+  height: 25px;
+  margin: 0 20px;
+}
+.logo.header-button {
+  margin: 0;
+  padding: 17.5px 20px;
 }
 
 .main {
@@ -130,8 +134,6 @@ h1 {
   transform: scaleY(-1);
 }
 .header-button {
-  right: 0;
-  position: fixed;
   cursor: pointer;
   padding: 17.5px;
   line-height: 0;
@@ -143,9 +145,13 @@ h1 {
 .theme-switch {
   height: 25px;
 }
-[dir="rtl"] .theme-switch {
+.header-end {
+  right: 0;
+  position: fixed;
+}
+[dir="rtl"] .header-end {
   right: auto;
-  left: 25px;
+  left: 0;
 }
 
 .hidden-button {
@@ -316,24 +322,32 @@ body.iframe .search-box input {
 }
 
 .permissions div.main {
-  justify-content: center;
-  display: grid;
-  grid-template-rows: 14rem 10rem;
+  display: block;
+  box-sizing: border-box;
+  max-width: fit-content;
+  margin: auto;
+  padding: 2rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-text) transparent;
 }
 
 .permissions-block {
-  margin-top: 3rem;
+  margin-top: 1rem;
   font-size: 1.25rem;
 }
 
 .permissions-block h2 {
+  font-family: "Sora", sans-serif;
   font-size: 3rem;
+  font-weight: 600;
   margin: 0;
 }
 
 .permissions-steps {
   display: flex;
   align-items: flex-end;
+  gap: 2rem;
 }
 
 .permissions-steps > div {
@@ -342,19 +356,25 @@ body.iframe .search-box input {
   align-items: center;
 }
 
-.permissions-steps > div:not(:last-child) {
-  margin-right: 2rem;
+@media (max-width: 1000px) {
+  .permissions-steps {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 #permissionsBtn {
+  display: block;
   height: 6rem;
   width: 18rem;
+  font-family: "Sora", sans-serif;
   font-size: 2.5rem;
   cursor: pointer;
 }
 
 #screenshot {
-  height: 10rem;
+  width: 24rem;
+  max-width: 100%;
 }
 
 color-picker {
@@ -365,7 +385,7 @@ color-picker {
   border: 1px solid var(--control-border);
   --color-picker-background-color: var(--button-background);
   --color-picker-color: var(--content-text);
-  --color-picker-font-family: Sora, sans-serif;
+  --color-picker-font-family: Roboto, sans-serif;
 }
 
 button.setting-input.color {
@@ -413,10 +433,11 @@ button.setting-input.color.open {
 }
 #iframe-fullscreen-suggestion > span {
   width: 100%;
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: bold;
+  font-size: 14px;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
 }
