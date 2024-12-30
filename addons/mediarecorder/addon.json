@@ -14,6 +14,10 @@
       "matches": ["projects"]
     }
   ],
+  "latestUpdate": {
+    "version": "1.35.0",
+    "temporaryNotice": "The maximum recording time has been increased to 10 minutes (600 seconds)."
+  },
   "versionAdded": "1.6.0",
   "enabledByDefault": false
 }

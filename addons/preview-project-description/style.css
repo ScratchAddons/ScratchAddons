@@ -1,0 +1,20 @@
+.sa-toggle-project-preview {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.sa-toggle-project-preview > span {
+  font-size: 90%;
+  font-weight: normal;
+}
+
+.sa-toggle-project-preview > .toggle-switch {
+  top: 0;
+}
+
+.project-textlabel {
+  /* Needed for margin-left:auto to work */
+  display: flex;
+  width: 100%;
+}

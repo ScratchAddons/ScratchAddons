@@ -124,7 +124,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
     ...(snapTo.objectEdges
       ? Object.fromEntries(
           objects
-            .filter((item) => !(item.selected || item.data.isHelperItem))
+            .filter((item) => !(item.selected || item.data.isHelperItem || item.locked || item.guide))
             .map((item) => [
               [
                 `item_${item.id}_r`,
@@ -177,7 +177,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
     ...(snapTo.objectCenters
       ? Object.fromEntries(
           objects
-            .filter((item) => !item.selected)
+            .filter((item) => !(item.selected || item.data.isHelperItem || item.locked || item.guide))
             .map((item) => [
               [
                 `item_${item.id}_c`,
@@ -193,7 +193,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
     ...(snapTo.objectMidlines
       ? Object.fromEntries(
           objects
-            .filter((item) => !item.selected)
+            .filter((item) => !(item.selected || item.data.isHelperItem || item.locked || item.guide))
             .map((item) => [
               [
                 `item_${item.id}_cx`,
@@ -216,7 +216,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
     ...(snapTo.objectCorners
       ? Object.fromEntries(
           objects
-            .filter((item) => !(item.selected || item.data.isHelperItem))
+            .filter((item) => !(item.selected || item.data.isHelperItem || item.locked || item.guide))
             .map((item) => [
               [
                 `item_${item.id}_tl`,

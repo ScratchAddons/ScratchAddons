@@ -1,4 +1,5 @@
 .sa-vol-slider {
+  display: flex;
   /* Same lateral padding as .clone-container-container */
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -28,8 +29,8 @@
   cursor: pointer;
 }
 
-.sa-vol-slider-small .sa-vol-slider-input,
-.sa-vol-slider-small .sa-vol-slider-icon:not([data-icon="mute"]) {
+.sa-small-stage .sa-vol-slider-input,
+.sa-small-stage .sa-vol-slider-icon:not([data-icon="mute"]) {
   display: none;
 }
 

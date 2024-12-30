@@ -7,7 +7,7 @@
       "link": "https://scratch.mit.edu/TheColaber"
     }
   ],
-  "tags": ["editor", "codeEditor", "featured"],
+  "tags": ["editor", "codeEditor", "theme", "featured"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [

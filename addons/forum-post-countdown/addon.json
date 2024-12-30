@@ -1,0 +1,26 @@
+{
+  "name": "Forum post cooldown display",
+  "description": "After submitting a forum post, displays a countdown on the submit button showing how long you have to wait before posting again.",
+  "tags": ["community", "forums"],
+  "versionAdded": "1.34.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["newPostScreens"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["newPostScreens"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld/"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}

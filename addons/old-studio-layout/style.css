@@ -22,6 +22,9 @@
   height: 45px;
   line-height: 30px;
 }
+.studio-info textarea.studio-title ~ .validation-message {
+  line-height: normal;
+}
 .studio-info .sa-oldstudio-follow-section {
   position: absolute;
   width: 200px;
@@ -40,7 +43,7 @@
 }
 .studio-info .studio-image {
   width: 250px;
-  height: 147px;
+  height: 162.5px;
 }
 .studio-thumb-edit-img {
   padding: 0 0.25em;
@@ -75,13 +78,13 @@
   margin: 0.25em;
   padding: 0;
   background: transparent;
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
   font-size: 1em;
   font-weight: bold;
 }
 .studio-info .studio-info-footer-report button:hover {
   background: transparent;
-  color: var(--darkWww-link-hover, #4280d7);
+  color: var(--darkWww-link-hover, #7854c0);
 }
 .studio-info .studio-info-footer-report button img {
   filter: var(--darkWww-link-iconFilter, var(--oldStudioLayout-defaultLinkIconFilter));
@@ -98,7 +101,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 21; /* Higher than infinite-scroll fixed footer */
+  z-index: 19; /* Lower than infinite-scroll fixed footer */
   background-color: var(--darkWww-box, white);
   border-top: 1px solid var(--darkWww-border-15, #d9d9d9);
   border-radius: 0;

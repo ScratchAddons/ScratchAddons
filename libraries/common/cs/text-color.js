@@ -100,7 +100,7 @@ function brighten(hex, c) {
     r: (1 - c.r) * 255 + c.r * r,
     g: (1 - c.g) * 255 + c.g * g,
     b: (1 - c.b) * 255 + c.b * b,
-    a: 1 - c.a + c.a * a,
+    a: a ? 1 - c.a + c.a * a : 0,
   });
 }
 
@@ -124,8 +124,8 @@ function makeHsv(hSource, sSource, vSource) {
     typeof hSource !== "number" && convertToHsv(parseHex(hSource)).s === 0
       ? 0
       : typeof sSource === "number"
-      ? sSource
-      : convertToHsv(parseHex(sSource)).s;
+        ? sSource
+        : convertToHsv(parseHex(sSource)).s;
   const v = typeof vSource === "number" ? vSource : convertToHsv(parseHex(vSource)).v;
   return convertToHex(convertFromHsv({ h, s, v }));
 }

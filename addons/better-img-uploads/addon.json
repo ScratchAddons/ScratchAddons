@@ -52,11 +52,11 @@
         },
         {
           "id": "fill",
-          "name": "Stretch to fill stage"
+          "name": "Stretch to fill canvas"
         },
         {
           "id": "fit",
-          "name": "Shrink to fit stage"
+          "name": "Shrink to fit canvas"
         }
       ],
       "default": "fit"

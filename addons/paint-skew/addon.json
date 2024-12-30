@@ -1,0 +1,26 @@
+{
+  "name": "Skewing in costume editor",
+  "description": "Hold Ctrl while scaling an object on its sides to skew it. Hold Alt while skewing an object to skew it from its center.",
+  "info": [
+    {
+      "text": "On macOS, use the Command key instead of the Control key and the Option key instead of the Alt key.",
+      "id": "useCmdOnMac"
+    }
+  ],
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor", "featured"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.35.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
