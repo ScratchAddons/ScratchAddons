@@ -119,7 +119,7 @@
     <script src="index.js" type="module"></script>
   </head>
   <body v-cloak :class="{light: theme}">
-    <div class="navbar">
+    <div class="navbar" v-if="!isIframe">
       <div class="navbar-start" :class="{wide: !smallMode}">
         <img
           :src="switchPath"

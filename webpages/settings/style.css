@@ -201,9 +201,6 @@ body.iframe .addon-description {
 body.iframe .search-box {
   padding: 10px;
 }
-body.iframe .navbar {
-  display: none;
-}
 body.iframe .main {
   /* No calc -60px because there's no navbar */
   height: 100%;
