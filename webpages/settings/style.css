@@ -28,6 +28,14 @@ body {
   z-index: 10;
 }
 
+.navbar-start {
+  display: flex;
+  align-items: center;
+}
+.navbar-start.wide {
+  min-width: 300px;
+}
+
 h1 {
   font-family: "Sora", sans-serif;
   font-size: 18px;
@@ -66,7 +74,6 @@ h1 {
 .addons-container {
   overflow-y: auto;
   padding: 20px;
-  padding-top: 10px;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
   height: 100vh;
@@ -146,12 +153,7 @@ h1 {
   height: 25px;
 }
 .header-end {
-  right: 0;
-  position: fixed;
-}
-[dir="rtl"] .header-end {
-  right: auto;
-  left: 0;
+  margin-inline-start: auto;
 }
 
 .hidden-button {
@@ -199,9 +201,6 @@ body.iframe .addon-description {
 }
 body.iframe .search-box {
   padding: 10px;
-}
-body.iframe .navbar {
-  display: none;
 }
 body.iframe .main {
   /* No calc -60px because there's no navbar */
