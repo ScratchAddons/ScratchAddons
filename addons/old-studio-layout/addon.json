@@ -1,6 +1,6 @@
 {
   "name": "Old studio layout",
-  "description": "Reverts the layout of the studio page back to the one used before the studio update or the one previously available as part of the Scratch 2.0 \u2192 3.0 addon.",
+  "description": "Reverts the layout of the studio page back to the one used before the studio update.",
   "info": [
     {
       "type": "notice",
@@ -8,8 +8,12 @@
       "id": "mobile"
     },
     {
-      "text": "The size of most elements is not changed. If you want to see more projects and curators at once, use the \"more items per row\" addon.",
+      "text": "If you want to see more projects and curators at once, use the \"more items per row\" addon.",
       "id": "itemsPerRow"
+    },
+    {
+      "text": "If you want the studio page to look the way it did before the update if the \"Scratch 2.0 \u2192 3.0\" addon was disabled, use the \"Scratch 3.0 \u2192 2.0\" addon.",
+      "id": "scratch3to2"
     }
   ],
   "tags": ["community", "theme", "studios", "featured"],
@@ -53,36 +57,11 @@
       "matches": ["https://scratch.mit.edu/studios/*"]
     },
     {
-      "url": "default.css",
+      "url": "scratch3to2.css",
       "matches": ["https://scratch.mit.edu/studios/*"],
       "if": {
-        "settings": { "version": "default" }
+        "addonEnabled": ["scratch3to2"]
       }
-    },
-    {
-      "url": "scratchr2.css",
-      "matches": ["https://scratch.mit.edu/studios/*"],
-      "if": {
-        "settings": { "version": "scratchr2" }
-      }
-    }
-  ],
-  "settings": [
-    {
-      "id": "version",
-      "type": "select",
-      "name": "Version",
-      "potentialValues": [
-        {
-          "id": "default",
-          "name": "Default"
-        },
-        {
-          "id": "scratchr2",
-          "name": "Scratch 2.0 \u2192 3.0"
-        }
-      ],
-      "default": "default"
     }
   ]
 }
