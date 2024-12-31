@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Scroll while dragging blocks",
+  "description": "Allows scrolling using the scroll wheel while dragging blocks.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/"
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.32.0"
+}
