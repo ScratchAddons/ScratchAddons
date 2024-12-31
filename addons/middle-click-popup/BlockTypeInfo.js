@@ -431,16 +431,20 @@ export class BlockTypeInfo {
       } else {
         let FieldColour;
         let FieldNumber;
+        let FieldVerticalSeparator;
         if (Blockly.registry) {
           // new Blockly
           FieldColour = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_colour_slider");
           FieldNumber = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_number");
+          FieldVerticalSeparator = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_vertical_separator");
         } else {
           FieldColour = Blockly.FieldColour;
           FieldNumber = Blockly.FieldNumber;
+          FieldVerticalSeparator = Blockly.FieldVerticalSeparator;
         }
         if (
           field instanceof Blockly.FieldLabel ||
+          field instanceof FieldVerticalSeparator ||
           (!Blockly.registry && field instanceof Blockly.FieldVariableGetter)
         ) {
           if (field.getText().trim().length !== 0) parts.push(field.getText());
