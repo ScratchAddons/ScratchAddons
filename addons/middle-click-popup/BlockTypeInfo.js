@@ -429,14 +429,14 @@ export class BlockTypeInfo {
             break;
         }
       } else {
-        let FieldColour;
+        let FieldColourSlider;
         let FieldNumber;
         if (Blockly.registry) {
           // new Blockly
-          FieldColour = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_colour_slider");
+          FieldColourSlider = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_colour_slider");
           FieldNumber = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_number");
         } else {
-          FieldColour = Blockly.FieldColour;
+          FieldColourSlider = Blockly.FieldColourSlider;
           FieldNumber = Blockly.FieldNumber;
         }
         if (
@@ -444,7 +444,7 @@ export class BlockTypeInfo {
           (!Blockly.registry && field instanceof Blockly.FieldVariableGetter)
         ) {
           if (field.getText().trim().length !== 0) parts.push(field.getText());
-        } else if (field instanceof FieldColour) {
+        } else if (field instanceof FieldColourSlider) {
           addInput(new BlockInputColour(inputIdx, fieldIdx));
         } else if (field instanceof FieldNumber) {
           addInput(new BlockInputNumber(inputIdx, fieldIdx, field.getText()));
