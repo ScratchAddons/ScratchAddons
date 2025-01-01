@@ -22,6 +22,7 @@ svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete {
   stroke: var(--editorTheme3-commentColor);
 }
 svg[class*="scratchblocks-style-scratch3"] .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-label.sb3-comment-label,
 #sb3-dropdownArrow path,
 #sb3-loopArrow path[fill="#fff"],
 #sb3-turnLeft path[fill="#fff"],

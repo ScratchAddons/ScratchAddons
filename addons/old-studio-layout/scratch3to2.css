@@ -1,0 +1,310 @@
+/* Page */
+.studio-page #view {
+  max-width: 940px;
+  padding-top: 15px;
+}
+.studio-page #view .studio-shell {
+  padding-top: 0;
+  gap: 0;
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+
+/* Box */
+.studio-info,
+.studio-tabs {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+  border: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.27);
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+}
+.studio-info {
+  margin-top: 88px;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.studio-tabs {
+  display: flex;
+  flex-direction: column;
+  padding-top: 46px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.27),
+    0 1px 0 inset var(--darkWww-gray-boxHighlight, white);
+}
+
+/* Title */
+.studio-info-section:first-child /* title */ {
+  top: 8px;
+  left: 261px;
+  width: calc(100% - 510px);
+}
+.studio-info .studio-title {
+  color: var(--darkWww-gray-scratchr2HeaderText, #554747);
+  text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
+  font-weight: bold;
+}
+.studio-info textarea.studio-title {
+  height: 34px;
+}
+
+/* Follow Studio */
+.studio-info .sa-oldstudio-follow-section {
+  top: 8px;
+  right: 21px;
+  width: auto;
+  max-width: 200px;
+}
+.studio-info .studio-follow-button {
+  padding: 0 10px;
+}
+.studio-info .studio-info-footer-stats > div:nth-child(2) /* follower count */,
+.studio-page:not(.sa-oldstudio-logged-out) .studio-info .studio-info-footer-stats > div:nth-child(2) {
+  top: 40px;
+  right: 21px;
+  width: auto;
+  max-width: 200px;
+  padding-right: 11px;
+  color: var(--darkWww-gray-scratchr2ButtonText, #666);
+  font-size: 11px;
+  line-height: 20px;
+  font-weight: bold;
+}
+.sa-oldstudio-logged-out .studio-info .studio-info-footer-stats > div:nth-child(2) {
+  top: 8px;
+}
+
+/* Info container */
+.studio-info,
+.studio-info .studio-description {
+  width: 212px;
+}
+.studio-info {
+  margin-top: 66px;
+  padding: 20px 14px;
+  gap: 5px;
+  border-right: none;
+}
+.sa-oldstudio-logged-out .studio-info {
+  margin-top: 98px;
+}
+
+/* Thumbnail */
+.studio-info .studio-image {
+  width: 212px;
+  height: 141px;
+}
+
+/* Last updated */
+.studio-info .studio-info-footer-stats > div:first-child {
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+}
+
+/* Description */
+.studio-info .studio-description {
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+}
+.studio-info .studio-description.uneditable {
+  color-scheme: var(--darkWww-gray-colorScheme, light);
+}
+.studio-info textarea.studio-description {
+  width: 216px;
+}
+
+/* Report */
+.studio-info .studio-info-footer-report button {
+  margin: 0;
+  margin-left: auto;
+  border: none;
+  box-shadow: none;
+  color: var(--darkWww-link-scratchr2, #855cd6);
+  font-size: 13px;
+  font-weight: normal;
+}
+.studio-info .studio-info-footer-report button:hover {
+  color: var(--darkWww-link-scratchr2, #855cd6);
+  text-decoration: underline;
+}
+.studio-info .studio-info-footer-report button img,
+.studio-info .studio-info-footer-report button:hover img {
+  filter: var(--darkWww-link-scratchr2IconFilter, none);
+}
+
+/* Tabs */
+.studio-tab-nav {
+  padding: 0 20px;
+  box-sizing: border-box;
+  background-color: transparent;
+  border-bottom: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
+  box-shadow: none;
+}
+.sub-nav.sub-nav-align-left {
+  justify-content: flex-start;
+}
+.studio-tab-nav a.nav_link > li {
+  height: 29px;
+  border-radius: 5px 5px 0 0;
+  border: 1px solid transparent;
+  box-shadow: none;
+  color: var(--darkWww-gray-scratchr2ButtonText, #666);
+  text-shadow: none;
+  font-weight: bold;
+}
+.studio-tab-nav a.nav_link:hover > li,
+.studio-tab-nav a.nav_link > li:active {
+  background-color: transparent;
+  border: 1px solid var(--darkWww-border, #ddd);
+  border-bottom-color: transparent;
+  box-shadow: inset 0 1px 0 var(--darkWww-gray-boxHighlight, white);
+  color: var(--darkWww-gray-scratchr2ButtonText, #666);
+}
+.studio-tab-nav a.active.nav_link > li,
+.studio-tab-nav a.active.nav_link:hover > li {
+  background-color: var(--darkWww-box, white);
+  border-color: var(--darkWww-border-20, #ccc);
+  border-bottom-color: transparent;
+  box-shadow: none;
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+}
+.studio-tab-nav li img {
+  height: 0;
+}
+.studio-tab-nav li img,
+.studio-tab-nav li:active img {
+  filter: var(--darkWww-gray-filter, none);
+  opacity: 0.7;
+}
+.studio-tab-nav .active > li img,
+.studio-tab-nav a.active.nav_link:hover > li img {
+  background-position: -15px -313px;
+  filter: var(--darkWww-box-filter, none);
+}
+.studio-tab-nav [href$="comments"].active li img,
+.studio-tab-nav a[href$="comments"].active.nav_link:hover > li img {
+  background-position: -15px -18px;
+}
+.studio-tab-nav [href$="curators"].active li img,
+.studio-tab-nav a[href$="curators"].active.nav_link:hover > li img {
+  background-position: -15px -366px;
+}
+.studio-tab-nav [href$="activity"].active li img,
+.studio-tab-nav a[href$="activity"].active.nav_link:hover > li img {
+  background-position: -15px -478px;
+}
+.studio-tab-nav li .tab-count {
+  font-weight: bold;
+}
+
+/* Tab content */
+.studio-tabs > div:not(.studio-tab-nav) {
+  flex-grow: 1;
+  padding: 0 20px;
+  padding-top: 0;
+  background-color: var(--darkWww-box, white);
+  color: var(--darkWww-box-text, #575e75);
+}
+.studio-header-container h2 {
+  color: var(--darkWww-box-scratchr2HeaderText, #554747);
+  font-size: 18px;
+  line-height: normal;
+}
+.studio-compose-container .comments-root-reply {
+  margin-top: 0;
+}
+
+/* Projects */
+.studio-project-tile .studio-project-username {
+  color: var(--darkWww-box-scratchr2Text, #322f31);
+}
+
+/* Browse Projects */
+.studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton),
+#sa-studio-followers-button,
+.user-projects-modal .user-projects-modal-title {
+  height: 28px;
+  box-sizing: content-box;
+  padding: 5px 15px;
+  background-image: linear-gradient(#666, #322f31);
+  border: 1px solid #444;
+  box-shadow: 0 -1px 1px #999;
+  color: white;
+  font-size: 15px;
+  font-weight: normal;
+}
+.studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton)::before,
+#sa-studio-followers-button::before {
+  vertical-align: middle;
+  margin-right: 10px;
+  width: 15px;
+  transform: none;
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/triangle-open-white.png");
+  background-position: center top;
+  background-size: auto;
+  opacity: 0.9;
+  filter: none;
+}
+.user-projects-modal {
+  bottom: 40px;
+}
+.user-projects-modal .user-projects-modal-title {
+  height: 3rem;
+  box-sizing: border-box;
+}
+.sa-followers-main .user-projects-modal-title {
+  padding: 5px 15px !important;
+  box-shadow: 0 -1px 1px #999 !important;
+  color: white !important;
+  text-align: left !important;
+  font-weight: normal !important;
+}
+.user-projects-modal .user-projects-modal-nav button {
+  color: white;
+}
+.user-projects-modal .modal-content-close {
+  color: white;
+}
+
+/* Comments */
+.studio-compose-container {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.studio-compose-container .studio-header-container {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.compose-comment .compose-bottom-row .compose-limit {
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+}
+.comment .comment-top-row .username {
+  color: var(--darkWww-box-scratchr2LabelText, #333);
+}
+.comment .comment-top-row .comment-delete,
+.comment .comment-top-row .comment-report {
+  color: var(--darkWww-box-scratchr2GrayText, #999);
+}
+.comment .comment-top-row .comment-delete::before,
+.comment .comment-top-row .comment-report::before {
+  filter: var(--darkWww-box-filter, none);
+}
+.comment .comment-body .comment-bubble {
+  color: var(--darkWww-box-scratchr2Text, #322f31);
+}
+.comment .comment-body .comment-bottom-row .comment-time {
+  color: var(--darkWww-box-scratchr2GrayText, #999);
+}
+.replies.collapsed > .comment:last-of-type::after {
+  background-image: linear-gradient(transparent, var(--darkWww-box, white));
+}
+
+/* Activity */
+.studio-activity .studio-messages-list {
+  color: var(--darkWww-box-scratchr2Text);
+}
+.studio-activity .studio-activity-icon {
+  filter: var(--darkWww-box-filter, none);
+}
+.studio-activity .social-message-date {
+  color: var(--darkWww-box-scratchr2GrayText, #999);
+}

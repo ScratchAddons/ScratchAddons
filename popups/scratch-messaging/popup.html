@@ -49,7 +49,7 @@
         <a
           @click="deleteComment()"
           class="delete-btn"
-          :class="{'bold': deleteStep === 1}"
+          :class="{'delete-confirm': deleteStep === 1}"
           v-show="!deleted"
           v-if="canDeleteComment"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
