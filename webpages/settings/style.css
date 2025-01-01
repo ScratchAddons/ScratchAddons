@@ -146,6 +146,7 @@ h1 {
   line-height: 0;
   transition: 0.2s ease;
 }
+.sidebarToggleOpen,
 .header-button:hover {
   background: var(--header-hover-darken);
 }
