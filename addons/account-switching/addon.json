@@ -1,0 +1,16 @@
+{
+  "name": "Account switching",
+  "description": "-",
+  "popup": {
+    "icon": "../../images/icons/users.svg",
+    "name": "Accounts",
+    "fullscreen": false,
+    "script": "popup.js",
+    "html": "popup.html"
+  },
+  "tags": ["popup", "featured"],
+  "versionAdded": "1.41.0",
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
