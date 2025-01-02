@@ -603,7 +603,7 @@ class TokenTypeColor extends TokenType {
   }
 
   createText(token, query, endOnly) {
-    return query.query.substring(token.start, token.end);
+    return query.str.substring(token.start, token.end);
   }
 }
 

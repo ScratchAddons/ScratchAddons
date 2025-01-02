@@ -56,5 +56,8 @@
     "license": "ISC",
     "year": "2016,",
     "fullname": "Jake Archibald <jaffathecake@gmail.com>"
+  },
+  "Roboto": {
+    "license": "Apache-2.0"
   }
 }
