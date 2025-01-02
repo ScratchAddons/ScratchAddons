@@ -13,7 +13,7 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.40.0",
+  "versionAdded": "1.41.0",
   "tags": ["editor", "costumeEditor"],
   "enabledByDefault": false
 }

@@ -20,7 +20,9 @@ export default async function ({ addon, global, console, msg }) {
   /**
    * Reverse the mapping above to lookup by shortcut key.
    */
-  const shortcutToToolLocalizationId = Object.fromEntries(Object.entries(toolLocalizationIdToShortcut).map(([key, value]) => [value, key]));
+  const shortcutToToolLocalizationId = Object.fromEntries(
+    Object.entries(toolLocalizationIdToShortcut).map(([key, value]) => [value, key])
+  );
 
   let isInitialized = false;
   let isUserTyping = false;
@@ -36,9 +38,11 @@ export default async function ({ addon, global, console, msg }) {
    * If costume editor is open, initialize tool shortcuts, otherwise clean them up if needed.
    */
   async function handleStateChanged(event) {
-    // console.log("STATE: ", event.detail.action.type);
     // If "Convert to Bitmap/Vector" button is pressed in the costume editor, re-draw shortcuts on the buttons.
-    if (event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT" || event.detail.action.type === "scratch-gui/locales/SELECT_LOCALE") {
+    if (
+      event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT" ||
+      event.detail.action.type === "scratch-gui/locales/SELECT_LOCALE"
+    ) {
       setTimeout(async () => await addShortcutsToTitles(), 0); // allow the DOM to update before calling addLettersToButtons.
       return;
     }
@@ -86,7 +90,7 @@ export default async function ({ addon, global, console, msg }) {
     const localizationId = shortcutToToolLocalizationId[event.key.toLowerCase()];
     if (!localizationId) return;
 
-    const localizedToolName = addon.tab.scratchMessage(localizationId)
+    const localizedToolName = addon.tab.scratchMessage(localizationId);
     await switchTool(localizedToolName);
   }
 
@@ -124,9 +128,9 @@ export default async function ({ addon, global, console, msg }) {
    * Mutates button tooltip to include shortcut key.
    */
   function updateTitle(button, title) {
-    if (!title) return
+    if (!title) return;
 
-    const localizationId = Object.keys(toolLocalizationIdToShortcut).find(k => addon.tab.scratchMessage(k) === title);
+    const localizationId = Object.keys(toolLocalizationIdToShortcut).find((k) => addon.tab.scratchMessage(k) === title);
     if (!localizationId || !toolLocalizationIdToShortcut[localizationId]) return;
 
     const titleWithShortcut = `${title} (${toolLocalizationIdToShortcut[localizationId].toUpperCase()})`;
