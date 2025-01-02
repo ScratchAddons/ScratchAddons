@@ -3,22 +3,24 @@
  */
 export default async function ({ addon, global, console, msg }) {
   const COSTUME_EDITOR_TAB_INDEX = 1;
-  const toolNameToShortcut = {
-    Select: "s",
-    Reshape: "a",
-    Brush: "b",
-    Eraser: "e",
-    Fill: "f",
-    Text: "t",
-    Line: "l",
-    Circle: "c",
-    Rectangle: "r",
+
+  //Note: LocalizationIds can be found here: addon.tab.redux.state.locales.messages
+  const toolLocalizationIdToShortcut = {
+    "paint.selectMode.select": "s",
+    "paint.reshapeMode.reshape": "a",
+    "paint.brushMode.brush": "b",
+    "paint.eraserMode.eraser": "e",
+    "paint.fillMode.fill": "f",
+    "paint.textMode.text": "t",
+    "paint.lineMode.line": "l",
+    "paint.ovalMode.oval": "c",
+    "paint.rectMode.rect": "r",
   };
 
   /**
    * Reverse the mapping above to lookup by shortcut key.
    */
-  const shortcutToToolName = Object.fromEntries(Object.entries(toolNameToShortcut).map(([key, value]) => [value, key]));
+  const shortcutToToolLocalizationId = Object.fromEntries(Object.entries(toolLocalizationIdToShortcut).map(([key, value]) => [value, key]));
 
   let isInitialized = false;
   let isUserTyping = false;
@@ -34,8 +36,9 @@ export default async function ({ addon, global, console, msg }) {
    * If costume editor is open, initialize tool shortcuts, otherwise clean them up if needed.
    */
   async function handleStateChanged(event) {
+    // console.log("STATE: ", event.detail.action.type);
     // If "Convert to Bitmap/Vector" button is pressed in the costume editor, re-draw shortcuts on the buttons.
-    if (event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
+    if (event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT" || event.detail.action.type === "scratch-gui/locales/SELECT_LOCALE") {
       setTimeout(async () => await addShortcutsToTitles(), 0); // allow the DOM to update before calling addLettersToButtons.
       return;
     }
@@ -80,8 +83,11 @@ export default async function ({ addon, global, console, msg }) {
   async function handleKeyDown(event) {
     if (isUserTyping) return;
 
-    var toolName = shortcutToToolName[event.key.toLowerCase()];
-    await switchTool(toolName);
+    const localizationId = shortcutToToolLocalizationId[event.key.toLowerCase()];
+    if (!localizationId) return;
+
+    const localizedToolName = addon.tab.scratchMessage(localizationId)
+    await switchTool(localizedToolName);
   }
 
   /**
@@ -91,7 +97,7 @@ export default async function ({ addon, global, console, msg }) {
     if (!toolName || addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== COSTUME_EDITOR_TAB_INDEX) return;
 
     try {
-      var modeSelector = await addon.tab.waitForElement("[class^='paint-editor_mode-selector']");
+      const modeSelector = await addon.tab.waitForElement("[class^='paint-editor_mode-selector']");
       if (modeSelector) {
         modeSelector.querySelector(`span[title^='${toolName}']`)?.click();
       }
@@ -118,9 +124,12 @@ export default async function ({ addon, global, console, msg }) {
    * Mutates button tooltip to include shortcut key.
    */
   function updateTitle(button, title) {
-    if (!title || !toolNameToShortcut[title]) return;
+    if (!title) return
 
-    const titleWithShortcut = title + ` (${toolNameToShortcut[title].toUpperCase()})`;
+    const localizationId = Object.keys(toolLocalizationIdToShortcut).find(k => addon.tab.scratchMessage(k) === title);
+    if (!localizationId || !toolLocalizationIdToShortcut[localizationId]) return;
+
+    const titleWithShortcut = `${title} (${toolLocalizationIdToShortcut[localizationId].toUpperCase()})`;
     button.setAttribute("title", titleWithShortcut);
   }
 
