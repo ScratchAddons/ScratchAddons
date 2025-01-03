@@ -37,7 +37,7 @@ export default async function ({ addon, console }) {
   /**
    * If costume editor is open, initialize tool shortcuts, otherwise clean them up if needed.
    */
-  async function handleStateChanged(event) {
+  function handleStateChanged(event) {
     // If "Convert to Bitmap/Vector" button is pressed in the costume editor, re-draw shortcuts on the buttons.
     if (
       event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT" ||
@@ -52,7 +52,7 @@ export default async function ({ addon, console }) {
     if (prevEditorTabIndex !== activeIndex) {
       prevEditorTabIndex = activeIndex;
       if (activeIndex === COSTUME_EDITOR_TAB_INDEX) {
-        await initialize();
+        initialize();
       } else if (activeIndex !== COSTUME_EDITOR_TAB_INDEX && isInitialized) {
         cleanup();
       }
@@ -62,13 +62,13 @@ export default async function ({ addon, console }) {
   /**
    * Setup keydown listeners for shortcuts and and update tooltips to include shortcuts.
    */
-  async function initialize() {
+  function initialize() {
     if (isInitialized) return; // Prevents double initialization
     isInitialized = true;
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("focusin", userStartedTyping);
     document.addEventListener("focusout", userStoppedTyping);
-    await addShortcutsToTitles();
+    addShortcutsToTitles();
   }
 
   /**
@@ -84,24 +84,24 @@ export default async function ({ addon, console }) {
   /**
    * Switch costume editor tool if a valid shortcut was pressed.
    */
-  async function handleKeyDown(event) {
+  function handleKeyDown(event) {
     if (isUserTyping) return;
 
     const localizationId = shortcutToToolLocalizationId[event.key.toLowerCase()];
     if (!localizationId) return;
 
     const localizedToolName = addon.tab.scratchMessage(localizationId);
-    await switchTool(localizedToolName);
+    switchTool(localizedToolName);
   }
 
   /**
    * For selecting costume editor tools by name.
    */
-  async function switchTool(toolName) {
+  function switchTool(toolName) {
     if (!toolName || addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== COSTUME_EDITOR_TAB_INDEX) return;
 
     try {
-      const modeSelector = await addon.tab.waitForElement("[class^='paint-editor_mode-selector']");
+      const modeSelector = document.querySelector("[class^='paint-editor_mode-selector']");
       if (modeSelector) {
         modeSelector.querySelector(`span[title^='${toolName}']`)?.click();
       }
@@ -113,9 +113,9 @@ export default async function ({ addon, console }) {
   /**
    * Iterate over the costume editor tool buttons and update their tooltips to include shortcuts.
    */
-  async function addShortcutsToTitles() {
+  function addShortcutsToTitles() {
     try {
-      const container = await addon.tab.waitForElement("[class^='paint-editor_mode-selector']");
+      const container = document.querySelector("[class^='paint-editor_mode-selector']");
       container.querySelectorAll("span").forEach((span) => {
         updateTitle(span, span.getAttribute("title"));
       });
