@@ -1,7 +1,7 @@
 /**
  * Scratch Addons Script to add keyboard shortcuts to costume editor tools (similar to TurboWarp)
  */
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console }) {
   const COSTUME_EDITOR_TAB_INDEX = 1;
 
   //Note: LocalizationIds can be found here: addon.tab.redux.state.locales.messages
@@ -43,18 +43,18 @@ export default async function ({ addon, global, console, msg }) {
       event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT" ||
       event.detail.action.type === "scratch-gui/locales/SELECT_LOCALE"
     ) {
-      setTimeout(async () => await addShortcutsToTitles(), 0); // allow the DOM to update before calling addLettersToButtons.
+      setTimeout(addShortcutsToTitles, 0); // allow the DOM to update before calling addLettersToButtons.
       return;
     }
 
     // Only initialize or cleanup when the user switches to a new tab.
     const activeIndex = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
-    if (prevEditorTabIndex != activeIndex) {
+    if (prevEditorTabIndex !== activeIndex) {
       prevEditorTabIndex = activeIndex;
       if (activeIndex === COSTUME_EDITOR_TAB_INDEX) {
         await initialize();
       } else if (activeIndex !== COSTUME_EDITOR_TAB_INDEX && isInitialized) {
-        await cleanup();
+        cleanup();
       }
     }
   }
@@ -74,7 +74,7 @@ export default async function ({ addon, global, console, msg }) {
   /**
    * Remove keydown listeners.
    */
-  async function cleanup() {
+  function cleanup() {
     isInitialized = false;
     document.removeEventListener("keydown", handleKeyDown);
     document.removeEventListener("focusin", userStartedTyping);
