@@ -62,7 +62,11 @@ const dropdownSanitizations = [
   { searchValue: "]", replacer: "\\]" },
 ];
 
-const strInpSanitizations = [...dropdownSanitizations, { searchValue: / v$/g, replacer: " \\v" }];
+const strInpSanitizations = [
+  ...dropdownSanitizations,
+  { searchValue: / v$/g, replacer: " \\v" },
+  { searchValue: /^(#(?:[\da-f]{3}){1,2}?)$/gi, replacer: "​$1" }, // ZWSP
+];
 
 const blockSanitizations = [
   { searchValue: "\\", replacer: "\\\\" },
@@ -94,8 +98,14 @@ const numBlock = (field) => (block) => {
 
 const dropdown = (field) => (block) => `(${sanitize(block.getField(field).getText(), repSanitizations)} v)`;
 
-const simpleReporter = (text, category, isBool) => (_, context) =>
-  `${isBool ? "<" : "("}${text}${argumentConflict(text, context.startBlock) ? ` :: ${category}` : ""}${isBool ? ">" : ")"}`;
+const simpleReporter = (text, category, isBool) => {
+  const block = (_, context) =>
+    `${isBool ? "<" : "("}${text}${argumentConflict(text, context.startBlock) ? ` :: ${category}` : ""}${isBool ? ">" : ")"}`;
+
+  block.repText = text;
+  block.isBool = isBool;
+  return block;
+};
 
 const procedure = (block, context) => {
   const isDef = (checkBlock) =>
@@ -146,7 +156,8 @@ const procedure = (block, context) => {
       /^define(?: |$)/.test(block.toString()) ||
       Object.values(blocks).some(
         (block) =>
-          block.labels?.length === labels.length && block.labels.every((label, index) => label === labels[index])
+          block.labels?.length === labels.length &&
+          block.labels.every((label, index) => label.replace(/[,%?:]/g, "") === labels[index].replace(/[,%?:]/g, ""))
       ))
   ) {
     return output + ` :: custom`;
@@ -240,7 +251,7 @@ const blocks = {
   sound_setvolumeto: build`set volume to ${{ input: "VOLUME" }} %`,
   sound_volume: simpleReporter("volume", "sound"),
 
-  event_whentouchingobject: build`when this sprite touches ${{ input: "TOUCHINGOBJECTMENU" }}`,
+  event_whentouchingobject: build`when this sprite touches ${{ input: "TOUCHINGOBJECTMENU" }} :: events hat`,
   event_touchingobjectmenu: dropdown("TOUCHINGOBJECTMENU"),
   event_whenflagclicked: build`when green flag clicked`,
   event_whenthisspriteclicked: build`when this sprite clicked`,
@@ -312,8 +323,28 @@ const blocks = {
   sensing_timer: simpleReporter("timer", "sensing"),
   sensing_resettimer: build`reset timer`,
   sensing_of_object_menu: dropdown("OBJECT"),
-  sensing_of: build`([${{ field: "PROPERTY", sanitizations: dropdownSanitizations }} v] of ${{ input: "OBJECT" }})`,
-  sensing_current: build`(current [${{ field: "CURRENTMENU", sanitizations: dropdownSanitizations }} v])`,
+  sensing_of: (block, context) => {
+    const property = sanitize(block.getField("PROPERTY").getText(), dropdownSanitizations);
+    const mathOptions = [
+      "abs",
+      "floor",
+      "ceiling",
+      "sqrt",
+      "sin",
+      "cos",
+      "tan",
+      "asin",
+      "acos",
+      "atan",
+      "ln",
+      "log",
+      "e ^",
+      "10 ^",
+    ];
+    const override = mathOptions.includes(property) ? " :: sensing" : "";
+    return `([${property} v] of ${getBlockCode(block.getInputTargetBlock("OBJECT", { startBlock: block, ...context }))}${override})`;
+  },
+  /*build`([${{ field: "PROPERTY", sanitizations: dropdownSanitizations }} v] of ${{ input: "OBJECT" }})`*/ sensing_current: build`(current [${{ field: "CURRENTMENU", sanitizations: dropdownSanitizations }} v])`,
   sensing_dayssince2000: simpleReporter("days since 2000", "sensing"),
   sensing_username: simpleReporter("username", "sensing"),
   sensing_userid: build`(user id :: sensing)`,
@@ -339,7 +370,15 @@ const blocks = {
 
   data_variable: (block, context) => {
     const text = block.getField("VARIABLE").getText();
-    return `(${sanitize(text, repSanitizations)}${argumentConflict(text, context.startBlock) || / v$/.test(text) ? " :: variables" : ""})`;
+    const conflict =
+      argumentConflict(text, context.startBlock) ||
+      / v$/.test(text) ||
+      Object.values(blocks).some(
+        (block) =>
+          block.repText && !block.isBool && block.repText.replaceAll(/[,%?:]/g, "") === text.replaceAll(/[,%?:]/g, "")
+      );
+
+    return `(${sanitize(text, repSanitizations)}${conflict ? " :: variables" : ""})`;
   },
   data_setvariableto: build`set [${{ field: "VARIABLE", sanitizations: dropdownSanitizations }} v] to ${{
     input: "VALUE",
