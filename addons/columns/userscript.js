@@ -1,7 +1,7 @@
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
   const _ToolboxPosition = Blockly.Toolbox.prototype.position;
   Blockly.Toolbox.prototype.position = function () {
     _ToolboxPosition.call(this);
@@ -15,7 +15,7 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_vertical.js#L314
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_vertical.js#L314
   const _VerticalFlyoutPosition = Blockly.VerticalFlyout.prototype.position;
   Blockly.VerticalFlyout.prototype.position = function () {
     _VerticalFlyoutPosition.call(this);
@@ -52,6 +52,13 @@ export default async function ({ addon, msg, console }) {
         y
       );
       this.scrollbar_.resize();
+      Blockly.unbindEvent_(this.scrollbar_.onMouseDownBarWrapper_);
+      this.scrollbar_.onMouseDownBarWrapper_ = Blockly.bindEventWithChecks_(
+        this.scrollbar_.svgBackground_,
+        "mousedown",
+        this.scrollbar_,
+        this.scrollbar_.onMouseDownBar_
+      );
     }
 
     // Set CSS variables for the userstyle.
@@ -60,7 +67,7 @@ export default async function ({ addon, msg, console }) {
     container.parentElement.style.setProperty("--sa-flyout-y", `${y}px`);
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_base.js#L370
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_base.js#L370
   const _VerticalFlyoutGetWidth = Blockly.VerticalFlyout.prototype.getWidth;
   Blockly.VerticalFlyout.prototype.getWidth = function () {
     // In RTL, this will be called by Blockly to position blocks inside the flyout.
@@ -69,7 +76,7 @@ export default async function ({ addon, msg, console }) {
     return width;
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L595
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L595
   const _CategoryMenuCreateDom = Blockly.Toolbox.CategoryMenu.prototype.createDom;
   Blockly.Toolbox.CategoryMenu.prototype.createDom = function () {
     _CategoryMenuCreateDom.call(this);
@@ -81,7 +88,7 @@ export default async function ({ addon, msg, console }) {
     this.parentHtml_.appendChild(this.secondTable);
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L606
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L606
   const _CategoryMenuPopulate = Blockly.Toolbox.CategoryMenu.prototype.populate;
   Blockly.Toolbox.CategoryMenu.prototype.populate = function (domTree) {
     if (!domTree) return;
@@ -122,7 +129,7 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L639
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L639
   const _CategoryMenuDispose = Blockly.Toolbox.CategoryMenu.prototype.dispose;
   Blockly.Toolbox.CategoryMenu.prototype.dispose = function () {
     _CategoryMenuDispose.call(this);
@@ -130,6 +137,22 @@ export default async function ({ addon, msg, console }) {
       this.secondTable.remove();
       this.secondTable = null;
     }
+  };
+
+  // https://github.com/scratchfoundation/scratch-blocks/blob/d374085e42a84d8aaf10f1ef3fb6ec6e9f1b7cf4/core/scrollbar.js#L700
+  const _ScrollbarOnMouseDownBar = Blockly.Scrollbar.prototype.onMouseDownBar_;
+  Blockly.Scrollbar.prototype.onMouseDownBar_ = function (e) {
+    // Scratch doesn't add the scrollbar origin coordinates when comparing mouse position with handle position
+    const newEvent = new MouseEvent("mousedown", {
+      // used by Blockly.utils.isRightButton:
+      button: e.button,
+      // used by Blockly.utils.mouseToSvg:
+      clientX: e.clientX + this.origin_.x,
+      clientY: e.clientY + this.origin_.y,
+    });
+    newEvent.stopPropagation = () => e.stopPropagation();
+    newEvent.preventDefault = () => e.preventDefault();
+    _ScrollbarOnMouseDownBar.call(this, newEvent);
   };
 
   function updateToolbox() {
@@ -150,9 +173,19 @@ export default async function ({ addon, msg, console }) {
     toolbox.position();
   }
 
+  function updateClass() {
+    // Add class to allow editor-compact to handle this addon
+    if (addon.self.disabled) document.body.classList.remove("sa-columns-enabled");
+    else document.body.classList.add("sa-columns-enabled");
+  }
+
   updateToolbox();
   addon.self.addEventListener("disabled", updateToolbox);
   addon.self.addEventListener("reenabled", updateToolbox);
+
+  updateClass();
+  addon.self.addEventListener("disabled", updateClass);
+  addon.self.addEventListener("reenabled", updateClass);
 
   while (true) {
     const addExtensionButton = await addon.tab.waitForElement("[class*='gui_extension-button_']", {

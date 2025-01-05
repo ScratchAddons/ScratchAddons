@@ -1,25 +1,31 @@
+.categoryBubble::after,
 .scratchCategoryItemBubble::after {
   /* block-palette-icons */
   filter: brightness(0);
 }
 
-.blocklyEditableText > text {
+.blocklyEditableText > text,
+.scratch-renderer.default-theme .blocklyEditableField > text {
   fill: var(--editorTheme3-inputColor-blackText);
 }
-.blocklyHtmlInput {
+.sa-theme3-editable-label .blocklyHtmlInput {
+  /* Labels in custom block editor */
   color: var(--editorTheme3-inputColor-blackText);
 }
 
 .blocklyDropDownDiv .goog-menuitem,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+.blocklyDropDownDiv .blocklyMenuItem,
+.blocklyNumPadButton {
   color: black;
 }
-.blocklyDropDownDiv .blocklyText {
+.blocklyDropDownDiv .blocklyText,
+.blocklyDropDownDiv.scratch-renderer.default-theme .blocklyText {
   /* "Play note" dropdown */
   fill: black;
 }
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
+.blocklyDropDownDiv .blocklyMenu .blocklyMenuItem:hover,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
   background-color: var(--editorTheme3-hoveredItem, rgba(255, 255, 255, 0.3));
 }

@@ -21,7 +21,8 @@ body {
   background-color: var(--tooltip-background);
   border-radius: 10px;
   box-shadow: var(--large-shadow);
-  font-weight: 600;
+  font-weight: 500;
+  user-select: none;
 }
 
 .loading-progress {
@@ -37,12 +38,13 @@ body {
   text-align: center;
   font-size: 1rem;
   padding-top: 20px;
-  font-weight: 600;
+  font-weight: 500;
   margin: 0 2rem;
+  user-select: none;
 }
 
 .title {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--content-text);
   padding: 6px 8px;
   cursor: default;
@@ -60,13 +62,13 @@ body {
 }
 .float-right {
   white-space: nowrap;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .project-details {
   padding: 8px;
   color: var(--description-text);
-  font-size: 12px;
+  font-size: 14px;
 }
 .username-list > a {
   display: inline-block;
@@ -96,7 +98,7 @@ body {
 }
 
 .small-icon {
-  height: 14px;
+  height: 16px;
   vertical-align: text-bottom;
   filter: var(--content-icon-filter);
 }
@@ -104,6 +106,10 @@ body {
 .add-button {
   text-align: center;
   padding-top: 0.5rem;
+}
+
+.add-button .large-button {
+  display: inline-flex;
 }
 
 .opened {

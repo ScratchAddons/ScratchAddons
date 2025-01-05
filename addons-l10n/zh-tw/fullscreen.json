@@ -1,1 +1,1 @@
-{"fullscreen/@name":"增強全屏","fullscreen/@description":"修復了一些全屏顯示模式下的一些問題，讓全屏時同時讓瀏覽器也以全屏展開，且可以選擇隱藏綠旗等工具列。","fullscreen/@info-hideToolbarNotice":"如果你啟用全屏時隱藏工具列，你可以用 ESC 鍵來退出全屏模式。","fullscreen/@settings-name-browserFullscreen":"全屏模式時同時讓瀏覽器進入全屏","fullscreen/@settings-name-hideToolbar":"全屏模式時隱藏工具列"}
+{"fullscreen/@name":"增強全屏","fullscreen/@description":"修復了一些全屏顯示模式下的一些問題，讓全屏時同時讓瀏覽器也以全屏展開，且可以選擇隱藏綠旗等工具列。","fullscreen/@settings-name-browserFullscreen":"全屏模式時同時讓瀏覽器進入全屏"}

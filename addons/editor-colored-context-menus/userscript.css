@@ -11,5 +11,5 @@
   border-top-color: var(--sa-contextmenu-border) !important;
 }
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
-  color: white;
+  color: var(--sa-contextmenu-text);
 }

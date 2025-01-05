@@ -1,0 +1,38 @@
+/* Include */
+a,
+a:link,
+a:not([href]),
+a:hover,
+a:active,
+a.black:hover,
+a.black:active,
+a.reply,
+input.link,
+input.link:hover,
+input.link:active,
+input.link.black:hover,
+input.link.black:active,
+.button > span,
+button,
+span.comment-reply,
+#comments .more-replies .pulldown,
+#email-resend-box a,
+/* scratch3to2 compatibility */
+.thumbnail .thumbnail-creator a,
+.grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.comment .comment-body .comment-bottom-row .comment-reply,
+.studio-thumb-edit-button,
+.studio-project-tile .studio-project-username {
+  font-weight: bold;
+}
+
+#footer a {
+  font-weight: bold !important;
+}
+
+/* Exclude */
+a.slider-carousel-control,
+#topnav ul.site-nav li a,
+#topnav ul.account-nav ul.user-nav li a {
+  font-weight: normal;
+}

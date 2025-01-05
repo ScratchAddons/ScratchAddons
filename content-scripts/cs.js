@@ -11,6 +11,11 @@ try {
 if (window.frameElement && window.frameElement.getAttribute("src") === null)
   throw "Scratch Addons: iframe without src attribute ignored";
 if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
+if (new URL(location.href).hostname === "localhost") {
+  if (!["8333", "8601", "8602"].includes(new URL(location.href).port)) {
+    throw "Scratch Addons: this localhost port is not supported";
+  }
+}
 
 const MAX_USERSTYLES_PER_ADDON = 100;
 
@@ -95,8 +100,12 @@ const cs = {
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
   copyImage(dataURL) {
-    // Firefox only
+    // Firefox 109-126 only
     return new Promise((resolve, reject) => {
+      if (typeof Clipboard.prototype.write === "function") {
+        reject("Use browser API instead");
+        return;
+      }
       browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
         (res) => {
           resolve();
@@ -350,7 +359,7 @@ function waitForDocumentHead() {
 }
 
 function getL10NURLs() {
-  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || navigator.language;
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
   if (langCode === "pt") {
     urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
@@ -400,6 +409,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         if (everLoadedUserscriptAddons.has(addonId)) {
           if (!dynamicDisable) return;
           // Addon was reenabled
+          document.querySelector(`[data-sa-hide-disabled-style=${addonId}]`).remove();
           _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
         } else {
           if (!dynamicEnable) return;
@@ -447,6 +457,10 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
           removeAddonStyles(addonId);
         }
         disabledDynamicAddons.add(addonId);
+        const style = document.createElement("style");
+        style.dataset.saHideDisabledStyle = addonId;
+        style.textContent = `[data-sa-hide-disabled=${addonId}] { display: none !important; }`;
+        document.body.appendChild(style);
         _page_.fireEvent({ name: "disabled", addonId, target: "self" });
       } else {
         everLoadedUserscriptAddons.delete(addonId);
@@ -542,7 +556,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
 if (location.pathname.startsWith("/discuss/")) {
-  // We do this first as sb2 runs fast.
+  // We do this first as scratchblocks runs fast.
+  // Used by better-quoter.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
@@ -551,7 +566,8 @@ if (location.pathname.startsWith("/discuss/")) {
   if (document.readyState !== "loading") {
     setTimeout(preserveBlocks, 0);
   } else {
-    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
+    // { capture: true } is needed to run before jQuery's listener
+    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true, capture: true });
   }
 }
 
@@ -642,6 +658,11 @@ const showBanner = () => {
   const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
   const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
+  //
+  const _uiLanguage = chrome.i18n.getUILanguage();
+  const _localeSlash = _uiLanguage.startsWith("en") ? "" : `${_uiLanguage.split("-")[0]}/`;
+  //
+
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
     textContent: chrome.i18n
@@ -650,7 +671,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33_2", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_40", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -670,7 +691,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33_2"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_40"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,

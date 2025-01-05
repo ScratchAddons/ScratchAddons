@@ -70,6 +70,9 @@
 .sa-mcp-preview-container {
   flex: auto;
   overflow-y: scroll;
+}
+
+.sa-mcp-root /* <-- specificity */ .sa-mcp-preview-container {
   scrollbar-width: none;
 }
 
@@ -109,4 +112,9 @@
 
 .sa-mcp-preview-block-bg-selection {
   fill: #7774;
+}
+
+.blocklyAnimationLayer {
+  /* show delete animation above the popup */
+  z-index: 1000;
 }

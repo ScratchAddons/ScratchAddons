@@ -5,6 +5,7 @@
  */
 
 import { BlockShape, BlockInstance, BlockInputEnum, BlockInputBoolean, BlockInputBlock } from "./BlockTypeInfo.js";
+import { getTextWidth } from "./module.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -176,26 +177,6 @@ function createTextComponent(text, fillVar, container) {
   return new BlockComponent(textElement, 0, getTextWidth(textElement));
 }
 
-const textWidthCache = new Map();
-const textWidthCacheSize = 1000;
-
-/**
- * Gets the width of an svg text element, with caching.
- * @param {SVGTextElement} textElement
- */
-function getTextWidth(textElement) {
-  let string = textElement.innerHTML;
-  if (string.length === 0) return 0;
-  let width = textWidthCache.get(string);
-  if (width) return width;
-  width = textElement.getBoundingClientRect().width;
-  textWidthCache.set(string, width);
-  if (textWidthCache.size > textWidthCacheSize) {
-    textWidthCache.delete(textWidthCache.keys().next());
-  }
-  return width;
-}
-
 /**
  * Creates a DOM element to hold all the contents of a block.
  * A block could be the top level block, or it could be a block like (() + ()) that's inside
@@ -291,7 +272,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
       } else if (blockPart instanceof BlockInputEnum) {
         if (blockPart.isRound) {
           component = createBackedTextedComponent(
-            blockInput?.string ?? blockPart.values[0].string,
+            blockInput.string,
             blockContainer,
             BlockShapes.TextInput,
             categoryClass,
@@ -301,7 +282,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           );
         } else {
           component = createBackedTextedComponent(
-            blockInput?.string ?? blockPart.values[0].string,
+            blockInput.string,
             blockContainer,
             BlockShapes.SquareInput,
             categoryClass,

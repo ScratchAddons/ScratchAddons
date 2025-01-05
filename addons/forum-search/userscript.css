@@ -21,13 +21,15 @@
   max-width: 100%;
 }
 
-#forum-search-input {
+#forum-search-input,
+#forum-search-filter-input {
   flex: 1 0 0;
   margin-right: 0.25rem;
 }
 
 #forum-search-dropdown {
   flex: 0 1 15%;
+  margin-right: 0.25rem;
 }
 
 #forum-search-form {
@@ -35,4 +37,10 @@
   display: flex;
   background: white;
   border-top: 1px solid #e0e0e0;
+}
+
+#forum-search-form .button {
+  margin: 0;
+  height: auto;
+  line-height: 18px;
 }

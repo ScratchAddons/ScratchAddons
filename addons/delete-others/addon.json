@@ -1,0 +1,15 @@
+{
+  "name": "Delete other costumes or sounds",
+  "description": "Adds an option to the right click context menu for costumes and sounds to delete all items except for the selected one.",
+  "tags": ["editor", "costumeEditor", "featured"],
+  "versionAdded": "1.39.0",
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

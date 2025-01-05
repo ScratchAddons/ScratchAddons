@@ -12,7 +12,7 @@ const removeAllChildren = (element) => {
 };
 
 export default async function ({ addon, console, msg }) {
-  setup(addon.tab.traps.vm);
+  setup(addon);
 
   let logsTab;
   const messagesLoggedBeforeLogsTabLoaded = [];
@@ -161,6 +161,7 @@ export default async function ({ addon, console, msg }) {
   interfaceHeader.append(tabListElement, buttonContainerElement);
   interfaceContainer.append(interfaceHeader, tabContentContainer);
   document.body.append(interfaceContainer);
+  moveInterface(0, 0); // necessary to initialize position if running scratch-gui locally
 
   const createHeaderButton = ({ text, icon, description }) => {
     const button = Object.assign(document.createElement("div"), {
@@ -300,7 +301,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   const goToBlock = (blockId) => {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const block = workspace.getBlockById(blockId);
     if (!block) return;
 
@@ -326,8 +327,8 @@ export default async function ({ addon, console, msg }) {
   // May be slightly incorrect in some edge cases.
   const formatBlocklyBlockData = (jsonData) => {
     // For sample jsonData, see:
-    // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/motion.js
-    // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/control.js
+    // https://github.com/scratchfoundation/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/motion.js
+    // https://github.com/scratchfoundation/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/control.js
 
     const processSegment = (index) => {
       const message = jsonData[`message${index}`];
@@ -347,11 +348,11 @@ export default async function ({ addon, console, msg }) {
           } else if (type === "field_image") {
             const src = argInfo.src;
             if (src.endsWith("rotate-left.svg")) {
-              formattedMessage += msg("/global/blocks/anticlockwise");
+              formattedMessage += msg("/_general/blocks/anticlockwise");
             } else if (src.endsWith("rotate-right.svg")) {
-              formattedMessage += msg("/global/blocks/clockwise");
+              formattedMessage += msg("/_general/blocks/clockwise");
             } else if (src.endsWith("green-flag.svg")) {
-              formattedMessage += msg("/global/blocks/green-flag");
+              formattedMessage += msg("/_general/blocks/green-flag");
             }
           } else {
             formattedMessage += "()";
@@ -425,9 +426,10 @@ export default async function ({ addon, console, msg }) {
       );
       category = "more";
     } else {
-      // Try to call things like https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
+      // Try to call things like https://github.com/scratchfoundation/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
       var jsonData;
       const fakeBlock = {
+        workspace: addon.tab.traps.getWorkspace(),
         jsonInit(data) {
           jsonData = data;
         },

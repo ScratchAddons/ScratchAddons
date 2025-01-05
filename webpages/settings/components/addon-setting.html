@@ -36,7 +36,7 @@
         </div>
         <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
-            <img class="icon-type" src="../../images/icons/plus.svg" />
+            <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
           <div v-click-outside="closeResetDropdowns">
             <button
@@ -44,7 +44,7 @@
               class="addon-buttons addon-split-button-dropdown"
               @click="toggleRowDropdown"
             >
-              <img class="icon-type" src="../../images/icons/expand.svg" />
+              <img class="icon-type" src="../../images/icons/expand.svg" draggable="false" />
             </button>
             <ul>
               <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
@@ -146,7 +146,7 @@
           :title="msg('reset')"
           @click="updateOption(setting.default || '')"
         >
-          <img src="../../images/icons/undo.svg" class="icon-type" /></button
+          <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" /></button
       ></template>
     </div>
   </div>
@@ -170,6 +170,8 @@
     padding: 0 12px;
     margin-left: auto;
     border-radius: 4px 0 0 4px;
+    font-family: inherit;
+    font-size: 14px;
     transition: 0.2s ease;
     transition-property: box-shadow, border;
   }
@@ -188,42 +190,43 @@
   .setting-input.check {
     appearance: none;
     display: block;
+    background: var(--button-background);
     width: 40px;
     height: 20px;
-    background-color: var(--switch-background);
-    border: none;
     border-radius: 10px;
     position: relative;
     cursor: pointer;
     transition: all 0.25s ease;
+    border: 1px solid var(--switch-border);
   }
 
   .setting-input.check::before {
     content: "";
     position: absolute;
-    top: 5px;
-    left: 5px;
     display: block;
     width: 10px;
     height: 10px;
     background-color: var(--switch-inner-background);
     border-radius: 5px;
+    top: 4px;
+    left: 4px;
     transition: all 0.25s ease;
   }
   [dir="rtl"] .setting-input.check::before {
-    left: 25px;
+    left: 24px;
   }
 
   .setting-input.check:checked {
     background-color: var(--blue);
+    border-color: var(--blue);
   }
 
   .setting-input.check:checked::before {
     background-color: var(--white-text);
-    left: 25px;
+    left: 24px;
   }
   [dir="rtl"] .setting-input.check:checked::before {
-    left: 5px;
+    left: 4px;
   }
 
   .setting-input.number {
@@ -252,8 +255,7 @@
   .setting-label {
     text-transform: uppercase;
     color: var(--label-text);
-    font-weight: 600;
-    font-size: 12px;
+    font-weight: 500;
   }
 
   .setting-dropdown,
@@ -351,7 +353,7 @@
   .setting-dropdown .text-preview {
     margin-left: 12px;
     color: var(--label-text);
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .setting-table {
