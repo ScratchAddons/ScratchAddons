@@ -9,7 +9,7 @@
   >
     <div class="setting-label-container">
       <div class="setting-label" v-html="settingsName(addon)"></div>
-      <div v-if="setting.description" class="tooltip">
+      <div v-if="setting.description && !isIframe" class="tooltip">
         <img src="../../images/icons/help.svg" class="icon-type setting-help-icon" />
         <span class="tooltiptext">{{setting.description}}</span>
       </div>
@@ -169,9 +169,6 @@
     margin-inline-start: 8px;
     width: 18px;
     height: 18px;
-  }
-  .iframe .setting-help-icon {
-    display: none;
   }
   .setting-input {
     color: var(--content-text);
