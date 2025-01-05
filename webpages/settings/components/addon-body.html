@@ -46,7 +46,7 @@
       </div>
       <div class="related-addons" v-if="addon._relatedAddons && !isIframe">
         <div class="addon-message addon-info">
-          <span>{{msg('relatedAddons')}}</span>
+          <span class="related-addons-text">{{msg('relatedAddons')}}</span>
           <span v-for="addonManifest of addon._relatedAddons">
             <a @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
           </span>
@@ -164,7 +164,7 @@
   .related-addons span:not(:first-child):not(:last-child)::after {
     content: ",";
   }
-  .related-addons span:first-child {
+  .related-addons-text {
     font-weight: bold;
   }
   .addon-name {
