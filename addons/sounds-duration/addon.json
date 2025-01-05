@@ -20,5 +20,7 @@
       "matches": ["projects"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.26.0"
 }

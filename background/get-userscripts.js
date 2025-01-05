@@ -1,5 +1,6 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
+import { setUserAsActive } from "./imports/inactivity.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
@@ -223,6 +224,7 @@ const csInfoCache = new Map();
 // (example: on browser startup, with a Scratch page opening on startup).
 chrome.webRequest.onBeforeRequest.addListener(
   async (request) => {
+    setUserAsActive();
     if (!scratchAddons.localState.allReady) return;
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
     const loadingObj = { loading: true };
@@ -246,20 +248,20 @@ chrome.webRequest.onBeforeRequest.addListener(
 // Example: going to https://scratch.mit.edu/studios/104 (no slash after 104)
 // will redirect to /studios/104/ (with a slash)
 // If a cache entry is too old, remove it
-chrome.alarms.create("cleanCsInfoCache", { periodInMinutes: 1 });
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "cleanCsInfoCache") {
-    csInfoCache.forEach((obj, key) => {
-      if (!obj.loading) {
-        const currentTimestamp = Date.now();
-        const objTimestamp = obj.timestamp;
-        if (currentTimestamp - objTimestamp > 45000) {
-          csInfoCache.delete(key);
-        }
+setInterval(() => {
+  csInfoCache.forEach((obj, key) => {
+    if (!obj.loading) {
+      const currentTimestamp = Date.now();
+      const objTimestamp = obj.timestamp;
+      if (currentTimestamp - objTimestamp > 45000) {
+        csInfoCache.delete(key);
       }
-    });
-  }
-});
+    }
+  });
+}, 30000);
+// This interval may possibly be missed if the background context gets
+// killed or stopped - but at that point, the csInfoCache no longer
+// exists, so we have nothing to clear anyway.
 
 chrome.webRequest.onResponseStarted.addListener(
   (request) => {
@@ -345,7 +347,7 @@ const WELL_KNOWN_PATTERNS = {
   // scratch-www routes, not including project pages
   // Matches /projects (an error page) but not /projects/<id>
   scratchWWWNoProject:
-    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects|cookies)\/?)?$/,
+    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps?)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects|cookies|accounts\/bad-username)\/?)?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {
@@ -400,16 +402,15 @@ function matchesIf(injectable, settings) {
 function userscriptMatches(data, scriptOrStyle, addonId) {
   if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
 
-  /*
-  const url = data.url;
-  const parsedURL = new URL(url);
-  */
-  let url = data.url;
-  let parsedURL = new URL(url);
-  if (parsedURL.origin === "https://scratchfoundation.github.io" || parsedURL.port === "8601") {
-    url = "https://scratch.mit.edu/projects/104/editor";
-    parsedURL = new URL(url);
+  let _url = data.url;
+  let _parsedURL = new URL(_url);
+  if (_parsedURL.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(_parsedURL.port)) {
+    // Run addons on scratch-gui
+    _url = "https://scratch.mit.edu/projects/editor/";
+    _parsedURL = new URL(_url);
   }
+  const url = _url;
+  const parsedURL = _parsedURL;
   const { matches, _scratchDomainImplied } = scriptOrStyle;
   const parsedPathname = parsedURL.pathname;
   const parsedOrigin = parsedURL.origin;

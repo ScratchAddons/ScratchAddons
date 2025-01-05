@@ -37,11 +37,13 @@
 }
 
 .pos-container-container,
-.clone-container-container {
+.clone-container-container,
+[class*="turbo-mode_turbo-container"] {
   transition: opacity 0.25s ease;
 }
 
 .sa-vol-slider:hover ~ .pos-container-container,
-.sa-vol-slider:hover ~ .clone-container-container {
+.sa-vol-slider:hover ~ .clone-container-container,
+.sa-vol-slider:hover ~ [class*="turbo-mode_turbo-container"] {
   opacity: 0;
 }

@@ -26,14 +26,17 @@
   "1hour": {
     "message": "For 1 hour"
   },
+  "4hours": {
+    "message": "For 4 hours"
+  },
   "8hours": {
     "message": "For 8 hours"
   },
-  "24hours": {
-    "message": "For 24 hours"
+  "untilTomorrow": {
+    "message": "Until tomorrow"
   },
   "untilEnabled": {
-    "message": "Until I turn it back on"
+    "message": "Until turned off"
   },
   "muteFor": {
     "message": "Do not disturb"
@@ -62,6 +65,9 @@
   "forEditor": {
     "message": "For editor"
   },
+  "forPlayer": {
+    "message": "For project player"
+  },
   "forWebsite": {
     "message": "For website"
   },
@@ -89,14 +95,14 @@
   "codeEditorFeatures": {
     "message": "Code Editor"
   },
+  "playerFeatures": {
+    "message": "Project Player Features"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
   "profilesFeatures": {
     "message": "Profiles"
-  },
-  "projectPlayerFeatures": {
-    "message": "Project Player"
   },
   "projectPageFeatures": {
     "message": "Project Pages"
@@ -112,6 +118,9 @@
   },
   "websiteThemes": {
     "message": "Website Themes"
+  },
+  "playerThemes": {
+    "message": "Project Player Themes"
   },
   "popupFeatures": {
     "message": "Extension Popup Features"
@@ -172,6 +181,9 @@
   },
   "dark": {
     "message": "Dark"
+  },
+  "loading": {
+    "message": "Loading..."
   },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
@@ -245,14 +257,25 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_32": {
-    "message": "New addon: \"move sprite to front layer\", which lets you Shift+Click a sprite within the sprite pane to move it to the front (top layer) of the stage. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_40": {
+    "message": "New addon: \"delete sprites without confirmation\", which removes the new confirmation prompt that asks if you are sure you want to delete a sprite. Go to $1 to enable it.",
+    "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_32": {
-    "message": "Other new addons added this update are \"faster project loading\", \"follow topics after posting\", \"necropost highlighter\", and \"remember collapsed forum categories\"."
+  "sendFeedbackNotification": {
+    "message": "send feedback"
+  },
+  "extensionUpdateInfo2_v1_40": {
+    "message": "The \"save blocks as image\" addon now allows copying the images directly to the clipboard. Also, the \"project video recorder\" now exports mp4 files if supported by the browser."
+  },
+  "readTheBlogPost": {
+    "message": "Read the $1 for more information.",
+    "description": "The placeholder is \"blog post\""
+  },
+  "blogPost": {
+    "message": "blog post"
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."

@@ -14,9 +14,11 @@ export default async function ({ addon, console }) {
     }
     const fill = removeAlpha(background.getAttribute("fill"));
     const border = background.getAttribute("stroke") || "#0003";
+    const text = ScratchBlocks.Colours.text;
     widgetDiv.classList.add("sa-contextmenu-colored");
     widgetDiv.style.setProperty("--sa-contextmenu-bg", fill);
     widgetDiv.style.setProperty("--sa-contextmenu-border", border);
+    widgetDiv.style.setProperty("--sa-contextmenu-text", text);
   };
 
   const originalHandleRightClick = ScratchBlocks.Gesture.prototype.handleRightClick;

@@ -3,7 +3,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     className: tab.scratchClass("modal_modal-overlay"),
     dir: tab.direction,
   });
-  container.style.display = isOpen ? "" : "none";
+  container.style.display = "none";
   document.body.appendChild(container);
   const modal = Object.assign(document.createElement("div"), {
     className: tab.scratchClass("modal_modal-content"),
@@ -31,7 +31,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
   closeButton.appendChild(
     Object.assign(document.createElement("img"), {
       className: tab.scratchClass("close-button_close-icon"),
-      src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+      src: import.meta.url + "/../../../images/cs/close-s3.svg",
     })
   );
   const content = Object.assign(document.createElement("div"), {
@@ -42,14 +42,19 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     `,
   });
   modal.appendChild(content);
+  const open = () => {
+    container.style.display = "";
+    if (tab.editorMode === "editor") {
+      tab.traps.getBlockly().then((Blockly) => Blockly.hideChaff());
+    }
+  };
+  if (isOpen) open();
   return {
     container: modal,
     content,
     backdrop: container,
     closeButton,
-    open: () => {
-      container.style.display = "";
-    },
+    open,
     close: () => {
       container.style.display = "none";
     },
@@ -84,13 +89,13 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
     })
   );
   const header = Object.assign(document.createElement("div"), {
-    className: "modal-header modal-title",
+    className: "modal-header modal-title sa-modal-title",
     style: `
       height: 3rem;
       box-sizing: border-box;
       padding-top: 0.75rem;
-      background-color: var(--darkWww-navbar, #4d97ff);
-      box-shadow: 0 -1px 0 0 inset var(--darkWww-navbar-variant, #4280d7);
+      background-color: var(--darkWww-navbar, #855cd6);
+      box-shadow: 0 -1px 0 0 inset var(--darkWww-navbar-variant, #7854c0);
       color: var(--darkWww-navbar-text, white);
       text-align: center;
       font-weight: bold;
@@ -238,7 +243,11 @@ export const confirm = (tab, title, message, { useEditorClasses = false, okButto
   }
   content.appendChild(
     Object.assign(document.createElement("div"), {
-      className: { editor: tab.scratchClass("prompt_label") }[mode] || "",
+      className:
+        {
+          editor: tab.scratchClass("prompt_label"),
+          "scratch-www": "sa-confirm-text",
+        }[mode] || "",
       style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
       innerText: message,
     })

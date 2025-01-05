@@ -29,9 +29,7 @@ export function initUI({ addon, msg }) {
   };
 
   const controlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(controlsGroup, {
-    display: "flex",
-  });
+  addon.tab.displayNoneWhileDisabled(controlsGroup);
 
   const settingPageWrapper = document.createElement("div");
   settingPageWrapper.className = "sa-paint-snap-settings-wrapper";
@@ -76,6 +74,10 @@ export function initUI({ addon, msg }) {
   settingButton.title = msg("settings");
   settingButton.appendChild(createButtonImage("settings"));
   controlsGroup.appendChild(settingButton);
+
+  document.body.addEventListener("click", (e) => {
+    if (areSettingsOpen() && !e.target.matches(".sa-paint-snap-group *")) setSettingsOpen(false);
+  });
 
   const settingsOpenUpdaters = [];
 

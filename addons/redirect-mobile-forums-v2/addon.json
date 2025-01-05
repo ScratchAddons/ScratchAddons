@@ -1,0 +1,20 @@
+{
+  "name": "Redirect to standard forums",
+  "description": "Redirects you to the standard (\"main\") view of the forums when you visit the mobile (\"m\") view of the forums, avoiding Page not found errors.",
+  "credits": [
+    {
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/m/*", "https://scratch.mit.edu/404/"],
+      "runAtComplete": false
+    }
+  ],
+  "versionAdded": "1.16.0",
+  "tags": ["community", "forums"],
+  "enabledByDefault": true
+}

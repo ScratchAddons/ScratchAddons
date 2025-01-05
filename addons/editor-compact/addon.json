@@ -1,0 +1,60 @@
+{
+  "name": "Compact editor",
+  "description": "Decreases the size of buttons, input fields, the menu bar, and other elements in the editor, making more space for components such as the code area, the costume editor, and costume previews, as was the case in Scratch 2.0.",
+  "tags": ["editor", "theme", "featured"],
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "info": [
+    {
+      "id": "hide-icons-update",
+      "text": "To hide menu bar icons, use the \"Customizable menu bar\" addon."
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "hide-labels.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "hideLabels": true }
+      }
+    },
+    {
+      "url": "sprite-properties.css",
+      "matches": ["projects"],
+      "if": {
+        "addonEnabled": ["sprite-properties"]
+      }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "id": "hideLabels",
+      "type": "boolean",
+      "name": "Hide button labels in costume and sound editor",
+      "default": true
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.34.0",
+  "enabledByDefault": false
+}

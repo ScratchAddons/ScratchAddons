@@ -8,6 +8,9 @@ import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
+const isScratchGui =
+  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
+
 const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
@@ -19,12 +22,13 @@ let createdAnyBlockContextMenus = false;
  * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
-  constructor(info) {
+  constructor(addonObj, info) {
     super();
     this._addonId = info.id;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+    this._addonObj = addonObj;
   }
   /**
    * Version of the renderer (scratch-www, scratchr2, or null if it cannot be determined).
@@ -36,8 +40,8 @@ export default class Tab extends Listenable {
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
-        ? "scratchr2"
-        : null;
+          ? "scratchr2"
+          : null;
     return this._clientVersion;
   }
   /**
@@ -95,7 +99,12 @@ export default class Tab extends Listenable {
    * @param {string} url - script URL.
    * @returns {Promise}
    */
-  loadScript(url) {
+  loadScript(relativeUrl) {
+    const urlObj = new URL(import.meta.url);
+    urlObj.pathname = relativeUrl;
+
+    const url = urlObj.href;
+
     return new Promise((resolve, reject) => {
       if (scratchAddons.loadedScripts[url]) {
         const obj = scratchAddons.loadedScripts[url];
@@ -148,6 +157,7 @@ export default class Tab extends Listenable {
    * Use this as an optimization and do not rely on the behavior.
    * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
    * Use this as an optimization and do not rely on the behavior.
+   * @param {boolean=} opts.resizeEvent - True if the selector should be resolved on window resize, in addition to the reduxEvents.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
@@ -162,7 +172,8 @@ export default class Tab extends Listenable {
       }
     }
     const { reduxCondition, condition } = opts;
-    let listener;
+    let reduxListener;
+    let resizeListener;
     let combinedCondition = () => {
       if (condition && !condition()) return false;
       if (this.redux.state) {
@@ -173,20 +184,24 @@ export default class Tab extends Listenable {
       // if it runs a little earlier. Just don't error out.
       return true;
     };
-    if (opts.reduxEvents) {
+    if (opts.reduxEvents || opts.resizeEvent) {
       const oldCondition = combinedCondition;
       let satisfied = false;
       combinedCondition = () => {
         if (oldCondition && !oldCondition()) return false;
         return satisfied;
       };
-      listener = ({ detail }) => {
-        if (opts.reduxEvents.includes(detail.action.type)) {
+      reduxListener = ({ detail }) => {
+        if (opts.reduxEvents && opts.reduxEvents.includes(detail.action.type)) {
           satisfied = true;
         }
       };
       this.redux.initialize();
-      this.redux.addEventListener("statechanged", listener);
+      this.redux.addEventListener("statechanged", reduxListener);
+      resizeListener = () => {
+        if (opts.resizeEvent) satisfied = true;
+      };
+      window.addEventListener("resize", resizeListener);
     }
     const promise = scratchAddons.sharedObserver.watch({
       query: selector,
@@ -194,9 +209,10 @@ export default class Tab extends Listenable {
       condition: combinedCondition,
       elementCondition: opts.elementCondition || null,
     });
-    if (listener) {
+    if (reduxListener || resizeListener) {
       promise.then((match) => {
-        this.redux.removeEventListener("statechanged", listener);
+        this.redux.removeEventListener("statechanged", reduxListener);
+        window.removeEventListener("resize", resizeListener);
         return match;
       });
     }
@@ -207,7 +223,11 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return "editor";
+    if (isScratchGui || location.pathname === "/projects/editor" || location.pathname === "/projects/editor/") {
+      // Note that scratch-gui does not change the URL when going fullscreen.
+      if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
+      return "editor";
+    }
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
@@ -225,7 +245,7 @@ export default class Tab extends Listenable {
   copyImage(dataURL) {
     if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
     if (typeof Clipboard.prototype.write === "function") {
-      // Chrome
+      // Chrome or Firefox 127+
       const blob = dataURLToBlob(dataURL);
       const items = [
         new ClipboardItem({
@@ -234,7 +254,8 @@ export default class Tab extends Listenable {
       ];
       return navigator.clipboard.write(items);
     } else {
-      // Firefox needs Content Script
+      // Firefox 109-126 only
+      // The image is sent to the background event page where it is copied with extension APIs
       return scratchAddons.methods.copyImage(dataURL).catch((err) => {
         return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
       });
@@ -285,6 +306,14 @@ export default class Tab extends Listenable {
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
+    const isProject =
+      location.pathname.split("/")[1] === "projects" &&
+      !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+    if (!isProject && !isScratchGui) {
+      scratchAddons.console.warn("addon.tab.scratchClass() was used outside a project page");
+      return "";
+    }
+
     if (!this._calledScratchClassReady)
       throw new Error("Wait until addon.tab.scratchClassReady() resolves before using addon.tab.scratchClass");
 
@@ -316,8 +345,9 @@ export default class Tab extends Listenable {
 
   scratchClassReady() {
     // Make sure to return a resolved promise if this is not a project!
-    const isProject = location.pathname.split("/")[1] === "projects" && location.pathname.split("/")[3] !== "embed";
-    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+    const isProject =
+      location.pathname.split("/")[1] === "projects" &&
+      !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
     if (!isProject && !isScratchGui) return Promise.resolve();
 
     this._calledScratchClassReady = true;
@@ -330,13 +360,9 @@ export default class Tab extends Listenable {
   /**
    * Hides an element when the addon is disabled.
    * @param {HTMLElement} el - the element.
-   * @param {object=} opts - the options.
-   * @param {string=} opts.display - the fallback value for CSS display.
    */
-  displayNoneWhileDisabled(el, { display = "" } = {}) {
-    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
-      g[1].toUpperCase()
-    )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
+  displayNoneWhileDisabled(el) {
+    el.dataset.saHideDisabled = this._addonId;
   }
 
   /**
@@ -344,9 +370,10 @@ export default class Tab extends Listenable {
    * @type {string}
    */
   get direction() {
-    // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
+    // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
-    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    const rawLang = this._addonObj.auth.scratchLang; // Guaranteed to exist
+    const lang = rawLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 
@@ -595,6 +622,23 @@ export default class Tab extends Listenable {
             })()
           );
         },
+        from: () => [],
+        until: () => [],
+      },
+      afterProfileCountry: {
+        element: () =>
+          q(".shared-after-country-space") ||
+          (() => {
+            const wrapper = Object.assign(document.createElement("div"), {
+              className: "shared-after-country-space",
+            });
+
+            wrapper.style.display = "inline-block";
+
+            document.querySelector(".location").appendChild(wrapper);
+
+            return wrapper;
+          })(),
         from: () => [],
         until: () => [],
       },

@@ -1,6 +1,6 @@
 {
   "name": "Debugger",
-  "description": "Adds a new \"debugger\" window to the editor. Allows for logging into the \"Logs\" tab of the debugger window using the \"log\", \"warn\" and \"error\" blocks. The \"breakpoint\" block will pause the project when executed. All running threads can be viewed in the \"Threads\" tab of the debugger, and when paused the \"Step\" button can be used to execute the next block. A graph of frames per second and number of clones can be viewed in the \"Performance\" tab.",
+  "description": "Adds a new \"debugger\" window to the editor. Allows for logging into the \"Logs\" tab of the debugger window using the \"log\", \"warn\" and \"error\" blocks. The \"breakpoint\" block will pause the project when executed. All running stacks of blocks can be viewed in the \"Threads\" tab of the debugger window, and when paused the \"Step\" button can be used to execute the next block. A graph of frames per second and number of clones can be viewed in the \"Performance\" tab.",
   "credits": [
     {
       "name": "Tacodiva",
@@ -51,7 +51,7 @@
       "default": false
     },
     {
-      "name": "Log when max clones exceeded",
+      "name": "Log when clone limit exceeded",
       "id": "log_failed_clone_creation",
       "type": "boolean",
       "default": true
@@ -75,7 +75,7 @@
       "default": false
     },
     {
-      "name": "Fill and animate graphs",
+      "name": "Animated graphs (may affect performance)",
       "id": "fancy_graphs",
       "type": "boolean",
       "default": false
@@ -85,7 +85,7 @@
   "versionAdded": "1.16.0",
   "latestUpdate": {
     "version": "1.33.0",
-    "temporaryNotice": "There is now an option to disable the filling and animating of graphs.",
+    "temporaryNotice": "Graph animation is now disabled by default to increase performance. You can re-enable it if you want.",
     "newSettings": ["fancy_graphs"]
   },
   "libraries": ["chartjs"]

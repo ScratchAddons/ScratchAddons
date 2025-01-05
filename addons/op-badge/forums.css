@@ -1,0 +1,10 @@
+.sa-original-poster {
+  display: inline-block;
+  background-color: var(--darkWww-button-scratchr2PostHeader, #855cd6);
+  color: var(--darkWww-button-text, white);
+  border-radius: 16px;
+  text-shadow: none;
+  padding: 4px;
+  padding-left: 6px;
+  padding-right: 6px;
+}

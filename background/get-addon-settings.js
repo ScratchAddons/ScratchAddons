@@ -1,13 +1,18 @@
 import minifySettings from "../libraries/common/minify-settings.js";
+import changeAddonState from "./imports/change-addon-state.js";
+import { onReady } from "./imports/on-ready.js";
 
 /**
  Since presets can change independently of others, we have to keep track of
  the versions separately. Current versions:
 
- - editor-dark-mode 6 (bumped in v1.32 four times)
- - editor-theme3 3 (last bumped in v1.32)
+ - editor-dark-mode 10 (bumped 4 times in v1.33.2)
+ - editor-theme3 4 (last bumped in v1.39)
+ - dark-www 7 (bumped twice in v1.34.0)
+ - forum-quote-code-beautifier 1 (last bumped in v1.34)
  */
 
+// The following three functions are helper functions for the setting migration code
 const areColorsEqual = (currentColor, oldPresetColor) => {
   // Case insensitive
   const currentColorLowercase = currentColor.toLowerCase();
@@ -18,10 +23,10 @@ const areColorsEqual = (currentColor, oldPresetColor) => {
     hexColor.length === 7 // #{rr}{gg}{bb}  →  #{rr}{gg}{bb}ff
       ? `${hexColor}ff`
       : hexColor.length === 5 // #{r}{g}{b}{a}  →  #{rr}{gg}{bb}{aa}
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
-      : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
-      : hexColor;
+        ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
+        : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
+          ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
+          : hexColor;
 
   // Convert both colors to #{rr}{gg}{bb}{aa}
   const currentColorRRGGBBAA = getRRGGBBAA(currentColorLowercase);
@@ -58,6 +63,8 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, presetOrFn 
       if (typeof presetOrFn === "object") map[key] = presetOrFn.values[key];
     }
 
+    if (Array.isArray(settings._appliedVersions)) settings._appliedVersions.push(version);
+    else settings._appliedVersions = [version];
     if (typeof presetOrFn === "function") return presetOrFn(); // Custom migration logic if preset matches
 
     const preset = presetOrFn;
@@ -70,6 +77,7 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, presetOrFn 
   }
 };
 
+// Since v1.33.0, addon settings are split up across three storage keys to help stay below a storage quota.
 async function transitionToNewStorageKeys(addonSettings) {
   chrome.storage.sync.set(
     {
@@ -98,6 +106,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
     ? {} // Default value
     : { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 };
   const func = () => {
+    // Start by migrating settings (sometimes we add new settings or make changes to
+    // the available settings in some addons between versions)
     let madeAnyChanges = false;
 
     if (addonsEnabled["editor-devtools"] === true && addonsEnabled["move-to-top-bottom"] === undefined) {
@@ -135,6 +145,48 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
     }
 
+    if (addonsEnabled["custom-menu-bar"] === undefined) {
+      // Transition v1.35 to v1.36
+      if (addonsEnabled["tutorials-button"] === true) {
+        // Hide Tutorials button is now a setting in Customizable menu bar. Enable it for existing addon users.
+        madeAnyChanges = true;
+        addonsEnabled["custom-menu-bar"] = true;
+        addonSettings["custom-menu-bar"] = { ["hide-tutorials-button"]: true };
+      }
+      if (addonsEnabled["editor-compact"] === true) {
+        // The icons on the menu bar buttons are now hidden via Customizable menu bar.
+        // Enable it for existing Compact editor users.
+        madeAnyChanges = true;
+        addonsEnabled["custom-menu-bar"] = true;
+        if (!addonSettings["custom-menu-bar"]) addonSettings["custom-menu-bar"] = {};
+        addonSettings["custom-menu-bar"]["menu-labels"] = "labels";
+      }
+    }
+
+    if (addonsEnabled["editor-dark-mode"] && addonSettings["editor-dark-mode"]["dots"] === false) {
+      // Transition v1.38 to v1.39
+      madeAnyChanges = true;
+      delete addonSettings["editor-dark-mode"]["dots"];
+      addonsEnabled["workspace-dots"] = true;
+      if (!addonSettings["workspace-dots"]) addonSettings["workspace-dots"] = {};
+      addonSettings["workspace-dots"]["theme"] = "none";
+    }
+
+    if (addonSettings["editor-theme3"]?._version === 3) {
+      // Detected update to v1.39 (code below will set the version to 4)
+      if (addonsEnabled["msg-count-badge"] && chrome.action.getUserSettings) {
+        chrome.action
+          .getUserSettings()
+          .then((userSettings) => {
+            if (userSettings?.isOnToolbar === false) {
+              // Disable addon if extension not pinned to toolbar
+              onReady(() => changeAddonState("msg-count-badge", false));
+            }
+          })
+          .catch(() => {});
+      }
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
@@ -156,7 +208,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             madeChangesToAddon = true;
             madeAnyChanges = true;
 
-            // cloning required for tables
+            // Fill in with default value
+            // Cloning required for tables
             settings[option.id] = JSON.parse(JSON.stringify(option.default));
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
@@ -206,6 +259,133 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             delete scratchr2.primaryColor;
             delete scratchr2.linkColor;
           }
+
+          updatePresetIfMatching(
+            settings,
+            1,
+            {
+              navbar: "#4d97ff",
+            },
+            () => {
+              settings.navbar = "#855cd6";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            2,
+            {
+              // Old blue "highlight color" setting
+              button: "#4d97ff", // Same old color as "navbar" setting.
+            },
+            () => {
+              settings.button = "#855cd6"; // Same new color as migration #1
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            3,
+            {
+              // "Experimental Dark" preset (as of v1.33.1 - now renamed)
+              page: "#202020",
+              // navbar: "#4d97ff",
+              box: "#282828",
+              gray: "#333333",
+              blue: "#252c37",
+              input: "#202020",
+              // button: "#4d97ff",
+              link: "#4d97ff",
+              footer: "#333333",
+              border: "#606060",
+            },
+            () => {
+              settings.blue = "#292d32";
+              settings.link = "#ccb3ff";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            4,
+            // "Dark WWW" preset
+            {
+              page: "#242527",
+              // navbar: "#4d97ff",
+              box: "#2f3137",
+              gray: "#424346",
+              blue: "#1b1d1f",
+              input: "#3a3a3a",
+              // button: "#4d97ff",
+              link: "#4d97ff",
+              footer: "#17181a",
+              border: "#000000",
+            },
+            () => {
+              settings.link = "#ccb3ff"; // Same new color as migration #3
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            5,
+            // "Scratch default colors" preset (as of v1.33.1 - now renamed)
+            {
+              page: "#fcfcfc",
+              // navbar: "#4d97ff",
+              box: "#ffffff",
+              gray: "#f2f2f2",
+              blue: "#e9f1fc",
+              input: "#fafafa",
+              // button: "#4d97ff",
+              link: "#4d97ff",
+              footer: "#f2f2f2",
+              border: "#0000001a",
+            },
+            () => {
+              settings.link = "#855cd6";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+
+          updatePresetIfMatching(
+            settings,
+            6,
+            // "Scratch default colors (blue)" preset
+            {
+              page: "#fcfcfc",
+              box: "#ffffff",
+              gray: "#f2f2f2",
+              blue: "#e9f1fc",
+              input: "#fafafa",
+              link: "#4d97ff",
+              footer: "#f2f2f2",
+              border: "#0000001a",
+            },
+            () => {
+              settings.messageIndicatorOnMessagesPage = "#ffab1a";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            7,
+            // "Experimental Dark (blue)" preset
+            {
+              page: "#202020",
+              box: "#282828",
+              gray: "#333333",
+              blue: "#252c37",
+              input: "#202020",
+              link: "#4d97ff",
+              footer: "#333333",
+              border: "#606060",
+            },
+            () => {
+              settings.messageIndicatorOnMessagesPage = "#ffab1a";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
         }
 
         if (addonId === "editor-dark-mode") {
@@ -322,6 +502,110 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             settings.popup = newPopupSettingValue;
             madeAnyChanges = madeChangesToAddon = true;
           }
+
+          updatePresetIfMatching(
+            settings,
+            7,
+            {
+              // "Experimental Dark" preset
+              page: "#263241",
+              primary: "#4d97ff",
+              highlightText: "#4d97ff",
+              menuBar: "#4d97ff",
+              activeTab: "#282828",
+              tab: "#202020",
+              selector: "#252c37",
+              selector2: "#202020",
+              selectorSelection: "#282828",
+              accent: "#282828",
+              input: "#282828",
+              workspace: "#282828",
+              categoryMenu: "#282828",
+              palette: "#333333cc",
+              border: "#444444",
+            },
+            () => {
+              console.log("Migrated Experimental Dark preset.");
+              madeAnyChanges = madeChangesToAddon = true;
+              settings.page = "#2e3238";
+              settings.primary = "#855cd6";
+              settings.highlightText = "#ccb3ff";
+              settings.selector = "#292d32";
+              // Changing the menuBar ("menu bar background") setting is handled by migration #10.
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            8,
+            {
+              // "3.Darker" preset
+              page: "#111111",
+              primary: "#4d97ff",
+              highlightText: "#4d97ff",
+              menuBar: "#202020",
+              activeTab: "#202020",
+              tab: "#151515",
+              selector: "#202020",
+              selector2: "#202020",
+              selectorSelection: "#111111",
+              accent: "#151515",
+              input: "#202020",
+              workspace: "#151515",
+              categoryMenu: "#202020",
+              palette: "#202020cc",
+              border: "#ffffff0d",
+            },
+            () => {
+              console.log("Migrated 3.Darker preset.");
+              madeAnyChanges = madeChangesToAddon = true;
+              // Applies only 2 of the 5 changes from migration #7 with the exact same colors.
+              settings.primary = "#855cd6";
+              settings.highlightText = "#ccb3ff";
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            9,
+            {
+              // "Scratch 3.0 default colors" preset (as of v1.33.1 - now renamed)
+              page: "#e5f0ff",
+              primary: "#4d97ff",
+              highlightText: "#4d97ff",
+              menuBar: "#4d97ff",
+              activeTab: "#ffffff",
+              tab: "#d9e3f2",
+              selector: "#e9f1fc",
+              selector2: "#d9e3f2",
+              selectorSelection: "#ffffff",
+              accent: "#ffffff",
+              input: "#ffffff",
+              workspace: "#f9f9f9",
+              categoryMenu: "#ffffff",
+              palette: "#f9f9f9cc",
+              border: "#00000026",
+            },
+            () => {
+              console.log("Migrated Scratch 3.0 default colors preset.");
+              madeAnyChanges = madeChangesToAddon = true;
+              // Applies the same color (#855cd6) to the "highlight color" and "text and icon highlight color" settings.
+              settings.primary = "#855cd6";
+              settings.highlightText = "#855cd6";
+              // Changing the menuBar ("menu bar background") setting is handled by migration #10.
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            10,
+            {
+              // Old vanilla "menu bar background" (blue)
+              menuBar: "#4d97ff",
+            },
+            () => {
+              console.log("Migrated 'menu bar background' setting from old blue to new purple.");
+              madeAnyChanges = madeChangesToAddon = true;
+              settings.menuBar = "#855cd6"; // New vanilla "menu bar background" (purple)
+            }
+          );
         }
 
         if (addonId === "editor-theme3") {
@@ -396,6 +680,58 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             // Override the preset color if dark comments are not enabled
             addonSettings["comment-color"] = "#FEF49C";
           }
+
+          // Transition v1.38 to v1.39
+          updatePresetIfMatching(
+            settings,
+            4,
+            {
+              text: "colorOnBlack",
+            },
+            () => {
+              madeAnyChanges = madeChangesToAddon = true;
+              Object.assign(settings, {
+                // Fraction of the "Black" preset
+                fillStyle: "colored",
+                fillOpacity: 5,
+                strokeStyle: "colored",
+                strokeOpacity: 50,
+              });
+            }
+          );
+        }
+
+        if (addonId === "forum-quote-code-beautifier") {
+          updatePresetIfMatching(settings, 1, { bordercolor: "#28A5DA" }, () => {
+            madeAnyChanges = madeChangesToAddon = true;
+            settings.bordercolor = "#855cd6";
+          });
+        }
+
+        if (addonId === "colorblind" && settings.links) {
+          // Transition v1.34 to v1.35
+          if (settings.links !== "underline") settings["underline-style"] = "none";
+          if (settings.links === "bold") {
+            settings.bold = "all";
+          } else {
+            settings["bold"] = "default";
+          }
+          delete settings.links;
+          madeAnyChanges = madeChangesToAddon = true;
+        }
+
+        if (addonId === "fullscreen" && settings.hideToolbar !== undefined) {
+          // Transition v1.36 to v1.37
+          if (!settings.hideToolbar) {
+            settings.toolbar = "show";
+          } else if (settings.hoverToolbar) {
+            settings.toolbar = "hover";
+          } else {
+            settings.toolbar = "hide";
+          }
+          delete settings.hideToolbar;
+          delete settings.hoverToolbar;
+          madeAnyChanges = madeChangesToAddon = true;
         }
       }
 
@@ -407,6 +743,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
     }
 
+    // Finally, minify the settings and store them in the scratchAddons object
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     if (madeAnyChanges)
       chrome.storage.sync.set({

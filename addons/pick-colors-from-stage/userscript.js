@@ -41,7 +41,7 @@ export default async function ({ addon, msg, console }) {
             // By the time we get here, scratch-paint will have already deactivated its eye dropper.
             // If we were to just call the callback, the color would indeed update, but the sliders
             // in the color selector would not update.
-            // https://github.com/LLK/scratch-paint/blob/970b72c3e75d0ad44ab54e403a44786ca5f45512/src/containers/color-picker.jsx#L64
+            // https://github.com/scratchfoundation/scratch-paint/blob/970b72c3e75d0ad44ab54e403a44786ca5f45512/src/containers/color-picker.jsx#L64
             // To work around this, we will re-enable the color picker before running the callback.
             addon.tab.redux.dispatch({
               ...action,

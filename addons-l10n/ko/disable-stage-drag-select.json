@@ -1,1 +1,1 @@
-{"disable-stage-drag-select/@name":"편집기에서 스프라이트 드래그 끄기","disable-stage-drag-select/@description":"편집기 무대에서(드래그가 가능하도록 설정된 스프라이트 제외) 스프라이트 드래그를 막습니다. 시프트 키를 누르면 스프라이트가 정상적으로 드래그됩니다."}
+{"disable-stage-drag-select/@name":"편집기에서 스프라이트 드래그 끄기","disable-stage-drag-select/@description":"편집기 무대에서(드래그가 가능하도록 설정된 스프라이트 제외) 스프라이트 드래그를 막습니다. 시프트 키를 누르면 스프라이트가 정상적으로 드래그됩니다.","disable-stage-drag-select/@settings-name-drag_while_stopped":"프로젝트가 멈쳐 있을 때 드래그를 가능하게 해줍니다."}
