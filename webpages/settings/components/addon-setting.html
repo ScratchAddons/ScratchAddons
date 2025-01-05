@@ -9,6 +9,10 @@
   >
     <div class="setting-label-container">
       <div class="setting-label" v-html="settingsName(addon)"></div>
+      <div v-if="setting.description" class="tooltip">
+        <img src="../../images/icons/help.svg" class="icon-type setting-help-icon">
+        <span class="tooltiptext">{{setting.description}}</span>
+      </div>
       <addon-tag v-if="isNewOption" tag="new"></addon-tag>
     </div>
     <template v-if="noResetDropdown">
@@ -160,6 +164,14 @@
     display: flex;
     align-items: center;
     position: relative;
+  }
+  .setting-help-icon {
+    padding-inline-start: 8px;
+    width: 18px;
+    height: 18px;
+  }
+  .iframe .setting-help-icon {
+    display: none;
   }
   .setting-input {
     color: var(--content-text);
