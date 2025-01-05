@@ -280,7 +280,7 @@ const blocks = {
   event_whenbroadcastreceived: build`when I receive ${{ field: "BROADCAST_OPTION", dropdown: true, useText: true }}`,
   event_whenbackdropswitchesto: build`when backdrop switches to ${{ field: "BACKDROP", dropdown: true }}`,
   event_whengreaterthan: build`when ${{ field: "WHENGREATERTHANMENU", dropdown: true, args: { LOUDNESS: "loudness", TIMER: "timer" } }} > ${{ input: "VALUE" }}`,
-  event_broadcast_menu: dropdown({useText: true}),
+  event_broadcast_menu: dropdown({ useText: true }),
   event_broadcast: build`broadcast ${{ input: "BROADCAST_INPUT", dropdown: true, useText: true }}`,
   event_broadcastandwait: build`broadcast ${{ input: "BROADCAST_INPUT", dropdown: true, useText: true }} and wait`,
   event_whenkeypressed: build`when ${{ field: "KEY_OPTION", dropdown: true }} key pressed`,
