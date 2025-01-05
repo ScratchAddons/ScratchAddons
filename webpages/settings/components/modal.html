@@ -1,7 +1,7 @@
 <template>
   <div v-cloak v-show="isOpen" class="modal">
     <div class="modal-content" v-click-outside="clickOutside" @click="closePickers">
-      <div class="modal-title">
+      <div>
         <img
           @click="isOpen = false"
           class="close"
@@ -31,19 +31,10 @@
     justify-content: center;
   }
 
-  .modal-title {
-    position: sticky;
-    top: 0;
-    background-color: inherit;
-    padding-block: 20px;
-    z-index: 99;
-  }
-
   .modal-content {
     background-color: var(--page-background);
     margin: auto;
     padding: 20px;
-    padding-top: 0px;
     width: 50rem;
     max-width: 80%;
     border-radius: 10px;

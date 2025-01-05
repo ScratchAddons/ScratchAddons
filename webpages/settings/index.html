@@ -281,13 +281,15 @@
       </div>
     </div>
     <modal class="related-addons-modal" :is-open.sync="relatedAddonsOpen" :title="msg('relatedAddons')" v-cloak>
-      <addon-body
-        v-for="addonManifest of relatedAddons"
-        :visible="true"
-        :addon="addonManifest"
-        group-id="enabled"
-        :group-expanded="true"
-      ></addon-body>
+      <div class="settings-block">
+        <addon-body
+          v-for="addonManifest of relatedAddons"
+          :visible="true"
+          :addon="addonManifest"
+          group-id="enabled"
+          :group-expanded="true"
+        ></addon-body>
+      </div>
     </modal>
     <modal class="more-settings" :is-open.sync="moreSettingsOpen" :title="msg('moreSettings')" v-cloak>
       <div class="addon-block settings-block">
