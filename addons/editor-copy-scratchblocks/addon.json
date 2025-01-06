@@ -2,6 +2,13 @@
   "versionAdded": "1.41.0",
   "name": "Copy scratchblocks code from editor",
   "description": "Adds an option to block context menus to copy the block's scratchblocks code to the clipboard for use in the forums.",
+  "info": [
+    {
+      "type": "info",
+      "text": "This addon can only output English scratchblocks code.",
+      "id": "lang-support"
+    }
+  ],
   "tags": ["editor", "codeEditor"],
   "userscripts": [
     {
