@@ -2,7 +2,7 @@
   "name": "Jump to unread posts in discussion forums",
   "description": "Makes topic links on the discuss page go to the first unread post rather than the first post of the topic.",
   "tags": ["community", "forums"],
-  "versionAdded": "1.41.0",
+  "versionAdded": "1.42.0",
   "userscripts": [
     {
       "url": "userscript.js",
