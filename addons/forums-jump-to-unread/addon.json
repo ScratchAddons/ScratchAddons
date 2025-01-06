@@ -1,0 +1,26 @@
+{
+  "name": "Jump to unread posts in discussion forums",
+  "description": "Makes topic links on the discuss page go to the first unread post rather than the first post of the topic.",
+  "tags": ["community", "forums"],
+  "versionAdded": "1.41.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["^https://scratch.mit.edu/discuss/(?:m/|)(?:search|1|3|4|6|7|9|11|49)/"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["^https://scratch.mit.edu/discuss/(?:m/|)(?:search|1|3|4|6|7|9|11|49)/"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "just-a-hriday",
+      "link": "https://scratch.mit.edu/users/just-a-hriday/"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
