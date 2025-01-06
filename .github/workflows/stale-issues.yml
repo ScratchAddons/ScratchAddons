@@ -10,13 +10,13 @@ jobs:
     if: github.repository_owner == 'ScratchAddons'
     steps:
       - name: Generate token
-        uses: tibdex/github-app-token@v1
+        uses: tibdex/github-app-token@v2
         id: generate-token
         with:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
       - name: Execute Action
-        uses: actions/stale@v6
+        uses: actions/stale@v9
         with:
           stale-issue-message: 'Ping! There has been no activity for 7 days.'
           stale-pr-message: 'Ping! There has been no activity for 7 days.'

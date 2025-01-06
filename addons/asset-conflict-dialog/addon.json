@@ -1,0 +1,32 @@
+{
+  "name": "Asset conflict dialog",
+  "description": "When uploading costumes or sounds with the same name as an existing one, shows a dialog with options to replace or skip them instead of always renaming them.",
+  "credits": [
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    },
+    {
+      "name": "GarboMuffin",
+      "link": "https://scratch.mit.edu/users/GarboMuffin/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "versionAdded": "1.39.0",
+  "tags": ["editor", "costumeEditor", "featured"],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

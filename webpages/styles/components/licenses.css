@@ -8,6 +8,15 @@
   padding: 2rem;
 }
 
+.licenses-body h2 {
+  font-family: "Sora", sans-serif;
+  font-weight: 600;
+}
+
 .licenses-body pre {
   white-space: pre-wrap;
+}
+
+#loading {
+  display: none;
 }
