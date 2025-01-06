@@ -44,14 +44,6 @@
           />{{ info.text }}
         </div>
       </div>
-      <div class="related-addons" v-if="addon._relatedAddons && !isIframe">
-        <div class="addon-message addon-info">
-          <span class="related-addons-text">{{msg('relatedAddons')}}</span>
-          <span v-for="addonManifest of addon._relatedAddons">
-            <a @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
-          </span>
-        </div>
-      </div>
       <div class="addon-credits" v-if="addon.credits">
         <span>{{ msg("creditTo") }}</span>
         <span v-for="credit of addon.credits">
@@ -113,6 +105,14 @@
             </span>
             <span>{{preset.name}}</span>
           </button>
+        </div>
+      </div>
+      <div class="related-addons" v-if="addon._relatedAddons && !isIframe">
+        <div class="addon-message addon-info">
+          <span class="related-addons-text">{{msg('relatedAddons')}}</span>
+          <span v-for="addonManifest of addon._relatedAddons">
+            <a @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
+          </span>
         </div>
       </div>
     </div>
@@ -308,7 +308,7 @@
     flex-wrap: wrap;
     padding: 6px;
     padding-left: 10px;
-    border-width: 1px;
+    border: none;
     border-radius: 10px;
     font-size: 12px;
   }
