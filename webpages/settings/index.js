@@ -538,7 +538,9 @@ let fuse;
     for (const { manifest } of manifests) {
       if (manifest.relatedAddons) {
         manifest._relatedAddons = manifest.relatedAddons.map(
-          (relatedAddonId) => manifests.find(({ addonId }) => addonId === relatedAddonId).manifest
+          (relatedAddonId) =>
+            manifests.find(({ addonId }) => addonId === relatedAddonId)?.manifest ??
+            console.warn("Invalid related addon:", relatedAddonId, "found on addon manifest of:", addonId)
         );
       }
     }
