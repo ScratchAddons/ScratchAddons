@@ -7,6 +7,7 @@ export default async function ({ template }) {
         isIframe: window.parent !== window,
         rowDropdownOpen: false,
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
+        isOverflowing: false,
       };
     },
     ready() {
@@ -149,6 +150,10 @@ export default async function ({ template }) {
         this.addonSettings[this.setting.id] = newValue;
         this.updateSettings();
       },
+      checkOverflowing(e) {
+        this.isOverflowing = window.innerWidth - e.clientX < 250;
+        console.log(this.isOverflowing)
+      }
     },
     events: {
       closePickers(...params) {
