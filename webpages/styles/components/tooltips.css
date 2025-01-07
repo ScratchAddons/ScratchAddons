@@ -49,6 +49,10 @@
   transform: translate(-50%, -100%);
   margin-inline-start: 0;
 }
+[dir="rtl"] .tooltiptext.tooltiptexttop {
+  transform: translate(50%, -100%);
+  right: 50%;
+}
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
