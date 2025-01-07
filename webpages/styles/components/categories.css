@@ -23,6 +23,9 @@
 .categories-block.smallMode.closed {
   transform: translateX(-100%);
 }
+.categories-block.smallMode.closed {
+  transform: translateX(100%);
+}
 
 .categories-block.closed:not(.smallMode) {
   display: none;
