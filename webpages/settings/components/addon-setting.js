@@ -152,8 +152,8 @@ export default async function ({ template }) {
       },
       checkOverflowing(e) {
         this.isOverflowing = window.innerWidth - e.clientX < 250;
-        console.log(this.isOverflowing)
-      }
+        console.log(this.isOverflowing);
+      },
     },
     events: {
       closePickers(...params) {
