@@ -10,12 +10,8 @@
     <div class="setting-label-container">
       <div class="setting-label" v-html="settingsName(addon)"></div>
       <div v-if="setting.description && !isIframe" class="tooltip">
-        <img
-          src="../../images/icons/help.svg"
-          class="icon-type setting-help-icon"
-          @mouseenter="checkOverflowing($event)"
-        />
-        <span class="tooltiptext" :class="{tooltiptextleft: isOverflowing}">{{setting.description}}</span>
+        <img src="../../images/icons/help.svg" class="icon-type setting-help-icon" />
+        <span class="tooltiptext tooltiptexttop">{{setting.description}}</span>
       </div>
       <addon-tag v-if="isNewOption" tag="new"></addon-tag>
     </div>
