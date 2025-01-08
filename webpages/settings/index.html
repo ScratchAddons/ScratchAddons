@@ -280,7 +280,12 @@
         </div>
       </div>
     </div>
-    <modal class="related-addons-modal" :is-open.sync="relatedAddonsOpen" :title="msg('relatedAddonsTitleCase')" v-cloak>
+    <modal
+      class="related-addons-modal"
+      :is-open.sync="relatedAddonsOpen"
+      :title="msg('relatedAddonsTitleCase')"
+      v-cloak
+    >
       <div class="settings-block">
         <addon-body
           v-for="addonManifest of relatedAddons"
