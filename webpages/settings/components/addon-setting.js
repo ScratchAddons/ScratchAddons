@@ -4,7 +4,6 @@ export default async function ({ template }) {
     template,
     data() {
       return {
-        isIframe: window.parent !== window,
         rowDropdownOpen: false,
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
       };
