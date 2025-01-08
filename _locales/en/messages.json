@@ -152,6 +152,9 @@
   "relatedAddons": {
     "message": "Related addons:"
   },
+  "relatedAddonsTitleCase": {
+    "message": "Related Addons"
+  },
   "creditTo": {
     "message": "Credit to:"
   },
