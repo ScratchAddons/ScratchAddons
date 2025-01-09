@@ -1,3 +1,5 @@
+import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
+
 export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
@@ -939,6 +941,7 @@ export default async function ({ addon, console, msg }) {
 
   const uniques = (array) => [...new Set(array)];
 
+  enableContextMenuSeparators(addon.tab);
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (!addon.self.disabled) {
@@ -1007,12 +1010,14 @@ export default async function ({ addon, console, msg }) {
               : // If there's no such button, insert at end
                 items.length;
           const text = opcodeData.msg ? opcodeData.msg : opcodeData.opcode ? msg(opcodeData.opcode) : msg(block.type);
-          items.splice(insertBeforeIndex, 0, {
+          const item = {
             enabled: true,
             text,
             callback: menuCallbackFactory(block, opcodeData),
             separator: i === 0,
-          });
+          };
+          if (i === 0) addSeparator(item);
+          items.splice(insertBeforeIndex, 0, item);
         });
 
         if (block.type === "data_variable" || block.type === "data_listcontents") {
@@ -1021,7 +1026,10 @@ export default async function ({ addon, console, msg }) {
           // firstVariableItem might be undefined, a variable to switch to,
           // or an item added by editor-devtools (or any addon before this one)
           const firstVariableItem = items[delBlockIndex + 1];
-          if (firstVariableItem) firstVariableItem.separator = true;
+          if (firstVariableItem) {
+            firstVariableItem.separator = true;
+            addSeparator(firstVariableItem);
+          }
         }
       }
       return items;

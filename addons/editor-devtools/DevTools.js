@@ -1,6 +1,7 @@
 // import ShowBroadcast from "./show-broadcast.js";
 import DomHelpers from "./DomHelpers.js";
 import UndoGroup from "./UndoGroup.js";
+import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
 
 export default class DevTools {
   constructor(addon, msg, m) {
@@ -55,37 +56,56 @@ export default class DevTools {
       else blockly.Msg.CLEAN_UP = originalMsg;
     });
 
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
-        items.push({
-          enabled: blockly.clipboardXml_,
-          text: this.m("paste"),
-          separator: true,
-          _isDevtoolsFirstItem: true,
-          callback: () => {
-            let ids = this.getTopBlockIDs();
+    enableContextMenuSeparators(this.addon.tab);
 
-            document.dispatchEvent(
-              new KeyboardEvent("keydown", {
-                keyCode: 86,
-                ctrlKey: true,
-                griff: true,
-              })
-            );
+    const pasteCallback = () => {
+      let ids = this.getTopBlockIDs();
 
-            setTimeout(() => {
-              this.beginDragOfNewBlocksNotInIDs(ids);
-            }, 10);
-          },
-        });
-        return items;
-      },
-      { workspace: true }
-    );
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          keyCode: 86,
+          ctrlKey: true,
+          griff: true,
+        })
+      );
+
+      setTimeout(() => {
+        this.beginDragOfNewBlocksNotInIDs(ids);
+      }, 10);
+    };
+
+    if (blockly.registry) {
+      // new Blockly
+      blockly.ContextMenuRegistry.registry.register(
+        addSeparator({
+          displayText: this.m("paste"),
+          preconditionFn: () => (blockly.clipboardXml_ ? "enabled" : "disabled"),
+          callback: pasteCallback,
+          scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+          id: "saPaste",
+          weight: 10, // after Save All as Image
+        })
+      );
+    } else {
+      this.addon.tab.createBlockContextMenu(
+        (items, block) => {
+          items.push({
+            enabled: blockly.clipboardXml_,
+            text: this.m("paste"),
+            separator: true,
+            _isDevtoolsFirstItem: true,
+            callback: pasteCallback,
+          });
+          return items;
+        },
+        { workspace: true }
+      );
+    }
+
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         items.push(
-          {
+          addSeparator({
             enabled: true,
             text: this.m("make-space"),
             _isDevtoolsFirstItem: true,
@@ -93,15 +113,15 @@ export default class DevTools {
               this.doCleanUp(block);
             },
             separator: true,
-          },
-          {
+          }),
+          addSeparator({
             enabled: true,
             text: this.m("copy-all"),
             callback: () => {
               this.eventCopyClick(block);
             },
             separator: true,
-          },
+          }),
           {
             enabled: true,
             text: this.m("copy-block"),
@@ -138,23 +158,26 @@ export default class DevTools {
       },
       { blocks: true }
     );
+
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
           this.selVarID = block.getVars()[0];
-          items.push({
-            enabled: true,
-            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
-            callback: () => {
-              let wksp = this.getWorkspace();
-              let v = wksp.getVariableById(this.selVarID);
-              let varName = window.prompt(this.msg("replace", { name: v.name }));
-              if (varName) {
-                this.doReplaceVariable(this.selVarID, varName, v.type);
-              }
-            },
-            separator: true,
-          });
+          items.push(
+            addSeparator({
+              enabled: true,
+              text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+              callback: () => {
+                let wksp = this.getWorkspace();
+                let v = wksp.getVariableById(this.selVarID);
+                let varName = window.prompt(this.msg("replace", { name: v.name }));
+                if (varName) {
+                  this.doReplaceVariable(this.selVarID, varName, v.type);
+                }
+              },
+              separator: true,
+            })
+          );
         }
         return items;
       },
