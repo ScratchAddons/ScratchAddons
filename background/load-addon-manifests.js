@@ -19,7 +19,11 @@ const localizeSettings = (addonId, setting, tableId) => {
   );
 
   if (setting.description) {
-    setting.description = scratchAddons.l10n.get(`${addonId}/@settings-description-${settingId}`, {}, setting.description);
+    setting.description = scratchAddons.l10n.get(
+      `${addonId}/@settings-description-${settingId}`,
+      {},
+      setting.description
+    );
   }
 
   switch (setting.type) {
