@@ -30,6 +30,7 @@
     {
       "name": "Flip controls",
       "id": "invertDrag",
+      "description": "Make grabbing blocks individually the default behavior. Hold Ctrl to drag entire stacks.",
       "type": "boolean",
       "default": false
     }
