@@ -30,7 +30,7 @@ export default async function ({ addon, console, msg }) {
     fetch(`https://api.scratch.mit.edu/users/${user}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.code == "NotFound") {
+        if (data.code === "NotFound") {
           setInvalidUsername();
         } else if (!data.code) {
           span.innerText = "@" + data.username;

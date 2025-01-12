@@ -1,0 +1,233 @@
+/* Header */
+.outer .title-banner.masthead {
+  background-color: transparent;
+}
+.outer .title-banner.masthead h1 {
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+}
+
+/* Tabs */
+.outer .tab-background {
+  background-color: transparent;
+  box-shadow: none;
+}
+@media (min-width: 942px) {
+  .outer .tabs {
+    /* Search page uses em instead of rem */
+    width: 58.75rem;
+  }
+}
+.tabs {
+  background-color: transparent;
+  border-bottom: 1px solid var(--darkWww-border-20, #ccc);
+}
+.tabs button {
+  width: auto;
+  padding: 4px 20px;
+  border: 1px solid transparent;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: var(--darkWww-page-scratchr2ButtonText, #666);
+  font-weight: bold;
+}
+.tabs button:active {
+  padding: 4px 20px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+.tabs button:hover {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+  border: 1px solid var(--darkWww-border, #ddd);
+  border-bottom-color: transparent;
+  box-shadow: inset 0 1px 0 var(--darkWww-gray-boxHighlight, white);
+  color: var(--darkWww-gray-scratchr2ButtonText, #666);
+  transition: none;
+}
+.tabs button.active,
+.tabs button.active:hover {
+  background-color: var(--darkWww-box, white);
+  border: 1px solid var(--darkWww-border-20, #ccc);
+  border-bottom-color: transparent;
+  box-shadow: none;
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+}
+.tabs button > div {
+  display: flex;
+  align-items: center;
+}
+.tabs button.sa-search-profile-btn {
+  display: var(--searchProfile-_displayNoneWhileDisabledValue, flex) !important;
+  align-items: center;
+  padding: 4px 20px;
+}
+.tabs button .tab-icon {
+  margin-bottom: 0;
+  margin-right: 4px;
+}
+.tabs button:not(.active) .tab-icon {
+  filter: var(--darkWww-page-filter, none);
+}
+.tabs button:hover .tab-icon {
+  filter: var(--darkWww-gray-filter, none);
+}
+.tabs button.active .tab-icon {
+  filter: var(--darkWww-box-filter, none);
+}
+.tabs button .tab-icon.projects,
+.tabs button .tab-icon.studios {
+  width: 0;
+  height: 0;
+  padding: 12px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  opacity: 0.7;
+}
+.tabs button .tab-icon.projects {
+  background-image: url("%addon-self-dir%/assets/green_flag_gray.png");
+}
+.tabs button .tab-icon.studios {
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/icons_sm.png");
+  background-position: -15px -310px;
+}
+
+/* Filters */
+.outer .sort-controls {
+  border: none;
+}
+.outer .categories {
+  padding: 0;
+}
+.outer .categories li,
+body:not(.sa-body-editor) .outer .sort-mode .select select {
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  border-radius: 5px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  font-size: 13px;
+  line-height: 30px;
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+.outer .categories li {
+  margin: 3px;
+}
+.outer .categories > a:first-child > li {
+  margin-left: 0;
+}
+.outer .categories > a:last-child > li {
+  margin-right: 0;
+}
+.outer .categories li:active {
+  padding: 0 10px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.outer .categories li:hover,
+body:not(.sa-body-editor) .outer .sort-mode .select select:hover,
+body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+}
+.outer .categories li:hover {
+  transition: none;
+}
+.outer .categories li.active {
+  background-color: var(--darkWww-button-scratchr2, #855cd6);
+  background-image: none;
+  border-color: var(--darkWww-button-scratchr2, #855cd6);
+  text-shadow: none;
+}
+.outer .categories li.active:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+.outer .sort-mode {
+  margin-top: 3px;
+  align-self: flex-start;
+  width: auto;
+  position: relative;
+}
+body:not(.sa-body-editor) .outer .sort-mode .select select {
+  appearance: none;
+  width: auto;
+  padding-right: 25px;
+  cursor: pointer;
+}
+.outer .sort-mode::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(50% - 2px);
+  right: 11px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid var(--darkWww-box-scratchr2Caret, black);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Grid */
+.outer #projectBox {
+  margin: 0;
+  padding-top: 8px;
+  padding-bottom: 20px;
+  background-color: transparent;
+}
+.grid .flex-row {
+  padding-top: 0;
+  padding-bottom: 8px;
+}
+.grid .thumbnail {
+  background-color: transparent;
+  box-shadow: none;
+}
+.grid .thumbnail .thumbnail-image {
+  margin: 7px auto;
+}
+.grid .thumbnail.project .thumbnail-image img,
+.grid .thumbnail.gallery .thumbnail-image img {
+  border: 1px solid var(--darkWww-border-15, #ddd);
+  border-radius: 0;
+}
+.grid .thumbnail .thumbnail-info .creator-image img {
+  margin-left: -1px;
+  margin-right: 7px;
+  border: 1px solid var(--darkWww-border-15, #ddd);
+  border-radius: 0;
+}
+.thumbnail .thumbnail-title a {
+  font-weight: 800;
+}
+.grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+  font-weight: normal;
+}
+
+/* Load More */
+.outer #projectBox .button {
+  width: auto;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  line-height: 30px;
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+.outer #projectBox .button:hover {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+}

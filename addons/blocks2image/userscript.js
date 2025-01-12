@@ -40,8 +40,6 @@ export default async function ({ addon, console, msg }) {
   exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
   exSVG.setAttribute("version", "1.1");
 
-  const enabledAddons = await addon.self.getEnabledAddons("codeEditor");
-
   addon.tab.createBlockContextMenu(
     (items) => {
       if (addon.self.disabled) return items;
@@ -180,9 +178,9 @@ export default async function ({ addon, console, msg }) {
   async function exportBlock(isExportPNG, copyToClipboard, returnData, block) {
     let svg;
     if (block) {
-      svg = selectedBlocks(isExportPNG, block);
+      svg = selectedBlocks(isExportPNG ? 2 : 1, block);
     } else {
-      svg = allBlocks(isExportPNG);
+      svg = allBlocks(isExportPNG ? 2 : 1);
     }
     // resolve nbsp whitespace
     svg.querySelectorAll("text").forEach((text) => {
@@ -218,59 +216,48 @@ export default async function ({ addon, console, msg }) {
         externalImages[iconUrl].forEach((item) => item.setAttribute("xlink:href", dataUri));
       })
     );
-    if (!isExportPNG) {
-      exportData(new XMLSerializer().serializeToString(svg));
-    } else {
+    if (isExportPNG) {
       return exportPNG(svg, copyToClipboard, returnData);
+    } else {
+      exportData(new XMLSerializer().serializeToString(svg));
     }
   }
 
-  function selectedBlocks(isExportPNG, block) {
+  function selectedBlocks(scale, block) {
     let svg = exSVG.cloneNode();
 
     let svgchild = block.svgGroup_;
+    const translateY = Math.abs(svgchild.getBBox().y) * scale + scale;
     svgchild = svgchild.cloneNode(true);
-    let dataShapes = svgchild.getAttribute("data-shapes");
-    let translateY = 0; // blocks no hat
-    const scale = isExportPNG ? 2 : 1;
-    if (dataShapes === "c-block c-1 hat") {
-      translateY = 20; // for My block
-    }
-    if (dataShapes === "hat") {
-      translateY = 16; // for Events
-      if (enabledAddons.includes("cat-blocks")) {
-        translateY += 16; // for cat ears
-      }
-    }
-    svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
+    svgchild.setAttribute("transform", `translate(${scale},${translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
     return svg;
   }
 
-  function allBlocks(isExportPNG) {
+  function allBlocks(scale) {
     let svg = exSVG.cloneNode();
-
     let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
-    svgchild = svgchild.cloneNode(true);
-
+    let translateY = 0;
     let xArr = [];
     let yArr = [];
 
+    // Loop before cloneNode so getBBox() works.
     svgchild.childNodes.forEach((g) => {
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
-      xArr.push(x * (isExportPNG ? 2 : 1));
-      yArr.push(y * (isExportPNG ? 2 : 1));
+      xArr.push(x * scale);
+      yArr.push(y * scale);
+
+      // This seems to work since the actual positioning is done with translate.
+      if (translateY === 0) translateY = Math.abs(g.getBBox().y) * scale + scale;
     });
 
-    svgchild.setAttribute(
-      "transform",
-      `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18 * (isExportPNG ? 2 : 1)}) ${
-        isExportPNG ? "scale(2)" : ""
-      }`
-    );
+    translateY -= Math.min(...yArr);
+
+    svgchild = svgchild.cloneNode(true);
+    svgchild.setAttribute("transform", `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
@@ -302,8 +289,8 @@ export default async function ({ addon, console, msg }) {
       document.body.append(iframe);
       iframe.contentDocument.write(serializer.serializeToString(svg));
       let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-      svg.setAttribute("width", width + "px");
-      svg.setAttribute("height", height + "px");
+      svg.setAttribute("width", width + 4 + "px");
+      svg.setAttribute("height", height + 4 + "px");
 
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");

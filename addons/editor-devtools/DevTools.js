@@ -163,7 +163,7 @@ export default class DevTools {
   }
 
   getWorkspace() {
-    return Blockly.getMainWorkspace();
+    return this.addon.tab.traps.getWorkspace();
   }
 
   isCostumeEditor() {

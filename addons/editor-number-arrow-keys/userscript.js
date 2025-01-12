@@ -168,6 +168,7 @@ export default async function ({ addon }) {
     } else {
       // Normal Blockly input
       e.target.value = newValue.toString();
+      e.target.dispatchEvent(new Event("input"));
     }
   });
 }

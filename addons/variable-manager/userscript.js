@@ -158,7 +158,7 @@ export default async function ({ addon, console, msg }) {
       label.htmlFor = id;
       const onLabelOut = (e) => {
         e.preventDefault();
-        const workspace = Blockly.getMainWorkspace();
+        const workspace = addon.tab.traps.getWorkspace();
 
         let newName = label.value;
         if (newName === this.scratchVariable.name) {

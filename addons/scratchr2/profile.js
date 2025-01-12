@@ -1,3 +1,4 @@
+/* global $ */
 /** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const oldSliderCarousel = $.fn.sliderCarousel;

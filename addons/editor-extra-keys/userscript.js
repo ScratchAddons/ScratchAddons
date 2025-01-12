@@ -75,7 +75,7 @@ export default async function ({ addon, msg }) {
   }
 
   const updateExistingBlocks = () => {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const flyout = workspace && workspace.getFlyout();
     if (workspace && flyout) {
       const allBlocks = [...workspace.getAllBlocks(), ...flyout.getWorkspace().getAllBlocks()];

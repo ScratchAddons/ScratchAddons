@@ -2,6 +2,8 @@ import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./mo
 
 /** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
+
   function createArrow(direction, callback) {
     const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
 
@@ -30,12 +32,12 @@ export default async function ({ addon, console }) {
       var input = this.inputList[n];
       if (input.connection) {
         var target = input.connection.targetBlock();
-        if (target.getField(field.name) == field) {
+        if (target.getField(field.name) === field) {
           inputNameToRemove = input.name;
         }
       } else {
         for (var j = 0; j < input.fieldRow.length; j++) {
-          if (input.fieldRow[j] == field) {
+          if (input.fieldRow[j] === field) {
             inputNameToRemove = input.name;
           }
         }
@@ -159,9 +161,8 @@ export default async function ({ addon, console }) {
   }
 
   function getExistingProceduresDeclarationBlock() {
-    // Blockly.getMainWorkspace is required for this to work.
-    // for future reference "upgrading" to addon.tab.traps.getWorkspace() will cause bugs.
-    return Blockly.getMainWorkspace()
+    // addon.tab.traps.getWorkspace() will never return the procedure declaration editor
+    return ScratchBlocks.getMainWorkspace()
       .getAllBlocks()
       .find((block) => block.type === "procedures_declaration");
   }

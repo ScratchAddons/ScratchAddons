@@ -1,3 +1,4 @@
+.categoryBubble::after,
 .scratchCategoryItemBubble::after {
   /* block-palette-icons */
   filter: brightness(0);
@@ -11,13 +12,28 @@
 .u-dropdown-searchbar,
 .u-dropdown-searchbar:focus,
 .blocklyDropDownDiv .goog-menuitem,
+.blocklyDropDownDiv .blocklyMenuItem,
 .blocklyNumPadButton {
   color: #575e75;
+}
+.blocklyDropDownDiv .blocklyText,
+.blocklyDropDownDiv.scratch-renderer.default-theme .blocklyText {
+  /* "Play note" dropdown */
+  fill: #575e75;
 }
 .u-dropdown-searchbar:focus {
   background-color: var(--editorTheme3-hoveredItem);
 }
 
+.blocklyAngleGauge,
+.blocklyAngleCenterPoint {
+  fill: black;
+}
+.blocklyAngleLine,
+.blocklyAngleMarks,
+.blocklyAngleCenterPoint {
+  stroke: black;
+}
 .blocklyAngleDragHandle {
   stroke: black;
   stroke-opacity: 0.15;
@@ -28,16 +44,24 @@
   fill: #feffff;
 }
 .scratchCommentBody,
-.scratchCommentTextarea {
+.scratchCommentTextarea,
+.blocklyComment .blocklyTextarea {
   background-color: #ffffff;
 }
 .scratchWorkspaceCommentBorder {
   stroke: var(--editorTheme3-commentColor);
 }
+.blocklyComment {
+  --colour-commentBorder: var(--editorTheme3-commentColor);
+}
+.blocklyCommentTopbarBackground {
+  fill: #e9eef2;
+}
 .scratchCommentTextarea::placeholder {
   color: rgba(0, 0, 0, 0.5);
 }
-.scratchCommentText {
+.scratchCommentText,
+.scratch-renderer.default-theme .blocklyComment .blocklyTextarea {
   fill: #575e75;
   color: #575e75;
 }

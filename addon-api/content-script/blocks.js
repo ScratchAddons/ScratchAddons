@@ -140,22 +140,51 @@ const generateBlockXML = () => {
 };
 
 const injectWorkspace = (ScratchBlocks) => {
-  const BlockSvg = ScratchBlocks.BlockSvg;
-  const oldUpdateColour = BlockSvg.prototype.updateColour;
-  BlockSvg.prototype.updateColour = function (...args) {
-    // procedures_prototype also have a procedure code but we do not want to color them.
-    if (!this.isInsertionMarker() && this.type === "procedures_call") {
-      const block = this.procCode_ && getCustomBlock(this.procCode_);
-      const color = ScratchBlocks.Colours.text === "#000000" ? highContrastColor : defaultColor;
-      if (block) {
-        this.colour_ = customColor.color || color.color;
-        this.colourSecondary_ = customColor.secondaryColor || color.secondaryColor;
-        this.colourTertiary_ = customColor.tertiaryColor || color.tertiaryColor;
-        this.customContextMenu = null;
-      }
-    }
-    return oldUpdateColour.call(this, ...args);
+  const isHighContrast = (workspace) => {
+    if (ScratchBlocks.registry)
+      return workspace.getTheme().name === "high-contrast"; // new Blockly
+    else return ScratchBlocks.Colours.text === "#000000";
   };
+
+  const BlockSvg = ScratchBlocks.BlockSvg;
+  if (ScratchBlocks.registry) {
+    // new Blockly
+    const oldApplyColour = BlockSvg.prototype.applyColour;
+    BlockSvg.prototype.applyColour = function (...args) {
+      // procedures_prototype also have a procedure code but we do not want to color them.
+      if (!this.isInsertionMarker() && this.type === "procedures_call") {
+        const block = this.procCode_ && getCustomBlock(this.procCode_);
+        const color = isHighContrast(this.workspace) ? highContrastColor : defaultColor;
+        if (block) {
+          this.style = {
+            ...this.style,
+            colourPrimary: customColor.color || color.color,
+            colourSecondary: customColor.secondaryColor || color.secondaryColor,
+            colourTertiary: customColor.tertiaryColor || color.tertiaryColor,
+          };
+          this.pathObject.setStyle(this.style);
+          this.customContextMenu = null;
+        }
+      }
+      return oldApplyColour.call(this, ...args);
+    };
+  } else {
+    const oldUpdateColour = BlockSvg.prototype.updateColour;
+    BlockSvg.prototype.updateColour = function (...args) {
+      // procedures_prototype also have a procedure code but we do not want to color them.
+      if (!this.isInsertionMarker() && this.type === "procedures_call") {
+        const block = this.procCode_ && getCustomBlock(this.procCode_);
+        const color = ScratchBlocks.Colours.text === "#000000" ? highContrastColor : defaultColor;
+        if (block) {
+          this.colour_ = customColor.color || color.color;
+          this.colourSecondary_ = customColor.secondaryColor || color.secondaryColor;
+          this.colourTertiary_ = customColor.tertiaryColor || color.tertiaryColor;
+          this.customContextMenu = null;
+        }
+      }
+      return oldUpdateColour.call(this, ...args);
+    };
+  }
 
   // We use Scratch's extension category mechanism to create a new category.
   // https://github.com/scratchfoundation/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
@@ -163,63 +192,89 @@ const injectWorkspace = (ScratchBlocks) => {
   const originalGetBlocksXML = vm.runtime.getBlocksXML;
   vm.runtime.getBlocksXML = function (target) {
     const result = originalGetBlocksXML.call(this, target);
+    let workspace;
+    if (ScratchBlocks.registry) {
+      // New Blockly: we need a workspace (it doesn't matter which one) to get the theme name.
+      // tabAPI.traps.getWorkspace() sometimes throws an error if called inside this function.
+      workspace = ScratchBlocks.common.getMainWorkspace();
+    }
     result.unshift({
       id: "sa-blocks",
       xml:
         "<category" +
         ` name="${escapeHTML(scratchAddons.l10n.get("debugger/@name", null, "Debugger"))}"` +
-        ' id="sa-blocks"' +
+        ` ${ScratchBlocks.registry ? "toolboxitemid" : "id"}="sa-blocks"` +
         ' colour="#ff7b26"' +
         ' secondaryColour="#ff7b26"' +
-        ` iconURI="${ScratchBlocks.Colours.text === "#000000" ? HIGH_CONTRAST_ICON : DEFAULT_ICON}"` +
+        ` iconURI="${isHighContrast(workspace) ? HIGH_CONTRAST_ICON : DEFAULT_ICON}"` +
         `>${generateBlockXML()}</category>`,
     });
     return result;
   };
 
-  // Trick Scratch into thinking addon blocks are defined somewhere.
-  // This makes Scratch's "is this procedure used anywhere" check work when addon blocks exist.
-  // getDefineBlock is used in https://github.com/scratchfoundation/scratch-blocks/blob/37f12ae3e342480f4d8e7b6ba783c46e29e77988/core/block_dragger.js#L275-L297
-  // and https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/procedures.js
-  // Only block_dragger.js should be able to reference addon blocks, but if procedures.js does
-  // somehow, we shim enough of the API that things shouldn't break.
-  const originalGetDefineBlock = ScratchBlocks.Procedures.getDefineBlock;
-  ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
-    // If an actual definition with this code exists, return that instead of our shim.
-    const result = originalGetDefineBlock.call(this, procCode, workspace);
-    if (result) {
-      return result;
-    }
-    const block = getCustomBlock(procCode);
-    if (block) {
-      return {
-        workspace,
-        getInput() {
-          return {
-            connection: {
-              targetBlock() {
-                return null;
+  if (!ScratchBlocks.registry) {
+    // We can't override this function on new Blockly because it's a not exported.
+    // It isn't referenced anywhere outside procedures.js, so this shouldn't cause issues.
+    // ---
+    // Trick Scratch into thinking addon blocks are defined somewhere.
+    // This makes Scratch's "is this procedure used anywhere" check work when addon blocks exist.
+    // getDefineBlock is used in https://github.com/scratchfoundation/scratch-blocks/blob/37f12ae3e342480f4d8e7b6ba783c46e29e77988/core/block_dragger.js#L275-L297
+    // and https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/procedures.js
+    // Only block_dragger.js should be able to reference addon blocks, but if procedures.js does
+    // somehow, we shim enough of the API that things shouldn't break.
+    const originalGetDefineBlock = ScratchBlocks.Procedures.getDefineBlock;
+    ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
+      // If an actual definition with this code exists, return that instead of our shim.
+      const result = originalGetDefineBlock.call(this, procCode, workspace);
+      if (result) {
+        return result;
+      }
+      const block = getCustomBlock(procCode);
+      if (block) {
+        return {
+          workspace,
+          getInput() {
+            return {
+              connection: {
+                targetBlock() {
+                  return null;
+                },
               },
-            },
-          };
-        },
-      };
-    }
-    return result;
-  };
+            };
+          },
+        };
+      }
+      return result;
+    };
+  }
 
-  const originalCreateAllInputs = ScratchBlocks.Blocks["procedures_call"].createAllInputs_;
-  ScratchBlocks.Blocks["procedures_call"].createAllInputs_ = function (...args) {
-    const blockData = getCustomBlock(this.procCode_);
-    if (blockData) {
-      const originalProcCode = this.procCode_;
-      this.procCode_ = blockData.displayName;
-      const ret = originalCreateAllInputs.call(this, ...args);
-      this.procCode_ = originalProcCode;
-      return ret;
-    }
-    return originalCreateAllInputs.call(this, ...args);
-  };
+  const newCreateAllInputs = (originalCreateAllInputs) =>
+    function (...args) {
+      const blockData = getCustomBlock(this.procCode_);
+      if (blockData) {
+        const originalProcCode = this.procCode_;
+        this.procCode_ = blockData.displayName;
+        const ret = originalCreateAllInputs.call(this, ...args);
+        this.procCode_ = originalProcCode;
+        return ret;
+      }
+      return originalCreateAllInputs.call(this, ...args);
+    };
+  if (ScratchBlocks.registry) {
+    // new Blockly
+    const originalBlockDoInit = ScratchBlocks.Block.prototype.doInit_;
+    ScratchBlocks.Block.prototype.doInit_ = function (...args) {
+      const result = originalBlockDoInit.call(this, args);
+      if (this.type === "procedures_call") {
+        const originalCreateAllInputs = this.createAllInputs_;
+        this.createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);
+        return result;
+      }
+    };
+  } else {
+    const originalCreateAllInputs = ScratchBlocks.Blocks["procedures_call"].createAllInputs_;
+    ScratchBlocks.Blocks["procedures_call"].createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);
+  }
 
   // Toolbox update may be required to make category appear in flyout
   queueToolboxUpdate();
