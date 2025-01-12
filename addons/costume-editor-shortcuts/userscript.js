@@ -1,6 +1,7 @@
 /**
  * Scratch Addons Script to add keyboard shortcuts to costume editor tools (similar to TurboWarp)
  */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const COSTUME_EDITOR_TAB_INDEX = 1;
 
