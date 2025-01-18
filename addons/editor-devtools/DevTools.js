@@ -662,14 +662,15 @@ export default class DevTools {
 
     if (e.keyCode === 86 && ctrlKey && !e.griff) {
       // Ctrl + V
-      // Set a timeout so we can take control of the paste after the event
-      const g = this.getWorkspace().svgGroup_;
-      const b = g.getBoundingClientRect();
+      // Don't paste if the mouse is outside the workspace SVG group
+      const group = this.getWorkspace().svgGroup_;
+      const bounds = group.getBoundingClientRect();
       const { x, y } = this.mouseXY;
-      if (x < b.x) return;
-      if (y < b.y) return;
-      if (x > b.x + b.width) return;
-      if (y > b.y + b.height) return;
+      if (x < bounds.x) return;
+      if (y < bounds.y) return;
+      if (x > bounds.x + bounds.width) return;
+      if (y > bounds.y + bounds.height) return;
+      // Set a timeout so we can take control of the paste after the event
       let ids = this.getTopBlockIDs();
       setTimeout(() => {
         this.beginDragOfNewBlocksNotInIDs(ids);
