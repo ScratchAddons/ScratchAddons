@@ -663,10 +663,18 @@ export default class DevTools {
     if (e.keyCode === 86 && ctrlKey && !e.griff) {
       // Ctrl + V
       // Set a timeout so we can take control of the paste after the event
+      const g = this.getWorkspace().svgGroup_;
+      const b = g.getBoundingClientRect();
+      const { x, y } = this.mouseXY;
+      if (x < b.x) return;
+      if (y < b.y) return;
+      if (x > b.x + b.width) return;
+      if (y > b.y + b.height) return;
       let ids = this.getTopBlockIDs();
       setTimeout(() => {
         this.beginDragOfNewBlocksNotInIDs(ids);
       }, 10);
+      return true;
     }
 
     // if (e.keyCode === 220 && (!document.activeElement || document.activeElement.tagName === 'INPUT')) {
