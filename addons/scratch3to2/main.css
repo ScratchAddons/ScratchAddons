@@ -1,6 +1,6 @@
 /* Page */
 html,
-body,
+body:not(.sa-body-editor, .scratchCommentBody),
 #view {
   background-color: var(--darkWww-page, #fcfcfc);
   background-image: var(
@@ -8,7 +8,7 @@ body,
     url("https://cdn.scratch.mit.edu/scratchr2/static/images/scratch-bg.png")
   );
 }
-body {
+body:not(.sa-body-editor, .scratchCommentBody) {
   color: var(--darkWww-page-scratchr2Text, #322f31);
 }
 p {

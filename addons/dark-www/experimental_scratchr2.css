@@ -288,6 +288,7 @@ button:hover,
   color: var(--darkWww-gray-scratchr2Text);
   text-shadow: var(--darkWww-gray-scratchr2TextShadow);
 }
+.three-column-band,
 .djangobb blockquote,
 .nvtooltip h3 /* statistics */ {
   background-color: var(--darkWww-gray-scratchr2);
