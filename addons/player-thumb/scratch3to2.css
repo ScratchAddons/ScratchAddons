@@ -1,0 +1,12 @@
+body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper"] {
+  position: relative;
+}
+body:not(.sa-body-editor) div[class*="loader_background_"],
+body:not(.sa-body-editor) .sa-project-thumb {
+  border-radius: 0;
+}
+body:not(.sa-body-editor) :not([class*="stage-wrapper_full-screen_"]) > div[class*="loader_background_"],
+body:not(.sa-body-editor) .sa-project-thumb.loading {
+  top: 38px;
+  height: calc(100% - 39px);
+}
