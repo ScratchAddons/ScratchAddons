@@ -17,17 +17,23 @@ let createdAnyBlockContextMenus = false;
 
 /**
  * APIs specific to userscripts.
- * @extends Listenable
- * @property {Trap} traps
- * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
   constructor(addonObj, info) {
     super();
+    /** @private */
     this._addonId = info.id;
+    /**
+     * Obtain objects that aren't otherwise available.
+     */
     this.traps = new Trap(this);
+    /**
+     * Get and modify Scratch's redux state.
+     */
     this.redux = new ReduxHandler();
+    /** @private */
     this._waitForElementSet = new WeakSet();
+    /** @private */
     this._addonObj = addonObj;
   }
   /**
@@ -37,6 +43,7 @@ export default class Tab extends Listenable {
   get clientVersion() {
     if (location.origin !== "https://scratch.mit.edu") return "scratch-www"; // scratchr2 cannot be self-hosted
     if (!this._clientVersion)
+      /** @private */
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
@@ -46,17 +53,17 @@ export default class Tab extends Listenable {
   }
   /**
    * @callback Tab~blockCallback
-   * @param {object} params - the passed params.
-   * @param {object} thread - the current thread.
+   * @param {object} params The passed params.
+   * @param {object} thread The current thread.
    */
   /**
    * Adds a custom stack block definition. Internally this is a special-cased custom block.
-   * @param {string} proccode the procedure definition code
-   * @param {object} opts - options.
-   * @param {string[]} opts.args - a list of argument names the block takes.
-   * @param {Tab~blockCallback} opts.callback - the callback.
-   * @param {boolean=} opts.hidden - whether the block is hidden from the palette.
-   * @param {string=} opts.displayName - the display name of the block, if different from the proccode.
+   * @param {string} proccode The procedure definition code.
+   * @param {object} opts Options.
+   * @param {string[]} opts.args A list of argument names the block takes.
+   * @param {Tab~blockCallback} opts.callback The callback.
+   * @param {boolean=} opts.hidden Whether the block is hidden from the palette.
+   * @param {string=} opts.displayName The display name of the block, if different from the proccode.
    */
   addBlock(proccode, opts) {
     blocks.init(this);
@@ -64,39 +71,39 @@ export default class Tab extends Listenable {
   }
   /**
    * Removes a stack block definition. Should not be called in most cases.
-   * @param {string} proccode the procedure definition code of the block
+   * @param {string} proccode The procedure definition code of the block.
    */
   removeBlock(proccode) {
     return blocks.removeBlock(proccode);
   }
   /**
    * Sets the color for the custom blocks.
-   * @param {object} colors - the colors.
-   * @param {string=} colors.color - the primary color.
-   * @param {string=} colors.secondaryColor - the secondary color.
-   * @param {string=} colors.tertiaryColor - the tertiary color.
+   * @param {object} colors The colors.
+   * @param {string=} colors.color The primary color.
+   * @param {string=} colors.secondaryColor The secondary color.
+   * @param {string=} colors.tertiaryColor The tertiary color.
    */
   setCustomBlockColor(colors) {
     return blocks.setCustomBlockColor(colors);
   }
   /**
    * Gets the custom block colors.
-   * @returns {object} - the colors.
+   * @returns {object} The colors.
    */
   getCustomBlockColor() {
     return blocks.color;
   }
   /**
    * Gets a custom block from the procedure definition code.
-   * @param {string} proccode the procedure definition code.
-   * @returns {object=} the custom block definition.
+   * @param {string} proccode The procedure definition code.
+   * @returns {object=} The custom block definition.
    */
   getCustomBlock(proccode) {
     return blocks.getCustomBlock(proccode);
   }
   /**
    * Loads a script by URL.
-   * @param {string} url - script URL.
+   * @param {string} url Script URL.
    * @returns {Promise}
    */
   loadScript(relativeUrl) {
@@ -148,17 +155,17 @@ export default class Tab extends Listenable {
   }
   /**
    * Waits until an element renders, then return the element.
-   * @param {string} selector - argument passed to querySelector.
-   * @param {object} opts - options.
-   * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
-   * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
-   * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
-   * @param {function=} opts.reduxCondition - A function that returns whether to resolve the selector or not.
+   * @param {string} selector Argument passed to querySelector.
+   * @param {object} opts Options.
+   * @param {boolean=} opts.markAsSeen Whether it should mark resolved elements to be skipped next time or not.
+   * @param {function=} opts.condition A function that returns whether to resolve the selector or not.
+   * @param {function=} opts.elementCondition A function that returns whether to resolve the selector or not, given an element.
+   * @param {function=} opts.reduxCondition A function that returns whether to resolve the selector or not.
    * Use this as an optimization and do not rely on the behavior.
-   * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
+   * @param {string[]=} opts.reduxEvents An array of redux events that must be dispatched before resolving the selector.
    * Use this as an optimization and do not rely on the behavior.
-   * @param {boolean=} opts.resizeEvent - True if the selector should be resolved on window resize, in addition to the reduxEvents.
-   * @returns {Promise<Element>} - element found.
+   * @param {boolean=} opts.resizeEvent Whether the selector should be resolved on window resize, in addition to the reduxEvents.
+   * @returns {Promise<Element>} The element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
@@ -219,7 +226,7 @@ export default class Tab extends Listenable {
     return promise;
   }
   /**
-   * editor mode (or null for non-editors).
+   * Editor mode (or null for non-editors).
    * @type {?string}
    */
   get editorMode() {
@@ -239,7 +246,7 @@ export default class Tab extends Listenable {
 
   /**
    * Copies an PNG image.
-   * @param {string} dataURL - data url of the png image
+   * @param {string} dataURL Data url of the PNG image.
    * @returns {Promise}
    */
   copyImage(dataURL) {
@@ -264,7 +271,7 @@ export default class Tab extends Listenable {
 
   /**
    * Gets translation used by Scratch.
-   * @param {string} key - Translation key.
+   * @param {string} key Translation key.
    * @returns {string} Translation.
    */
   scratchMessage(key) {
@@ -291,9 +298,7 @@ export default class Tab extends Listenable {
     }
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get _eventTargetKey() {
     return "tab";
   }
@@ -301,8 +306,8 @@ export default class Tab extends Listenable {
   /**
    * Gets the hashed class name for a Scratch stylesheet class name.
    * @param {...*} args Unhashed class names.
-   * @param {object} opts - options.
-   * @param {String[]|String} opts.others - Non-Scratch class or classes to merge.
+   * @param {object} opts Options.
+   * @param {String[]|String} opts.others Non-Scratch class or classes to merge.
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
@@ -343,6 +348,7 @@ export default class Tab extends Listenable {
     return res;
   }
 
+  /** @private */
   scratchClassReady() {
     // Make sure to return a resolved promise if this is not a project!
     const isProject =
@@ -350,6 +356,7 @@ export default class Tab extends Listenable {
       !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
     if (!isProject && !isScratchGui) return Promise.resolve();
 
+    /** @private */
     this._calledScratchClassReady = true;
     if (scratchAddons.classNames.loaded) return Promise.resolve();
     return new Promise((resolve) => {
@@ -359,15 +366,15 @@ export default class Tab extends Listenable {
 
   /**
    * Hides an element when the addon is disabled.
-   * @param {HTMLElement} el - the element.
+   * @param {HTMLElement} el The element.
    */
   displayNoneWhileDisabled(el) {
     el.dataset.saHideDisabled = this._addonId;
   }
 
   /**
-   * The direction of the text; i.e. rtl or ltr.
-   * @type {string}
+   * The direction of the text.
+   * @type {"rtl" | "ltr"}
    */
   get direction() {
     // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
@@ -404,12 +411,12 @@ export default class Tab extends Listenable {
    * paintEditorZoomControls - before the zoom controls in the paint editor
    *
    *
-   * @param {object} opts - options.
-   * @param {string} opts.space - the shared space name.
-   * @param {HTMLElement} element - the element to add.
-   * @param {number} order - the order of the added element. Should not conflict with other addons.
-   * @param {HTMLElement=} scope - if multiple shared spaces exist, the one where the shared space gets added to.
-   * @returns {boolean} whether the operation was successful or not.
+   * @param {object} opts Options.
+   * @param {"stageHeader" | "fullscreenStageHeader" | "afterGreenFlag" | "afterStopButton" | "afterCopyLinkButton" | "afterSoundTab" | "forumsBeforePostReport" | "forumsAfterPostReport" | "beforeRemixButton" | "studioCuratorsTab" | "forumToolbarTextDecoration" | "forumToolbarLinkDecoration" | "forumToolbarFont" | "forumToolbarList" | "forumToolbarDecoration" | "forumToolbarEnvironment" | "forumToolbarScratchblocks" | "forumToolbarTools" | "assetContextMenuAfterExport" | "assetContextMenuAfterDelete" | "monitor" | "paintEditorZoomControls"} opts.space The shared space name.
+   * @param {HTMLElement} opts.element The element to add.
+   * @param {number} opts.order The order of the added element. Should not conflict with other addons.
+   * @param {HTMLElement=} opts.scope If multiple shared spaces exist, the one where the shared space gets added to.
+   * @returns {boolean} Whether the operation was successful or not.
    */
   appendToSharedSpace({ space, element, order, scope }) {
     const q = document.querySelector.bind(document);
@@ -724,28 +731,28 @@ export default class Tab extends Listenable {
   /**
    * Type for context menu item.
    * @typedef {object} Tab~ContextMenuItem
-   * @property {boolean} enabled - whether it is enabled.
-   * @property {string} text - the context menu item label.
-   * @property {function} callback - the function that is called when item is clicked.
-   * @property {boolean} separator - whether to add a separator above the item.
+   * @property {boolean} enabled Whether it is enabled.
+   * @property {string} text The context menu item label.
+   * @property {function} callback The function that is called when item is clicked.
+   * @property {boolean} separator Whether to add a separator above the item.
    */
 
   /**
    * Callback to modify the context menu.
    * @callback Tab~blockContextMenuCallback
-   * @param {Tab~ContextMenuItem[]} items - the items added by vanilla code or other addons.
-   * @param {?object} block - the targeted block, if any.
-   * @returns {Tab~ContextMenuItem[]} the array that contains values of items array as well as new items.
+   * @param {Tab~ContextMenuItem[]} items The items added by vanilla code or other addons.
+   * @param {?object} block The targeted block, if any.
+   * @returns {Tab~ContextMenuItem[]} The array that contains values of items array as well as new items.
    */
 
   /**
    * Creates an item in the editor Blockly context menu.
    * @param {Tab~blockContextMenuCallback} callback Returns new menu items.
-   * @param {object} conditions - Show context menu when one of these conditions meet.
-   * @param {boolean=} conditions.workspace - Add to workspace context menu.
-   * @param {boolean=} conditions.blocks - Add to block context menu outside the flyout.
-   * @param {boolean=} conditions.flyout - Add to block context menu in flyout/palette.
-   * @param {boolean=} conditions.comments - Add to comments.
+   * @param {object} conditions Show context menu when one of these conditions meet.
+   * @param {boolean=} conditions.workspace Add to workspace context menu.
+   * @param {boolean=} conditions.blocks Add to block context menu outside the flyout.
+   * @param {boolean=} conditions.flyout Add to block context menu in flyout/palette.
+   * @param {boolean=} conditions.comments Add to comments.
    */
   createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
     contextMenuCallbacks.push({ addonId: this._addonId, callback, workspace, blocks, flyout, comments });
@@ -797,37 +804,37 @@ export default class Tab extends Listenable {
 
   /**
    * @typedef {object} Tab~EditorContextMenuContext
-   * @property {string} type - the type of the context menu.
-   * @property {HTMLElement} menuItem - the item element.
-   * @property {HTMLElement} target - the target item.
-   * @property {number=} index - the index, if applicable.
+   * @property {string} type The type of the context menu.
+   * @property {HTMLElement} menuItem The item element.
+   * @property {HTMLElement} target The target item.
+   * @property {number=} index The index, if applicable.
    */
 
   /**
    * Callback executed when the item is clicked.
    * @callback Tab~EditorContextMenuItemCallback
-   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   * @param {Tab~EditorContextMenuContext} context The context for the action.
    */
 
   /**
    * Callback to check if the item should be visible.
    * @callback Tab~EditorContextMenuItemCallback
-   * @param {Tab~EditorContextMenuContext} context - the context for the action.
-   * @returns {boolean} true to make it visible, false to hide
+   * @param {Tab~EditorContextMenuContext} context The context for the action.
+   * @returns {boolean} True to make it visible, false to hide.
    */
 
   /**
    * Adds a context menu item for the editor.
-   * @param {Tab~EditorContextMenuItemCallback} callback - the callback executed when the item is clicked.
-   * @param {object} opts - the options.
-   * @param {string} opts.className - the class name to add to the item.
-   * @param {string[]} opts.types - which types of context menu it should add to.
-   * @param {string} opts.position - the position inside the context menu.
-   * @param {number} opts.order - the order within the position.
-   * @param {string} opts.label - the label for the item.
-   * @param {boolean=} opts.border - whether to add a border at the top or not.
-   * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
-   * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
+   * @param {Tab~EditorContextMenuItemCallback} callback The callback executed when the item is clicked.
+   * @param {object} opts The options.
+   * @param {string} opts.className The class name to add to the item.
+   * @param {string[]} opts.types Which types of context menu it should add to.
+   * @param {string} opts.position The position inside the context menu.
+   * @param {number} opts.order The order within the position.
+   * @param {string} opts.label The label for the item.
+   * @param {boolean=} opts.border Whether to add a border at the top or not.
+   * @param {boolean=} opts.dangerous Whether to indicate the item as dangerous or not.
+   * @param {Tab~EditorContextMenuItemCondition} opts.condition A function to check if the item should be shown.
    */
   createEditorContextMenu(...args) {
     addContextMenu(this, ...args);
@@ -835,23 +842,23 @@ export default class Tab extends Listenable {
 
   /**
    * @typedef {object} Tab~Modal
-   * @property {HTMLElement} container - the container element.
-   * @property {HTMLElement} content - where the content should be appended.
-   * @property {HTMLElement} backdrop - the modal overlay.
-   * @property {HTMLElement} closeButton - the close (X) button on the header.
-   * @property {function} open - opens the modal.
-   * @property {function} close - closes the modal.
-   * @property {function} remove - removes the modal, making it no longer usable.
+   * @property {HTMLElement} container The container element.
+   * @property {HTMLElement} content Where the content should be appended.
+   * @property {HTMLElement} backdrop The modal overlay.
+   * @property {HTMLElement} closeButton The close (X) button on the header.
+   * @property {function} open Opens the modal.
+   * @property {function} close Closes the modal.
+   * @property {function} remove Removes the modal, making it no longer usable.
    */
 
   /**
    * Creates a modal using the vanilla style.
-   * @param {string} title - the title.
-   * @param {object=} opts - the options.
-   * @param {boolean=} opts.isOpen - whether to open the modal by default.
-   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
-   * @param {boolean=} opts.useSizesClass - if on scratch-www, whether to add modal-sizes class.
-   * @return {Tab~Modal} - the modal.
+   * @param {string} title The title.
+   * @param {object=} opts The options.
+   * @param {boolean=} opts.isOpen Whether to open the modal by default.
+   * @param {boolean=} opts.useEditorClasses If on editor, whether to apply editor styles and not www styles.
+   * @param {boolean=} opts.useSizesClass If on scratch-www, whether to add modal-sizes class.
+   * @return {Tab~Modal} The modal.
    */
   createModal(title, { isOpen = false, useEditorClasses = false, useSizesClass = false } = {}) {
     if (this.editorMode !== null && useEditorClasses) return modal.createEditorModal(this, title, { isOpen });
@@ -861,13 +868,13 @@ export default class Tab extends Listenable {
 
   /**
    * Opens a confirmation dialog. Can be used to replace confirm(), but is async.
-   * @param {string} title - the title.
-   * @param {string} message - the message displayed in the contents.
-   * @param {object=} opts - the options.
-   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
-   * @param {string=} opts.okButtonLabel - the label of the button for approving the confirmation
-   * @param {string=} opts.cancelButtonLabel - the label of the button for rejecting the confirmation
-   * @returns {Promise<boolean>} - whether the confirmation was approved
+   * @param {string} title The title.
+   * @param {string} message The message displayed in the contents.
+   * @param {object=} opts The options.
+   * @param {boolean=} opts.useEditorClasses If on editor, whether to apply editor styles and not www styles.
+   * @param {string=} opts.okButtonLabel The label of the button for approving the confirmation.
+   * @param {string=} opts.cancelButtonLabel The label of the button for rejecting the confirmation.
+   * @returns {Promise<boolean>} Whether the confirmation was approved.
    */
   confirm(title, message, opts) {
     return modal.confirm(this, title, message, opts);
@@ -875,12 +882,12 @@ export default class Tab extends Listenable {
 
   /**
    * Opens a prompt that a user can enter a value into.
-   * @param {string} title - the title.
-   * @param {string} message - the message displayed in the contents.
-   * @param {string=} defaultValue - the default value.
-   * @param {object=} opts - the options.
-   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
-   * @returns Promise<?string> - the entered value, or null if canceled.
+   * @param {string} title The title.
+   * @param {string} message The message displayed in the contents.
+   * @param {string=} defaultValue The default value.
+   * @param {object=} opts The options.
+   * @param {boolean=} opts.useEditorClasses If on editor, whether to apply editor styles and not www styles.
+   * @returns Promise<?string> The entered value, or null if canceled.
    */
   prompt(title, message, defaultValue, opts) {
     return modal.prompt(this, title, message, defaultValue, opts);

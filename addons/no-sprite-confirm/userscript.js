@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console }) => {
   document.body.addEventListener("click", () => {
     setTimeout(() => {
