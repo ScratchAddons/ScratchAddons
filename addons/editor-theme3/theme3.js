@@ -545,9 +545,15 @@ export default async function ({ addon, console, msg }) {
     };
   }
 
-  if (!Blockly.registry) {
-    // editor-colored-context menus compatibility
-    // doesn't support new Blockly yet
+  if (Blockly.registry) {
+    // New Blockly
+    const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu;
+    Blockly.BlockSvg.prototype.showContextMenu = function (e) {
+      const widgetDiv = Blockly.WidgetDiv.getDiv();
+      widgetDiv.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
+      return oldBlockShowContextMenu.call(this, e);
+    };
+  } else {
     const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
     Blockly.BlockSvg.prototype.showContextMenu_ = function (e) {
       Blockly.WidgetDiv.DIV.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
@@ -879,6 +885,8 @@ export default async function ({ addon, console, msg }) {
         )
       );
       workspace.refreshTheme();
+      // used by editor-colored-context-menus
+      document.body.style.setProperty("--colour-text", uncoloredTextColor())
     }
     addon.tab.setCustomBlockColor({
       color: primaryColor(saCategory),
