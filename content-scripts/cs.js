@@ -556,7 +556,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
 if (location.pathname.startsWith("/discuss/")) {
-  // We do this first as sb2 runs fast.
+  // We do this first as scratchblocks runs fast.
+  // Used by better-quoter.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
@@ -565,7 +566,8 @@ if (location.pathname.startsWith("/discuss/")) {
   if (document.readyState !== "loading") {
     setTimeout(preserveBlocks, 0);
   } else {
-    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
+    // { capture: true } is needed to run before jQuery's listener
+    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true, capture: true });
   }
 }
 
@@ -621,19 +623,16 @@ const showBanner = () => {
     font-size: 14px;
     line-height: normal;`,
   });
-  /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=oRo0tMWEpiA",
+    href: "https://www.youtube.com/watch?v=vuL5lV0l3fY",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
-  // Thumbnails were 100px height
-  */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.png"),
-    style: "height: 150px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -669,7 +668,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_38", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_41", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -679,21 +678,17 @@ const showBanner = () => {
             .outerHTML,
           */
           Object.assign(document.createElement("a"), {
-            // href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
-            href: `https://scratchaddons.com/${_localeSlash}feedback?ext_version=${
-              chrome.runtime.getManifest().version
-            }&utm_source=extension&utm_medium=updatenotification&utm_campaign=mv3`,
+            href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
             style: NOTIF_LINK_STYLE,
-            // textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
-            textContent: chrome.i18n.getMessage("sendFeedbackNotification"),
+            textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
         ][Number(i) - 1]
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_38"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_41"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -746,9 +741,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  // notifImageLink.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
 
-  notifInnerBody.appendChild(notifImage);
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);

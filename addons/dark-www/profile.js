@@ -1,3 +1,4 @@
+/* global $ */
 export default async function ({ addon, console }) {
   const oldAnimate = $.fn.animate;
   $.fn.animate = function (style, ...args) {

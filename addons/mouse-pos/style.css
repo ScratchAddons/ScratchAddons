@@ -11,7 +11,7 @@
   font-size: 0.6rem;
   font-weight: bold;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #5cb1d6;
+  color: var(--editorDarkMode-page-lightBlueText, #2e8eb8);
   white-space: nowrap;
 }
 

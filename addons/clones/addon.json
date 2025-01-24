@@ -47,6 +47,6 @@
     "version": "1.31.0",
     "newSettings": ["projectpage"]
   },
-  "tags": ["editor", "projectPlayer", "recommended"],
+  "tags": ["player", "recommended"],
   "enabledByDefault": false
 }

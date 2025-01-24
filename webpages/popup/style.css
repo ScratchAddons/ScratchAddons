@@ -8,7 +8,7 @@ body {
   overflow: hidden;
   margin: 0;
   background-color: var(--brand-orange); /* Firefox popup arrow */
-  font-family: "Sora", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: var(--white-text);
 }
 
@@ -24,6 +24,7 @@ body {
   cursor: pointer;
   padding: 18px;
   line-height: 0;
+  user-select: none;
   transition: 0.2s ease;
 }
 .header-button:hover {
@@ -39,6 +40,8 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
+  font-family: "Sora", sans-serif;
+  user-select: none;
 }
 #logo {
   height: 25px;
@@ -56,34 +59,33 @@ body {
 }
 
 #popup-bar {
-  padding: 10px;
-  padding-bottom: 0px;
   display: flex;
+  background-color: var(--navigation-background);
   border-bottom: 1px solid var(--control-border);
 }
 
 #popup-chooser {
+  flex-grow: 1;
   display: flex;
   color: var(--content-text);
-  height: 35px;
+  height: 45px;
   overflow: hidden;
 }
 .popup-name {
+  flex-grow: 1;
   display: flex;
   height: 100%;
-  box-sizing: border-box;
+  justify-content: center;
   align-items: center;
-  font-size: 12px;
+  position: relative;
+  font-size: 14px;
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
-  background-color: var(--button-background);
-  border: 1px solid var(--control-border);
-  border-bottom: none;
-  border-radius: 12px 12px 0 0;
+  user-select: none;
   transition: 0.2s ease;
 }
 .popup-name:hover {
-  background-color: var(--button-hover-background);
+  background-color: var(--hover-darken);
 }
 .popup-name:not(.sel):hover {
   cursor: pointer;
@@ -92,8 +94,24 @@ body {
   border-inline-end: none;
 }
 .popup-name.sel {
-  background-color: var(--brand-orange);
-  color: var(--white-text);
+  background-color: var(--hover-darken);
+  font-weight: bold;
+}
+.popup-name::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  height: 4px;
+  background-color: var(--orange);
+  border-radius: 4px 4px 0 0;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+.popup-name.sel::before {
+  opacity: 1;
 }
 .popup-name img {
   vertical-align: middle;
@@ -101,25 +119,21 @@ body {
   width: 18px;
   height: 18px;
 }
-.popup-name.sel img {
-  filter: brightness(0) invert(1);
-}
 .popup-title {
   padding-inline-start: 5px;
 }
 .popout > .popout-img {
   display: inline-block;
   vertical-align: -3px;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   padding: 2px;
   margin-inline-start: 3px;
   margin-inline-end: -2px;
   border-radius: 2px;
 }
 .popout:hover > .popout-img {
-  background-color: var(--white-text);
-  filter: none;
+  background-color: var(--hover-highlight);
 }
 [dir="rtl"] .popout > .popout-img {
   transform: scaleX(-1);
@@ -132,11 +146,14 @@ iframe {
   border: none;
   overflow-y: scroll;
   background-color: var(--page-background);
+  user-select: none;
 }
 #version {
   color: var(--white-text);
   margin: 5px;
   text-decoration: none;
   opacity: 0.75;
-  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  user-select: text;
 }

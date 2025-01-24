@@ -43,6 +43,16 @@
   right: auto;
   left: 100%;
 }
+.tooltiptext.tooltiptexttop {
+  left: 50%;
+  top: -10px;
+  transform: translate(-50%, -100%);
+  margin-inline-start: 0;
+}
+[dir="rtl"] .tooltiptext.tooltiptexttop {
+  transform: translate(50%, -100%);
+  right: 50%;
+}
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
@@ -71,6 +81,14 @@
 [dir="rtl"] .tooltip .tooltiptext.tooltiptextleft::after {
   left: auto;
   right: 100%;
+}
+.tooltip .tooltiptext.tooltiptexttop::after {
+  top: 100%;
+  right: 50%;
+  margin-top: 0;
+  margin-right: -5px;
+  border-inline-end-color: transparent;
+  border-top-color: var(--tooltip-background);
 }
 
 .tooltiptext:hover .tooltiptext:after {

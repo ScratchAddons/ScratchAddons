@@ -17,6 +17,7 @@
       "name": "Shock59",
       "link": "https://github.com/shock59"
     },
+    { "name": "0znzw", "link": "https://scratch.mit.edu/users/0znzw" },
     { "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }
   ],
   "info": [
@@ -161,6 +162,19 @@
         "r": 0.7,
         "g": 0.7,
         "b": 0.7
+      }
+    },
+    {
+      "name": "commentTopBar",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        },
+        "r": 0.9,
+        "g": 0.9,
+        "b": 0.9
       }
     }
   ],

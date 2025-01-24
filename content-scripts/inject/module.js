@@ -284,9 +284,10 @@ function loadClasses() {
         .flat()
         .map((e) => e.selectorText)
         .filter((e) => e)
-        .map((e) => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
+        .map((e) => e.match(/(([\w-]+?)_([\w-]+)_(([\w\d-]|\\\+)+))/g))
         .filter((e) => e)
         .flat()
+        .map((e) => e.replace(/\\\+/g, "+"))
     ),
   ];
   scratchAddons.classNames.loaded = true;
@@ -315,18 +316,4 @@ if (isScratchGui || isProject) {
       if (!foundElement) scratchAddons.console.log("Did not find elementSelector element after 10 seconds.");
     }, 10000);
   }
-}
-
-if (location.pathname === "/discuss/3/topic/add/") {
-  const checkUA = () => {
-    if (!window.mySettings) return false;
-    const ua = window.mySettings.markupSet.find((x) => x.className);
-    ua.openWith = window._simple_http_agent = ua.openWith.replace("version", "versions");
-    const textarea = document.getElementById("id_body");
-    if (textarea?.value) {
-      textarea.value = ua.openWith;
-      return true;
-    }
-  };
-  if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }
