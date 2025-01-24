@@ -31,7 +31,7 @@ export default async function ({ addon, console }) {
 
   const originalHandleRightClick = ScratchBlocks.Gesture.prototype.handleRightClick;
   ScratchBlocks.Gesture.prototype.handleRightClick = function (...args) {
-    const block = (ScratchBlocks.registry) ? this.targetBlock : this.targetBlock_;
+    const block = ScratchBlocks.registry ? this.targetBlock : this.targetBlock_;
     const ret = originalHandleRightClick.call(this, ...args);
     if (block) {
       applyContextMenuColor(block);

@@ -886,7 +886,7 @@ export default async function ({ addon, console, msg }) {
       );
       workspace.refreshTheme();
       // used by editor-colored-context-menus
-      document.body.style.setProperty("--colour-text", uncoloredTextColor())
+      document.body.style.setProperty("--colour-text", uncoloredTextColor());
     }
     addon.tab.setCustomBlockColor({
       color: primaryColor(saCategory),
