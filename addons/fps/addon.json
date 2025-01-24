@@ -21,6 +21,6 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "projectPlayer", "featured"],
+  "tags": ["editor", "player", "featured"],
   "versionAdded": "1.42.0"
 }
