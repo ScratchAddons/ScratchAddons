@@ -249,12 +249,14 @@ body:not(.sa-body-editor) [class*="stage-header_stage-size-row_"] > * {
 }
 body:not(.sa-body-editor) [class*="stage-header_stage-button_"] {
   background-color: transparent;
+  border: none;
+}
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:not(.sa-gamepad-container *) {
   background-image: url("%addon-self-dir%/assets/full_screen.png");
   background-repeat: no-repeat;
   background-position: center center;
-  border: none;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"] {
+body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gamepad-container *) {
   display: none;
 }
 [class*="stage-header_embed-scratch-logo_"] img {
