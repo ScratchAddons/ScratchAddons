@@ -13,16 +13,11 @@
       "link": "https://github.com/JeremyGamer13/"
     }
   ],
-  "tags": [
-    "editor",
-    "costumeEditor"
-  ],
+  "tags": ["editor", "costumeEditor"],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "dynamicEnable": true,
