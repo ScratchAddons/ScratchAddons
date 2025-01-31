@@ -239,7 +239,7 @@ export default async function ({ addon, msg, console }) {
         results.forEach((item) => {
           item.insertBelow(last);
           if (isCompoundPath(item)) {
-            decomposeCompoundPath(item).forEach(i => i.copyAttributes(item, true));
+            decomposeCompoundPath(item).forEach((i) => i.copyAttributes(item, true));
           }
         });
       }
