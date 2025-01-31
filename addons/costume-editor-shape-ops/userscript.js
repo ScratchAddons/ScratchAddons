@@ -114,6 +114,13 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
+  function decomposeCompoundPath(path) {
+    const childIndex = path.parent.children.indexOf(path);
+    const items = path.parent.insertChildren(childIndex, path.children);
+    path.remove();
+    return items || [];
+  }
+
   // Some of this code was originally written by JeremyGamer13 for PenguinMod,
   // and further modified by CST1229
   // https://github.com/CST1229/scratch-paint/blob/0283b94a479d58af9500af0317f6f1bc0f193f78/src/containers/mode-tools.jsx#L191-L347
@@ -136,26 +143,26 @@ export default async function ({ addon, msg, console }) {
           if (item2 === item1) continue;
           newItem = newItem.divide(item2, { insert: false });
         }
-        results.push(newItem);
+
         newItem.insertBelow(item1);
+        let compoundPathResults = [newItem];
+        if (isCompoundPath(newItem)) compoundPathResults = decomposeCompoundPath(newItem);
+        results.push(...compoundPathResults);
       });
 
       selectedItems.forEach((item) => item.remove());
 
       // kinda ugly solution to remove duplicate objects
-      const processed = new Set();
-      for (const result of selectedItems) {
-        for (const result2 of selectedItems) {
+      /*for (const result of results) {
+        if (!result.parent) continue;
+        for (const result2 of results) {
+          if (!result2.parent) continue;
           if (result === result2) continue;
-          if (result.position.equals(result2.position)) {
-            if (!processed.has(result) && !processed.has(result2)) {
-              result2.remove();
-              processed.add(result);
-              processed.add(result2);
-            }
+          if (result && result2 && result?.compare(result2)) {
+            result2.remove();
           }
         }
-      }
+      }*/
 
       modeTools.props.setSelectedItems([]);
       results.forEach((item) => setItemSelection(item, true));
@@ -184,7 +191,11 @@ export default async function ({ addon, msg, console }) {
         }
         const result = item.divide(last);
         result.insertBelow(item);
-        results.push(result);
+
+        let compoundPathResults = [result];
+        if (isCompoundPath(result)) compoundPathResults = decomposeCompoundPath(result);
+
+        results.push(...compoundPathResults);
       });
       results.push(lastClone);
 
@@ -201,8 +212,8 @@ export default async function ({ addon, msg, console }) {
         if (item === last) {
           return;
         }
-        if (item._children) {
-          item._children.forEach(processItem);
+        if (item.children) {
+          item.children.forEach(processItem);
           return;
         }
         if (!item.unite) return;
@@ -224,8 +235,13 @@ export default async function ({ addon, msg, console }) {
       if (results) {
         results.push(result);
       }
-      if (specificOperation !== "subtract" && specificOperation !== "intersect" && doSelections) {
-        results.forEach((item) => item.insertBelow(last));
+      if (!((specificOperation === "subtract" || specificOperation === "intersect") && doSelections)) {
+        results.forEach((item) => {
+          item.insertBelow(last);
+          if (isCompoundPath(item)) {
+            decomposeCompoundPath(item).forEach(i => i.copyAttributes(item, true));
+          }
+        });
       }
       last.remove();
     } else {
