@@ -120,6 +120,19 @@ export default async function ({ addon, msg, console }) {
     path.remove();
     return items || [];
   }
+  function recursiveDecompose(item, dryRun = false) {
+    if (Array.isArray(item)) {
+      const newArray = [];
+      for (const child of item) {
+        newArray.push(...recursiveDecompose(child, dryRun));
+      }
+      return newArray;
+    }
+    if (!item || !item.children) return [item];
+    const children = item.children;
+    if (!dryRun) decomposeCompoundPath(item);
+    return children.map(() => recursiveDecompose(child, dryRun));
+  }
 
   // Some of this code was originally written by JeremyGamer13 for PenguinMod,
   // and further modified by CST1229
@@ -171,13 +184,14 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
-    const selectedItems = getSelectedRootItems();
-    if (selectedItems.length < 2) {
+    let selectedItems = getSelectedRootItems();
+    if (recursiveDecompose(selectedItems, true).filter(item => item.unite).length < 2) {
       // If nothing or not enough items are selected,
       // we probably shouldnt select and merge everything
       return;
     }
     const results = [];
+    selectedItems = recursiveDecompose(selectedItems).filter(item => item.unite);
 
     // unite the shapes together, removing the original
     if (specificOperation === "divide") {
@@ -204,8 +218,17 @@ export default async function ({ addon, msg, console }) {
       modeTools.props.onUpdateImage();
       return;
     } else if (typeof specificOperation === "string") {
-      const last = selectedItems[selectedItems.length - 1];
+      let last = selectedItems[selectedItems.length - 1];
+      if (specificOperation === "exclude") {
+        // intersect all selected items to use as a subtract mask
+        last = selectedItems[0];
+        for (let i = 1; i < selectedItems.length; i++) {
+          last = last.intersect(selectedItems[i], {insert: false});
+        }
+        specificOperation = "subtract";
+      }
       if (!last.unite) return;
+      const alternateBehavior = ((specificOperation === "subtract" || specificOperation === "intersect") && doSelections);
 
       let result = null;
       const processItem = function (item) {
@@ -219,7 +242,7 @@ export default async function ({ addon, msg, console }) {
         if (!item.unite) return;
         if (!result) result = item;
 
-        if ((specificOperation === "subtract" || specificOperation === "intersect") && doSelections) {
+        if (alternateBehavior) {
           const newItem = item[specificOperation](last);
           results.push(newItem);
           newItem.insertBelow(item);
@@ -235,7 +258,7 @@ export default async function ({ addon, msg, console }) {
       if (results) {
         results.push(result);
       }
-      if (!((specificOperation === "subtract" || specificOperation === "intersect") && doSelections)) {
+      if (!alternateBehavior) {
         results.forEach((item) => {
           item.insertBelow(last);
           if (isCompoundPath(item)) {
@@ -275,10 +298,9 @@ export default async function ({ addon, msg, console }) {
     }
     if (doSelections) {
       selectedItems.forEach((item) => item.remove());
-      // modeTools.props.setSelectedItems([]);
       results.forEach((result) => setItemSelection(result, true));
-      modeTools.props.onUpdateImage();
     }
+    modeTools.props.onUpdateImage();
     return results;
   }
 
