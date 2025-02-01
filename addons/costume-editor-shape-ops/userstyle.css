@@ -42,7 +42,7 @@
 .sa-shape-ops-container.shown .sa-shape-ops-dropdown-arrow {
   transform: rotate(180deg);
   padding-bottom: 0;
-  padding-top: .2rem;
+  padding-top: 0.2rem;
 }
 .sa-shape-ops-container:not(.shown) .sa-shape-ops-options {
   display: none;
