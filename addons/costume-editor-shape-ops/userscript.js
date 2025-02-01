@@ -185,13 +185,13 @@ export default async function ({ addon, msg, console }) {
     }
 
     let selectedItems = getSelectedRootItems();
-    if (recursiveDecompose(selectedItems, true).filter(item => item.unite).length < 2) {
+    if (recursiveDecompose(selectedItems, true).filter((item) => item.unite).length < 2) {
       // If nothing or not enough items are selected,
       // we probably shouldnt select and merge everything
       return;
     }
     const results = [];
-    selectedItems = recursiveDecompose(selectedItems).filter(item => item.unite);
+    selectedItems = recursiveDecompose(selectedItems).filter((item) => item.unite);
 
     // unite the shapes together, removing the original
     if (specificOperation === "divide") {
@@ -223,12 +223,12 @@ export default async function ({ addon, msg, console }) {
         // intersect all selected items to use as a subtract mask
         last = selectedItems[0];
         for (let i = 1; i < selectedItems.length; i++) {
-          last = last.intersect(selectedItems[i], {insert: false});
+          last = last.intersect(selectedItems[i], { insert: false });
         }
         specificOperation = "subtract";
       }
       if (!last.unite) return;
-      const alternateBehavior = ((specificOperation === "subtract" || specificOperation === "intersect") && doSelections);
+      const alternateBehavior = (specificOperation === "subtract" || specificOperation === "intersect") && doSelections;
 
       let result = null;
       const processItem = function (item) {
