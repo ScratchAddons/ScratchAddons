@@ -298,10 +298,6 @@ export default async function ({ addon, msg, console }) {
     handleMergeShape("divide", true);
   }
 
-  function isVector() {
-    return addon.tab.redux.state.scratchPaint.format.startsWith("VECTOR");
-  }
-
   const dashedBorder = addon.tab.scratchClass("mode-tools_mod-dashed-border");
 
   let lastSelect, lastSelectContainer, lastPrevButton;
@@ -310,22 +306,36 @@ export default async function ({ addon, msg, console }) {
       lastSelectContainer.classList.remove("shown");
     }
   });
-  addon.tab.redux.addEventListener("statechanged", ({ detail: { action } }) => {
+  addon.tab.redux.addEventListener("statechanged", ({ detail: { action: {type} } }) => {
     if (!lastSelect) return;
-    if (action.type === "scratch-paint/formats/CHANGE_FORMAT") {
-      // Hide button in bitmap mode, and show it in vector
-      if (isVector()) {
-        lastSelect.style.display = "";
-      } else {
-        lastSelect.style.display = "none";
-        lastSelectContainer.classList.remove("shown");
-      }
-      if (lastPrevButton) lastPrevButton.classList.toggle(dashedBorder, isVector());
-    } else if (action.type === "scratch-paint/select/CHANGE_SELECTED_ITEMS") {
+    if (type === "scratch-paint/formats/CHANGE_FORMAT" || type === "scratch-paint/modes/CHANGE_MODE") {
+      updateSelectVisibility()
+    } else if (type === "scratch-paint/select/CHANGE_SELECTED_ITEMS") {
       updateSelectDisabled();
     }
   });
+  addon.self.addEventListener("disabled", () => {
+    if (lastSelect) {
+      updateSelectVisibility();
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    if (lastSelect) {
+      updateSelectVisibility();
+    }
+  });
 
+  function updateSelectVisibility() {
+    // Only show the dropdown in vector select mode
+    if (addon.tab.redux.state.scratchPaint.mode === "SELECT" && !addon.self.disabled) {
+      lastSelect.style.display = "";
+      lastPrevButton.classList.add(dashedBorder);
+    } else {
+      lastSelect.style.display = "none";
+      lastSelectContainer.classList.remove("shown");
+      lastPrevButton.classList.remove(dashedBorder);
+    }
+  }
   function updateSelectDisabled() {
     // Shape operations can't be used with less than 2 selected items anyways
     lastSelect.disabled = addon.tab.redux.state.scratchPaint.selectedItems.length < 2;
@@ -352,13 +362,13 @@ export default async function ({ addon, msg, console }) {
     const selectContainer = document.createElement("div");
     selectContainer.className = "sa-shape-ops-container";
     lastSelectContainer = selectContainer;
+    addon.tab.displayNoneWhileDisabled(selectContainer);
 
     const selectOptions = document.createElement("div");
     selectOptions.className = "sa-shape-ops-options Popover-body";
 
     const select = document.createElement("button");
     select.className = "sa-shape-ops-dropdown " + addon.tab.scratchClass("dropdown_dropdown");
-    select.style.display = isVector() ? "" : "none";
     select.textContent = msg("header");
     select.addEventListener("click", function () {
       lastSelectContainer.classList.toggle("shown");
@@ -396,7 +406,6 @@ export default async function ({ addon, msg, console }) {
       option.appendChild(text);
       selectOptions.appendChild(option);
     }
-    addon.tab.displayNoneWhileDisabled(select);
 
     addSelectOption("merge", handleMergeShape);
     addSelectOption("mask", handleMaskShape);
@@ -410,6 +419,6 @@ export default async function ({ addon, msg, console }) {
     modeToolsEl.appendChild(selectContainer);
 
     lastPrevButton = selectContainer.previousElementSibling;
-    lastPrevButton.classList.toggle(dashedBorder, isVector());
+    updateSelectVisibility();
   }
 }
