@@ -298,19 +298,45 @@ export default async function ({ addon, msg, console }) {
     handleMergeShape("divide", true);
   }
 
+  function isVector() {
+    return addon.tab.redux.state.scratchPaint.format.startsWith("VECTOR");
+  }
+
   const dashedBorder = addon.tab.scratchClass("mode-tools_mod-dashed-border");
-  let lastSelect, lastPrevButton;
+
+  let lastSelect, lastSelectContainer, lastPrevButton;
+  document.addEventListener("pointerdown", function (e) {
+    if (lastSelect && lastSelectContainer && !lastSelectContainer.contains(e.target)) {
+      lastSelectContainer.classList.remove("shown");
+    }
+  });
   addon.tab.redux.addEventListener("statechanged", ({ detail: { action } }) => {
-    if (lastSelect && action.type === "scratch-paint/formats/CHANGE_FORMAT") {
-      if (action.format === "VECTOR") {
+    if (!lastSelect) return;
+    if (action.type === "scratch-paint/formats/CHANGE_FORMAT") {
+      // Hide button in bitmap mode, and show it in vector
+      if (isVector()) {
         lastSelect.style.display = "";
       } else {
         lastSelect.style.display = "none";
+        lastSelectContainer.classList.remove("shown");
       }
       if (lastPrevButton)
-        lastPrevButton.classList.toggle(dashedBorder, addon.tab.redux.state.scratchPaint.format === "VECTOR");
+        lastPrevButton.classList.toggle(dashedBorder, isVector());
+    } else if (action.type === "scratch-paint/select/CHANGE_SELECTED_ITEMS") {
+      updateSelectDisabled();
     }
   });
+
+  function updateSelectDisabled() {
+    // Shape operations can't be used with less than 2 selected items anyways
+    lastSelect.disabled = addon.tab.redux.state.scratchPaint.selectedItems.length < 2;
+    if (lastSelect.disabled) {
+      lastSelect.title = msg("button-disabled");
+    } else {
+      lastSelect.title = "";
+    }
+  }
+
   while (true) {
     const modeToolsEl = await addon.tab.waitForElement("[class*='paint-editor_mod-mode-tools_']", {
       markAsSeen: true,
@@ -324,32 +350,54 @@ export default async function ({ addon, msg, console }) {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
 
-    const select = document.createElement("select");
-    (select.className = "sa-shape-ops-dropdown " + addon.tab.scratchClass("dropdown_dropdown")),
-      (select.style.display = addon.tab.redux.state.scratchPaint.format === "VECTOR" ? "" : "none");
-    lastSelect = select;
-    function addSelectOption(value, callback = null) {
-      const isHeader = value === "header";
+    const selectContainer = document.createElement("div");
+    selectContainer.className = "sa-shape-ops-container";
+    lastSelectContainer = selectContainer;
 
-      const option = document.createElement("option");
-      option.value = value;
-      option.textContent = msg(value);
-      if (!isHeader) option.title = msg(value + "-title");
-      option.disabled = isHeader;
-      option.selected = isHeader;
-      if (callback) {
-        select.addEventListener("change", () => {
-          if (select.value === value) {
-            callback();
-            select.value = "header";
-          }
-        });
-      }
-      select.appendChild(option);
+    const selectOptions = document.createElement("div");
+    selectOptions.className = "sa-shape-ops-options Popover-body";
+
+    const select = document.createElement("button");
+    select.className = "sa-shape-ops-dropdown " + addon.tab.scratchClass("dropdown_dropdown");
+    select.style.display = isVector() ? "" : "none";
+    select.textContent = msg("header");
+    select.addEventListener("click", function () {
+      lastSelectContainer.classList.toggle("shown");
+    });
+    lastSelect = select;
+    updateSelectDisabled();
+
+    const dropdownArrow = document.createElement("img");
+    dropdownArrow.src = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjhweCIgaGVpZ2h0PSI1cHgiIHZpZXdCb3g9IjAgMCA4IDUiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDQzLjIgKDM5MDY5KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5kcm9wZG93bi1jYXJldDwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxkZWZzPjwvZGVmcz4KICAgIDxnIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJkcm9wZG93bi1jYXJldCIgZmlsbD0iIzg1NUNENiI+CiAgICAgICAgICAgIDxwYXRoIGQ9Ik00LDUgQzMuNzI1MjA3MDgsNSAzLjQ1MTYzMDA2LDQuODk2OTUwNDUgMy4yNDEyNzk3Myw0LjY4OTY1MzExIEwwLjMxNDYxMzU3MiwxLjgwNjY2MjI3IEMtMC4xMDQ4NzExOTEsMS4zOTMyNjU4MyAtMC4xMDQ4NzExOTEsMC43MjQ2NDIwMjMgMC4zMTQ2MTM1NzIsMC4zMTAwNDczMzEgQzAuNzMyODgyNDM4LC0wLjEwMzM0OTExIDcuMjY3MTE3NTYsLTAuMTAzMzQ5MTEgNy42ODUzODY0MywwLjMxMDA0NzMzMSBDOC4xMDQ4NzExOSwwLjcyMzQ0Mzc3MiA4LjEwNDg3MTE5LDEuMzkzMjY1ODMgNy42ODUzODY0MywxLjgwNjY2MjI3IEw0Ljc1OTkzNjE3LDQuNjg5NjUzMTEgQzQuNTQ5NTg1ODMsNC44OTY5NTA0NSA0LjI3NjAwODgyLDUgNCw1Ij48L3BhdGg+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4K";
+    dropdownArrow.className = "sa-shape-ops-dropdown-arrow " + addon.tab.scratchClass("dropdown_dropdown-icon");
+    dropdownArrow.draggable = false;
+    select.appendChild(dropdownArrow);
+
+    function addSelectOption(value, callback) {
+      const option = document.createElement("button");
+      option.className = `sa-shape-ops-option ${addon.tab.scratchClass("button_button")
+        } ${addon.tab.scratchClass("fixed-tools_mod-menu-item")
+        }`;
+      option.title = msg(value + "-title");
+      option.addEventListener("click", function () {
+        callback();
+        lastSelectContainer.classList.remove("shown");
+      });
+
+      const img = document.createElement("img");
+      img.src = `${addon.self.dir}/assets/${value}.svg`;
+      img.className = addon.tab.scratchClass("fixed-tools_menu-item-icon");
+      img.draggable = false;
+
+      option.appendChild(img);
+
+      const text = document.createElement("span");
+      text.textContent = msg(value);
+      option.appendChild(text);
+      selectOptions.appendChild(option);
     }
     addon.tab.displayNoneWhileDisabled(select);
 
-    addSelectOption("header", null);
     addSelectOption("merge", handleMergeShape);
     addSelectOption("mask", handleMaskShape);
     addSelectOption("subtract", handleSubtractShape);
@@ -357,9 +405,11 @@ export default async function ({ addon, msg, console }) {
     addSelectOption("fracture", handleFractureShape);
     addSelectOption("cut", handleCutShape);
 
-    modeToolsEl.appendChild(select);
+    selectContainer.appendChild(selectOptions);
+    selectContainer.appendChild(select);
+    modeToolsEl.appendChild(selectContainer);
 
-    lastPrevButton = select.previousElementSibling;
-    lastPrevButton.classList.toggle(dashedBorder, addon.tab.redux.state.scratchPaint.format === "VECTOR");
+    lastPrevButton = selectContainer.previousElementSibling;
+    lastPrevButton.classList.toggle(dashedBorder, isVector());
   }
 }

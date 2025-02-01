@@ -1,10 +1,9 @@
 .sa-shape-ops-dropdown {
   background-color: var(--editorDarkMode-accent, white);
-  margin-left: calc(3 * 0.25rem);
+  cursor: default;
 }
-[dir="rtl"] .sa-shape-ops-dropdown {
-  margin-left: 0;
-  margin-right: calc(3 * 0.25rem);
+.sa-shape-ops-dropdown:disabled {
+  opacity: 0.5;
 }
 
 .sa-shape-ops-dropdown option {
@@ -12,5 +11,39 @@
   color-scheme: var(--editorDarkMode-input-colorScheme, light);
 }
 .sa-shape-ops-dropdown option[value="header"] {
+  display: none;
+}
+
+.sa-shape-ops-container {
+  position: relative;
+  margin-left: calc(3 * 0.25rem);
+}
+[dir="rtl"] .sa-shape-ops-container {
+  margin-left: 0;
+  margin-right: calc(3 * 0.25rem);
+}
+.sa-shape-ops-options {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  margin-top: 0.25rem;
+}
+.sa-shape-ops-option {
+  border: none;
+}
+
+.sa-shape-ops-container.shown .sa-shape-ops-dropdown {
+  background-color: var(--editorDarkMode-border, #00000026);
+}
+.sa-shape-ops-container.shown .sa-shape-ops-dropdown-arrow {
+  transform: rotate(180deg);
+  padding-bottom: 0;
+  padding-top: .2rem;
+}
+.sa-shape-ops-container:not(.shown) .sa-shape-ops-options {
   display: none;
 }
