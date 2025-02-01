@@ -298,6 +298,16 @@ export default async function ({ addon, msg, console }) {
     handleMergeShape("divide", true);
   }
 
+  let lastSelect;
+  addon.tab.redux.addEventListener("statechanged", ({detail: {action}}) => {
+    if (lastSelect && action.type === "scratch-paint/formats/CHANGE_FORMAT") {
+      if (action.format === "VECTOR") {
+        lastSelect.style.display = "";
+      } else {
+        lastSelect.style.display = "none";
+      }
+    }
+  });
   while (true) {
     const modeToolsEl = await addon.tab.waitForElement("[class*='paint-editor_mod-mode-tools_']", {
       markAsSeen: true,
@@ -307,11 +317,14 @@ export default async function ({ addon, msg, console }) {
         "fontsLoaded/SET_FONTS_LOADED",
         "scratch-gui/locales/SELECT_LOCALE",
         "scratch-gui/targets/UPDATE_TARGET_LIST",
+        "scratch-paint/formats/CHANGE_FORMAT",
       ],
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
 
     const select = document.createElement("select");
+    select.style.display = addon.tab.redux.state.scratchPaint.format === "VECTOR" ? "" : "none";
+    lastSelect = select;
     function addSelectOption(value, callback = null, header = false) {
       const option = document.createElement("option");
       option.value = value;
