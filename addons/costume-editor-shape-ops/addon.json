@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Shape operations in costume editor",
-  "description": "Adds buttons to perform operations like merging, subtracting and masking on vector shapes in the costume editor. (NO BUTTONS YET, USE s_* FUNCTIONS IN CONSOLE)",
+  "description": "Adds a button to perform operations like merging, subtracting and masking on vector shapes in the costume editor.",
   "credits": [
     {
       "name": "CST1229",
