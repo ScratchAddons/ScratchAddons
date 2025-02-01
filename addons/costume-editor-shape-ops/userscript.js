@@ -308,8 +308,7 @@ export default async function ({ addon, msg, console }) {
         "scratch-gui/locales/SELECT_LOCALE",
         "scratch-gui/targets/UPDATE_TARGET_LIST",
       ],
-      reduxCondition: (state) =>
-        state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
 
     const select = document.createElement("select");
@@ -326,7 +325,7 @@ export default async function ({ addon, msg, console }) {
             callback();
             select.value = "header";
           }
-        })
+        });
       }
       select.appendChild(option);
     }
