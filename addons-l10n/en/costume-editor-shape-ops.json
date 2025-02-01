@@ -1,0 +1,15 @@
+{
+    "costume-editor-shape-ops/header": "Shape...",
+    "costume-editor-shape-ops/merge": "Merge",
+    "costume-editor-shape-ops/mask": "Mask",
+    "costume-editor-shape-ops/subtract": "Subtract",
+    "costume-editor-shape-ops/exclude": "Exclude",
+    "costume-editor-shape-ops/fracture": "Fracture",
+    "costume-editor-shape-ops/cut": "Cut",
+    "costume-editor-shape-ops/merge-title": "Merge all selected shapes into one",
+    "costume-editor-shape-ops/mask-title": "Keep only the parts inside the frontmost selected shape (which gets deleted)",
+    "costume-editor-shape-ops/subtract-title": "Erase the frontmost selected shape from all other selected shapes",
+    "costume-editor-shape-ops/exclude-title": "Erase overlapping parts of 2 selected shapes",
+    "costume-editor-shape-ops/fracture-title": "Slice every selected shape at intersections",
+    "costume-editor-shape-ops/cut-title": "Cut the frontmost selected shape's outline into all other selected shapes"
+}

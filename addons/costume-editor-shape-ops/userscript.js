@@ -297,10 +297,49 @@ export default async function ({ addon, msg, console }) {
   function handleCutShape() {
     handleMergeShape("divide", true);
   }
-  window.s_merge = handleMergeShape;
-  window.s_mask = handleMaskShape;
-  window.s_subtract = handleSubtractShape;
-  window.s_exclude = handleExcludeShape;
-  window.s_fracture = handleFractureShape;
-  window.s_cut = handleCutShape;
+
+  while (true) {
+    const modeToolsEl = await addon.tab.waitForElement("[class*='paint-editor_mod-mode-tools_']", {
+      markAsSeen: true,
+      reduxEvents: [
+        "scratch-gui/navigation/ACTIVATE_TAB",
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/targets/UPDATE_TARGET_LIST",
+      ],
+      reduxCondition: (state) =>
+        state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+    });
+
+    const select = document.createElement("select");
+    function addSelectOption(value, callback = null, header = false) {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = msg(value);
+      if (!header) option.title = msg(value + "-title");
+      option.disabled = header;
+      option.selected = header;
+      if (callback) {
+        select.addEventListener("change", () => {
+          if (select.value === value) {
+            callback();
+            select.value = "header";
+          }
+        })
+      }
+      select.appendChild(option);
+    }
+    addon.tab.displayNoneWhileDisabled(select);
+
+    addSelectOption("header", null, true);
+    addSelectOption("merge", handleMergeShape);
+    addSelectOption("mask", handleMaskShape);
+    addSelectOption("subtract", handleSubtractShape);
+    addSelectOption("exclude", handleExcludeShape);
+    addSelectOption("fracture", handleFractureShape);
+    addSelectOption("cut", handleCutShape);
+
+    modeToolsEl.appendChild(select);
+  }
 }
