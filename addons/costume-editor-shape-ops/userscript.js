@@ -299,7 +299,7 @@ export default async function ({ addon, msg, console }) {
   }
 
   let lastSelect;
-  addon.tab.redux.addEventListener("statechanged", ({detail: {action}}) => {
+  addon.tab.redux.addEventListener("statechanged", ({ detail: { action } }) => {
     if (lastSelect && action.type === "scratch-paint/formats/CHANGE_FORMAT") {
       if (action.format === "VECTOR") {
         lastSelect.style.display = "";
