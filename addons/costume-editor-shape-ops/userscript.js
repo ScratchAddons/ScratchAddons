@@ -298,7 +298,8 @@ export default async function ({ addon, msg, console }) {
     handleMergeShape("divide", true);
   }
 
-  let lastSelect;
+  const dashedBorder = addon.tab.scratchClass("mode-tools_mod-dashed-border");
+  let lastSelect, lastPrevButton;
   addon.tab.redux.addEventListener("statechanged", ({detail: {action}}) => {
     if (lastSelect && action.type === "scratch-paint/formats/CHANGE_FORMAT") {
       if (action.format === "VECTOR") {
@@ -306,6 +307,7 @@ export default async function ({ addon, msg, console }) {
       } else {
         lastSelect.style.display = "none";
       }
+      if (lastPrevButton) lastPrevButton.classList.toggle(dashedBorder, addon.tab.redux.state.scratchPaint.format === "VECTOR");
     }
   });
   while (true) {
@@ -317,21 +319,23 @@ export default async function ({ addon, msg, console }) {
         "fontsLoaded/SET_FONTS_LOADED",
         "scratch-gui/locales/SELECT_LOCALE",
         "scratch-gui/targets/UPDATE_TARGET_LIST",
-        "scratch-paint/formats/CHANGE_FORMAT",
       ],
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
 
     const select = document.createElement("select");
+    select.className = "sa-shape-ops-dropdown " + addon.tab.scratchClass("dropdown_dropdown"),
     select.style.display = addon.tab.redux.state.scratchPaint.format === "VECTOR" ? "" : "none";
     lastSelect = select;
-    function addSelectOption(value, callback = null, header = false) {
+    function addSelectOption(value, callback = null) {
+      const isHeader = value === "header";
+
       const option = document.createElement("option");
       option.value = value;
       option.textContent = msg(value);
-      if (!header) option.title = msg(value + "-title");
-      option.disabled = header;
-      option.selected = header;
+      if (!isHeader) option.title = msg(value + "-title");
+      option.disabled = isHeader;
+      option.selected = isHeader;
       if (callback) {
         select.addEventListener("change", () => {
           if (select.value === value) {
@@ -344,7 +348,7 @@ export default async function ({ addon, msg, console }) {
     }
     addon.tab.displayNoneWhileDisabled(select);
 
-    addSelectOption("header", null, true);
+    addSelectOption("header", null);
     addSelectOption("merge", handleMergeShape);
     addSelectOption("mask", handleMaskShape);
     addSelectOption("subtract", handleSubtractShape);
@@ -353,5 +357,8 @@ export default async function ({ addon, msg, console }) {
     addSelectOption("cut", handleCutShape);
 
     modeToolsEl.appendChild(select);
+
+    lastPrevButton = select.previousElementSibling;
+    lastPrevButton.classList.toggle(dashedBorder, addon.tab.redux.state.scratchPaint.format === "VECTOR");
   }
 }

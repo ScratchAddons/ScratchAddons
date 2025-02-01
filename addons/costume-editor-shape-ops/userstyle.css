@@ -1,0 +1,16 @@
+.sa-shape-ops-dropdown {
+    background-color: var(--editorDarkMode-accent, white);
+    margin-left: calc(3 * .25rem);
+}
+[dir="rtl"] .sa-shape-ops-dropdown {
+    margin-left: 0;
+    margin-right: calc(3 * .25rem);
+}
+
+.sa-shape-ops-dropdown option {
+    color: var(--editorDarkMode-input-text, #202540);
+    color-scheme: var(--editorDarkMode-input-colorScheme, light);
+}
+.sa-shape-ops-dropdown option[value="header"] {
+    display: none;
+}
