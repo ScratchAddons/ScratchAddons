@@ -328,14 +328,21 @@ export default async function ({ addon, msg, console }) {
       lastSelectContainer.classList.remove("shown");
     }
   });
-  addon.tab.redux.addEventListener("statechanged", ({ detail: { action: {type} } }) => {
-    if (!lastSelect) return;
-    if (type === "scratch-paint/formats/CHANGE_FORMAT" || type === "scratch-paint/modes/CHANGE_MODE") {
-      updateSelectVisibility()
-    } else if (type === "scratch-paint/select/CHANGE_SELECTED_ITEMS") {
-      updateSelectDisabled();
+  addon.tab.redux.addEventListener(
+    "statechanged",
+    ({
+      detail: {
+        action: { type },
+      },
+    }) => {
+      if (!lastSelect) return;
+      if (type === "scratch-paint/formats/CHANGE_FORMAT" || type === "scratch-paint/modes/CHANGE_MODE") {
+        updateSelectVisibility();
+      } else if (type === "scratch-paint/select/CHANGE_SELECTED_ITEMS") {
+        updateSelectDisabled();
+      }
     }
-  });
+  );
   addon.self.addEventListener("disabled", () => {
     if (lastSelect) {
       updateSelectVisibility();
