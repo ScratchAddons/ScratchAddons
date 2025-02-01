@@ -300,14 +300,15 @@ export default async function ({ addon, msg, console }) {
 
   const dashedBorder = addon.tab.scratchClass("mode-tools_mod-dashed-border");
   let lastSelect, lastPrevButton;
-  addon.tab.redux.addEventListener("statechanged", ({detail: {action}}) => {
+  addon.tab.redux.addEventListener("statechanged", ({ detail: { action } }) => {
     if (lastSelect && action.type === "scratch-paint/formats/CHANGE_FORMAT") {
       if (action.format === "VECTOR") {
         lastSelect.style.display = "";
       } else {
         lastSelect.style.display = "none";
       }
-      if (lastPrevButton) lastPrevButton.classList.toggle(dashedBorder, addon.tab.redux.state.scratchPaint.format === "VECTOR");
+      if (lastPrevButton)
+        lastPrevButton.classList.toggle(dashedBorder, addon.tab.redux.state.scratchPaint.format === "VECTOR");
     }
   });
   while (true) {
@@ -324,8 +325,8 @@ export default async function ({ addon, msg, console }) {
     });
 
     const select = document.createElement("select");
-    select.className = "sa-shape-ops-dropdown " + addon.tab.scratchClass("dropdown_dropdown"),
-    select.style.display = addon.tab.redux.state.scratchPaint.format === "VECTOR" ? "" : "none";
+    (select.className = "sa-shape-ops-dropdown " + addon.tab.scratchClass("dropdown_dropdown")),
+      (select.style.display = addon.tab.redux.state.scratchPaint.format === "VECTOR" ? "" : "none");
     lastSelect = select;
     function addSelectOption(value, callback = null) {
       const isHeader = value === "header";
