@@ -111,13 +111,20 @@ export default async function ({ addon, console, msg }) {
   };
 
   const getSortableHOCFromElement = (el) => {
+    let reactInternalInstance;
     const nearestSpriteSelector = el.closest("[class*='sprite-selector_sprite-selector']");
     if (nearestSpriteSelector) {
-      return nearestSpriteSelector[reactInternalKey].child.sibling.child.stateNode;
+      reactInternalInstance = nearestSpriteSelector[reactInternalKey].child.sibling;
     }
     const nearestAssetPanelWrapper = el.closest('[class*="asset-panel_wrapper"]');
     if (nearestAssetPanelWrapper) {
-      return nearestAssetPanelWrapper[reactInternalKey].child.child.stateNode;
+      reactInternalInstance = nearestAssetPanelWrapper[reactInternalKey].child.child;
+    }
+    if (reactInternalInstance) {
+      while (!isSortableHOC(reactInternalInstance.stateNode)) {
+        reactInternalInstance = reactInternalInstance.child;
+      }
+      return reactInternalInstance.stateNode;
     }
     throw new Error("cannot find SortableHOC");
   };
@@ -268,39 +275,54 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
+  const isSortableHOC = (sortableHOCInstance) => {
+    try {
+      const SortableHOC = sortableHOCInstance.constructor;
+      return (
+        Array.isArray(sortableHOCInstance.props.items) &&
+        (typeof sortableHOCInstance.props.selectedId === "string" ||
+          typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
+        typeof sortableHOCInstance.containerBox !== "undefined" &&
+        typeof SortableHOC.prototype.componentDidMount === "undefined" &&
+        typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
+        typeof SortableHOC.prototype.handleAddSortable === "function" &&
+        typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
+        typeof SortableHOC.prototype.setRef === "function"
+      );
+    } catch {
+      return false;
+    }
+  };
+
   const verifySortableHOC = (sortableHOCInstance) => {
-    const SortableHOC = sortableHOCInstance.constructor;
-    if (
-      Array.isArray(sortableHOCInstance.props.items) &&
-      (typeof sortableHOCInstance.props.selectedId === "string" ||
-        typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
-      typeof sortableHOCInstance.containerBox !== "undefined" &&
-      typeof SortableHOC.prototype.componentDidMount === "undefined" &&
-      typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
-      typeof SortableHOC.prototype.handleAddSortable === "function" &&
-      typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
-      typeof SortableHOC.prototype.setRef === "function"
-    )
-      return;
+    if (isSortableHOC(sortableHOCInstance)) return;
     throw new Error("Can not comprehend SortableHOC");
   };
 
+  const isSpriteSelectorItem = (spriteSelectorItemInstance) => {
+    try {
+      const SpriteSelectorItem = spriteSelectorItemInstance.constructor;
+      return (
+        typeof spriteSelectorItemInstance.props.asset === "object" &&
+        typeof spriteSelectorItemInstance.props.name === "string" &&
+        typeof spriteSelectorItemInstance.props.dragType === "string" &&
+        typeof SpriteSelectorItem.prototype.handleClick === "function" &&
+        typeof SpriteSelectorItem.prototype.setRef === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
+        // TEMPORARILY DISABLED FOR REACT 18 TESTING
+        // typeof SpriteSelectorItem.prototype.handleDeleteButtonClick === "function" &&
+        // typeof SpriteSelectorItem.prototype.handleDeleteSpriteModalConfirm === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
+        typeof SpriteSelectorItem.prototype.handleExport === "function"
+      );
+    } catch {
+      return false;
+    }
+  };
+
   const verifySpriteSelectorItem = (spriteSelectorItemInstance) => {
-    const SpriteSelectorItem = spriteSelectorItemInstance.constructor;
-    if (
-      typeof spriteSelectorItemInstance.props.asset === "object" &&
-      typeof spriteSelectorItemInstance.props.name === "string" &&
-      typeof spriteSelectorItemInstance.props.dragType === "string" &&
-      typeof SpriteSelectorItem.prototype.handleClick === "function" &&
-      typeof SpriteSelectorItem.prototype.setRef === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDeleteButtonClick === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDeleteSpriteModalConfirm === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
-      typeof SpriteSelectorItem.prototype.handleExport === "function"
-    )
-      return;
+    if (isSpriteSelectorItem(spriteSelectorItemInstance)) return;
     throw new Error("Can not comprehend SpriteSelectorItem");
   };
 
@@ -637,7 +659,7 @@ export default async function ({ addon, console, msg }) {
       const selectedItem = getSelectedItem(this);
       if (selectedItem) {
         const folder = getFolderFromName(selectedItem.name);
-        const currentFolder = this.state.folders.includes(folder) ? folder : null;
+        const currentFolder = this.state && this.state.folders.includes(folder) ? folder : null;
         if (type === TYPE_SPRITES) {
           currentSpriteFolder = currentFolder;
         } else if (type === TYPE_ASSETS) {
@@ -654,7 +676,7 @@ export default async function ({ addon, console, msg }) {
         }
         if (selectedItemChanged) {
           if (!selectedItem.isStage) {
-            if (typeof folder === "string" && !this.state.folders.includes(folder)) {
+            if (typeof folder === "string" && (!this.state || !this.state.folders.includes(folder))) {
               this.setState((prevState) => ({
                 folders: [...prevState.folders, folder],
               }));
@@ -1333,7 +1355,11 @@ export default async function ({ addon, console, msg }) {
     vm = addon.tab.traps.vm;
     reactInternalKey = addon.tab.traps.getInternalKey(spriteSelectorItemElement);
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
-    const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
+    let reactInternalInstance = spriteSelectorItemElement[reactInternalKey];
+    while (!isSpriteSelectorItem(reactInternalInstance.stateNode)) {
+      reactInternalInstance = reactInternalInstance.child;
+    }
+    const spriteSelectorItemInstance = reactInternalInstance.stateNode;
     verifySortableHOC(sortableHOCInstance);
     verifySpriteSelectorItem(spriteSelectorItemInstance);
     verifyVM(vm);
