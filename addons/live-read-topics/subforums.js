@@ -3,7 +3,7 @@ export default async function ({ addon, msg, console }) {
     const el = document.querySelector(`.tclcon a[href='/discuss/topic/${e.data}/']`);
     if (!el) return;
     el.parentElement.classList.add("topic_isread");
-    const icon = el.parentElement.parentElement.parentElement.querySelector(".inew");
+    const icon = el.closest(".tcl").querySelector(".inew");
     if (!icon) return;
     icon.classList.remove("inew");
     icon.classList.add("forumicon");
