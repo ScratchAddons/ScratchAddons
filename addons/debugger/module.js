@@ -5,8 +5,6 @@ const STATUS_YIELD = 2;
 const STATUS_YIELD_TICK = 3;
 const STATUS_DONE = 4;
 
-const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-
 let vm;
 
 let paused = false;
@@ -421,7 +419,7 @@ export const setup = (addon) => {
       const soundTab = document.querySelector(
         "[class*='gui_tab-panel_']:nth-child(4) [class*='asset-panel_detail-area_']"
       );
-      const reactInternalKey = Object.keys(soundTab).filter((key) => key.startsWith(REACT_INTERNAL_PREFIX));
+      const reactInternalKey = addon.tab.traps.getInternalKey(soundTab);
       const soundLibraryInstance = soundTab[reactInternalKey].child.sibling.child.child.stateNode;
       const SoundLibrary = soundLibraryInstance.constructor;
       const AudioEngine = soundLibraryInstance.audioEngine.constructor;

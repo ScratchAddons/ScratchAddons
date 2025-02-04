@@ -86,8 +86,6 @@ export default async function ({ addon, console, msg }) {
   // These two components communicate through the `name` property of the items.
   // We touch some things on the VM to make dragging items work properly.
 
-  const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
@@ -1333,7 +1331,7 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     vm = addon.tab.traps.vm;
-    reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
+    reactInternalKey = addon.tab.traps.getInternalKey(spriteSelectorItemElement);
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
     const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
     verifySortableHOC(sortableHOCInstance);
