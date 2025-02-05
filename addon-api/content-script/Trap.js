@@ -106,7 +106,7 @@ export default class Trap extends Listenable {
 
   /**
    * Gets react internal key.
-   * @param {HTMLElement} elem - the root element of the React component
+   * @param {HTMLElement} elem - an element rendered by React
    * @returns {string} the key
    */
   getInternalKey(elem) {
