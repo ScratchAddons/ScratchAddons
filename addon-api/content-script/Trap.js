@@ -40,12 +40,7 @@ export default class Trap extends Listenable {
   }
 
   _getBlocksComponent(wrapper) {
-    if (!this._react_internal_key) {
-      this._react_internal_key = Object.keys(wrapper).find((key) =>
-        this.REACT_INTERNAL_PREFIXES.some((prefix) => key.startsWith(prefix))
-      );
-    }
-    const internal = wrapper[this._react_internal_key];
+    const internal = wrapper[this.getInternalKey(wrapper)];
     let childable = internal;
     /* eslint-disable no-empty */
     while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
