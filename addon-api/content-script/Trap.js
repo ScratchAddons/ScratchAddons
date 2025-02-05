@@ -158,7 +158,7 @@ export default class Trap extends Listenable {
     let toolState = internalState;
     let tool;
     while (toolState) {
-      const toolInstance = toolState.child.stateNode;
+      const toolInstance = toolState.child.stateNode || toolState.child.child.stateNode;
       if (toolInstance.tool) {
         tool = toolInstance.tool;
         break;
