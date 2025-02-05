@@ -118,7 +118,7 @@ export default async function ({ addon, console, msg }) {
     }
     const nearestAssetPanelWrapper = el.closest('[class*="asset-panel_wrapper"]');
     if (nearestAssetPanelWrapper) {
-      reactInternalInstance = nearestAssetPanelWrapper[reactInternalKey].child.child;
+      reactInternalInstance = nearestAssetPanelWrapper[reactInternalKey];
     }
     if (reactInternalInstance) {
       while (!isSortableHOC(reactInternalInstance.stateNode)) {
@@ -130,9 +130,13 @@ export default async function ({ addon, console, msg }) {
   };
 
   const getBackpackFromElement = (el) => {
-    const gui = el.closest('[class*="gui_editor-wrapper"]');
-    if (!gui) throw new Error("cannot find Backpack");
-    return gui[reactInternalKey].child.sibling.child.stateNode;
+    const backpackContainer = el.closest('[class*="backpack_backpack-container_"]');
+    if (!backpackContainer) throw new Error("cannot find Backpack");
+    let reactInternalInstance = backpackContainer[reactInternalKey];
+    while (!isBackpack(reactInternalInstance.stateNode)) {
+      reactInternalInstance = reactInternalInstance.return;
+    }
+    return reactInternalInstance.stateNode;
   };
 
   const getSpriteSelectorItemFromElement = (el) => {
@@ -348,14 +352,20 @@ export default async function ({ addon, console, msg }) {
     throw new Error("Can not comprehend VM");
   };
 
-  const verifyBackpack = (backpackInstance) => {
-    const Backpack = backpackInstance.constructor;
-    if (
-      typeof Backpack.prototype.handleDrop === "function" &&
-      typeof Backpack.prototype.componentDidUpdate === "undefined"
-    ) {
-      return;
+  const isBackpack = (backpackInstance) => {
+    try {
+      const Backpack = backpackInstance.constructor;
+      return (
+        typeof Backpack.prototype.handleDrop === "function" &&
+        typeof Backpack.prototype.componentDidUpdate === "undefined"
+      );
+    } catch {
+      return false;
     }
+  };
+
+  const verifyBackpack = (backpackInstance) => {
+    if (isBackpack(backpackInstance)) return;
     throw new Error("Can not comprehend Backpack");
   };
 
