@@ -365,7 +365,7 @@ export default async function ({ addon, msg, console }) {
       }
     });
     let prompt;
-    addMoreOptionsToPrompt(variable).then((result) => prompt = result);
+    addMoreOptionsToPrompt(variable).then((result) => (prompt = result));
     return ret;
   };
 

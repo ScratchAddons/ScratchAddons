@@ -35,7 +35,8 @@ export default async function ({ addon, msg, console }) {
       _handleUpdatePlayhead.call(this, playhead);
       const timeSinceStart = (Date.now() - this.startTime) / 1000;
       const trimStartTime = soundEditor.audioBufferPlayer.buffer.duration * soundEditor.audioBufferPlayer.trimStart;
-      const trimmedDuration = soundEditor.audioBufferPlayer.buffer.duration * soundEditor.audioBufferPlayer.trimEnd - trimStartTime;
+      const trimmedDuration =
+        soundEditor.audioBufferPlayer.buffer.duration * soundEditor.audioBufferPlayer.trimEnd - trimStartTime;
       setText(timeSinceStart, trimmedDuration);
     };
 
@@ -44,7 +45,8 @@ export default async function ({ addon, msg, console }) {
     soundEditor.handleStoppedPlaying = function () {
       _handleStoppedPlaying.call(this);
       const trimStartTime = soundEditor.audioBufferPlayer.buffer.duration * soundEditor.audioBufferPlayer.trimStart;
-      const trimmedDuration = soundEditor.audioBufferPlayer.buffer.duration * soundEditor.audioBufferPlayer.trimEnd - trimStartTime;
+      const trimmedDuration =
+        soundEditor.audioBufferPlayer.buffer.duration * soundEditor.audioBufferPlayer.trimEnd - trimStartTime;
       if (trimmedDuration === 0) {
         setText(0, soundEditor.audioBufferPlayer.buffer.duration);
       } else {
