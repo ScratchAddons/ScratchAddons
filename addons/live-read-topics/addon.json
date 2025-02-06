@@ -1,5 +1,5 @@
 {
-  "name": "Instant read indicators on forum category pages",
+  "name": "Instant forum read indicators",
   "description": "Automatically shows a topic as read when clicking on it on a forum category's page without requiring a reload.",
   "versionAdded": "1.42.0",
   "tags": ["community", "forums"],
