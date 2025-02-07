@@ -1,3 +1,5 @@
+import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
+
 /** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
@@ -367,6 +369,7 @@ export default async function ({ addon, msg, console }) {
     return ret;
   };
 
+  enableContextMenuSeparators(addon.tab);
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (!addon.self.disabled && (block.getCategory() === "data" || block.getCategory() === "data-lists")) {
@@ -379,12 +382,14 @@ export default async function ({ addon, msg, console }) {
               items[0].text = msg("edit-list-option");
             }
           }
-          items.push({
-            enabled: true,
-            separator: true,
-            text: msg(`to-${variable.isLocal ? "global" : "local"}`),
-            callback: () => convertVariable(variable, !variable.isLocal, variable.isCloud),
-          });
+          items.push(
+            addSeparator({
+              enabled: true,
+              separator: true,
+              text: msg(`to-${variable.isLocal ? "global" : "local"}`),
+              callback: () => convertVariable(variable, !variable.isLocal, variable.isCloud),
+            })
+          );
         }
       }
       return items;
