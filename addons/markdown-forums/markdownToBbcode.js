@@ -10,6 +10,8 @@ export const toBBCode = (markdown) => {
   }
 };
 
+const url = (s) => s.replace(/\]/g, "%5D");
+
 const options = {
   renderer: {
     code({ text, lang }) {
@@ -100,10 +102,10 @@ const options = {
       return `[s]${this.parser.parseInline(tokens)}[/s]`;
     },
     link({ href, tokens }) {
-      return `[url ${href}]${this.parser.parseInline(tokens)}[/url]`;
+      return `[url ${url(href)}]${this.parser.parseInline(tokens)}[/url]`;
     },
     image({ href, text }) {
-      return `[img ${href}]${text ? `\n[small][i]${text}[/i][/small]` : ""}`;
+      return `[img ${url(href)}]${text ? `\n[small][i]${text}[/i][/small]` : ""}`;
     },
     text({ tokens, text }) {
       return tokens ? this.parser.parseInline(tokens) : text.replace(/\[/g, "[[]");
