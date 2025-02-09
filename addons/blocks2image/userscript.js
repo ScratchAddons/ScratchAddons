@@ -128,6 +128,7 @@ export default async function ({ addon, console, msg }) {
     const { backdrop, container, content, closeButton } = modal;
     let remove = modal.remove;
     container.classList.add("sa-export-container");
+    container.classList.add("sa-export-loading"); // hide while loading to avoid layout shift
     content.classList.add("sa-export-content");
 
     backdrop.addEventListener("click", remove);
@@ -138,20 +139,30 @@ export default async function ({ addon, console, msg }) {
     const image = document.createElement("img");
     image.classList.add("sa-export-image");
 
+    const loadingContainer = document.createElement("div");
+    loadingContainer.classList.add("sa-export-loading-container");
+    backdrop.append(loadingContainer);
+
+    const loadingSpinner = document.createElement("span");
+    loadingSpinner.classList.add("sa-spinner", "sa-spinner-white");
+    loadingContainer.append(loadingSpinner);
+
     const loadingText = document.createElement("div");
     loadingText.classList.add("sa-export-loading-text");
     loadingText.textContent = msg("loading");
-    content.append(loadingText);
+    loadingContainer.append(loadingText);
 
     exportBlock(true, false, true, block).then((result) => {
       image.src = result;
-      content.removeChild(loadingText);
     });
 
     image.onload = function () {
       const aspect = image.width / image.height;
       if (aspect >= 1) image.classList.add("wide");
       else image.classList.add("tall");
+
+      backdrop.removeChild(loadingContainer);
+      container.classList.remove("sa-export-loading");
     };
 
     imageContainer.append(image);

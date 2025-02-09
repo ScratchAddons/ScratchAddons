@@ -1,3 +1,5 @@
+@import url("../../libraries/common/cs/spinner.css");
+
 .sa-export-container {
   box-sizing: border-box;
   width: 700px;
@@ -73,8 +75,23 @@
   filter: var(--editorDarkMode-primary-filter, none);
 }
 
+.sa-export-container.sa-export-loading {
+  visibility: hidden;
+}
+
+.sa-export-loading-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
 .sa-export-loading-text {
-  text-align: center;
-  padding-top: 1.5rem;
-  font-size: large;
+  color: white;
+  font-size: 1rem;
+  user-select: none;
 }
