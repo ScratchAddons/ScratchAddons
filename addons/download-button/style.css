@@ -47,3 +47,9 @@
   animation-delay: 0s, 0.25s;
   animation-iteration-count: 1, infinite;
 }
+
+@media (max-width: 767px) /* $tablet-portrait - 1px */ {
+  #sa-download-button {
+    display: none;
+  }
+}

@@ -87,7 +87,7 @@ export default async function ({ addon, console, msg }) {
       const optTargetId =
         type === "costume" ? args[2] : type === "backdrop" ? this.runtime.getTargetForStage() : args[1];
       // the only difference between backdrop and costume is backdrop has stage as target id
-      if (type == "backdrop") type = "costume";
+      if (type === "backdrop") type = "costume";
       const assetObj = type === "costume" ? args[1] : args[0];
 
       // handle new costume or sound via Paint/Record

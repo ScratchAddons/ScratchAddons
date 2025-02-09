@@ -1,0 +1,457 @@
+/* Page */
+.studio-page {
+  background-color: transparent;
+}
+.studio-page #view {
+  margin-top: 35px;
+  margin-bottom: 0;
+  padding-top: 20px;
+  background-image: none;
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+
+/* Info */
+.studio-info {
+  gap: 10px;
+}
+.studio-info .studio-title {
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+  font-size: 22px;
+  line-height: 26px;
+}
+.studio-info .studio-follow-button,
+.button.sa-leave-button {
+  height: 32px;
+  padding: 0 10px;
+  font-size: 13px;
+  line-height: 30px;
+}
+.studio-info .studio-follow-button {
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  padding: 8px 10px;
+  line-height: 18px;
+}
+.studio-info .studio-follow-button:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+.studio-info .studio-follow-button::before {
+  content: "";
+  padding-left: 24px;
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/icons_sm.png");
+  background-repeat: no-repeat;
+  background-position: -15px -400px;
+  filter: var(--darkWww-button-filter, none);
+}
+.button.sa-leave-button {
+  border: 1px solid #ff8c1a;
+}
+.button.sa-leave-button:hover {
+  background-color: #e67e17;
+}
+.studio-info .studio-image {
+  padding: 5px;
+  border: 1px solid var(--darkWww-border-20, #ccc);
+  border-radius: 0;
+}
+.studio-info .studio-description {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.studio-info .studio-description.uneditable {
+  padding: 0;
+  background-color: transparent;
+  font-size: 13px;
+  line-height: 20px;
+}
+.studio-info .studio-info-footer-stats div {
+  margin: 0;
+  color: var(--darkWww-page-scratchr2ButtonText, #666);
+  font-size: 13px;
+  line-height: 20px;
+}
+.studio-info .studio-info-footer-stats div img {
+  display: none;
+}
+.studio-info .studio-info-footer-report button {
+  height: 26px;
+  padding: 0 10px 0 2px;
+  background-color: var(--darkWww-button-scratchr2, #855cd6);
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  border-radius: 5px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 13px;
+}
+.studio-info .studio-info-footer-report button:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+
+/* Editing info */
+.studio-info textarea.studio-title,
+.studio-info textarea.studio-description {
+  display: block;
+  width: 304px;
+  padding: 0;
+}
+.studio-info textarea.studio-title:not(:focus),
+.studio-info textarea.studio-description:not(:focus) {
+  background-color: var(--darkWww-box, white);
+  border-color: var(--darkWww-border-20, #ccc);
+  border-radius: 3px;
+}
+.studio-info textarea.studio-title:not(:empty, :hover, :focus),
+.studio-info textarea.studio-description:not(:empty, :hover, :focus) {
+  background-color: transparent;
+  border-color: transparent;
+}
+.studio-thumb-edit-button {
+  margin-top: 5px;
+  height: auto;
+  color: var(--darkWww-link-scratchr2, #855cd6);
+  font-size: 13px;
+  font-weight: normal;
+}
+.studio-thumb-edit-button:hover {
+  text-decoration: underline;
+}
+.studio-thumb-edit-img {
+  height: 18px;
+  padding-right: 5px;
+  filter: var(--darkWww-link-scratchr2IconFilter, none);
+}
+
+/* Report modal */
+.studio-report-modal .studio-report-title {
+  height: auto;
+  padding: 5px 15px;
+  background-color: transparent;
+  box-shadow: inset 0 -1px 0 0 var(--darkWww-border-5, #eee);
+}
+
+/* Tabs */
+.studio-tab-nav {
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: var(--darkWww-border-20, #ccc);
+  font-size: 13px;
+}
+.studio-tab-nav a.nav_link:hover {
+  text-decoration: none;
+}
+.sub-nav li {
+  margin-top: 0;
+  margin-bottom: 6px;
+  margin-right: 6px;
+  border-radius: 5px;
+}
+.sub-nav li:hover {
+  transition: none;
+}
+.studio-tab-nav li {
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border-color: var(--darkWww-box-scratchr2ButtonBorder, #999);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  text-shadow: 0 1px var(--darkWww-box, white);
+  transition: none;
+}
+.studio-tab-nav a.nav_link:hover > li {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  border-color: var(--darkWww-box-scratchr2ButtonBorder, #999);
+}
+.studio-tab-nav li:active {
+  padding: 0 10px;
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.studio-tab-nav .active > li {
+  background-color: var(--darkWww-button-scratchr2, #855cd6);
+  border-color: var(--darkWww-button-scratchr2, #855cd6);
+  text-shadow: none;
+}
+.studio-tab-nav a.active.nav_link:hover > li {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+  border-color: var(--darkWww-button-scratchr2, #855cd6);
+}
+.studio-tab-nav li img {
+  margin-right: 2px;
+  filter: invert(0.72);
+}
+.studio-tab-nav li img {
+  width: 0;
+  height: 0;
+  padding: 8.5px 12px;
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/icons_sm.png");
+  background-repeat: no-repeat;
+  background-position: -15px -313px;
+  filter: var(--darkWww-box-filter, none);
+}
+.studio-tab-nav .active li img,
+.studio-tab-nav a.active.nav_link:hover > li img {
+  background-position: -15px -349px;
+  filter: var(--darkWww-button-filter, none);
+}
+.studio-tab-nav [href$="comments"] li img {
+  background-position: -15px -18px;
+}
+.studio-tab-nav [href$="comments"].active li img,
+.studio-tab-nav a[href$="comments"].active.nav_link:hover > li img {
+  background-position: -16px -52px;
+}
+.studio-tab-nav [href$="curators"] li img {
+  background-position: -15px -366px;
+}
+.studio-tab-nav [href$="curators"].active li img,
+.studio-tab-nav a[href$="curators"].active.nav_link:hover > li img {
+  background-position: -15px -401px;
+}
+.studio-tab-nav [href$="activity"] li img {
+  background-position: -15px -478px;
+}
+.studio-tab-nav [href$="activity"].active li img,
+.studio-tab-nav a[href$="activity"].active.nav_link:hover > li img {
+  background-position: -15px -512px;
+}
+
+/* Tab title */
+.studio-header-container {
+  padding-bottom: 0;
+  font-size: 13px; /* for "Anyone can add projects" switch label */
+}
+.studio-header-container h2 {
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+  font-size: 22px;
+  line-height: 26px;
+}
+
+/* Load More */
+.studio-grid-load-more button,
+.studio-compose-container .load-more-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+  height: 32px;
+  padding: 0 10px;
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  line-height: 30px;
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+.studio-grid-load-more button:hover,
+.studio-compose-container .load-more-button:hover {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+}
+
+/* Projects */
+.studio-project-tile {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+.studio-project-tile .studio-project-image {
+  box-sizing: border-box;
+  background-color: transparent;
+  border: 1px solid var(--darkWww-border-15, #ddd);
+  border-radius: 0;
+}
+.studio-project-tile .studio-project-bottom {
+  padding-left: 0;
+  padding-right: 0;
+}
+.studio-project-tile .studio-project-bottom > a {
+  line-height: 0;
+}
+.studio-project-tile .studio-project-avatar {
+  border: 1px solid var(--darkWww-border-15, #ddd);
+  border-radius: 0;
+}
+.studio-project-tile .studio-project-info {
+  justify-content: center;
+  line-height: 20px;
+}
+.studio-project-tile .studio-project-title {
+  color: var(--darkWww-link-scratchr2, #855cd6);
+  font-weight: 800;
+}
+.studio-project-tile .studio-project-username {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+  font-weight: normal;
+}
+
+/* Comments */
+.studio-compose-container {
+  padding-top: 0;
+}
+.compose-comment .compose-bottom-row .compose-limit {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.comment .comment-top-row .username {
+  color: var(--darkWww-page-scratchr2LabelText, #333);
+}
+.comment .comment-top-row .comment-delete,
+.comment .comment-top-row .comment-report {
+  color: var(--darkWww-page-scratchr2GrayText, #999);
+}
+.comment .comment-body .comment-bubble {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.comment .comment-body .comment-bottom-row .comment-time {
+  color: var(--darkWww-page-scratchr2GrayText, #999);
+}
+
+/* Curators */
+.studio-member-tile {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+  border-color: var(--darkWww-border-5, #eee);
+  border-radius: 0;
+}
+.studio-member-tile > a {
+  line-height: 0;
+}
+.studio-member-tile .studio-member-image {
+  border: 1px solid var(--darkWww-border-20, #ccc);
+  border-radius: 0;
+}
+.studio-member-tile .studio-member-name {
+  color: var(--darkWww-link-scratchr2, #855cd6);
+}
+.studio-member-tile .studio-member-role {
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+}
+#sa-studio-followers-button,
+#sa-studio-followers-button + .button {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  line-height: 30px;
+}
+#sa-studio-followers-button:hover,
+#sa-studio-followers-button + .button:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+.studio-invitation {
+  display: block;
+  min-height: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.studio-invitation-msg {
+  display: inline;
+  font-size: 13px;
+}
+.studio-invitation-button {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  margin-left: 3px;
+  box-shadow: none;
+  color: var(--darkWww-link-scratchr2, #855cd6);
+}
+.studio-invitation-button:hover {
+  text-decoration: underline;
+}
+
+/* Activity */
+.studio-activity .studio-messages-list {
+  background-color: transparent;
+  border: none;
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.social-message {
+  padding: 1em 0;
+  border-color: var(--darkWww-border-5, #f3f3f3);
+  font-size: 13px;
+  line-height: 20px;
+}
+.studio-activity .studio-activity-icon {
+  align-self: center;
+  margin-right: 4px;
+  width: 0;
+  min-width: 0;
+  height: 0;
+  padding: 7px;
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/icons_xs.png");
+  opacity: 0.7;
+  filter: var(--darkWww-page-filter, none);
+}
+.studio-activity .studio-activity-icon[src$="activity-curator.svg"] {
+  background-position: -7px -265px;
+}
+.studio-activity .studio-activity-icon[src$="activity-project.svg"] {
+  background-position: -7px -225px;
+}
+.studio-activity .studio-activity-icon[src$="activity-edit.svg"] {
+  background-position: -7px -3px;
+}
+.studio-activity .social-message-date {
+  color: var(--darkWww-page-scratchr2GrayText, #999);
+}
+
+/* Add Projects, Invite Curators */
+.studio-adder-section h3 {
+  color: var(--darkWww-link-scratchr2, #855cd6);
+  font-size: 18px;
+}
+.studio-adder-section .studio-adder-row input {
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  background-color: var(--darkWww-box, white);
+  border-color: var(--darkWww-border-20, #ccc);
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  color: var(--darkWww-box-scratchr2InputText, #555);
+  font-size: 13px;
+  line-height: 30px;
+  transition:
+    border-color 0.2s linear,
+    box-shadow 0.2s linear;
+}
+.studio-adder-section .studio-adder-row input:focus {
+  border-color: rgba(82, 168, 236, 0.8);
+  box-shadow:
+    inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(82, 168, 236, 0.6);
+  outline: none;
+}
+.studio-adder-section .studio-adder-row input::placeholder {
+  color: var(--darkWww-box-scratchr2InputPlaceholder, #bbb);
+}
+.studio-adder-section .studio-adder-row button {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  line-height: 30px;
+}
+.studio-adder-section .studio-adder-row button:not(:disabled):hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+.studio-adder-section .studio-adder-row .studio-adder-vertical-divider {
+  border-color: var(--darkWww-border-20, #ccc);
+  border-right: none;
+}
+
+/* Browse Projects/Followers modal */
+.user-projects-modal .user-projects-modal-title {
+  height: auto;
+  padding: 5px 15px;
+  background-color: transparent;
+  box-shadow: inset 0 -1px 0 0 var(--darkWww-border-5, #eee);
+}
