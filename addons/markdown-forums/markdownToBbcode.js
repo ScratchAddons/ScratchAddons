@@ -44,14 +44,45 @@ const options = {
     paragraph({ tokens }) {
       return `${this.parser.parseInline(tokens)}\n`;
     },
-    table() {
-      throw new Error("no-tables");
-    },
-    tablerow() {
-      throw new Error("no-tables");
-    },
-    tablecell() {
-      throw new Error("no-tables");
+    table({ header, rows }) {
+      const allRows = [header, ...rows];
+      const columnLengths = [];
+      allRows.forEach((row) => {
+        row.forEach(({ text }, i) => {
+          if (text.length > (columnLengths[i] ?? 0)) {
+            columnLengths[i] = text.length;
+          }
+        });
+      });
+      const borders =
+        "=".repeat(
+          columnLengths.reduce((a, b) => a + b, 0) +
+            (columnLengths.length + 1) + // bars
+            columnLengths.length * 2 // spaces
+        ) + "\n";
+      let out = "[code]\n" + borders;
+      allRows.forEach((row) => {
+        row.forEach(({ text, align }, i) => {
+          const length = columnLengths[i] ?? 0;
+          const finalText = (
+            align === "right"
+              ? text.padStart(length, " ")
+              : align === "center"
+                ? " ".repeat(Math.floor((length - text.length) / 2)) +
+                  text +
+                  " ".repeat(Math.ceil((length - text.length) / 2))
+                : text.padEnd(length, " ")
+          ).replace(/(?<=\[)\/?(?=code\])/g, (s) => s + "\u200d");
+          out += `| ${finalText} `;
+        });
+        out += "|\n";
+        if (row[0].header) {
+          out += borders;
+        }
+      });
+      out += borders;
+      out += "[/code]";
+      return out;
     },
     strong({ tokens }) {
       return `[b]${this.parser.parseInline(tokens)}[/b]`;
