@@ -71,7 +71,7 @@
   filter: var(--editorDarkMode-input-filter, none);
 }
 
-.sa-export-svg-button img {
+.sa-export-png-button img {
   filter: var(--editorDarkMode-primary-filter, none);
 }
 

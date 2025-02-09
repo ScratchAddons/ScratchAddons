@@ -187,15 +187,15 @@ export default async function ({ addon, console, msg }) {
     copyButton.appendChild(copyIconContainer);
     copyButton.appendChild(new Text(msg("clipboard")));
 
-    svgButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-svg-button" });
+    svgButton.className = "sa-export-svg-button";
+    svgButton.textContent = msg("svg");
+
+    pngButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-png-button" });
     downloadIconContainer.className = "sa-export-button-icon";
     downloadIcon.src = addon.self.dir + "/download.svg";
     downloadIconContainer.appendChild(downloadIcon);
-    svgButton.appendChild(downloadIconContainer);
-    svgButton.appendChild(new Text(msg("svg")));
-
-    pngButton.className = "sa-export-png-button";
-    pngButton.textContent = msg("png");
+    pngButton.appendChild(downloadIconContainer);
+    pngButton.appendChild(new Text(msg("png")));
 
     buttonContainer.append(copyButton);
     buttonContainer.append(svgButton);
