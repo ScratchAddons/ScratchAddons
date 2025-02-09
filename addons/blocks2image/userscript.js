@@ -164,11 +164,26 @@ export default async function ({ addon, console, msg }) {
     const svgButton = document.createElement("button");
     const pngButton = document.createElement("button");
 
-    copyButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-copy-button" });
-    copyButton.textContent = msg("clipboard");
+    const copyIconContainer = document.createElement("span");
+    const copyIcon = document.createElement("img");
+    const downloadIconContainer = document.createElement("span");
+    const downloadIcon = document.createElement("img");
+
+    copyButton.className = "sa-export-copy-button";
+    copyIconContainer.className = "sa-export-button-icon";
+    copyIcon.src = addon.self.dir + "/copy.svg";
+    copyIconContainer.appendChild(copyIcon);
+    copyButton.appendChild(copyIconContainer);
+    copyButton.appendChild(new Text(msg("clipboard")));
+
     svgButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-svg-button" });
-    svgButton.textContent = msg("svg");
-    pngButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-png-button" });
+    downloadIconContainer.className = "sa-export-button-icon";
+    downloadIcon.src = addon.self.dir + "/download.svg";
+    downloadIconContainer.appendChild(downloadIcon);
+    svgButton.appendChild(downloadIconContainer);
+    svgButton.appendChild(new Text(msg("svg")));
+
+    pngButton.className = "sa-export-png-button";
     pngButton.textContent = msg("png");
 
     buttonContainer.append(copyButton);

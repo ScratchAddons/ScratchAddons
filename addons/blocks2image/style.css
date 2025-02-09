@@ -39,14 +39,38 @@
 
 .sa-export-button-container {
   display: flex;
-  justify-content: center;
   align-items: center;
   margin-top: 1.5rem;
+  padding: 0 2.25rem;
+}
+
+.sa-export-copy-button {
+  margin-inline-end: auto;
 }
 
 .sa-export-button-container button {
-  margin-left: 0.5rem;
   margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.sa-export-button-container button + button {
+  margin-inline-start: 0.5rem;
+}
+
+.sa-export-button-icon {
+  margin-inline-end: 0.5rem;
+  height: 0;
+  display: flex;
+  align-items: center;
+}
+
+.sa-export-copy-button img {
+  filter: var(--editorDarkMode-input-filter, none);
+}
+
+.sa-export-svg-button img {
+  filter: var(--editorDarkMode-primary-filter, none);
 }
 
 .sa-export-loading-text {
