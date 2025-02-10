@@ -34,5 +34,6 @@
   "enabledByDefault": false,
   "versionAdded": "1.14.0",
   "dynamicEnable": true,
-  "dynamicDisable": true
+  "dynamicDisable": true,
+  "libraries": ["scratch-gui"]
 }
