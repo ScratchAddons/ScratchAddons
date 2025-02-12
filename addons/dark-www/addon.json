@@ -515,6 +515,18 @@
       }
     },
     {
+      "name": "box-strongBlueText",
+      "value": {
+        "type": "textColor",
+        "black": "#056dff",
+        "white": "#80b5ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-greenText",
       "value": {
         "type": "textColor",
