@@ -100,5 +100,6 @@
         "notchSize": 0
       }
     }
-  ]
+  ],
+  "libraries": ["scratch-blocks"]
 }

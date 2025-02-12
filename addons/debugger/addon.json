@@ -88,5 +88,5 @@
     "temporaryNotice": "Graph animation is now disabled by default to increase performance. You can re-enable it if you want.",
     "newSettings": ["fancy_graphs"]
   },
-  "libraries": ["chartjs"]
+  "libraries": ["chartjs", "scratch-gui", "scratch-vm"]
 }
