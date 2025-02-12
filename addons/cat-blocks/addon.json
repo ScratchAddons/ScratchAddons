@@ -34,5 +34,7 @@
   "versionAdded": "1.14.0",
   "tags": ["editor", "codeEditor", "theme", "featured"],
   "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "libraries": ["scratch-blocks"]
 }
