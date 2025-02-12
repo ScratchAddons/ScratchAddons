@@ -1,0 +1,38 @@
+/* Block palette categories */
+div.scratchCategoryMenuItem:hover {
+  color: var(--editorDarkMode-highlightText) !important;
+}
+
+div.scratchCategoryMenuItem.categorySelected {
+  background-color: var(--editorDarkMode-primary-transparent15);
+}
+
+/* Block palette checkboxes */
+g.checked > rect.blocklyFlyoutCheckbox {
+  fill: var(--editorDarkMode-primary);
+  stroke: var(--editorDarkMode-primary);
+}
+
+g.checked > path.blocklyFlyoutCheckboxPath {
+  stroke: var(--editorDarkMode-primary-text);
+}
+
+/* Sliders */
+input[class*="monitor_slider_"] {
+  accent-color: var(--editorDarkMode-primary);
+}
+
+/* Checkboxes and radio buttons */
+label {
+  accent-color: var(--editorDarkMode-primary);
+}
+
+/* Project loading screen */
+[class*="loader_background_"] {
+  background-color: var(--editorDarkMode-menuBar);
+  color: var(--editorDarkMode-menuBar-text);
+}
+
+[class*="loader_background_"] img {
+  filter: var(--editorDarkMode-menuBar-filter);
+}

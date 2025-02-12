@@ -745,3 +745,49 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 .sa-comment-preview-reduce-transparency {
   background-color: var(--editorDarkMode-input);
 }
+
+/* Input fields from dialogs */
+input[class*="prompt_variable-name-text-input_"] {
+  outline-color: var(--editorDarkMode-primary);
+}
+
+/* Green flag active background color */
+img[class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
+  background-color: var(--editorDarkMode-primary-transparent35);
+}
+
+/* Fixes for device searching dialogs (used by extensions such as LEGO BOOST, micro:bit, etc...) */
+button[class*="connection-modal_connection-button_"] {
+  background-color: var(--editorDarkMode-primary);
+  color: var(--editorDarkMode-primary-text);
+}
+
+div[class*="connection-modal_dot_"][class*="connection-modal_active-step-dot_"] {
+  background-color: var(--editorDarkMode-primary);
+}
+
+div[class*="connection-modal_dot_"][class*="connection-modal_inactive-step-dot_"] {
+  background-color: var(--editorDarkMode-primary-transparent35);
+}
+
+img[class*="connection-modal_bluetooth-centered-icon_"] {
+  background-color: var(--editorDarkMode-primary);
+}
+
+div[class*="connection-modal_activityArea_"] {
+  background-color: var(--editorDarkMode-primary-transparent15);
+}
+
+div[class*="connection-modal_dots-holder_"] {
+  background-color: var(--editorDarkMode-primary-transparent15);
+}
+
+/* Fixes for the tutorial popup */
+div[class*="card_see-all-button_"] {
+  background-color: var(--editorDarkMode-primary);
+  color: var(--editorDarkMode-primary-text);
+}
+
+div[class*="card_deck-name_"] {
+  color: var(--editorDarkMode-primary);
+}

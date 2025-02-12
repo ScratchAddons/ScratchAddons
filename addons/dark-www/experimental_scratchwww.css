@@ -836,3 +836,8 @@ p {
      of the document inside, it gets an opaque backgound. */
   color-scheme: light;
 }
+
+/* Fix the accent color of checkboxes and radio buttons */
+input {
+  accent-color: var(--darkWww-button);
+}
