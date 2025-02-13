@@ -8,6 +8,7 @@ export default class Trap extends Listenable {
   constructor(tab) {
     super();
     this._react_internal_key = undefined;
+    this._react_internal_container_key = undefined;
     this._isWWW = () => tab.clientVersion === "scratch-www";
     this._getEditorMode = () => this._isWWW() && tab.editorMode;
     this._waitForElement = tab.waitForElement.bind(tab);
@@ -27,15 +28,19 @@ export default class Trap extends Listenable {
   /**
    * @private
    */
-  get REACT_INTERNAL_PREFIX() {
-    return "__reactInternalInstance$";
+  get REACT_INTERNAL_PREFIXES() {
+    return ["__reactInternalInstance$", "__reactFiber$"];
+  }
+
+  /**
+   * @private
+   */
+  get REACT_INTERNAL_CONTAINER_PREFIXES() {
+    return ["__reactContainere$", "__reactContainer$"];
   }
 
   _getBlocksComponent(wrapper) {
-    if (!this._react_internal_key) {
-      this._react_internal_key = Object.keys(wrapper).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
-    }
-    const internal = wrapper[this._react_internal_key];
+    const internal = wrapper[this.getInternalKey(wrapper)];
     let childable = internal;
     /* eslint-disable no-empty */
     while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
@@ -101,14 +106,30 @@ export default class Trap extends Listenable {
 
   /**
    * Gets react internal key.
-   * @param {HTMLElement} elem - the reference
+   * @param {HTMLElement} elem - an element rendered by React
    * @returns {string} the key
    */
   getInternalKey(elem) {
     if (!this._react_internal_key) {
-      this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
+      this._react_internal_key = Object.keys(elem).find((key) =>
+        this.REACT_INTERNAL_PREFIXES.some((prefix) => key.startsWith(prefix))
+      );
     }
     return this._react_internal_key;
+  }
+
+  /**
+   * Gets react internal container key.
+   * @param {HTMLElement} elem - the root element of the React app
+   * @returns {string} the key
+   */
+  getInternalContainerKey(elem) {
+    if (!this._react_internal_container_key) {
+      this._react_internal_container_key = Object.keys(elem).find((key) =>
+        this.REACT_INTERNAL_CONTAINER_PREFIXES.some((prefix) => key.startsWith(prefix))
+      );
+    }
+    return this._react_internal_container_key;
   }
 
   /**
@@ -132,7 +153,7 @@ export default class Trap extends Listenable {
     let toolState = internalState;
     let tool;
     while (toolState) {
-      const toolInstance = toolState.child.stateNode;
+      const toolInstance = toolState.child.stateNode || toolState.child.child.stateNode; // React 16 || React 18
       if (toolInstance.tool) {
         tool = toolInstance.tool;
         break;

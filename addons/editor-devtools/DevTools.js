@@ -742,7 +742,7 @@ export default class DevTools {
 
     this.codeTab = guiTabs[0];
     this.costTab = guiTabs[1];
-    this.costTabBody = document.querySelector("div[aria-labelledby=" + this.costTab.id + "]");
+    this.costTabBody = document.querySelector("div[aria-labelledby='" + this.costTab.id + "']");
 
     this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
