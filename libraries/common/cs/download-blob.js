@@ -1,5 +1,5 @@
 export default (filename, blob) => {
-  const url = URL.createObjectURL(blob);;
+  const url = URL.createObjectURL(blob);
   const a = Object.assign(document.createElement("a"), {
     href: url,
     download: filename,
