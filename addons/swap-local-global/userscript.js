@@ -243,9 +243,6 @@ export default async function ({ addon, msg, console }) {
     }
 
     const promptBody = await addon.tab.waitForElement('[class^="prompt_body_"]');
-    if (!promptBody) {
-      return;
-    }
 
     const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_"]');
     if (headerTitle) {
