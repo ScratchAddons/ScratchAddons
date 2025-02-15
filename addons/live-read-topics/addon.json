@@ -19,6 +19,12 @@
       "matches": ["topics"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/discuss/*/"]
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true
 }
