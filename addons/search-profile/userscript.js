@@ -40,7 +40,7 @@ export default async function ({ addon, console, msg }) {
 
     nav.addEventListener("keydown", (event) => {
       // Keyboard navigation
-      // Modified code from scratch-www/src/components/tabs/tabs.jsx
+      // Modified code from https://github.com/scratchfoundation/scratch-www/blob/1938b3d/src/components/tabs/tabs.jsx
       if (!["ArrowLeft", "ArrowRight", "Home", "End", "Enter", " "].includes(event.key)) {
         return;
       }

@@ -72,5 +72,6 @@
       "url": "download.css",
       "matches": ["https://scratch.mit.edu/download"]
     }
-  ]
+  ],
+  "libraries": ["scratch-flash"]
 }
