@@ -1,0 +1,35 @@
+{
+  "name": "Hidden blocks",
+  "description": "Shows working hidden blocks in the block palette.",
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.42.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Add sprites to menu in block \"when this sprite touches\"",
+      "id": "addSpritesToMenu",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "credits": [
+    {
+      "name": "Mikhail Zuenko",
+      "link": "https://scratch.mit.edu/users/zuenko-michail"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "When using hidden blocks, there's no guarantee that they will work with future updates to Scratch. The project that used the hidden blocks might be marked as NFE (Not For Everyone).",
+      "id": "hiddenBlocksCanBeRemoved"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
