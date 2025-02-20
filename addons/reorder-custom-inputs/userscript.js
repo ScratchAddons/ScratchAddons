@@ -144,11 +144,11 @@ export default async function ({ addon, console }) {
     procedureDeclaration.onChangeFn = function (...args) {
       if (addon.self.disabled) return originalUpdateDeclarationProcCode.call(this, ...args);
       return modifiedUpdateDeclarationProcCode.call(this, ...args);
-    }
+    };
     procedureDeclaration.removeFieldCallback = function (...args) {
       if (addon.self.disabled) return originalRemoveFieldCallback.call(this, ...args);
       return modifiedRemoveFieldCallback.call(this, ...args);
-    }
+    };
 
     for (const inputFn of ["addLabelExternal", "addBooleanExternal", "addStringNumberExternal"]) {
       const originalFn = procedureDeclaration[inputFn];
@@ -158,7 +158,7 @@ export default async function ({ addon, console }) {
       procedureDeclaration[inputFn] = function (...args) {
         if (addon.self.disabled) return originalAddFns[inputFn].call(this, ...args);
         return addInputAfter(originalFn, inputFn).call(this, ...args);
-      }
+      };
     }
   }
 
