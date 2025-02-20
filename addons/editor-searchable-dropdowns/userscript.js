@@ -100,6 +100,7 @@ export default async function ({ addon, console, msg }) {
           // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
           blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
           searchBar.focus();
+          setTimeout(() => searchBar.scrollIntoView(), 0);
         }
       };
     }
