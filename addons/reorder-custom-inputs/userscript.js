@@ -1,7 +1,7 @@
 import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./modified-funcs.js";
 
 export default async function ({ addon, console }) {
-  const ScratchBlocks = await addon.tab.traps.getBlockly();
+  const Blockly = await addon.tab.traps.getBlockly();
 
   function createArrow(direction, callback) {
     const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
@@ -137,31 +137,34 @@ export default async function ({ addon, console }) {
   }
 
   function polluteProcedureDeclaration(procedureDeclaration, save_original = true) {
-    procedureDeclaration.createAllInputs_ = modifiedCreateAllInputs;
-    procedureDeclaration.onChangeFn = modifiedUpdateDeclarationProcCode;
-    procedureDeclaration.removeFieldCallback = modifiedRemoveFieldCallback;
+    procedureDeclaration.createAllInputs_ = function (...args) {
+      if (addon.self.disabled) return originalCreateAllInputs.call(this, ...args);
+      return modifiedCreateAllInputs.call(this, ...args);
+    };
+    procedureDeclaration.onChangeFn = function (...args) {
+      if (addon.self.disabled) return originalUpdateDeclarationProcCode.call(this, ...args);
+      return modifiedUpdateDeclarationProcCode.call(this, ...args);
+    }
+    procedureDeclaration.removeFieldCallback = function (...args) {
+      if (addon.self.disabled) return originalRemoveFieldCallback.call(this, ...args);
+      return modifiedRemoveFieldCallback.call(this, ...args);
+    }
 
     for (const inputFn of ["addLabelExternal", "addBooleanExternal", "addStringNumberExternal"]) {
+      const originalFn = procedureDeclaration[inputFn];
       if (save_original) {
-        originalAddFns[inputFn] = procedureDeclaration[inputFn];
+        originalAddFns[inputFn] = originalFn;
       }
-      procedureDeclaration[inputFn] = addInputAfter(procedureDeclaration[inputFn], inputFn);
-    }
-  }
-
-  function depolluteProcedureDeclaration(procedureDeclaration) {
-    procedureDeclaration.createAllInputs_ = originalCreateAllInputs;
-    procedureDeclaration.onChangeFn = originalUpdateDeclarationProcCode;
-    procedureDeclaration.removeFieldCallback = originalRemoveFieldCallback;
-
-    for (const [inputFnName, originalFn] of Object.entries(originalAddFns)) {
-      procedureDeclaration[inputFnName] = originalFn;
+      procedureDeclaration[inputFn] = function (...args) {
+        if (addon.self.disabled) return originalAddFns[inputFn].call(this, ...args);
+        return addInputAfter(originalFn, inputFn).call(this, ...args);
+      }
     }
   }
 
   function getExistingProceduresDeclarationBlock() {
     // addon.tab.traps.getWorkspace() will never return the procedure declaration editor
-    return ScratchBlocks.getMainWorkspace()
+    return Blockly.getMainWorkspace()
       .getAllBlocks()
       .find((block) => block.type === "procedures_declaration");
   }
@@ -177,6 +180,7 @@ export default async function ({ addon, console }) {
 
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = function () {
       originalShowEditor.call(this);
+      if (addon.self.disabled) return;
       createArrow("left", () => shiftFieldCallback(this.sourceBlock_, this, "left"));
       createArrow("right", () => shiftFieldCallback(this.sourceBlock_, this, "right"));
       selectedField = this;
@@ -184,19 +188,9 @@ export default async function ({ addon, console }) {
   }
 
   function disableAddon() {
-    // depollute the procedures_declaration prototype
-    depolluteProcedureDeclaration(Blockly.Blocks["procedures_declaration"]);
-
-    // if custom procedures modal is already open we also directly depollute the existing procedures_declaration block
-    if (addon.tab.redux.state.scratchGui.customProcedures.active) {
-      depolluteProcedureDeclaration(getExistingProceduresDeclarationBlock());
-    }
-
-    Blockly.FieldTextInputRemovable.prototype.showEditor_ = originalShowEditor;
     Blockly.WidgetDiv.DIV.querySelectorAll(".sa-reorder-inputs-arrow").forEach((e) => e.remove());
   }
 
-  const Blockly = await addon.tab.traps.getBlockly();
   const originalCreateAllInputs = Blockly.Blocks["procedures_declaration"].createAllInputs_;
   const originalUpdateDeclarationProcCode = Blockly.Blocks["procedures_declaration"].onChangeFn;
   const originalRemoveFieldCallback = Blockly.Blocks["procedures_declaration"].removeFieldCallback;
