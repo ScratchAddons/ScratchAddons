@@ -58,6 +58,7 @@ export default async function ({ addon, console, msg }) {
   let blocklyDropDownContent = null;
   let blocklyDropdownMenu = null;
   let searchBar = null;
+  let noResultsMessage = null;
   // Contains DOM and addon state
   let items = [];
   let searchedItems = [];
@@ -72,10 +73,17 @@ export default async function ({ addon, console, msg }) {
     searchBar.addEventListener("input", updateSearch);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
-    blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
+
+    noResultsMessage = document.createElement("div");
+    noResultsMessage.textContent = msg("noResults");
+    noResultsMessage.hidden = true;
+    noResultsMessage.classList.add("u-dropdown-no-results", "blocklyMenuItem", "goog-menuitem");
+
+    blocklyDropdownMenu.insertBefore(noResultsMessage, blocklyDropdownMenu.firstChild);
+    blocklyDropdownMenu.insertBefore(searchBar, noResultsMessage);
 
     items = Array.from(blocklyDropdownMenu.children)
-      .filter((child) => child.tagName !== "INPUT")
+      .filter((child) => !child.matches(".u-dropdown-searchbar, .u-dropdown-no-results"))
       .map((element) => ({
         element,
         text: element.textContent,
@@ -282,9 +290,12 @@ export default async function ({ addon, console, msg }) {
         blocklyDropdownMenu.appendChild(item.element);
       }
     }
+    let visibleItems = 0;
     for (const { item, score } of searchedItems) {
       item.element.hidden = score < 0;
+      if (score >= 0) ++visibleItems;
     }
+    noResultsMessage.hidden = visibleItems > 0;
   }
 
   function handleKeyDownEvent(event) {
