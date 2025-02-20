@@ -22,10 +22,7 @@ export default async function ({ addon, console, msg }) {
     if (Blockly.registry) {
       // new Blockly
       // TODO: LINK
-      const VariableModel = Blockly.registry.getClass(
-        Blockly.registry.Type.VARIABLE_MODEL,
-        Blockly.registry.DEFAULT
-      );
+      const VariableModel = Blockly.registry.getClass(Blockly.registry.Type.VARIABLE_MODEL, Blockly.registry.DEFAULT);
       const variable = new VariableModel(workspace, ...args);
       workspace.getVariableMap().addVariable(variable);
       Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(variable));
@@ -33,7 +30,7 @@ export default async function ({ addon, console, msg }) {
     } else {
       return workspace.createVariable(...args);
     }
-  }
+  };
 
   const ADDON_ITEMS = {
     createGlobalVariable: {
@@ -85,7 +82,7 @@ export default async function ({ addon, console, msg }) {
       }));
     currentDropdownOptions = resultOfLastGetOptions;
     updateSearch();
-  }
+  };
 
   if (Blockly.registry) {
     // new Blockly
@@ -103,7 +100,7 @@ export default async function ({ addon, console, msg }) {
           setTimeout(() => searchBar.scrollIntoView(), 0);
         }
       };
-    }
+    };
 
     // FieldDropdown.showEditor_() calls Menu.render(), then DropDownDiv.showPositionedByField().
     // We override Menu.render() so that when showPositionedByField() is called, the search bar is
@@ -117,7 +114,7 @@ export default async function ({ addon, console, msg }) {
         initSearchBar();
       }
       return menu;
-    }
+    };
   } else {
     const oldDropDownDivShow = Blockly.DropDownDiv.show;
     Blockly.DropDownDiv.show = function (...args) {
