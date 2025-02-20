@@ -23,3 +23,7 @@
 .blocklyDropDownDiv .goog-menu {
   overflow-x: hidden;
 }
+
+.u-dropdown-selected-item {
+  background-color: var(--colour-menuHover);
+}
