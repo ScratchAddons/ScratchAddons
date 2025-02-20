@@ -21,7 +21,7 @@ export default async function ({ addon, console, msg }) {
   const newVariable = (workspace, ...args) => {
     if (Blockly.registry) {
       // new Blockly
-      // TODO: LINK
+      // https://github.com/scratchfoundation/scratch-blocks/blob/91c8b63/src/variables.ts#L126-L137
       const VariableModel = Blockly.registry.getClass(Blockly.registry.Type.VARIABLE_MODEL, Blockly.registry.DEFAULT);
       const variable = new VariableModel(workspace, ...args);
       workspace.getVariableMap().addVariable(variable);
