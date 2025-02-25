@@ -388,6 +388,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 
 /* Block category menu background */
 .blocklyToolboxDiv,
+.blocklyToolbox,
 .scratchCategoryMenu {
   background: var(--editorDarkMode-categoryMenu);
   color: var(--editorDarkMode-categoryMenu-text);
@@ -614,6 +615,8 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="blocks_blocks_"] .injectionDiv,
 [class*="blocks_blocks_"] .blocklyToolboxDiv,
 [dir="rtl"] [class*="blocks_blocks_"] .blocklyToolboxDiv,
+[class*="blocks_blocks_"] .blocklyToolbox,
+[dir="rtl"] [class*="blocks_blocks_"] .blocklyToolbox,
 [class*="blocks_blocks_"] .blocklyFlyout,
 [dir="rtl"] [class*="blocks_blocks_"] .blocklyFlyout,
 [class*="backpack_backpack-header_"],
