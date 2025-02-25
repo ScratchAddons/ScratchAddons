@@ -409,6 +409,7 @@ export default async function ({ addon, console, msg }) {
     let toolbox;
     if (Blockly.registry) toolbox = document.querySelector(".blocklyToolbox");
     else toolbox = document.querySelector(".blocklyToolboxDiv");
+
     const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
 
     for (let element of [toolbox, addExtensionButton, flyOut, scrollBar]) {
