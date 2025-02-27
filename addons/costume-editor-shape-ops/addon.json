@@ -1,0 +1,32 @@
+{
+  "name": "Shape operations in costume editor",
+  "description": "Adds a menu to perform Boolean operations like merging, subtracting and masking on vector shapes in the costume editor.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/"
+    },
+    {
+      "name": "JeremyGamer13",
+      "id": "code-from-penguinmod",
+      "note": "Original shape operation code",
+      "link": "https://github.com/JeremyGamer13/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor", "featured"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.42.0"
+}
