@@ -138,12 +138,10 @@ export default async function ({ addon, msg, console }) {
   // and further modified by CST1229
   // https://github.com/CST1229/scratch-paint/blob/0283b94a479d58af9500af0317f6f1bc0f193f78/src/containers/mode-tools.jsx#L191-L347
   function handleMergeShape(specificOperation, doSelections) {
+    // if it breaks, it's probably better to throw a debuggable error in the console rather than silently failing
     const modeToolsEl = document.querySelector("[class*='paint-editor_mod-mode-tools_']");
-    if (!modeToolsEl) return;
-    const internalInstanceKey = Object.keys(modeToolsEl).find((key) => key.startsWith("__reactInternalInstance$"));
-    if (!internalInstanceKey) return;
+    const internalInstanceKey = addon.tab.traps.getInternalKey(modeToolsEl);
     const modeTools = modeToolsEl[internalInstanceKey]?.child?.child?.child?.child?.stateNode;
-    if (!modeTools) return;
 
     if (specificOperation === "fracture") {
       const selectedItems = getSelectedRootItems();
@@ -328,6 +326,7 @@ export default async function ({ addon, msg, console }) {
       lastSelectContainer.classList.remove("shown");
     }
   });
+  addon.tab.redux.initialize();
   addon.tab.redux.addEventListener(
     "statechanged",
     ({
