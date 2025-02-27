@@ -141,7 +141,11 @@ export default async function ({ addon, msg, console }) {
     // if it breaks, it's probably better to throw a debuggable error in the console rather than silently failing
     const modeToolsEl = document.querySelector("[class*='paint-editor_mod-mode-tools_']");
     const internalInstanceKey = addon.tab.traps.getInternalKey(modeToolsEl);
-    const modeTools = modeToolsEl[internalInstanceKey]?.child?.child?.child?.child?.stateNode;
+    let modeToolsInst = modeToolsEl[internalInstanceKey];
+    while (!(modeToolsInst?.stateNode?.props?.setSelectedItems && modeToolsInst?.stateNode?.props?.onUpdateImage) && modeToolsInst) {
+      modeToolsInst = modeToolsInst.child;
+    }
+    const modeTools = modeToolsInst.stateNode;
 
     if (specificOperation === "fracture") {
       const selectedItems = getSelectedRootItems();
