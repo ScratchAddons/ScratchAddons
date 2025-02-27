@@ -68,7 +68,7 @@ const categories = [
   saCategory,
 ];
 
-// From scratch-gui/src/lib/themes/default/index.js
+// From https://github.com/scratchfoundation/scratch-gui/blob/782fa44/src/lib/themes/default/index.js
 const defaultColors = {
   motion: {
     primary: "#4C97FF",
@@ -139,7 +139,7 @@ const defaultColors = {
   text: "#FFFFFF",
 };
 
-// From scratch-blocks/media/dropdown-arrow.svg
+// From https://github.com/scratchfoundation/scratch-blocks/blob/2e3a31e/media/dropdown-arrow.svg
 const arrowPath =
   "M6.36,7.79a1.43,1.43,0,0,1-1-.42L1.42,3.45a1.44,1.44,0,0,1,0-2c0.56-.56,9.31-0.56,9.87,0a1.44,1.44,0,0,1,0,2L7.37,7.37A1.43,1.43,0,0,1,6.36,7.79Z";
 const arrowShadowPath =
@@ -545,9 +545,15 @@ export default async function ({ addon, console, msg }) {
     };
   }
 
-  if (!Blockly.registry) {
-    // editor-colored-context menus compatibility
-    // doesn't support new Blockly yet
+  if (Blockly.registry) {
+    // New Blockly
+    const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu;
+    Blockly.BlockSvg.prototype.showContextMenu = function (e) {
+      const widgetDiv = Blockly.WidgetDiv.getDiv();
+      widgetDiv.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
+      return oldBlockShowContextMenu.call(this, e);
+    };
+  } else {
     const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
     Blockly.BlockSvg.prototype.showContextMenu_ = function (e) {
       Blockly.WidgetDiv.DIV.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
@@ -879,6 +885,8 @@ export default async function ({ addon, console, msg }) {
         )
       );
       workspace.refreshTheme();
+      // used by editor-colored-context-menus
+      document.body.style.setProperty("--colour-text", uncoloredTextColor());
     }
     addon.tab.setCustomBlockColor({
       color: primaryColor(saCategory),
