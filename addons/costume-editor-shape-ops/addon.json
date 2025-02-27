@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Shape operations in costume editor",
   "description": "Adds a menu to perform Boolean operations like merging, subtracting and masking on vector shapes in the costume editor.",
   "credits": [
