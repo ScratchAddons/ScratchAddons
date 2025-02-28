@@ -188,6 +188,9 @@ export default async function ({ addon, console }) {
       const originalInit = Blockly.Blocks["procedures_declaration"].init;
       Blockly.Blocks["procedures_declaration"].init = function () {
         originalInit.call(this);
+        originalCreateAllInputs = this.createAllInputs_;
+        originalUpdateDeclarationProcCode = this.onChangeFn;
+        originalRemoveFieldCallback = this.removeFieldCallback;
         polluteProcedureDeclaration(this);
       };
     } else {
@@ -223,20 +226,24 @@ export default async function ({ addon, console }) {
   let INPUT_DUMMY;
   let INPUT_VALUE;
   let FieldTextInputRemovable;
+  let originalCreateAllInputs;
+  let originalUpdateDeclarationProcCode;
+  let originalRemoveFieldCallback;
   if (Blockly.registry) {
     // new Blockly
     INPUT_DUMMY = Blockly.inputs.inputTypes.DUMMY;
     INPUT_VALUE = Blockly.inputs.inputTypes.VALUE;
     FieldTextInputRemovable = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_input_removable");
+    // The other variables are set in enableAddon()
   } else {
     INPUT_DUMMY = Blockly.DUMMY_INPUT;
     INPUT_VALUE = Blockly.INPUT_VALUE;
     FieldTextInputRemovable = Blockly.FieldTextInputRemovable;
+    originalCreateAllInputs = Blockly.Blocks["procedures_declaration"].createAllInputs_;
+    originalUpdateDeclarationProcCode = Blockly.Blocks["procedures_declaration"].onChangeFn;
+    originalRemoveFieldCallback = Blockly.Blocks["procedures_declaration"].removeFieldCallback;
   }
 
-  const originalCreateAllInputs = Blockly.Blocks["procedures_declaration"].createAllInputs_;
-  const originalUpdateDeclarationProcCode = Blockly.Blocks["procedures_declaration"].onChangeFn;
-  const originalRemoveFieldCallback = Blockly.Blocks["procedures_declaration"].removeFieldCallback;
   const originalShowEditor = FieldTextInputRemovable.prototype.showEditor_;
   let originalAddFns = {};
   let selectedField = null;
