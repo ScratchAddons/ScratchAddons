@@ -17,10 +17,12 @@ export default async function ({ addon, console }) {
 
   const customZoomAreaElement = document.createElement("div");
   customZoomAreaElement.className = "sa-custom-zoom-area";
-  customZoomAreaElement.addEventListener("mousedown", (e) => { // old Blockly
+  customZoomAreaElement.addEventListener("mousedown", (e) => {
+    // old Blockly
     getElementAtPoint(e).dispatchEvent(new MouseEvent("mousedown", e));
   });
-  customZoomAreaElement.addEventListener("pointerdown", (e) => { // new Blockly
+  customZoomAreaElement.addEventListener("pointerdown", (e) => {
+    // new Blockly
     getElementAtPoint(e).dispatchEvent(new PointerEvent("pointerdown", e));
   });
   customZoomAreaElement.addEventListener("wheel", (e) => {
