@@ -1,4 +1,6 @@
 export default async function ({ addon, console }) {
+  const Blockly = await addon.tab.traps.getBlockly();
+
   const speeds = {
     none: "0s",
     short: "0.2s",
@@ -18,6 +20,9 @@ export default async function ({ addon, console }) {
   customZoomAreaElement.addEventListener("mousedown", (e) => {
     getElementAtPoint(e).dispatchEvent(new MouseEvent("mousedown", e));
   });
+  customZoomAreaElement.addEventListener("pointerdown", (e) => {
+    getElementAtPoint(e).dispatchEvent(new PointerEvent("pointerdown", e));
+  });
   customZoomAreaElement.addEventListener("wheel", (e) => {
     e.preventDefault();
     getElementAtPoint(e).dispatchEvent(new WheelEvent("wheel", e));
@@ -26,7 +31,8 @@ export default async function ({ addon, console }) {
   function update() {
     if (addon.tab.editorMode !== "editor") return;
 
-    const { zoomOptions } = addon.tab.traps.getWorkspace().options;
+    const workspace = addon.tab.traps.getWorkspace();
+    const zoomOptions = workspace.options.zoom || workspace.options.zoomOptions; // new Blockly || old Blockly
     zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
     zoomOptions.minScale = addon.settings.get("minZoom") / 100;
     zoomOptions.startScale = addon.settings.get("startZoom") / 100;
@@ -46,7 +52,8 @@ export default async function ({ addon, console }) {
   }
   addon.settings.addEventListener("change", update);
   while (true) {
-    await addon.tab.waitForElement(".blocklyZoom", {
+    const selector = Blockly.registry ? ".blocklyZoomReset" : ".blocklyZoom";
+    await addon.tab.waitForElement(selector, {
       markAsSeen: true,
       reduxEvents: [
         "scratch-gui/mode/SET_PLAYER",
