@@ -7,7 +7,8 @@ export default async function ({ addon, console }) {
     const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
 
     let widgetDiv;
-    if (Blockly.registry) widgetDiv = Blockly.WidgetDiv.getDiv(); // new Blockly
+    if (Blockly.registry)
+      widgetDiv = Blockly.WidgetDiv.getDiv(); // new Blockly
     else widgetDiv = Blockly.WidgetDiv.DIV;
 
     widgetDiv.insertAdjacentHTML(
@@ -213,7 +214,8 @@ export default async function ({ addon, console }) {
 
   function disableAddon() {
     let widgetDiv;
-    if (Blockly.registry) widgetDiv = Blockly.WidgetDiv.getDiv(); // new Blockly
+    if (Blockly.registry)
+      widgetDiv = Blockly.WidgetDiv.getDiv(); // new Blockly
     else widgetDiv = Blockly.WidgetDiv.DIV;
     widgetDiv.querySelectorAll(".sa-reorder-inputs-arrow").forEach((e) => e.remove());
   }
