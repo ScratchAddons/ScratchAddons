@@ -28,5 +28,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.42.0"
+  "versionAdded": "1.42.0",
+  "libraries": ["scratch-paint"]
 }
