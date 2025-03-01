@@ -16,6 +16,7 @@
       "link": "https://github.com/DNin01"
     }
   ],
+  "relatedAddons": ["editor-theme3", "zebra-striping", "custom-block-shape"],
   "userscripts": [
     {
       "url": "userscript.js",
