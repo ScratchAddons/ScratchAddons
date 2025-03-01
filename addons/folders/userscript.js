@@ -295,8 +295,6 @@ export default async function ({ addon, console, msg }) {
         (typeof sortableHOCInstance.props.selectedId === "string" ||
           typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
         typeof sortableHOCInstance.containerBox !== "undefined" &&
-        typeof SortableHOC.prototype.componentDidMount === "undefined" &&
-        typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
         typeof SortableHOC.prototype.handleAddSortable === "function" &&
         typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
         typeof SortableHOC.prototype.setRef === "function"
@@ -307,7 +305,12 @@ export default async function ({ addon, console, msg }) {
   };
 
   const verifySortableHOC = (sortableHOCInstance) => {
-    if (isSortableHOC(sortableHOCInstance)) return;
+    const SortableHOC = sortableHOCInstance.constructor;
+    if (
+      isSortableHOC(sortableHOCInstance) &&
+      typeof SortableHOC.prototype.componentDidMount === "undefined" &&
+      typeof SortableHOC.prototype.componentDidUpdate === "undefined"
+    ) return;
     throw new Error("Can not comprehend SortableHOC");
   };
 
