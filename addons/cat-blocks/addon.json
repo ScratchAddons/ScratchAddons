@@ -20,7 +20,10 @@
     {
       "type": "notice",
       "text": "The \"watch mouse cursor\" setting may impact performance when the editor is open.",
-      "id": "watch"
+      "id": "watch",
+      "if": {
+        "settings": { "watch": true }
+      }
     }
   ],
   "settings": [
