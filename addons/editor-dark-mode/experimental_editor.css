@@ -737,17 +737,3 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
   /* The <object> gets a white background if color-scheme is dark. */
   color-scheme: light;
 }
-/* For `editor-comment-previews` */
-.sa-comment-preview-inner {
-  color: var(--editorDarkMode-input-text);
-  background-color: var(--editorDarkMode-input-transparent90);
-}
-@supports (backdrop-filter: blur(16px)) {
-  .sa-comment-preview-inner {
-    background-color: var(--editorDarkMode-input-transparent75);
-    backdrop-filter: blur(16px);
-  }
-}
-.sa-comment-preview-reduce-transparency {
-  background-color: var(--editorDarkMode-input);
-}
