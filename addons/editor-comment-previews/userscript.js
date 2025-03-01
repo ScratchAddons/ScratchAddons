@@ -82,7 +82,9 @@ export default async function ({ addon, console }) {
     }
 
     // Note: .blocklyBubbleCanvas > g can be a flyout checkobox on modern Blockly
-    const el = e.target.closest(".blocklyComment.blocklyCollapsed, .blocklyBubbleCanvas > g, .blocklyBlockCanvas .blocklyDraggable[data-id]:not(.blocklyShadow)");
+    const el = e.target.closest(
+      ".blocklyComment.blocklyCollapsed, .blocklyBubbleCanvas > g, .blocklyBlockCanvas .blocklyDraggable[data-id]:not(.blocklyShadow)"
+    );
     if (el === hoveredElement) {
       // Nothing to do.
       return;
