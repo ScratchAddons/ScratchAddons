@@ -310,7 +310,8 @@ export default async function ({ addon, console, msg }) {
       isSortableHOC(sortableHOCInstance) &&
       typeof SortableHOC.prototype.componentDidMount === "undefined" &&
       typeof SortableHOC.prototype.componentDidUpdate === "undefined"
-    ) return;
+    )
+      return;
     throw new Error("Can not comprehend SortableHOC");
   };
 
