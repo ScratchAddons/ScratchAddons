@@ -129,9 +129,9 @@ export default async function ({ addon, msg, console }) {
       return newArray;
     }
     if (!item || !item.children) return [item];
-    const children = item.children;
-    if (!dryRun) decomposeCompoundPath(item);
-    return children.map(() => recursiveDecompose(child, dryRun));
+    let children = item.children;
+    if (!dryRun) children = decomposeCompoundPath(item);
+    return recursiveDecompose(children, dryRun);
   }
 
   // Some of this code was originally written by JeremyGamer13 for PenguinMod,
@@ -196,7 +196,8 @@ export default async function ({ addon, msg, console }) {
       return;
     }
     const results = [];
-    selectedItems = recursiveDecompose(selectedItems).filter((item) => item.unite);
+    selectedItems = recursiveDecompose(selectedItems);
+    selectedItems = selectedItems.filter((item) => item.unite);
 
     // unite the shapes together, removing the original
     if (specificOperation === "divide") {
