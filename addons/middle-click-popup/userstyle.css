@@ -43,9 +43,8 @@
   padding-right: 0.2rem;
 }
 
-.sa-mcp-input-wrapper:focus {
-  /* Change Scratch default styles */
-  box-shadow: none;
+.sa-mcp-input-wrapper:focus-within {
+  border-color: var(--editorDarkMode-primary, #855cd6);
 }
 
 .sa-mcp-input-wrapper[data-error="true"] {
@@ -61,6 +60,11 @@
   height: 100%;
   line-height: 100%;
   box-sizing: border-box;
+  font: inherit;
+}
+
+.sa-mcp-input {
+  color: inherit;
 }
 
 .sa-mcp-input-suggestion {
