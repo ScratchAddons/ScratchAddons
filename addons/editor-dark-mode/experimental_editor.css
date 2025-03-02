@@ -667,6 +667,7 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 .sa-paint-snap-settings,
 [class*="prompt_variable-name-text-input_"],
 [class*="prompt_button-row_"] button,
+[class*="custom-procedures_option-card_"],
 [class*="custom-procedures_button-row_"] button,
 [class*="slider-prompt_min-input_"],
 [class*="slider-prompt_max-input_"],
