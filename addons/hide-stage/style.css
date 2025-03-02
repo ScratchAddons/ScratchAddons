@@ -5,7 +5,11 @@
 
 .sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
 .sa-stage-hidden [class*="asset-panel_wrapper_"],
-.sa-stage-hidden [class*="backpack_backpack-header_"] {
+[dir="ltr"] .sa-stage-hidden [class*="backpack_backpack-header_"],
+[dir="rtl"] .sa-stage-hidden [class*="backpack_backpack-header_"],
+/* for editor-stage-left: */
+[dir="ltr"] .sa-stage-hidden [class*="gui_extension-button-container_"],
+[dir="rtl"] .sa-stage-hidden [class*="gui_extension-button-container_"] {
   border-radius: 0;
 }
 
