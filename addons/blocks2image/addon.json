@@ -31,5 +31,6 @@
     "temporaryNotice": "The addon has been reworked. There is now a modal for saving the blocks as an image, and the image can be copied to the clipboard.",
     "isMajor": true
   },
-  "permissions": ["clipboardWrite"]
+  "permissions": ["clipboardWrite"],
+  "libraries": ["scratch-gui"]
 }

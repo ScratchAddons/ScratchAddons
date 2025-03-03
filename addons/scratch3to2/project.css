@@ -223,6 +223,13 @@ body:not(.sa-body-editor) [class*="green-flag_green-flag_"]:hover,
 body:not(.sa-body-editor) [class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
   background-image: url("%addon-self-dir%/assets/green_flag_hover.png");
 }
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps] {
+  background-image: url("%addon-self-dir%/assets/green_flag_60fps.png");
+}
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps]:hover,
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps][class*="green-flag_is-active_"] {
+  background-image: url("%addon-self-dir%/assets/green_flag_60fps_hover.png");
+}
 body:not(.sa-body-editor) [class*="stop-all_stop-all_"] {
   background-image: url("%addon-self-dir%/assets/stop_hover.png");
   opacity: 1;

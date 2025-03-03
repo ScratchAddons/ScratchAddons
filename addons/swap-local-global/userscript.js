@@ -238,15 +238,12 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  const addMoreOptionsToPrompt = (variable) => {
+  const addMoreOptionsToPrompt = async (variable) => {
     if (addon.self.disabled) {
       return;
     }
 
-    const promptBody = document.querySelector('[class^="prompt_body_"]');
-    if (!promptBody) {
-      return;
-    }
+    const promptBody = await addon.tab.waitForElement('[class^="prompt_body_"]');
 
     const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_"]');
     if (headerTitle) {
@@ -365,7 +362,8 @@ export default async function ({ addon, msg, console }) {
         convertVariable(variable, prompt.isLocal(), prompt.isCloud());
       }
     });
-    const prompt = addMoreOptionsToPrompt(variable);
+    let prompt;
+    addMoreOptionsToPrompt(variable).then((result) => (prompt = result));
     return ret;
   };
 

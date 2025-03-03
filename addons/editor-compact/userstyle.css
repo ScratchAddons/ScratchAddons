@@ -305,20 +305,25 @@ input.sa-search-sprites-box {
 }
 
 /* Code tab */
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .scratchCategoryMenuItem {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .scratchCategoryMenuItem,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxCategory {
   padding: 0.25rem 0;
 }
 .scratchCategoryItemBubble,
-.scratchCategoryItemIcon {
+.scratchCategoryItemIcon,
+.categoryBubble,
+.categoryIconBubble {
   width: 1rem;
   height: 1rem;
   background-size: 1rem 1rem;
 }
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolbox {
   height: calc(100% - 2rem) !important;
   scrollbar-width: none;
 }
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webkit-scrollbar {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webkit-scrollbar,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolbox::-webkit-scrollbar {
   display: none;
 }
 body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-button-container_"] {

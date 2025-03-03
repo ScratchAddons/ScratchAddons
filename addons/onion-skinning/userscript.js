@@ -12,8 +12,11 @@ export default async function ({ addon, console, msg }) {
     // The check can technically fail when Redux isn't supported (rare cases)
     // Just ignore in this case
   }
-  const paperCanvas =
-    paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)].child.child.child.stateNode;
+  let reactInternalInstance = paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)];
+  while (!reactInternalInstance.stateNode?.recalibrateSize) {
+    reactInternalInstance = reactInternalInstance.child;
+  }
+  const paperCanvas = reactInternalInstance.stateNode;
 
   let paperCenter;
   const storedOnionLayers = [];
