@@ -81,7 +81,10 @@ export default async function ({ addon, console }) {
       return;
     }
 
-    const el = e.target.closest(".blocklyBubbleCanvas > g, .blocklyBlockCanvas .blocklyDraggable[data-id]");
+    // Note: .blocklyBubbleCanvas > g can be a flyout checkobox on modern Blockly
+    const el = e.target.closest(
+      ".blocklyComment.blocklyCollapsed, .blocklyBubbleCanvas > g, .blocklyBlockCanvas .blocklyDraggable[data-id]:not(.blocklyShadow)"
+    );
     if (el === hoveredElement) {
       // Nothing to do.
       return;
@@ -94,16 +97,16 @@ export default async function ({ addon, console }) {
     let text = null;
     if (
       addon.settings.get("hover-view") &&
-      e.target.closest(".blocklyBubbleCanvas > g") &&
+      e.target.closest(".blocklyComment.blocklyCollapsed, .blocklyBubbleCanvas > g") &&
       // Hovering over the thin line that connects comments to blocks should never show a preview
       !e.target.closest("line")
     ) {
-      const collapsedText = el.querySelector("text.scratchCommentText");
-      if (collapsedText.getAttribute("display") !== "none") {
+      const collapsedText = el.querySelector("text.blocklyCommentPreview, text.scratchCommentText");
+      if (collapsedText && collapsedText.getAttribute("display") !== "none") {
         const textarea = el.querySelector("textarea");
         text = textarea.value;
       }
-    } else if (e.target.closest(".blocklyBlockCanvas .blocklyDraggable[data-id]")) {
+    } else if (e.target.closest(".blocklyBlockCanvas .blocklyDraggable[data-id]:not(.blocklyShadow)")) {
       const id = el.dataset.id;
       const block = getBlock(id);
       const comment = getComment(block);
