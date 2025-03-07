@@ -26,7 +26,7 @@ export default async function ({ addon, console }) {
   const showUpdatedValue = () => {
     xPos.setAttribute("data-content", `${x},`);
     yPos.setAttribute("data-content", `${y}`);
-  }
+  };
 
   Object.defineProperty(vm.runtime.ioDevices.mouse, "_scratchX", {
     get: function () {
