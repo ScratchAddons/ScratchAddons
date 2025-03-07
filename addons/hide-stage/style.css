@@ -3,9 +3,19 @@
   height: auto;
 }
 
-.sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
-.sa-stage-hidden [class*="asset-panel_wrapper_"],
-.sa-stage-hidden [class*="backpack_backpack-header_"] {
+[dir="ltr"] .sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
+[dir="rtl"] .sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
+[dir="ltr"] .sa-stage-hidden [class*="asset-panel_wrapper_"],
+[dir="rtl"] .sa-stage-hidden [class*="asset-panel_wrapper_"],
+[dir="ltr"] .sa-stage-hidden [class*="backpack_backpack-header_"],
+[dir="rtl"] .sa-stage-hidden [class*="backpack_backpack-header_"],
+/* for editor-stage-left: */
+[dir="ltr"] .sa-stage-hidden [class*="gui_extension-button-container_"],
+[dir="rtl"] .sa-stage-hidden [class*="gui_extension-button-container_"],
+[dir="ltr"] .sa-stage-hidden [class*="selector_wrapper_"],
+[dir="rtl"] .sa-stage-hidden [class*="selector_wrapper_"],
+[dir="ltr"] [class*="selector_new-buttons_"]::before,
+[dir="rtl"] [class*="selector_new-buttons_"]::before {
   border-radius: 0;
 }
 

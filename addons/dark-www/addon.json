@@ -2663,6 +2663,8 @@
         "link": "#1aa0d8",
         "footer": "#ececec",
         "border": "#0000001a",
+        "messageIndicatorColor": "#f9a739",
+        "messageIndicatorOnMessagesPage": "#f9a739",
         "darkBanners": "off",
         "darkForumCode": false
       }
@@ -2682,6 +2684,8 @@
         "link": "#25aff4",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "off",
         "darkForumCode": false
       }

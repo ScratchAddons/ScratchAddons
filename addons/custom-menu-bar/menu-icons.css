@@ -5,6 +5,12 @@
   display: none;
 }
 
+[class*="settings-menu_dropdown-label"] + img,
+[class*="menu-bar_collapsible-label"] + img {
+  /* dropdown arrow */
+  margin-inline-start: 0.125rem;
+}
+
 [class*="menu-bar_help-icon_"] {
   margin: 0;
 }
