@@ -26,6 +26,10 @@ export default async function ({ addon, msg }) {
   submitButton.title = msg("cant-post");
   submitButton.classList.add("sa-forum-post-countdown-disabled");
 
+  const checkbox = document.createElement("input");
+  checkbox.type="checkbutton";
+  document.querySelector("#djangobbwrap .form-submit").appendChild(checkbox);@fwA
+
   setInterval(async () => {
     const now = Date.now();
     if (now > Number(countdown) + secondCount * 1000) {
@@ -33,6 +37,10 @@ export default async function ({ addon, msg }) {
       submitButton.title = "";
       submitButton.classList.remove("sa-forum-post-countdown-disabled");
       elt.remove();
+      if (checkbox.value) {
+        submitButton.click();
+      }
+      checkbox.remove();
       return;
     }
     elt.textContent = msg("seconds-left", { seconds: secondCount - Math.floor((now - countdown) / 1000) });
