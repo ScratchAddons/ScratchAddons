@@ -1,8 +1,9 @@
 export default async function ({ addon, msg }) {
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
-  submitButton.addEventListener("click", () => {
-    if (!localStorage.getItem("sa-forum-post-countdown")) {
+  message=document.querySelector(".success");
+  
+  if (message&!localStorage.getItem("sa-forum-post-countdown")) {
       localStorage.setItem("sa-forum-post-countdown", Date.now());
     }
   });
