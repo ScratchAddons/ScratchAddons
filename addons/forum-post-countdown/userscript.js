@@ -1,13 +1,12 @@
 export default async function ({ addon, msg }) {
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
-  message=document.querySelector(".success");
-  
-  if (message&!localStorage.getItem("sa-forum-post-countdown")) {
+  let message=document.querySelector(".success");
+
+if (message) {
       localStorage.setItem("sa-forum-post-countdown", Date.now());
     }
-  });
-
+  
   const countdown = localStorage.getItem("sa-forum-post-countdown");
   if (!countdown) {
     return;
@@ -27,8 +26,15 @@ export default async function ({ addon, msg }) {
   submitButton.classList.add("sa-forum-post-countdown-disabled");
 
   const checkbox = document.createElement("input");
-  checkbox.type="checkbutton";
-  document.querySelector("#djangobbwrap .form-submit").appendChild(checkbox);@fwA
+  checkbox.type="checkbox";
+  checkbox.id="sa-post-cooldown-checkbox";
+  const label=document.createElement("label");
+  label.for=checkbox.id;
+  label.innerText="Post when ready";
+  label.style.display="inline";
+  let form_submit=document.querySelector("#djangobbwrap .form-submit");
+  form_submit.appendChild(checkbox);
+  form_submit.appendChild(label);
 
   setInterval(async () => {
     const now = Date.now();
@@ -37,10 +43,11 @@ export default async function ({ addon, msg }) {
       submitButton.title = "";
       submitButton.classList.remove("sa-forum-post-countdown-disabled");
       elt.remove();
-      if (checkbox.value) {
+      if (checkbox.checked) {
         submitButton.click();
       }
       checkbox.remove();
+      label.remove();
       return;
     }
     elt.textContent = msg("seconds-left", { seconds: secondCount - Math.floor((now - countdown) / 1000) });
