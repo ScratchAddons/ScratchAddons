@@ -1,12 +1,12 @@
 export default async function ({ addon, msg }) {
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
-  let message=document.querySelector(".success");
+  let message = document.querySelector(".success");
 
-if (message) {
-      localStorage.setItem("sa-forum-post-countdown", Date.now());
-    }
-  
+  if (message) {
+    localStorage.setItem("sa-forum-post-countdown", Date.now());
+  }
+
   const countdown = localStorage.getItem("sa-forum-post-countdown");
   if (!countdown) {
     return;
@@ -26,18 +26,22 @@ if (message) {
   submitButton.classList.add("sa-forum-post-countdown-disabled");
 
   const checkbox = document.createElement("input");
-  checkbox.type="checkbox";
-  checkbox.id="sa-forum-post-countdown-checkbox";
-  document.querySelectorAll(".errorlist li").forEach((i)=>{
-    if (countdown&&addon.settings.get("retry")&&i.innerText=="Sorry, you have to wait 60 seconds between posts."){
-      checkbox.checked=true;
+  checkbox.type = "checkbox";
+  checkbox.id = "sa-forum-post-countdown-checkbox";
+  document.querySelectorAll(".errorlist li").forEach((i) => {
+    if (
+      countdown &&
+      addon.settings.get("retry") &&
+      i.innerText == "Sorry, you have to wait 60 seconds between posts."
+    ) {
+      checkbox.checked = true;
     }
-  })
-  const label=document.createElement("label");
-  label.for=checkbox.id;
-  label.innerText=msg("post-after-cooldown");
-  label.style.display="inline";
-  let form_submit=document.querySelector("#djangobbwrap .form-submit");
+  });
+  const label = document.createElement("label");
+  label.for = checkbox.id;
+  label.innerText = msg("post-after-cooldown");
+  label.style.display = "inline";
+  let form_submit = document.querySelector("#djangobbwrap .form-submit");
   form_submit.appendChild(checkbox);
   form_submit.appendChild(label);
 
