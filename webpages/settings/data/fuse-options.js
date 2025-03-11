@@ -47,6 +47,6 @@ export default {
     {
       name: "presets.name",
       weight: 0.1,
-    }
+    },
   ],
 };
