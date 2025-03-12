@@ -32,7 +32,7 @@ export default async function ({ addon, msg }) {
     if (
       countdown &&
       addon.settings.get("retry") &&
-      i.innerText == "Sorry, you have to wait 60 seconds between posts."
+      i.innerText.match("Sorry, you have to wait (60|120) seconds between posts\\.")
     ) {
       checkbox.checked = true;
     }
