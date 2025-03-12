@@ -29,10 +29,6 @@ export default {
       weight: 0.4,
     },
     {
-      name: "_english.settings.name",
-      weight: 0.2,
-    },
-    {
       name: "credits.name",
       weight: 0.2,
     },
