@@ -23,7 +23,8 @@
   ],
   "settings": [
     {
-      "name": "When you get the message, automatically retry when possible",
+      "name": "Retry after countdown",
+      "description": "When posting fails because of the 60 second rule, automatically try again when possible.",
       "type": "boolean",
       "default": true,
       "id": "retry"
