@@ -21,6 +21,14 @@
       "link": "https://scratch.mit.edu/users/mybearworld/"
     }
   ],
+  "settings": [
+    {
+      "name": "When you get the message, automatically retry when possible",
+      "type": "boolean",
+      "default": true,
+      "id": "retry"
+    }
+  ],
   "dynamicDisable": true,
   "dynamicEnable": true
 }
