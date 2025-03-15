@@ -28,7 +28,7 @@ export default async function ({ addon, msg }) {
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.id = "sa-forum-post-countdown-checkbox";
-  checkbox.style.margin="0.5em";
+  checkbox.style.margin = "0.5em";
   document.querySelectorAll(".errorlist li").forEach((i) => {
     if (
       countdown &&
