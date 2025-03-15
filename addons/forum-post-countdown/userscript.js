@@ -28,11 +28,13 @@ export default async function ({ addon, msg }) {
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.id = "sa-forum-post-countdown-checkbox";
+  checkbox.style.margin="0.5em";
   document.querySelectorAll(".errorlist li").forEach((i) => {
     if (
       countdown &&
       addon.settings.get("retry") &&
       i.innerText.match("Sorry, you have to wait (60|120) seconds between posts\\.")
+      // This message will work in any language because Scratch does not translate it.
     ) {
       checkbox.checked = true;
     }
