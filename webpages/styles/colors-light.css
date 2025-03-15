@@ -1,4 +1,6 @@
 :root {
+  color-scheme: light;
+
   --brand-orange-min-font-weight: 500;
   --green-text: var(--green);
   --blue-text: #175ef8;

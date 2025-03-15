@@ -183,6 +183,7 @@ export default async function ({ addon, console, msg }) {
     copyButton.className = "sa-export-copy-button";
     copyIconContainer.className = "sa-export-button-icon";
     copyIcon.src = addon.self.dir + "/copy.svg";
+    copyIcon.draggable = false;
     copyIconContainer.appendChild(copyIcon);
     copyButton.appendChild(copyIconContainer);
     copyButton.appendChild(new Text(msg("clipboard")));
@@ -193,6 +194,7 @@ export default async function ({ addon, console, msg }) {
     pngButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-png-button" });
     downloadIconContainer.className = "sa-export-button-icon";
     downloadIcon.src = addon.self.dir + "/download.svg";
+    downloadIcon.draggable = false;
     downloadIconContainer.appendChild(downloadIcon);
     pngButton.appendChild(downloadIconContainer);
     pngButton.appendChild(new Text(msg("png")));

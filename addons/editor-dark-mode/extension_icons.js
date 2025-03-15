@@ -13,11 +13,14 @@ export default async function ({ addon, console }) {
     const match = dataUriRegex.exec(iconUri);
     if (match) {
       const oldSvg = atob(match[1]);
-      const newColor = textColor(addon.settings.get("categoryMenu"), null, "#ffffff");
-      if (newColor) {
-        const newSvg = oldSvg.replace(/#575e75|#4d4d4d/gi, newColor);
-        return `data:image/svg+xml;base64,${btoa(newSvg)}`;
-      }
+      const newColor = textColor(addon.settings.get("categoryMenu"));
+      const newHighContrastColor = textColor(addon.settings.get("categoryMenu"), "#000000", "#ffffff");
+      const newSvg = oldSvg
+        .replace(/#575e75|#4d4d4d/gi, "%text%")
+        .replace(/#000000|#000|black/gi, "%highContrastText%")
+        .replace(/%text%/g, newColor)
+        .replace(/%highContrastText%/g, newHighContrastColor);
+      return `data:image/svg+xml;base64,${btoa(newSvg)}`;
     }
   };
 

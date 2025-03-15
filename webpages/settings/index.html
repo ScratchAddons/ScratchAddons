@@ -181,7 +181,7 @@
       <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
         <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
         <button v-show="searchInput === ''" class="search-button"></button>
-        <button v-else class="search-clear-button" @click="clearSearch()"></button>
+        <button v-else class="search-clear-button" @click="clearAndFocusSearch()"></button>
       </div>
       <div @click="setTheme(!theme)" class="header-button header-end">
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
@@ -245,7 +245,7 @@
         <div v-cloak class="search-box" v-if="isIframe">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-else class="search-clear-button" @click="clearSearch()"></button>
+          <button v-else class="search-clear-button" @click="clearAndFocusSearch()"></button>
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
