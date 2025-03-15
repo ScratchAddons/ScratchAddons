@@ -73,8 +73,9 @@ export default async function ({ template }) {
           this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
-          this.expanded =
-            isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
+          this.expanded = this.$el.closest(".modal")
+            ? this.expanded
+            : isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
               : event.shiftKey
                 ? false
@@ -117,6 +118,22 @@ export default async function ({ template }) {
       },
       msg(...params) {
         return this.$root.msg(...params);
+      },
+      openRelated(clickedAddon) {
+        if (this.$el.closest(".modal")) {
+          // We're inside a modal. Open in a new tab instead.
+          const url = new URL(location.href);
+          url.hash = `addon-${clickedAddon._addonId}`;
+          window.open(url.href);
+          return;
+        }
+        this.$root.openRelatedAddons(this.addon);
+        setTimeout(() => {
+          const addonElem = document.querySelector(`.modal #addon-${clickedAddon._addonId}`);
+          addonElem.scrollIntoView({ behavior: "smooth" });
+          addonElem.classList.add("addon-blink");
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
       },
     },
     watch: {
