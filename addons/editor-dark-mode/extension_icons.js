@@ -7,9 +7,14 @@ export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   const recolorIcon = (iconUri, extensionId) => {
-    if (addon.self.disabled) return iconUri;
-    if (!iconUri || !["music", "videoSensing", "text2speech"].includes(extensionId)) return iconUri;
+    if (addon.self.disabled || !iconUri) return iconUri;
 
+    if (extensionId === "translate") {
+      if (iconUri.startsWith("data:image/png")) return iconUri; // not in high contrast mode
+      return textColor(addon.settings.get("categoryMenu"), iconUri, addon.self.dir + "/assets/translate_white.svg");
+    }
+
+    if (!["music", "videoSensing", "text2speech"].includes(extensionId)) return iconUri;
     const match = dataUriRegex.exec(iconUri);
     if (match) {
       const oldSvg = atob(match[1]);
