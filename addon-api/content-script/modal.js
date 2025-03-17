@@ -32,6 +32,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     Object.assign(document.createElement("img"), {
       className: tab.scratchClass("close-button_close-icon"),
       src: import.meta.url + "/../../../images/cs/close-s3.svg",
+      draggable: false,
     })
   );
   const content = Object.assign(document.createElement("div"), {
@@ -86,6 +87,7 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
     Object.assign(document.createElement("img"), {
       className: "modal-content-close-img",
       src: "/svgs/modal/close-x.svg",
+      draggable: false,
     })
   );
   const header = Object.assign(document.createElement("div"), {

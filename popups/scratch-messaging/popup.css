@@ -326,7 +326,10 @@ a.message-type-title-text {
   text-decoration: none;
 }
 #bottom-bar .separator {
-  padding-inline: 5px;
+  margin: auto 8px;
+  height: 15px;
+  padding: 0;
+  border-left: 1px solid var(--content-separator);
 }
 .marked-as-read {
   font-weight: bold;
