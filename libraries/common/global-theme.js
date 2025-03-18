@@ -6,6 +6,11 @@ export default function () {
     const favicon = document.getElementById("favicon");
     if (favicon) favicon.href = chrome.runtime.getURL("/images/icon-blue.png");
   }
+  const now = Date.now() / 1000;
+  if (now < 1743609600 && now > 1743436800 && ["settings", "popup"].includes(location.pathname.split("/")[2])) {
+    // March 31, 2025 12:00:00 GMT to April 2, 2025 12:00:00 GMT
+    document.documentElement.style.setProperty("--brand-orange", "#6c503c");
+  }
   const lightThemeLink = document.createElement("link");
   lightThemeLink.setAttribute("rel", "stylesheet");
   lightThemeLink.setAttribute("href", chrome.runtime.getURL("/webpages/styles/colors-light.css"));
