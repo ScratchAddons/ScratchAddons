@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   new BroadcastChannel("sa-live-read-topics").addEventListener("message", (e) => {
     const el = document.querySelector(`.tclcon a[href='/discuss/topic/${e.data}/']`);
