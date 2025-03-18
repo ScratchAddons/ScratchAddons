@@ -54,7 +54,11 @@ export default [
   },
   {
     id: "recommended",
-    name: chrome.i18n.getMessage("recommended"),
+    name: (() => {
+      const now = Date.now() / 1000;
+      if (now < 1743609600 && now > 1743436800) return "Potaoto Board 🥔";
+      return chrome.i18n.getMessage("recommended");
+    })(),
     addonIds: [],
     expanded: true,
     iframeShow: false,
