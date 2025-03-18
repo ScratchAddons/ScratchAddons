@@ -10,6 +10,8 @@ export default function () {
   if (now < 1743609600 && now > 1743436800 && ["settings", "popup"].includes(location.pathname.split("/")[2])) {
     // March 31, 2025 12:00:00 GMT to April 2, 2025 12:00:00 GMT
     document.documentElement.style.setProperty("--brand-orange", "#6c503c");
+    // https://www.deviantart.com/fabooguy/art/Dirt-Ground-Texture-Tileable-2048x2048-441212191
+    document.documentElement.style.setProperty("--dirt-background", "url('../../images/dirt.jpg')");
   }
   const lightThemeLink = document.createElement("link");
   lightThemeLink.setAttribute("rel", "stylesheet");

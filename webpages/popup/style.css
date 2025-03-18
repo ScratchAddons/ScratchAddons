@@ -19,6 +19,7 @@ body {
 #header {
   display: flex;
   height: 60px;
+  background-image: var(--dirt-background, none);
 }
 .header-button {
   cursor: pointer;
