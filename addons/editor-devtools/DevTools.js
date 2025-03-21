@@ -42,6 +42,15 @@ export default class DevTools {
         items.push(
           {
             enabled: true,
+            text: this.m("make-space"),
+            _isDevtoolsFirstItem: true,
+            callback: () => {
+              this.makeSpace(block);
+            },
+            separator: true,
+          },
+          {
+            enabled: true,
             text: this.m("copy-all"),
             callback: () => {
               this.eventCopyClick(block);
@@ -89,23 +98,16 @@ export default class DevTools {
       },
       { blocks: true, flyout: true }
     );
-
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
-        items.push({
-          enabled: true,
-          text: this.m("make-space"),
-          _isDevtoolsFirstItem: true,
-          callback: () => {
-            this.makeSpace(block);
-          },
-          separator: true,
-        });
-        return items;
-      },
-      { blocks: true }
-    );
   }
+
+  getWorkspace() {
+    return Blockly.getMainWorkspace();
+  }
+
+  isCostumeEditor() {
+    return this.costTab.className.indexOf("gui_is-selected") >= 0;
+  }
+
   /**
    * Pushes everything below the blocks scripts column down, and everything on it's right to the right.
    * If the workspace is in RTL mode, then we shift everything on it's left to the left instead
@@ -184,14 +186,6 @@ export default class DevTools {
       }
     }
     UndoGroup.endUndoGroup(wksp);
-  }
-
-  getWorkspace() {
-    return this.blockly.getMainWorkspace();
-  }
-
-  isCostumeEditor() {
-    return this.costTab.className.indexOf("gui_is-selected") >= 0;
   }
 
   getTopBlockIDs() {

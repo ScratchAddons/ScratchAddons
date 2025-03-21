@@ -5,9 +5,9 @@
   "editor-devtools/copy-all": "Copy All",
   "editor-devtools/copy-block": "Copy Block",
   "editor-devtools/cut-block": "Cut Block",
+  "editor-devtools/make-space": "Make Space",
   "editor-devtools/swap": "Swap {var} in Sprite",
   "editor-devtools/lists": "lists",
   "editor-devtools/variables": "variables",
-  "editor-devtools/extension-description-not-for-addon": "Scratch 3 Developer Tools to enhance your Scratch Editing Experience on https://scratch.mit.edu",
-  "editor-devtools/make-space": "Make Space"
+  "editor-devtools/extension-description-not-for-addon": "Scratch 3 Developer Tools to enhance your Scratch Editing Experience on https://scratch.mit.edu"
 }
