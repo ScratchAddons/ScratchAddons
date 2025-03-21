@@ -174,7 +174,6 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 [class*="slider_handle_"],
 [class*="sound-editor_button_"],
 [class*="library-item_library-item_"],
-.s3devDDOut.vis, /* devtools style */
 .sa-find-dropdown-out.visible, /* find-bar style */
 .sa-mcp-container, /* middle-click-popup style */
 [class*="prompt_body_"],
