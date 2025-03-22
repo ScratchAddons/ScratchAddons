@@ -9,6 +9,7 @@
 
     <!-- Preload font -->
     <link rel="preload" href="../../libraries/thirdparty/Sora.css" as="style" />
+    <link rel="preload" href="../../libraries/thirdparty/Roboto.css" as="style" />
     <link
       rel="preload"
       href="../../libraries/thirdparty/Sora/latin-ext.400.woff2"
@@ -37,6 +38,48 @@
       type="font/woff2"
       crossorigin
     />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Roboto/latin-ext.400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Roboto/latin-ext.500.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Roboto/latin-ext.700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Roboto/latin.400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Roboto/latin.500.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Roboto/latin.700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
 
@@ -52,10 +95,11 @@
     <link rel="modulepreload" href="data/fuse-options.js" />
 
     <!-- Preload images -->
-    <link rel="preload" href="../../images/icons/switch.svg" as="image" />
+    <link rel="preload" href="../../images/icons/menu.svg" as="image" />
     <link rel="preload" href="../../images/icon-transparent.svg" as="image" />
     <link rel="preload" href="../../images/icons/list.svg" as="image" />
     <link rel="preload" href="../../images/icons/puzzle.svg" as="image" />
+    <link rel="preload" href="../../images/icons/player.svg" as="image" />
     <link rel="preload" href="../../images/icons/web.svg" as="image" />
     <link rel="preload" href="../../images/icons/brush.svg" as="image" />
     <link rel="preload" href="../../images/icons/popup.svg" as="image" />
@@ -103,7 +147,6 @@
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
       @import url("../styles/components/tooltips.css");
-      @import url("../styles/components/smallmode.css");
       /* Modals and popups are needed last */
       @import url("../styles/components/modal.css");
       @import url("../styles/components/enablepopup.css");
@@ -113,39 +156,56 @@
     <link rel="stylesheet" href="style.css" />
 
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
+    <link href="../../libraries/thirdparty/Roboto.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="../../libraries/thirdparty/color-picker.js" type="module"></script>
     <script src="../../libraries/thirdparty/sortable.min.js" type="module"></script>
     <script src="index.js" type="module"></script>
   </head>
   <body v-cloak :class="{light: theme}">
-    <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
-      <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
-      <h1 v-cloak>{{ msg("settings") }}</h1>
-      <div @click="setTheme(!theme)" class="header-button">
-        <img v-cloak class="theme-switch" :src="themePath" />
+    <div class="navbar" v-if="!isIframe">
+      <div class="navbar-start" :class="{wide: !smallMode}">
+        <img
+          src="../../images/icons/menu.svg"
+          id="sidebar-toggle"
+          class="header-button"
+          :class="{sidebarToggleOpen: categoryOpen === true}"
+          @click="sidebarToggle()"
+          v-cloak
+          v-show="smallMode"
+          draggable="false"
+        />
+        <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
+        <h1 v-cloak>{{ msg("settings") }}</h1>
+      </div>
+      <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
+        <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
+        <button v-show="searchInput === ''" class="search-button"></button>
+        <button v-else class="search-clear-button" @click="clearAndFocusSearch()"></button>
+      </div>
+      <div @click="setTheme(!theme)" class="header-button header-end">
+        <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
       </div>
     </div>
     <div class="main">
       <div
         class="categories-block"
         v-click-outside="closesidebar"
-        v-show="categoryOpen && !isIframe"
-        :class="{smallMode: smallMode === true}"
+        v-show="!isIframe"
+        :class="{closed: categoryOpen === false, smallMode: smallMode === true}"
       >
         <category-selector v-for="category of categories" :category="category"></category-selector>
 
         <a
           v-cloak
-          class="category category-small"
+          class="category"
           style="margin-top: auto"
           href="https://scratchaddons.com/credits/"
           :href="sidebarUrls.contributors"
           target="_blank"
         >
-          <img src="../../images/icons/users.svg" />
-          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
+          <img src="../../images/icons/users.svg" draggable="false" />
+          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <!--
         <div class="category category-small" @click="openReview()">
@@ -153,35 +213,39 @@
           <span v-cloak>{{ msg("review") }}</span>
         </div>
         -->
-        <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
-          <img src="../../images/icons/translate.svg" />
-          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
+        <a v-cloak class="category" href="https://scratchaddons.com/translate" target="_blank">
+          <img src="../../images/icons/translate.svg" draggable="false" />
+          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <a
           v-cloak
-          class="category category-small"
+          class="category"
           href="https://scratchaddons.com/feedback/"
           :href="sidebarUrls.feedback"
           target="_blank"
         >
-          <img src="../../images/icons/comment.svg" />
-          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
+          <img src="../../images/icons/comment.svg" draggable="false" />
+          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
-          <img src="../../images/icons/wrench.svg" />
+          <img src="../../images/icons/wrench.svg" draggable="false" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
       <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
+        <img
+          src="../../images/icons/left-arrow.svg"
+          :class="{flipped: categoryOpen === (direction() === 'rtl')}"
+          draggable="false"
+        />
       </div>
 
-      <!-- This is the main menu, where the searchbar and the addon items are located -->
+      <!-- This is the main menu, where the searchbar (in the popup) and the addon items are located -->
       <div class="addons-block">
-        <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
+        <div v-cloak class="search-box" v-if="isIframe">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-else class="search-clear-button" @click="clearSearch()"></button>
+          <button v-else class="search-clear-button" @click="clearAndFocusSearch()"></button>
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
@@ -221,7 +285,8 @@
         <div class="addon-body">
           <div class="addon-topbar">
             <span class="addon-name"
-              ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
+              ><img src="../../images/icons/theme.svg" class="icon-type" draggable="false" /> {{
+              msg("scratchAddonsTheme") }}
             </span>
           </div>
           <div class="addon-settings">
@@ -244,7 +309,12 @@
         <div class="addon-body">
           <div class="addon-topbar">
             <span class="addon-name"
-              ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
+              ><img
+                src="../../images/icons/import-export.svg"
+                class="icon-type"
+                :class="{'dark': theme === false}"
+                draggable="false"
+              />
               {{ msg("exportAndImportSettings") }}
             </span>
           </div>
@@ -268,7 +338,7 @@
         <div class="addon-body">
           <div class="addon-topbar">
             <span class="addon-name"
-              ><img src="../../images/icons/translate.svg" class="icon-type" />{{ msg("language") }}
+              ><img src="../../images/icons/translate.svg" class="icon-type" draggable="false" />{{ msg("language") }}
             </span>
           </div>
           <div class="addon-settings">
@@ -308,7 +378,7 @@
         </p>
         <p>
           <a
-            href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb,sortable"
+            href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb,sortable,Roboto"
             target="_blank"
             >{{ msg("libraryCredits") }}</a
           >

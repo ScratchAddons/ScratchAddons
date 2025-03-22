@@ -3,11 +3,16 @@
   color: var(--white-text);
   border-radius: 4px;
   padding: 2px 5px;
-  font-size: 12px;
-  font-weight: 500;
+  /* Badges have a 2px bottom border which means the text
+     is not vertically centered relative to the addon name
+     and description. Fixed by adding 1px extra top padding
+     here and 1px bottom padding to the addon name. */
+  padding-top: 3px;
+  font-size: 14px;
   margin-inline-start: 10px;
   border-bottom: 2px solid #111;
   white-space: nowrap;
+  user-select: none;
 }
 .badge .tooltiptext {
   white-space: normal;
@@ -19,12 +24,12 @@
 }
 .badge.green {
   background: #78fd2b;
-  color: #333;
+  color: #000;
   border-color: #53b31c;
 }
 .badge.yellow {
   background: #fddd2b;
-  color: #333;
+  color: #000;
   border-color: #fdab12;
 }
 .badge.red {
@@ -36,8 +41,13 @@
   border-color: #d81212;
 }
 .badge.darkgreen {
-  background: #00b1a8;
-  border-color: #047773;
+  background: #0cd1c7;
+  color: #000;
+  border-color: #12a39e;
+}
+.badge.lightblue {
+  background: #1394bf;
+  border-color: #0c627f;
 }
 .badge.purple {
   background: rgb(177, 23, 248);
@@ -59,4 +69,7 @@
 }
 .filter-option.sel.darkgreen {
   background: #00b1a8;
+}
+.filer-option.sel.lightblue {
+  background: #1394bf;
 }

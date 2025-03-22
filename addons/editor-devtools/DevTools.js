@@ -1,6 +1,7 @@
 import DomHelpers from "./DomHelpers.js";
 import UndoGroup from "./UndoGroup.js";
 import { getVariableUsesById } from "./utils.js";
+import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
 
 export default class DevTools {
   constructor(addon, msg, m) {
@@ -36,11 +37,58 @@ export default class DevTools {
   }
 
   async addContextMenus() {
-    this.blockly = await this.addon.tab.traps.getBlockly();
+const blockly = await this.addon.tab.traps.getBlockly();
+
+    enableContextMenuSeparators(this.addon.tab);
+
+    const pasteCallback = () => {
+      let ids = this.getTopBlockIDs();
+
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          keyCode: 86,
+          ctrlKey: true,
+          griff: true,
+        })
+      );
+
+      setTimeout(() => {
+        this.beginDragOfNewBlocksNotInIDs(ids);
+      }, 10);
+    };
+
+    if (blockly.registry) {
+      // new Blockly
+      blockly.ContextMenuRegistry.registry.register(
+        addSeparator({
+          displayText: this.m("paste"),
+          preconditionFn: () => (blockly.clipboardXml_ ? "enabled" : "disabled"),
+          callback: pasteCallback,
+          scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+          id: "saPaste",
+          weight: 10, // after Save All as Image
+        })
+      );
+    } else {
+      this.addon.tab.createBlockContextMenu(
+        (items, block) => {
+          items.push({
+            enabled: blockly.clipboardXml_,
+            text: this.m("paste"),
+            separator: true,
+            _isDevtoolsFirstItem: true,
+            callback: pasteCallback,
+          });
+          return items;
+        },
+        { workspace: true }
+      );
+    }
+
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         items.push(
-          {
+          addSeparator({
             enabled: true,
             text: this.m("make-space"),
             _isDevtoolsFirstItem: true,
@@ -48,15 +96,15 @@ export default class DevTools {
               this.makeSpace(block);
             },
             separator: true,
-          },
-          {
+          }),
+          addSeparator({
             enabled: true,
             text: this.m("copy-all"),
             callback: () => {
               this.eventCopyClick(block);
             },
             separator: true,
-          },
+          }),
           {
             enabled: true,
             text: this.m("copy-block"),
@@ -76,23 +124,26 @@ export default class DevTools {
       },
       { blocks: true }
     );
+
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
           this.selVarID = block.getVars()[0];
-          items.push({
-            enabled: true,
-            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
-            callback: () => {
-              let wksp = this.getWorkspace();
-              let v = wksp.getVariableById(this.selVarID);
-              let varName = window.prompt(this.msg("replace", { name: v.name }));
-              if (varName) {
-                this.doReplaceVariable(this.selVarID, varName, v.type);
-              }
-            },
-            separator: true,
-          });
+          items.push(
+            addSeparator({
+              enabled: true,
+              text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+              callback: () => {
+                let wksp = this.getWorkspace();
+                let v = wksp.getVariableById(this.selVarID);
+                let varName = window.prompt(this.msg("replace", { name: v.name }));
+                if (varName) {
+                  this.doReplaceVariable(this.selVarID, varName, v.type);
+                }
+              },
+              separator: true,
+            })
+          );
         }
         return items;
       },
@@ -101,7 +152,7 @@ export default class DevTools {
   }
 
   getWorkspace() {
-    return Blockly.getMainWorkspace();
+    return this.addon.tab.traps.getWorkspace();
   }
 
   isCostumeEditor() {
@@ -320,7 +371,7 @@ export default class DevTools {
 
     this.codeTab = guiTabs[0];
     this.costTab = guiTabs[1];
-    this.costTabBody = document.querySelector("div[aria-labelledby=" + this.costTab.id + "]");
+    this.costTabBody = document.querySelector("div[aria-labelledby='" + this.costTab.id + "']");
 
     this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);

@@ -10,5 +10,6 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.21.0"
+  "versionAdded": "1.21.0",
+  "libraries": ["scratch-gui"]
 }

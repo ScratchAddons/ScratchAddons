@@ -18,32 +18,47 @@ export default async function ({ addon, console, msg }) {
     return !vm.editingTarget.lookupVariableByNameAndType(name, type);
   };
 
+  const newVariable = (workspace, ...args) => {
+    if (Blockly.registry) {
+      // new Blockly
+      // https://github.com/scratchfoundation/scratch-blocks/blob/91c8b63/src/variables.ts#L126-L137
+      const VariableModel = Blockly.registry.getClass(Blockly.registry.Type.VARIABLE_MODEL, Blockly.registry.DEFAULT);
+      const variable = new VariableModel(workspace, ...args);
+      workspace.getVariableMap().addVariable(variable);
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(variable));
+      return variable;
+    } else {
+      return workspace.createVariable(...args);
+    }
+  };
+
   const ADDON_ITEMS = {
     createGlobalVariable: {
       enabled: (name) => canUseAsGlobalVariableName(name, ""),
-      createVariable: (workspace, name) => workspace.createVariable(name),
+      createVariable: (workspace, name) => newVariable(workspace, name),
     },
     createLocalVariable: {
       enabled: (name) => canUseAsLocalVariableName(name, ""),
-      createVariable: (workspace, name) => workspace.createVariable(name, "", null, true),
+      createVariable: (workspace, name) => newVariable(workspace, name, "", null, true),
     },
     createGlobalList: {
       enabled: (name) => canUseAsGlobalVariableName(name, "list"),
-      createVariable: (workspace, name) => workspace.createVariable(name, "list"),
+      createVariable: (workspace, name) => newVariable(workspace, name, "list"),
     },
     createLocalList: {
       enabled: (name) => canUseAsLocalVariableName(name, "list"),
-      createVariable: (workspace, name) => workspace.createVariable(name, "list", null, true),
+      createVariable: (workspace, name) => newVariable(workspace, name, "list", null, true),
     },
     createBroadcast: {
       enabled: (name) => canUseAsGlobalVariableName(name, "broadcast_msg"),
-      createVariable: (workspace, name) => workspace.createVariable(name, "broadcast_msg"),
+      createVariable: (workspace, name) => newVariable(workspace, name, "broadcast_msg"),
     },
   };
 
   let blocklyDropDownContent = null;
   let blocklyDropdownMenu = null;
   let searchBar = null;
+  let noResultsMessage = null;
   // Contains DOM and addon state
   let items = [];
   let searchedItems = [];
@@ -51,54 +66,98 @@ export default async function ({ addon, console, msg }) {
   let currentDropdownOptions = [];
   let resultOfLastGetOptions = [];
 
-  const oldDropDownDivShow = Blockly.DropDownDiv.show;
-  Blockly.DropDownDiv.show = function (...args) {
-    blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
-    if (!blocklyDropdownMenu) {
-      return oldDropDownDivShow.call(this, ...args);
-    }
-
-    blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
-
+  const initSearchBar = () => {
     searchBar = document.createElement("input");
-    addon.tab.displayNoneWhileDisabled(searchBar, { display: "flex" });
+    addon.tab.displayNoneWhileDisabled(searchBar);
     searchBar.type = "text";
     searchBar.addEventListener("input", updateSearch);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
-    blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
+
+    noResultsMessage = document.createElement("div");
+    noResultsMessage.textContent = msg("noResults");
+    noResultsMessage.hidden = true;
+    noResultsMessage.classList.add("u-dropdown-no-results", "blocklyMenuItem", "goog-menuitem");
+
+    blocklyDropdownMenu.insertBefore(noResultsMessage, blocklyDropdownMenu.firstChild);
+    blocklyDropdownMenu.insertBefore(searchBar, noResultsMessage);
 
     items = Array.from(blocklyDropdownMenu.children)
-      .filter((child) => child.tagName !== "INPUT")
+      .filter((child) => !child.matches(".u-dropdown-searchbar, .u-dropdown-no-results"))
       .map((element) => ({
         element,
         text: element.textContent,
       }));
     currentDropdownOptions = resultOfLastGetOptions;
     updateSearch();
-
-    // Call the original show method after adding everything so that it can perform the correct size calculations
-    const ret = oldDropDownDivShow.call(this, ...args);
-
-    // Lock the size of the dropdown
-    blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
-    blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
-    blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
-
-    // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
-    blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
-    searchBar.focus();
-
-    return ret;
   };
 
-  const oldDropDownDivClearContent = Blockly.DropDownDiv.clearContent;
-  Blockly.DropDownDiv.clearContent = function () {
-    oldDropDownDivClearContent.call(this);
-    items = [];
-    searchedItems = [];
-    Blockly.DropDownDiv.content_.style.height = "";
-  };
+  if (Blockly.registry) {
+    // new Blockly
+    const oldFieldDropdownCreate = Blockly.FieldDropdown.prototype.dropdownCreate;
+    Blockly.FieldDropdown.prototype.dropdownCreate = function () {
+      oldFieldDropdownCreate.call(this);
+      this.menu_.saSearchable = true;
+      this.menu_.focus = () => {
+        // Only focus once - by default, Blockly focuses the menu every time it's hovered
+        this.menu_.focus = () => {};
+        if (searchBar) {
+          // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
+          blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
+          searchBar.focus();
+          setTimeout(() => searchBar.scrollIntoView(), 0);
+        }
+      };
+    };
+
+    // FieldDropdown.showEditor_() calls Menu.render(), then DropDownDiv.showPositionedByField().
+    // We override Menu.render() so that when showPositionedByField() is called, the search bar is
+    // already there and the correct size of the menu can be calculated.
+    const oldMenuRender = Blockly.Menu.prototype.render;
+    Blockly.Menu.prototype.render = function (...args) {
+      const menu = oldMenuRender.call(this, ...args);
+      if (this.saSearchable) {
+        blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
+        blocklyDropdownMenu = menu;
+        initSearchBar();
+      }
+      return menu;
+    };
+  } else {
+    const oldDropDownDivShow = Blockly.DropDownDiv.show;
+    Blockly.DropDownDiv.show = function (...args) {
+      blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
+      if (!blocklyDropdownMenu) {
+        return oldDropDownDivShow.call(this, ...args);
+      }
+
+      blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
+
+      initSearchBar();
+
+      // Call the original show method after adding everything so that it can perform the correct size calculations
+      const ret = oldDropDownDivShow.call(this, ...args);
+
+      // Lock the size of the dropdown
+      blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
+      blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
+      blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
+
+      // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
+      blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
+      searchBar.focus();
+
+      return ret;
+    };
+
+    const oldDropDownDivClearContent = Blockly.DropDownDiv.clearContent;
+    Blockly.DropDownDiv.clearContent = function () {
+      oldDropDownDivClearContent.call(this);
+      items = [];
+      searchedItems = [];
+      Blockly.DropDownDiv.content_.style.height = "";
+    };
+  }
 
   const oldFieldDropdownGetOptions = Blockly.FieldDropdown.prototype.getOptions;
   Blockly.FieldDropdown.prototype.getOptions = function () {
@@ -106,15 +165,11 @@ export default async function ({ addon, console, msg }) {
     const block = this.sourceBlock_;
     const isStage = vm.editingTarget && vm.editingTarget.isStage;
     if (block) {
-      if (block.category_ === "data") {
-        options.push(getMenuItemMessage("createGlobalVariable"));
+      if (block.type.startsWith("data_")) {
+        const isListBlock = block.type.includes("list");
+        options.push(getMenuItemMessage(isListBlock ? "createGlobalList" : "createGlobalVariable"));
         if (!isStage) {
-          options.push(getMenuItemMessage("createLocalVariable"));
-        }
-      } else if (block.category_ === "data-lists") {
-        options.push(getMenuItemMessage("createGlobalList"));
-        if (!isStage) {
-          options.push(getMenuItemMessage("createLocalList"));
+          options.push(getMenuItemMessage(isListBlock ? "createLocalList" : "createLocalVariable"));
         }
       } else if (block.type === "event_broadcast_menu" || block.type === "event_whenbroadcastreceived") {
         options.push(getMenuItemMessage("createBroadcast"));
@@ -125,8 +180,9 @@ export default async function ({ addon, console, msg }) {
     return options;
   };
 
-  const oldFieldVariableOnItemSelected = Blockly.FieldVariable.prototype.onItemSelected;
-  Blockly.FieldVariable.prototype.onItemSelected = function (menu, menuItem) {
+  const onItemSelectedMethodName = Blockly.registry ? "onItemSelected_" : "onItemSelected";
+  const oldFieldVariableOnItemSelected = Blockly.FieldVariable.prototype[onItemSelectedMethodName];
+  Blockly.FieldVariable.prototype[onItemSelectedMethodName] = function (menu, menuItem) {
     const sourceBlock = this.sourceBlock_;
     if (sourceBlock && sourceBlock.workspace && searchBar.value.length !== 0) {
       const workspace = sourceBlock.workspace;
@@ -146,8 +202,16 @@ export default async function ({ addon, console, msg }) {
 
   function selectItem(item, click) {
     // You can't just use click() or focus() because Blockly uses mousedown and mouseup handlers, not click handlers.
-    item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
-    if (click) item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
+    if (Blockly.registry) {
+      // new Blockly
+      const previousSelection = item.parentElement.querySelector(".u-dropdown-selected-item");
+      if (previousSelection) previousSelection.classList.remove("u-dropdown-selected-item");
+      item.classList.add("u-dropdown-selected-item");
+      if (click) item.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
+    } else {
+      item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
+      if (click) item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
+    }
 
     // Scroll the item into view if it is offscreen.
     const itemTop = item.offsetTop;
@@ -226,9 +290,12 @@ export default async function ({ addon, console, msg }) {
         blocklyDropdownMenu.appendChild(item.element);
       }
     }
+    let visibleItems = 0;
     for (const { item, score } of searchedItems) {
       item.element.hidden = score < 0;
+      if (score >= 0) ++visibleItems;
     }
+    noResultsMessage.hidden = visibleItems > 0;
   }
 
   function handleKeyDownEvent(event) {
@@ -237,7 +304,7 @@ export default async function ({ addon, console, msg }) {
       event.stopPropagation();
       event.preventDefault();
 
-      const selectedItem = document.querySelector(".goog-menuitem-highlight");
+      const selectedItem = document.querySelector(".goog-menuitem-highlight, .u-dropdown-selected-item");
       if (selectedItem && !selectedItem.hidden) {
         selectItem(selectedItem, true);
         return;
@@ -277,7 +344,7 @@ export default async function ({ addon, console, msg }) {
 
       let selectedIndex = -1;
       for (let i = 0; i < items.length; i++) {
-        if (items[i].element.classList.contains("goog-menuitem-highlight")) {
+        if (items[i].element.matches(".goog-menuitem-highlight, .u-dropdown-selected-item")) {
           selectedIndex = i;
           break;
         }

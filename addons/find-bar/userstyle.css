@@ -10,8 +10,7 @@
   margin-left: 1em;
 }
 .sa-find-bar[hidden] {
-  /* !important to override displayNoneWhileDisabled */
-  display: none !important;
+  display: none;
 }
 
 .sa-find-wrapper {
@@ -63,7 +62,7 @@
   padding-left: 0.4em;
 }
 
-.sa-find-input:focus {
+input.sa-find-input:focus /* must be specific enough to override editor-dark-mode */ {
   /* Change Scratch default styles */
   box-shadow: none;
 }
