@@ -114,6 +114,11 @@ let fuse;
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
+        aprilFoolsPotato: (() => {
+          const now = Date.now() / 1000;
+          if (now < 1743595200 && now > 1743422400) return " 🥔";
+          else return "";
+        })(),
       };
     },
     computed: {
