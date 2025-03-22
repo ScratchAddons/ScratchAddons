@@ -37,6 +37,7 @@ export default async function ({ addon, console }) {
       alerts.style.display = "flex";
     }
     if (e.detail.action.type === "scratch-gui/vm-status/SET_STARTED_STATE") {
+      controls.classList.remove("sa-controls-disabled");
       thumb.remove();
       addon.tab.redux.removeEventListener("statechanged", handleStateChange);
     }
