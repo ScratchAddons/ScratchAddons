@@ -37,7 +37,7 @@ export default class DevTools {
   }
 
   async addContextMenus() {
-const blockly = await this.addon.tab.traps.getBlockly();
+    const blockly = await this.addon.tab.traps.getBlockly();
 
     enableContextMenuSeparators(this.addon.tab);
 
