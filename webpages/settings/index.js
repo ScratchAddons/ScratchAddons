@@ -116,7 +116,7 @@ let fuse;
         })(),
         aprilFoolsPotato: (() => {
           const now = Date.now() / 1000;
-          if (now < 1743609600 && now > 1743436800) return " 🥔";
+          if (now < 1743595200 && now > 1743422400) return " 🥔";
           else return "";
         })(),
       };
