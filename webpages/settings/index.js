@@ -335,6 +335,7 @@ let fuse;
         }, 150);
       },
       selectedCategory(newValue) {
+        this.relatedAddonsOpen = false;
         this.addonListObjs.forEach((obj) => {
           const shouldHideAsEasterEgg =
             obj.manifest._categories[0] === "easterEgg" &&

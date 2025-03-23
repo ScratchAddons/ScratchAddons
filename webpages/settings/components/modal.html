@@ -1,6 +1,6 @@
 <template>
   <div v-cloak v-show="isOpen" class="modal">
-    <div class="modal-content" v-click-outside="clickOutside" @click="closePickers">
+    <div class="modal-content" v-click-outside="clickOutside">
       <div>
         <img
           @click="isOpen = false"
@@ -36,16 +36,11 @@
     margin: auto;
     padding: 20px;
     width: 50rem;
-    max-width: 80%;
+    max-width: 75%;
     border-radius: 10px;
-    min-height: 75%;
-    max-height: 90%;
+    height: 75%;
     display: flex;
     flex-direction: column;
-  }
-
-  .related-addons-modal .modal-content {
-    width: 100%;
   }
 
   .close {
