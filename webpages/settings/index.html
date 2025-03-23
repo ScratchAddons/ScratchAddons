@@ -163,26 +163,19 @@
     <script src="index.js" type="module"></script>
   </head>
   <body v-cloak :class="{light: theme}">
-    <div class="navbar" v-if="!isIframe">
-      <div class="navbar-start" :class="{wide: !smallMode}">
-        <img
-          src="../../images/icons/menu.svg"
-          id="sidebar-toggle"
-          class="header-button"
-          :class="{sidebarToggleOpen: categoryOpen === true}"
-          @click="sidebarToggle()"
-          v-cloak
-          v-show="smallMode"
-          draggable="false"
-        />
-        <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
-        <h1 v-cloak>{{ msg("settings") }}</h1>
-      </div>
-      <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
-        <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
-        <button v-show="searchInput === ''" class="search-button"></button>
-        <button v-else class="search-clear-button" @click="clearSearch()"></button>
-      </div>
+    <div class="navbar">
+      <img
+        src="../../images/icons/menu.svg"
+        id="sidebar-toggle"
+        class="header-button"
+        :class="{sidebarToggleOpen: categoryOpen === true}"
+        @click="sidebarToggle()"
+        v-cloak
+        v-show="smallMode"
+        draggable="false"
+      />
+      <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
+      <h1 v-cloak>{{ msg("settings") }}</h1>
       <div @click="setTheme(!theme)" class="header-button header-end">
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
       </div>
@@ -240,9 +233,9 @@
         />
       </div>
 
-      <!-- This is the main menu, where the searchbar (in the popup) and the addon items are located -->
+      <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
-        <div v-cloak class="search-box" v-if="isIframe">
+        <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
           <button v-else class="search-clear-button" @click="clearSearch()"></button>
