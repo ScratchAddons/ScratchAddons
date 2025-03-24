@@ -733,6 +733,10 @@ class TokenTypeBlock extends TokenType {
           strings.push(...blockPart.toLowerCase().split(" "));
         } else if (blockPart.type === BlockInputType.ENUM) {
           for (const enumValue of blockPart.values) {
+
+            if (this.stringForms.length >= WorkspaceQuerier.MAX_RESULTS)
+                return;
+
             enumerateStringForms(
               partIdx + 1,
               [...strings, ...enumValue.string.toLowerCase().split(" ")],
@@ -749,11 +753,16 @@ class TokenTypeBlock extends TokenType {
     };
 
     enumerateStringForms();
+
+    if (this.stringForms.length >= WorkspaceQuerier.MAX_STRING_FORMS) {
+        console.log("Warning: Block '" + this.block.id + "' has too many string forms. Search results may not be very good.");
+        this.stringForms.length = 0;
+    }
   }
 
   /**
    * @param {QueryInfo} query
-   * @param {number} idx
+   * @param {number} idxi
    * @param {number} depth
    * @returns
    */
@@ -1159,12 +1168,17 @@ export default class WorkspaceQuerier {
   /**
    * The maximum number of results to find before we give up searching sub-blocks.
    */
-  static MAX_RESULTS = 1000;
+  static MAX_RESULTS = 2000;
 
   /**
    * The maximum number of tokens to find before giving up.
    */
-  static MAX_TOKENS = 10000;
+  static MAX_TOKENS = 100000;
+
+   /**
+    * The maximum number of string forms a block can have before we give up.
+    */
+  static MAX_STRING_FORMS = 500;
 
   /**
    * Indexes a workspace in preparation for querying it.
