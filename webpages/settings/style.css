@@ -72,10 +72,10 @@ h1 {
   height: 100vh;
 }
 
-.addons-container.placeholder {
+.addons-container .placeholder {
   pointer-events: none;
 }
-.addons-container.placeholder .addon-body:first-child {
+.addons-container .placeholder .addon-body:first-child {
   /* Doing this instead of padding in .addons-container itself to avoid
   problems with other CSS that would also set padding on the same element,
   like the "body.iframe .addons-container" selector below */
