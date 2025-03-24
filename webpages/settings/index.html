@@ -239,7 +239,7 @@
           <div v-if="!isIframe" class="category-header-title" v-cloak>
             <div v-if="relatedAddonsOpen" class="related-addons-header">
               <img src="../../images/icons/left-arrow.svg" class="back-button" @click="backRelatedAddon()"></img>
-              <span>{{ msg("relatedTo", this.relatedAddonsHistory.at(-1).name) }}</span>
+              <span>{{ msg("relatedTo", relatedToAddonName) }}</span>
             </div>
             <span v-else>{{ selectedCategoryName }}</span>
           </div>

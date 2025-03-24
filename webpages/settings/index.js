@@ -86,6 +86,7 @@ let fuse;
         moreSettingsOpen: false,
         relatedAddonsOpen: false,
         relatedAddons: [],
+        relatedToAddonName: null,
         relatedAddonsHistory: [],
         categoryOpen: true,
         loaded: false,
@@ -184,6 +185,7 @@ let fuse;
         location.hash = "";
       },
       openRelatedAddons(addonManifest, log = true) {
+        this.relatedToAddonName = addonManifest.name;
         if (log) this.relatedAddonsHistory.push(addonManifest);
         this.relatedAddons.length = 0;
         for (const relatedManifest of addonManifest._relatedAddons) {
@@ -196,7 +198,6 @@ let fuse;
         if (this.relatedAddonsHistory.length === 0) {
           this.relatedAddonsOpen = false;
         } else {
-          console.log(this.relatedAddonsHistory.at(-1))
           this.openRelatedAddons(this.relatedAddonsHistory.at(-1), false);
         }
         setTimeout(() => {
