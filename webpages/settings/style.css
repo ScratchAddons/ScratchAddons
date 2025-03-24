@@ -140,7 +140,7 @@ h1 {
   border-radius: 4px;
   cursor: pointer;
   transition: 0.2s ease;
-  filter: var(--icon-filter);
+  filter: var(--content-icon-filter);
 }
 
 .back-button:hover {
