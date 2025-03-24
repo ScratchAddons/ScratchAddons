@@ -182,12 +182,7 @@ h1 {
   height: 25px;
 }
 .header-end {
-  right: 0;
-  position: fixed;
-}
-[dir="rtl"] .header-end {
-  right: auto;
-  left: 0;
+  margin-inline-start: auto;
 }
 
 .hidden-button {
