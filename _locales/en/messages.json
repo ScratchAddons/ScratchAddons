@@ -152,8 +152,8 @@
   "relatedAddons": {
     "message": "Related addons:"
   },
-  "relatedAddonsTitleCase": {
-    "message": "Related Addons"
+  "relatedTo": {
+    "message": "Related to $1"
   },
   "creditTo": {
     "message": "Credit to:"
