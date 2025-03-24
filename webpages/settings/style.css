@@ -117,7 +117,7 @@ h1 {
   border-bottom: 1px solid var(--control-border);
   display: flex;
   align-items: center;
-  padding: 18px 40px;
+  padding: 10px 40px;
   user-select: none;
 }
 
