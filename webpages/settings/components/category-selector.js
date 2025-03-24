@@ -27,6 +27,7 @@ export default async function ({ template }) {
           this.$root.selectedCategory = this.category.id;
         }
         this.lastClick = Date.now();
+        this.$root.relatedAddonsOpen = false;
       },
     },
   });

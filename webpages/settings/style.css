@@ -112,6 +112,41 @@ h1 {
   vertical-align: bottom;
 }
 
+.addons-block-header {
+  background: var(--search-toolbar-background);
+  border-bottom: 1px solid var(--control-border);
+  display: flex;
+  align-items: center;
+  padding: 18px 40px;
+  user-select: none;
+}
+
+.category-header-title {
+  flex-grow: 1;
+  font-size: 16px;
+}
+
+.related-addons-header {
+  display: flex;
+  align-items: center;
+}
+
+.back-button {
+  width: 24px;
+  height: 24px;
+  vertical-align: bottom;
+  padding: 4px;
+  margin-inline-end: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  filter: var(--icon-filter);
+}
+
+.back-button:hover {
+  background-color: var(--hover-highlight)
+}
+
 .clear-button {
   padding-inline: 7px;
   border-radius: 0 4px 4px 0;
@@ -198,8 +233,11 @@ body.iframe .tooltiptext {
 body.iframe .addon-description {
   display: none;
 }
-body.iframe .search-box {
+body.iframe .addons-block-header {
   padding: 10px;
+}
+body.iframe .search-box {
+  width: 100%;
 }
 body.iframe .navbar {
   display: none;

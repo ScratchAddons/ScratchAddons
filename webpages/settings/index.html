@@ -235,10 +235,19 @@
 
       <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
-        <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
-          <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-else class="search-clear-button" @click="clearSearch()"></button>
+        <div class="addons-block-header">
+          <div v-if="!isIframe" class="category-header-title" v-cloak>
+            <div v-if="relatedAddonsOpen" class="related-addons-header">
+              <img src="../../images/icons/left-arrow.svg" class="back-button" @click="relatedAddonsOpen = false"></img>
+              <span>{{ msg("relatedAddonsTitleCase") }}</span>
+            </div>
+            <span v-else>{{ selectedCategoryName }}</span>
+          </div>
+          <div v-cloak class="search-box" v-if="!relatedAddonsOpen" :class="{smallMode: smallMode === true}">
+            <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
+            <button v-show="searchInput === ''" class="search-button"></button>
+            <button v-else class="search-clear-button" @click="clearSearch()"></button>
+          </div>
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
