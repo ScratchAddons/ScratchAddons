@@ -195,16 +195,16 @@ let fuse;
         const addon = this.relatedAddonsHistory.pop();
         if (this.relatedAddonsHistory.length === 0) {
           this.relatedAddonsOpen = false;
-          setTimeout(() => {
+        } else {
+          console.log(this.relatedAddonsHistory.at(-1))
+          this.openRelatedAddons(this.relatedAddonsHistory.at(-1), false);
+        }
+        setTimeout(() => {
             const addonElem = document.querySelector(`.addons-container #addon-${addon._addonId}`);
             addonElem.scrollIntoView({ behavior: "smooth" });
             addonElem.classList.add("addon-blink");
             setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
           }, 0);
-        } else {
-          console.log(this.relatedAddonsHistory.at(-1))
-          this.openRelatedAddons(this.relatedAddonsHistory.at(-1), false);
-        }
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
