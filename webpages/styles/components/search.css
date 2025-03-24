@@ -3,11 +3,12 @@
   align-items: center;
   user-select: none;
   border-radius: 4px;
-  border: 1px solid var(--search-input-background); /* prevent layout shift */
+  border: 1px solid transparent; /* prevent layout shift */
+  transition: 0.2s ease;
 }
 
 .search-box:focus-within {
-  border: 1px solid var(--brand-orange);
+  border-color: var(--brand-orange);
 }
 
 .search-box input {
