@@ -1,0 +1,26 @@
+{
+  "name": "Project stats percentages",
+  "description": "Hover over stats to view the percentage of each project stat versus the total number of views",
+  "credits": [
+    {
+      "name": "Jazza",
+      "link": "https://scratch.mit.edu/users/greeny--231"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.40.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "styles.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["community", "projectPage"]
+}
