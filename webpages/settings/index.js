@@ -94,6 +94,7 @@ let fuse;
         manifests: [],
         manifestsById: {},
         selectedCategory: "all",
+        previousCategory: "all",
         searchInput: "",
         searchInputReal: "",
         addonSettings: {},
@@ -186,6 +187,10 @@ let fuse;
       },
       openRelatedAddons(addonManifest, log = true) {
         this.relatedToAddonName = addonManifest.name;
+        if (this.relatedAddonsHistory.length === 0) {
+          this.previousCategory = this.selectedCategory;
+          this.selectedCategory = "all";
+        }
         if (log) this.relatedAddonsHistory.push(addonManifest);
         this.relatedAddons.length = 0;
         for (const relatedManifest of addonManifest._relatedAddons) {
@@ -197,6 +202,7 @@ let fuse;
         const addon = this.relatedAddonsHistory.pop();
         if (this.relatedAddonsHistory.length === 0) {
           this.relatedAddonsOpen = false;
+          this.selectedCategory = this.previousCategory;
         } else {
           this.openRelatedAddons(this.relatedAddonsHistory.at(-1), false);
         }
