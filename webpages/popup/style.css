@@ -8,7 +8,7 @@ body {
   overflow: hidden;
   margin: 0;
   background-color: var(--brand-orange); /* Firefox popup arrow */
-  font-family: "Sora", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: var(--white-text);
 }
 
@@ -19,11 +19,13 @@ body {
 #header {
   display: flex;
   height: 60px;
+  background-image: var(--dirt-background, none);
 }
 .header-button {
   cursor: pointer;
   padding: 18px;
   line-height: 0;
+  user-select: none;
   transition: 0.2s ease;
 }
 .header-button:hover {
@@ -39,6 +41,8 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
+  font-family: "Sora", sans-serif;
+  user-select: none;
 }
 #logo {
   height: 25px;
@@ -75,9 +79,10 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  font-size: 12px;
+  font-size: 14px;
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
+  user-select: none;
   transition: 0.2s ease;
 }
 .popup-name:hover {
@@ -121,8 +126,8 @@ body {
 .popout > .popout-img {
   display: inline-block;
   vertical-align: -3px;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   padding: 2px;
   margin-inline-start: 3px;
   margin-inline-end: -2px;
@@ -142,11 +147,14 @@ iframe {
   border: none;
   overflow-y: scroll;
   background-color: var(--page-background);
+  user-select: none;
 }
 #version {
   color: var(--white-text);
   margin: 5px;
   text-decoration: none;
   opacity: 0.75;
-  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  user-select: text;
 }

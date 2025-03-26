@@ -7,31 +7,61 @@ export default async function ({ addon, msg, console }) {
 
   const BROADCAST_MESSAGE_TYPE = Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE;
 
-  const _dropdownCreate = Blockly.FieldVariable.dropdownCreate;
-  Blockly.FieldVariable.dropdownCreate = function () {
+  let FieldVariable;
+  if (Blockly.registry) {
+    // new Blockly
+    FieldVariable = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_variable");
+  } else {
+    FieldVariable = Blockly.FieldVariable;
+  }
+  const _dropdownCreate = FieldVariable.dropdownCreate;
+  FieldVariable.dropdownCreate = function () {
     const options = _dropdownCreate.call(this);
+    const workspace = this.sourceBlock_.workspace;
+    let variableTypes;
+    if (Blockly.registry)
+      variableTypes = workspace.getVariableMap().getTypes(); // new Blockly
+    else variableTypes = workspace.getVariableTypes();
     if (
       !addon.self.disabled &&
-      this.defaultType_ === BROADCAST_MESSAGE_TYPE &&
+      (this.defaultType_ ?? this.getDefaultType()) === BROADCAST_MESSAGE_TYPE &&
       // Disable when workspace has no actual broadcast to rename
-      this.sourceBlock_.workspace.getVariableTypes().includes("broadcast_msg")
+      variableTypes.includes(BROADCAST_MESSAGE_TYPE)
     ) {
       options.push([msg("RENAME_BROADCAST"), RENAME_BROADCAST_MESSAGE_ID]);
     }
     return options;
   };
 
-  const _onItemSelected = Blockly.FieldVariable.prototype.onItemSelected;
-  Blockly.FieldVariable.prototype.onItemSelected = function (menu, menuItem) {
+  let onItemSelectedMethodName;
+  if (Blockly.registry)
+    onItemSelectedMethodName = "onItemSelected_"; // new Blockly
+  else onItemSelectedMethodName = "onItemSelected";
+  const _onItemSelected = FieldVariable.prototype[onItemSelectedMethodName];
+  FieldVariable.prototype[onItemSelectedMethodName] = function (menu, menuItem) {
     const workspace = this.sourceBlock_.workspace;
     if (this.sourceBlock_ && workspace) {
       if (menuItem.getValue() === RENAME_BROADCAST_MESSAGE_ID) {
-        promptRenameBroadcast(workspace, this.variable_);
+        promptRenameBroadcast(workspace, this.variable ?? this.variable_);
         return;
       }
     }
     return _onItemSelected.call(this, menu, menuItem);
   };
+
+  // Custom event for undo/redo
+  class RenameBroadcastEvent extends Blockly.Events.Abstract {
+    constructor(workspace, callback) {
+      super();
+      this.type = "sa_broadcast_rename";
+      this.workspaceId = workspace.id;
+      this.callback = callback;
+    }
+
+    run(isRedo) {
+      this.callback(isRedo);
+    }
+  }
 
   const resetVMCaches = () => {
     const blockContainers = new Set(vm.runtime.targets.map((i) => i.blocks));
@@ -40,16 +70,11 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  const addUndoRedoHook = (callback) => {
-    const eventQueue = Blockly.Events.FIRE_QUEUE_;
-    // After a rename is emitted, some unrelated garbage events also get emitted
-    // So we should trap the first event
-    const undoItem = eventQueue[0];
-    const originalRun = undoItem.run;
-    undoItem.run = function (isRedo) {
-      originalRun.call(this, isRedo);
-      callback(isRedo);
-    };
+  const addUndoRedoHook = (workspace, callback) => {
+    // On new Blockly, we can't access the event queue to modify the existing event.
+    // Instead, we fire a new event, which works on both old and new Blockly.
+    // The custom event should be in a group together with the actual Blockly events.
+    Blockly.Events.fire(new RenameBroadcastEvent(workspace, callback));
   };
 
   const renameBroadcastInVM = (id, newName) => {
@@ -74,19 +99,28 @@ export default async function ({ addon, msg, console }) {
   };
 
   const renameBroadcast = (workspace, id, oldName, newName) => {
+    Blockly.Events.setGroup(true);
+
     // Rename in editor. Undo/redo will work automatically.
-    workspace.renameVariableById(id, newName);
+    // Old Blockly's renameVariableById() creates a new group, so we need
+    // to replace setGroup() with a no-op to prevent that.
+    const _setGroup = Blockly.Events.setGroup;
+    if (!Blockly.registry) Blockly.Events.setGroup = () => {};
+    workspace.getVariableMap().renameVariableById(id, newName);
+    if (!Blockly.registry) Blockly.Events.setGroup = _setGroup;
 
     // Rename in VM. Need to manually implement undo/redo.
     renameBroadcastInVM(id, newName);
 
-    addUndoRedoHook((isRedo) => {
+    addUndoRedoHook(workspace, (isRedo) => {
       if (isRedo) {
         renameBroadcastInVM(id, newName);
       } else {
         renameBroadcastInVM(id, oldName);
       }
     });
+
+    Blockly.Events.setGroup(false);
   };
 
   const mergeBroadcast = (workspace, oldId, oldName, newName) => {
@@ -107,8 +141,7 @@ export default async function ({ addon, msg, console }) {
     }
     // Remove the broadcast from the editor so it doesn't appear in dropdowns.
     // Undo/redo will work automatically for this.
-    workspace.deleteVariableById(oldId);
-    Blockly.Events.setGroup(false);
+    workspace.getVariableMap().deleteVariableById(oldId);
 
     // Merge in VM to update sprites that aren't open. Need to manually implement undo/redo.
     // To figure out how to undo this operation, we first figure out which blocks we're
@@ -135,11 +168,10 @@ export default async function ({ addon, msg, console }) {
     };
     applyVmEdits(true);
 
-    // Earlier editor updates are guaranteed to generate at least 1 event that we can hook as the
-    // broadcast block must exist in the editor for the user to rename it.
-    addUndoRedoHook((isRedo) => {
+    addUndoRedoHook(workspace, (isRedo) => {
       applyVmEdits(isRedo);
     });
+    Blockly.Events.setGroup(false);
   };
 
   const promptRenameBroadcast = (workspace, variable) => {
@@ -149,11 +181,18 @@ export default async function ({ addon, msg, console }) {
     const promptText = msg("RENAME_BROADCAST_TITLE", { name: oldName });
     const promptDefaultText = oldName;
 
-    Blockly.prompt(
+    const blocksWrapper = document.querySelector("[class*='gui_blocks-wrapper_']");
+    let reactInternalInstance = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
+    while (!reactInternalInstance.stateNode?.ScratchBlocks) {
+      reactInternalInstance = reactInternalInstance.child;
+    }
+    const blocksComponent = reactInternalInstance.stateNode;
+
+    blocksComponent.handlePromptStart(
       promptText,
       promptDefaultText,
       function (newName) {
-        newName = Blockly.Variables.trimName_(newName);
+        newName = newName.trim();
         const nameIsEmpty = !newName;
         if (nameIsEmpty) {
           return;
@@ -179,8 +218,8 @@ export default async function ({ addon, msg, console }) {
       for (const block of allBlocks) {
         for (const input of block.inputList) {
           for (const field of input.fieldRow) {
-            if (field instanceof Blockly.FieldVariable) {
-              field.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
+            if (field instanceof FieldVariable) {
+              field.menuGenerator_ = FieldVariable.dropdownCreate;
             }
           }
         }

@@ -1,3 +1,5 @@
+@import url("../../libraries/common/cs/spinner.css");
+
 #sa-download-button:before {
   background-image: url("./download.svg");
   display: inline-block;
@@ -15,26 +17,6 @@
 #sa-download-button.waiting {
   opacity: 0.6;
   pointer-events: none;
-}
-
-@keyframes spin-intro {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(359deg);
-  }
 }
 
 #sa-download-button.loading:before {

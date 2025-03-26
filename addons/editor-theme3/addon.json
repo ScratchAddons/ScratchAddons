@@ -163,6 +163,19 @@
         "g": 0.7,
         "b": 0.7
       }
+    },
+    {
+      "name": "commentTopBar",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        },
+        "r": 0.9,
+        "g": 0.9,
+        "b": 0.9
+      }
     }
   ],
   "dynamicEnable": true,
@@ -592,5 +605,6 @@
   "presetPreview": {
     "type": "palette",
     "colors": ["motion-color", "looks-color", "sounds-color", "events-color", "control-color", "sensing-color"]
-  }
+  },
+  "libraries": ["scratch-www", "scratch-gui", "scratch-blocks"]
 }

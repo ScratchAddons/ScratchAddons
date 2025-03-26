@@ -29,6 +29,7 @@
   border: 2px solid rgba(87, 94, 117, 0.5);
   border-radius: 50%;
   cursor: pointer;
+  z-index: 2; /* above custom zoom controls */
 }
 
 [dir="ltr"] .sa-backpack-button {
@@ -37,6 +38,14 @@
 
 [dir="rtl"] .sa-backpack-button {
   left: 24px;
+}
+
+[dir="ltr"] .sa-backpack-button.sa-new-blockly {
+  right: 28px;
+}
+
+[dir="rtl"] .sa-backpack-button.sa-new-blockly {
+  left: 29px;
 }
 
 .sa-backpack-open .sa-backpack-button {

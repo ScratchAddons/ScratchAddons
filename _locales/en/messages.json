@@ -65,6 +65,9 @@
   "forEditor": {
     "message": "For editor"
   },
+  "forPlayer": {
+    "message": "For project player"
+  },
   "forWebsite": {
     "message": "For website"
   },
@@ -92,14 +95,14 @@
   "codeEditorFeatures": {
     "message": "Code Editor"
   },
+  "playerFeatures": {
+    "message": "Project Player Features"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
   "profilesFeatures": {
     "message": "Profiles"
-  },
-  "projectPlayerFeatures": {
-    "message": "Project Player"
   },
   "projectPageFeatures": {
     "message": "Project Pages"
@@ -115,6 +118,9 @@
   },
   "websiteThemes": {
     "message": "Website Themes"
+  },
+  "playerThemes": {
+    "message": "Project Player Themes"
   },
   "popupFeatures": {
     "message": "Extension Popup Features"
@@ -248,8 +254,8 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_39": {
-    "message": "New addon: \"delete other costumes or sounds\", which adds an option to the right click context menu for costumes and sounds to delete all items except for the selected one. Go to $1 to enable it.",
+  "extensionUpdateInfo1_v1_41": {
+    "message": "New addon: \"costume editor keyboard shortcuts\", which adds keyboard shortcuts to costume editor tools (similar to TurboWarp). Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
@@ -258,8 +264,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_39": {
-    "message": "Other new addons added this update are \"asset conflict dialog\", \"customizable code editor grid\", \"customizable stage monitors\", and  \"remaining reply counter\"."
+  "extensionUpdateInfo2_v1_41": {
+    "message": "Another new addon is \"Scratch 3.0 → 2.0\", which makes Scratch 3.0-styled pages look like Scratch 2.0."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",

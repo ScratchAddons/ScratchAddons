@@ -40,6 +40,36 @@
       }
     },
     {
+      "name": "page-scratchr2GrayText",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          },
+          "r": 0.6,
+          "g": 0.6,
+          "b": 0.6
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          },
+          "r": 0.25,
+          "g": 0.25,
+          "b": 0.25
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "page-tab",
       "value": {
         "type": "textColor",
@@ -120,9 +150,9 @@
           "type": "settingValue",
           "settingId": "page"
         },
-        "r": 0.99,
-        "g": 0.99,
-        "b": 0.99
+        "r": 0.98,
+        "g": 0.98,
+        "b": 0.98
       }
     },
     {
@@ -156,6 +186,32 @@
           "type": "settingValue",
           "settingId": "page"
         }
+      }
+    },
+    {
+      "name": "page-scratchr2ButtonText",
+      "value": {
+        "type": "textColor",
+        "black": "#666666",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-scratchr2BackgroundImage",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "options": {
+          "#fcfcfc": "url('https://cdn.scratch.mit.edu/scratchr2/static/images/scratch-bg.png')",
+          "#fcfcfcff": "url('https://cdn.scratch.mit.edu/scratchr2/static/images/scratch-bg.png')"
+        },
+        "default": "none"
       }
     },
     {
@@ -358,6 +414,17 @@
       }
     },
     {
+      "name": "box-blackText",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-filter",
       "value": {
         "type": "textColor",
@@ -390,29 +457,6 @@
         "source": {
           "type": "settingValue",
           "settingId": "box"
-        }
-      }
-    },
-    {
-      "name": "box-borderFilterInverted",
-      "value": {
-        "type": "textColor",
-        "black": "brightness(0.4)",
-        "white": "none",
-        "source": {
-          "type": "alphaBlend",
-          "opaqueSource": {
-            "type": "settingValue",
-            "settingId": "box"
-          },
-          "transparentSource": {
-            "type": "brighten",
-            "source": {
-              "type": "settingValue",
-              "settingId": "border"
-            },
-            "a": 0.94
-          }
         }
       }
     },
@@ -471,6 +515,18 @@
       }
     },
     {
+      "name": "box-strongBlueText",
+      "value": {
+        "type": "textColor",
+        "black": "#056dff",
+        "white": "#80b5ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-greenText",
       "value": {
         "type": "textColor",
@@ -514,18 +570,6 @@
         "black": "rgba(0, 0, 0, 0.05)",
         "white": "rgba(255, 255, 255, 0.05)",
         "threshold": 32,
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
-      "name": "box-divider5",
-      "value": {
-        "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.05)",
-        "white": "rgba(255, 255, 255, 0.05)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -632,17 +676,6 @@
       "value": {
         "type": "textColor",
         "black": "#666666",
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
-      "name": "box-scratchr2Caret",
-      "value": {
-        "type": "textColor",
-        "black": "#000000",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -995,6 +1028,18 @@
       }
     },
     {
+      "name": "gray-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
       "name": "gray-darker",
       "value": {
         "type": "textColor",
@@ -1139,6 +1184,19 @@
       }
     },
     {
+      "name": "gray-scratchr2TextShadow",
+      "value": {
+        "type": "textColor",
+        "black": "0 1px white",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        },
+        "threshold": 224
+      }
+    },
+    {
       "name": "gray-scratchr2SelectedTab",
       "value": {
         "type": "textColor",
@@ -1226,6 +1284,47 @@
         "default": {
           "type": "settingValue",
           "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2ProjectStatsBackground",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        },
+        "options": {
+          "#f2f2f2": "#dddddd",
+          "#f2f2f2ff": "#dddddd"
+        },
+        "default": {
+          "type": "textColor",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "black": {
+            "type": "multiply",
+            "source": {
+              "type": "settingValue",
+              "settingId": "gray"
+            },
+            "r": 0.9,
+            "g": 0.9,
+            "b": 0.9
+          },
+          "white": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "gray"
+            },
+            "r": 0.9,
+            "g": 0.9,
+            "b": 0.9
+          }
         }
       }
     },
@@ -1828,6 +1927,29 @@
         "default": {
           "type": "settingValue",
           "settingId": "link"
+        }
+      }
+    },
+    {
+      "name": "link-scratchr2IconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "link"
+          },
+          "options": {
+            "#4d97ff": "#1aa0d8",
+            "#4d97ffff": "#1aa0d8",
+            "#25aff4": "#1aa0d8",
+            "#25aff4ff": "#1aa0d8"
+          },
+          "default": {
+            "type": "settingValue",
+            "settingId": "link"
+          }
         }
       }
     },
@@ -2541,6 +2663,8 @@
         "link": "#1aa0d8",
         "footer": "#ececec",
         "border": "#0000001a",
+        "messageIndicatorColor": "#f9a739",
+        "messageIndicatorOnMessagesPage": "#f9a739",
         "darkBanners": "off",
         "darkForumCode": false
       }
@@ -2560,6 +2684,8 @@
         "link": "#25aff4",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "off",
         "darkForumCode": false
       }
@@ -2613,5 +2739,6 @@
   "presetPreview": {
     "type": "palette",
     "colors": ["button", "navbar", "page", "box", "gray", "blue"]
-  }
+  },
+  "libraries": ["scratch-www"]
 }

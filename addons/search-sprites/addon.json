@@ -33,6 +33,7 @@
     "version": "1.40.0",
     "temporaryNotice": "The search bar is now below the sprite list, next to the add button."
   },
-  "tags": ["editor"],
-  "enabledByDefault": false
+  "tags": ["editor", "recommended"],
+  "enabledByDefault": false,
+  "libraries": ["scratch-gui"]
 }

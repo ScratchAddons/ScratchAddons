@@ -1,3 +1,5 @@
+@import url("../../libraries/common/cs/spinner.css");
+
 .sa-export-container {
   box-sizing: border-box;
   width: 700px;
@@ -39,18 +41,57 @@
 
 .sa-export-button-container {
   display: flex;
-  justify-content: center;
   align-items: center;
   margin-top: 1.5rem;
+  padding: 0 2.25rem;
+}
+
+.sa-export-copy-button {
+  margin-inline-end: auto;
 }
 
 .sa-export-button-container button {
-  margin-left: 0.5rem;
   margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.sa-export-button-container button + button {
+  margin-inline-start: 0.5rem;
+}
+
+.sa-export-button-icon {
+  margin-inline-end: 0.5rem;
+  height: 0;
+  display: flex;
+  align-items: center;
+}
+
+.sa-export-copy-button img {
+  filter: var(--editorDarkMode-input-filter, none);
+}
+
+.sa-export-png-button img {
+  filter: var(--editorDarkMode-primary-filter, none);
+}
+
+.sa-export-container.sa-export-loading {
+  visibility: hidden;
+}
+
+.sa-export-loading-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .sa-export-loading-text {
-  text-align: center;
-  padding-top: 1.5rem;
-  font-size: large;
+  color: white;
+  font-size: 1rem;
+  user-select: none;
 }

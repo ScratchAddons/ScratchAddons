@@ -1,7 +1,7 @@
 {
   "name": "Save blocks as image",
   "description": "Right click on the code area or a stack of blocks to copy it to the clipboard or save it as a PNG or SVG file.",
-  "tags": ["editor", "codeEditor"],
+  "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {
       "name": "summerscar",
@@ -31,5 +31,6 @@
     "temporaryNotice": "The addon has been reworked. There is now a modal for saving the blocks as an image, and the image can be copied to the clipboard.",
     "isMajor": true
   },
-  "permissions": ["clipboardWrite"]
+  "permissions": ["clipboardWrite"],
+  "libraries": ["scratch-gui"]
 }

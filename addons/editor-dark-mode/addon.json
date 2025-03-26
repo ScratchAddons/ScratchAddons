@@ -233,6 +233,16 @@
       }
     },
     {
+      "name": "primary-iconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
       "name": "primary-transparent35",
       "value": {
         "type": "multiply",
@@ -1540,5 +1550,6 @@
     "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "libraries": ["scratch-render"]
 }

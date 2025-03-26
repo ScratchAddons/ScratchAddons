@@ -1,4 +1,6 @@
 :root {
+  color-scheme: dark;
+
   --brand-orange: #ff7b26;
   --brand-orange-min-font-weight: normal;
   --orange: #ff7b26;
@@ -17,6 +19,7 @@
   --dark-red-variant: #d84a12;
   --dark-red-text: var(--dark-red-variant);
   --white-text: #fff;
+  --black-text: #222;
 
   --page-background: #222;
   --content-background: #2a2a2a;
@@ -26,6 +29,7 @@
   --button-hover-background: #1a1a1a;
   --input-background: #222;
   --search-input-background: #111;
+  --search-input-background-navbar: #f0f0f0;
   --switch-border: #808080;
   --switch-inner-background: #eee;
   --tooltip-background: #000;

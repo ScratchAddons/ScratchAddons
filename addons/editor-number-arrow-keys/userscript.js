@@ -78,7 +78,7 @@ export default async function ({ addon }) {
     else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
       // Number inputs in `mediarecorder` addon modal
       return true;
-    } else if (el.className.includes("input_input-form_")) {
+    } else if (el.matches("[class*=input_input-form_]")) {
       if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
         // Sprite X/Y coordinates, size and direction (excludes sprite name)
         return true;
@@ -167,6 +167,7 @@ export default async function ({ addon }) {
     } else {
       // Normal Blockly input
       e.target.value = newValue.toString();
+      e.target.dispatchEvent(new Event("input"));
     }
   });
 }
