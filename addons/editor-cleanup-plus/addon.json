@@ -1,6 +1,6 @@
 {
   "name": "Enhanced clean up tool",
-  "description": "Improves the clean up feature in the code area's right click context menu with multiple columns and suggestions of removing unused variables and lists."
+  "description": "Improves the clean up feature in the code area's right click context menu with multiple columns and suggestions of removing unused variables and lists.",
   "credits": [
     {
       "name": "griffpatch"
