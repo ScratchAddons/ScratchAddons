@@ -1,0 +1,27 @@
+{
+    "editor-project-formatter/format-warn": "(⚠️ warning) \"{type}\" [{subject}]: {err-msg}",
+    "editor-project-formatter/format-error": "(❌ error) \"{type}\" [{subject}]: {err-msg}",
+
+    "editor-project-formatter/check-formatting": "Check Project Formatting",
+    "editor-project-formatter/check-formatting-sprite": "check formatting in sprite",
+
+    "editor-project-formatter/format-issues": "Format Issues",
+    "editor-project-formatter/format-issues-in-sprite": "Format Issues in Sprite",
+
+    "editor-project-formatter/format-project": "Format Project",
+    "editor-project-formatter/format-sprite": "format sprite",
+
+    "editor-project-formatter/ignore-block": "Ignore this {type}",
+    "editor-project-formatter/ignore-sprite": "ignore {type}",
+    "editor-project-formatter/ignore": "ignore this {type}",
+
+    "editor-project-formatter/unignore-block": "Remark {type} back to formater",
+    "editor-project-formatter/unignore-sprite": "remark {type} back to formater",
+    "editor-project-formatter/unignore": "remark this {type} back to formater",
+
+    "editor-project-formatter/reset-ignore-list": "Reset ignored items list",
+
+    "editor-project-formatter/variable": "variable",
+    "editor-project-formatter/list": "list",
+    "editor-project-formatter/proccedure": "custom block"
+  }
