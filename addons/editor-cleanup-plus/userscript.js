@@ -1,9 +1,9 @@
 import UndoGroup from "../editor-devtools/UndoGroup.js";
-import { getVariableUsesById, getOrderedTopBlockColumns } from "../editor-devtools/utils.js";
+import { getVariableUsesById, getOrderedTopBlockColumns } from "../../libraries/common/cs/devtools-utils.js";
 
 export default async function ({ addon, console, msg, safeMsg: m }) {
   const blockly = await addon.tab.traps.getBlockly();
-  const getWorkspace = () => blockly.getMainWorkspace();
+  const getWorkspace = () => addon.tab.traps.getWorkspace();
 
   let originalMsg = blockly.Msg.CLEAN_UP;
   addon.self.addEventListener("disabled", () => (blockly.Msg.CLEAN_UP = originalMsg));
@@ -17,7 +17,7 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
   };
 
   const doCleanUp = () => {
-    let workspace = blockly.getMainWorkspace();
+    let workspace = getWorkspace();
 
     UndoGroup.startUndoGroup(workspace);
 

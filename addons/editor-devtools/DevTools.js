@@ -1,6 +1,6 @@
 import DomHelpers from "./DomHelpers.js";
 import UndoGroup from "./UndoGroup.js";
-import { getVariableUsesById } from "./utils.js";
+import { getVariableUsesById } from "../../libraries/common/cs/devtools-utils.js";
 import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
 
 export default class DevTools {
@@ -17,7 +17,6 @@ export default class DevTools {
     this.canShare = false;
 
     this.mouseXY = { x: 0, y: 0 };
-    this.blockly = null;
   }
 
   async init() {

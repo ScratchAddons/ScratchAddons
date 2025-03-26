@@ -1,6 +1,6 @@
 {
   "name": "Developer tools",
-  "description": "Adds copy/cut/paste blocks, variable swap options, and make-space option to context menu.",
+  "description": "Adds options to copy/cut/paste blocks, swap variables, and make space to the right click context menu.",
   "credits": [
     {
       "name": "griffpatch"
@@ -28,7 +28,7 @@
   "versionAdded": "1.0.0",
   "latestUpdate": {
     "version": "1.39.0",
-    "temporaryNotice": "The Cleanup-plus tool has been moved to a separate addon."
+    "temporaryNotice": "The \"Clean up Blocks +\" option has been moved to a separate addon."
   },
   "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": true
