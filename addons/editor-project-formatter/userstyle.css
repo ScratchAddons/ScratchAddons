@@ -1,0 +1,173 @@
+.sa-editor-formatter-options-icon {
+    filter: var(--editorDarkMode-menuBar-filter);
+}
+
+/*Based of TurboWarp*/
+.sa-format-issues-textarea {
+    width: 100%;
+    height: 5rem;
+    min-height: 2rem;
+    max-width: 100%;
+    min-width: 100%;
+    padding: 0.25rem;
+    border: 1px solid var(--editorDarkMode-border);
+    background-color: var(--editorDarkMode-input);
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-family: monospace;
+    margin: 0.5rem 0;
+    display: block;
+}
+.sa-format-issues-modal-label {
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+}
+
+.sa-format-options_help-icon {
+    position: relative;
+    border: 0;
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+.sa-format-options_help-icon img {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    filter: var(--editorDarkMode-helpIcon-filter);
+}
+
+.sa-format-options-popup {
+    box-sizing: border-box;
+    width: 750px;
+    max-height: min(800px, 80vh);
+    max-width: 85%;
+    margin-top: 12vh;
+    overflow-y: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sa-format-options-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0.5rem 0 0 0;
+    font-weight: bold;
+}
+
+.sa-format-options-divider {
+    flex-grow: 1;
+    margin-left: 1rem;
+    border-top: 1px dashed var(--editorDarkMode-accent-divider);
+}
+
+.sa-format-options-note {
+    border: 1px solid var(--editorDarkMode-primary, #855cd6);
+    background-color: var(--editorDarkMode-primary-transparent15, #855cd626);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.sa-format-options-modal {
+    padding: 1.5rem 2.25rem;
+}
+.sa-rule-name {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+.sa-rule-name > .rule-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.sa-rule-name > label {
+    flex: 0 1 auto;
+}
+
+.sa-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin-left: auto;
+}
+
+
+/*Description Box*/
+.sa-settings-description-text {
+    font-style: italic;
+    font-size: 0.875rem;
+    color: var(--editorDarkMode-descriptionUnfocused-color, rgb(123 123 146));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sa-settings-description-text:hover {
+    font-style: initial;
+    color: var(--editorDarkMode-descriptionFocused-color, hsla(225, 15%, 40%, 1));
+    background-color: var(--editorDarkMode-descriptionBox-color, #b9d6ff);
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+    padding: 0.75rem 0.5rem;
+}
+
+.sa-rule-name:has(.sa-toggle-input:checked) > .sa-settings-description-text {
+    font-style: initial;
+    color: var(--editorDarkMode-descriptionFocused-color, hsla(225, 15%, 40%, 1));
+    background-color: var(--editorDarkMode-descriptionBox-color, #b9d6ff);
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+    padding: 0.75rem 0.5rem;
+}
+
+
+/* Toggle Switch */
+.sa-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .2s;
+    border-radius: 24px;
+}
+
+.sa-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 4px;
+    background-color: var(--editorDarkMode-selector2-text);
+    transition: .2s;
+    border-radius: 50%;
+}
+
+  .sa-toggle-input:checked + .sa-toggle-slider {
+    background-color: var(--editorDarkMode-primary, #855cd6);
+  }
+
+.sa-toggle-input:checked + .sa-toggle-slider:before {
+    transform: translateX(30px);
+}
+
+.sa-toggle-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+}
