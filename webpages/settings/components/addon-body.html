@@ -121,6 +121,11 @@
     width: 0; /* don't include the description
                  when calculating addon-body size */
     flex-grow: 1;
+    /* Badges have a 2px bottom border which means the text
+       is not vertically centered relative to the addon name
+       and description. Fixed by adding 1px bottom padding
+       here and 1px extra top padding to the badge. */
+    padding-bottom: 1px;
   }
 
   .addon-description-full,
@@ -133,7 +138,7 @@
   .addon-credits,
   .addon-license {
     margin-top: 4px;
-    font-size: 0.9em;
+    font-size: 13px;
   }
   .addon-credits a,
   .addon-license a {
@@ -153,6 +158,11 @@
     height: 100%;
     display: flex;
     align-items: center;
+    /* Badges have a 2px bottom border which means the text
+       is not vertically centered relative to the addon name
+       and description. Fixed by adding 1px bottom padding
+       here and 1px extra top padding to the badge. */
+    padding-bottom: 1px;
   }
   .addon-name > span:empty {
     display: inline-block;
@@ -271,7 +281,7 @@
     padding: 8px;
     border: 2px solid;
     border-radius: 5px;
-    font-weight: 600;
+    font-weight: 500;
     margin: 10px 0;
     display: flex;
     align-items: center;
@@ -302,8 +312,8 @@
     margin-inline-end: 10px;
   }
   .addon-message img {
-    height: 15px;
-    width: 15px;
+    height: 16px;
+    width: 16px;
     margin-inline-end: 10px;
     user-select: none;
   }

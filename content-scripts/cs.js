@@ -623,19 +623,16 @@ const showBanner = () => {
     font-size: 14px;
     line-height: normal;`,
   });
-  /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=oRo0tMWEpiA",
+    href: "https://www.youtube.com/watch?v=vuL5lV0l3fY",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
-  // Thumbnails were 100px height
-  */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.png"),
-    style: "height: 150px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -652,6 +649,7 @@ const showBanner = () => {
     width: 24px;`,
     title: chrome.i18n.getMessage("close"),
     src: chrome.runtime.getURL("../images/cs/close.svg"),
+    draggable: false,
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
@@ -671,7 +669,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_40", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_41", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -691,7 +689,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_40"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_41"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -744,9 +742,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  // notifImageLink.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
 
-  notifInnerBody.appendChild(notifImage);
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);

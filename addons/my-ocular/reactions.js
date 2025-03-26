@@ -67,6 +67,7 @@ export default async function ({ addon, console, msg }) {
 
             let img = document.createElement("img");
             img.src = url;
+            img.draggable = false;
 
             reactionButton.innerText = "";
             reactionButton.appendChild(img);
@@ -89,6 +90,7 @@ export default async function ({ addon, console, msg }) {
 
             let img = document.createElement("img");
             img.src = url;
+            img.draggable = false;
 
             reactionMenuItem.innerText = "";
             reactionMenuItem.appendChild(img);

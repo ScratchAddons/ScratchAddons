@@ -49,7 +49,7 @@
         <a
           @click="deleteComment()"
           class="delete-btn"
-          :class="{'bold': deleteStep === 1}"
+          :class="{'delete-confirm': deleteStep === 1}"
           v-show="!deleted"
           v-if="canDeleteComment"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
@@ -525,7 +525,7 @@
         ><img class="small-icon" src="../../images/icons/read.svg" draggable="false" /> {{ uiMessages.markedAsReadMsg
         }}</span
       >
-      <span v-cloak class="separator">|</span>
+      <span v-cloak class="separator"></span>
       <a v-cloak href="https://scratch.mit.edu/messages" class="nolink open-messages"
         >{{ uiMessages.openMessagesMsg }}<img src="../../images/icons/popout.svg" class="popout" draggable="false"
       /></a>

@@ -35,7 +35,9 @@
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
 .blocklyDropDownDiv .blocklyMenu .blocklyMenuItem:hover,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
+.blocklyDropDownDiv .blocklyMenu .u-dropdown-selected-item,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight,
+.sa-contextmenu-colored .blocklyContextMenu .blocklyMenuItem:hover {
   background-color: var(--editorTheme3-hoveredItem, rgba(0, 0, 0, 0.2));
 }
 

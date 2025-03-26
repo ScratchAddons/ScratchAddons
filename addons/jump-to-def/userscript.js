@@ -1,12 +1,5 @@
 import Utils from "../find-bar/blockly/Utils.js";
 export default async function ({ addon, msg, console }) {
-  if (!addon.self._isDevtoolsExtension && window.initGUI) {
-    console.log("Extension running, stopping addon");
-    window._devtoolsAddonEnabled = true;
-    window.dispatchEvent(new CustomEvent("scratchAddonsDevtoolsAddonStopped"));
-    return;
-  }
-
   const utils = new Utils(addon);
 
   const Blockly = await addon.tab.traps.getBlockly();
@@ -29,7 +22,7 @@ export default async function ({ addon, msg, console }) {
         if (block.type === "procedures_call") {
           let findProcCode = block.getProcCode();
 
-          let topBlocks = utils.getWorkspace().getTopBlocks();
+          let topBlocks = addon.tab.traps.getWorkspace().getTopBlocks();
           for (const root of topBlocks) {
             if (root.type === "procedures_definition") {
               let label = root.getChildren()[0];
