@@ -8,13 +8,15 @@ export default async function ({ template }) {
       },
       lineWidth() {
         // See definition of setLineAttributes_() in addons/workspace-dots/userscript.js
-        return {
-          "dots": 0.675,
-          "crosshairs": this.spacing / 2.5,
-          "lines": this.spacing + 1,
-          "vertical": this.spacing + 1,
-          "horizontal": this.spacing + 1,
-        }[this.settings.theme] || 0;
+        return (
+          {
+            dots: 0.675,
+            crosshairs: this.spacing / 2.5,
+            lines: this.spacing + 1,
+            vertical: this.spacing + 1,
+            horizontal: this.spacing + 1,
+          }[this.settings.theme] || 0
+        );
       },
     },
   });

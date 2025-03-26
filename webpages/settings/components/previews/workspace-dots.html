@@ -1,13 +1,9 @@
 <template>
   <div role="presentation" class="dots-preview">
-    <svg width="100%" height="108"> <!-- 108px is a multiple of the default spacing -->
+    <svg width="100%" height="108">
+      <!-- 108px is a multiple of the default spacing -->
       <defs>
-        <pattern
-          id="dots-pattern"
-          patternUnits="userSpaceOnUse"
-          :width="spacing"
-          :height="spacing"
-        >
+        <pattern id="dots-pattern" patternUnits="userSpaceOnUse" :width="spacing" :height="spacing">
           <g :stroke-width="lineWidth" stroke="var(--content-text)">
             <line
               v-if="settings.theme !== 'horizontal'"

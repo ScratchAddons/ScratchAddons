@@ -1,4 +1,4 @@
-import cssVariables from '../../../../libraries/common/vue-css-variables.js';
+import cssVariables from "../../../../libraries/common/vue-css-variables.js";
 
 export default async function ({ template }) {
   const CompactMessagesPreview = Vue.extend({
