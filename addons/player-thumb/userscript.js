@@ -5,6 +5,7 @@ export default async function ({ addon, console }) {
   const thumb = document.createElement("img");
   thumb.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
   thumb.classList = "sa-project-thumb loading";
+  thumb.draggable = false;
 
   const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
   addon.tab.redux.initialize();

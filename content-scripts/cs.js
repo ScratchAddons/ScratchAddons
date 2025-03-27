@@ -649,6 +649,7 @@ const showBanner = () => {
     width: 24px;`,
     title: chrome.i18n.getMessage("close"),
     src: chrome.runtime.getURL("../images/cs/close.svg"),
+    draggable: false,
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 

@@ -174,7 +174,6 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 [class*="slider_handle_"],
 [class*="sound-editor_button_"],
 [class*="library-item_library-item_"],
-.s3devDDOut.vis, /* devtools style */
 .sa-find-dropdown-out.visible, /* find-bar style */
 .sa-mcp-container, /* middle-click-popup style */
 [class*="prompt_body_"],
@@ -217,6 +216,9 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 }
 [class*="selector_new-buttons_"]::before {
   background: linear-gradient(var(--editorDarkMode-accent-gradient-opacity0), var(--editorDarkMode-accent-gradient));
+}
+[class*="library-item_library-item-inset-image-container_"] {
+  border-color: var(--editorDarkMode-accent);
 }
 .sa-float-bar-dropdown > li.sa-boolean::before /* middle-click-popup style */ {
   border-top: 9px solid var(--editorDarkMode-accent);
@@ -667,6 +669,7 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 .sa-paint-snap-settings,
 [class*="prompt_variable-name-text-input_"],
 [class*="prompt_button-row_"] button,
+[class*="custom-procedures_option-card_"],
 [class*="custom-procedures_button-row_"] button,
 [class*="slider-prompt_min-input_"],
 [class*="slider-prompt_max-input_"],

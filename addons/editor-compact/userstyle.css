@@ -23,10 +23,15 @@
 }
 
 [class*="menu-bar_collapsible-label_"],
+[class*="settings-menu_dropdown-label_"] {
+  margin-left: 0.125rem;
+  margin-right: 0.25rem;
+}
+
 [dir="rtl"] [class*="menu-bar_collapsible-label_"],
-[class*="settings-menu_dropdown-label_"],
 [dir="rtl"] [class*="settings-menu_dropdown-label_"] {
-  margin: 0;
+  margin-right: 0.125rem;
+  margin-left: 0.25rem;
 }
 
 @media (max-width: 1024px) {
