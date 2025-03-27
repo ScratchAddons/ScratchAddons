@@ -5,7 +5,8 @@ import Cast from "./cast.js";
  * @property  {string} name - Name of the rule.
  * @property  {string} id - ID of the rule
  * @property  {string} description - Description of the rule.
- * @property  {boolean|null} [enabled=false] - Enables the rule when created. It's `false` by default.
+ * @property  {"notice"|"warn"|"error"} level - Error level of the rule.
+ * @property  {boolean|null} enabled - Enables the rule when created. It's `false` by default.
  */
 
 /**
@@ -30,8 +31,11 @@ const uid = function () {
   return id.join("");
 };
 
+/**Utilities for the formatter. */
 export default class FormatterUtils {
+  /**@type {Rule[]} Rule Options. */
   #ruleOptions;
+  formatErrors;
 
   constructor(vm, customRules, addonSettings, addonID) {
     this.vm = vm;
@@ -43,10 +47,12 @@ export default class FormatterUtils {
 
     this.ignoredItems = new Set();
     this.storage = null;
+    this.formatErrors = [];
 
     this.#ruleOptions = this.createRuleRegistry(
       {
         name: "Griffpatch Style",
+        level: "error",
         id: "griffpatch-style",
         description:
           "Makes your projects look more like griffpatch's projects.\nExamples include UPPERCASE global variables/lists and vice-versa, Sprite names must be in Title Case, costumes and sound names must be in lowercase and avoid spaces (Excluding the Stage).",
@@ -55,12 +61,14 @@ export default class FormatterUtils {
       { name: "Test", id: "test", description: "Test", enabled: true },
       {
         name: "Special Starter Characters for Local Variables",
+        level: "error",
         id: "local-var-startswith-special-char",
         description: "Forces local variables to start with a special character (~, _, -).",
         enabled: false,
       },
       {
         name: "Avoid Capitalized Custom Blocks",
+        level: "error",
         id: "custom-block-no-capitalized",
         description: "Makes sure that custom blocks aren't capitalized.",
         enabled: false,
@@ -72,6 +80,7 @@ export default class FormatterUtils {
           name: uid(),
           id: uid(),
           description: uid(),
+          level: "notice",
           enabled: false,
         }))
     );
@@ -85,9 +94,7 @@ export default class FormatterUtils {
     let ruleRegistry = new Set();
 
     for (const rule of rules) {
-      if (rule?.enabled) {
-        rule.enabled = this.setRuleEnabled(rule.enabled, rule.id);
-      } else {
+      if (rule?.enabled === null || rule?.enabled === undefined) {
         rule.enabled = false;
       }
       ruleRegistry.add(JSON.stringify(rule));
@@ -100,26 +107,15 @@ export default class FormatterUtils {
     this.storage = JSON.parse(localStorage.getItem("sa-formatter-settings"));
     if (this.storage) {
       this.ignoredItems = new Set(this.storage.ignoredItems);
-      this.#ruleOptions = this.storage.map((rule) => {
+      this.#ruleOptions = this.storage.ruleOptions.map((rule) => {
         return {
           name: rule.name,
           id: rule.id,
           description: rule.description,
-          enabled: this.addonSettings.get("formatter-settings-to-menu")
-            ? rule.enabled
-            : this.addonSettings.get(rule.id),
+          enabled: rule.enabled,
         };
       });
     }
-  }
-
-  /**Toggles a rule if the "formatter settings in menu" addon setting is disabled. Otherwise, it will fallback to the addon setting.
-   * @param {boolean} expectedOutput - The expected output to set.
-   * @param {string} ruleID - The setting ID of the rule.
-   */
-  setRuleEnabled(expectedOutput, ruleID) {
-    console.log(this.addonSettings.get("formatter-settings-to-menu") ? expectedOutput : ruleID);
-    return this.addonSettings.get("formatter-settings-to-menu") ? expectedOutput : this.addonSettings.get(ruleID);
   }
 
   generateConfig() {
@@ -132,6 +128,20 @@ export default class FormatterUtils {
 
   saveToStorage() {
     localStorage.setItem("sa-formatter-settings", this.generateConfig());
+  }
+
+  getRuleByID(id) {
+    try {
+      return this.#ruleOptions.find((rule) => rule.id === id);
+    } catch {
+      return null;
+    }
+  }
+
+  logToDebugger(msg, thread, level) {
+    if (this.addonSettings.get("debugger-support")) {
+      return msg, thread, level === "notice" ? "log" : level;
+    }
   }
 
   /**Get all rules. */
@@ -194,7 +204,7 @@ export default class FormatterUtils {
     return result;
   }
   getCustomBlocks() {
-    const targets = runtime.targets;
+    const targets = this.runtime.targets;
     const customBlocks = [];
 
     for (const target of targets) {
@@ -213,8 +223,8 @@ export default class FormatterUtils {
     return customBlocks.length > 0 ? customBlocks : [];
   }
   getVariables() {
-    const stage = runtime.getTargetForStage();
-    const targets = runtime.targets;
+    const stage = this.runtime.getTargetForStage();
+    const targets = this.runtime.targets;
 
     const globalVars = Object.values(stage.variables)
       .filter((v) => v.type !== "list")
@@ -225,10 +235,7 @@ export default class FormatterUtils {
       .map((v) => Object.values(v))
       .map((v) =>
         // prettier-ignore
-        v.filter(
-            (v) =>
-              v.type !== "list" && !globalVars.map((obj) => obj.text).includes(v.name)
-          ).map((v) => ({ text: v.name, value: v.id }))
+        v.filter((v) => v.type !== "list" && !globalVars.map((obj) => obj.text).includes(v.name)).map((v) => ({ text: v.name, value: v.id }))
       )
       .flat(1);
 
@@ -268,25 +275,19 @@ export default class FormatterUtils {
     return lists;
   }
 
-  checkFormatRule(rule, val, type, opts = {}) {
+  checkFormatRule(ruleID, val, type, { isGlobal = false }) {
+    const rule = this.getRuleByID(ruleID);
+
     if (ignoreList.has(val.value)) return;
-    if (rules[rule].enabled) {
-      let str = Cast.toString(rules[rule].regex);
-      if (str.startsWith("if")) {
-        str = this.getLogic(str, opts);
-      }
-
-      const regex = new RegExp(str.split("/")[1], str.split("/")[2]);
-      regex.lastIndex = 0;
-
-      switch (rule) {
-        case "griffpatchStyle": {
+    if (rule.enabled) {
+      switch (rule.id) {
+        case "griffpatch-style": {
           // prettier-ignore
-          const isValidName = Cast.toBoolean(opts.isGlobal) ? val.text === val.text.toUpperCase() : val.text === val.text.toLowerCase()
+          const isValidName = isGlobal ? val.text === val.text.toUpperCase() : val.text === val.text.toLowerCase()
           if (!isValidName) {
             this.formatErrors.push({
               type: type,
-              level: rules[rule].level,
+              level: rule.level,
               subject: val.text,
               msg: Scratch.translate(
                 Cast.toString(rules[rule].msg).replace(/\{([^}]+)\}/g, (e) => {

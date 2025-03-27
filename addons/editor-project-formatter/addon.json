@@ -10,107 +10,83 @@
     "dynamicDisable": false,
     "settings": [
         {
-            "name": "@addtosettingsmenu.svg Add Formatter Options to Editor",
-            "description": "Adds the formatter options to the settings menu instead of the addon settings.",
-            "id": "formatter-settings-to-menu",
+            "name": "@addtosettingsmenu.svg Custom Rules to Settings Menu",
+            "description": "Adds the Custom Rules to the settings menu instead of the addon settings.",
+            "id": "custom-rules-to-menu",
             "type": "boolean",
             "default": true
         },
         {
-          "name": "Griffpatch Style",
-          "description": "Makes your projects look more like griffpatch's projects.\nExamples include UPPERCASE global variables/lists and vice-versa, Sprite names must be in Title Case, costumes and sound names must be in lowercase and avoid spaces (Excluding the Stage).",
-          "id": "griffpatch-style",
-          "type": "boolean",
-          "default": true,
-          "if": {
-              "settings": { "formatter-settings-to-menu": false }
-          }
-      },
-      {
-          "name": "Test",
-          "description": "Test",
-          "id": "test",
-          "type": "boolean",
-          "default": true,
-          "if": {
-              "settings": { "formatter-settings-to-menu": false }
-          }
-      },
-      {
-          "name": "Special Starter Characters for Local Variables",
-          "description": "Forces local variables to start with a special character (~, _, -).",
-          "id": "local-var-startswith-special-char",
-          "type": "boolean",
-          "default": false,
-          "if": {
-              "settings": { "formatter-settings-to-menu": false }
-          }
-      },
-      {
-        "name": "Custom Rules",
-        "id": "custom-rules",
-        "type": "table",
-        "default": [
-          {
-            "name": "My Rule",
-            "enabled": false,
-            "logic": "if <subject.isUppercase>",
-            "level": "error",
-            "msg": "{val} is not {val.case}",
-            "format-logic": "subject.toUppercase.toCamelCase.formatRegex(/huh/)"
-          }
-        ],
-        "row": [
-          {
-            "name": "Rule Name",
-            "id": "name",
-            "type": "string",
-            "default": "My Rule"
-          },
-          {
-            "name": "Enabled",
-            "id": "enabled",
-            "type": "boolean",
-            "default": false
-          },
-          {
-            "name": "Rule Logic",
-            "id": "logic",
-            "type": "string",
-            "default": "/regex whee/"
-          },
-          {
-            "name": "Message",
-            "id": "msg",
-            "type": "string",
-            "default": "{val} is not {val.case}"
-          },
-          {
-            "name": "Formatting Logic",
-            "id": "format-logic",
-            "type": "string",
-            "default": "subject.toUppercase"
-          },
-          {
-            "name": "Rule Level",
-            "id": "level",
-            "type": "select",
-            "potentialValues": [
-              {
-                "name": "Error",
-                "id": "error"
-              },
-              {
-                "name": "Warning",
-                "id": "warn"
-              }
-            ],
-            "default": "error"
+          "name": "Custom Rules",
+          "id": "custom-rules",
+          "type": "table",
+          "default": [
+            {
+              "name": "My Rule",
+              "enabled": false,
+              "logic": "if <subject.isUppercase>",
+              "level": "error",
+              "msg": "{val} is not {val.case}",
+              "format-logic": "subject.toUppercase.toCamelCase.formatRegex(/huh/)"
+            }
+          ],
+          "row": [
+            {
+              "name": "Rule Name",
+              "id": "name",
+              "type": "string",
+              "default": "My Rule"
+            },
+            {
+              "name": "Enabled",
+              "id": "enabled",
+              "type": "boolean",
+              "default": false
+            },
+            {
+              "name": "Rule Logic",
+              "id": "logic",
+              "type": "string",
+              "default": "/regex whee/"
+            },
+            {
+              "name": "Message",
+              "id": "msg",
+              "type": "string",
+              "default": "{val} is not {val.case}"
+            },
+            {
+              "name": "Formatting Logic",
+              "id": "format-logic",
+              "type": "string",
+              "default": "subject.toUppercase"
+            },
+            {
+              "name": "Rule Level",
+              "id": "level",
+              "type": "select",
+              "potentialValues": [
+                {
+                  "name": "Error",
+                  "id": "error"
+                },
+                {
+                  "name": "Warning",
+                  "id": "warn"
+                }
+              ],
+              "default": "error"
 
-          }
-        ],
+            }
+          ]
+      },
+      {
+        "name": "Log to Debugger",
+        "id": "debugger-support",
+        "type": "boolean",
+        "default": true,
         "if": {
-            "settings": { "formatter-settings-to-menu": false }
+          "addonEnabled": ["debugger"]
         }
       }
     ],

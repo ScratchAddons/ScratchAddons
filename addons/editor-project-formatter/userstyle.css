@@ -1,5 +1,5 @@
 .sa-editor-formatter-options-icon {
-    filter: var(--editorDarkMode-menuBar-filter);
+    filter: var(--editorDarkMode-menuBar-filter, none);
 }
 
 /*Based of TurboWarp*/
@@ -10,8 +10,8 @@
     max-width: 100%;
     min-width: 100%;
     padding: 0.25rem;
-    border: 1px solid var(--editorDarkMode-border);
-    background-color: var(--editorDarkMode-input);
+    border: 1px solid var(--editorDarkMode-border, #00000026);
+    background-color: inherit;
     border-radius: 0.25rem;
     font-size: 0.875rem;
     font-family: monospace;
