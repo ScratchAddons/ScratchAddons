@@ -211,6 +211,8 @@ export default class EditorFormatter {
               callback: () => this.console.log("hello world!"),
             })
           );
+        } else {
+          this.console.log(block);
         }
         return items;
       },
@@ -464,8 +466,6 @@ export default class EditorFormatter {
           reduxCondition: (state) => state.scratchGui.menus.settingsMenu,
         }
       );
-
-      formatterOptions.style.display = this.addon.settings.get("formatter-settings-to-menu") ? "block" : "none";
 
       if (!settingsMenu.closest('div[class*="menu_submenu_"]')) settingsMenu.append(formatterOptions);
     }

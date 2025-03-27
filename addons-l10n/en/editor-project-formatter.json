@@ -1,6 +1,8 @@
 {
     "editor-project-formatter/format-warn": "(⚠️ warning) \"{type}\" [{subject}]: {err-msg}",
     "editor-project-formatter/format-error": "(❌ error) \"{type}\" [{subject}]: {err-msg}",
+    "editor-project-formatter/format-notice": "(ℹ️ notice) \"{type}\" [{subject}]: {err-msg}",
+
 
     "editor-project-formatter/check-formatting": "Check Project Formatting",
     "editor-project-formatter/check-formatting-sprite": "check formatting in sprite",
