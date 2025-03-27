@@ -85,8 +85,8 @@ let fuse;
         forceEnglishSettingInitial: null,
         moreSettingsOpen: false,
         relatedAddonsOpen: false,
-        relatedAddons: [],
         relatedToAddonName: null,
+        relatedAddons: [],
         relatedAddonsHistory: [],
         categoryOpen: true,
         loaded: false,
@@ -187,16 +187,16 @@ let fuse;
       },
       openRelatedAddons(addonManifest, log = true) {
         this.relatedToAddonName = addonManifest.name;
+        this.relatedAddons.length = 0;
         if (this.relatedAddonsHistory.length === 0) {
           this.previousCategory = this.selectedCategory;
           this.selectedCategory = "all";
+          this.relatedAddonsOpen = true;
         }
         if (log) this.relatedAddonsHistory.push(addonManifest);
-        this.relatedAddons.length = 0;
         for (const relatedManifest of addonManifest._relatedAddons) {
           this.relatedAddons.push(relatedManifest);
         }
-        this.relatedAddonsOpen = true;
       },
       backRelatedAddon() {
         const addon = this.relatedAddonsHistory.pop();
@@ -206,12 +206,19 @@ let fuse;
         } else {
           this.openRelatedAddons(this.relatedAddonsHistory.at(-1), false);
         }
+        this.blinkAddon(addon._addonId);
+      },
+      blinkAddon(addonId) {
         setTimeout(() => {
-            const addonElem = document.querySelector(`.addons-container #addon-${addon._addonId}`);
-            addonElem.scrollIntoView({ behavior: "smooth" });
-            addonElem.classList.add("addon-blink");
-            setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
-          }, 0);
+          const addonElem = document.getElementById("addon-" + addonId);
+          if (!addonElem) return;
+          addonElem.scrollIntoView();
+          // Browsers sometimes ignore :target for the elements dynamically appended.
+          // Use CSS class to initiate the blink animation.
+          addonElem.classList.add("addon-blink");
+          // 2s (animation length) + 1ms
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -647,16 +654,7 @@ let fuse;
 
         const addon = vue.manifestsById[addonId];
         vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-        setTimeout(() => {
-          const addonElem = document.getElementById("addon-" + addonId);
-          if (!addonElem) return;
-          addonElem.scrollIntoView();
-          // Browsers sometimes ignore :target for the elements dynamically appended.
-          // Use CSS class to initiate the blink animation.
-          addonElem.classList.add("addon-blink");
-          // 2s (animation length) + 1ms
-          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
-        }, 0);
+        this.blinkAddon(addonId);
       }
     }, 0);
 
