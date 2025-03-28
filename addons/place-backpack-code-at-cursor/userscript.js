@@ -22,8 +22,11 @@ export default async function ({ addon, console }) {
     const BLOCKS_DEFAULT_SCALE = 0.675; // would be better if we could get this from lib/layout-constants.js
     const { targets } = redux.state.scratchGui.workspaceMetrics;
     const { isRtl } = redux.state.locales;
-    const { left, right } = workspace.scrollbar.hScroll.outerSvg_.getBoundingClientRect();
-    const { top } = workspace.scrollbar.vScroll.outerSvg_.getBoundingClientRect();
+    const { hScroll, vScroll } = workspace.scrollbar;
+    const hScrollSvg = hScroll.outerSvg || hScroll.outerSvg_; // new Blockly || old Blockly
+    const vScrollSvg = vScroll.outerSvg || vScroll.outerSvg_;
+    const { left, right } = hScrollSvg.getBoundingClientRect();
+    const { top } = vScrollSvg.getBoundingClientRect();
 
     const insideWorkspace = isRtl ? mouseX > left : mouseX < right;
     const topBlock = blocks.find((block) => block.topLevel);
