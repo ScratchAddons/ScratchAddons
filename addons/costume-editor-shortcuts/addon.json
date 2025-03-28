@@ -15,5 +15,10 @@
   ],
   "versionAdded": "1.41.0",
   "tags": ["editor", "costumeEditor", "recommended"],
+  "latestUpdate": {
+    "version": "1.42.0",
+    "isMajor": true,
+    "temporaryNotice": "The bug where shortcuts were still triggered while holding the Ctrl key was fixed."
+  },
   "enabledByDefault": false
 }
