@@ -11,7 +11,7 @@
     "settings": [
         {
             "name": "@addtosettingsmenu.svg Custom Rules to Settings Menu",
-            "description": "Adds the Custom Rules to the settings menu instead of the addon settings.",
+            "description": "Adds Custom Rules to the \"settings\" menu instead of the addon settings.",
             "id": "custom-rules-to-menu",
             "type": "boolean",
             "default": true
