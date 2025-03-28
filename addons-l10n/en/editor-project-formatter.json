@@ -17,9 +17,9 @@
     "editor-project-formatter/ignore-sprite": "ignore {type}",
     "editor-project-formatter/ignore": "ignore this {type}",
 
-    "editor-project-formatter/unignore-block": "Remark {type} back to formater",
-    "editor-project-formatter/unignore-sprite": "remark {type} back to formater",
-    "editor-project-formatter/unignore": "remark this {type} back to formater",
+    "editor-project-formatter/unignore-block": "Remark {type} back to formatter",
+    "editor-project-formatter/unignore-sprite": "remark {type} back to formatter",
+    "editor-project-formatter/unignore": "remark this {type} back to formatter",
 
     "editor-project-formatter/reset-ignore-list": "Reset ignored items list",
 

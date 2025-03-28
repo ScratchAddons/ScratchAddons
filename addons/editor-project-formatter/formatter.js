@@ -58,7 +58,7 @@ export default class EditorFormatter {
       return SB.getMainWorkspace();
     });
 
-    this.formatterUtils = new FormatterUtils(this.vm, this.addon.settings.get("custom-rules"), this.addon.settings);
+    this.formatterUtils = new FormatterUtils(this.vm, this.addon, this.console);
     this.formatConfirm = false;
   }
 
@@ -218,21 +218,47 @@ export default class EditorFormatter {
       },
       { blocks: true, flyout: true }
     );
-    this.addon.tab.createEditorContextMenu(
-      (ctx) => {
-        const target = this.vm.editingTarget;
-        const chosenSpriteObject = target.sprite[`${ctx.type}s`].find((val) => val.name === ctx.name.realName);
-        const ID = chosenSpriteObject.assetId;
-      },
-      {
-        className: "saIgnore",
-        types: ["costume", "sound"],
-        position: "assetContextMenuAfterExport",
-        order: 0,
-        border: true,
-        label: "undefined",
+    this.addon.tab.createEditorContextMenu((ctxType, ctx) => {
+      const target = this.vm.editingTarget;
+
+      this.console.log(ctx);
+
+      let ctxID;
+
+      if (ctx.name?.folder) {
+        ctxID = `${target.id}_${ctxType}_${ctx.name.folder}`;
+        ctxType = "folder";
+      } else {
+        const chosenSpriteCtx = target.sprite[`${ctxType}s`].find((val) => val.name === ctx.name.realName);
+        ctxID = chosenSpriteCtx.assetId;
       }
-    );
+
+      return [
+        {
+          className: "sa-ignore",
+          types: ["costume", "sound"],
+          position: ctx.name.folder ? "assetContextMenuAfterDelete" : "assetContextMenuAfterExport",
+          order: 13,
+          border: true,
+          callback: () => {
+            this.formatterUtils.ignoredItems.add(ctxID);
+            this.console.log(this.formatterUtils.ignoredItems);
+          },
+          label: this.m("ignore", { type: ctxType }),
+        },
+        {
+          className: "sa-unignore",
+          types: ["costume", "sound"],
+          position: ctx.name.folder ? "assetContextMenuAfterDelete" : "assetContextMenuAfterExport",
+          order: 14,
+          callback: () => {
+            this.formatterUtils.ignoredItems.delete(ctxID);
+            this.console.log(this.formatterUtils.ignoredItems);
+          },
+          label: this.m("unignore", { type: ctxType }),
+        },
+      ];
+    });
   }
   /**Creates a format message.
    * @param {"warn"|"error"} level - The message level
