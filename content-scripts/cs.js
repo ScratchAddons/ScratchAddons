@@ -625,7 +625,7 @@ const showBanner = () => {
   });
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=oRo0tMWEpiA",
+    href: "https://www.youtube.com/watch?v=vuL5lV0l3fY",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
