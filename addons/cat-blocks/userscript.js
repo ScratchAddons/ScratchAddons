@@ -4,8 +4,11 @@
  */
 
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+import { isScratchAprilFools25 } from "../hide-flyout/april-fools.js";
 
 export default async function ({ addon, console }) {
+  if (await isScratchAprilFools25(addon.tab.redux)) return;
+
   const Blockly = await addon.tab.traps.getBlockly();
 
   const shouldWatchMouseCursor = addon.settings.get("watch");
