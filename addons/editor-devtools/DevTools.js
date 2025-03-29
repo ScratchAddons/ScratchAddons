@@ -8,6 +8,9 @@ export default class DevTools {
     this.addon = addon;
     this.msg = msg;
     this.m = m;
+    /**
+     * @type {VirtualMachine}
+     */
     this.domHelpers = new DomHelpers(addon);
 
     this.codeTab = null;
@@ -34,7 +37,6 @@ export default class DevTools {
       this.initInner(root);
     }
   }
-
   async addContextMenus() {
     const blockly = await this.addon.tab.traps.getBlockly();
 
@@ -361,7 +363,6 @@ export default class DevTools {
           if (blockOnly === 2) {
             UndoGroup.startUndoGroup(wksp);
             block.dispose(true);
-            // We have been CHANGED!!! - Happens when going to project page, and then back inside again!!!
             UndoGroup.endUndoGroup(wksp);
           }
         }, 0);
