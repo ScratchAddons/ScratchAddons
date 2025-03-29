@@ -286,7 +286,7 @@ export default class DevTools {
 
   eventKeyDown(e) {
     const switchCostume = (up) => {
-      // todo: select previous costume/keyCode
+      // todo: select previous costume
       let selected = this.costTabBody.querySelector("div[class*='sprite-selector-item_is-selected']");
       let node = up ? selected.parentNode.previousSibling : selected.parentNode.nextSibling;
       if (node) {
@@ -350,7 +350,7 @@ export default class DevTools {
       block.select();
       let next = blockOnly ? block.getNextBlock() : null;
       if (next) {
-        next.unplug(false);
+        next.unplug(false); // setParent(null);
       }
 
       // separate child temporarily
