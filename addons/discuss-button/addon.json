@@ -87,6 +87,10 @@
         {
           "name": "Wiki",
           "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
+        },
+        {
+          "name": "Scratch Addons settings",
+          "values": { "name": "Addons", "url": "/scratch-addons-extension/settings/" }
         }
       ]
     },
