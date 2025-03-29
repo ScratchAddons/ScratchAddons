@@ -473,6 +473,7 @@ export default class EditorFormatter {
   /**Initialize the editor formatter. */
   async init() {
     this.addContextMenus();
+    this.formatterUtils.init();
 
     const formatterOptions = this.craftMenuOption("Formatter Options", {
       callback: (e) => {

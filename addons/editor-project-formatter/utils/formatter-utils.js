@@ -29,6 +29,8 @@ import Cast from "../utils/cast.js";
  * @property {?OptionValues[]} values - Available values to select. Only use with "select".
  */
 
+const DEFAULT_COMMENT_SIZE = 200;
+
 /**Checks if the block belongs to the "Debugger" category. */
 function isDebuggerBlock(block) {
   const DEBUGGER_BLOCKS = [
@@ -39,7 +41,7 @@ function isDebuggerBlock(block) {
   ];
 
   try {
-    const proccode = block?.getProcCode() ?? block.proccode;
+    const proccode = block?.getProcCode() ?? block.mutation.proccode;
 
     return DEBUGGER_BLOCKS.includes(proccode);
   } catch {
@@ -131,18 +133,28 @@ export default class FormatterUtils {
         id: "custom-block-no-capitalized",
         description: "Makes sure that custom blocks aren't capitalized.",
         enabled: false,
-      },
-      // Create Multiple Test Rules
-      ...Array(20)
-        .fill()
-        .map(() => ({
-          name: uid(),
-          id: uid(),
-          description: uid(),
-          level: "notice",
-          enabled: false,
-        }))
+      }
     );
+  }
+
+  init() {
+    this.runtime.on("PROJECT_LOADED", () => {
+      this.console.log("project was loaded");
+      this.loadConfigFromComment();
+    });
+
+    this.addon.tab.redux.initialize();
+
+    this.addon.tab.redux.addEventListener("statechanged", (action) => {
+      const savingStates = ["MANUAL_UPDATING", "AUTO_UPDATING", "UPDATING_BEFORE_COPY", "UPDATING_BEFORE_NEW"];
+
+      const { loadingState } = action.detail.next.scratchGui.projectState;
+      if (loadingState) {
+        if (savingStates.includes(loadingState)) {
+          setTimeout(() => this.saveConfigToProject(), 100);
+        }
+      }
+    });
   }
 
   /** Creates a new rule registry.
@@ -162,12 +174,66 @@ export default class FormatterUtils {
     return [...ruleRegistry].map((v) => JSON.parse(v));
   }
 
-  loadStorage() {
-    this.storage = JSON.parse(localStorage.getItem("sa-formatter-settings"));
+  loadConfigFromComment() {
+    const comment = this.findConfigCommentInStage();
+    if (comment) {
+      this.console.log(comment.text);
+      this.loadConfig(comment.text);
+    }
+  }
+
+  loadConfig(config) {
+    const match = config.match(/formatter-config:\/\/(.*?)\/\/:formatter-config/);
+    config = match ? JSON.parse(match[1]) : null;
+
+    this.console.log(match);
+
+    this.storage = JSON.parse(config);
     if (this.storage) {
       this.ignoredItems = new Set(this.storage.ignoredItems);
       this.#ruleOptions = this.storage.ruleOptions;
       this.customRules = this.storage.customRules;
+    }
+  }
+
+  findConfigCommentInStage() {
+    const stage = this.runtime.getTargetForStage();
+
+    for (const comment of Object.values(stage.comments)) {
+      if (/formatter-config:\/\/.+\/\/:formatter-config/.test(comment.text)) {
+        return comment;
+      }
+    }
+
+    return null;
+  }
+
+  /**Saves the formatter configuration into a comment. */
+  saveConfigToProject() {
+    const stage = this.runtime.getTargetForStage();
+    const comment = this.findConfigCommentInStage();
+    if (!comment) {
+      stage.createComment(
+        uid(),
+        null,
+        `Project Formatter Configuration.\n\nYou can move, resize and minimize this comment, but don't edit it by hand unless you actually know what you're doing.\nThis comment can be deleted to reset the formatter config.\nformatter-config://${JSON.stringify(
+          this.generateConfig()
+        )}//:formatter-config`,
+        50,
+        50,
+        DEFAULT_COMMENT_SIZE,
+        DEFAULT_COMMENT_SIZE,
+        true
+      );
+    } else {
+      comment.text = `Project Formatter Configuration.\n\nYou can move, resize and minimize this comment, but don't edit it by hand unless you actually know what you're doing.\nThis comment can be deleted to reset the formatter config.\nformatter-config://${JSON.stringify(
+        this.generateConfig()
+      )}//:formatter-config`;
+    }
+
+    this.runtime.emitProjectChanged();
+    if (this.vm.editingTarget.isStage) {
+      this.vm.emitWorkspaceUpdate();
     }
   }
 
@@ -177,10 +243,6 @@ export default class FormatterUtils {
       customRules: this.customRules,
       ignoredItems: [...this.ignoredItems],
     });
-  }
-
-  saveToStorage() {
-    localStorage.setItem("sa-formatter-settings", this.generateConfig());
   }
 
   getRuleByID(id) {
@@ -262,13 +324,15 @@ export default class FormatterUtils {
 
     for (const target of targets) {
       const blocks = target.blocks._blocks;
-      for (const blockId in blocks) {
-        const block = blocks[blockId];
-        if (block.opcode === "procedures_call" && !isDebuggerBlock(block)) {
-          customBlocks.push({
-            text: this.formatCustomBlock(block),
-            value: block.id,
-          });
+      if (blocks) {
+        for (const blockId in blocks) {
+          const block = blocks[blockId];
+          if (block.opcode === "procedures_call" && !isDebuggerBlock(block)) {
+            customBlocks.push({
+              name: this.formatCustomBlock(block),
+              id: block.id,
+            });
+          }
         }
       }
     }
@@ -301,8 +365,8 @@ export default class FormatterUtils {
   }
 
   getLists() {
-    const stage = runtime.getTargetForStage();
-    const targets = runtime.targets;
+    const stage = this.runtime.getTargetForStage();
+    const targets = this.runtime.targets;
 
     const globalLists = Object.values(stage.variables)
       .filter((v) => v.type === "list")
@@ -370,8 +434,8 @@ export default class FormatterUtils {
    * @param {object} opts Optional options.
    */
   _formatVariable(rule, targetVariable, isList, { isGlobal = false }) {
-    const targets = runtime.targets;
-    const stage = runtime.getTargetForStage();
+    const targets = this.runtime.targets;
+    const stage = this.runtime.getTargetForStage();
     if (isGlobal) {
       for (const variable of Object.values(stage.variables)) {
         if (variable.id === targetVariable.id)
@@ -445,14 +509,17 @@ export default class FormatterUtils {
     }
   }
 
-  formatRule(rule, val, valID, { isGlobal = false }) {
+  formatRule(ruleID, val, valID, { isGlobal = false }) {
+    const rule = this.getRuleByID(ruleID);
+
     if (ignoreList.has(valID)) return val;
+
     if (rules[rule].enabled) {
       switch (rule) {
         case "griffpatch-style": {
           return isGlobal ? val.toUpperCase() : val.toLowerCase();
         }
-        case "camelCaseOnly":
+        case "camel-case-only":
           // prettier-ignore
           return val.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => chr.toUpperCase());
         case "customNoCapitalized":
@@ -461,28 +528,6 @@ export default class FormatterUtils {
       }
     } else {
       return val;
-    }
-  }
-
-  checkCustomFormatRules(val, type) {
-    if (ignoreList.has(val.id)) return;
-    for (const rule in customRules) {
-      if (
-        (customRules[rule].enabled && customRules[rule].scopes.includes(type)) ||
-        customRules[rule].scopes.includes("all")
-      ) {
-        let str = Cast.toString(rules[rule].regex);
-
-        const regex = new RegExp(str.split("/")[1], str.split("/")[2]);
-        if (!regex.test(val.text)) {
-          this.formatErrors.push({
-            type: type,
-            level: customRules[rule].level,
-            subject: val.text,
-            msg: Scratch.translate(Cast.toString(rules[rule].msg).replace(/\{([^}]+)\}/g, val)),
-          });
-        }
-      }
     }
   }
 
@@ -574,7 +619,6 @@ export default class FormatterUtils {
   }
 
   checkFormatting() {
-    if (!isEditor) return;
     this.formatErrors = [];
 
     this._checkSpriteFormatting();
@@ -585,25 +629,12 @@ export default class FormatterUtils {
     return this.formatErrors;
   }
 
-  formatProject(util) {
+  formatProject() {
     if (!isEditor) return;
     // prettier-ignore
-    if (confirm("!~~~WARNING~~~! \n\n This will format the entire project according to the enabled rules. \n\n This process is irreversible and might break the entire project. \n Do you want to proceed?")){
-      console.log("formatting project...")
-      this._formatVariables(util)
-      this._formatLists(util)
-      console.info("formatting completed")
-    }
-
-    this._formatVariables(util);
-    this._formatLists(util);
-  }
-
-  checkFormatttingBlock() {
-    this.formatErrors = [];
-
-    this._checkSpriteFormatting();
-    this._checkVariableFormatting();
-    this._checkCustomBlockFormatting();
+    console.log("formatting project...")
+    this._formatVariables();
+    this._formatLists();
+    console.info("formatting completed");
   }
 }

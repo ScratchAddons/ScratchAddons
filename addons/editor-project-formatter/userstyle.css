@@ -151,7 +151,7 @@
     width: 16px;
     left: 2px;
     bottom: 4px;
-    background-color: var(--editorDarkMode-selector2-text);
+    background-color: var(--editorDarkMode-selector2-text,#575e75 );
     transition: .2s;
     border-radius: 50%;
 }

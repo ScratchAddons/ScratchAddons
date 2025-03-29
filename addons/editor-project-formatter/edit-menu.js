@@ -1,7 +1,6 @@
 import EditorFormatter from "./formatter.js";
 
 export default async function ({ addon, console, msg, safeMsg: m }) {
-  console.log("hello world!");
   const editorFormatter = new EditorFormatter(addon, console, msg, m);
 
   function closeMenu(menu, reduxHandler) {
@@ -20,7 +19,7 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
   });
 
   const formatProjectMenu = editorFormatter.craftMenuOption(m("format-project"), {
-    callback: (e) => {
+    callback: () => {
       editorFormatter.format();
       closeMenu("editMenu", addon.tab.redux);
     },
