@@ -238,6 +238,10 @@ export default class DevTools {
     UndoGroup.endUndoGroup(wksp);
   }
 
+  /**
+   * Returns a Set of the top blocks in this workspace / sprite
+   * @returns {Set<any>} Set of top blocks
+   */
   getTopBlockIDs() {
     let wksp = this.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
@@ -248,6 +252,12 @@ export default class DevTools {
     return ids;
   }
 
+  /**
+   * Initiates a drag event for all block stacks except those in the set of ids.
+   * But why? - Because we know all the ids of the existing stacks before we paste / duplicate - so we can find the
+   * new stack by excluding all the known ones.
+   * @param ids Set of previously known ids
+   */
   beginDragOfNewBlocksNotInIDs(ids) {
     if (!this.addon.settings.get("enablePasteBlocksAtMouse")) {
       return;
@@ -256,6 +266,7 @@ export default class DevTools {
     let topBlocks = wksp.getTopBlocks();
     for (const block of topBlocks) {
       if (!ids.has(block.id)) {
+        // todo: move the block to the mouse pointer?
         let mouseXYClone = { x: this.mouseXY.x, y: this.mouseXY.y };
         this.domHelpers.triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
       }
@@ -273,6 +284,7 @@ export default class DevTools {
 
   eventKeyDown(e) {
     const switchCostume = (up) => {
+      // todo: select previous costume/keyCode
       let selected = this.costTabBody.querySelector("div[class*='sprite-selector-item_is-selected']");
       let node = up ? selected.parentNode.previousSibling : selected.parentNode.nextSibling;
       if (node) {
@@ -320,6 +332,8 @@ export default class DevTools {
     }
 
     if (e.keyCode === 86 && ctrlKey && !e.griff) {
+      // Ctrl + V
+      // Set a timeout so we can take control of the paste after the event
       let ids = this.getTopBlockIDs();
       setTimeout(() => {
         this.beginDragOfNewBlocksNotInIDs(ids);
@@ -337,15 +351,17 @@ export default class DevTools {
         next.unplug(false);
       }
 
+      // separate child temporarily
       document.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
       if (next || blockOnly === 2) {
         setTimeout(() => {
           if (next) {
-            wksp.undo();
+            wksp.undo(); // undo the unplug above...
           }
           if (blockOnly === 2) {
             UndoGroup.startUndoGroup(wksp);
             block.dispose(true);
+            // We have been CHANGED!!! - Happens when going to project page, and then back inside again!!!
             UndoGroup.endUndoGroup(wksp);
           }
         }, 0);
@@ -365,6 +381,7 @@ export default class DevTools {
     let guiTabs = root.childNodes;
 
     if (this.codeTab && guiTabs[0] !== this.codeTab) {
+      // We have been CHANGED!!! - Happens when going to project page, and then back inside again!!!
       this.domHelpers.unbindAllEvents();
     }
 
@@ -374,7 +391,7 @@ export default class DevTools {
 
     this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
-    this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true);
+    this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true);  // true to capture all mouse downs 'before' the dom events handle them
     this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
   }
 }
