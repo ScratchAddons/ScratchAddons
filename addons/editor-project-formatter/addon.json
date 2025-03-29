@@ -102,10 +102,7 @@
     ],
     "userstyles": [{
       "url": "userstyle.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "formatter-settings-to-menu": true }
-      }
+      "matches": ["projects"]
     }],
     "info": [
       {

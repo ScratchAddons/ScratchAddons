@@ -1,3 +1,4 @@
+/*eslint-disable*/
 export default class Color {
   /**
    * @typedef {object} RGBObject - An object representing a color in RGB format.
@@ -214,3 +215,4 @@ export default class Color {
     };
   }
 }
+/*eslint-enable*/

@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 import Color from "../utils/color.js";
 
 /**
@@ -233,3 +235,4 @@ export default class Cast {
     return index;
   }
 }
+/*eslint-enable*/
