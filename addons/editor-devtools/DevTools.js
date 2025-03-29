@@ -391,7 +391,7 @@ export default class DevTools {
 
     this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
-    this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true);  // true to capture all mouse downs 'before' the dom events handle them
+    this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them
     this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
   }
 }
