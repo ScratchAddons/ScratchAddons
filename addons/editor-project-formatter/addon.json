@@ -1,122 +1,123 @@
 {
-    "name": "Project Formatter",
-    "description": "Adds an opinionated formatter to your projects for more readability.",
-    "credits": [
-      {
-        "name": "Hammouda101010"
-      }
-    ],
-    "dynamicEnable": false,
-    "dynamicDisable": false,
-    "settings": [
+  "name": "Project Formatter",
+  "description": "Adds an opinionated formatter to your projects for more readability.",
+  "credits": [
+    {
+      "name": "Hammouda101010"
+    }
+  ],
+  "dynamicEnable": false,
+  "dynamicDisable": false,
+  "settings": [
+    {
+      "name": "@addtosettingsmenu.svg Custom Rules to Settings Menu",
+      "description": "Adds Custom Rules to the \"settings\" menu instead of the addon settings.",
+      "id": "custom-rules-to-menu",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Custom Rules",
+      "id": "custom-rules",
+      "type": "table",
+      "default": [
         {
-            "name": "@addtosettingsmenu.svg Custom Rules to Settings Menu",
-            "description": "Adds Custom Rules to the \"settings\" menu instead of the addon settings.",
-            "id": "custom-rules-to-menu",
-            "type": "boolean",
-            "default": true
+          "name": "My Rule",
+          "enabled": false,
+          "logic": "if <subject.isUppercase>",
+          "level": "error",
+          "msg": "{val} is not {val.case}",
+          "format-logic": "subject.toUppercase.toCamelCase.formatRegex(/huh/)"
+        }
+      ],
+      "row": [
+        {
+          "name": "Rule Name",
+          "id": "name",
+          "type": "string",
+          "default": "My Rule"
         },
         {
-          "name": "Custom Rules",
-          "id": "custom-rules",
-          "type": "table",
-          "default": [
+          "name": "Enabled",
+          "id": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "Rule Logic",
+          "id": "logic",
+          "type": "string",
+          "default": "/regex whee/"
+        },
+        {
+          "name": "Message",
+          "id": "msg",
+          "type": "string",
+          "default": "{val} is not {val.case}"
+        },
+        {
+          "name": "Formatting Logic",
+          "id": "format-logic",
+          "type": "string",
+          "default": "subject.toUppercase"
+        },
+        {
+          "name": "Rule Level",
+          "id": "level",
+          "type": "select",
+          "potentialValues": [
             {
-              "name": "My Rule",
-              "enabled": false,
-              "logic": "if <subject.isUppercase>",
-              "level": "error",
-              "msg": "{val} is not {val.case}",
-              "format-logic": "subject.toUppercase.toCamelCase.formatRegex(/huh/)"
+              "name": "Error",
+              "id": "error"
+            },
+            {
+              "name": "Warning",
+              "id": "warn"
             }
           ],
-          "row": [
-            {
-              "name": "Rule Name",
-              "id": "name",
-              "type": "string",
-              "default": "My Rule"
-            },
-            {
-              "name": "Enabled",
-              "id": "enabled",
-              "type": "boolean",
-              "default": false
-            },
-            {
-              "name": "Rule Logic",
-              "id": "logic",
-              "type": "string",
-              "default": "/regex whee/"
-            },
-            {
-              "name": "Message",
-              "id": "msg",
-              "type": "string",
-              "default": "{val} is not {val.case}"
-            },
-            {
-              "name": "Formatting Logic",
-              "id": "format-logic",
-              "type": "string",
-              "default": "subject.toUppercase"
-            },
-            {
-              "name": "Rule Level",
-              "id": "level",
-              "type": "select",
-              "potentialValues": [
-                {
-                  "name": "Error",
-                  "id": "error"
-                },
-                {
-                  "name": "Warning",
-                  "id": "warn"
-                }
-              ],
-              "default": "error"
-
-            }
-          ]
-      },
-      {
-        "name": "Log to Debugger",
-        "id": "debugger-support",
-        "type": "boolean",
-        "default": true,
-        "if": {
-          "addonEnabled": ["debugger"]
+          "default": "error"
         }
+      ]
+    },
+    {
+      "name": "Log to Debugger",
+      "id": "debugger-support",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "addonEnabled": ["debugger"]
       }
-    ],
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["projects"]
-      },
-      {
-        "url": "edit-menu.js",
-        "matches": ["projects"]
-      }
-    ],
-    "userstyles": [{
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "edit-menu.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
       "url": "userstyle.css",
       "matches": ["projects"]
-    }],
-    "info": [
-      {
-        "type": "info",
-        "text": "Fun fact: this addon was originaly supposed to be an extension for TurboWarp.",
-        "id": "projectFormatterFunfact"
-      }
-    ],
-    "libraries": ["scratch-vm", "scratch-gui"],
-    "versionAdded": "1.4.2",
-    "latestUpdate": {
-      "isMajor": true,
-      "version": "1.4.2"
-    },
-    "tags": ["editor", "editorMenuBar", "codeEditor", "costumeEditor", "beta"],
-    "enabledByDefault": false
-  }
+    }
+  ],
+  "info": [
+    {
+      "type": "info",
+      "text": "Fun fact: this addon was originaly supposed to be an extension for TurboWarp.",
+      "id": "projectFormatterFunfact"
+    }
+  ],
+  "libraries": ["scratch-vm", "scratch-gui"],
+  "versionAdded": "1.4.2",
+  "latestUpdate": {
+    "isMajor": true,
+    "version": "1.4.2"
+  },
+  "tags": ["editor", "editorMenuBar", "codeEditor", "costumeEditor", "beta"],
+  "enabledByDefault": false
+}
