@@ -325,9 +325,8 @@ export default class FormatterUtils {
     for (const target of targets) {
       const blocks = target.blocks._blocks;
       if (blocks) {
-        for (const blockId in blocks) {
-          const block = blocks[blockId];
-          if (block.opcode === "procedures_call" && !isDebuggerBlock(block)) {
+        for (const block of blocks) {
+          if (block?.opcode === "procedures_call" && !isDebuggerBlock(block)) {
             customBlocks.push({
               name: this.formatCustomBlock(block),
               id: block.id,
