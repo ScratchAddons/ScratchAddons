@@ -167,7 +167,7 @@ export default class DevTools {
    */
 
   makeSpace(targetBlock) {
-    const wksp = this.getWorkspace()
+    const wksp = this.getWorkspace();
 
     // ensure that all events are grouped together in the undo stack
     UndoGroup.startUndoGroup(wksp);
@@ -277,8 +277,8 @@ export default class DevTools {
     // handle grouping the undo events
     // we set the endUndoGroup to happen after the user has placed the block somewhere
     UndoGroup.startUndoGroup(wksp, true);
-    const onEndDrag = e => {
-      if (e.type === 'endDrag') {
+    const onEndDrag = (e) => {
+      if (e.type === "endDrag") {
         UndoGroup.endUndoGroup(wksp);
         wksp.removeChangeListener(onEndDrag);
       }
