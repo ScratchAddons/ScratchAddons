@@ -8,9 +8,6 @@ export default class DevTools {
     this.addon = addon;
     this.msg = msg;
     this.m = m;
-    /**
-     * @type {VirtualMachine}
-     */
     this.domHelpers = new DomHelpers(addon);
 
     this.codeTab = null;
