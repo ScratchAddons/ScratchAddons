@@ -167,7 +167,12 @@ export default class DevTools {
    */
 
   makeSpace(targetBlock) {
-    const topBlocks = this.getWorkspace().getTopBlocks();
+    const wksp = this.getWorkspace()
+
+    // ensure that all events are grouped together in the undo stack
+    UndoGroup.startUndoGroup(wksp);
+
+    const topBlocks = wksp.getTopBlocks();
     const { pos: tPos, xMax: tXMax } = this.getBlockPosAndXMax(targetBlock);
     const targetRoot = targetBlock.getRootBlock();
     const isRTL = targetBlock.RTL;
@@ -199,6 +204,8 @@ export default class DevTools {
     const shiftX = (isRTL ? -1 : 1) * (maxXShift - minXShift);
     const shiftY = maxYShift - minYShift;
     for (const [block, shldShiftX, shldShiftY] of shouldShift) block.moveBy(shiftX * shldShiftX, shiftY * shldShiftY);
+
+    UndoGroup.endUndoGroup(wksp);
   }
 
   // in non-RTL mode this function returns the top left corner of the block and the right most x value of the stack
@@ -260,15 +267,26 @@ export default class DevTools {
    * new stack by excluding all the known ones.
    * @param ids Set of previously known ids
    */
-  beginDragOfNewBlocksNotInIDs(ids) {
+  async beginDragOfNewBlocksNotInIDs(ids) {
     if (!this.addon.settings.get("enablePasteBlocksAtMouse")) {
       return;
     }
     let wksp = this.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
+
+    // handle grouping the undo events
+    // we set the endUndoGroup to happen after the user has placed the block somewhere
+    UndoGroup.startUndoGroup(wksp, true);
+    const onEndDrag = e => {
+      if (e.type === 'endDrag') {
+        UndoGroup.endUndoGroup(wksp);
+        wksp.removeChangeListener(onEndDrag);
+      }
+    };
+    wksp.addChangeListener(onEndDrag);
+
     for (const block of topBlocks) {
       if (!ids.has(block.id)) {
-        // todo: move the block to the mouse pointer?
         let mouseXYClone = { x: this.mouseXY.x, y: this.mouseXY.y };
         this.domHelpers.triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
       }
