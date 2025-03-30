@@ -188,10 +188,11 @@ export default class FormatterUtils {
 
   loadConfig(config) {
     const match = config.match(/formatter-config:\/\/(.*?)\/\/:formatter-config/);
-    this.console.log("loading config:", config);
     const parsed_config = match[1];
+    this.console.log("loading config:", JSON.parse(parsed_config));
 
     this.storage = parsed_config ? JSON.parse(parsed_config) : null;
+
     if (this.storage) {
       this.ignoredItems = new Set(this.storage.ignoredItems) ?? this.ignoredItems;
       this.#ruleOptions = this.storage.ruleOptions ?? this.#ruleOptions;
@@ -202,7 +203,7 @@ export default class FormatterUtils {
   findConfigCommentInStage() {
     const stage = this.runtime.getTargetForStage();
 
-    if (stage.comments) {
+    if (stage?.comments) {
       for (const comment of Object.values(stage.comments)) {
         if (/formatter-config:\/\/.+\/\/:formatter-config/.test(comment.text)) {
           return comment;

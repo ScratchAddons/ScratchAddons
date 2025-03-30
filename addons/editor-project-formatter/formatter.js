@@ -488,8 +488,7 @@ export default class EditorFormatter {
 
   /**Initialize the editor formatter. */
   async init() {
-    this.addContextMenus();
-    this.formatterUtils.loadConfigFromComment();
+    await this.addContextMenus();
 
     const formatterOptions = this.craftMenuOption("Formatter Options", {
       callback: (e) => {
@@ -499,6 +498,8 @@ export default class EditorFormatter {
       imgSrc: this.formatterOptsImg,
       separator: false,
     });
+
+    this.formatterUtils.loadConfigFromComment();
 
     while (true) {
       const settingsMenu = await this.addon.tab.waitForElement(
