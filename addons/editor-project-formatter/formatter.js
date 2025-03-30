@@ -113,8 +113,6 @@ export default class EditorFormatter {
     // Create the modal content
     modalContainer.append(labelA, issuesTextArea, labelB, buttonRow);
 
-    this.console.log(modal);
-
     modal.content.appendChild(modalContainer);
 
     // Modal style
@@ -357,8 +355,6 @@ export default class EditorFormatter {
      */
     const formatRuleOptions = this.formatterUtils.rules;
 
-    this.console.log(formatRuleOptions);
-
     const ruleContainer = document.createElement("section");
 
     const createDivider = () => {
@@ -417,12 +413,10 @@ export default class EditorFormatter {
     const rulesDiv = document.createElement("div");
     rulesDiv.style.paddingLeft = "1.2rem";
 
-    this.console.log(rulesDiv.style);
-
     formatRuleOptions.forEach((rule) => {
       const ruleDiv = document.createElement("div");
       ruleDiv.id = rule.id;
-      ruleDiv.className = "sa-rule-name";
+      ruleDiv.className = "sa-formatter-options-rule-name";
 
       const ruleName = document.createElement("label");
       ruleName.textContent = `${rule.name}:`;
@@ -435,24 +429,23 @@ export default class EditorFormatter {
       ruleDescription.id = `${rule.id}_description`;
 
       const toggleLabel = document.createElement("label");
-      toggleLabel.className = "sa-toggle-switch";
+      toggleLabel.className = "sa-formatter-options-toggle-switch";
 
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
-      checkbox.className = "sa-toggle-input";
+      checkbox.className = "sa-formatter-options-toggle-input";
       checkbox.checked = rule.enabled;
       checkbox.addEventListener("change", ({ target: checkbox }) => {
         this.formatterUtils.rules = { id: rule.id, enabled: checkbox.checked };
-        this.console.log(this.formatterUtils.rules);
       });
 
       const slider = document.createElement("span");
-      slider.className = "sa-toggle-slider";
+      slider.className = "sa-formatter-options-toggle-slider";
 
       toggleLabel.append(checkbox, slider);
 
       const ruleHeader = document.createElement("div");
-      ruleHeader.className = "rule-header";
+      ruleHeader.className = "sa-formatter-options-rule-header";
 
       const helpButton = createHelpButton(rule.id);
 
@@ -465,6 +458,29 @@ export default class EditorFormatter {
 
     ruleContainer.appendChild(rulesDiv);
 
+    const buttonRow = document.createElement("div");
+    buttonRow.setAttribute(
+      "class",
+      this.addon.tab.scratchClass("prompt_button-row", { others: ["sa-formatter-options-button-row"] })
+    );
+
+    const okButton = document.createElement("button");
+    okButton.setAttribute(
+      "class",
+      this.addon.tab.scratchClass("prompt_ok-button", {
+        others: ["sa-formatter-options-button", "sa-formatter-options-ok-button"],
+      })
+    );
+
+    okButton.textContent = this.m("formatter-config-save");
+    okButton.addEventListener("click", () => {
+      this.formatterUtils.saveConfigToProject();
+      modal.remove();
+    });
+    buttonRow.appendChild(okButton);
+
+    ruleContainer.appendChild(buttonRow);
+
     content.appendChild(ruleContainer);
 
     closeButton.addEventListener("click", () => modal.remove());
@@ -473,7 +489,7 @@ export default class EditorFormatter {
   /**Initialize the editor formatter. */
   async init() {
     this.addContextMenus();
-    this.formatterUtils.init();
+    this.formatterUtils.loadConfigFromComment();
 
     const formatterOptions = this.craftMenuOption("Formatter Options", {
       callback: (e) => {

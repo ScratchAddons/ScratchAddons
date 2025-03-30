@@ -24,5 +24,7 @@
 
   "editor-project-formatter/variable": "variable",
   "editor-project-formatter/list": "list",
-  "editor-project-formatter/proccedure": "custom block"
+  "editor-project-formatter/proccedure": "custom block",
+
+  "editor-project-formatter/formatter-config-save": "Save to Project"
 }

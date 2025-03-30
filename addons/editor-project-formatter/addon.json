@@ -1,5 +1,5 @@
 {
-  "name": "Project Formatter",
+  "name": "Project formatter",
   "description": "Adds an opinionated formatter to your projects for more readability.",
   "credits": [
     {
@@ -80,6 +80,13 @@
       ]
     },
     {
+      "name": "Save Rules with Project",
+      "description":"Rules will be automaticaly saved when you also save your project. (onto the website manualy or automaticaly, your computer, copying it, etc)" ,
+      "id": "save-with-project",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Log to Debugger",
       "id": "debugger-support",
       "type": "boolean",
@@ -113,10 +120,10 @@
     }
   ],
   "libraries": ["scratch-vm", "scratch-gui"],
-  "versionAdded": "1.4.2",
+  "versionAdded": "1.4.3",
   "latestUpdate": {
     "isMajor": true,
-    "version": "1.4.2"
+    "version": "1.4.3"
   },
   "tags": ["editor", "editorMenuBar", "codeEditor", "costumeEditor", "beta"],
   "enabledByDefault": false

@@ -135,23 +135,28 @@ export default class FormatterUtils {
         enabled: false,
       }
     );
-  }
-
-  init() {
-    this.runtime.on("PROJECT_LOADED", () => {
-      this.console.log("project was loaded");
-      this.loadConfigFromComment();
-    });
 
     this.addon.tab.redux.initialize();
 
-    this.addon.tab.redux.addEventListener("statechanged", (action) => {
-      const savingStates = ["MANUAL_UPDATING", "AUTO_UPDATING", "UPDATING_BEFORE_COPY", "UPDATING_BEFORE_NEW"];
+    this.addon.tab.redux.addEventListener("statechanged", (e) => {
+      // Saving states
+      const START_MANUAL_UPDATING = "scratch-gui/project-state/START_MANUAL_UPDATING";
+      const START_AUTO_UPDATING = "scratch-gui/project-state/START_AUTO_UPDATING";
+      const START_UPDATING_BEFORE_CREATING_COPY = "scratch-gui/project-state/START_UPDATING_BEFORE_CREATING_COPY";
+      const START_UPDATING_BEFORE_CREATING_NEW = "scratch-gui/project-state/START_UPDATING_BEFORE_CREATING_NEW";
 
-      const { loadingState } = action.detail.next.scratchGui.projectState;
-      if (loadingState) {
-        if (savingStates.includes(loadingState)) {
-          setTimeout(() => this.saveConfigToProject(), 100);
+      const savedStates = [
+        START_MANUAL_UPDATING,
+        START_AUTO_UPDATING,
+        START_UPDATING_BEFORE_CREATING_COPY,
+        START_UPDATING_BEFORE_CREATING_NEW,
+      ];
+
+      const { action } = e.detail;
+      if (action) {
+        if (savedStates.includes(action.type) && this.addon.settings.get("save-with-project")) {
+          this.console.log(e.detail);
+          this.saveConfigToProject();
         }
       }
     });
@@ -177,31 +182,31 @@ export default class FormatterUtils {
   loadConfigFromComment() {
     const comment = this.findConfigCommentInStage();
     if (comment) {
-      this.console.log(comment.text);
       this.loadConfig(comment.text);
     }
   }
 
   loadConfig(config) {
     const match = config.match(/formatter-config:\/\/(.*?)\/\/:formatter-config/);
-    config = match ? JSON.parse(match[1]) : null;
+    this.console.log("loading config:", config);
+    const parsed_config = match[1];
 
-    this.console.log(match);
-
-    this.storage = JSON.parse(config);
+    this.storage = parsed_config ? JSON.parse(parsed_config) : null;
     if (this.storage) {
-      this.ignoredItems = new Set(this.storage.ignoredItems);
-      this.#ruleOptions = this.storage.ruleOptions;
-      this.customRules = this.storage.customRules;
+      this.ignoredItems = new Set(this.storage.ignoredItems) ?? this.ignoredItems;
+      this.#ruleOptions = this.storage.ruleOptions ?? this.#ruleOptions;
+      this.customRules = this.storage.customRules ?? this.customRules;
     }
   }
 
   findConfigCommentInStage() {
     const stage = this.runtime.getTargetForStage();
 
-    for (const comment of Object.values(stage.comments)) {
-      if (/formatter-config:\/\/.+\/\/:formatter-config/.test(comment.text)) {
-        return comment;
+    if (stage.comments) {
+      for (const comment of Object.values(stage.comments)) {
+        if (/formatter-config:\/\/.+\/\/:formatter-config/.test(comment.text)) {
+          return comment;
+        }
       }
     }
 
@@ -210,31 +215,31 @@ export default class FormatterUtils {
 
   /**Saves the formatter configuration into a comment. */
   saveConfigToProject() {
+    const CONFIG_COMMENT_TEXT = `Project Formatter Configuration.\n\nYou can move, resize and minimize this comment, but don't edit it by hand unless you actually know what you're doing.\nThis comment can be deleted to reset the formatter configuration.\n\nformatter-config://${this.generateConfig()}//:formatter-config`;
+
     const stage = this.runtime.getTargetForStage();
     const comment = this.findConfigCommentInStage();
     if (!comment) {
-      stage.createComment(
-        uid(),
-        null,
-        `Project Formatter Configuration.\n\nYou can move, resize and minimize this comment, but don't edit it by hand unless you actually know what you're doing.\nThis comment can be deleted to reset the formatter config.\nformatter-config://${JSON.stringify(
-          this.generateConfig()
-        )}//:formatter-config`,
-        50,
-        50,
-        DEFAULT_COMMENT_SIZE,
-        DEFAULT_COMMENT_SIZE,
-        true
-      );
+      stage.createComment(uid(), null, CONFIG_COMMENT_TEXT, 50, 50, 635, 465, false);
+      this.console.log("created new comment");
     } else {
-      comment.text = `Project Formatter Configuration.\n\nYou can move, resize and minimize this comment, but don't edit it by hand unless you actually know what you're doing.\nThis comment can be deleted to reset the formatter config.\nformatter-config://${JSON.stringify(
-        this.generateConfig()
-      )}//:formatter-config`;
+      if (comment.text !== CONFIG_COMMENT_TEXT) {
+        comment.text = CONFIG_COMMENT_TEXT;
+      } else {
+        this.console.info("There was no change on the formatter configuration.");
+        return;
+      }
     }
 
-    this.runtime.emitProjectChanged();
-    if (this.vm.editingTarget.isStage) {
-      this.vm.emitWorkspaceUpdate();
+    if (comment.text !== CONFIG_COMMENT_TEXT) {
+      this.runtime.emitProjectChanged();
+      if (this.vm.editingTarget.isStage) {
+        this.vm.emitWorkspaceUpdate();
+      }
     }
+
+    this.console.info("saved editor formatter config");
+    this.loadConfigFromComment();
   }
 
   generateConfig() {
