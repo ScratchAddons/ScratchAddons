@@ -14,7 +14,7 @@ export default class UndoGroup {
     if (undoStack.length) {
       undoStack[undoStack.length - 1]._devtoolsLastUndo = true;
     }
-    console.log("start", JSON.parse(JSON.stringify(undoStack)));
+
     workspace._undoGroupIncludeLast = includeLast;
   }
 
@@ -34,10 +34,7 @@ export default class UndoGroup {
       for (; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
         undoStack[i].group = group;
       }
-
-      console.log("end", JSON.parse(JSON.stringify(undoStack)));
       if (includeLast && i >= 0) undoStack[i].group = group;
-      console.log("end2", JSON.parse(JSON.stringify(undoStack)));
     }, 0);
   }
 }
