@@ -1,4 +1,4 @@
-import UndoGroup from "../editor-devtools/UndoGroup.js";
+import UndoGroup from "../../libraries/common/cs/UndoGroup.js";
 import { getVariableUsesById, getOrderedTopBlockColumns } from "../../libraries/common/cs/devtools-utils.js";
 
 export default async function ({ addon, console, msg, safeMsg: m }) {

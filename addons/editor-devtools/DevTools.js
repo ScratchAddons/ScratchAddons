@@ -1,5 +1,5 @@
 import DomHelpers from "./DomHelpers.js";
-import UndoGroup from "./UndoGroup.js";
+import UndoGroup from "../../libraries/common/cs/UndoGroup.js";
 import { getVariableUsesById } from "../../libraries/common/cs/devtools-utils.js";
 import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
 
