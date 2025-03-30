@@ -81,7 +81,7 @@
     },
     {
       "name": "Save Rules with Project",
-      "description":"Rules will be automaticaly saved when you also save your project. (onto the website manualy or automaticaly, your computer, copying it, etc)" ,
+      "description": "Rules will be automaticaly saved when you also save your project. (onto the website manualy or automaticaly, your computer, copying it, etc)",
       "id": "save-with-project",
       "type": "boolean",
       "default": true
