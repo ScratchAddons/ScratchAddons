@@ -40,19 +40,12 @@ export default class DevTools {
     enableContextMenuSeparators(this.addon.tab);
 
     const pasteCallback = () => {
-      let ids = this.getTopBlockIDs();
-
       document.dispatchEvent(
         new KeyboardEvent("keydown", {
           keyCode: 86,
           ctrlKey: true,
-          griff: true,
         })
       );
-
-      setTimeout(() => {
-        this.beginDragOfNewBlocksNotInIDs(ids);
-      }, 10);
     };
 
     if (blockly.registry) {
@@ -348,7 +341,7 @@ export default class DevTools {
       }
     }
 
-    if (e.keyCode === 86 && ctrlKey && !e.griff) {
+    if (e.keyCode === 86 && ctrlKey) {
       // Ctrl + V
       // Set a timeout so we can take control of the paste after the event
       let ids = this.getTopBlockIDs();
