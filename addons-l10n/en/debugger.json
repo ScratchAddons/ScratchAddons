@@ -52,10 +52,6 @@
   "debugger/timing-average-time": "Average Time",
   "debugger/timing-ratio-time": "Ratio Time",
   "debugger/timing-percent-time": "Percent Time",
-  "debugger/timing-rtc": "Operation Cost",
-  "debugger/timing-rtc-short": "Op Cost",
   "debugger/timing-call-count": "Call Count",
-  "debugger/timing-no-timers": "No timers started.",
-  "debugger/timing-rtc-info": "Operation Cost, also known as Relative Time Cost (RTC), is the amount of time an operation takes relative to the time the subtraction operation takes. See the following {table}.",
-  "debugger/timing-rtc-info-table": "table"
+  "debugger/timing-no-timers": "No timers started."
 }

@@ -10,12 +10,9 @@ export function createTableHeader(config, msg) {
       <span class = 'timing-average-time'>${msg("timing-average-time")}</span>
       <span class = 'timing-percent-time'>${msg("timing-percent-time")}</span>
       <span class = 'timing-call-count'>${msg("timing-call-count")}</span>
-      <span class = 'timing-rtc'>${msg("timing-rtc-short")}</span>
     `;
 
-  const rtcHeader = tableHeader.querySelector(".timing-rtc");
   const percentHeader = tableHeader.querySelector(".timing-percent-time");
-  rtcHeader.style.display = "none";
 
   // Mapping from table header textContent to timer keys
   const headerClassKeyMapping = {
@@ -24,7 +21,6 @@ export function createTableHeader(config, msg) {
     "timing-average-time": "avgTime",
     "timing-percent-time": "totalTime",
     "timing-call-count": "callCount",
-    "timing-rtc": "rtc",
   };
 
   tableHeader.querySelectorAll("span, a").forEach((headerElement) => {
@@ -43,5 +39,5 @@ export function createTableHeader(config, msg) {
     });
   });
 
-  return { tableHeader, rtcHeader, percentHeader };
+  return { tableHeader, percentHeader };
 }

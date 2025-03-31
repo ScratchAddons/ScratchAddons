@@ -54,7 +54,6 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   // config for our block scope settings that can be modified in the toolbar
   const config = {
-    showRTC: false,
     showLineByLine: false,
     showHeatmap: false,
     showRatioTime: false,
@@ -62,7 +61,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     sortDirection: "descending",
     isStepThreadPolluted: false,
   };
-  const { tableHeader, rtcHeader, percentHeader } = createTableHeader(config, msg);
+  const { tableHeader, percentHeader } = createTableHeader(config, msg);
   const tableRows = new TableRows(config, debug, msg, tableHeader);
 
   const profiler = new Profiler(config);
@@ -71,7 +70,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   const timingManager = new TimingManager(addon.settings, config, profiler);
   const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows);
-  const toolbar = createToolbar(heatmapManager, rtcHeader, config, polluteStepThread, msg, addon);
+  const toolbar = createToolbar(heatmapManager, config, polluteStepThread, msg);
   profiler.tm = timingManager;
 
   const content = createContent();
@@ -93,13 +92,6 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       toolbar.classList.remove("show");
     });
   });
-
-  fetch(addon.self.dir + "/timing/RTC.json")
-    .then((res) => res.json())
-    .then((data) => {
-      profiler.rtcTable = data;
-    })
-    .catch((error) => console.error("Error loading JSON:", error));
 
   // create the tab
   const tab = debug.createHeaderTab({
