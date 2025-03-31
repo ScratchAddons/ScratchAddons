@@ -101,12 +101,6 @@
       "id": "show_ratio_time",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Exclude yield times from timings",
-      "id": "exclude_yields",
-      "type": "boolean",
-      "default": false
     }
   ],
   "tags": ["editor", "codeEditor", "featured"],
