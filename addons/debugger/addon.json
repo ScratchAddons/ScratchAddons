@@ -108,7 +108,6 @@
       "type": "boolean",
       "default": false
     }
-
   ],
   "tags": ["editor", "codeEditor", "featured"],
   "versionAdded": "1.16.0",
