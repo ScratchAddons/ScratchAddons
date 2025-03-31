@@ -48,7 +48,7 @@ export function createToolbar(heatmapManager, config, polluteStepThread, msg) {
     });
 
     toolbar.appendChild(li);
-  };
+  }
 
   toolbar.appendChild(heatmapSlider);
 
