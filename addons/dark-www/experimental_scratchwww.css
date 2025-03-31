@@ -292,6 +292,9 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .donate-section .donate-button {
   color: var(--darkWww-box-greenText);
 }
+.tou-modal-link {
+  color: var(--darkWww-box-greenText) !important;
+}
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
 }
