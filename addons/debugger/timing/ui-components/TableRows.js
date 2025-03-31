@@ -24,11 +24,11 @@ class TableRows extends LogView {
       totalTime: timer.totalTime.toFixed(1),
       avgTime: (timer.totalTime / timer.callCount).toFixed(2),
       percent: this.config.showRatioTime
-      ? (this.minTimerTime === 0 && timer.totalTime === 0)
-          ? '1.0'
+        ? this.minTimerTime === 0 && timer.totalTime === 0
+          ? "1.0"
           : (timer.totalTime / this.minTimerTime).toFixed(1)
-      : (this.totalTimerTime === 0 && timer.totalTime === 0)
-          ? '100.00'
+        : this.totalTimerTime === 0 && timer.totalTime === 0
+          ? "100.00"
           : ((100 * timer.totalTime) / this.totalTimerTime).toFixed(2),
       callCount: timer.callCount,
     };
