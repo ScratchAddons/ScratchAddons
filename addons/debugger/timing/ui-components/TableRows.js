@@ -51,14 +51,9 @@ class TableRows extends LogView {
       labelElem = createInfoElement(timer.label);
     }
 
-    const { totalTime, avgTime, percent, callCount} = this.getRowValues(timer);
+    const { totalTime, avgTime, percent, callCount } = this.getRowValues(timer);
     const perSymbol = this.config.showRatioTime ? "" : "%";
-    const formattedValues = [
-      `${totalTime} ms`,
-      `${avgTime} ms`,
-      `${percent} ${perSymbol}`,
-      callCount
-    ];
+    const formattedValues = [`${totalTime} ms`, `${avgTime} ms`, `${percent} ${perSymbol}`, callCount];
     const elements = [labelElem, ...formattedValues.map((v) => createInfoElement(v))];
     elements.forEach((elem) => root.appendChild(elem));
     return { root, ...elements };
@@ -83,7 +78,7 @@ class TableRows extends LogView {
     const { sortDirection, sortHeader } = this.config;
     this.rows = this.rows.map((row) => ({
       ...row,
-      avgTime: row.totalTime / row.callCount
+      avgTime: row.totalTime / row.callCount,
     }));
     this.rows.sort((a, b) => (sortDirection === "ascending" ? 1 : -1) * (a[sortHeader] - b[sortHeader]));
   }
