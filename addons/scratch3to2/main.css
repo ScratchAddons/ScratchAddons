@@ -576,6 +576,9 @@ body:not(.sa-body-editor) .select select > option {
   color: var(--darkWww-box-scratchr2HeaderText, #554747) !important;
   text-align: left !important;
 }
+.tou-modal-top {
+  display: none;
+}
 .sa-confirm-text {
   margin-bottom: 0.9375rem !important;
   color: var(--darkWww-box-scratchr2Text, #322f31);
