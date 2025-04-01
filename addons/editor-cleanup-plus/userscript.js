@@ -1,5 +1,5 @@
 import UndoGroup from "../../libraries/common/cs/UndoGroup.js";
-import { getVariableUsesById, getOrderedTopBlockColumns } from "../../libraries/common/cs/devtools-utils.js";
+import { getVariableUsesById, getOrderedTopBlockColumns, autoPositionComment} from "../../libraries/common/cs/devtools-utils.js";
 
 export default async function ({ addon, console, msg, safeMsg: m }) {
   const blockly = await addon.tab.traps.getBlockly();
@@ -63,11 +63,7 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
 
     let topComments = workspace.getTopComments();
     for (const comment of topComments) {
-      if (comment.setVisible) {
-        comment.setVisible(false);
-        comment.needsAutoPositioning_ = true;
-        comment.setVisible(true);
-      }
+      autoPositionComment(comment)
     }
 
     setTimeout(() => {

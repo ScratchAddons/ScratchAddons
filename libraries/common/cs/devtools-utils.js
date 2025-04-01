@@ -41,6 +41,13 @@ export const getTopBlocks = (workspace) => {
   return topBlocks;
 };
 
+export const autoPositionComment = (comment) => {
+    comment.needsAutoPositioning_ = true;
+    comment.autoPosition_()
+    comment.needsAutoPositioning_ = false;
+    comment.moveTo(comment.x_, comment.y_);
+}
+
 /**
  * Split the top blocks into ordered columns
  * @param separateOrphans true to keep all orphans separate
@@ -56,10 +63,7 @@ export const getOrderedTopBlockColumns = (separateOrphans, workspace) => {
 
     for (const comment of topComments) {
       if (comment.setVisible) {
-        comment.setVisible(false);
-        comment.needsAutoPositioning_ = true;
-        comment.setVisible(true);
-
+        autoPositionComment(comment);
         let right = comment.getBoundingRectangle().bottomRight.x;
 
         let root = comment.block_.getRootBlock();
