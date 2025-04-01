@@ -67,7 +67,7 @@ const categories = [
     colorId: "more",
   },
   extensionsCategory,
-  saCategory
+  saCategory,
 ];
 
 // From scratch-blocks/media/dropdown-arrow.svg
@@ -127,13 +127,13 @@ export default async function ({ addon, console, msg }) {
   };
 
   const uncoloredTextColor = () => {
-    if (textMode() === 'white' || textMode() === 'colorOnBlack') return '#ffffff';
-    if (textMode() === 'black' || textMode() === 'colorOnWhite') return '#000000';
+    if (textMode() === "white" || textMode() === "colorOnBlack") return "#ffffff";
+    if (textMode() === "black" || textMode() === "colorOnWhite") return "#000000";
     throw new Error(`unknown text mode: ${textMode()}`);
   };
 
   const textFieldText = () => {
-    const black = textMode() === 'black' ? '#000000' : undefined;
+    const black = textMode() === "black" ? "#000000" : undefined;
     return textColor(addon.settings.get("input-color"), black);
   };
 
@@ -144,10 +144,10 @@ export default async function ({ addon, console, msg }) {
     return "#000000";
   };
 
-  const categoryIconBackground = (primary) => isColoredTextMode() ? quaternaryColor(primary) : primaryColor(primary);
+  const categoryIconBackground = (primary) => (isColoredTextMode() ? quaternaryColor(primary) : primaryColor(primary));
   const categoryIconBorder = (primary) => tertiaryColor(primary);
 
-  const useBlackIcons = () => textMode() === 'black' || textMode() === 'colorOnWhite';
+  const useBlackIcons = () => textMode() === "black" || textMode() === "colorOnWhite";
   const iconPath = () => `/icons/${useBlackIcons() ? "black_text" : "white_text"}`;
 
   const makeDropdownArrow = (color) => {
@@ -177,7 +177,7 @@ export default async function ({ addon, console, msg }) {
       const match = this.iconURI_.match(/^data:image\/svg\+xml;(base64)?,/);
       if (match) {
         const data = this.iconURI_.substring(match[0].length);
-        const oldSvg = match[1] === 'base64' ? atob(data) : decodeURIComponent(data);
+        const oldSvg = match[1] === "base64" ? atob(data) : decodeURIComponent(data);
         const category = this.id_ === "a-b" ? saCategory : extensionsCategory;
         const primary = addon.settings.get(category.settingId);
         const newColor = textMode() === "white" ? primaryColor(primary) : tertiaryColor(primary);
@@ -208,7 +208,7 @@ export default async function ({ addon, console, msg }) {
       for (const input of this.inputList) {
         if (input.outlinePath) {
           const sourceBlock = this.isShadow() && this.getParent() ? this.getParent() : this;
-          const category = categories.find(i => i.categoryId === sourceBlock.category_);
+          const category = categories.find((i) => i.categoryId === sourceBlock.category_);
           if (category) {
             input.outlinePath.setAttribute("fill", fieldBackground(addon.settings.get(category.settingId)));
           }
@@ -268,11 +268,11 @@ export default async function ({ addon, console, msg }) {
     if (!addon.self.disabled) {
       // Fix color of the text in the dropdown
       this.textElement_.style.setProperty("fill", fieldTextColor(this), "important");
-  
+
       // Fix dropdown arrow color
       this.arrow_.remove();
       this.arrow_ = makeDropdownArrow(fieldTextColor(this));
-  
+
       // Redraw arrow
       const text = this.text_;
       this.text_ = null;
@@ -332,24 +332,24 @@ export default async function ({ addon, console, msg }) {
 
     const extensions = {
       music: {
-        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/music.svg`)
+        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/music.svg`),
       },
       pen: {
-        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/pen.svg`)
+        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/pen.svg`),
       },
       text2speech: {
-        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/text2speech.svg`)
+        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/text2speech.svg`),
       },
       translate: {
-        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/translate.${useBlackIcons() ? 'svg' : 'png'}`)
+        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/translate.${useBlackIcons() ? "svg" : "png"}`),
       },
       videoSensing: {
-        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/videoSensing.svg`)
-      }
+        blockIconURI: addon.self.getResource(`${iconPath()}/extensions/videoSensing.svg`),
+      },
     };
 
     BLOCKS_MAP[BLOCKS_CUSTOM] = {
-      blocksMediaFolder: 'blocks-media/default',
+      blocksMediaFolder: "blocks-media/default",
       colors: blockColors,
       extensions: extensions,
       customExtensionColors: {
@@ -358,24 +358,24 @@ export default async function ({ addon, console, msg }) {
         tertiary: tertiaryColor,
         quaternary: quaternaryColor,
         categoryIconBackground,
-        categoryIconBorder
+        categoryIconBorder,
       },
-      useForStage: false
+      useForStage: false,
     };
 
-    const newTheme = addon.tab.redux.state.scratchGui.theme.theme.set('blocks', BLOCKS_CUSTOM);
+    const newTheme = addon.tab.redux.state.scratchGui.theme.theme.set("blocks", BLOCKS_CUSTOM);
     addon.tab.redux.dispatch({
-      type: 'scratch-gui/theme/SET_THEME',
-      theme: newTheme
+      type: "scratch-gui/theme/SET_THEME",
+      theme: newTheme,
     });
   };
 
   const disable = () => {
     const defaultTheme = detectTheme().blocks;
-    const newTheme = addon.tab.redux.state.scratchGui.theme.theme.set('blocks', defaultTheme);
+    const newTheme = addon.tab.redux.state.scratchGui.theme.theme.set("blocks", defaultTheme);
     addon.tab.redux.dispatch({
-      type: 'scratch-gui/theme/SET_THEME',
-      theme: newTheme
+      type: "scratch-gui/theme/SET_THEME",
+      theme: newTheme,
     });
   };
 
