@@ -42,11 +42,11 @@ export const getTopBlocks = (workspace) => {
 };
 
 export const autoPositionComment = (comment) => {
-    comment.needsAutoPositioning_ = true;
-    comment.autoPosition_()
-    comment.needsAutoPositioning_ = false;
-    comment.moveTo(comment.x_, comment.y_);
-}
+  comment.needsAutoPositioning_ = true;
+  comment.autoPosition_();
+  comment.needsAutoPositioning_ = false;
+  comment.moveTo(comment.x_, comment.y_);
+};
 
 /**
  * Split the top blocks into ordered columns
