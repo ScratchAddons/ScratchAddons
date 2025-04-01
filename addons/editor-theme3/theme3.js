@@ -1042,4 +1042,4 @@ export default async function ({ addon, console, msg }) {
     colorModeSubmenu.appendChild(managedBySa);
     colorModeSubmenu.appendChild(addonSettingsLink);
   }
-        }
+}
