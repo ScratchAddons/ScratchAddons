@@ -229,6 +229,9 @@ export default class EditorFormatter {
       } else {
         const chosenSpriteCtx = target.sprite[`${ctxType}s`].find((val) => val.name === ctx.name.realName);
         ctxID = chosenSpriteCtx.assetId;
+        if (ctxType === "costume" && target.isStage) {
+          ctxType = "backdrop";
+        }
       }
 
       return [
@@ -328,6 +331,8 @@ export default class EditorFormatter {
   }
 
   openFormatterOptions() {
+    this.formatterUtils.loadConfigFromComment();
+
     const modal = this.addon.tab.createModal("Formatter Options", {
       useEditorClasses: true,
       isOpen: true,
@@ -341,17 +346,18 @@ export default class EditorFormatter {
     container.classList.add("sa-format-options-popup");
 
     /**
-     * An object representing a format rule.
-     * @typedef FormatRule
-     * @property {string} name - The name of the option
-     * @property {string} id - The ID of the option
-     * @property {string} description - The description of the rule
-     * @property {string} enabled - Checks if the rule is enabled
+     * @typedef {Object} Rule
+     * @property  {string} name - Name of the rule.
+     * @property  {string} id - ID of the rule
+     * @property  {string} description - Description of the rule.
+     * @property  {"notice"|"warn"|"error"} level - Error level of the rule.
+     * @property  {boolean|null} enabled - Enables the rule when created. It's `false` by default.
+     * @property {?Option[]} opts - (Optional) Options for the rule. <br> Used to alter the behavour of the rule by the user.
      */
 
     /**
      * All format rule options.
-     * @type {FormatRule[]}
+     * @type {Rule[]}
      */
     const formatRuleOptions = this.formatterUtils.rules;
 
@@ -410,6 +416,34 @@ export default class EditorFormatter {
       return button;
     };
 
+    const createDropdown = (array, elementClass) => {
+      // Helper function to check if the list only has objects.
+      const onlyPlainObjects = (arr) => {
+        arr.every(
+          (item) => item !== null && typeof item === "object" && !Array.isArray(item) && !(item instanceof Date)
+        );
+      };
+
+      const select = document.createElement("select");
+
+      select.setAttribute("class", elementClass);
+
+      array.forEach((item) => {
+        const option = document.createElement("option");
+
+        if (!onlyPlainObjects(array)) {
+          option.innerText = item.text;
+          option.value = item.value;
+        } else {
+          option.innerText = item;
+          option.value = item;
+        }
+        select.appendChild(option);
+      });
+
+      return select;
+    };
+
     const rulesDiv = document.createElement("div");
     rulesDiv.style.paddingLeft = "1.2rem";
 
@@ -418,9 +452,11 @@ export default class EditorFormatter {
       ruleDiv.id = rule.id;
       ruleDiv.className = "sa-formatter-options-rule-name";
 
+      // First we create the rule label
       const ruleName = document.createElement("label");
       ruleName.textContent = `${rule.name}:`;
 
+      // Then we create the description box
       const ruleDescription = document.createElement("span");
       ruleDescription.className = "sa-settings-description-text";
       ruleDescription.innerText = rule.description;
@@ -428,6 +464,32 @@ export default class EditorFormatter {
       ruleDescription.style.display = "none";
       ruleDescription.id = `${rule.id}_description`;
 
+      // Now we add the level dropdown
+      const levelDropdown = createDropdown(
+        [
+          {
+            text: "Error",
+            value: "error",
+          },
+          {
+            text: "Warning",
+            value: "warn",
+          },
+          {
+            text: "Notice",
+            value: "notice",
+          },
+        ],
+        "sa-formatter-options-dropdown"
+      );
+
+      levelDropdown.value = rule.level ?? "notice";
+
+      levelDropdown.addEventListener("change", ({ target: dropdown }) => {
+        this.formatterUtils.rules = { id: rule.id, level: dropdown.value };
+      });
+
+      // Then we add the toggle switch
       const toggleLabel = document.createElement("label");
       toggleLabel.className = "sa-formatter-options-toggle-switch";
 
@@ -444,13 +506,16 @@ export default class EditorFormatter {
 
       toggleLabel.append(checkbox, slider);
 
+      // After that, insert the switch and the label in a seperate div
       const ruleHeader = document.createElement("div");
       ruleHeader.className = "sa-formatter-options-rule-header";
 
+      // Create a button that shows and hides the description box
       const helpButton = createHelpButton(rule.id);
 
-      ruleHeader.append(ruleName, helpButton, toggleLabel);
+      ruleHeader.append(ruleName, helpButton, levelDropdown, toggleLabel);
 
+      // Finally, add the elements to the rule div.
       ruleDiv.append(ruleHeader, ruleDescription);
 
       rulesDiv.appendChild(ruleDiv);
@@ -498,8 +563,6 @@ export default class EditorFormatter {
       imgSrc: this.formatterOptsImg,
       separator: false,
     });
-
-    this.formatterUtils.loadConfigFromComment();
 
     while (true) {
       const settingsMenu = await this.addon.tab.waitForElement(

@@ -99,7 +99,7 @@ export default class FormatterUtils {
           "Makes your projects look more like griffpatch's projects.\nExamples include UPPERCASE global variables/lists and vice-versa, Sprite names must be in Title Case, costumes and sound names must be in lowercase and avoid spaces (Excluding the Stage).",
         enabled: true,
       },
-      { name: "Test", id: "test", description: "Test", enabled: true },
+      { name: "Test", id: "test", description: "Test", level: "notice", enabled: true },
       {
         name: "Special Starter Characters for Local Variables",
         level: "error",
@@ -232,11 +232,11 @@ export default class FormatterUtils {
       }
     }
 
-    if (comment.text !== CONFIG_COMMENT_TEXT) {
-      this.runtime.emitProjectChanged();
-      if (this.vm.editingTarget.isStage) {
-        this.vm.emitWorkspaceUpdate();
-      }
+    this.runtime.emitProjectChanged();
+    this.console.log(this.vm.editingTarget.isStage);
+    if (this.vm.editingTarget.isStage) {
+      this.console.log("update stage workspace");
+      this.vm.emitWorkspaceUpdate();
     }
 
     this.console.info("saved editor formatter config");
@@ -270,10 +270,11 @@ export default class FormatterUtils {
     return this.#ruleOptions;
   }
   /**Enable/disable a rule. */
-  set rules({ id, enabled }) {
+  set rules({ id, level, enabled }) {
     const rule = this.#ruleOptions.find((r) => r.id === id);
     if (rule) {
       rule.enabled = enabled;
+      rule.level = level;
     } else {
       console.error(`Rule with ID ${id} not found.`);
     }

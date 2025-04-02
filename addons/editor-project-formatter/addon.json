@@ -10,6 +10,22 @@
   "dynamicDisable": false,
   "settings": [
     {
+      "name": "Save Rules with Project",
+      "description": "Rules will be automaticaly saved when you also save your project. (onto the website manualy or automaticaly, your computer, copying it, etc)",
+      "id": "save-with-project",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Log to Debugger",
+      "id": "debugger-support",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "addonEnabled": ["debugger"]
+      }
+    },
+    {
       "name": "@addtosettingsmenu.svg Custom Rules to Settings Menu",
       "description": "Adds Custom Rules to the \"settings\" menu instead of the addon settings.",
       "id": "custom-rules-to-menu",
@@ -78,22 +94,6 @@
           "default": "error"
         }
       ]
-    },
-    {
-      "name": "Save Rules with Project",
-      "description": "Rules will be automaticaly saved when you also save your project. (onto the website manualy or automaticaly, your computer, copying it, etc)",
-      "id": "save-with-project",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Log to Debugger",
-      "id": "debugger-support",
-      "type": "boolean",
-      "default": true,
-      "if": {
-        "addonEnabled": ["debugger"]
-      }
     }
   ],
   "userscripts": [

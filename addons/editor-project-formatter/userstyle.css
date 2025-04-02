@@ -89,6 +89,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  gap: 0.5rem;
 }
 
 .sa-formatter-options-rule-name > label {
@@ -100,7 +101,7 @@
   display: inline-block;
   width: 50px;
   height: 24px;
-  margin-left: auto;
+  margin-left: 0;
 }
 
 /*Description Box*/
@@ -174,4 +175,15 @@
 
 .sa-formatter-options-button-row {
   margin-top: 1.5rem;
+}
+
+/*Dropdowns*/
+.sa-formatter-options-dropdown {
+  color: var(--editorDarkMode-selector-text);
+  background-color: var(--editorDarkMode-input);
+  outline-color: var(--editorDarkMode-primary);
+  border-radius: 10px;
+  border-color: var(--editorDarkMode-border);
+  margin-right: 1rem;
+  margin-left: auto;
 }
