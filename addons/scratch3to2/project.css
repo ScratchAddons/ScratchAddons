@@ -223,6 +223,13 @@ body:not(.sa-body-editor) [class*="green-flag_green-flag_"]:hover,
 body:not(.sa-body-editor) [class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
   background-image: url("%addon-self-dir%/assets/green_flag_hover.png");
 }
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps] {
+  background-image: url("%addon-self-dir%/assets/green_flag_60fps.png");
+}
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps]:hover,
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps][class*="green-flag_is-active_"] {
+  background-image: url("%addon-self-dir%/assets/green_flag_60fps_hover.png");
+}
 body:not(.sa-body-editor) [class*="stop-all_stop-all_"] {
   background-image: url("%addon-self-dir%/assets/stop_hover.png");
   opacity: 1;
@@ -249,12 +256,14 @@ body:not(.sa-body-editor) [class*="stage-header_stage-size-row_"] > * {
 }
 body:not(.sa-body-editor) [class*="stage-header_stage-button_"] {
   background-color: transparent;
+  border: none;
+}
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:not(.sa-gamepad-container *) {
   background-image: url("%addon-self-dir%/assets/full_screen.png");
   background-repeat: no-repeat;
   background-position: center center;
-  border: none;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"] {
+body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gamepad-container *) {
   display: none;
 }
 [class*="stage-header_embed-scratch-logo_"] img {
@@ -300,20 +309,6 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] {
 }
 body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   display: none;
-}
-
-/* player-thumb compatibility */
-body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper"] {
-  position: relative;
-}
-body:not(.sa-body-editor) div[class*="loader_background_"],
-body:not(.sa-body-editor) .sa-project-thumb {
-  border-radius: 0;
-}
-body:not(.sa-body-editor) :not([class*="stage-wrapper_full-screen_"]) > div[class*="loader_background_"],
-body:not(.sa-body-editor) .sa-project-thumb.loading {
-  top: 38px;
-  height: calc(100% - 39px);
 }
 
 /* Description */

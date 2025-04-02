@@ -53,6 +53,8 @@
 .initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::after {
   border-color: #473e59;
 }
+.starter-projects-page .page-header,
+.projects-carousel .header,
 .boost .extension-header,
 .ev3 .extension-header,
 .wedo2 .extension-header {

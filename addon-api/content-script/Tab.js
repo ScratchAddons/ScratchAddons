@@ -757,6 +757,30 @@ export default class Tab extends Listenable {
     createdAnyBlockContextMenus = true;
 
     this.traps.getBlockly().then((ScratchBlocks) => {
+      if (ScratchBlocks.registry) {
+        // new Blockly
+        const oldGenerateContextMenu = ScratchBlocks.BlockSvg.prototype.generateContextMenu;
+        ScratchBlocks.BlockSvg.prototype.generateContextMenu = function (...args) {
+          let items = oldGenerateContextMenu.call(this, ...args);
+          for (const { callback, blocks, flyout } of contextMenuCallbacks) {
+            let injectMenu =
+              // Block in workspace
+              (blocks && !this.isInFlyout) ||
+              // Block in flyout
+              (flyout && this.isInFlyout);
+            if (injectMenu) {
+              try {
+                items = callback(items, this);
+              } catch (e) {
+                console.error("Error while calling context menu callback: ", e);
+              }
+            }
+          }
+          return items;
+        };
+        return;
+      }
+
       const oldShow = ScratchBlocks.ContextMenu.show;
       ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
         const gesture = ScratchBlocks.mainWorkspace.currentGesture_;

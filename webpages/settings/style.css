@@ -222,7 +222,7 @@ body.iframe #search-not-found {
   border-radius: 4px;
 }
 
-body.iframe .tooltiptext {
+body.iframe .tooltiptext:not(.tooltiptexttop) {
   display: none;
 }
 body.iframe .addon-description {

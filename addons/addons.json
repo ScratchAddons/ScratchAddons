@@ -154,8 +154,11 @@
   "workspace-dots",
   "asset-conflict-dialog",
   "remaining-replies",
+  "fps",
   "forum-user-agent",
   "no-sprite-confirm",
+  "costume-editor-shortcuts",
+  "live-read-topics",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

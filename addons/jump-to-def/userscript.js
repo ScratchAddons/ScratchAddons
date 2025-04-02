@@ -1,12 +1,5 @@
 import Utils from "../find-bar/blockly/Utils.js";
 export default async function ({ addon, msg, console }) {
-  if (!addon.self._isDevtoolsExtension && window.initGUI) {
-    console.log("Extension running, stopping addon");
-    window._devtoolsAddonEnabled = true;
-    window.dispatchEvent(new CustomEvent("scratchAddonsDevtoolsAddonStopped"));
-    return;
-  }
-
   const utils = new Utils(addon);
 
   const Blockly = await addon.tab.traps.getBlockly();

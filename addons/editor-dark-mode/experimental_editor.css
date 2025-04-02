@@ -174,7 +174,6 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 [class*="slider_handle_"],
 [class*="sound-editor_button_"],
 [class*="library-item_library-item_"],
-.s3devDDOut.vis, /* devtools style */
 .sa-find-dropdown-out.visible, /* find-bar style */
 .sa-mcp-container, /* middle-click-popup style */
 [class*="prompt_body_"],
@@ -217,6 +216,9 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 }
 [class*="selector_new-buttons_"]::before {
   background: linear-gradient(var(--editorDarkMode-accent-gradient-opacity0), var(--editorDarkMode-accent-gradient));
+}
+[class*="library-item_library-item-inset-image-container_"] {
+  border-color: var(--editorDarkMode-accent);
 }
 .sa-float-bar-dropdown > li.sa-boolean::before /* middle-click-popup style */ {
   border-top: 9px solid var(--editorDarkMode-accent);
@@ -287,6 +289,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="input_input-form_"],
 [class*="input_input-form_"],
 [class*="context-menu_context-menu_"],
+[class*="context-menu_context-menu-content_"],
 .blocklyWidgetDiv .goog-menu,
 .blocklyWidgetDiv .blocklyMenu,
 [class*="filter_filter_"],
@@ -313,6 +316,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="color-picker_row-header_"],
 [class*="filter_filter-input_"],
 [class*="filter_filter-input_"]::placeholder,
+[class*="context-menu_menu-item_"],
 .blocklyWidgetDiv .goog-menuitem,
 .blocklyMenuItem,
 .scratchColourPickerLabel,
@@ -386,6 +390,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 
 /* Block category menu background */
 .blocklyToolboxDiv,
+.blocklyToolbox,
 .scratchCategoryMenu {
   background: var(--editorDarkMode-categoryMenu);
   color: var(--editorDarkMode-categoryMenu-text);
@@ -612,6 +617,8 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="blocks_blocks_"] .injectionDiv,
 [class*="blocks_blocks_"] .blocklyToolboxDiv,
 [dir="rtl"] [class*="blocks_blocks_"] .blocklyToolboxDiv,
+[class*="blocks_blocks_"] .blocklyToolbox,
+[dir="rtl"] [class*="blocks_blocks_"] .blocklyToolbox,
 [class*="blocks_blocks_"] .blocklyFlyout,
 [dir="rtl"] [class*="blocks_blocks_"] .blocklyFlyout,
 [class*="backpack_backpack-header_"],
@@ -653,6 +660,7 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 .sa-var-manager td,
 [class*="library-item_library-item_"],
 [class*="context-menu_context-menu_"],
+[class*="context-menu_context-menu-content_"],
 .blocklyWidgetDiv .goog-menu,
 .blocklyWidgetDiv .blocklyMenu,
 .scratchEyedropper,
@@ -661,6 +669,7 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 .sa-paint-snap-settings,
 [class*="prompt_variable-name-text-input_"],
 [class*="prompt_button-row_"] button,
+[class*="custom-procedures_option-card_"],
 [class*="custom-procedures_button-row_"] button,
 [class*="slider-prompt_min-input_"],
 [class*="slider-prompt_max-input_"],
@@ -730,18 +739,4 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 .Popover .resize-sensor {
   /* The <object> gets a white background if color-scheme is dark. */
   color-scheme: light;
-}
-/* For `editor-comment-previews` */
-.sa-comment-preview-inner {
-  color: var(--editorDarkMode-input-text);
-  background-color: var(--editorDarkMode-input-transparent90);
-}
-@supports (backdrop-filter: blur(16px)) {
-  .sa-comment-preview-inner {
-    background-color: var(--editorDarkMode-input-transparent75);
-    backdrop-filter: blur(16px);
-  }
-}
-.sa-comment-preview-reduce-transparency {
-  background-color: var(--editorDarkMode-input);
 }

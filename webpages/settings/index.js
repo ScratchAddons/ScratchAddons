@@ -241,6 +241,10 @@ let fuse;
       clearSearch() {
         this.searchInputReal = "";
       },
+      clearAndFocusSearch() {
+        this.clearSearch();
+        document.querySelector("#searchBox").focus();
+      },
       setTheme(mode) {
         setGlobalTheme(mode);
         this.theme = mode;
