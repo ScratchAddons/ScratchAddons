@@ -733,9 +733,7 @@ class TokenTypeBlock extends TokenType {
           strings.push(...blockPart.toLowerCase().split(" "));
         } else if (blockPart.type === BlockInputType.ENUM) {
           for (const enumValue of blockPart.values) {
-
-            if (this.stringForms.length >= WorkspaceQuerier.MAX_RESULTS)
-                return;
+            if (this.stringForms.length >= WorkspaceQuerier.MAX_RESULTS) return;
 
             enumerateStringForms(
               partIdx + 1,
@@ -755,8 +753,10 @@ class TokenTypeBlock extends TokenType {
     enumerateStringForms();
 
     if (this.stringForms.length >= WorkspaceQuerier.MAX_STRING_FORMS) {
-        console.log("Warning: Block '" + this.block.id + "' has too many string forms. Search results may not be very good.");
-        this.stringForms.length = 0;
+      console.log(
+        "Warning: Block '" + this.block.id + "' has too many string forms. Search results may not be very good."
+      );
+      this.stringForms.length = 0;
     }
   }
 
@@ -1175,9 +1175,9 @@ export default class WorkspaceQuerier {
    */
   static MAX_TOKENS = 100000;
 
-   /**
-    * The maximum number of string forms a block can have before we give up.
-    */
+  /**
+   * The maximum number of string forms a block can have before we give up.
+   */
   static MAX_STRING_FORMS = 500;
 
   /**
