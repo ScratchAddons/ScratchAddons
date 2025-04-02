@@ -5,8 +5,9 @@
 }
 
 .filter-text {
-  font-weight: 600;
+  font-weight: 500;
   margin-inline-end: 20px;
+  user-select: none;
 }
 
 .filter-options {

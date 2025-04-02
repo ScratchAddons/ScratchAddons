@@ -19,7 +19,7 @@ export default async function ({ addon, console, msg }) {
   label.append(checkboxInput, sliderSpan);
   divElement.append(span, label);
 
-  addon.tab.displayNoneWhileDisabled(divElement, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(divElement);
   addon.self.addEventListener("disabled", () => {
     togglePreview(false);
     checkboxInput.checked = false;
@@ -28,8 +28,6 @@ export default async function ({ addon, console, msg }) {
   checkboxInput.addEventListener("change", () => {
     togglePreview(checkboxInput.checked);
   });
-
-  const REACT_CONTAINER_PREFIX = "__reactContainere$";
 
   let currentlyEnabled = false;
   let wasEverEnabled = false;
@@ -130,7 +128,7 @@ export default async function ({ addon, console, msg }) {
     // Override the render function of the Preview component
     // https://github.com/scratchfoundation/scratch-www/blob/fdcb700/src/views/preview/project-view.jsx
     const reactRootElement = document.querySelector("#app");
-    const reactContainerKey = Object.keys(reactRootElement).find((key) => key.startsWith(REACT_CONTAINER_PREFIX));
+    const reactContainerKey = addon.tab.traps.getInternalContainerKey(reactRootElement);
     let instance = reactRootElement[reactContainerKey];
     while (!instance.stateNode || typeof instance.stateNode.handleUpdateProjectId !== "function") {
       instance = instance.child;

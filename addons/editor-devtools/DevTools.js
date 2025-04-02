@@ -1,6 +1,6 @@
-// import ShowBroadcast from "./show-broadcast.js";
 import DomHelpers from "./DomHelpers.js";
 import UndoGroup from "./UndoGroup.js";
+import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
 
 export default class DevTools {
   constructor(addon, msg, m) {
@@ -55,37 +55,56 @@ export default class DevTools {
       else blockly.Msg.CLEAN_UP = originalMsg;
     });
 
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
-        items.push({
-          enabled: blockly.clipboardXml_,
-          text: this.m("paste"),
-          separator: true,
-          _isDevtoolsFirstItem: true,
-          callback: () => {
-            let ids = this.getTopBlockIDs();
+    enableContextMenuSeparators(this.addon.tab);
 
-            document.dispatchEvent(
-              new KeyboardEvent("keydown", {
-                keyCode: 86,
-                ctrlKey: true,
-                griff: true,
-              })
-            );
+    const pasteCallback = () => {
+      let ids = this.getTopBlockIDs();
 
-            setTimeout(() => {
-              this.beginDragOfNewBlocksNotInIDs(ids);
-            }, 10);
-          },
-        });
-        return items;
-      },
-      { workspace: true }
-    );
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          keyCode: 86,
+          ctrlKey: true,
+          griff: true,
+        })
+      );
+
+      setTimeout(() => {
+        this.beginDragOfNewBlocksNotInIDs(ids);
+      }, 10);
+    };
+
+    if (blockly.registry) {
+      // new Blockly
+      blockly.ContextMenuRegistry.registry.register(
+        addSeparator({
+          displayText: this.m("paste"),
+          preconditionFn: () => (blockly.clipboardXml_ ? "enabled" : "disabled"),
+          callback: pasteCallback,
+          scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+          id: "saPaste",
+          weight: 10, // after Save All as Image
+        })
+      );
+    } else {
+      this.addon.tab.createBlockContextMenu(
+        (items, block) => {
+          items.push({
+            enabled: blockly.clipboardXml_,
+            text: this.m("paste"),
+            separator: true,
+            _isDevtoolsFirstItem: true,
+            callback: pasteCallback,
+          });
+          return items;
+        },
+        { workspace: true }
+      );
+    }
+
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         items.push(
-          {
+          addSeparator({
             enabled: true,
             text: this.m("make-space"),
             _isDevtoolsFirstItem: true,
@@ -93,15 +112,15 @@ export default class DevTools {
               this.doCleanUp(block);
             },
             separator: true,
-          },
-          {
+          }),
+          addSeparator({
             enabled: true,
             text: this.m("copy-all"),
             callback: () => {
               this.eventCopyClick(block);
             },
             separator: true,
-          },
+          }),
           {
             enabled: true,
             text: this.m("copy-block"),
@@ -117,44 +136,30 @@ export default class DevTools {
             },
           }
         );
-        // const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
-        // if (BROADCAST_BLOCKS.includes(block.type)) {
-        //   // Show Broadcast
-        //   const broadcastId = this.showBroadcastSingleton.getAssociatedBroadcastId(block.id);
-        //   if (broadcastId) {
-        //     ["Senders", "Receivers"].forEach((showKey, i) => {
-        //       items.push({
-        //         enabled: true,
-        //         text: this.msg(`show-${showKey}`.toLowerCase()),
-        //         callback: () => {
-        //           this.showBroadcastSingleton[`show${showKey}`](broadcastId);
-        //         },
-        //         separator: i == 0,
-        //       });
-        //     });
-        //   }
-        // }
         return items;
       },
       { blocks: true }
     );
+
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
           this.selVarID = block.getVars()[0];
-          items.push({
-            enabled: true,
-            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
-            callback: () => {
-              let wksp = this.getWorkspace();
-              let v = wksp.getVariableById(this.selVarID);
-              let varName = window.prompt(this.msg("replace", { name: v.name }));
-              if (varName) {
-                this.doReplaceVariable(this.selVarID, varName, v.type);
-              }
-            },
-            separator: true,
-          });
+          items.push(
+            addSeparator({
+              enabled: true,
+              text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+              callback: () => {
+                let wksp = this.getWorkspace();
+                let v = wksp.getVariableById(this.selVarID);
+                let varName = window.prompt(this.msg("replace", { name: v.name }));
+                if (varName) {
+                  this.doReplaceVariable(this.selVarID, varName, v.type);
+                }
+              },
+              separator: true,
+            })
+          );
         }
         return items;
       },
@@ -163,7 +168,7 @@ export default class DevTools {
   }
 
   getWorkspace() {
-    return Blockly.getMainWorkspace();
+    return this.addon.tab.traps.getWorkspace();
   }
 
   isCostumeEditor() {
@@ -340,14 +345,12 @@ export default class DevTools {
 
       // todo: tie comments to blocks... find widths and width of block stack row...
       for (const comment of topComments) {
-        // comment.autoPosition_();
         // Hiding and showing repositions the comment right next to it's block - nice!
         if (comment.setVisible) {
           comment.setVisible(false);
           comment.needsAutoPositioning_ = true;
           comment.setVisible(true);
 
-          // let bb = comment.block_.svgPath_.getBBox();
           let right = comment.getBoundingRectangle().bottomRight.x;
 
           // Get top block for stack...
@@ -368,7 +371,6 @@ export default class DevTools {
     let orphans = { x: -999999, count: 0, blocks: [] };
 
     for (const topBlock of topBlocks) {
-      // let r = b.getBoundingRectangle();
       let position = topBlock.getRelativeToSurfaceXY();
       /**
        * @type {Col}
@@ -399,10 +401,6 @@ export default class DevTools {
         cols.push(new Col(position.x, 1, [topBlock]));
       }
     }
-
-    // if (orphans.blocks.length > 0) {
-    //     cols.push(orphans);
-    // }
 
     // Sort columns, then blocks inside the columns
     cols.sort((a, b) => a.x - b.x);
@@ -472,98 +470,6 @@ export default class DevTools {
     UndoGroup.endUndoGroup(wksp);
   }
 
-  /*
-    function doInjectScripts(codeString) {
-      let w = getWorkspace();
-      let xml = new XML(); // document.implementation.createDocument(null, "xml");
-      let x = xml.xmlDoc.firstChild;
-
-      let tree = math.parse(codeString);
-      console.log(tree);
-
-      const binaryOperatorTypes = {
-        add: "operator_add",
-        subtract: "operator_subtract",
-        this.multiply: "operator_multiply",
-        divide: "operator_divide",
-      };
-
-      const BLOCK_TYPE = {
-        number: "math_number",
-        text: "text",
-      };
-
-      function translateMathToXml(x, tree, shadowType) {
-        let xShadowField = null;
-        if (shadowType) {
-          let xShadow = xml.newXml(x, "shadow", { type: shadowType });
-          if (shadowType === BLOCK_TYPE.number) {
-            xShadowField = xml.newXml(xShadow, "field", { name: "NUM" });
-          } else if (shadowType === BLOCK_TYPE.text) {
-            xShadowField = xml.newXml(xShadow, "field", { name: "TEXT" });
-          }
-        }
-
-        if (!tree || !tree.type) {
-          return;
-        }
-
-        if (tree.type === "OperatorNode") {
-          let operatorType = binaryOperatorTypes[tree.fn];
-          if (operatorType) {
-            let xOp = newXml(x, "block", { type: operatorType });
-            translateMathToXml(xml.newXml(xOp, "value", { name: "NUM1" }), tree.args[0], BLOCK_TYPE.number);
-            translateMathToXml(xml.newXml(xOp, "value", { name: "NUM2" }), tree.args[1], BLOCK_TYPE.number);
-            return;
-          }
-
-          return;
-        }
-
-        if (tree.type === "ConstantNode") {
-          // number or text in quotes
-          if (xShadowField) {
-            xml.setAttr(xShadowField, { text: tree.value });
-          }
-          return;
-        }
-
-        if (tree.type === "SymbolNode") {
-          // variable
-          let xVar = xml.newXml(x, "block", { type: "data_variable" });
-          xml.newXml(xVar, "field", { name: "VARIABLE", text: tree.name });
-          return;
-        }
-
-        if (tree.type === "FunctionNode") {
-          // Method Call
-          if (tree.fn.name === "join") {
-            let xOp = newXml(x, "block", { type: "operator_join" });
-            translateMathToXml(xml.newXml(xOp, "value", { name: "STRING1" }), tree.args[0], BLOCK_TYPE.text);
-            translateMathToXml(xml.newXml(xOp, "value", { name: "STRING2" }), tree.args[1], BLOCK_TYPE.text);
-            return;
-          }
-        }
-      }
-
-      translateMathToXml(x, tree);
-      console.log(x);
-
-      let ids = Blockly.Xml.domToWorkspace(x, w);
-      console.log(ids);
-    }
-     */
-  /*
-    function clickInject(e) {
-      let codeString = window.prompt("Griffpatch: Enter an expression (i.e. a+2*3)");
-      if (codeString) {
-        doInjectScripts(codeString);
-      }
-      e.preventDefault();
-      return false;
-    }
-    */
-
   /**
    * Returns a Set of the top blocks in this workspace / sprite
    * @returns {Set<any>} Set of top blocks
@@ -592,7 +498,6 @@ export default class DevTools {
     let topBlocks = wksp.getTopBlocks();
     for (const block of topBlocks) {
       if (!ids.has(block.id)) {
-        // console.log("I found a new block!!! - " + block.id);
         // todo: move the block to the mouse pointer?
         let mouseXYClone = { x: this.mouseXY.x, y: this.mouseXY.y };
         this.domHelpers.triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
@@ -633,7 +538,6 @@ export default class DevTools {
     let ctrlKey = e.ctrlKey || e.metaKey;
 
     if (e.key === "ArrowLeft" && ctrlKey) {
-      // Ctrl + Left Arrow Key
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
@@ -647,7 +551,6 @@ export default class DevTools {
     }
 
     if (e.key === "ArrowRight" && ctrlKey) {
-      // Ctrl + Right Arrow Key
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
@@ -668,10 +571,6 @@ export default class DevTools {
         this.beginDragOfNewBlocksNotInIDs(ids);
       }, 10);
     }
-
-    // if (e.keyCode === 220 && (!document.activeElement || document.activeElement.tagName === 'INPUT')) {
-    //
-    // }
   }
 
   eventCopyClick(block, blockOnly) {
@@ -719,7 +618,7 @@ export default class DevTools {
 
     this.codeTab = guiTabs[0];
     this.costTab = guiTabs[1];
-    this.costTabBody = document.querySelector("div[aria-labelledby=" + this.costTab.id + "]");
+    this.costTabBody = document.querySelector("div[aria-labelledby='" + this.costTab.id + "']");
 
     this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);

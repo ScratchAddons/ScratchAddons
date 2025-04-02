@@ -1,4 +1,9 @@
+import updateToolboxXML from "../../libraries/common/cs/update-toolbox-xml.js";
+import { isScratchAprilFools25 } from "../hide-flyout/april-fools.js";
+
 export default async function ({ addon, console, msg, safeMsg }) {
+  if (await isScratchAprilFools25(addon.tab.redux)) return;
+
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const SMALL_GAP = 8;
@@ -107,11 +112,17 @@ export default async function ({ addon, console, msg, safeMsg }) {
     return moveReportersToEnd(variables).concat(moveReportersToEnd(lists));
   };
 
-  const DataCategory = ScratchBlocks.DataCategory;
+  let oldVariableCategoryCallback;
+  if (ScratchBlocks.registry) {
+    // new Blockly
+    oldVariableCategoryCallback = ScratchBlocks.ScratchVariables.getVariablesCategory;
+  } else {
+    oldVariableCategoryCallback = ScratchBlocks.DataCategory;
+  }
   let variableCategory;
   let listCategory;
   const variableCategoryCallback = (workspace) => {
-    let result = DataCategory(workspace);
+    let result = oldVariableCategoryCallback(workspace);
 
     if (!addon.self.disabled && addon.settings.get("moveReportersDown")) {
       result = moveReportersDown(result);
@@ -139,8 +150,12 @@ export default async function ({ addon, console, msg, safeMsg }) {
   // https://github.com/scratchfoundation/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
   const oldShow = ScratchBlocks.Flyout.prototype.show;
   ScratchBlocks.Flyout.prototype.show = function (xmlList) {
-    this.workspace_.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
-    this.workspace_.registerToolboxCategoryCallback("LIST", listCategoryCallback);
+    let workspace;
+    if (ScratchBlocks.registry)
+      workspace = this.targetWorkspace; // new Blockly
+    else workspace = this.workspace_;
+    workspace.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
+    workspace.registerToolboxCategoryCallback("LIST", listCategoryCallback);
     return oldShow.call(this, xmlList);
   };
 
@@ -153,21 +168,39 @@ export default async function ({ addon, console, msg, safeMsg }) {
     const result = originalGetBlocksXML.call(this, target);
     hasSeparateListCategory = addon.settings.get("separateListCategory");
     if (!addon.self.disabled && hasSeparateListCategory) {
+      let dataPrimary;
+      let dataTertiary;
+      let listsPrimary;
+      let listsTertiary;
+      if (ScratchBlocks.registry) {
+        // New Blockly: we need a workspace (it doesn't matter which one) to get the block styles.
+        // tabAPI.traps.getWorkspace() sometimes throws an error if called inside this function.
+        const theme = ScratchBlocks.common.getMainWorkspace().getTheme();
+        dataPrimary = theme.blockStyles.data.colourPrimary;
+        dataTertiary = theme.blockStyles.data.colourTertiary;
+        listsPrimary = theme.blockStyles.data_lists.colourPrimary;
+        listsTertiary = theme.blockStyles.data_lists.colourTertiary;
+      } else {
+        dataPrimary = ScratchBlocks.Colours.data.primary;
+        dataTertiary = ScratchBlocks.Colours.data.tertiary;
+        listsPrimary = ScratchBlocks.Colours.data_lists.primary;
+        listsTertiary = ScratchBlocks.Colours.data_lists.tertiary;
+      }
       result.push({
         id: "data",
         xml: `
         <category
           name="%{BKY_CATEGORY_VARIABLES}"
-          id="variables"
-          colour="${ScratchBlocks.Colours.data.primary}"
-          secondaryColour="${ScratchBlocks.Colours.data.tertiary}"
+          ${ScratchBlocks.registry ? "toolboxitemid" : "id"}="variables"
+          colour="${dataPrimary}"
+          secondaryColour="${dataTertiary}"
           custom="VARIABLE">
         </category>
         <category
           name="${safeMsg("list-category")}"
-          id="lists"
-          colour="${ScratchBlocks.Colours.data_lists.primary}"
-          secondaryColour="${ScratchBlocks.Colours.data_lists.tertiary}"
+          ${ScratchBlocks.registry ? "toolboxitemid" : "id"}="lists"
+          colour="${listsPrimary}"
+          secondaryColour="${listsTertiary}"
           custom="LIST">
         </category>`,
       });
@@ -184,48 +217,44 @@ export default async function ({ addon, console, msg, safeMsg }) {
     return result;
   };
 
-  // If editingTarget is set, the editor has already rendered and we have to tell it to rerender.
-  if (vm.editingTarget) {
-    vm.emitWorkspaceUpdate();
-  }
-
-  addon.settings.addEventListener("change", (e) => {
-    // When the separate list category option changes, we need to do a workspace update.
-    // For all other options, just refresh the toolbox.
-    // Always doing both of these in response to a settings change causes many issues.
-    if (addon.settings.get("separateListCategory") !== hasSeparateListCategory) {
-      if (vm.editingTarget) {
-        vm.emitWorkspaceUpdate();
-      }
+  const updateFlyoutContent = () => {
+    const workspace = addon.tab.traps.getWorkspace();
+    if (!workspace) return;
+    if (ScratchBlocks.registry) {
+      ScratchBlocks.Events.disable();
+      workspace.getToolbox().forceRerender(); // new Blockly
+      ScratchBlocks.Events.enable();
     } else {
-      const workspace = Blockly.getMainWorkspace();
-      if (workspace) {
-        workspace.refreshToolboxSelection_();
-      }
-    }
-  });
-
-  const dynamicEnableOrDisable = () => {
-    // Enabling/disabling is similar to changing settings.
-    // If separate list category is enabled, a workspace update is needed.
-    // If any other setting is enabled, refresh the toolbox.
-    if (addon.settings.get("separateListCategory")) {
-      if (vm.editingTarget) {
-        vm.emitWorkspaceUpdate();
-      }
-    }
-    if (addon.settings.get("separateLocalVariables") || addon.settings.get("moveReportersDown")) {
-      const workspace = Blockly.getMainWorkspace();
-      if (workspace) {
-        workspace.refreshToolboxSelection_();
-      }
+      workspace.refreshToolboxSelection_();
     }
   };
 
+  addon.settings.addEventListener("change", (e) => {
+    // When the separate list category option changes, we need to update the toolbox XML.
+    // For all other options, just refresh the toolbox.
+    if (addon.settings.get("separateListCategory") !== hasSeparateListCategory) {
+      updateToolboxXML(addon.tab);
+    } else {
+      updateFlyoutContent();
+    }
+  });
+
+  const updateToolbox = () => {
+    // Enabling/disabling is similar to changing settings.
+    // If separate list category is enabled, a toolbox XML update is needed.
+    // If any other setting is enabled, refresh the toolbox.
+    if (addon.settings.get("separateListCategory")) {
+      updateToolboxXML(addon.tab);
+    }
+    if (addon.settings.get("separateLocalVariables") || addon.settings.get("moveReportersDown")) {
+      updateFlyoutContent();
+    }
+  };
+  updateToolbox();
   addon.self.addEventListener("disabled", () => {
-    dynamicEnableOrDisable();
+    updateToolbox();
   });
   addon.self.addEventListener("reenabled", () => {
-    dynamicEnableOrDisable();
+    updateToolbox();
   });
 }

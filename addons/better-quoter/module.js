@@ -78,7 +78,7 @@ function getSelectionBBCode(selection) {
     tongue: ":P",
     lol: ":lol:",
     mad: ":mad:",
-    roll: ":rolleyes",
+    roll: ":rolleyes:",
     cool: ":cool:",
   });
 
@@ -164,7 +164,7 @@ function getSelectionBBCode(selection) {
   // scratchblocks
   const scratchBlocksPres = html.getElementsByClassName("blocks");
   for (const pre of scratchBlocksPres) {
-    pre.textContent = `[scratchblocks]\n${pre.getAttribute("data-original")}\n[/scratchblocks]`; // cs.js manages data-original because 3.0 scratchblocks
+    pre.textContent = `[scratchblocks]\n${pre.getAttribute("data-original")}\n[/scratchblocks]`; // cs.js manages data-original
   }
 
   // code blocks

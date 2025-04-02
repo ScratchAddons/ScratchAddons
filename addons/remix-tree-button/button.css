@@ -10,3 +10,9 @@
   vertical-align: bottom;
   content: "";
 }
+
+@media (max-width: 767px) /* $tablet-portrait - 1px */ {
+  .remixtree-button {
+    display: none;
+  }
+}

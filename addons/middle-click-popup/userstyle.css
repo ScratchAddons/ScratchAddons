@@ -43,9 +43,8 @@
   padding-right: 0.2rem;
 }
 
-.sa-mcp-input-wrapper:focus {
-  /* Change Scratch default styles */
-  box-shadow: none;
+.sa-mcp-input-wrapper:focus-within {
+  border-color: var(--editorDarkMode-primary, #855cd6);
 }
 
 .sa-mcp-input-wrapper[data-error="true"] {
@@ -61,15 +60,23 @@
   height: 100%;
   line-height: 100%;
   box-sizing: border-box;
+  font: inherit;
+}
+
+.sa-mcp-input {
+  color: inherit;
 }
 
 .sa-mcp-input-suggestion {
-  color: hsla(225, 15%, 40%, 0.65);
+  color: var(--editorDarkMode-input-transparentText, hsla(225, 15%, 40%, 0.6));
 }
 
 .sa-mcp-preview-container {
   flex: auto;
   overflow-y: scroll;
+}
+
+.sa-mcp-root /* <-- specificity */ .sa-mcp-preview-container {
   scrollbar-width: none;
 }
 
@@ -109,4 +116,9 @@
 
 .sa-mcp-preview-block-bg-selection {
   fill: #7774;
+}
+
+.blocklyAnimationLayer {
+  /* show delete animation above the popup */
+  z-index: 1000;
 }

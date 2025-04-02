@@ -1,10 +1,10 @@
 {
-  "name": "Customizable menu bar",
+  "name": "Customizable editor menu bar",
   "description": "Allows you to hide specific editor menu bar items or remove their labels or icons.",
   "credits": [
     {
       "name": "philipp2007",
-      "link": "https://ggigabyte.repl.co/"
+      "link": "https://iqnite.github.io/"
     },
     {
       "name": "CST1229",
@@ -55,6 +55,12 @@
     {
       "name": "Hide Tutorials button",
       "id": "hide-tutorials-button",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Hide Debug button",
+      "id": "hide-debug-button",
       "type": "boolean",
       "default": false
     },
@@ -122,11 +128,35 @@
           "hide-tutorials-button": true
         }
       }
+    },
+    {
+      "url": "debug-hide.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "hide-debug-button": true
+        }
+      }
+    },
+    {
+      "url": "divider-hide.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "hide-tutorials-button": true,
+          "hide-debug-button": true
+        }
+      }
     }
   ],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true,
   "enabledByDefault": false,
-  "versionAdded": "1.35.0"
+  "versionAdded": "1.36.0",
+  "latestUpdate": {
+    "version": "1.40.0",
+    "newSettings": ["hide-debug-button"],
+    "isMajor": true
+  }
 }

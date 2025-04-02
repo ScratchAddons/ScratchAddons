@@ -9,71 +9,88 @@ export default async function ({ addon, console, msg }) {
         return;
       }
 
-      let title = null;
-      let cancelMessage = null;
+      let confirmationTitle = null;
+      let confirmationMessage = null;
+
+      // Check if the user is performing one of the following actions...
+
+      // Share Project
       if (
         addon.settings.get("projectsharing") &&
         e.target.closest(
           "[class*='share-button_share-button']:not([class*='is-shared']), .banner-text + .banner-button"
         )
       ) {
-        title = addon.tab.scratchMessage("project.share.shareButton"); // "Share"
-        cancelMessage = msg("share");
-      } else if (
+        confirmationTitle = addon.tab.scratchMessage("project.share.shareButton");
+        confirmationMessage = msg("share");
+      }
+      // Unshare Project
+      else if (
         addon.settings.get("projectunsharing") &&
         e.target.closest(".media-stats a.unshare") &&
         location.hash !== "#galleries"
       ) {
-        title = e.target.closest(".media-stats a.unshare").textContent; // "Unshare"
-        cancelMessage = msg("unshare");
-      } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
+        confirmationTitle = e.target.closest(".media-stats a.unshare").textContent;
+        confirmationMessage = msg("unshare");
+      }
+      // Follow/Unfollow User
+      else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
         const button = e.target.closest("#profile-data .follow-button");
         if (button.classList.contains("notfollowing")) {
-          title = button.querySelector("span.follow").textContent; // "Follow"
-          cancelMessage = msg("follow");
+          confirmationTitle = button.querySelector("span.follow").textContent;
+          confirmationMessage = msg("follow");
         } else {
-          title = button.querySelector("span.unfollow").textContent; // "Unfollow"
-          cancelMessage = msg("unfollow");
+          confirmationTitle = button.querySelector("span.unfollow").textContent;
+          confirmationMessage = msg("unfollow");
         }
-      } else if (
+      }
+      // Accept Studio Invite
+      else if (
         ((/^\/studios\/\d+\/curators/g.test(location.pathname) &&
           e.target.closest("button.studio-invitation-button")) ||
           (location.pathname.startsWith("/messages") && e.target.closest(".sa-curator-invite-button"))) &&
         addon.settings.get("joiningstudio")
       ) {
-        title = location.pathname.startsWith("/messages")
+        confirmationTitle = location.pathname.startsWith("/messages")
           ? msg("accept-invite")
           : addon.tab.scratchMessage("studio.curatorAcceptInvite");
-        cancelMessage = msg("joinstudio");
-      } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
-        title = msg("closetopic-title");
-        cancelMessage = msg("closetopic");
-      } else if (addon.settings.get("cancelcomment")) {
+        confirmationMessage = msg("joinstudio");
+      }
+      // Close Forum Topic
+      else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
+        confirmationTitle = msg("closetopic-title");
+        confirmationMessage = msg("closetopic");
+      }
+      // Cancel Pending Comment
+      else if (addon.settings.get("cancelcomment")) {
         if (e.target.closest("div[data-control='cancel'] > a, .compose-cancel")) {
           // Do not ask to confirm canceling empty comments
           if (e.target.closest("form").querySelector("textarea").value === "") return;
-          title = msg("cancelcomment-title");
-          cancelMessage = msg("cancelcomment");
+          confirmationTitle = msg("cancelcomment-title");
+          confirmationMessage = msg("cancelcomment");
         }
         // Clicking "Reply" while writing a reply also discards the comment
         else if (e.target.closest("a[data-control='reply-to'], .comment-reply")) {
           // Do not ask to confirm canceling empty comments
           if (e.target.closest(".comment .info, .comment-body").querySelector("textarea")?.value.length > 0) {
-            title = msg("cancelcomment-title");
-            cancelMessage = msg("cancelcomment");
+            confirmationTitle = msg("cancelcomment-title");
+            confirmationMessage = msg("cancelcomment");
           }
         }
-      } else if (addon.settings.get("removingprojects") && e.target.closest(".media-trash")) {
-        title = msg("removeproject-title");
-        cancelMessage = msg("removeproject");
+      }
+      // Send Project to Trash
+      else if (addon.settings.get("removingprojects") && e.target.closest(".media-trash")) {
+        confirmationTitle = msg("removeproject-title");
+        confirmationMessage = msg("removeproject");
       }
 
-      if (cancelMessage !== null) {
+      // If one of the actions above is being taken, prevent it and show confirmation prompt
+      if (confirmationMessage !== null) {
         e.preventDefault();
         e.stopPropagation();
         addon.tab.scratchClassReady().then(() => {
           addon.tab
-            .confirm(title, cancelMessage, {
+            .confirm(confirmationTitle, confirmationMessage, {
               okButtonLabel: msg("yes"),
               cancelButtonLabel: msg("no"),
               useEditorClasses: addon.tab.editorMode === "editor",

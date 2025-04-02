@@ -28,7 +28,7 @@ export default class DomHelpers {
     // fetch target elements
     let elemDrag = selectorDrag; // document.querySelector(selectorDrag);
     let elemDrop = selectorDrop; // document.querySelector(selectorDrop);
-    if (!elemDrag /* || !elemDrop*/) {
+    if (!elemDrag) {
       return false;
     }
 
@@ -48,7 +48,6 @@ export default class DomHelpers {
 
     if (!elemDrop) {
       if (mouseXY) {
-        // console.log(mouseXY);
         let center2X = mouseXY.x;
         let center2Y = mouseXY.y;
         fireMouseEvent("drag", elemDrag, center2X, center2Y);

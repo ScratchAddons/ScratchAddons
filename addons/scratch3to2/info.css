@@ -1,0 +1,86 @@
+/* Page */
+#view {
+  padding-top: 15px;
+  padding-bottom: 20px;
+}
+
+/* Header */
+.information-page .title-banner.masthead {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+.information-page .title-banner.masthead h1 {
+  margin: 0;
+  padding: 7px 20px;
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+  border: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
+  border-bottom: none;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.27),
+    inset 0 1px 0 var(--darkWww-gray-boxHighlight, white);
+  color: var(--darkWww-gray-scratchr2HeaderText, #554747);
+  text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
+  font-size: 22px;
+  line-height: 26px;
+}
+
+/* Content */
+.information-page .info-outer {
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: var(--darkWww-box, white);
+  border: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.27);
+  color: var(--darkWww-box-scratchr2Text, #322f31);
+}
+.information-page .info-outer::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.information-page .info-outer .info-inner:last-child /* no navigation */ {
+  float: none;
+  margin: auto;
+  width: 100%;
+  max-width: 38.75em;
+}
+.information-page .info-outer .info-inner section:last-child {
+  margin-bottom: 0;
+}
+.information-page .info-outer .info-inner h2,
+.information-page .info-outer .info-inner h3,
+.information-page .info-outer .info-inner h4,
+.information-page .info-outer .info-inner dl dt {
+  color: var(--darkWww-box-scratchr2HeaderText, #554747);
+}
+.information-page .info-outer .info-inner p,
+.information-page .info-outer .info-inner ul,
+.information-page .info-outer .info-inner dl {
+  line-height: 1.25em;
+}
+.information-page .info-outer .info-inner a {
+  font-weight: bold;
+}
+
+/* Navigation */
+.information-page .info-outer nav {
+  border-color: var(--darkWww-border-20, #ccc);
+}
+.information-page .info-outer nav a {
+  font-weight: bold;
+}
+
+/* Get Help */
+.gethelp-button {
+  margin-bottom: 0;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  line-height: 30px;
+}
+.gethelp-button:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}

@@ -3,14 +3,23 @@
 }
 .studio-page #view {
   max-width: 942px;
+  color: var(--darkWww-page-text, #575e75);
 }
 .studio-page #view .studio-shell {
   padding: 0;
+  padding-top: 65px;
+  grid-template-columns: 250px minmax(0, 1fr);
   position: relative;
 }
 .studio-info-section:first-child /* title */ {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 220px);
   line-height: 45px;
+}
+.studio-info .studio-title {
+  font-weight: 500;
 }
 .studio-info div.studio-title {
   overflow: hidden;
@@ -22,8 +31,13 @@
   height: 45px;
   line-height: 30px;
 }
+.studio-info textarea.studio-title ~ .validation-message {
+  line-height: normal;
+}
 .studio-info .sa-oldstudio-follow-section {
   position: absolute;
+  top: 0;
+  right: 0;
   width: 200px;
 }
 .studio-info .studio-follow-button {
@@ -60,6 +74,8 @@
 }
 .studio-info .studio-info-footer-stats > div:nth-child(2) /* follower count */ {
   position: absolute;
+  top: 21px;
+  right: 0;
   margin: 0;
 }
 .studio-page:not(.sa-oldstudio-logged-out) .studio-info .studio-info-footer-stats > div:nth-child(2) {
@@ -70,6 +86,12 @@
 }
 .studio-page:not(.sa-oldstudio-logged-out) .studio-info .studio-info-footer-stats > div:nth-child(2) img {
   filter: var(--darkWww-button-filterInverted, brightness(0) invert(1));
+}
+.sa-oldstudio-logged-out .studio-info .studio-info-footer-stats > div:nth-child(2) {
+  top: 11px;
+}
+.studio-info .studio-info-footer-stats div img {
+  filter: var(--darkWww-page-filter, none);
 }
 .studio-info .studio-info-footer-report button {
   margin: 0.25em;
@@ -90,8 +112,41 @@
 .studio-info .studio-info-footer-report button:hover img {
   filter: var(--darkWww-link-hoverIconFilter, var(--oldStudioLayout-defaultLinkHoverIconFilter));
 }
+.studio-tab-nav {
+  margin: 0;
+  padding: 0;
+  background-color: var(--darkWww-box, white);
+  border: none;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+}
+.sub-nav.sub-nav-align-left {
+  justify-content: center;
+}
+.studio-tab-nav a.nav_link > li {
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+}
+.studio-tab-nav a.nav_link:hover > li,
+.sub-nav a.nav_link > li:active {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid var(--darkWww-box-tabHover, rgba(0, 0, 0, 0.2));
+}
+.studio-tab-nav a.active.nav_link > li,
+.studio-tab-nav a.active.nav_link:hover > li {
+  background: transparent;
+  border-color: var(--darkWww-box-greenText, #328554);
+  color: var(--darkWww-box-text, #575e75);
+}
 .studio-tab-nav li img {
   height: 1.5em;
+}
+.studio-tab-nav .active > li img,
+.studio-tab-nav a.active.nav_link:hover > li img {
+  filter: var(--darkWww-box-filterInverted, invert(0.55));
 }
 .studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton), #sa-studio-followers-button /* browse projects */ {
   position: fixed;
