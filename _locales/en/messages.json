@@ -26,14 +26,17 @@
   "1hour": {
     "message": "For 1 hour"
   },
+  "4hours": {
+    "message": "For 4 hours"
+  },
   "8hours": {
     "message": "For 8 hours"
   },
-  "24hours": {
-    "message": "For 24 hours"
+  "untilTomorrow": {
+    "message": "Until tomorrow"
   },
   "untilEnabled": {
-    "message": "Until I turn it back on"
+    "message": "Until turned off"
   },
   "muteFor": {
     "message": "Do not disturb"
@@ -62,6 +65,9 @@
   "forEditor": {
     "message": "For editor"
   },
+  "forPlayer": {
+    "message": "For project player"
+  },
   "forWebsite": {
     "message": "For website"
   },
@@ -89,14 +95,14 @@
   "codeEditorFeatures": {
     "message": "Code Editor"
   },
+  "playerFeatures": {
+    "message": "Project Player Features"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
   "profilesFeatures": {
     "message": "Profiles"
-  },
-  "projectPlayerFeatures": {
-    "message": "Project Player"
   },
   "projectPageFeatures": {
     "message": "Project Pages"
@@ -112,6 +118,9 @@
   },
   "websiteThemes": {
     "message": "Website Themes"
+  },
+  "playerThemes": {
+    "message": "Project Player Themes"
   },
   "popupFeatures": {
     "message": "Extension Popup Features"
@@ -169,6 +178,9 @@
   },
   "dark": {
     "message": "Dark"
+  },
+  "loading": {
+    "message": "Loading..."
   },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
@@ -242,15 +254,18 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_36": {
-    "message": "New addon: \"rearrangeable custom block inputs\", which allows rearranging custom block parameters on the \"Make a block\" screen. Go to $1 to enable it.",
+  "extensionUpdateInfo1_v1_42": {
+    "message": "New addon: \"FPS counter\", which shows the project framerate above the stage. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_36": {
-    "message": "Other new addons added this update are \"customizable menu bar\", \"place backpack code at mouse\", and \"square block text inputs\"."
+  "sendFeedbackNotification": {
+    "message": "send feedback"
+  },
+  "extensionUpdateInfo2_v1_42": {
+    "message": "Another new addon is \"Instant forum read indicators\", which instantly marks topics as read when opening them in a new tab."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",

@@ -29,10 +29,11 @@ export default async function ({ addon, console, msg }) {
       });
       const container = document.createElement("div");
       container.className = "sa-project-info";
-      addon.tab.displayNoneWhileDisabled(container, { display: "inline-block" });
+      addon.tab.displayNoneWhileDisabled(container);
       addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: container, order: 0 });
       let spriteImg = document.createElement("img");
       spriteImg.setAttribute("src", "https://scratch.mit.edu/svgs/project/sprite-count.svg");
+      spriteImg.setAttribute("draggable", false);
       container.appendChild(spriteImg);
       let spriteLbl = document.createElement("span");
       spriteLbl.id = "spriteLabel";
@@ -40,6 +41,7 @@ export default async function ({ addon, console, msg }) {
       container.appendChild(document.createElement("br"));
       let scriptImg = document.createElement("img");
       scriptImg.setAttribute("src", "https://scratch.mit.edu/svgs/project/block-count.svg");
+      scriptImg.setAttribute("draggable", false);
       container.appendChild(scriptImg);
       let scriptLbl = document.createElement("span");
       scriptLbl.id = "scriptLabel";

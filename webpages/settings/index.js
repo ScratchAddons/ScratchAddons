@@ -56,8 +56,15 @@ let fuse;
     },
   });
 
+  // REMINDER: update similar code at /background/imports/util.js
   const browserLevelPermissions = ["notifications"];
-  if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
+  if (typeof browser !== "undefined") {
+    // Firefox only
+    if (typeof Clipboard.prototype.write !== "function") {
+      // Firefox 109-126 only
+      browserLevelPermissions.push("clipboardWrite");
+    }
+  }
   let grantedOptionalPermissions = [];
   const updateGrantedPermissions = () =>
     chrome.permissions.getAll(({ permissions }) => {
@@ -76,7 +83,6 @@ let fuse;
         theme: initialTheme,
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
-        switchPath: "../../images/icons/switch.svg",
         moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
@@ -107,6 +113,11 @@ let fuse;
             feedback: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${versionName}&${utm}`,
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
+        })(),
+        aprilFoolsPotato: (() => {
+          const now = Date.now() / 1000;
+          if (now < 1743595200 && now > 1743422400) return " 🥔";
+          else return "";
         })(),
       };
     },
@@ -172,14 +183,10 @@ let fuse;
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
+        location.hash = "";
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
-        if (this.categoryOpen) {
-          vue.switchPath = "../../images/icons/close.svg";
-        } else {
-          vue.switchPath = "../../images/icons/switch.svg";
-        }
       },
       msg(message, ...params) {
         return chrome.i18n.getMessage(message, ...params);
@@ -198,6 +205,10 @@ let fuse;
       },
       clearSearch() {
         this.searchInputReal = "";
+      },
+      clearAndFocusSearch() {
+        this.clearSearch();
+        document.querySelector("#searchBox").focus();
       },
       setTheme(mode) {
         setGlobalTheme(mode);
@@ -310,7 +321,7 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target.classList[0] === "toggle") return;
+        if (event?.target.id === "sidebar-toggle") return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
@@ -373,15 +384,19 @@ let fuse;
       window.addEventListener(
         "hashchange",
         (e) => {
-          const addonId = location.hash.replace(/^#addon-/, "");
-          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
-          if (!groupWithAddon) return; //Don't run if hash is invalid
-          const addon = this.manifestsById[addonId];
+          if (location.hash === "#moresettings") {
+            vue.openMoreSettings();
+          } else {
+            const addonId = location.hash.replace(/^#addon-/, "");
+            const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+            if (!groupWithAddon) return; //Don't run if hash is invalid
+            const addon = this.manifestsById[addonId];
 
-          groupWithAddon.expanded = true;
-          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-          this.clearSearch();
-          setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+            groupWithAddon.expanded = true;
+            this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+            this.clearSearch();
+            setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+          }
         },
         { capture: false }
       );
@@ -421,7 +436,9 @@ let fuse;
             ? "theme"
             : manifest.tags.includes("community")
               ? "community"
-              : "editor";
+              : manifest.tags.includes("player")
+                ? "player"
+                : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -436,7 +453,7 @@ let fuse;
         return count;
       };
       if (manifest._categories[0] === "theme") {
-        // All themes should have either "editor" or "community" tag
+        // All themes should have either the "editor", "community" or "player" tag
         addCategoryIfTag([
           {
             tag: "editor",
@@ -448,9 +465,15 @@ let fuse;
               tag: "community",
               category: "themesForWebsite",
             },
+          ]) ||
+          addCategoryIfTag([
+            {
+              tag: "player",
+              category: "themesForPlayer",
+            },
           ]);
       } else if (manifest._categories[0] === "editor") {
-        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor", "projectPlayer"]);
+        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor"]);
         if (addedCategories === 0) manifest._categories.push("editorOthers");
       } else if (manifest._categories[0] === "community") {
         const addedCategories = addCategoryIfTag(["profiles", "projectPage", "forums"]);
@@ -530,7 +553,7 @@ let fuse;
       } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
       else return null;
     };
-    const order = [["danger", "beta"], "editor", "community", "popup"];
+    const order = [["danger", "beta"], "editor", "player", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
       group.addonIds = group.addonIds
@@ -580,7 +603,9 @@ let fuse;
     vue.loaded = true;
     setTimeout(() => {
       const hash = window.location.hash;
-      if (hash.startsWith("#addon-")) {
+      if (location.hash === "#moresettings") {
+        vue.openMoreSettings();
+      } else if (hash.startsWith("#addon-")) {
         const addonId = hash.substring(7);
         const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
@@ -622,11 +647,9 @@ let fuse;
     if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
-      vue.switchPath = "../../images/icons/switch.svg";
     } else if (vue.smallMode !== false) {
       vue.smallMode = false;
       vue.categoryOpen = true;
-      vue.switchPath = "../../images/icons/close.svg";
     }
   }
   window.onresize = resize;

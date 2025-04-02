@@ -25,6 +25,8 @@ const vue = new Vue({
   },
   methods: {
     msg(message, ...params) {
+      const now = Date.now() / 1000;
+      if (message === "extensionName" && now < 1743595200 && now > 1743422400) return "Scratch Potatoes 🥔";
       return chrome.i18n.getMessage(message, ...params);
     },
     direction() {
@@ -68,17 +70,16 @@ const vue = new Vue({
 
 let manifests = null;
 // If order unspecified, addon goes first. All new popups should be added here.
-const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
+const TAB_ORDER = ["__settings__", "scratch-messaging", "cloud-games"];
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   manifests = res.manifests;
-  const popupObjects = Object.keys(res.addonsEnabled)
+  let popupObjects = Object.keys(res.addonsEnabled)
     .filter((addonId) => res.addonsEnabled[addonId] === true)
     .map((addonId) => manifests.find((addon) => addon.addonId === addonId))
     // Note an enabled addon might not exist anymore!
     .filter((findManifest) => findManifest !== undefined)
     .filter(({ manifest }) => manifest.popup)
-    .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA))
     .map(
       ({ addonId, manifest }) =>
         (manifest.popup._addonId = addonId) &&
@@ -92,6 +93,9 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     html: "../settings/index.html",
     _addonId: "__settings__",
   });
+  popupObjects = popupObjects.sort(
+    ({ _addonId: addonIdB }, { _addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA)
+  );
   vue.popups = popupObjects;
   chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
     let id = -1;

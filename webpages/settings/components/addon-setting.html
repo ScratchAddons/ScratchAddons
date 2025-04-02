@@ -9,6 +9,10 @@
   >
     <div class="setting-label-container">
       <div class="setting-label" v-html="settingsName(addon)"></div>
+      <div v-if="setting.description" :class="{tooltip: addon._enabled}">
+        <img src="../../images/icons/help.svg" class="icon-type setting-help-icon" />
+        <span class="tooltiptext tooltiptexttop">{{setting.description}}</span>
+      </div>
       <addon-tag v-if="isNewOption" tag="new"></addon-tag>
     </div>
     <template v-if="noResetDropdown">
@@ -36,7 +40,7 @@
         </div>
         <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
-            <img class="icon-type" src="../../images/icons/plus.svg" />
+            <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
           <div v-click-outside="closeResetDropdowns">
             <button
@@ -44,7 +48,7 @@
               class="addon-buttons addon-split-button-dropdown"
               @click="toggleRowDropdown"
             >
-              <img class="icon-type" src="../../images/icons/expand.svg" />
+              <img class="icon-type" src="../../images/icons/expand.svg" draggable="false" />
             </button>
             <ul>
               <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
@@ -146,7 +150,7 @@
           :title="msg('reset')"
           @click="updateOption(setting.default || '')"
         >
-          <img src="../../images/icons/undo.svg" class="icon-type" /></button
+          <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" /></button
       ></template>
     </div>
   </div>
@@ -161,6 +165,11 @@
     align-items: center;
     position: relative;
   }
+  .setting-help-icon {
+    margin-inline-start: 8px;
+    width: 18px;
+    height: 18px;
+  }
   .setting-input {
     color: var(--content-text);
     background: var(--input-background);
@@ -170,6 +179,8 @@
     padding: 0 12px;
     margin-left: auto;
     border-radius: 4px 0 0 4px;
+    font-family: inherit;
+    font-size: 14px;
     transition: 0.2s ease;
     transition-property: box-shadow, border;
   }
@@ -253,8 +264,8 @@
   .setting-label {
     text-transform: uppercase;
     color: var(--label-text);
-    font-weight: 600;
-    font-size: 12px;
+    font-weight: 500;
+    min-width: 70px;
   }
 
   .setting-dropdown,
@@ -352,7 +363,7 @@
   .setting-dropdown .text-preview {
     margin-left: 12px;
     color: var(--label-text);
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .setting-table {

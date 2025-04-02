@@ -33,7 +33,7 @@ export default class UndoGroup {
 }
 
 /**
- * https://github.com/scratchfoundation/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
+ * https://github.com/scratchfoundation/scratch-blocks/blob/2e3a31e/core/utils.js#L610-L623
  * @returns {string}
  * @private
  */

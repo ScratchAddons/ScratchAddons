@@ -25,11 +25,23 @@ export default {
       weight: 0.3,
     },
     {
+      name: "settings.name",
+      weight: 0.4,
+    },
+    {
       name: "credits.name",
       weight: 0.2,
     },
     {
       name: "info.text",
+      weight: 0.1,
+    },
+    {
+      name: "settings.potentialValues.name",
+      weight: 0.1,
+    },
+    {
+      name: "presets.name",
       weight: 0.1,
     },
   ],

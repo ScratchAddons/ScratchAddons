@@ -546,7 +546,7 @@ class TokenTypeStringLiteral extends TokenType {
     for (let i = idx; i <= query.length; i++) {
       const isTerminator = TokenTypeStringLiteral.isTerminator(query.str[i]);
       const isIgnorable = QueryInfo.IGNORABLE_CHARS.includes(query.str[i]);
-      if ((wasTerminator !== isTerminator || i == query.length) && !wasIgnorable && i !== idx && i !== quoteEnd) {
+      if ((wasTerminator !== isTerminator || i === query.length) && !wasIgnorable && i !== idx && i !== quoteEnd) {
         const value = query.str.substring(idx, i);
         yield new Token(idx, i, this, value);
       }
@@ -603,7 +603,7 @@ class TokenTypeColor extends TokenType {
   }
 
   createText(token, query, endOnly) {
-    return query.query.substring(token.start, token.end);
+    return query.str.substring(token.start, token.end);
   }
 }
 
@@ -1045,7 +1045,7 @@ export class QueryResult {
           } else if (part instanceof BlockInputString && input !== part.defaultValue) {
             // Make string inputs 100x their real length so they appear at the bottom
             stringLength += ("" + input).length * 100;
-          } else if (input != null) {
+          } else if (input !== null) {
             stringLength += ("" + input).length;
           }
         }
@@ -1248,7 +1248,7 @@ export default class WorkspaceQuerier {
     validResults = validResults.sort((a, b) => {
       const aLengths = a.getLengths();
       const bLengths = b.getLengths();
-      if (aLengths.stringLength != bLengths.stringLength) return aLengths.stringLength - bLengths.stringLength;
+      if (aLengths.stringLength !== bLengths.stringLength) return aLengths.stringLength - bLengths.stringLength;
       return aLengths.tokenLength - bLengths.tokenLength;
     });
 
