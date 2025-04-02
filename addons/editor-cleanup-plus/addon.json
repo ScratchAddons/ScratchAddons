@@ -18,7 +18,7 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.39.0",
+  "versionAdded": "1.43.0",
   "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": false
 }
