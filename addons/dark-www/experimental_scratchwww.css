@@ -292,6 +292,9 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .donate-section .donate-button {
   color: var(--darkWww-box-greenText);
 }
+.tou-modal-link {
+  color: var(--darkWww-box-greenText) !important;
+}
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
 }
@@ -327,9 +330,14 @@ body:not(.sa-body-editor) .select .join-flow-select {
 .outer #projectBox,
 .download .installation,
 body:not(.sa-body-editor) .gender-radio-row,
-.wedo .banner {
+.wedo .banner,
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row {
   background-color: var(--darkWww-gray);
   color: var(--darkWww-gray-text);
+}
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected,
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected:hover {
+  background-color: hsla(215, 100%, 65%, 0.25);
 }
 body:not(.sa-body-editor) /* specificity */ .outer .sort-mode .select select {
   background-color: transparent;
