@@ -88,13 +88,15 @@
       "name": "Stop previous timing on start timing",
       "id": "auto_stop_timing",
       "type": "boolean",
-      "default": false
+      "default": false,
+      "description": "Automatically stops the previous timing block when a new one starts—ideal for timing consecutive sections. Only the final block needs an explicit stop."
     },
     {
       "name": "Ratio Time instead of Percentage Time",
       "id": "show_ratio_time",
       "type": "boolean",
-      "default": false
+      "default": false,
+      "description": "Replaces the percentage column with a ratio of each block’s total time to the smallest block’s total time."
     }
   ],
   "tags": ["editor", "codeEditor", "featured"],
