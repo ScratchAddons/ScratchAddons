@@ -762,7 +762,7 @@ class TokenTypeBlock extends TokenType {
 
   /**
    * @param {QueryInfo} query
-   * @param {number} idxi
+   * @param {number} idx
    * @param {number} depth
    * @returns
    */
