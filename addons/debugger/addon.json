@@ -95,12 +95,6 @@
       "id": "show_ratio_time",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Ratio Time instead of Percentage Time",
-      "id": "show_ratio_time",
-      "type": "boolean",
-      "default": false
     }
   ],
   "tags": ["editor", "codeEditor", "featured"],
