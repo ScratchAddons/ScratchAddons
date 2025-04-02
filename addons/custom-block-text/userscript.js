@@ -39,12 +39,12 @@ export default async function ({ addon, console }) {
   textShadowCss.textContent = `
     .blocklyDraggable > .blocklyText,
     .blocklyDraggable > g > text {
-      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+      text-shadow: 1px 1px 0 var(--editorTheme3-text-shadow, rgba(0, 0, 0, 0.4));
     }
     
     div[theme="high-contrast"] .blocklyDraggable > .blocklyText,
     div[theme="high-contrast"] .blocklyDraggable > g > text {
-      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15);
+      text-shadow: 1px 1px 0 var(--editorTheme3-text-shadow, rgba(0, 0, 0, 0.15));
     }`;
   textShadowCss.disabled = true;
   document.head.appendChild(textShadowCss);
