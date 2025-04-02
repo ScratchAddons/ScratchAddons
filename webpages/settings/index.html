@@ -238,7 +238,12 @@
         <div class="addons-block-header">
           <div v-if="!isIframe" class="category-header-title" v-cloak>
             <div v-if="relatedAddonsOpen" class="related-addons-header">
-              <img src="../../images/icons/left-arrow.svg" class="back-button" draggable="false" @click="backRelatedAddon()"></img>
+              <img
+                src="../../images/icons/left-arrow.svg"
+                class="back-button"
+                draggable="false"
+                @click="backRelatedAddon()"
+              />
               <span>{{ msg("relatedTo", relatedToAddonName) }}</span>
             </div>
             <span v-else>{{ selectedCategoryName }}</span>
@@ -268,26 +273,26 @@
           </template>
           <template v-else>
             <div v-for="addon of addonList">
-            <div
-              id="iframe-fullscreen-suggestion"
-              v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
-              v-show="searchInput === ''"
-            >
-              <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
-              <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
-            </div>
-            <addon-group-header
-              v-if="addon.headerAbove"
-              :group="addon.group"
-              :shown-count="groupShownCount(addon.group)"
-              :margin-above="groupMarginAbove(addon.group)"
-            ></addon-group-header>
-            <addon-body
-              :visible="addon.matchesSearch && addon.matchesCategory"
-              :addon="addon.manifest"
-              :group-id="addon.group.id"
-              :group-expanded="addon.group.expanded"
-            ></addon-body>
+              <div
+                id="iframe-fullscreen-suggestion"
+                v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
+                v-show="searchInput === ''"
+              >
+                <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
+                <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
+              </div>
+              <addon-group-header
+                v-if="addon.headerAbove"
+                :group="addon.group"
+                :shown-count="groupShownCount(addon.group)"
+                :margin-above="groupMarginAbove(addon.group)"
+              ></addon-group-header>
+              <addon-body
+                :visible="addon.matchesSearch && addon.matchesCategory"
+                :addon="addon.manifest"
+                :group-id="addon.group.id"
+                :group-expanded="addon.group.expanded"
+              ></addon-body>
             </div>
           </template>
         </div>

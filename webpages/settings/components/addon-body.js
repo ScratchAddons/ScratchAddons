@@ -122,7 +122,7 @@ export default async function ({ template }) {
       openRelated(clickedAddon) {
         this.$root.openRelatedAddons(this.addon);
         this.$root.blinkAddon(clickedAddon._addonId);
-      }
+      },
     },
     watch: {
       groupId(newValue) {

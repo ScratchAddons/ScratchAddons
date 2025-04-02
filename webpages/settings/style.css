@@ -144,7 +144,7 @@ h1 {
 }
 
 .back-button:hover {
-  background-color: var(--hover-highlight)
+  background-color: var(--hover-highlight);
 }
 
 .clear-button {
