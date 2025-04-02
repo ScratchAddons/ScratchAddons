@@ -77,7 +77,8 @@ export default async function ({ addon }) {
   const isSupportedElement = (el) => {
     let inputSelector = " input:is([type=text], [type=number])";
     if (!el.classList) return false;
-    if (el.classList.contains("blocklyHtmlInput")) return true; // Block inputs do not have a type to change
+    if (el.classList.contains("blocklyHtmlInput"))
+      return true; // Block inputs do not have a type to change
     else if (el.matches("[class*=mediaRecorderPopupContent]" + inputSelector)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
