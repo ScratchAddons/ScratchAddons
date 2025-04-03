@@ -259,12 +259,13 @@ export default async function ({ addon, console, msg }) {
       }, {});
     };
 
+    const getHref = (item) => item.getAttribute("xlink:href") || item.getAttribute("href");
     const externalImages = /*Object.*/ groupBy(
       Array.from(svg.querySelectorAll("image")).filter((item) => {
-        const iconUrl = item.getAttribute("xlink:href");
+        const iconUrl = getHref(item);
         return iconUrl && !iconUrl.startsWith("data:");
       }),
-      (item) => item.getAttribute("xlink:href")
+      (item) => getHref(item)
     );
 
     // replace external images with data URIs
@@ -276,7 +277,10 @@ export default async function ({ addon, console, msg }) {
           reader.addEventListener("load", () => resolve(reader.result));
           reader.readAsDataURL(blob);
         });
-        externalImages[iconUrl].forEach((item) => item.setAttribute("xlink:href", dataUri));
+        externalImages[iconUrl].forEach((item) => {
+          item.removeAttribute("href");
+          item.setAttribute("xlink:href", dataUri);
+        });
       })
     );
     if (isExportPNG) {
