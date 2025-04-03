@@ -73,12 +73,11 @@ export default async function ({ addon }) {
     return true;
   };
 
-  // Because math-in-inputs changes the type to "text", we need to check for that instead of "number"
   const isSupportedElement = (el) => {
-    let inputSelector = " input:is([type=text], [type=number])";
+    let inputSelector = " input[type=number]";
     if (!el.classList) return false;
     if (el.classList.contains("blocklyHtmlInput"))
-      return true; // Block inputs do not have a type to change
+      return true; // Block inputs do not have a type attribute
     else if (el.matches("[class*=mediaRecorderPopupContent]" + inputSelector)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
@@ -97,7 +96,6 @@ export default async function ({ addon }) {
         // Any inputs in the colour popover
         return true;
       }
-      // Doing math in the following inputs is almost useless, but for consistency we'll allow it
     } else if (el.matches("[class*=sa-paint-snap-settings]" + inputSelector)) {
       // The paint-snap distance setting
       return true;
