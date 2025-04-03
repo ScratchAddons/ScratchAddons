@@ -10,6 +10,14 @@
       "link": "https://scratch.mit.edu/users/Chrome_Cat/"
     }
   ],
+  "settings": [
+    {
+      "name": "Find unused variables",
+      "id": "promptUnused",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [

@@ -22,6 +22,7 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
 
   const doCleanUp = () => {
     let workspace = getWorkspace();
+    const promptUnused = addon.settings.get("promptUnused");
 
     UndoGroup.startUndoGroup(workspace);
 
@@ -32,7 +33,7 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
       let message = msg("orphaned", {
         count: orphanCount,
       });
-      if (confirm(message)) {
+      if (promptUnused && confirm(message)) {
         for (const block of result.orphans.blocks) {
           block.dispose();
         }
@@ -75,72 +76,75 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
     }
 
     setTimeout(() => {
-      // Locate unused local variables...
-      let workspace = getWorkspace();
-      let map = workspace.getVariableMap();
-      let vars = map.getVariablesOfType("");
-      let unusedLocals = [];
-
-      for (const row of vars) {
-        if (row.isLocal) {
-          let usages = getVariableUsesById(row.getId(), workspace);
-          if (!usages || usages.length === 0) {
-            unusedLocals.push(row);
-          }
-        }
-      }
-
-      if (unusedLocals.length > 0) {
-        const unusedCount = unusedLocals.length;
-        let message = msg("unused-var", {
-          count: unusedCount,
-        });
-        for (let i = 0; i < unusedLocals.length; i++) {
-          let orphan = unusedLocals[i];
-          if (i > 0) {
-            message += ", ";
-          }
-          message += orphan.name;
-        }
-        if (confirm(message)) {
-          for (const orphan of unusedLocals) {
-            workspace.deleteVariableById(orphan.getId());
-          }
-        }
-      }
-
-      // Locate unused local lists...
-      let lists = map.getVariablesOfType("list");
-      let unusedLists = [];
-
-      for (const row of lists) {
-        if (row.isLocal) {
-          let usages = getVariableUsesById(row.getId(), workspace);
-          if (!usages || usages.length === 0) {
-            unusedLists.push(row);
-          }
-        }
-      }
-      if (unusedLists.length > 0) {
-        const unusedCount = unusedLists.length;
-        let message = msg("unused-list", {
-          count: unusedCount,
-        });
-        for (let i = 0; i < unusedLists.length; i++) {
-          let orphan = unusedLists[i];
-          if (i > 0) {
-            message += ", ";
-          }
-          message += orphan.name;
-        }
-        if (confirm(message)) {
-          for (const orphan of unusedLists) {
-            workspace.deleteVariableById(orphan.getId());
-          }
-        }
-      }
-
+      if (promptUnused) promptUnusedVariables();
       UndoGroup.endUndoGroup(workspace);
     }, 100);
   };
+
+  function promptUnusedVariables() {
+    // Locate unused local variables...
+    let workspace = getWorkspace();
+    let map = workspace.getVariableMap();
+    let vars = map.getVariablesOfType("");
+    let unusedLocals = [];
+
+    for (const row of vars) {
+      if (row.isLocal) {
+        let usages = getVariableUsesById(row.getId(), workspace);
+        if (!usages || usages.length === 0) {
+          unusedLocals.push(row);
+        }
+      }
+    }
+
+    if (unusedLocals.length > 0) {
+      const unusedCount = unusedLocals.length;
+      let message = msg("unused-var", {
+        count: unusedCount,
+      });
+      for (let i = 0; i < unusedLocals.length; i++) {
+        let orphan = unusedLocals[i];
+        if (i > 0) {
+          message += ", ";
+        }
+        message += orphan.name;
+      }
+      if (confirm(message)) {
+        for (const orphan of unusedLocals) {
+          workspace.deleteVariableById(orphan.getId());
+        }
+      }
+    }
+
+    // Locate unused local lists...
+    let lists = map.getVariablesOfType("list");
+    let unusedLists = [];
+
+    for (const row of lists) {
+      if (row.isLocal) {
+        let usages = getVariableUsesById(row.getId(), workspace);
+        if (!usages || usages.length === 0) {
+          unusedLists.push(row);
+        }
+      }
+    }
+    if (unusedLists.length > 0) {
+      const unusedCount = unusedLists.length;
+      let message = msg("unused-list", {
+        count: unusedCount,
+      });
+      for (let i = 0; i < unusedLists.length; i++) {
+        let orphan = unusedLists[i];
+        if (i > 0) {
+          message += ", ";
+        }
+        message += orphan.name;
+      }
+      if (confirm(message)) {
+        for (const orphan of unusedLists) {
+          workspace.deleteVariableById(orphan.getId());
+        }
+      }
+    }
+  }
 }
