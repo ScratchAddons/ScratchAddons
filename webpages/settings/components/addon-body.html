@@ -108,7 +108,7 @@
         </div>
       </div>
       <div class="related-addons" v-if="addon._relatedAddons && !isIframe">
-        <div class="addon-message addon-info">
+        <div class="addon-message">
           <span class="related-addons-text">{{msg('relatedAddons')}}</span>
           <span v-for="addonManifest of addon._relatedAddons">
             <a @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
@@ -306,8 +306,7 @@
     padding: 6px;
     padding-left: 10px;
     border: none;
-    border-radius: 10px;
-    font-size: 12px;
+    font-size: 14px;
   }
   .addon-notice {
     border-color: var(--notice-border);
