@@ -328,6 +328,12 @@ export default async function ({ addon, console, msg }) {
 
     svgchild = svgchild.cloneNode(true);
     svgchild.setAttribute("transform", `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`);
+
+    // Include comment text in the exported SVG
+    for (const textarea of svgchild.querySelectorAll(".blocklyTextarea")) {
+      textarea.innerText = textarea.value;
+    }
+
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
