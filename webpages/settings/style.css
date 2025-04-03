@@ -124,6 +124,7 @@ h1 {
 .category-header-title {
   flex-grow: 1;
   font-size: 16px;
+  font-weight: 500;
 }
 
 .related-addons-header {
