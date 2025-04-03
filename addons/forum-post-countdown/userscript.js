@@ -40,7 +40,7 @@ export default async function ({ addon, msg }) {
     }
   });
   const label = document.createElement("label");
-  label.for = checkbox.id;
+  label.htmlFor = checkbox.id;
   label.innerText = msg("post-after-cooldown");
   label.style.display = "inline";
   let form_submit = document.querySelector("#djangobbwrap .form-submit");
