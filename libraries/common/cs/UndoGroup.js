@@ -7,12 +7,15 @@ export default class UndoGroup {
   /**
    * Start an Undo group - begin recording
    * @param workspace the workspace
+   * @param {boolean} [includeLast=false] whether to include the event immediately preceding the start
    */
-  static startUndoGroup(workspace) {
+  static startUndoGroup(workspace, includeLast = false) {
     const undoStack = workspace.undoStack_;
     if (undoStack.length) {
       undoStack[undoStack.length - 1]._devtoolsLastUndo = true;
     }
+
+    workspace._undoGroupIncludeLast = includeLast;
   }
 
   /**
@@ -21,13 +24,17 @@ export default class UndoGroup {
    */
   static endUndoGroup(workspace) {
     const undoStack = workspace.undoStack_;
+    const includeLast = workspace._undoGroupIncludeLast;
+    delete workspace._undoGroupIncludeLast;
     // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
     // https://github.com/scratchfoundation/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
     setTimeout(() => {
       const group = generateUID();
-      for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
+      let i = undoStack.length - 1;
+      for (; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
         undoStack[i].group = group;
       }
+      if (includeLast && i >= 0) undoStack[i].group = group;
     }, 0);
   }
 }
