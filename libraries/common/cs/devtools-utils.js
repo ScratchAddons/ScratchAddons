@@ -42,10 +42,11 @@ export const getTopBlocks = (workspace) => {
 };
 
 export const autoPositionComment = (comment) => {
-  comment.needsAutoPositioning_ = true;
-  comment.autoPosition_();
-  comment.needsAutoPositioning_ = false;
-  comment.moveTo(comment.x_, comment.y_);
+  if (typeof comment.autoPosition_ === 'function') {
+    comment.needsAutoPositioning_ = true;
+    comment.autoPosition_();
+    comment.needsAutoPositioning_ = false;
+  }
 };
 
 /**
