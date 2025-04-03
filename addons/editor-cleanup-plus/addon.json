@@ -28,5 +28,5 @@
   ],
   "versionAdded": "1.43.0",
   "tags": ["editor", "codeEditor", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": true
 }
