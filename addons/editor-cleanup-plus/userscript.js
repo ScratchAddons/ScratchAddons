@@ -41,28 +41,32 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
       }
     }
 
-    let cursorX = 48;
+    const gridSize = workspace.getGrid().spacing || workspace.getGrid().spacing_; // new blockly || old blockly
+
+    // coordinates start between the workspace dots but script-snap snaps to them
+    let cursorX = gridSize / 2;
 
     let maxWidths = result.maxWidths;
 
     for (const column of columns) {
-      let cursorY = 64;
+      let cursorY = gridSize / 2;
       let maxWidth = 0;
 
       for (const block of column.blocks) {
-        let extraHeight = 72;
         let xy = block.getRelativeToSurfaceXY();
         if (cursorX - xy.x !== 0 || cursorY - xy.y !== 0) {
           block.moveBy(cursorX - xy.x, cursorY - xy.y);
         }
         let heightWidth = block.getHeightWidth();
-        cursorY += heightWidth.height + extraHeight;
+        cursorY += heightWidth.height + gridSize;
+        cursorY += gridSize - ((cursorY + gridSize / 2) % gridSize);
 
         let maxWidthWithComments = maxWidths[block.id] || 0;
         maxWidth = Math.max(maxWidth, Math.max(heightWidth.width, maxWidthWithComments));
       }
 
-      cursorX += maxWidth + 96;
+      cursorX += maxWidth + gridSize;
+      cursorX += gridSize - ((cursorX + gridSize / 2) % gridSize);
     }
 
     let topComments = workspace.getTopComments();
