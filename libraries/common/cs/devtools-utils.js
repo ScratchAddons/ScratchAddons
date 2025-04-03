@@ -42,7 +42,7 @@ export const getTopBlocks = (workspace) => {
 };
 
 export const autoPositionComment = (comment) => {
-  if (typeof comment.autoPosition_ === 'function') {
+  if (typeof comment.autoPosition_ === "function") {
     comment.needsAutoPositioning_ = true;
     comment.autoPosition_();
     comment.needsAutoPositioning_ = false;
