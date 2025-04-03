@@ -5,7 +5,9 @@ export default async function ({ addon, console, msg }) {
 
   function makeStyle() {
     let style = document.createElement("style");
-    style.textContent = Blockly.registry ? "" : `
+    style.textContent = Blockly.registry
+      ? ""
+      : `
     .blocklyText {
         fill: ${Blockly.Colours.text};
         font-family: "Helvetica Neue", Helvetica, sans-serif;
