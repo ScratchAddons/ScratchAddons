@@ -21,6 +21,15 @@
       "link": "https://scratch.mit.edu/users/mybearworld/"
     }
   ],
+  "settings": [
+    {
+      "name": "Retry after countdown",
+      "description": "When posting fails because of the 60 second rule, automatically try again when possible.",
+      "type": "boolean",
+      "default": true,
+      "id": "retry"
+    }
+  ],
   "dynamicDisable": true,
   "dynamicEnable": true
 }

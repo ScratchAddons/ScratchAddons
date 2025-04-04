@@ -107,12 +107,14 @@ export default async function ({ addon, console, msg }) {
 
     forceReactRerender();
 
-    if (!document.querySelector(".project-description")) {
-      // Something went wrong for some reason...
-      console.log("Failed to show preview of project notes.");
-      checkboxInput.checked = false;
-      currentlyEnabled = false;
-    }
+    setTimeout(() => {
+      if (!document.querySelector(".project-description")) {
+        // Something went wrong for some reason...
+        console.log("Failed to show preview of project notes.");
+        checkboxInput.checked = false;
+        currentlyEnabled = false;
+      }
+    }, 0);
   }
 
   function forceReactRerender() {
