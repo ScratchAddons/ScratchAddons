@@ -753,7 +753,7 @@ class TokenTypeBlock extends TokenType {
     enumerateStringForms();
 
     if (this.stringForms.length >= WorkspaceQuerier.MAX_STRING_FORMS) {
-      console.log(
+      console.warn(
         "Warning: Block '" + this.block.id + "' has too many string forms. Search results may not be very good."
       );
       this.stringForms.length = 0;
@@ -1222,12 +1222,12 @@ export default class WorkspaceQuerier {
       }
       ++query.resultCount;
       if (!limited && query.resultCount >= WorkspaceQuerier.MAX_RESULTS) {
-        console.log("Warning: Workspace query exceeded maximum result count.");
+        console.warn("Warning: Workspace query exceeded maximum result count.");
         limited = true;
       }
 
       if (!query.canCreateMoreTokens()) {
-        console.log("Warning: Workspace query exceeded maximum token count.");
+        console.warn("Warning: Workspace query exceeded maximum token count.");
         limited = true;
         break;
       }
