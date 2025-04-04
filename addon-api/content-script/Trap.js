@@ -2,27 +2,37 @@ import Listenable from "../common/Listenable.js";
 
 /**
  * Manages object trapping.
- * @extends Listenable
  */
 export default class Trap extends Listenable {
   constructor(tab) {
     super();
+    /** @private */
     this._react_internal_key = undefined;
+    /** @private */
     this._react_internal_container_key = undefined;
+    /** @private */
     this._isWWW = () => tab.clientVersion === "scratch-www";
+    /** @private */
     this._getEditorMode = () => this._isWWW() && tab.editorMode;
+    /** @private */
     this._waitForElement = tab.waitForElement.bind(tab);
+    /** @private */
     this._cache = Object.create(null);
   }
 
   /**
    * scratch-vm instance.
-   * @throws when on non-project page.
+   * @throws When on non-project page.
    * @type {object}
    */
   get vm() {
     if (!this._getEditorMode()) throw new Error("Cannot access vm on non-project page");
     return __scratchAddonsTraps._onceMap.vm;
+  }
+
+  /** @private */
+  get REACT_INTERNAL_PREFIX() {
+    return "__reactInternalInstance$";
   }
 
   /**
@@ -39,6 +49,7 @@ export default class Trap extends Listenable {
     return ["__reactContainere$", "__reactContainer$"];
   }
 
+  /** @private */
   _getBlocksComponent(wrapper) {
     const internal = wrapper[this.getInternalKey(wrapper)];
     let childable = internal;
@@ -48,6 +59,7 @@ export default class Trap extends Listenable {
     return childable;
   }
 
+  /** @private */
   _getBlocksWrapperComponentSync() {
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed")
@@ -60,6 +72,7 @@ export default class Trap extends Listenable {
     return this._getBlocksComponent(elem);
   }
 
+  /** @private */
   async _getBlocksWrapperComponent() {
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed")
@@ -78,7 +91,7 @@ export default class Trap extends Listenable {
    * Gets Blockly instance actually used by Scratch.
    * This is different from window.Blockly.
    * @async
-   * @throws when on non-project page.
+   * @throws When on non-project page.
    * @returns {Promise<object>}
    */
   async getBlockly() {
@@ -105,9 +118,9 @@ export default class Trap extends Listenable {
   }
 
   /**
-   * Gets react internal key.
-   * @param {HTMLElement} elem - an element rendered by React
-   * @returns {string} the key
+   * Gets React's internal key.
+   * @param {HTMLElement} elem An element rendered by React.
+   * @returns {string} The key.
    */
   getInternalKey(elem) {
     if (!this._react_internal_key) {
@@ -135,7 +148,7 @@ export default class Trap extends Listenable {
   /**
    * Gets @scratch/paper instance.
    * @async
-   * @throws when on non-project page or if paper couldn't be found.
+   * @throws When on non-project page or if paper couldn't be found.
    * @returns {Promise<object>}
    */
   async getPaper() {

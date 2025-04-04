@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console, msg }) => {
   const types = ["costume", "sound"];
 
