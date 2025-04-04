@@ -74,18 +74,34 @@ export default async function ({ addon }) {
   };
 
   const isSupportedElement = (el) => {
-    if (el.classList.contains("blocklyHtmlInput")) return true;
-    else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
+    let inputSelector = " input[type=number]";
+    if (!el.classList) return false;
+    if (el.classList.contains("blocklyHtmlInput"))
+      return true; // Block inputs do not have a type attribute
+    else if (el.matches("[class*=mediaRecorderPopupContent]" + inputSelector)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
     } else if (el.matches("[class*=input_input-form_]")) {
-      if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
-        // Sprite X/Y coordinates, size and direction (excludes sprite name)
+      // The following elements have this in their class list
+      if (el.matches("[class*=input_input-small_]")) {
+        // Inputs in sprite propeties (exluding sprite name)
         return true;
-      } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
-        // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
+      } else if (
+        el.matches("[class*=paint-editor_editor-container-top_]" + inputSelector) &&
+        !el.matches("[class*=fixed-tools_costume-input_]")
+      ) {
+        // All costume editor inputs (in the top bar: outline width, brush size, etc) except costume name
         return true;
-      } else return false;
+      } else if (el.matches("[class*=Popover-body]" + inputSelector)) {
+        // Any inputs in the colour popover
+        return true;
+      }
+    } else if (el.matches("[class*=sa-paint-snap-settings]" + inputSelector)) {
+      // The paint-snap distance setting
+      return true;
+    } else if (el.matches("[class*=sa-onion-settings]" + inputSelector)) {
+      // All inputs in the onion-skinning settings
+      return true;
     }
     return false;
   };
