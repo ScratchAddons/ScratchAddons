@@ -73,6 +73,7 @@ export default async function ({ template }) {
           this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
+          // Do not collapse when disabling in related addons view
           this.expanded = this.$root.relatedAddonsOpen
             ? this.expanded
             : isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
