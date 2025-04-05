@@ -104,6 +104,7 @@ class Highlighter {
   }
 
   setGlowingThreads(threads) {
+    if (this.addon.tab.editorMode !== "editor") return;
     const elementsToHighlight = new Set();
     const workspace = this.addon.tab.traps.getWorkspace();
 
