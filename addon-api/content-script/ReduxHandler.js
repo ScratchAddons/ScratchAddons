@@ -2,12 +2,14 @@ import Listenable from "../common/Listenable.js";
 
 /**
  * Handles Redux state.
- * @extends Listenable
  * @property {boolean} initialized Whether the handler is initialized or not.
  */
 export default class ReduxHandler extends Listenable {
   constructor() {
     super();
+    /**
+     * Whether the Redux handler is initialized.
+     */
     this.initialized = false;
     this.initialize();
   }
@@ -40,8 +42,8 @@ export default class ReduxHandler extends Listenable {
 
   /**
    * Dispatches redux state change.
-   * @param {object} payload - payload to pass to redux.
-   * @throws when Redux is unavailable.
+   * @param {object} payload Payload to pass to redux.
+   * @throws When Redux is unavailable.
    */
   dispatch(payload) {
     if (!__scratchAddonsRedux.dispatch) throw new Error("Redux is unavailable");
@@ -50,10 +52,10 @@ export default class ReduxHandler extends Listenable {
 
   /**
    * Waits until a state meets the condition.
-   * @param {function} condition - a function that takes redux state and returns whether to keep waiting or not.
-   * @param {object=} opts - options.
-   * @param {string=|string[]=} actions - the action(s) to check for.
-   * @returns {Promise} a Promise resolved when the state meets the condition.
+   * @param {function} condition A function that takes redux state and returns whether to keep waiting or not.
+   * @param {object=} opts Options.
+   * @param {string=|string[]=} actions The action(s) to check for.
+   * @returns {Promise} A Promise resolved when the state meets the condition.
    */
   waitForState(condition, opts = {}) {
     this.initialize();
