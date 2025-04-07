@@ -1,0 +1,10 @@
+@import url("../../libraries/common/cs/react-tooltip.css");
+
+.sa-font-upload-btn:hover + .__react_component_tooltip {
+  visibility: visible;
+}
+
+.sa-font-upload-tooltip {
+  left: auto;
+}
+

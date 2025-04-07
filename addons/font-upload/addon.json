@@ -1,0 +1,46 @@
+{
+  "name": "Font Upload",
+  "description": "Upload fonts as sprites.",
+  "credits": [
+    {
+      "name": "Dylan Dang"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "projects"
+      ],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "tags": [
+    "editor"
+  ],
+  "settings": [
+    {
+      "name": "Base font size (px)",
+      "id": "baseFontSize",
+      "type": "integer",
+      "min": 1,
+      "default": 16,
+      "max": 1000
+    }
+  ],
+  "versionAdded": "1.43.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false,
+  "libraries": [
+    "scratch-gui"
+  ]
+}
