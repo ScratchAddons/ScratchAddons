@@ -17,10 +17,17 @@ export default class DevTools {
     this.canShare = false;
 
     this.mouseXY = { x: 0, y: 0 };
+
+    // On new Blockly, we can't access the clipboard data directly because it's
+    // a global variable in a module. Instead, we set this to true when something
+    // is copied. If the addon is enabled late, something might already be on the
+    // clipboard, so we initialize it to true.
+    this.clipboardHasData = addon.self.enabledLate;
   }
 
   async init() {
     this.addContextMenus();
+    this.patchCopyShortcuts();
     while (true) {
       const root = await this.addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
         markAsSeen: true,
@@ -40,7 +47,11 @@ export default class DevTools {
     enableContextMenuSeparators(this.addon.tab);
 
     const pasteCallback = () => {
-      document.dispatchEvent(
+      let target;
+      if (blockly.registry)
+        target = document.querySelector(".injectionDiv"); // new Blockly
+      else target = document;
+      target.dispatchEvent(
         new KeyboardEvent("keydown", {
           keyCode: 86,
           ctrlKey: true,
@@ -53,7 +64,7 @@ export default class DevTools {
       blockly.ContextMenuRegistry.registry.register(
         addSeparator({
           displayText: this.m("paste"),
-          preconditionFn: () => (blockly.clipboardXml_ ? "enabled" : "disabled"),
+          preconditionFn: () => (this.clipboardHasData ? "enabled" : "disabled"),
           callback: pasteCallback,
           scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
           id: "saPaste",
@@ -92,7 +103,7 @@ export default class DevTools {
             enabled: true,
             text: this.m("copy-all"),
             callback: () => {
-              this.eventCopyClick(block);
+              this.eventCopyClick(blockly, block);
             },
             separator: true,
           }),
@@ -100,14 +111,14 @@ export default class DevTools {
             enabled: true,
             text: this.m("copy-block"),
             callback: () => {
-              this.eventCopyClick(block, 1);
+              this.eventCopyClick(blockly, block, 1);
             },
           },
           {
             enabled: true,
             text: this.m("cut-block"),
             callback: () => {
-              this.eventCopyClick(block, 2);
+              this.eventCopyClick(blockly, block, 2);
             },
           }
         );
@@ -118,15 +129,15 @@ export default class DevTools {
 
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
-        if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
+        if (block.type.startsWith("data_")) {
           this.selVarID = block.getVars()[0];
           items.push(
             addSeparator({
               enabled: true,
-              text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+              text: this.m("swap", { var: block.type.includes("list") ? this.m("lists") : this.m("variables") }),
               callback: () => {
                 let wksp = this.getWorkspace();
-                let v = wksp.getVariableById(this.selVarID);
+                let v = wksp.getVariableMap().getVariableById(this.selVarID);
                 let varName = window.prompt(this.msg("replace", { name: v.name }));
                 if (varName) {
                   this.doReplaceVariable(this.selVarID, varName, v.type);
@@ -140,6 +151,32 @@ export default class DevTools {
       },
       { blocks: true, flyout: true }
     );
+  }
+
+  async patchCopyShortcuts() {
+    const devtools = this;
+    const blockly = await this.addon.tab.traps.getBlockly();
+    if (!blockly.registry) return;
+    const shortcuts = blockly.ShortcutRegistry.registry.getRegistry();
+
+    // Set this.clipboardHasData to true when something is copied on new Blockly
+
+    const newCallback = (oldCallback) =>
+      function (...args) {
+        const success = oldCallback.call(this, ...args);
+        if (success) devtools.clipboardHasData = true;
+        return success;
+      };
+
+    const copyShortcut = shortcuts[blockly.ShortcutItems.names.COPY];
+    const oldCopyCallback = copyShortcut.callback;
+    copyShortcut.callback = newCallback(oldCopyCallback);
+    blockly.ShortcutRegistry.registry.register(copyShortcut, true);
+
+    const cutShortcut = shortcuts[blockly.ShortcutItems.names.CUT];
+    const oldCutCallback = cutShortcut.callback;
+    cutShortcut.callback = newCallback(oldCutCallback);
+    blockly.ShortcutRegistry.registry.register(cutShortcut, true);
   }
 
   getWorkspace() {
@@ -214,7 +251,7 @@ export default class DevTools {
    */
   doReplaceVariable(varId, newVarName, type) {
     let wksp = this.getWorkspace();
-    let v = wksp.getVariable(newVarName, type);
+    let v = wksp.getVariableMap().getVariable(newVarName, type);
     if (!v) {
       alert(this.msg("var-not-exist"));
       return;
@@ -257,7 +294,7 @@ export default class DevTools {
    * new stack by excluding all the known ones.
    * @param ids Set of previously known ids
    */
-  async beginDragOfNewBlocksNotInIDs(ids) {
+  beginDragOfNewBlocksNotInIDs(ids) {
     if (!this.addon.settings.get("enablePasteBlocksAtMouse")) {
       return;
     }
@@ -278,7 +315,11 @@ export default class DevTools {
     for (const block of topBlocks) {
       if (!ids.has(block.id)) {
         let mouseXYClone = { x: this.mouseXY.x, y: this.mouseXY.y };
-        this.domHelpers.triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
+        let svgPath;
+        if (block.pathObject)
+          svgPath = block.pathObject.svgPath; // new Blockly
+        else svgPath = block.svgPath_;
+        this.domHelpers.triggerDragAndDrop(svgPath, null, mouseXYClone);
       }
     }
   }
@@ -292,7 +333,7 @@ export default class DevTools {
     this.updateMousePosition(e);
   }
 
-  eventKeyDown(e) {
+  eventKeyDownDocument(e) {
     const switchCostume = (up) => {
       // todo: select previous costume
       let selected = this.costTabBody.querySelector("div[class*='sprite-selector-item_is-selected']");
@@ -309,7 +350,7 @@ export default class DevTools {
       }
     };
 
-    if (document.URL.indexOf("editor") <= 0) {
+    if (this.addon.tab.editorMode !== "editor") {
       return;
     }
 
@@ -340,6 +381,14 @@ export default class DevTools {
         return true;
       }
     }
+  }
+
+  eventKeyDownBlockly(e) {
+    if (this.addon.tab.editorMode !== "editor") {
+      return;
+    }
+
+    let ctrlKey = e.ctrlKey || e.metaKey;
 
     if (e.keyCode === 86 && ctrlKey) {
       // Ctrl + V
@@ -351,29 +400,38 @@ export default class DevTools {
     }
   }
 
-  eventCopyClick(block, blockOnly) {
+  eventCopyClick(blockly, block, blockOnly) {
     let wksp = this.getWorkspace();
 
     if (block) {
       block.select();
       let next = blockOnly ? block.getNextBlock() : null;
       if (next) {
+        blockly.Events.setGroup(false);
         next.unplug(false); // setParent(null);
       }
 
       // separate child temporarily
-      document.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
+      let target;
+      if (blockly.registry)
+        target = document.querySelector(".injectionDiv"); // new Blockly
+      else target = document;
+      target.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
       if (next || blockOnly === 2) {
-        setTimeout(() => {
-          if (next) {
-            wksp.undo(); // undo the unplug above...
-          }
-          if (blockOnly === 2) {
-            UndoGroup.startUndoGroup(wksp);
-            block.dispose(true);
-            UndoGroup.endUndoGroup(wksp);
-          }
-        }, 0);
+        // wait until the event has been fired
+        // see https://github.com/google/blockly/blob/fa4fce5/core/events/utils.ts#L113-L115
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            if (next) {
+              wksp.undo(); // undo the unplug above...
+            }
+            if (blockOnly === 2) {
+              UndoGroup.startUndoGroup(wksp);
+              block.dispose(true);
+              UndoGroup.endUndoGroup(wksp);
+            }
+          }, 0);
+        });
       }
     }
   }
@@ -386,7 +444,7 @@ export default class DevTools {
     this.updateMousePosition(e);
   }
 
-  initInner(root) {
+  async initInner(root) {
     let guiTabs = root.childNodes;
 
     if (this.codeTab && guiTabs[0] !== this.codeTab) {
@@ -398,7 +456,15 @@ export default class DevTools {
     this.costTab = guiTabs[1];
     this.costTabBody = document.querySelector("div[aria-labelledby='" + this.costTab.id + "']");
 
-    this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
+    this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDownDocument(...e), true);
+
+    const blockly = await this.addon.tab.traps.getBlockly();
+    let keyEventTarget;
+    if (blockly.registry)
+      keyEventTarget = document.querySelector(".injectionDiv"); // new Blockly
+    else keyEventTarget = document;
+    this.domHelpers.bindOnce(keyEventTarget, "keydown", (...e) => this.eventKeyDownBlockly(...e), true);
+
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
     this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them
     this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
