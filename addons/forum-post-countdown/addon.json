@@ -5,6 +5,7 @@
   "versionAdded": "1.34.0",
   "latestUpdate": {
     "version": "1.43.0",
+    "temporaryNotice": "The countdown is now more accurate.",
     "newSettings": ["retry"]
   },
   "userscripts": [
