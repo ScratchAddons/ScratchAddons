@@ -326,7 +326,11 @@
                 </div>
               </div>
               <div class="edm-paint-canvas-and-controls">
-                <div class="edm-paint-canvas"></div>
+                <div
+                  class="edm-paint-canvas"
+                  @mouseenter="$emit('areahover', 'affectPaper')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                ></div>
                 <div class="edm-paint-controls">
                   <div
                     class="edm-button"
