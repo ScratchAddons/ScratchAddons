@@ -28,14 +28,18 @@ export default class UndoGroup {
     delete workspace._undoGroupIncludeLast;
     // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
     // https://github.com/scratchfoundation/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
-    setTimeout(() => {
-      const group = generateUID();
-      let i = undoStack.length - 1;
-      for (; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
-        undoStack[i].group = group;
-      }
-      if (includeLast && i >= 0) undoStack[i].group = group;
-    }, 0);
+    // New Blockly uses a setTimeout inside requestAnimationFrame
+    // https://github.com/google/blockly/blob/fa4fce5/core/events/utils.ts#L113-L115
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const group = generateUID();
+        let i = undoStack.length - 1;
+        for (; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
+          undoStack[i].group = group;
+        }
+        if (includeLast && i >= 0) undoStack[i].group = group;
+      }, 0);
+    });
   }
 }
 
