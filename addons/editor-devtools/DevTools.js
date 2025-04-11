@@ -343,11 +343,20 @@ export default class DevTools {
 
     if (e.keyCode === 86 && ctrlKey) {
       // Ctrl + V
+      // Don't paste if the mouse is outside the workspace SVG group
+      const group = this.getWorkspace().svgGroup_;
+      const bounds = group.getBoundingClientRect();
+      const { x, y } = this.mouseXY;
+      if (x < bounds.x) return;
+      if (y < bounds.y) return;
+      if (x > bounds.x + bounds.width) return;
+      if (y > bounds.y + bounds.height) return;
       // Set a timeout so we can take control of the paste after the event
       let ids = this.getTopBlockIDs();
       setTimeout(() => {
         this.beginDragOfNewBlocksNotInIDs(ids);
       }, 10);
+      return true;
     }
   }
 
