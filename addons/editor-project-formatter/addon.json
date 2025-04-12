@@ -10,7 +10,7 @@
   "dynamicDisable": false,
   "settings": [
     {
-      "name": "Save Rules with Project",
+      "name": "@addtosettingsmenu.svg Save Rules with Project",
       "description": "Rules will be automaticaly saved when you also save your project. (onto the website manualy or automaticaly, your computer, copying it, etc)",
       "id": "save-with-project",
       "type": "boolean",
@@ -24,76 +24,6 @@
       "if": {
         "addonEnabled": ["debugger"]
       }
-    },
-    {
-      "name": "@addtosettingsmenu.svg Custom Rules to Settings Menu",
-      "description": "Adds Custom Rules to the \"settings\" menu instead of the addon settings.",
-      "id": "custom-rules-to-menu",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Custom Rules",
-      "id": "custom-rules",
-      "type": "table",
-      "default": [
-        {
-          "name": "My Rule",
-          "enabled": false,
-          "logic": "if <subject.isUppercase>",
-          "level": "error",
-          "msg": "{val} is not {val.case}",
-          "format-logic": "subject.toUppercase.toCamelCase.formatRegex(/huh/)"
-        }
-      ],
-      "row": [
-        {
-          "name": "Rule Name",
-          "id": "name",
-          "type": "string",
-          "default": "My Rule"
-        },
-        {
-          "name": "Enabled",
-          "id": "enabled",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "Rule Logic",
-          "id": "logic",
-          "type": "string",
-          "default": "/regex whee/"
-        },
-        {
-          "name": "Message",
-          "id": "msg",
-          "type": "string",
-          "default": "{val} is not {val.case}"
-        },
-        {
-          "name": "Formatting Logic",
-          "id": "format-logic",
-          "type": "string",
-          "default": "subject.toUppercase"
-        },
-        {
-          "name": "Rule Level",
-          "id": "level",
-          "type": "select",
-          "potentialValues": [
-            {
-              "name": "Error",
-              "id": "error"
-            },
-            {
-              "name": "Warning",
-              "id": "warn"
-            }
-          ],
-          "default": "error"
-        }
-      ]
     }
   ],
   "userscripts": [

@@ -153,6 +153,10 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
       log.internal = true;
       log.type = "warn";
     }
+    if (type === "internal-error") {
+      log.internal = true;
+      log.type = "error";
+    }
 
     const previousLog = logView.rows[logView.rows.length - 1];
     if (previousLog && areLogsEqual(log, previousLog)) {

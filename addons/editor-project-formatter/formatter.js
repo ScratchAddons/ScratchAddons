@@ -1,5 +1,6 @@
-import FormatterUtils from "./utils/formatter-utils.js";
+import FormatterUtils, { uid } from "./utils/formatter-utils.js";
 import AddonAssets from "./utils/addon-assets.js";
+import Cast from "./utils/cast.js";
 import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
 
 function closeMenu(menu, reduxHandler) {
@@ -26,6 +27,24 @@ function isDebuggerBlock(block) {
     return false;
   }
 }
+const convertToCSSCompatible = (styles) =>
+  Object.fromEntries(
+    Object.entries(styles).map(([key, value]) => {
+      if (value === null || typeof value === "undefined") {
+        return [key, "none"];
+      } else {
+        return [key, String(value)];
+      }
+    })
+  );
+
+/**Setup styles for an element.
+ * @param {HTMLElement} element The target element.
+ * @param {CSSStyleDeclaration} styles The CSS styles to apply.
+ */
+const setStyles = (element, styles) => Object.assign(element.style, convertToCSSCompatible(styles));
+
+const parseEncodedHTML = (str) => new DOMParser().parseFromString(str, "text/html").body.textContent ?? "";
 
 function getBlockType(block) {
   if (block.type.startsWith("procedures")) return "proccedure";
@@ -91,7 +110,7 @@ export default class EditorFormatter {
     const issuesTextArea = document.createElement("textarea");
     issuesTextArea.className = "sa-format-issues-textarea";
     issuesTextArea.setAttribute("readonly", true);
-    issuesTextArea.innerText = new DOMParser().parseFromString(issues, "text/html").body.textContent;
+    issuesTextArea.innerText = parseEncodedHTML(issues);
 
     // Create our buttons
     const buttonRow = document.createElement("div");
@@ -318,7 +337,9 @@ export default class EditorFormatter {
   }
 
   checkFormatting(scope) {
-    this.createFormatIssuesModal(this.newFormatMessage("warn", "sprite", "Sprite1", "ur code is ugly"), scope);
+    const msg = this.newFormatMessage("warn", "sprite", "Sprite1", "ur code is ugly");
+    this.createFormatIssuesModal(msg, scope);
+    this.formatterUtils.logToDebugger(parseEncodedHTML(msg), null, "warn");
   }
 
   async format() {
@@ -370,23 +391,30 @@ export default class EditorFormatter {
       return divider;
     };
 
-    const createHeader = (title) => {
+    const createHeader = (title, headerLevel) => {
       const headerDiv = document.createElement("div");
-      headerDiv.className = "sa-format-options-header ";
+      headerDiv.className = "sa-format-options-header";
 
-      const header = document.createElement("h3");
+      const headerLevelNumber = Number(headerLevel.replace("h", ""));
+
+      const header = document.createElement(headerLevel);
       header.textContent = title;
 
-      const headerDivider = createDivider();
+      if (headerLevelNumber <= 3) {
+        const headerDivider = createDivider();
 
-      headerDiv.append(header, headerDivider);
+        headerDiv.append(header, headerDivider);
+      } else {
+        headerDiv.append(header);
+      }
 
       return headerDiv;
     };
 
     ruleContainer.className = "sa-format-options-modal";
+    const rulesHeader = createHeader("Formatting Rules", "h3");
 
-    ruleContainer.appendChild(createHeader("Formatting Rules"));
+    ruleContainer.appendChild(rulesHeader);
 
     const createHelpButton = (id) => {
       const button = document.createElement("button");
@@ -417,7 +445,7 @@ export default class EditorFormatter {
     };
 
     const createDropdown = (array, elementClass) => {
-      // Helper function to check if the list only has objects.
+      /**  Helper function to check if the list only has objects. */
       const onlyPlainObjects = (arr) => {
         arr.every(
           (item) => item !== null && typeof item === "object" && !Array.isArray(item) && !(item instanceof Date)
@@ -441,11 +469,13 @@ export default class EditorFormatter {
         select.appendChild(option);
       });
 
+      select.name = "sa-formatter-settings-dropdown";
+
       return select;
     };
 
     const rulesDiv = document.createElement("div");
-    rulesDiv.style.paddingLeft = "1.2rem";
+    rulesDiv.className = "sa-format-options-header-section";
 
     formatRuleOptions.forEach((rule) => {
       const ruleDiv = document.createElement("div");
@@ -523,6 +553,237 @@ export default class EditorFormatter {
 
     ruleContainer.appendChild(rulesDiv);
 
+    const customRulesHeader = createHeader("Custom Rules", "h3");
+
+    const customRulesDiv = document.createElement("div");
+    customRulesDiv.className = "sa-format-options-header-section";
+
+    const plusImg = document.createElement("img");
+
+    plusImg.src = this.addonAssets.getFileFromAssets("plus.svg");
+    plusImg.className = "sa-formatter-options-plus-icon";
+
+    const minusImg = document.createElement("img");
+
+    minusImg.src = this.addonAssets.getFileFromAssets("minus.svg");
+    minusImg.className = "sa-formatter-options-plus-icon";
+
+    const addCustomRuleButton = document.createElement("button");
+
+    addCustomRuleButton.appendChild(plusImg);
+    addCustomRuleButton.className = "sa-formatter-options-custom-rule-button";
+
+    const removeCustomRuleButton = document.createElement("button");
+    removeCustomRuleButton.appendChild(minusImg);
+    removeCustomRuleButton.className = "sa-formatter-options-custom-rule-button";
+
+    const mainCustomRuleButtonRow = document.createElement("div");
+    mainCustomRuleButtonRow.className = "sa-formatter-options-main-custom-rule-button-row";
+    mainCustomRuleButtonRow.append(addCustomRuleButton, removeCustomRuleButton);
+
+    customRulesDiv.appendChild(mainCustomRuleButtonRow);
+
+    const createCustomRule = ({
+      name = null,
+      enabled = null,
+      logic = null,
+      level = null,
+      msg = null,
+      formatLogic = null,
+      id = null,
+    }) => {
+      const customRuleDiv = document.createElement("div");
+
+      const customRuleData = {
+        name: name ?? "My Rule",
+        enabled: enabled ?? false,
+        logic: logic ?? "if <subject.isUppercase>",
+        level: level ?? "error",
+        msg: msg ?? "{val} is not {val.case}",
+        formatLogic: formatLogic ?? "subject.toUppercase.toCamelCase.formatRegex(/huh/)",
+        id: id ?? uid(),
+      };
+
+      if (!id && !this.formatterUtils.customRules[id])
+        this.formatterUtils.customRules[customRuleData.id] = customRuleData;
+
+      /**Helper function to create inputs.
+       * @param {string} id ID of the input.
+       * @param {string} labelText The label's text.
+       * @param {string} parentId The parent's ID from the custom rules list.
+       * @param {?string} [type="string"] Type of the label.
+       * @param {?Object} opts Options of the input.
+       */
+      const createInput = (id, labelText, parentId, type = "string", opts) => {
+        const inputContainer = document.createElement("div");
+        setStyles(inputContainer, {
+          margin: 0,
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+        });
+
+        const input = document.createElement("input");
+        input.id = id;
+        switch (type) {
+          case "string": {
+            input.type = "text";
+
+            input.value = Cast.toString(this.formatterUtils.customRules[parentId][input.id]);
+            input.placeholder = "Some Text";
+
+            input.minLength = opts.minLength ?? 4;
+            input.maxLength = opts.maxLength ?? 8;
+
+            // Input Validation
+            const validationMsg = document.createElement("span");
+            validationMsg.className = "sa-formatter-options-validation-message";
+            validationMsg.style.display = "none";
+
+            input.addEventListener("input", (e) => {
+              if (e.target.value.length < input.minLength) {
+                input.classList.add("sa-formatter-options-custom-rule-input_invalid");
+                validationMsg.style.display = "block";
+
+                validationMsg.textContent = `Input must be atleast ${input.minLength} characters`;
+              } else {
+                input.classList.remove("sa-formatter-options-custom-rule-input_invalid");
+                validationMsg.style.display = "none";
+              }
+            });
+
+            inputContainer.append(input, validationMsg);
+            break;
+          }
+          case "number": {
+            input.type = "number";
+            input.value = Cast.toNumber(this.formatterUtils.customRules[parentId][input.id]);
+            input.placeholder = opts.min ?? 0;
+
+            input.min = opts.min ?? 0;
+            input.max = opts.max ?? Infinity;
+
+            // Input Validation
+            const validationMsg = document.createElement("span");
+            validationMsg.className = "sa-formatter-options-validation-message";
+            validationMsg.style.display = "none";
+
+            input.addEventListener("input", (e) => {
+              if (e.target.value.length > input.max) {
+                input.classList.add("sa-formatter-options-custom-rule-input_invalid");
+                validationMsg.style.display = "block";
+
+                validationMsg.textContent = `Input must be greater than "${input.min}"`;
+              } else if (e.target.value.length < input.min) {
+                input.classList.add("sa-formatter-options-custom-rule-input_invalid");
+                validationMsg.style.display = "block";
+
+                validationMsg.textContent = `Input must not be greater than ${input.max}`;
+              } else {
+                input.classList.remove("sa-formatter-options-custom-rule-input_invalid");
+                validationMsg.style.display = "none";
+              }
+            });
+
+            inputContainer.append(input, validationMsg);
+            break;
+          }
+          case "bool-toggle": {
+            input.type = "checkbox";
+
+            const toggle = document.createElement("div");
+            toggle.classList.add("sa-formatter-options-toggle-switch");
+
+            input.className = "sa-formatter-options-toggle-input";
+            input.checked = Cast.toBoolean(this.formatterUtils.customRules[parentId][input.id]);
+
+            const slider = document.createElement("span");
+            slider.className = "sa-formatter-options-toggle-slider";
+
+            toggle.append(input, slider);
+
+            inputContainer.appendChild(toggle);
+            break;
+          }
+          case "boolean": {
+            input.type = "checkbox";
+            inputContainer.appendChild(input);
+
+            break;
+          }
+          case "dropdown": {
+            if (!opts.dropdownData) throw new Error('Dropdown data is missing while input type is "dropdown".');
+            const dropdown = createDropdown(opts.dropdownData, `sa-formatter-options-custom-rule-input_${type}`);
+
+            dropdown.id = id;
+
+            dropdown.addEventListener("change", (e) => {
+              this.formatterUtils.customRules[parentId][dropdown.id] = e.target.value;
+            });
+
+            inputContainer.appendChild(dropdown);
+            break;
+          }
+        }
+        input.classList.add(`sa-formatter-options-custom-rule-input_${type}`);
+
+        const label = document.createElement("label");
+        label.textContent = `${labelText}:`;
+        label.htmlFor = id;
+        label.classList.add("sa-formatter-options-custom-rule-label");
+
+        input.addEventListener("change", (e) => {
+          this.formatterUtils.customRules[parentId][input.id] = e.target.value;
+        });
+
+        const inputDiv = document.createElement("div");
+        inputDiv.className = "sa-formatter-options-custom-rule-input-container";
+        inputDiv.append(label, inputContainer);
+
+        return inputDiv;
+      };
+
+      customRuleDiv.id = id ?? customRuleData.id;
+      customRuleDiv.className = "sa-formatter-options-custom-rule-box";
+
+      customRuleDiv.append(
+        createInput("name", "Rule Name", customRuleDiv.id, "string", { minLength: 4, maxLength: 16 }),
+        createInput("enabled", "Enabled", customRuleDiv.id, "bool-toggle"),
+        createInput("logic", "Rule Logic", customRuleDiv.id, "string", { minLength: 4, maxLength: 16 }),
+        createInput("level", "Rule Level", customRuleDiv.id, "dropdown", {
+          dropdownData: [
+            {
+              text: "Error",
+              value: "error",
+            },
+            {
+              text: "Warning",
+              value: "warn",
+            },
+            {
+              text: "Notice",
+              value: "notice",
+            },
+          ],
+        })
+      );
+
+      return customRulesDiv.appendChild(customRuleDiv);
+    };
+
+    const deleteCustomRule = (id) => {
+      customRulesDiv.removeChild(document.querySelector(`div[id="${id}"]`));
+      delete this.formatterUtils.customRules[id];
+    };
+
+    const deleteLatestCustomRule = () => deleteCustomRule(Object.keys(this.formatterUtils.customRules).at(0));
+
+    addCustomRuleButton.addEventListener("click", createCustomRule);
+
+    removeCustomRuleButton.addEventListener("click", deleteLatestCustomRule);
+
+    ruleContainer.append(customRulesHeader, customRulesDiv);
+
     const buttonRow = document.createElement("div");
     buttonRow.setAttribute(
       "class",
@@ -546,9 +807,19 @@ export default class EditorFormatter {
 
     ruleContainer.appendChild(buttonRow);
 
+    // Modal logic
     content.appendChild(ruleContainer);
 
     closeButton.addEventListener("click", () => modal.remove());
+
+    if (this.formatterUtils.customRules) {
+      this.console.log(this.formatterUtils.customRules);
+
+      for (const customRule of Object.values(this.formatterUtils.customRules)) {
+        this.console.log(customRule);
+        createCustomRule(customRule);
+      }
+    }
   }
 
   /**Initialize the editor formatter. */

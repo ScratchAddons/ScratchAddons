@@ -1,4 +1,5 @@
 import Cast from "../utils/cast.js";
+import DebuggerConsole from "../../debugger/debugger-module.js";
 
 /**
  * @typedef {Object} Rule
@@ -61,7 +62,7 @@ const soup_ = "!#%()*+,-./:;=?@[]^_`{|}~" + "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghi
  * 87 characters ^ 20 length > 128 bits (better than a UUID).
  * @return {string} A globally unique ID string.
  */
-const uid = function () {
+export const uid = function () {
   const length = 20;
   const soupLength = soup_.length;
   const id = [];
@@ -83,7 +84,7 @@ export default class FormatterUtils {
     this.addon = addon;
     this.console = console;
 
-    this.customRules = this.addon.settings.get("custom-rules");
+    this.customRules = {};
 
     this.ignoredItems = new Set();
     this.storage = null;
@@ -183,12 +184,20 @@ export default class FormatterUtils {
     const comment = this.findConfigCommentInStage();
     if (comment) {
       this.loadConfig(comment.text);
+    } else {
+      this.loadConfig();
     }
+    this.logToDebugger("test", null, "warn");
   }
 
   loadConfig(config) {
-    const match = config.match(/formatter-config:\/\/(.*?)\/\/:formatter-config/);
-    const parsed_config = match[1];
+    let parsed_config;
+    if (config) {
+      const match = config.match(/formatter-config:\/\/(.*?)\/\/:formatter-config/);
+      parsed_config = match[1];
+    } else {
+      parsed_config = null;
+    }
     this.console.log("loading config:", JSON.parse(parsed_config));
 
     this.storage = parsed_config ? JSON.parse(parsed_config) : null;
@@ -259,17 +268,17 @@ export default class FormatterUtils {
     }
   }
 
-  logToDebugger(msg, thread, level) {
-    if (this.addon.settings.get("debugger-support")) {
-      return msg, thread, level === "notice" ? "log" : level;
+  async logToDebugger(msg, thread, level) {
+    const enabledAddons = await this.addon.self.getEnabledAddons("codeEditor");
+    if (this.addon.settings.get("debugger-support") && enabledAddons.includes("debugger")) {
+      DebuggerConsole.addLog(msg, thread, level === "notice" ? "log" : level);
     }
   }
 
-  /**Get all rules. */
+  /** Rules of the formatter. */
   get rules() {
     return this.#ruleOptions;
   }
-  /**Enable/disable a rule. */
   set rules({ id, level, enabled }) {
     const rule = this.#ruleOptions.find((r) => r.id === id);
     if (rule) {
@@ -635,12 +644,25 @@ export default class FormatterUtils {
     return this.formatErrors;
   }
 
-  formatProject() {
-    if (!isEditor) return;
+  /**Formats the project according to the enabled rules
+   * @param {boolean} cleanUpOrphans Cleans up all orphans (not only reporters) if enabled.
+   */
+  formatProject(cleanUpOrphans) {
     // prettier-ignore
-    console.log("formatting project...")
+    this.console.log("formatting project...")
     this._formatVariables();
     this._formatLists();
-    console.info("formatting completed");
+    this.console.info("formatting completed");
+
+    this.addon.tab.traps.getBlockly().then((ScratchBlocks) => {
+      const oldCleanUpFunc = ScratchBlocks.WorkspaceSvg.prototype.cleanUp;
+      const self = this;
+      ScratchBlocks.WorkspaceSvg.prototype.cleanUp = function () {
+        oldCleanUpFunc.call(this);
+        if (cleanUpOrphans) {
+          self.cleanUpOrphans();
+        }
+      };
+    });
   }
 }
