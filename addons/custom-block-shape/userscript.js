@@ -12,7 +12,8 @@ export default async function ({ addon, console }) {
     function applyChanges(
       paddingSize = addon.settings.get("paddingSize"),
       cornerSize = addon.settings.get("cornerSize"),
-      notchSize = addon.settings.get("notchSize")
+      notchSize = addon.settings.get("notchSize"),
+      flat = addon.settings.get("flat")
     ) {
       let multiplier = paddingSize / 100;
       cornerSize = cornerSize / 100;
@@ -171,6 +172,14 @@ export default async function ({ addon, console }) {
       BlockSvg.TOP_LEFT_CORNER =
         "A " + BlockSvg.CORNER_RADIUS + "," + BlockSvg.CORNER_RADIUS + " 0 0,1 " + BlockSvg.CORNER_RADIUS + ",0";
 
+      if (flat) {
+        BlockSvg.START_HAT_PATH = BlockSvg.TOP_LEFT_CORNER_START + " " + BlockSvg.TOP_LEFT_CORNER;
+        BlockSvg.START_HAT_HEIGHT = 0;
+      } else {
+        BlockSvg.START_HAT_PATH = "c 25,-22 71,-22 96,0";
+        BlockSvg.START_HAT_HEIGHT = 16;
+      }
+
       BlockSvg.TOP_RIGHT_CORNER =
         "a " +
         BlockSvg.CORNER_RADIUS +
@@ -245,7 +254,7 @@ export default async function ({ addon, console }) {
 
     addon.self.addEventListener("disabled", () => {
       // Scratch 3.0 blocks
-      applyAndUpdate(100, 100, 100);
+      applyAndUpdate(100, 100, 100, false);
     });
 
     addon.self.addEventListener("reenabled", () => applyAndUpdate());
