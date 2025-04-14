@@ -1,6 +1,19 @@
 {
   "name": "SVG uploads fix",
-  "description": "Fixes a bug in the Scratch editor that makes uploaded SVG files created with some image editors, such as Affinity Designer, broken.",
+  "description": "Fixes some bugs in the Scratch editor which break some uploaded SVG files from Affinity Designer and scratchblocks.",
+  "credits": [
+    { "name": "World_Languages" },
+    {
+      "name": "StickmanRed",
+      "link": "https://scratch.mit.edu/users/StickmanRed/"
+    }
+  ],
+  "info": [
+    {
+      "id": "about-setting",
+      "text": "The \"fix more SVGs\" setting is experimental. It intends to fix SVG uploads of Scratch blocks, for example those generated with the \"save blocks as image\" feature."
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -8,9 +21,21 @@
       "runAtComplete": false
     }
   ],
+  "settings": [
+    {
+      "name": "Fix more SVGs (beta)",
+      "id": "removeUnsupported",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.4.0",
+  "latestUpdate": {
+    "newSettings": ["removeUnsupported"],
+    "version": "1.39.0"
+  },
   "tags": ["editor", "costumeEditor"],
   "enabledByDefault": false
 }
