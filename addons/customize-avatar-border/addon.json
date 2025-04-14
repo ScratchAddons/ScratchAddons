@@ -1,10 +1,14 @@
 {
-  "name": "Customizable profile picture border",
-  "description": "Allows you to hide or change the outline around profile pictures in project and studio comments.",
+  "name": "Customizable profile picture style",
+  "description": "Allows you to change the shape of profile pictures on the website, as well as their outline in project and studio comment sections.",
   "credits": [
     {
       "name": "CST1229",
       "link": "https://github.com/CST1229"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "userstyles": [
@@ -64,6 +68,41 @@
         },
         "addonEnabled": ["scratchr2"]
       }
+    },
+    {
+      "url": "scratchr2/round.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "settings": {
+          "round-style": ["square", "round", "circle"]
+        }
+      }
+    },
+    {
+      "url": "round.css",
+      "matches": ["scratchWWWNoProject", "projects"],
+      "if": {
+        "settings": {
+          "round-style": ["square", "round", "circle"]
+        }
+      }
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "radius",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "round-style"
+        },
+        "options": {
+          "square": "0%",
+          "round": "calc(var(--customizeAvatarBorder-radiusSetting) * 1%)",
+          "circle": "50%"
+        }
+      }
     }
   ],
   "dynamicEnable": true,
@@ -95,9 +134,50 @@
           "fill-transparent": true
         }
       }
+    },
+    {
+      "name": "Shape",
+      "id": "round-style",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "default",
+          "name": "Default (don't change)"
+        },
+        {
+          "id": "square",
+          "name": "Square"
+        },
+        {
+          "id": "round",
+          "name": "Rounded square"
+        },
+        {
+          "id": "circle",
+          "name": "Circle"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "name": "Corner radius (%)",
+      "id": "radiusSetting",
+      "type": "integer",
+      "min": 1,
+      "max": 49,
+      "default": 12,
+      "if": {
+        "settings": {
+          "round-style": "round"
+        }
+      }
     }
   ],
   "tags": ["community", "theme"],
   "versionAdded": "1.18.0",
+  "latestUpdate": {
+    "version": "1.32.0",
+    "newSettings": ["round-style"]
+  },
   "enabledByDefault": false
 }
