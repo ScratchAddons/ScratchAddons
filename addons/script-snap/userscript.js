@@ -24,7 +24,7 @@ export default async function ({ addon, console }) {
       else workspace.grid.spacing = 40;
       workspace.grid.update(workspace.scale);
     } else {
-      console.log(addon.settings.get("grid"))
+      console.log(addon.settings.get("grid"));
       workspace.grid_.snapToGrid_ = enabled;
       if (enabled) workspace.grid_.spacing_ = Number(addon.settings.get("grid"));
       else workspace.grid_.spacing_ = 40;
