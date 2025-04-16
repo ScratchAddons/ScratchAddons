@@ -19,12 +19,14 @@ export default async function ({ addon, console }) {
     if (Blockly.registry) {
       // New Blockly
       workspace.grid.snapToGrid = enabled;
-      if (enabled) workspace.grid.spacing = addon.settings.get("grid");
+      // TODO: Fix the root cause of the type bug (#8268)
+      if (enabled) workspace.grid.spacing = Number(addon.settings.get("grid"));
       else workspace.grid.spacing = 40;
       workspace.grid.update(workspace.scale);
     } else {
+      console.log(addon.settings.get("grid"))
       workspace.grid_.snapToGrid_ = enabled;
-      if (enabled) workspace.grid_.spacing_ = addon.settings.get("grid");
+      if (enabled) workspace.grid_.spacing_ = Number(addon.settings.get("grid"));
       else workspace.grid_.spacing_ = 40;
       workspace.grid_.update(workspace.scale);
     }
