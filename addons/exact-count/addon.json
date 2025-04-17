@@ -1,6 +1,6 @@
 {
   "name": "Show exact count",
-  "description": "Shows the exact count for user information.",
+  "description": "Shows exact numbers on profiles and the exact project count in studios.",
   "credits": [
     {
       "name": "TheColaber",
@@ -14,10 +14,26 @@
       "name": "World_Languages"
     }
   ],
+  "info": [
+    {
+      "id": "studioClick",
+      "text": "To see the exact number of projects in a studio, enable the \"exact count for studios\" setting below and click the \"100+\" label on the studio's Projects tab."
+    },
+    {
+      "id": "setting-removal",
+      "text": "The forum setting has been removed since the ScratchDB database used by it is offline."
+    }
+  ],
   "settings": [
     {
       "name": "Exact counts for profiles",
       "id": "user",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Exact count for studios",
+      "id": "studio",
       "type": "boolean",
       "default": true
     }
@@ -29,11 +45,28 @@
       "if": {
         "settings": { "user": true }
       }
+    },
+    {
+      "url": "studio.js",
+      "matches": ["studios"],
+      "if": {
+        "settings": { "studio": true }
+      }
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "studio.css",
+      "matches": ["studios"],
+      "if": {
+        "settings": { "studio": true }
+      }
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.2.0",
-  "tags": ["community", "recommended", "profiles", "forums", "studios"],
-  "enabledByDefault": false
+  "tags": ["community", "recommended", "profiles", "studios"],
+  "enabledByDefault": false,
+  "libraries": ["scratch-www"]
 }

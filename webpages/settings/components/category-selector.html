@@ -10,7 +10,7 @@
     :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
     @click="onClick($event)"
   >
-    <img :src="'../../images/icons/' + category.icon + '.svg'" />
+    <img :src="'../../images/icons/' + category.icon + '.svg'" draggable="false" />
     <span>{{ category.name }}</span>
   </div>
 </template>
@@ -22,15 +22,12 @@
       padding 0.2s ease,
       height 0.2s ease,
       opacity 0.2s ease;
-    padding: 20px 20px;
+    padding: 15px 20px;
     position: relative;
     user-select: none;
     cursor: pointer;
     display: flex;
     align-items: center;
-  }
-  .category.category-small {
-    padding: 15px 20px 15px 20px;
   }
 
   /* Classes used by index.html */
@@ -38,9 +35,9 @@
     color: inherit;
     text-decoration: inherit;
   }
-  a.category > span > img {
-    height: 10px;
-    vertical-align: middle;
+  a.category > span > img /* popout icon */ {
+    height: 12px;
+    vertical-align: -1px;
   }
 
   .category.sel {

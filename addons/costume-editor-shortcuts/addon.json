@@ -1,0 +1,24 @@
+{
+  "name": "Costume editor keyboard shortcuts",
+  "description": "Adds keyboard shortcuts to costume editor tools (similar to TurboWarp). Hover over a tool to view its shortcut.",
+  "credits": [
+    {
+      "name": "Hollow_Song's Dad",
+      "link": "https://scratch.mit.edu/users/Hollow_Song/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.41.0",
+  "tags": ["editor", "costumeEditor", "recommended"],
+  "latestUpdate": {
+    "version": "1.42.0",
+    "isMajor": true,
+    "temporaryNotice": "The bug where shortcuts were still triggered while holding the Ctrl key was fixed."
+  },
+  "enabledByDefault": false
+}

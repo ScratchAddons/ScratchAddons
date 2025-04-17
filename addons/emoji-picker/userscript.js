@@ -79,7 +79,7 @@ export default async function ({ addon, console, msg }) {
   //Create the emoji picker
   const emojiPicker = document.createElement("div");
   emojiPicker.className = "sa-emoji-picker";
-  addon.tab.displayNoneWhileDisabled(emojiPicker, { display: "inline-block" });
+  addon.tab.displayNoneWhileDisabled(emojiPicker);
 
   //Scratch emojis
   emojis.forEach((emoji) => {
@@ -90,6 +90,7 @@ export default async function ({ addon, console, msg }) {
     container.onclick = addEmoji;
     const item = document.createElement("img");
     item.src = addon.tab.clientVersion === "scratch-www" ? emoji.image : emoji.imager2; //We have to do a check here so that better emojis works on the picker on profiles
+    item.draggable = false;
     item.classList.add(
       addon.tab.clientVersion === "scratch-www" ? "emoji" : "easter-egg",
       "sa-emoji-picker-item-inner"
@@ -179,7 +180,7 @@ export default async function ({ addon, console, msg }) {
     emojiButtonText.textContent = "🙂︎";
     emojiButtonText.classList.add("sa-emoji-button");
     emojiButton.appendChild(emojiButtonText);
-    addon.tab.displayNoneWhileDisabled(emojiButton, { display: "inline-block" });
+    addon.tab.displayNoneWhileDisabled(emojiButton);
     if (addon.tab.clientVersion === "scratch-www") {
       buttonAppend.appendChild(emojiButton);
     } else {

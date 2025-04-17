@@ -1,6 +1,6 @@
 <template>
   <div class="addon-group" v-show="shouldShow" @click="toggle" :class="{  'margin-above': marginAbove }">
-    <img src="../../images/icons/expand.svg" alt="v" :class="{ 'reverted': group.expanded }" />
+    <img src="../../images/icons/expand.svg" alt="v" :class="{ 'reverted': group.expanded }" draggable="false" />
     {{ group.name }} ({{ shownCount }})
   </div>
 </template>
@@ -16,6 +16,7 @@
     cursor: pointer;
     margin: 0px 11px;
     padding: 0px 10px;
+    user-select: none;
   }
 
   .addon-group > img {

@@ -1,11 +1,13 @@
 import minifySettings from "../libraries/common/minify-settings.js";
+import changeAddonState from "./imports/change-addon-state.js";
+import { onReady } from "./imports/on-ready.js";
 
 /**
  Since presets can change independently of others, we have to keep track of
  the versions separately. Current versions:
 
  - editor-dark-mode 10 (bumped 4 times in v1.33.2)
- - editor-theme3 3 (last bumped in v1.32)
+ - editor-theme3 4 (last bumped in v1.39)
  - dark-www 7 (bumped twice in v1.34.0)
  - forum-quote-code-beautifier 1 (last bumped in v1.34)
  */
@@ -168,6 +170,21 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       addonsEnabled["workspace-dots"] = true;
       if (!addonSettings["workspace-dots"]) addonSettings["workspace-dots"] = {};
       addonSettings["workspace-dots"]["theme"] = "none";
+    }
+
+    if (addonSettings["editor-theme3"]?._version === 3) {
+      // Detected update to v1.39 (code below will set the version to 4)
+      if (addonsEnabled["msg-count-badge"] && chrome.action.getUserSettings) {
+        chrome.action
+          .getUserSettings()
+          .then((userSettings) => {
+            if (userSettings?.isOnToolbar === false) {
+              // Disable addon if extension not pinned to toolbar
+              onReady(() => changeAddonState("msg-count-badge", false));
+            }
+          })
+          .catch(() => {});
+      }
     }
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
@@ -663,6 +680,25 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             // Override the preset color if dark comments are not enabled
             addonSettings["comment-color"] = "#FEF49C";
           }
+
+          // Transition v1.38 to v1.39
+          updatePresetIfMatching(
+            settings,
+            4,
+            {
+              text: "colorOnBlack",
+            },
+            () => {
+              madeAnyChanges = madeChangesToAddon = true;
+              Object.assign(settings, {
+                // Fraction of the "Black" preset
+                fillStyle: "colored",
+                fillOpacity: 5,
+                strokeStyle: "colored",
+                strokeOpacity: 50,
+              });
+            }
+          );
         }
 
         if (addonId === "forum-quote-code-beautifier") {

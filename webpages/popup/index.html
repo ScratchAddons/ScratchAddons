@@ -12,6 +12,7 @@
     <link rel="icon" href="../../images/icon.png" id="favicon" />
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
+    <link href="../../libraries/thirdparty/Roboto.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="./index.js" type="module"></script>
     <link rel="preload" href="../styles/colors-light.css" as="style" />
@@ -19,14 +20,14 @@
   <body class="loading">
     <div id="header">
       <div id="title">
-        <img src="../../images/icon-transparent.svg" id="logo" alt="Logo" />
+        <img src="../../images/icon-transparent.svg" id="logo" alt="Logo" draggable="false" />
         <span id="title-text" v-cloak>
           {{ msg("extensionName") }}
           <a id="version" :href="changelogLink" target="_blank" title="{{ msg('changelog') }}">v{{ version }}</a>
         </span>
       </div>
       <div class="header-button" @click="openSettingsPage()">
-        <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" />
+        <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" draggable="false" />
       </div>
     </div>
     <div id="popups">
@@ -38,7 +39,7 @@
             :class="{ sel: currentPopup === popup }"
             @click="setPopup(popup)"
           >
-            <img v-if="popup.icon" :src="popup.icon" class="popup-icon" />
+            <img v-if="popup.icon" :src="popup.icon" class="popup-icon" draggable="false" />
             <a class="popup-title">{{ popup.name }}</a>
             <a
               v-if="popup.fullscreen"
@@ -47,7 +48,12 @@
               target="_blank"
               @click="closePopup()"
             >
-              <img src="../../images/icons/popout.svg" class="popout-img" title="{{ msg('openInNewTab') }}" />
+              <img
+                src="../../images/icons/popout.svg"
+                class="popout-img"
+                title="{{ msg('openInNewTab') }}"
+                draggable="false"
+              />
             </a>
           </div>
         </div>

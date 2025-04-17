@@ -10,3 +10,23 @@
   scrollbar-color: var(--gray-text) transparent;
   padding: 20px 0;
 }
+
+.categories-block.smallMode {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 200;
+  height: calc(100vh - 60px);
+  padding-bottom: 0;
+  transition: 0.25s;
+}
+
+.categories-block.smallMode.closed {
+  transform: translateX(-100%);
+}
+[dir="rtl"] .categories-block.smallMode.closed {
+  transform: translateX(100%);
+}
+
+.categories-block.closed:not(.smallMode) {
+  display: none;
+}
