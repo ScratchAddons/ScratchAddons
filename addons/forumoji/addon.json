@@ -2,7 +2,7 @@
   "name": "Forumoji emoji when posting in the forums",
   "description": "Replaces Unicode emoji with Forumoji emoji before posting a post in the forums.",
   "tags": ["community", "forums"],
-  "versionAdded": "1.39.0",
+  "versionAdded": "1.43.0",
   "userscripts": [
     {
       "url": "userscript.js",
