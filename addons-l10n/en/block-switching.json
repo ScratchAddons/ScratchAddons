@@ -19,6 +19,8 @@
   "block-switching/debugger_error": "error",
   "block-switching/debugger_log": "log",
   "block-switching/debugger_warn": "warn",
+  "block-switching/debugger_starttimer": "start timer",
+  "block-switching/debugger_stoptimer": "stop timer",
   "block-switching/looks_changeeffectby": "change effect",
   "block-switching/looks_seteffectto": "set effect",
   "block-switching/looks_changesizeby": "change size",
