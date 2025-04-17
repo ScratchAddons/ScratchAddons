@@ -23,6 +23,8 @@ export default class DevTools {
     // is copied. If the addon is enabled late, something might already be on the
     // clipboard, so we initialize it to true.
     this.clipboardHasData = addon.self.enabledLate;
+
+    this.copyAll = false;
   }
 
   async init() {
@@ -177,6 +179,22 @@ export default class DevTools {
     const oldCutCallback = cutShortcut.callback;
     cutShortcut.callback = newCallback(oldCutCallback);
     blockly.ShortcutRegistry.registry.register(cutShortcut, true);
+
+    // New Blockly copies a single block by default, so this is needed to make Copy All work
+    const oldBlockToCopyData = blockly.BlockSvg.prototype.toCopyData;
+    blockly.BlockSvg.prototype.toCopyData = function (...args) {
+      let data = oldBlockToCopyData.call(this, ...args);
+      if (!data) return null;
+      data = {
+        ...data,
+        blockState: blockly.serialization.blocks.save(this, {
+          addCoordinates: true,
+          addNextBlocks: devtools.copyAll,
+        }),
+      };
+      devtools.copyAll = false;
+      return data;
+    };
   }
 
   getWorkspace() {
@@ -406,7 +424,10 @@ export default class DevTools {
     if (block) {
       block.select();
       let next = blockOnly ? block.getNextBlock() : null;
-      if (next) {
+      if (blockly.registry) {
+        // new Blockly
+        this.copyAll = !blockOnly;
+      } else if (next) {
         blockly.Events.setGroup(false);
         next.unplug(false); // setParent(null);
       }
@@ -422,8 +443,8 @@ export default class DevTools {
         // see https://github.com/google/blockly/blob/fa4fce5/core/events/utils.ts#L113-L115
         requestAnimationFrame(() => {
           setTimeout(() => {
-            if (next) {
-              wksp.undo(); // undo the unplug above...
+            if (!blockly.registry && next) {
+              wksp.undo(); // old Blockly: undo the unplug above...
             }
             if (blockOnly === 2) {
               UndoGroup.startUndoGroup(wksp);
