@@ -87,10 +87,9 @@ export default async function ({ addon, console, msg }) {
     const i = block.id;
     const el = document.querySelector(`[data-id="${i}"]`);
     if (el) {
-        el.remove();
+      el.remove();
     } else {
-        console.log("failed to get object by id: ", block.id);
-        
+      console.log("failed to get object by id: ", block.id);
     }
   }
 }
