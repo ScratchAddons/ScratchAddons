@@ -84,7 +84,6 @@ export default async function ({ addon, console, msg }) {
   async function hideBlock(block) {
     console.log("clicked hide block button", block.id);
     console.log("fetching DOM object by id");
-    
 
     const i = block.id;
     const el = document.querySelector(`[data-id="${i}"]`);
