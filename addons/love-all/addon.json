@@ -1,0 +1,23 @@
+{
+    "name": "Love all",
+    "description": "Love all",
+    "credits": [
+      {
+        "name": "I STOLE IT FROM SHINZY WHO STOLE IT FROM SOMEONE ELSE"
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["projects"]
+      }
+    ],
+
+
+    "tags": ["editor", "codeEditor", "featured"],
+    "versionAdded": "1.22.0",
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "enabledByDefault": false,
+    "libraries": ["scratch-blocks"]
+  }
