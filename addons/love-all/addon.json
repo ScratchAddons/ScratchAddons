@@ -1,9 +1,9 @@
 {
-    "name": "Love all",
-    "description": "Love all",
+    "name": "Love all projects",
+    "description": "This will love every single project you visit",
     "credits": [
       {
-        "name": "I STOLE IT FROM SHINZY WHO STOLE IT FROM SOMEONE ELSE"
+        "name": "Milad Mehri"
       }
     ],
     "userscripts": [
@@ -15,9 +15,8 @@
 
 
     "tags": ["editor", "codeEditor", "featured"],
-    "versionAdded": "1.22.0",
+    "versionAdded": "1.44.0",
     "dynamicEnable": true,
     "dynamicDisable": true,
-    "enabledByDefault": false,
-    "libraries": ["scratch-blocks"]
+    "enabledByDefault": false
   }
