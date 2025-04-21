@@ -3,6 +3,9 @@ import { enableContextMenuSeparators, addSeparator } from "../../libraries/commo
 export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
+  // Get list of hidden blocks from local storage
+  const hiddenBlockIds = new Set(getHiddenBlockIds());
+
   enableContextMenuSeparators(addon.tab);
 
   addon.tab.createBlockContextMenu(
@@ -21,8 +24,10 @@ export default async function ({ addon, console, msg }) {
         0,
         addSeparator({
           enabled: true,
-          text: msg("Hide this block"),
+          text: msg("hideThisBlock"),
           callback: () => {
+            hiddenBlockIds.add(block.id);
+            saveHiddenBlockIds(hiddenBlockIds);
             hideBlockById(block.id);
           },
           separator: true,
@@ -34,24 +39,28 @@ export default async function ({ addon, console, msg }) {
     { blocks: true }
   );
 
-  async function hideBlockById(blockId) {
-    const el = document.querySelector(`[data-id="${blockId}"]`);
-    if (el) {
-      el.remove();
-    } else {
-      console.warn("Failed to get object to hide by data-id: ", blockId);
-    }
-  }
+  console.log("Hidden block ids", hiddenBlockIds);
+
+  /* =================================================================================== */
 
   const workspace = document.querySelector(".blocklyBlockCanvas");
 
   if (workspace) {
     // Add a mutation observer to the "blockly block canvas"
-    // to hide all blocks is mutation in child list occurs 
+    // to hide "all" blocks if mutation in child list occurs
     // (Example: detects when you switch sprites which reloads the blocks)
-    addMutationObserver(workspace, {childList: true}, hideBlocks)
+    addMutationObserver(workspace, { childList: true }, hideBlocks);
   } else {
-    console.warn("couldn't find workspace block-canvas: No element with class \"blocklyBlockCanvas\" found");
+    console.warn('couldn\'t find workspace block-canvas: No element with class "blocklyBlockCanvas" found');
+  }
+
+  async function hideBlockById(blockId) {
+    const blockDOM = document.querySelector(`[data-id="${blockId}"]`);
+    if (blockDOM) {
+      blockDOM.remove();
+    } else {
+      console.warn("Failed to get blockDOM to hide by data-id: ", blockId);
+    }
   }
 
   /// Adds a mutation observer to an element with a provided config and runs a function when the observer detects a mutation
@@ -64,7 +73,19 @@ export default async function ({ addon, console, msg }) {
 
   async function hideBlocks() {
     console.log("function to hide blocks called");
-    
+    hiddenBlockIds.forEach((id) => {
+      // if a block with an id from the list is found then we hide it
+      if (document.querySelector(`[data-id="${id}"]`)) {
+        hideBlockById(id);
+      }
+    });
   }
 
+  function getHiddenBlockIds() {
+    return JSON.parse(localStorage.getItem("hiddenBlockIds") || "[]");
+  }
+
+  function saveHiddenBlockIds(ids) {
+    localStorage.setItem("hiddenBlockIds", JSON.stringify(Array.from(ids)));
+  }
 }
