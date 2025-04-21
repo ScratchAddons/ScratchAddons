@@ -1,6 +1,6 @@
 {
   "name": "Hide blocks",
-  "description": "Allows you to hide code blocks in the scratch code editor to reduce lag when moving the view space of code editor due to many blocks of code in the code editor.",
+  "description": "Allows you to hide code blocks in the scratch code editor to reduce lag.",
   "credits": [
     {
       "name": "RedPanda247",
