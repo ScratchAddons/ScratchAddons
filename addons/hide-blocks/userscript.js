@@ -57,6 +57,15 @@ export default async function ({ addon, console, msg }) {
   async function hideBlockById(blockId) {
     const blockDOM = document.querySelector(`[data-id="${blockId}"]`);
     if (blockDOM) {
+      const blockPlaceholder = document.createElement("div");
+      console.log(blockPlaceholder);
+      // blockPlaceholder.style.width = "200px";
+      // blockPlaceholder.style.height = "100px";
+      // blockPlaceholder.style.backgroundColor = "red";
+      // blockPlaceholder.setAttribute("transform", blockDOM.getAttribute("transform"));
+      // blockPlaceholder.classList.add("blocklyDraggable");
+      // blockPlaceholder.innerHTML = "text";
+      blockDOM.parentElement.appendChild(blockPlaceholder);
       blockDOM.remove();
     } else {
       console.warn("Failed to get blockDOM to hide by data-id: ", blockId);
