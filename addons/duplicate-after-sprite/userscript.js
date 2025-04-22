@@ -1,5 +1,9 @@
 export default async function ({ addon, console }) {
-  await addon.tab.redux.waitForState((state) => state.scratchGui.projectState.loadingState === "SHOWING_WITH_ID");
+  await addon.tab.redux.waitForState(
+    (state) =>
+      state.scratchGui.projectState.loadingState === "SHOWING_WITH_ID" ||
+      state.scratchGui.projectState.loadingState === "SHOWING_WITHOUT_ID"
+  );
 
   const SA_DUPLICATE_OF = Symbol("SA_DUPLICATE_OF");
 
