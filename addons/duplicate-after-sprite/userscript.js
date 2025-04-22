@@ -1,9 +1,8 @@
 export default async function ({ addon, console }) {
-  await addon.tab.redux.waitForState(
-    (state) =>
-      state.scratchGui.projectState.loadingState === "SHOWING_WITH_ID" ||
-      state.scratchGui.projectState.loadingState === "SHOWING_WITHOUT_ID"
-  );
+  await new Promise((resolve) => {
+    if (addon.tab.traps.vm.editingTarget) return resolve();
+    addon.tab.traps.vm.runtime.once("PROJECT_LOADED", resolve);
+  });
 
   const SA_DUPLICATE_OF = Symbol("SA_DUPLICATE_OF");
 
