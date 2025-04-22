@@ -8,7 +8,11 @@
 }
 
 .search-box:focus-within {
-  border-color: var(--brand-orange);
+  border-color: var(--orange);
+}
+
+body:not(.iframe) .search-box:focus-within {
+  box-shadow: var(--input-focus-shadow);
 }
 
 .search-box input {
@@ -17,7 +21,7 @@
   border: none;
   border-radius: 4px 0 0 4px;
   color: var(--content-text);
-  width: 150px;
+  width: 200px;
   height: 16px;
   font-family: inherit;
   font-size: 14px;

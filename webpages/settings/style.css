@@ -61,6 +61,7 @@ h1 {
   flex-shrink: 1;
   display: flex;
   flex-direction: column;
+  min-width: 400px;
 }
 
 .addons-container {
