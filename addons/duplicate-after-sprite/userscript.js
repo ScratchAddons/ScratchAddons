@@ -18,6 +18,7 @@ export default async function ({ addon, console }) {
   addon.tab.traps.vm.runtime.addTarget = function (target) {
     addTarget.call(this, target);
     if (!addon.self.disabled && SA_DUPLICATE_OF in target.sprite) {
+      addon.tab.traps.vm.emitTargetsUpdate();
       addon.tab.traps.vm.reorderTarget(
         addon.tab.traps.vm.runtime.targets.length - 1,
         addon.tab.traps.vm.runtime.targets.findIndex(
