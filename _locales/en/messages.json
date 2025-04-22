@@ -381,15 +381,15 @@
   },
   "myVariable": {
     "message": "my variable",
-    "decription": "Used as a placeholder for a variable name."
+    "description": "Used as a placeholder for a variable name."
   },
   "myList": {
     "message": "my list",
-    "decription": "Used as a placeholder for a list name."
+    "description": "Used as a placeholder for a list name."
   },
   "thing": {
     "message": "thing",
-    "decription": "Used as a placeholder for a list item."
+    "description": "Used as a placeholder for a list item."
   },
   "extensionStoreDescription1": {
     "message": "Choose from 100+ options:",
