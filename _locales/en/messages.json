@@ -379,6 +379,18 @@
   "captureCommentConfirm": {
     "message": "Posting this comment may lead to automatic muting of your account, temporarily preventing you from commenting. Persistent muting can result in your account being blocked from Scratch. Are you sure you want to post this comment?"
   },
+  "myVariable": {
+    "message": "my variable",
+    "description": "Used as a placeholder for a variable name."
+  },
+  "myList": {
+    "message": "my list",
+    "description": "Used as a placeholder for a list name."
+  },
+  "thing": {
+    "message": "thing",
+    "description": "Used as a placeholder for a list item."
+  },
   "extensionStoreDescription1": {
     "message": "Choose from 100+ options:",
     "description:": "Used in the description for the extension stores"
