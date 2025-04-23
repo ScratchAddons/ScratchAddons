@@ -97,6 +97,11 @@ export default async function ({ addon, console, msg }) {
   let currentSpriteItems;
   let currentAssetItems;
 
+  let deletedItems = [];
+  let deletionTarget;
+  let lastCostumeDeletedName = null;
+  let shouldChangeRestoreButtonText = false;
+
   const untilInEditor = () => {
     if (addon.tab.editorMode === "editor") return;
     return new Promise((resolve, reject) => {
@@ -765,6 +770,26 @@ export default async function ({ addon, console, msg }) {
     });
   };
 
+  function getRestoreFun(type) {
+    deletedItems.reverse();
+    if (type === "costume") {
+      console.log(lastCostumeDeletedName);
+      if (lastCostumeDeletedName !== null) {
+        vm.renameCostume(0, lastCostumeDeletedName);
+        lastCostumeDeletedName = null;
+      }
+      deletedItems.forEach((costume) => {
+        deletionTarget.addCostume(costume);
+      });
+    } else if (type === "sound") {
+      deletedItems.forEach((sound) => {
+        deletionTarget.addSound(sound);
+      });
+    }
+    vm.emitTargetsUpdate();
+    deletedItems = [];
+  }
+
   await addon.tab.scratchClassReady();
   addon.tab.createEditorContextMenu((ctxType, ctx) => {
     if (ctxType !== "sprite" && ctxType !== "costume" && ctxType !== "sound") return;
@@ -833,21 +858,80 @@ export default async function ({ addon, console, msg }) {
       const removeFolder = () => {
         renameItems(null);
       };
+
+      const deleteFolderContents = async () => {
+        const type = component.props.dragType.toLowerCase();
+        if (type === "sprite") {
+          return;
+        }
+        else if (type === "costume" || type === "sound") {
+          if (
+            await addon.tab.confirm(msg("confirmTitle"), msg("infoCostume"), {
+              useEditorClasses: true,
+            })
+          ) {
+            deletedItems = [];
+            deletionTarget =  vm.editingTarget;
+            const items = type === "costume" ? "costumes" : "sounds";
+
+            for (let i = deletionTarget.sprite[items].length - 1; i > -1; i--) {
+              if (getFolderFromName(deletionTarget.sprite[items][i].name) === data.folder) {
+                let deleted = type === "costume" ? deletionTarget.deleteCostume(i) : deletionTarget.deleteSound(i);
+                if (deleted) deletedItems.push(deleted);
+              }
+            }
+
+            // The last costume cannot be deleted, but at least it can be removed from the folder
+            let lastCostumeRenamed = 0;
+            if (type === "costume" && deletionTarget.sprite.costumes.length === 1 && getFolderFromName(deletionTarget.sprite.costumes[0].name) === data.folder) {
+              lastCostumeDeletedName = deletionTarget.sprite.costumes[0].name;
+              vm.renameCostume(0, getNameWithoutFolder(deletionTarget.sprite.costumes[0].name));
+              lastCostumeRenamed = 1;
+            } else {
+              lastCostumeDeletedName = null;
+            }
+
+            vm.emitTargetsUpdate();
+
+            addon.tab.redux.dispatch({
+              type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
+              state: {
+                restoreFun: getRestoreFun.bind(this, type),
+                deletedItem: type === "costume" ? "Costume" : "Sound",
+              },
+            });
+            queueMicrotask(() => {
+              if (deletedItems.length + lastCostumeRenamed > 1) {
+                shouldChangeRestoreButtonText = true;
+              }
+            });
+          }
+        }
+      };
+
       return [
         {
           className: "sa-folders-rename-folder",
           label: msg("rename-folder"),
           callback: renameFolder,
           position: "assetContextMenuAfterDelete",
-          order: 10,
+          order: 10
         },
         {
           className: "sa-folders-remove-folder",
           label: msg("remove-folder"),
           callback: removeFolder,
           position: "assetContextMenuAfterDelete",
-          order: 11,
+          order: 11
         },
+        {
+          className: "sa-folders-delete-folder-contents",
+          label: "delete folder contents",
+          callback: deleteFolderContents,
+          position: "assetContextMenuAfterDelete",
+          order: 12,
+          dangerous: true
+        }
       ];
     } else {
       ctx.target.setAttribute("sa-folders-context-type", "asset");
@@ -1399,5 +1483,30 @@ export default async function ({ addon, console, msg }) {
     verifySortableHOC(sortableHOCInstance);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
     sortableHOCInstance.saInitialSetup();
+  }
+
+  // Update restore button
+  {
+    addon.tab.redux.initialize();
+    addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+      const e = detail;
+      if (!e.action || e.action.type !== "scratch-gui/restore-deletion/RESTORE_UPDATE") return;
+      shouldChangeRestoreButtonText = false;
+    });
+
+    while (true) {
+      const restoreButton = await addon.tab.waitForElement(
+        '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
+        {
+          markAsSeen: true,
+          reduxCondition: (state) => state.scratchGui.menus.editMenu,
+          condition: () => shouldChangeRestoreButtonText,
+        }
+      );
+
+      // We know that shouldChangeRestoreButtonText = true
+      const { deletedItem } = addon.tab.redux.state.scratchGui.restoreDeletion;
+      restoreButton.innerText = msg(`multi${deletedItem}s`);
+    }
   }
 }
