@@ -85,24 +85,24 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
     const workspace = addon.tab.traps.getWorkspace();
     const map = workspace.getVariableMap();
     const vars = map.getVariablesOfType("");
-    const unusedVariables = [];
+    const unusedLocals = [];
 
     for (const row of vars) {
       if (row.isLocal) {
         const usages = getVariableUsesById(row.getId(), workspace);
         if (!usages || usages.length === 0) {
-          unusedVariables.push(row);
+          unusedLocals.push(row);
         }
       }
     }
 
-    if (unusedVariables.length > 0) {
+    if (unusedLocals.length > 0) {
       const message = msg("unused-var", {
-        count: unusedVariables.length,
-        names: unusedVariables.map((x) => x.name).join(", "),
+        count: unusedLocals.length,
+        names: unusedLocals.map((x) => x.name).join(", "),
       });
       if (confirm(message)) {
-        for (const orphan of unusedVariables) {
+        for (const orphan of unusedLocals) {
           workspace.deleteVariableById(orphan.getId());
         }
       }
