@@ -38,8 +38,6 @@ body:not(.iframe) .search-box:focus-within {
 
 .search-box > button {
   background-color: var(--search-input-background);
-  background-repeat: no-repeat;
-  background-position: center;
   height: 32px;
   width: 44px;
   border: none;
@@ -51,10 +49,7 @@ body:not(.iframe) .search-box:focus-within {
   border-radius: 4px 0 0 4px;
 }
 
-.search-button {
-  background-image: url(/images/icons/search.svg);
-}
-
-.search-clear-button {
-  background-image: url(/images/icons/x.svg);
+.search-icon {
+  vertical-align: bottom;
+  filter: var(--content-icon-filter);
 }
