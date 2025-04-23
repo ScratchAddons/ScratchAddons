@@ -13,6 +13,7 @@
   "settings": [
     {
       "name": "Find unused variables",
+      "description": "Find unused reporters, variables and lists for this sprite only and ask to delete them.",
       "id": "promptUnused",
       "type": "boolean",
       "default": false
