@@ -30,6 +30,26 @@
       "id": "sounds",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Show trash icon when holding",
+      "id": "show-trash-shortcut",
+      "type": "select",
+      "default": "Shift",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "Shift",
+          "name": "Shift"
+        },
+        {
+          "id": "Control",
+          "name": "Ctrl"
+        }
+      ]
     }
   ],
   "userstyles": [
@@ -59,6 +79,48 @@
           "sounds": true
         }
       }
+    },
+    {
+      "url": "show-trash-shortcut.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "show-trash-shortcut": "Shift"
+        }
+      }
+    },
+    {
+      "url": "show-trash-shortcut.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "show-trash-shortcut": "Control"
+        }
+      }
     }
-  ]
+  ],
+  "userscripts": [
+    {
+      "url": "show-trash-shortcut.js",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "show-trash-shortcut": "Shift"
+        }
+      }
+    },
+    {
+      "url": "show-trash-shortcut.js",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "show-trash-shortcut": "Control"
+        }
+      }
+    }
+  ],
+  "latestUpdate": {
+    "version": "1.43.0",
+    "newSettings": ["show-trash-shortcut"]
+  }
 }
