@@ -32,22 +32,18 @@
       "default": true
     },
     {
-      "name": "Show trash icon when holding",
+      "name": "Show trash icon",
       "id": "show-trash-shortcut",
       "type": "select",
-      "default": "Shift",
+      "default": "shift",
       "potentialValues": [
         {
+          "id": "shift",
+          "name": "When the Shift key is held"
+        },
+        {
           "id": "none",
-          "name": "None"
-        },
-        {
-          "id": "Shift",
-          "name": "Shift"
-        },
-        {
-          "id": "Control",
-          "name": "Ctrl"
+          "name": "Never"
         }
       ]
     }
@@ -85,38 +81,15 @@
       "matches": ["projects"],
       "if": {
         "settings": {
-          "show-trash-shortcut": "Shift"
-        }
-      }
-    },
-    {
-      "url": "show-trash-shortcut.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "show-trash-shortcut": "Control"
+          "show-trash-shortcut": "shift"
         }
       }
     }
   ],
   "userscripts": [
     {
-      "url": "show-trash-shortcut.js",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "show-trash-shortcut": "Shift"
-        }
-      }
-    },
-    {
-      "url": "show-trash-shortcut.js",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "show-trash-shortcut": "Control"
-        }
-      }
+      "url": "userscript.js",
+      "matches": ["projects"]
     }
   ],
   "latestUpdate": {
