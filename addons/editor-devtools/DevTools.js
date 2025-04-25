@@ -52,7 +52,7 @@ export default class DevTools {
       const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, 'block').constructor;
       const oldPasteFunc = BlockPaster.prototype.paste;
       BlockPaster.prototype.paste = function(copyData, workspace, coords) {
-        if (devtools.addon.settings.get("enablePasteBlocksAtMouse"))
+        if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
           if (!this._canPaste(workspace)) return;
         }
         return oldPasteFunc.call(this, copyData, workspace, coords);
