@@ -48,12 +48,21 @@ export default class DevTools {
   async patchCopy() {
     const devtools = this;
     const blockly = await this.addon.tabs.traps.getBlockly();
-    if (blockly.registry) {} else {
+    if (blockly.registry) {
+      const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, 'block').constructor;
+      const oldPasteFunc = BlockPaster.prototype.paste;
+      BlockPaster.prototype.paste = function(copyData, workspace, coords) {
+        if (devtools.addon.settings.get("enablePasteBlocksAtMouse"))
+          if (!this._canPaste(workspace)) return;
+        }
+        return oldPasteFunc.call(this, copyData, workspace, coords);
+      };
+    } else {
       const oldPasteFunc = blockly.WorkspaceSvg.prototype.paste;
       blockly.WorkspaceSvg.prototype.paste = function (data) {
         if (!(this.rendered && this.currentGesture_)) return;
         if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
-          if (data.tagName.toLowerCase() !== "comment" && !devtools._canPaste()) {
+          if (data.tagName.toLowerCase() !== "comment" && !devtools._canPaste(this)) {
             this.currentGesture_.cancel();
             return;
           }
@@ -421,9 +430,9 @@ export default class DevTools {
     }
   }
 
-  _canPaste() {
+  _canPaste(workspace) {
     // Don't paste if the mouse is outside the workspace SVG group
-    const group = this.getWorkspace().svgGroup_;
+    const group = workspace.svgGroup_;
     const bounds = group.getBoundingClientRect();
     const { x, y } = this.mouseXY;
     if (x < bounds.x) return false;
@@ -442,7 +451,7 @@ export default class DevTools {
 
     if (e.keyCode === 86 && ctrlKey) {
       // Ctrl + V
-      if (!this._canPaste()) return;
+      if (!this._canPaste(this.getWorkspace())) return;
       // Set a timeout so we can take control of the paste after the event
       let ids = this.getTopBlockIDs();
       setTimeout(() => {
