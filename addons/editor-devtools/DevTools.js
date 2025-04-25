@@ -38,8 +38,19 @@ export default class DevTools {
   }
   async addContextMenus() {
     const blockly = await this.addon.tab.traps.getBlockly();
-    const oldCleanUpFunc = blockly.WorkspaceSvg.prototype.cleanUp;
     const self = this;
+    const oldPasteFunc = blockly.WorkspaceSvg.prototype.paste;
+    blockly.WorkspaceSvg.prototype.paste = function (data) {
+      if (!(this.rendered && this.currentGesture_)) return;
+      if (self.addon.settings.get("enablePasteBlocksAtMouse")) {
+        if (data.tagName.toLowerCase() !== "comment" && !self._canPaste()) {
+          this.currentGesture_.cancel();
+          return;
+        }
+      }
+      return oldPasteFunc.call(this, data);
+    };
+    const oldCleanUpFunc = blockly.WorkspaceSvg.prototype.cleanUp;
     blockly.WorkspaceSvg.prototype.cleanUp = function () {
       if (self.addon.settings.get("enableCleanUpPlus")) {
         self.doCleanUp();
@@ -609,6 +620,17 @@ export default class DevTools {
     this.updateMousePosition(e);
   }
 
+  _canPaste() {
+    const group = this.getWorkspace().svgGroup_;
+    const bounds = group.getBoundingClientRect();
+    const { x, y } = this.mouseXY;
+    if (x < bounds.x) return false;
+    if (y < bounds.y) return false;
+    if (x > bounds.x + bounds.width) return false;
+    if (y > bounds.y + bounds.height) return false;
+    return true;
+  }
+
   eventKeyDown(e) {
     const switchCostume = (up) => {
       // todo: select previous costume
@@ -663,13 +685,7 @@ export default class DevTools {
     if (e.keyCode === 86 && ctrlKey && !e.griff) {
       // Ctrl + V
       // Don't paste if the mouse is outside the workspace SVG group
-      const group = this.getWorkspace().svgGroup_;
-      const bounds = group.getBoundingClientRect();
-      const { x, y } = this.mouseXY;
-      if (x < bounds.x) return;
-      if (y < bounds.y) return;
-      if (x > bounds.x + bounds.width) return;
-      if (y > bounds.y + bounds.height) return;
+      if (!this._canPaste()) return;
       // Set a timeout so we can take control of the paste after the event
       let ids = this.getTopBlockIDs();
       setTimeout(() => {
