@@ -7,17 +7,25 @@ export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   const recolorIcon = (iconUri, extensionId) => {
-    if (addon.self.disabled) return iconUri;
-    if (!iconUri || !["music", "videoSensing", "text2speech"].includes(extensionId)) return iconUri;
+    if (addon.self.disabled || !iconUri) return iconUri;
 
+    if (extensionId === "translate") {
+      if (iconUri.startsWith("data:image/png")) return iconUri; // not in high contrast mode
+      return textColor(addon.settings.get("categoryMenu"), iconUri, addon.self.dir + "/assets/translate_white.svg");
+    }
+
+    if (!["music", "videoSensing", "text2speech"].includes(extensionId)) return iconUri;
     const match = dataUriRegex.exec(iconUri);
     if (match) {
       const oldSvg = atob(match[1]);
-      const newColor = textColor(addon.settings.get("categoryMenu"), null, "#ffffff");
-      if (newColor) {
-        const newSvg = oldSvg.replace(/#575e75|#4d4d4d/gi, newColor);
-        return `data:image/svg+xml;base64,${btoa(newSvg)}`;
-      }
+      const newColor = textColor(addon.settings.get("categoryMenu"));
+      const newHighContrastColor = textColor(addon.settings.get("categoryMenu"), "#000000", "#ffffff");
+      const newSvg = oldSvg
+        .replace(/#575e75|#4d4d4d/gi, "%text%")
+        .replace(/#000000|#000|black/gi, "%highContrastText%")
+        .replace(/%text%/g, newColor)
+        .replace(/%highContrastText%/g, newHighContrastColor);
+      return `data:image/svg+xml;base64,${btoa(newSvg)}`;
     }
   };
 

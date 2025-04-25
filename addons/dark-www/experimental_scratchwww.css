@@ -138,6 +138,7 @@ body:not(.sa-body-editor) .formik-input,
 .studio-member-tile,
 .studio-activity .studio-messages-list,
 .cards-modal-container,
+.projects-carousel .content .slick-track .thumbnail,
 .about .body,
 .messages-social-list,
 .comment-text,
@@ -224,6 +225,7 @@ body:not(.sa-body-editor) .button.white,
 .tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .cards-modal-container .cards-modal-section-title,
+.projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .unsupported-browser .faq-link-text,
 a.social-messages-profile-link:visited,
 a.social-messages-profile-link:link,
@@ -290,6 +292,12 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .donate-section .donate-button {
   color: var(--darkWww-box-greenText);
 }
+.tou-modal-link {
+  color: var(--darkWww-box-greenText) !important;
+}
+.projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
+  color: var(--darkWww-box-strongBlueText);
+}
 .social-message-icon {
   opacity: var(--darkWww-box-messageIconOpacity);
 }
@@ -322,9 +330,14 @@ body:not(.sa-body-editor) .select .join-flow-select {
 .outer #projectBox,
 .download .installation,
 body:not(.sa-body-editor) .gender-radio-row,
-.wedo .banner {
+.wedo .banner,
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row {
   background-color: var(--darkWww-gray);
   color: var(--darkWww-gray-text);
+}
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected,
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected:hover {
+  background-color: hsla(215, 100%, 65%, 0.25);
 }
 body:not(.sa-body-editor) /* specificity */ .outer .sort-mode .select select {
   background-color: transparent;
@@ -496,6 +509,7 @@ body:not(.sa-body-editor) .select select:focus {
   background-color: var(--darkWww-button-text);
 }
 .preview .remix-button,
+.starter-projects-page .surprise .surprise-button,
 .os-chooser .button:not(.active),
 .card .card-button,
 .initiatives-section .video-background.abhi .button,
@@ -533,6 +547,7 @@ body:not(.sa-body-editor) input {
   filter: var(--darkWww-button-filter);
 }
 .forms-close-button img,
+.starter-projects-page .surprise .surprise-button img,
 .os-chooser .button:not(.active) img {
   filter: none;
 }
@@ -638,6 +653,7 @@ a:hover {
 #footer,
 #donor,
 .gray-area,
+.starter-projects-page .getting-started,
 .parents .title-banner.faq-banner,
 .developers .title-banner.faq-banner {
   background-color: var(--darkWww-footer);

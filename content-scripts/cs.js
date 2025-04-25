@@ -625,7 +625,7 @@ const showBanner = () => {
   });
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=oRo0tMWEpiA",
+    href: "https://www.youtube.com/watch?v=vuL5lV0l3fY",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
@@ -652,6 +652,7 @@ const showBanner = () => {
     width: 24px;`,
     title: chrome.i18n.getMessage("close"),
     src: chrome.runtime.getURL("../images/cs/close.svg"),
+    draggable: false,
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
@@ -671,7 +672,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_41", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_42", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -691,7 +692,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_41"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_42"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,

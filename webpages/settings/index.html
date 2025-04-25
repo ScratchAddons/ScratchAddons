@@ -127,10 +127,20 @@
     <link rel="modulepreload" href="components/category-selector.js" />
     <link rel="preload" href="components/modal.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/modal.js" />
+    <link rel="preload" href="components/previews/compact-messages.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/compact-messages.js" />
+    <link rel="preload" href="components/previews/dark-www.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/dark-www.js" />
     <link rel="preload" href="components/previews/editor-dark-mode.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/previews/editor-dark-mode.js" />
     <link rel="preload" href="components/previews/palette.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/previews/palette.js" />
+    <link rel="preload" href="components/previews/stage-monitor.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/stage-monitor.js" />
+    <link rel="preload" href="components/previews/stage-monitor-preset.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/stage-monitor-preset.js" />
+    <link rel="preload" href="components/previews/workspace-dots.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/workspace-dots.js" />
 
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
@@ -181,7 +191,7 @@
       <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
         <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
         <button v-show="searchInput === ''" class="search-button"></button>
-        <button v-else class="search-clear-button" @click="clearSearch()"></button>
+        <button v-else class="search-clear-button" @click="clearAndFocusSearch()"></button>
       </div>
       <div @click="setTheme(!theme)" class="header-button header-end">
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
@@ -245,7 +255,7 @@
         <div v-cloak class="search-box" v-if="isIframe">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-else class="search-clear-button" @click="clearSearch()"></button>
+          <button v-else class="search-clear-button" @click="clearAndFocusSearch()"></button>
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>

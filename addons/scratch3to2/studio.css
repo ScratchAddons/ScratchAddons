@@ -346,6 +346,27 @@
 #sa-studio-followers-button + .button:hover {
   background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }
+.studio-invitation {
+  display: block;
+  min-height: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.studio-invitation-msg {
+  display: inline;
+  font-size: 13px;
+}
+.studio-invitation-button {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  margin-left: 3px;
+  box-shadow: none;
+  color: var(--darkWww-link-scratchr2, #855cd6);
+}
+.studio-invitation-button:hover {
+  text-decoration: underline;
+}
 
 /* Activity */
 .studio-activity .studio-messages-list {

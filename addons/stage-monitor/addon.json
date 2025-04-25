@@ -138,6 +138,12 @@
       }
     }
   ],
+  "addonPreview": {
+    "type": "stage-monitor"
+  },
+  "presetPreview": {
+    "type": "stage-monitor-preset"
+  },
   "dynamicEnable": true,
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,

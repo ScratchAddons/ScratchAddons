@@ -32,8 +32,13 @@ let fuse;
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
     "webpages/settings/components/modal",
+    "webpages/settings/components/previews/compact-messages",
+    "webpages/settings/components/previews/dark-www",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
+    "webpages/settings/components/previews/stage-monitor",
+    "webpages/settings/components/previews/stage-monitor-preset",
+    "webpages/settings/components/previews/workspace-dots",
   ]);
 
   Vue.directive("click-outside", {
@@ -200,6 +205,10 @@ let fuse;
       },
       clearSearch() {
         this.searchInputReal = "";
+      },
+      clearAndFocusSearch() {
+        this.clearSearch();
+        document.querySelector("#searchBox").focus();
       },
       setTheme(mode) {
         setGlobalTheme(mode);
