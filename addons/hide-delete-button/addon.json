@@ -6,6 +6,10 @@
     {
       "text": "Tip: If you accidentally delete a sprite, costume, or sound, you can undo the deletion by clicking Edit in the menu bar then Restore.",
       "id": "restoretip"
+    },
+    {
+      "text": "Useful: Hold Shift to show delete buttons",
+      "id": "show-trash-shortcut"
     }
   ],
   "versionAdded": "1.19.0",
@@ -30,22 +34,6 @@
       "id": "sounds",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Show trash icon",
-      "id": "show-trash-shortcut",
-      "type": "select",
-      "default": "shift",
-      "potentialValues": [
-        {
-          "id": "shift",
-          "name": "When the Shift key is held"
-        },
-        {
-          "id": "none",
-          "name": "Never"
-        }
-      ]
     }
   ],
   "userstyles": [
@@ -78,12 +66,7 @@
     },
     {
       "url": "show-trash-shortcut.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "show-trash-shortcut": "shift"
-        }
-      }
+      "matches": ["projects"]
     }
   ],
   "userscripts": [
@@ -94,6 +77,6 @@
   ],
   "latestUpdate": {
     "version": "1.43.0",
-    "newSettings": ["show-trash-shortcut"]
+    "temporaryNotice": "Useful: Hold Shift to show delete buttons"
   }
 }
