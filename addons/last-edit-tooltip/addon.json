@@ -25,7 +25,7 @@
   ],
   "versionAdded": "1.2.0",
   "latestUpdate": {
-    "version": "1.42.0",
+    "version": "1.43.0",
     "temporaryNotice": "Added the project creation date to the tooltip."
   },
   "tags": ["community", "projectPage"],
