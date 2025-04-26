@@ -770,25 +770,30 @@ export default async function ({ addon, console, msg }) {
 
   function getRestoreFun(type, lastCostumeDeleted) {
     // Reintegrate the only and last costume to the folder
-    if (lastCostumeDeleted !== null) { // type === "costume"
-      const index = lastCostumeDeleted.target.sprite.costumes.findIndex(costume => costume.assetId === lastCostumeDeleted.assetId);
+    if (lastCostumeDeleted !== null) {
+      // type === "costume"
+      const index = lastCostumeDeleted.target.sprite.costumes.findIndex(
+        (costume) => costume.assetId === lastCostumeDeleted.assetId
+      );
       vm.renameCostume(index, lastCostumeDeleted.name);
       lastCostumeDeleted = null;
     }
 
     // Close all folders to prevent sprites from being renamed
     if (type === "sprite") {
-      const element = document.querySelector("[class*='sprite-selector_sprite-wrapper'] [class*='sprite-selector-item_sprite-selector-item']");
+      const element = document.querySelector(
+        "[class*='sprite-selector_sprite-wrapper'] [class*='sprite-selector-item_sprite-selector-item']"
+      );
       if (element) {
         const component = getSpriteSelectorItemFromElement(element);
-        vm.runtime.targets.forEach(target => {
+        vm.runtime.targets.forEach((target) => {
           setFolderOpen(component, getFolderFromName(target.sprite.name), false);
         });
       }
     }
 
     restorationFunctions.reverse();
-    restorationFunctions.forEach(restore => restore());
+    restorationFunctions.forEach((restore) => restore());
     restorationFunctions = [];
   }
 
@@ -864,12 +869,16 @@ export default async function ({ addon, console, msg }) {
       const deleteFolderContents = async () => {
         const type = component.props.dragType.toLowerCase();
         if (
-          await addon.tab.confirm(msg("delete-folder-contents-prompt-title"), msg(`delete-${type}s-folder-contents-prompt`), {
-            useEditorClasses: true,
-          })
+          await addon.tab.confirm(
+            msg("delete-folder-contents-prompt-title"),
+            msg(`delete-${type}s-folder-contents-prompt`),
+            {
+              useEditorClasses: true,
+            }
+          )
         ) {
           if (type === "sprite") {
-            const targets =  vm.runtime.targets;
+            const targets = vm.runtime.targets;
             restorationFunctions = [];
 
             for (let i = targets.length - 1; i > -1; i--) {
@@ -893,8 +902,7 @@ export default async function ({ addon, console, msg }) {
                 restoreButtonMsg = "restore-sprites";
               }
             });
-          }
-          else if (type === "costume" || type === "sound") {
+          } else if (type === "costume" || type === "sound") {
             restorationFunctions = [];
             const assets = type === "costume" ? vm.editingTarget.sprite.costumes : vm.editingTarget.sprite.sounds;
 
@@ -940,14 +948,14 @@ export default async function ({ addon, console, msg }) {
           label: msg("rename-folder"),
           callback: renameFolder,
           position: "assetContextMenuAfterDelete",
-          order: 10
+          order: 10,
         },
         {
           className: "sa-folders-remove-folder",
           label: msg("remove-folder"),
           callback: removeFolder,
           position: "assetContextMenuAfterDelete",
-          order: 11
+          order: 11,
         },
         {
           className: "sa-folders-delete-folder-contents",
@@ -955,8 +963,8 @@ export default async function ({ addon, console, msg }) {
           callback: deleteFolderContents,
           position: "assetContextMenuAfterDelete",
           order: 12,
-          dangerous: true
-        }
+          dangerous: true,
+        },
       ];
     } else {
       ctx.target.setAttribute("sa-folders-context-type", "asset");
@@ -1479,37 +1487,42 @@ export default async function ({ addon, console, msg }) {
 
   // Sprite list
   {
-    addon.tab.waitForElement("[class^='sprite-selector_sprite-wrapper']", {
-      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-    }).then(spriteSelectorItemElement => {
-      vm = addon.tab.traps.vm;
-      reactInternalKey = addon.tab.traps.getInternalKey(spriteSelectorItemElement);
-      const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
-      let reactInternalInstance = spriteSelectorItemElement[reactInternalKey];
-      while (!isSpriteSelectorItem(reactInternalInstance.stateNode)) {
-        reactInternalInstance = reactInternalInstance.child;
-      }
-      const spriteSelectorItemInstance = reactInternalInstance.stateNode;
-      verifySortableHOC(sortableHOCInstance);
-      verifySpriteSelectorItem(spriteSelectorItemInstance);
-      verifyVM(vm);
-      patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
-      patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
-      sortableHOCInstance.saInitialSetup();
-      patchVM();
-    });
+    addon.tab
+      .waitForElement("[class^='sprite-selector_sprite-wrapper']", {
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      })
+      .then((spriteSelectorItemElement) => {
+        vm = addon.tab.traps.vm;
+        reactInternalKey = addon.tab.traps.getInternalKey(spriteSelectorItemElement);
+        const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
+        let reactInternalInstance = spriteSelectorItemElement[reactInternalKey];
+        while (!isSpriteSelectorItem(reactInternalInstance.stateNode)) {
+          reactInternalInstance = reactInternalInstance.child;
+        }
+        const spriteSelectorItemInstance = reactInternalInstance.stateNode;
+        verifySortableHOC(sortableHOCInstance);
+        verifySpriteSelectorItem(spriteSelectorItemInstance);
+        verifyVM(vm);
+        patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
+        patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
+        sortableHOCInstance.saInitialSetup();
+        patchVM();
+      });
   }
 
   // Costume and sound list
   {
-    addon.tab.waitForElement("[class*='selector_list-item']", {
-      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex !== 0 && !state.scratchGui.mode.isPlayerOnly,
-    }).then(selectorListItem => {
-      const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
-      verifySortableHOC(sortableHOCInstance);
-      patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
-      sortableHOCInstance.saInitialSetup();
-    });
+    addon.tab
+      .waitForElement("[class*='selector_list-item']", {
+        reduxCondition: (state) =>
+          state.scratchGui.editorTab.activeTabIndex !== 0 && !state.scratchGui.mode.isPlayerOnly,
+      })
+      .then((selectorListItem) => {
+        const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
+        verifySortableHOC(sortableHOCInstance);
+        patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
+        sortableHOCInstance.saInitialSetup();
+      });
   }
 
   // Update restore button
