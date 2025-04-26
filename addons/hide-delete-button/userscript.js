@@ -1,6 +1,6 @@
 export default async function ({ addon, console, msg }) {
   document.addEventListener("keydown", (event) => {
-    if (event.key == "Shift" && ! document.activeElement.matches(':focus')) {
+    if (event.key == "Shift" && !document.activeElement.matches(":focus")) {
       document.body.classList.add("sa-show-trash");
     }
   });
@@ -13,5 +13,5 @@ export default async function ({ addon, console, msg }) {
 
   window.addEventListener("blur", () => {
     document.body.classList.remove("sa-show-trash");
-  })
+  });
 }
