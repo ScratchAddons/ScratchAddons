@@ -66,8 +66,7 @@
       >
         <div class="setting-label">{{ msg("preview") }}</div>
         <component
-          :is="'preview-' + addon.addonPreview.type"
-          :options="addon.addonPreview"
+          :is="'preview-' + addon._addonId"
           :settings="addonSettings"
           :hovered-setting-id="hoveredSettingId"
           @areahover="highlightSetting"

@@ -3,7 +3,7 @@ import { textColor, multiply, alphaBlend, makeHsv } from "../../../../libraries/
 
 export default async function ({ template }) {
   const EditorDarkModePreview = Vue.extend({
-    props: ["options", "settings", "hoveredSettingId"],
+    props: ["settings", "hoveredSettingId"],
     template,
     data() {
       return {

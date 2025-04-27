@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const WorkspaceDotsPreview = Vue.extend({
-    props: ["options", "settings", "hoveredSettingId"],
+    props: ["settings", "hoveredSettingId"],
     template,
     computed: {
       spacing() {

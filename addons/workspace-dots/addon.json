@@ -29,9 +29,7 @@
       "if": { "settings": { "theme": ["dots", "crosshairs", "lines", "vertical", "horizontal"] } }
     }
   ],
-  "addonPreview": {
-    "type": "workspace-dots"
-  },
+  "addonPreview": true,
   "dynamicEnable": true,
   "dynamicDisable": true,
   "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }]
