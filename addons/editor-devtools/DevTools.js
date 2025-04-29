@@ -60,7 +60,6 @@ export default class DevTools {
     } else {
       const oldPasteFunc = blockly.WorkspaceSvg.prototype.paste;
       blockly.WorkspaceSvg.prototype.paste = function (data) {
-        if (!(this.rendered && this.currentGesture_)) return;
         if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
           if (data.tagName.toLowerCase() !== "comment" && !devtools._canPaste()) {
             this.currentGesture_.cancel();
