@@ -1,4 +1,7 @@
-[class*="paint-editor_editor-container-top_"] [class*="paint-editor_row_"]:first-child [class*="input-group_input-group_"]:first-child input,
+[class*="paint-editor_editor-container-top_"]
+  [class*="paint-editor_row_"]:first-child
+  [class*="input-group_input-group_"]:first-child
+  input,
 [class*="sound-editor_editor-container_"]:first-child [class*="sound-editor_row_"]:first-child input {
-    width: 15rem;
+  width: 15rem;
 }
