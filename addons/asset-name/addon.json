@@ -49,14 +49,14 @@
       "url": "wider.css",
       "matches": ["projects"],
       "if": {
-        "settings": { "field-sizing": "wider"}
+        "settings": { "field-sizing": "wider" }
       }
     },
     {
       "url": "fit-to-content.css",
       "matches": ["projects"],
       "if": {
-        "settings": { "field-sizing": "fit-to-content"}
+        "settings": { "field-sizing": "fit-to-content" }
       }
     }
   ],
