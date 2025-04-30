@@ -44,8 +44,12 @@ export default async function ({ addon, console, msg }) {
   }
 
   const vm = addon.tab.traps.vm;
+  window.vm = vm;
   vm.addCostume = wrapAddAssetAndSelectName(vm.addCostume, "costume");
-  vm.addSound = wrapAddAssetAndSelectName(vm.addSound, "sound");
+  vm.duplicateCostume = wrapAddAssetAndSelectName(vm.duplicateCostume, "costume");
   vm.addBackdrop = wrapAddAssetAndSelectName(vm.addBackdrop, "backdrop");
+  vm.addSound = wrapAddAssetAndSelectName(vm.addSound, "sound");
+  vm.duplicateSound = wrapAddAssetAndSelectName(vm.duplicateSound, "sound");
   vm.addSprite = wrapAddAssetAndSelectName(vm.addSprite, "sprite");
+  vm.duplicateSprite = wrapAddAssetAndSelectName(vm.duplicateSprite, "sprite");
 }
