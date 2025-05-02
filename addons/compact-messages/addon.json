@@ -41,9 +41,7 @@
       "max": 16
     }
   ],
-  "addonPreview": {
-    "type": "compact-messages"
-  },
+  "addonPreview": true,
   "userstyles": [
     {
       "url": "styles.css",

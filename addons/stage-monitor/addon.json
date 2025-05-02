@@ -138,9 +138,7 @@
       }
     }
   ],
-  "addonPreview": {
-    "type": "stage-monitor"
-  },
+  "addonPreview": true,
   "presetPreview": {
     "type": "stage-monitor-preset"
   },

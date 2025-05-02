@@ -3,7 +3,7 @@ import { textColor } from "../../../../libraries/common/cs/text-color.esm.js";
 
 export default async function ({ template }) {
   const StageMonitorPreview = Vue.extend({
-    props: ["options", "settings", "hoveredSettingId"],
+    props: ["settings", "hoveredSettingId"],
     template,
     computed: {
       colors() {
