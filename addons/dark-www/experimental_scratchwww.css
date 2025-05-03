@@ -459,6 +459,14 @@ body:not(.sa-body-editor) .gender-radio-row-selected:hover {
 .studio-list-bottom-gradient {
   background-image: linear-gradient(var(--darkWww-blue-opacity0), var(--darkWww-blue));
 }
+.mod-fetching::after,
+.studio-project-tile .studio-project-image {
+  background-color: var(--darkWww-blue-studioPlaceholder);
+}
+.mod-fetching {
+  background-color: var(--darkWww-blue-studioPlaceholder) !important;
+  color: var(--darkWww-blue-studioPlaceholder) !important;
+}
 
 /* Input background */
 body:not(.sa-body-editor) .select select,

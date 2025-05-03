@@ -1531,6 +1531,17 @@
       }
     },
     {
+      "name": "blue-studioPlaceholder",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "transparentSource": "#4d97ff80"
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
