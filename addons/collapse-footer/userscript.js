@@ -8,6 +8,7 @@ export default async function ({ addon, console }) {
   icon.height = 16;
   icon.width = 16;
   icon.className = "sa-footer-arrow";
+  icon.draggable = false;
   footer.insertBefore(icon, footer.firstChild);
 
   if (!(addon.settings.get("infiniteScroll") && enabledAddons.includes("infinite-scroll"))) {

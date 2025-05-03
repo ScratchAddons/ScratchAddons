@@ -16,8 +16,8 @@
   white-space: pre-wrap;
   pointer-events: none;
 
-  color: rgb(87, 94, 117);
-  background-color: rgb(255 255 255 / 90%);
+  color: var(--editorDarkMode-input-text, #575e75);
+  background-color: var(--editorDarkMode-input-transparent90, rgb(255 255 255 / 90%));
   border-style: none;
   border-radius: 8px;
   filter: drop-shadow(0px 5px 5px rgb(0 0 0 / 10%));
@@ -27,7 +27,7 @@
 
 @supports (backdrop-filter: blur(16px)) {
   .sa-comment-preview-inner {
-    background-color: rgb(255 255 255 / 75%);
+    background-color: var(--editorDarkMode-input-transparent75, rgb(255 255 255 / 75%));
     backdrop-filter: blur(16px);
   }
 }
@@ -46,6 +46,6 @@
 }
 
 .sa-comment-preview-reduce-transparency {
-  background-color: rgb(255 255 255);
+  background-color: var(--editorDarkMode-input, white);
   backdrop-filter: none;
 }

@@ -49,6 +49,7 @@ export default async function ({ addon, console, msg }) {
         const copyButton = document.createElement("img");
         copyButton.setAttribute("role", "button");
         copyButton.setAttribute("tabindex", "0");
+        copyButton.setAttribute("draggable", false);
         copyButton.setAttribute("alt", msg("copy-to-clipboard"));
         copyButton.setAttribute("src", addon.self.dir + "/copy.svg");
 
