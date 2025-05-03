@@ -48,6 +48,7 @@ export default class DevTools {
   async patchPaste() {
     const devtools = this;
     const blockly = await this.addon.tab.traps.getBlockly();
+    // Support for new blockly.
     if (blockly.registry) {
       const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, 'block').constructor;
       const oldPasteFunc = BlockPaster.prototype.paste;
