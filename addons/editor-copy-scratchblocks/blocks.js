@@ -1,5 +1,3 @@
-// TODO: add block comments
-
 export function getBlockCode(block, context = {}) {
   const output = blocks[block.type]?.(block, context);
   return context.startBlock && block.getNextBlock()
@@ -57,19 +55,15 @@ const sanitize = (text, sanitizations) =>
 
 // Sanitization configurations
 
-const dropdownSanitizations = [
+const sanitizations = {};
+
+sanitizations.dropdown = [
   { searchValue: "\\", replacer: "\\\\" },
   { searchValue: /^\/scratchblocks$/g, replacer: "\\/scratchblocks" },
   { searchValue: "]", replacer: "\\]" },
 ];
 
-const strInpSanitizations = [
-  ...dropdownSanitizations,
-  { searchValue: / v$/g, replacer: " \\v" },
-  { searchValue: /^(#(?:[\da-f]{3}){1,2}?)$/gi, replacer: "​$1" }, // ZWSP
-];
-
-const blockSanitizations = [
+sanitizations.block = [
   { searchValue: "\\", replacer: "\\\\" },
   { searchValue: "::", replacer: ":\\:" },
   { searchValue: "[", replacer: "\\[" },
@@ -83,8 +77,14 @@ const blockSanitizations = [
   { searchValue: "//", replacer: "\\//" },
 ];
 
-const repSanitizations = [
-  ...blockSanitizations,
+sanitizations.strInput = [
+  ...sanitizations.dropdown,
+  { searchValue: / v$/g, replacer: " \\v" },
+  { searchValue: /^(#(?:[\da-f]{3}){1,2}?)$/gi, replacer: "​$1" }, // ZWSP
+];
+
+sanitizations.reporter = [
+  ...sanitizations.block,
   { searchValue: ")", replacer: "\\)" },
   { searchValue: ">", replacer: "\\>" },
   { searchValue: /^$/g, replacer: " " },
@@ -120,13 +120,15 @@ const sensingCurrentArgs = {
 
 const numBlock = (field) => (block) => {
   const content = block.getFieldValue(field);
-  return /^[0-9e.-]*$/.test(content) ? `(${content})` : `[${sanitize(content, strInpSanitizations)}]`;
+  return /^[0-9e.-]*$/.test(content) ? `(${content})` : `[${sanitize(content, sanitizations.strInput)}]`;
 };
 
 const dropdown = (options) => (block) => {
   const field = options?.field ? block.getField(options?.field) : block.inputList[0].fieldRow[0];
   const text = options?.args?.[field.getValue()] ?? (options?.useText ? field.getText() : field.getValue());
-  return options?.square ? `[${sanitize(text, dropdownSanitizations)} v]` : `(${sanitize(text, repSanitizations)} v)`;
+  return options?.square
+    ? `[${sanitize(text, sanitizations.dropdown)} v]`
+    : `(${sanitize(text, sanitizations.reporter)} v)`;
 };
 
 const simpleReporter = (text, category, isBool) => {
@@ -154,7 +156,7 @@ const procedure = (block, context) => {
 
   const sanitizations = [
     { searchValue: "\\%", replacer: "%" },
-    ...blockSanitizations,
+    ...sanitizations.block,
     { searchValue: /^ {2,}| {2,}$/g, replacer: " " },
   ];
 
@@ -204,7 +206,7 @@ const blocks = {
   math_positive_number: numBlock("NUM"),
   math_number: numBlock("NUM"),
   note: numBlock("NOTE"),
-  text: build`[${{ field: "TEXT", sanitizations: strInpSanitizations }}]`,
+  text: build`[${{ field: "TEXT", sanitizations: sanitizations.strInput }}]`,
   colour_picker: build`[${{ field: "COLOUR" }}]`,
 
   motion_movesteps: build`move ${{ input: "STEPS" }} steps`,
@@ -325,7 +327,7 @@ const blocks = {
   sensing_of_object_menu: dropdown({ args: { _stage_: "Stage" } }),
   sensing_current: build`(current ${{ field: "CURRENTMENU", dropdown: true, args: sensingCurrentArgs }})`,
   sensing_of: (block, context) => {
-    const property = sanitize(block.getField("PROPERTY").getValue(), dropdownSanitizations);
+    const property = sanitize(block.getField("PROPERTY").getValue(), sanitizations.dropdown);
     const mathOptions = [
       "abs",
       "floor",
@@ -378,13 +380,13 @@ const blocks = {
           block.repText && !block.isBool && block.repText.replaceAll(/[,%?:]/g, "") === text.replaceAll(/[,%?:]/g, "")
       );
 
-    return `(${sanitize(text, repSanitizations)}${conflict ? " :: variables" : ""})`;
+    return `(${sanitize(text, sanitizations.reporter)}${conflict ? " :: variables" : ""})`;
   },
   data_setvariableto: build`set ${{ field: "VARIABLE", dropdown: true, useText: true }} to ${{ input: "VALUE" }}`,
   data_changevariableby: build`change ${{ field: "VARIABLE", dropdown: true, useText: true }} by ${{ input: "VALUE" }}`,
   data_showvariable: build`show variable ${{ field: "VARIABLE", dropdown: true, useText: true }}`,
   data_hidevariable: build`hide variable ${{ field: "VARIABLE", dropdown: true, useText: true }}`,
-  data_listcontents: build`(${{ field: "LIST", sanitizations: repSanitizations }} :: list)`,
+  data_listcontents: build`(${{ field: "LIST", sanitizations: sanitizations.reporter }} :: list)`,
   data_listindexall: dropdown(),
   data_listindexrandom: dropdown(),
   data_addtolist: build`add ${{ input: "ITEM" }} to ${{ field: "LIST", dropdown: true, useText: true }}`,
@@ -404,11 +406,11 @@ const blocks = {
   procedures_prototype: procedure,
   argument_reporter_string_number: (block, context) => {
     const text = block.getFieldValue("VALUE");
-    return `(${sanitize(text, repSanitizations)}${argumentConflict(text, context.startBlock) && !/ v$/.test(text) ? "" : " :: custom-arg"})`;
+    return `(${sanitize(text, sanitizations.reporter)}${argumentConflict(text, context.startBlock) && !/ v$/.test(text) ? "" : " :: custom-arg"})`;
   },
   argument_reporter_boolean: (block, context) => {
     const text = block.getFieldValue("VALUE");
-    return `<${sanitize(text, repSanitizations)}${argumentConflict(text, context.startBlock) ? "" : " :: custom-arg"}>`;
+    return `<${sanitize(text, sanitizations.reporter)}${argumentConflict(text, context.startBlock) ? "" : " :: custom-arg"}>`;
   },
 
   pen_clear: build`erase all`,

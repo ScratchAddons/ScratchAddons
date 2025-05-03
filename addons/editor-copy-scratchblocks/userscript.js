@@ -1,6 +1,6 @@
 import { getBlockCode, getScriptsCode } from "./blocks.js";
 
-export default async function ({ addon, console, msg }) {
+export default async ({ addon, msg }) => {
   addon.tab.createBlockContextMenu(
     (items) => {
       if (addon.self.disabled) return items;
@@ -24,42 +24,12 @@ export default async function ({ addon, console, msg }) {
     (items, block) => {
       if (addon.self.disabled) return items;
 
-      items.push(
-        {
-          enabled: true,
-          text: "Log block",
-          callback: () => {
-            console.log(block);
-          },
-          separator: true,
-        },
-        {
-          enabled: true,
-          text: "Log input names",
-          callback: () => {
-            console.log(block.inputList.map((input) => input.name));
-          },
-        },
-        {
-          enabled: true,
-          text: "Log block code",
-          callback: () => console.log(block.type),
-        },
-        {
-          enabled: true,
-          text: "Get dropdown info",
-          callback: () => {
-            const dropdown = block.getChildren()[parseInt(prompt("Child number", "0"))];
-            console.log(dropdown.type, dropdown.inputList[0].fieldRow[0].name);
-          },
-        },
-        {
-          enabled: true,
-          text: msg("copy-block-code"),
-          callback: () => navigator.clipboard.writeText(getBlockCode(block)),
-          separator: true,
-        }
-      );
+      items.push({
+        enabled: true,
+        text: msg("copy-block-code"),
+        callback: () => navigator.clipboard.writeText(getBlockCode(block)),
+        separator: true,
+      });
 
       if (block.getRootBlock()?.getNextBlock()) {
         items.push({
@@ -73,4 +43,4 @@ export default async function ({ addon, console, msg }) {
     },
     { blocks: true, flyout: true }
   );
-}
+};
