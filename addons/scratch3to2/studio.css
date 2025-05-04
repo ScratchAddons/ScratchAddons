@@ -10,6 +10,16 @@
   color: var(--darkWww-page-scratchr2Text, #322f31);
 }
 
+/* Loading */
+.mod-fetching::after,
+.studio-project-tile .studio-project-image {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+}
+.mod-fetching {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7) !important;
+  color: var(--darkWww-gray-scratchr2, #f7f7f7) !important;
+}
+
 /* Info */
 .studio-info {
   gap: 10px;
