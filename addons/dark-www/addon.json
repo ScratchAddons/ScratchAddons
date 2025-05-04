@@ -156,6 +156,17 @@
       }
     },
     {
+      "name": "page-studioPlaceholder",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "transparentSource": "#4d97ff80"
+      }
+    },
+    {
       "name": "page-scratchr2Text",
       "value": {
         "type": "textColor",

@@ -9,6 +9,16 @@
   grid-template-columns: 240px minmax(0, 1fr);
 }
 
+/* Loading */
+.mod-fetching::after,
+.studio-project-tile .studio-project-image {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+}
+.mod-fetching {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7) !important;
+  color: var(--darkWww-gray-scratchr2, #f7f7f7) !important;
+}
+
 /* Box */
 .studio-info,
 .studio-tabs {
