@@ -50,9 +50,9 @@ export default class DevTools {
     const blockly = await this.addon.tab.traps.getBlockly();
     // Support for new blockly.
     if (blockly.registry) {
-      const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, 'block').constructor;
+      const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, "block").constructor;
       const oldPasteFunc = BlockPaster.prototype.paste;
-      BlockPaster.prototype.paste = function(copyData, workspace, coords) {
+      BlockPaster.prototype.paste = function (copyData, workspace, coords) {
         if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
           if (!devtools._canPaste()) return;
         }
