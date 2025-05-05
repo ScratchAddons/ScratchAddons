@@ -29,6 +29,7 @@ export default class DevTools {
 
   async init() {
     this.addContextMenus();
+    this.patchPaste();
     this.patchCopyShortcuts();
     while (true) {
       const root = await this.addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
@@ -43,6 +44,33 @@ export default class DevTools {
       this.initInner(root);
     }
   }
+
+  async patchPaste() {
+    const devtools = this;
+    const blockly = await this.addon.tab.traps.getBlockly();
+    // Support for new blockly.
+    if (blockly.registry) {
+      const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, "block").constructor;
+      const oldPasteFunc = BlockPaster.prototype.paste;
+      BlockPaster.prototype.paste = function (copyData, workspace, coords) {
+        if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
+          if (!devtools._canPaste()) return;
+        }
+        return oldPasteFunc.call(this, copyData, workspace, coords);
+      };
+    } else {
+      const oldPasteFunc = blockly.WorkspaceSvg.prototype.paste;
+      blockly.WorkspaceSvg.prototype.paste = function (data) {
+        if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
+          if (data.tagName.toLowerCase() !== "comment" && !devtools._canPaste()) {
+            return;
+          }
+        }
+        return oldPasteFunc.call(this, data);
+      };
+    }
+  }
+
   async addContextMenus() {
     const blockly = await this.addon.tab.traps.getBlockly();
 
@@ -401,6 +429,17 @@ export default class DevTools {
     }
   }
 
+  _canPaste() {
+    // Don't paste if the mouse is outside the blockly SVG
+    const bounds = document.querySelector("svg.blocklySvg").getBoundingClientRect();
+    const { x, y } = this.mouseXY;
+    if (x < bounds.x) return false;
+    if (y < bounds.y) return false;
+    if (x > bounds.x + bounds.width) return false;
+    if (y > bounds.y + bounds.height) return false;
+    return true;
+  }
+
   eventKeyDownBlockly(e) {
     if (this.addon.tab.editorMode !== "editor") {
       return;
@@ -410,6 +449,7 @@ export default class DevTools {
 
     if (e.keyCode === 86 && ctrlKey) {
       // Ctrl + V
+      if (!this._canPaste()) return;
       // Set a timeout so we can take control of the paste after the event
       let ids = this.getTopBlockIDs();
       setTimeout(() => {
