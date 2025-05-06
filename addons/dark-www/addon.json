@@ -2391,11 +2391,7 @@
   "userstyles": [
     {
       "url": "experimental_scratchr2.css",
-      "matches": [
-        "isNotScratchWWW",
-        "https://scratch.mit.edu/403",
-        "https://scratch.mit.edu/404"
-      ]
+      "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"]
     },
     {
       "url": "experimental_scratchwww.css",
