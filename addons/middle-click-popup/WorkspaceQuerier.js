@@ -546,7 +546,7 @@ class TokenTypeStringLiteral extends TokenType {
     for (let i = idx; i <= query.length; i++) {
       const isTerminator = TokenTypeStringLiteral.isTerminator(query.str[i]);
       const isIgnorable = QueryInfo.IGNORABLE_CHARS.includes(query.str[i]);
-      if ((wasTerminator !== isTerminator || i == query.length) && !wasIgnorable && i !== idx && i !== quoteEnd) {
+      if ((wasTerminator !== isTerminator || i === query.length) && !wasIgnorable && i !== idx && i !== quoteEnd) {
         const value = query.str.substring(idx, i);
         yield new Token(idx, i, this, value);
       }
@@ -603,7 +603,7 @@ class TokenTypeColor extends TokenType {
   }
 
   createText(token, query, endOnly) {
-    return query.query.substring(token.start, token.end);
+    return query.str.substring(token.start, token.end);
   }
 }
 
@@ -733,6 +733,8 @@ class TokenTypeBlock extends TokenType {
           strings.push(...blockPart.toLowerCase().split(" "));
         } else if (blockPart.type === BlockInputType.ENUM) {
           for (const enumValue of blockPart.values) {
+            if (this.stringForms.length >= WorkspaceQuerier.MAX_RESULTS) return;
+
             enumerateStringForms(
               partIdx + 1,
               [...strings, ...enumValue.string.toLowerCase().split(" ")],
@@ -749,6 +751,13 @@ class TokenTypeBlock extends TokenType {
     };
 
     enumerateStringForms();
+
+    if (this.stringForms.length >= WorkspaceQuerier.MAX_STRING_FORMS) {
+      console.warn(
+        "Warning: Block '" + this.block.id + "' has too many string forms. Search results may not be very good."
+      );
+      this.stringForms.length = 0;
+    }
   }
 
   /**
@@ -1045,7 +1054,7 @@ export class QueryResult {
           } else if (part instanceof BlockInputString && input !== part.defaultValue) {
             // Make string inputs 100x their real length so they appear at the bottom
             stringLength += ("" + input).length * 100;
-          } else if (input != null) {
+          } else if (input !== null) {
             stringLength += ("" + input).length;
           }
         }
@@ -1159,12 +1168,17 @@ export default class WorkspaceQuerier {
   /**
    * The maximum number of results to find before we give up searching sub-blocks.
    */
-  static MAX_RESULTS = 1000;
+  static MAX_RESULTS = 2000;
 
   /**
    * The maximum number of tokens to find before giving up.
    */
-  static MAX_TOKENS = 10000;
+  static MAX_TOKENS = 100000;
+
+  /**
+   * The maximum number of string forms a block can have before we give up.
+   */
+  static MAX_STRING_FORMS = 500;
 
   /**
    * Indexes a workspace in preparation for querying it.
@@ -1208,12 +1222,12 @@ export default class WorkspaceQuerier {
       }
       ++query.resultCount;
       if (!limited && query.resultCount >= WorkspaceQuerier.MAX_RESULTS) {
-        console.log("Warning: Workspace query exceeded maximum result count.");
+        console.warn("Warning: Workspace query exceeded maximum result count.");
         limited = true;
       }
 
       if (!query.canCreateMoreTokens()) {
-        console.log("Warning: Workspace query exceeded maximum token count.");
+        console.warn("Warning: Workspace query exceeded maximum token count.");
         limited = true;
         break;
       }
@@ -1248,7 +1262,7 @@ export default class WorkspaceQuerier {
     validResults = validResults.sort((a, b) => {
       const aLengths = a.getLengths();
       const bLengths = b.getLengths();
-      if (aLengths.stringLength != bLengths.stringLength) return aLengths.stringLength - bLengths.stringLength;
+      if (aLengths.stringLength !== bLengths.stringLength) return aLengths.stringLength - bLengths.stringLength;
       return aLengths.tokenLength - bLengths.tokenLength;
     });
 

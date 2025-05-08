@@ -41,7 +41,7 @@ export default async function (
       button.disabled = true;
     }
 
-    addon.tab.displayNoneWhileDisabled(button, { display: "block" });
+    addon.tab.displayNoneWhileDisabled(button);
 
     button.addEventListener("click", async () => {
       if (userProfile.invited) {

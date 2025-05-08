@@ -2,6 +2,7 @@
 html,
 body {
   background-color: var(--darkWww-page);
+  background-image: var(--darkWww-page-scratchr2BackgroundImage);
   color: var(--darkWww-page-scratchr2Text);
   color-scheme: var(--darkWww-page-colorScheme);
 }
@@ -111,20 +112,24 @@ label,
 #comments .sa-emoji-picker {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2Text);
+  text-shadow: none;
 }
 .info-tooltip /* statistics */ {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2LabelText);
+  text-shadow: none;
 }
 .dropdown .dropdown-menu {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2ButtonText);
+  text-shadow: none;
 }
 input,
 textarea,
 select {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2InputText);
+  text-shadow: none;
 }
 .arrow-left,
 .arrow-right {
@@ -192,7 +197,7 @@ span.small-text,
   color: var(--darkWww-box-scratchr2GrayText);
 }
 .dropdown span.dropdown-toggle.black span.caret {
-  border-top-color: var(--darkWww-box-scratchr2Caret);
+  border-top-color: var(--darkWww-box-blackText);
 }
 input::placeholder {
   color: var(--darkWww-box-scratchr2InputPlaceholder);
@@ -238,18 +243,33 @@ input::placeholder {
 .postfootright {
   box-shadow: 1px 0 inset var(--darkWww-box-scratchr2Border);
 }
+.modal-header {
+  border-color: var(--darkWww-box-divider5);
+}
+.nvd3 .nv-axis line /* statistics */ {
+  stroke: var(--darkWww-box-tab);
+}
+.djangobb hr /* signature divider */ {
+  background-color: var(--darkWww-box-tabHover);
+}
+.nvd3 line.nv-guideline /* statistics */ {
+  stroke: var(--darkWww-box-tabHover);
+}
 button,
 .button.grey {
+  background-color: transparent;
   background-image: linear-gradient(
     var(--darkWww-box-scratchr2ButtonGradientTop),
     var(--darkWww-box-scratchr2ButtonGradientBottom)
   );
+  background-clip: padding-box;
   border-color: var(--darkWww-box-scratchr2ButtonBorder);
   color: var(--darkWww-box-scratchr2ButtonText);
   text-shadow: 0 1px var(--darkWww-box);
 }
 button:hover,
 .button.grey:hover {
+  background-color: transparent;
   background-image: linear-gradient(var(--darkWww-box-scratchr2ButtonHover), var(--darkWww-box-scratchr2ButtonHover));
 }
 .dropdown .dropdown-menu li:hover {
@@ -260,12 +280,17 @@ button:hover,
 .box,
 .postleft,
 .postfootleft,
-.djangobb blockquote,
 #profile-box .doing,
 .profile-box-footer-module textarea,
 #comments .highlighted,
-.nvtooltip h3 /* statistics */,
 .table-striped tbody > tr:nth-child(odd) > td {
+  background-color: var(--darkWww-gray-scratchr2);
+  color: var(--darkWww-gray-scratchr2Text);
+  text-shadow: var(--darkWww-gray-scratchr2TextShadow);
+}
+.three-column-band,
+.djangobb blockquote,
+.nvtooltip h3 /* statistics */ {
   background-color: var(--darkWww-gray-scratchr2);
   color: var(--darkWww-gray-scratchr2Text);
 }
@@ -317,6 +342,10 @@ button:hover,
 }
 .modal-footer {
   box-shadow: 0 1px inset var(--darkWww-gray-boxHighlight);
+}
+.header-text .profile-details .group,
+.profile-details span.sa-ocular-status {
+  border-color: var(--darkWww-gray-divider15);
 }
 .v-tabs li.active,
 .v-tabs li.active:hover {
@@ -443,7 +472,6 @@ input.link.black:active,
 }
 
 /* Border color */
-.modal-header,
 #profile-box .player,
 .nvtooltip h3 /* statistics */ {
   border-color: var(--darkWww-border-5);
@@ -457,15 +485,11 @@ input.link.black:active,
 #email-resend-box {
   border-color: var(--darkWww-border);
 }
-.nvd3 .nv-axis line /* statistics */ {
-  stroke: var(--darkWww-border);
-}
 .sa-collapse-footer #footer,
 .thumb img,
 .djangobb blockquote,
 .media-list li,
 .media-item-content .media-thumb img,
-.header-text .profile-details .group,
 .slider-carousel .thumb img,
 #comments #comments-enabled-box,
 .table td,
@@ -513,15 +537,9 @@ select,
   border-color: var(--darkWww-border-20);
   border-top-color: var(--darkWww-border-5);
 }
-.djangobb hr {
-  background-color: var(--darkWww-border-20);
-}
 .markItUpHeader ul .markItUpSeparator {
   background-color: var(--darkWww-border-20) !important;
   color: transparent;
-}
-.nvd3 line.nv-guideline /* statistics */ {
-  stroke: var(--darkWww-border-20);
 }
 .modal,
 .markItUpHeader ul ul {
@@ -565,7 +583,6 @@ select,
 
 html,
 body {
-  background-image: none;
   text-shadow: none;
 }
 

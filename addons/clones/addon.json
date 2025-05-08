@@ -63,6 +63,6 @@
     "isMajor": true,
     "temporaryNotice": "You can now display the number of clones for each sprite in the project editor."
   },
-  "tags": ["editor", "projectPlayer", "recommended"],
+  "tags": ["player", "recommended"],
   "enabledByDefault": false
 }
