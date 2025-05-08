@@ -58,7 +58,7 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.39.0",
+    "version": "1.43.0",
     "newSettings": ["showSpriteCount"],
     "isMajor": true,
     "temporaryNotice": "You can now display the number of clones for each sprite in the project editor."
