@@ -16,13 +16,11 @@ export default async function ({ addon, msg, console }) {
 
     let spriteNames;
     if (!spriteNamesCache || force) {
-      console.log("Doing querySelector");
       spriteNames = Array.from(
         document.querySelectorAll("[class*=sprite-selector_items-wrapper] [class*=sprite-selector-item_sprite-name]")
       );
       spriteNamesCache = Array.from(spriteNames);
     } else {
-      console.log("Using cached sprite names");
       spriteNames = spriteNamesCache;
     }
 
@@ -56,9 +54,8 @@ export default async function ({ addon, msg, console }) {
     queueMicrotask(updateCounts);
   };
 
-  vm.addListener("targetsUpdate", (e) =>
+  vm.addListener("targetsUpdate", () =>
     queueMicrotask(() => {
-      console.log(e);
       updateCounts.call(this, true);
     })
   );
