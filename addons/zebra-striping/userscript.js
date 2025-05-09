@@ -1,69 +1,88 @@
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 export default async function ({ addon, msg, console }) {
-  const ScratchBlocks = await addon.tab.traps.getBlockly();
+  await addon.tab.loadScript("/libraries/thirdparty/cs/tinycolor-min.js");
 
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalRender = ScratchBlocks.BlockSvg.prototype.render;
   ScratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
+    const shade = addon.settings.get("shade");
+    const intensity = addon.settings.get("intensity");
+    const amount = ((shade === "lighter" ? 1 : -1) * intensity) / 2;
+
     // Any changes that affect block striping should bubble to the top block of the script.
     // The top block of the script is responsible for striping all of its children.
     // This way stripes are computed exactly once.
-    if (!this.isInFlyout && !this.isShadow() && this.getParent() === null) {
-      const stripeState = new Map();
-      // Conveniently getDescendants() returns blocks in an order such that each block's
-      // parent will always come before that block (except the first block which has no
-      // parent).
+    if (
+      // addon is enabled
+      !addon.self.disabled &&
+      // not in the flyout
+      !this.isInFlyout &&
+      // not a shadow
+      !this.isShadow() &&
+      // not an insertion marker
+      !this.isInsertionMarker() &&
+      // does not have parent
+      this.getParent() === null
+    ) {
+      // getDescendants() returns blocks in an order such that each block's parent
+      // will always come before that block (except the first block which has no parent).
       for (const block of this.getDescendants()) {
         const parent = block.getSurroundParent();
 
-        let isStriped = false;
-        if (parent) {
-          if (block.isShadow()) {
-            isStriped = !!stripeState.get(parent);
-          } else if (parent.getColour() === block.getColour()) {
-            isStriped = !stripeState.get(parent);
-          }
-        }
-        stripeState.set(block, isStriped);
+        const shouldStripe =
+          // not a insertion marker
+          !block.isInsertionMarker() &&
+          // has a parent
+          parent &&
+          // shadow blocks are part of the parent block and should act differently then a block inside another block
+          (block.isShadow()
+            ? // parent is striped
+              parent.saStriped
+            : // parent and child have the same primary color
+              // categories can have the same color (from other addons)
+              // if the block was striped we need to look at it's original color.
+              parent.getColour() === (block.saOriginalColour ? block.saOriginalColour[0] : block.getColour()) &&
+              // parent is not striped
+              !parent.saStriped);
 
-        const elements = [block.svgPath_];
-        for (const input of block.inputList) {
-          if (input.outlinePath) {
-            elements.push(input.outlinePath);
-          }
-          for (const field of input.fieldRow) {
-            if (field.fieldGroup_) {
-              elements.push(field.fieldGroup_);
+        // if the block's stripe state is correct, no need to update its state.
+        // if a block has never been stripped (undefined) and shouldStripe is false, the code below won't run
+        if (shouldStripe === Boolean(block.saStriped)) continue;
+
+        if (!shouldStripe && block.saOriginalColour) {
+          block.setColour(...block.saOriginalColour);
+          block.saOriginalColour = null;
+        } else if (shouldStripe && !block.saOriginalColour) {
+          const color = block.getColour();
+          const secondary = block.getColourSecondary();
+          const tertiary = block.getColourTertiary();
+          const quaternary = block.getColourQuaternary();
+          block.saOriginalColour = [color, secondary, tertiary, quaternary];
+
+          const stripedColors = block.saOriginalColour.map((c) => "#" + tinycolor(c).lighten(amount).toHex());
+          block.setColour(...stripedColors);
+        }
+
+        // field dropdowns in non shadow blocks don't automatically update when setColour is called.
+        if (!block.isShadow()) {
+          for (const input of block.inputList) {
+            for (const field of input.fieldRow) {
+              if (field instanceof ScratchBlocks.FieldDropdown) {
+                field.box_.setAttribute("fill", field.sourceBlock_.getColour());
+                field.box_.setAttribute("stroke", field.sourceBlock_.getColourTertiary());
+              }
             }
           }
         }
-        for (const el of elements) {
-          el.classList.toggle("sa-zebra-stripe", isStriped);
-        }
+        block.saStriped = shouldStripe;
       }
     }
     return originalRender.call(this, opt_bubble);
   };
 
-  updateAllBlocks(addon.tab, { updateFlyout: false });
-
-  // The replacement glow filter's ID is randomly generated and changes
-  // when the workspace is reloaded (which includes loading the page and
-  // seeing the project page then seeing inside).
-  // As we need to stack the filter with the striping filter in the
-  // userstyle, we need to use the userscript to get the filter's ID
-  // and set a CSS variable on the document's root.
-  while (true) {
-    const replacementGlowEl = await addon.tab.waitForElement('filter[id*="blocklyReplacementGlowFilter"]', {
-      markAsSeen: true,
-      reduxEvents: [
-        "scratch-gui/mode/SET_PLAYER",
-        "fontsLoaded/SET_FONTS_LOADED",
-        "scratch-gui/locales/SELECT_LOCALE",
-        "scratch-gui/theme/SET_THEME",
-      ],
-      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-    });
-    document.documentElement.style.setProperty("--zebraStriping-replacementGlow", `url(#${replacementGlowEl.id})`);
-  }
+  if (addon.self.enabledLate) updateAllBlocks(addon.tab, { updateFlyout: false });
+  addon.self.addEventListener("disabled", () => updateAllBlocks(addon.tab, { updateFlyout: false }));
+  addon.self.addEventListener("reenabled", () => updateAllBlocks(addon.tab, { updateFlyout: false }));
+  addon.settings.addEventListener("change", () => updateAllBlocks(addon.tab, { updateFlyout: false }));
 }
