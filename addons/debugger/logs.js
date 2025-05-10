@@ -1,6 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import LogView from "./log-view.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function createLogsTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 

@@ -1412,9 +1412,7 @@ export default class WorkspaceQuerier {
     this._destroyTokenGroups();
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _destroyTokenGroups() {
     this.tokenTypeStringLiteral = null;
     this.tokenTypeNumberLiteral = null;
