@@ -636,7 +636,6 @@ export default async ({ addon, msg, safeMsg }) => {
           } else if (message.type === "remixproject") {
             this.remixes.push({
               parentTitle: message.parent_title,
-              remixTitle: message.title,
               actor: message.actor_username,
               projectId: message.project_id,
             });
@@ -770,14 +769,14 @@ export default async ({ addon, msg, safeMsg }) => {
             rel="noopener noreferrer"
             href="https://scratch.mit.edu/users/${remix.actor}/"
         >${remix.actor}</a>`;
-        const title = `<a target="_blank"
+        const link = `<a target="_blank"
             rel="noopener noreferrer"
             href="https://scratch.mit.edu/projects/${remix.projectId}/"
             style="text-decoration: underline"
-        >${escapeHTML(remix.remixTitle)}</a>`;
+        >${msg("remix-link")}</a>`;
         return safeMsg("remix-as", {
           actor,
-          title,
+          link,
           parentTitle: escapeHTML(remix.parentTitle),
         });
       },
