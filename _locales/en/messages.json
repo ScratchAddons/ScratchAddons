@@ -149,6 +149,12 @@
   "resetToDefault": {
     "message": "Reset to default settings"
   },
+  "relatedAddons": {
+    "message": "Related addons:"
+  },
+  "relatedTo": {
+    "message": "Related to: $1"
+  },
   "creditTo": {
     "message": "Credit to:"
   },
