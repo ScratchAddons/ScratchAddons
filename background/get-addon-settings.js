@@ -734,13 +734,14 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
           madeAnyChanges = madeChangesToAddon = true;
         }
 
-        if (addonId === "editor-devtools" && settings.enableCleanUpPlus === false) {
-          // Transition v1.42 to v1.43
-          // Disable editor-cleanup-plus if turned off in editor-devtools
-          addonsEnabled["editor-cleanup-plus"] = false;
-          delete settings.enableCleanUpPlus;
-          madeChangesToAddon = true;
-          madeAnyChanges = true;
+        if (addonId === "editor-cleanup-plus" && addonsEnabled[addonId] === undefined) {
+          if (addonSettings["editor-devtools"]?.enableCleanUpPlus !== undefined) {
+            const enabledStatus = addonsEnabled["editor-devtools"] && addonSettings["editor-devtools"].enableCleanUpPlus;
+            addonsEnabled[addonId] = enabledStatus;
+            madeAnyChanges = true;
+          } else {
+            // Respect the value of enabledByDefault (by doing nothing)
+          }
         }
       }
 
