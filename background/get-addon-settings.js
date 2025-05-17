@@ -736,7 +736,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
 
         if (addonId === "editor-cleanup-plus" && addonsEnabled[addonId] === undefined) {
           if (addonSettings["editor-devtools"]?.enableCleanUpPlus !== undefined) {
-            const enabledStatus = addonsEnabled["editor-devtools"] && addonSettings["editor-devtools"].enableCleanUpPlus;
+            const enabledStatus =
+              addonsEnabled["editor-devtools"] && addonSettings["editor-devtools"].enableCleanUpPlus;
             addonsEnabled[addonId] = enabledStatus;
             madeAnyChanges = true;
           } else {
