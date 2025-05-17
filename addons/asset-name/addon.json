@@ -1,0 +1,66 @@
+{
+  "name": "Enhanced asset name field",
+  "description": "Expands the name input field for costumes and sounds, and automatically selects it when creating a costume, sound, or sprite.",
+  "tags": ["editor"],
+  "versionAdded": "1.43.0",
+  "credits": [
+    {
+      "name": "Valmontechno",
+      "link": "https://github.com/valmontechno"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Field sizing",
+      "id": "field-sizing",
+      "type": "select",
+      "default": "default",
+      "description": "The Fit to content option is only available for Chrome, Edge, and Opera browsers.",
+      "potentialValues": [
+        {
+          "id": "default",
+          "name": "Scratch default"
+        },
+        {
+          "name": "Wider",
+          "id": "wider"
+        },
+        {
+          "name": "Fit to content (Beta)",
+          "id": "fit-to-content"
+        }
+      ]
+    },
+    {
+      "name": "Select name on asset creation",
+      "id": "auto-select",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "wider.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "field-sizing": "wider" }
+      }
+    },
+    {
+      "url": "fit-to-content.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "field-sizing": "fit-to-content" }
+      }
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true
+}
