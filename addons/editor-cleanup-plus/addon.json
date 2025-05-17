@@ -10,6 +10,15 @@
       "link": "https://scratch.mit.edu/users/Chrome_Cat/"
     }
   ],
+  "settings": [
+    {
+      "name": "Find unused variables",
+      "description": "Find unused reporters, variables and lists for this sprite only and ask to delete them.",
+      "id": "promptUnused",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
@@ -20,5 +29,5 @@
   ],
   "versionAdded": "1.43.0",
   "tags": ["editor", "codeEditor", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": true
 }
