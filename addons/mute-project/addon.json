@@ -32,5 +32,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.7.0",
   "tags": ["player", "recommended"],
-  "relatedAddons": ["vol-slider"]
+  "relatedAddons": ["vol-slider"],
+  "libraries": ["scratch-gui"]
 }

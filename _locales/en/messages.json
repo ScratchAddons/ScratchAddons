@@ -149,6 +149,12 @@
   "resetToDefault": {
     "message": "Reset to default settings"
   },
+  "relatedAddons": {
+    "message": "Related addons:"
+  },
+  "relatedTo": {
+    "message": "Related to: $1"
+  },
   "creditTo": {
     "message": "Credit to:"
   },
@@ -254,8 +260,8 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_40": {
-    "message": "New addon: \"delete sprites without confirmation\", which removes the new confirmation prompt that asks if you are sure you want to delete a sprite. Go to $1 to enable it.",
+  "extensionUpdateInfo1_v1_42": {
+    "message": "New addon: \"FPS counter\", which shows the project framerate above the stage. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
@@ -264,8 +270,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_40": {
-    "message": "The \"save blocks as image\" addon now allows copying the images directly to the clipboard. Also, the \"project video recorder\" now exports mp4 files if supported by the browser."
+  "extensionUpdateInfo2_v1_42": {
+    "message": "Another new addon is \"Instant forum read indicators\", which instantly marks topics as read when opening them in a new tab."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
@@ -378,6 +384,18 @@
   },
   "captureCommentConfirm": {
     "message": "Posting this comment may lead to automatic muting of your account, temporarily preventing you from commenting. Persistent muting can result in your account being blocked from Scratch. Are you sure you want to post this comment?"
+  },
+  "myVariable": {
+    "message": "my variable",
+    "description": "Used as a placeholder for a variable name."
+  },
+  "myList": {
+    "message": "my list",
+    "description": "Used as a placeholder for a list name."
+  },
+  "thing": {
+    "message": "thing",
+    "description": "Used as a placeholder for a list item."
   },
   "extensionStoreDescription1": {
     "message": "Choose from 100+ options:",

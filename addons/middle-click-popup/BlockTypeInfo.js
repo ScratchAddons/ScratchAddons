@@ -374,7 +374,7 @@ export class BlockTypeInfo {
    * @returns {BlockTypeInfo[]}
    */
   static getBlocks(Blockly, vm, workspace, locale) {
-    const flyoutWorkspace = workspace.getToolbox()?.flyout_.getWorkspace();
+    const flyoutWorkspace = workspace.getFlyout()?.getWorkspace();
     if (!flyoutWorkspace) return [];
 
     const blocks = [];

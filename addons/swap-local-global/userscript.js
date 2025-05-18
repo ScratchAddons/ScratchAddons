@@ -1,3 +1,5 @@
+import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
+
 export default async function ({ addon, msg, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
@@ -28,16 +30,46 @@ export default async function ({ addon, msg, console }) {
   const getVmVariable = (id) => vm.editingTarget.lookupVariableById(id);
   const isStageSelected = () => vm.editingTarget.isStage;
 
+  const createVariable = (workspace, ...args) => {
+    if (ScratchBlocks.registry) {
+      // new Blockly
+      // https://github.com/scratchfoundation/scratch-blocks/blob/91c8b63/src/variables.ts#L126-L137
+      const VariableModel = ScratchBlocks.registry.getClass(
+        ScratchBlocks.registry.Type.VARIABLE_MODEL,
+        ScratchBlocks.registry.DEFAULT
+      );
+      const variable = new VariableModel(workspace, ...args);
+      workspace.getVariableMap().addVariable(variable);
+      ScratchBlocks.Events.fire(new (ScratchBlocks.Events.get(ScratchBlocks.Events.VAR_CREATE))(variable));
+    } else {
+      workspace.createVariable(...args);
+    }
+  };
+
   const deleteVariableWithoutDeletingBlocks = (workspace, variable) => {
     // variable can be an ID or an actual Blockly variable object
     if (typeof variable === "string") {
-      variable = workspace.getVariableById(variable);
+      variable = workspace.getVariableMap().getVariableById(variable);
     }
-    workspace.variableMap_.deleteVariable(variable);
+    if (ScratchBlocks.registry) {
+      // new Blockly: can't use deleteVariable() because it also deletes references
+      // https://github.com/google/blockly/blob/fa4fce5/core/variable_map.ts#L288-L294
+      const variableMap = workspace.getVariableMap().variableMap;
+      const variablesOfType = variableMap.get(variable.getType());
+      if (variablesOfType && variablesOfType.has(variable.getId())) {
+        variablesOfType.delete(variable.getId());
+        ScratchBlocks.Events.fire(new (ScratchBlocks.Events.get(ScratchBlocks.Events.VAR_DELETE))(variable));
+        if (variablesOfType.size === 0) {
+          variableMap.delete(variable.getType());
+        }
+      }
+    } else {
+      workspace.getVariableMap().deleteVariable(variable);
+    }
   };
 
   const syncBlockVariableNameWithActualVariableName = (workspace, id) => {
-    const variable = workspace.getVariableById(id);
+    const variable = workspace.getVariableMap().getVariableById(id);
     for (const block of workspace.getAllBlocks()) {
       block.updateVarName(variable);
     }
@@ -58,7 +90,7 @@ export default async function ({ addon, msg, console }) {
       _undoRedoPreserveStateCallback = beginPreservingState(workspace, this.varId);
       deleteVariableWithoutDeletingBlocks(workspace, this.varId);
     } else {
-      workspace.createVariable(this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
+      createVariable(workspace, this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
       finishUndoRedoState();
     }
   };
@@ -67,7 +99,7 @@ export default async function ({ addon, msg, console }) {
   const customUndoVarCreate = function (forward) {
     const workspace = this.getEventWorkspace_();
     if (forward) {
-      workspace.createVariable(this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
+      createVariable(workspace, this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
       finishUndoRedoState();
     } else {
       _undoRedoPreserveStateCallback = beginPreservingState(workspace, this.varId);
@@ -75,14 +107,27 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  const flushBlocklyEventQueue = () => ScratchBlocks.Events.fireNow_();
+  const flushBlocklyEventQueue = () => {
+    if (ScratchBlocks.registry) {
+      // new Blockly: we can't call fireNow() because it isn't exported,
+      // but we can wait until the events have been fired
+      // see https://github.com/google/blockly/blob/fa4fce5/core/events/utils.ts#L113-L115
+      return new Promise((resolve) => {
+        requestAnimationFrame(() => {
+          setTimeout(resolve, 0);
+        });
+      });
+    } else {
+      ScratchBlocks.Events.fireNow_();
+    }
+  };
 
   const beginPreservingState = (workspace, id) => {
     // oldMonitorState is an instance of https://github.com/scratchfoundation/scratch-vm/blob/develop/src/engine/monitor-record.js or undefined
     const oldMonitorState = vm.runtime._monitorState.get(id);
     const oldVmVariable = getVmVariable(id);
-    return () => {
-      flushBlocklyEventQueue();
+    return async () => {
+      await flushBlocklyEventQueue();
 
       const newVmVariable = getVmVariable(id);
       if (newVmVariable) {
@@ -124,7 +169,7 @@ export default async function ({ addon, msg, console }) {
     };
   };
 
-  const convertVariable = (oldBlocklyVariable, newLocal, newCloud) => {
+  const convertVariable = async (oldBlocklyVariable, newLocal, newCloud) => {
     const CLOUD_PREFIX = "☁ ";
 
     const name = oldBlocklyVariable.name;
@@ -198,14 +243,14 @@ export default async function ({ addon, msg, console }) {
     ScratchBlocks.Events.setGroup(true);
     try {
       deleteVariableWithoutDeletingBlocks(workspace, oldBlocklyVariable);
-      workspace.createVariable(newName, type, id, newLocal, newCloud);
+      createVariable(workspace, newName, type, id, newLocal, newCloud);
     } finally {
       ScratchBlocks.Events.setGroup(false);
     }
 
     // 2 items will be added to the queue: a variable create and delete
     // We override their undo handlers to make undo/redo work properly
-    flushBlocklyEventQueue();
+    await flushBlocklyEventQueue();
     const stack = workspace.undoStack_;
     const createEvent = stack[stack.length - 1];
     const deleteEvent = stack[stack.length - 2];
@@ -235,15 +280,12 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  const addMoreOptionsToPrompt = (variable) => {
+  const addMoreOptionsToPrompt = async (variable) => {
     if (addon.self.disabled) {
       return;
     }
 
-    const promptBody = document.querySelector('[class^="prompt_body_"]');
-    if (!promptBody) {
-      return;
-    }
+    const promptBody = await addon.tab.waitForElement('[class^="prompt_body_"]');
 
     const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_"]');
     if (headerTitle) {
@@ -351,24 +393,43 @@ export default async function ({ addon, msg, console }) {
     };
   };
 
-  // https://github.com/scratchfoundation/scratch-blocks/blob/c5014f61e2e538e99601a9e0cb39e339e44c3910/core/variables.js#L470
-  const originalRenameVariable = ScratchBlocks.Variables.renameVariable;
-  ScratchBlocks.Variables.renameVariable = function (workspace, variable, opt_callback) {
-    const ret = originalRenameVariable.call(this, workspace, variable, (...args) => {
-      if (opt_callback) {
-        opt_callback(...args);
-      }
-      if (!addon.self.disabled && prompt) {
-        convertVariable(variable, prompt.isLocal(), prompt.isCloud());
-      }
-    });
-    const prompt = addMoreOptionsToPrompt(variable);
-    return ret;
+  const blocksWrapper = document.querySelector("[class*='gui_blocks-wrapper_']");
+  let reactInternalInstance = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
+  while (!reactInternalInstance.stateNode?.ScratchBlocks) {
+    reactInternalInstance = reactInternalInstance.child;
+  }
+  const blocksInstance = reactInternalInstance.stateNode;
+  const Blocks = blocksInstance.constructor;
+  const originalHandlePromptStart = Blocks.prototype.handlePromptStart;
+  const newHandlePromptStart = function (message, defaultValue, callback, optTitle, optVarType) {
+    const isRename = !!defaultValue;
+    if (!addon.self.disabled && isRename) {
+      const workspace = addon.tab.traps.getWorkspace();
+      const variable = workspace.getVariableMap().getVariable(defaultValue, optVarType);
+      let prompt;
+      addMoreOptionsToPrompt(variable).then((result) => (prompt = result));
+      const originalCallback = callback;
+      callback = (...args) => {
+        originalCallback(...args);
+        if (prompt) {
+          convertVariable(variable, prompt.isLocal(), prompt.isCloud());
+        }
+      };
+    }
+    originalHandlePromptStart.call(this, message, defaultValue, callback, optTitle, optVarType);
   };
+  Blocks.prototype.handlePromptStart = newHandlePromptStart;
+  if (ScratchBlocks.registry) {
+    // new Blockly
+    ScratchBlocks.ScratchVariables.setPromptHandler(newHandlePromptStart.bind(blocksInstance));
+  } else {
+    ScratchBlocks.prompt = newHandlePromptStart.bind(blocksInstance);
+  }
 
+  enableContextMenuSeparators(addon.tab);
   addon.tab.createBlockContextMenu(
     (items, block) => {
-      if (!addon.self.disabled && (block.getCategory() === "data" || block.getCategory() === "data-lists")) {
+      if (!addon.self.disabled && block.type.startsWith("data_")) {
         const variable = block.workspace.getVariableById(block.getVars()[0]);
         if (variable) {
           if (items.length > 0) {
@@ -378,12 +439,14 @@ export default async function ({ addon, msg, console }) {
               items[0].text = msg("edit-list-option");
             }
           }
-          items.push({
-            enabled: true,
-            separator: true,
-            text: msg(`to-${variable.isLocal ? "global" : "local"}`),
-            callback: () => convertVariable(variable, !variable.isLocal, variable.isCloud),
-          });
+          items.push(
+            addSeparator({
+              enabled: true,
+              separator: true,
+              text: msg(`to-${variable.isLocal ? "global" : "local"}`),
+              callback: () => convertVariable(variable, !variable.isLocal, variable.isCloud),
+            })
+          );
         }
       }
       return items;

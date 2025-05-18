@@ -59,5 +59,6 @@
     "isMajor": true
   },
   "tags": ["player", "recommended"],
-  "relatedAddons": ["mute-project"]
+  "relatedAddons": ["mute-project"],
+  "libraries": ["scratch-gui"]
 }

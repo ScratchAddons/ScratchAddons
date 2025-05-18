@@ -85,7 +85,7 @@ export default async function ({ addon, console }) {
    * Switch costume editor tool if a valid shortcut was pressed.
    */
   function handleKeyDown(event) {
-    if (isUserTyping) return;
+    if (isUserTyping || event.ctrlKey || event.altKey || event.metaKey) return;
 
     const localizationId = shortcutToToolLocalizationId[event.key.toLowerCase()];
     if (!localizationId) return;

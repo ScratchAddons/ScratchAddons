@@ -10,7 +10,7 @@
   z-index: 4999;
 }
 
-.sa-controls-disabled > img {
+body:not(.sa-body-editor) .sa-controls-disabled > img {
   pointer-events: none;
   opacity: 0.5;
 }

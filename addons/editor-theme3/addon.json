@@ -37,6 +37,7 @@
       "text": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks."
     }
   ],
+  "relatedAddons": ["zebra-striping", "custom-block-text", "custom-block-shape"],
   "latestUpdate": {
     "isMajor": true,
     "version": "1.39.0",
@@ -606,5 +607,6 @@
   "presetPreview": {
     "type": "palette",
     "colors": ["motion-color", "looks-color", "sounds-color", "events-color", "control-color", "sensing-color"]
-  }
+  },
+  "libraries": ["scratch-www", "scratch-gui", "scratch-blocks"]
 }

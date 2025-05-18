@@ -1,6 +1,6 @@
 {
   "name": "Hide delete button",
-  "description": "Hides delete button (trash can icon) from sprites, costumes and sounds. They can still be deleted using the right click context menu.",
+  "description": "Hides delete button (trash can icon) from sprites, costumes and sounds. They can still be deleted using the right click context menu or by holding the Shift key.",
   "tags": ["editor", "featured"],
   "relatedAddons": ["no-sprite-confirm"],
   "info": [
@@ -60,6 +60,20 @@
           "sounds": true
         }
       }
+    },
+    {
+      "url": "show-trash-shortcut.css",
+      "matches": ["projects"]
     }
-  ]
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "latestUpdate": {
+    "version": "1.43.0",
+    "temporaryNotice": "You can now hold Shift to show delete buttons."
+  }
 }

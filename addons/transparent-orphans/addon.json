@@ -41,6 +41,12 @@
       "default": 25
     }
   ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
   "userstyles": [
     {
       "url": "userstyle.css",
