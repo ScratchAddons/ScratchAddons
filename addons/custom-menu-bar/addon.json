@@ -31,6 +31,7 @@
     }
   ],
   "tags": ["editor", "editorMenuBar", "featured"],
+  "relatedAddons": ["editor-compact"],
   "settings": [
     {
       "name": "Show menu...",
