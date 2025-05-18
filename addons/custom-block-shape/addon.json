@@ -2,7 +2,6 @@
   "name": "Customizable block shape",
   "description": "Adjust the padding, corner radius, and notch height of blocks.",
   "tags": ["editor", "codeEditor", "theme", "featured"],
-  "relatedAddons": ["editor-theme3"],
   "credits": [
     {
       "name": "SheepTester",
@@ -17,7 +16,7 @@
       "link": "https://scratch.mit.edu/users/GarboMuffin/"
     }
   ],
-  "relatedAddons": ["editor-theme3", "zebra-striping", "custom-block-text"],
+  "relatedAddons": ["editor-theme3", "editor-square-inputs", "custom-block-text"],
   "versionAdded": "1.12.0",
   "enabledByDefault": false,
   "dynamicEnable": true,
