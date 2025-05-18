@@ -1550,5 +1550,6 @@
     "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
+  "relatedAddons": ["dark-www", "theme3"],
   "enabledByDefault": false
 }

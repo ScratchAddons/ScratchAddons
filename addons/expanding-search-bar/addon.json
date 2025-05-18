@@ -19,5 +19,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.16.0",
   "tags": ["community", "featured"],
+  "relatedAddons": ["discuss-button"],
   "enabledByDefault": false
 }

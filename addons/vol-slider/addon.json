@@ -58,5 +58,6 @@
     "newSettings": ["always"],
     "isMajor": true
   },
-  "tags": ["player", "recommended"]
+  "tags": ["player", "recommended"],
+  "relatedAddons": ["mute-project"]
 }

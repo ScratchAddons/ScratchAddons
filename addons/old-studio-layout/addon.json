@@ -17,6 +17,7 @@
     }
   ],
   "tags": ["community", "theme", "studios", "featured"],
+  "relatedAddons": ["scratchr2", "items-per-row", "studio-followers"],
   "credits": [
     {
       "name": "Maximouse",

@@ -437,6 +437,7 @@
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
+  "relatedAddons": ["editor-dark-mode", "custom-block-shape", "transparent-orphans", "zebra-striping"],
   "enabledByDefault": false,
   "presets": [
     {

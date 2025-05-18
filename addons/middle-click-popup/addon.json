@@ -19,6 +19,7 @@
     }
   ],
   "tags": ["editor", "codeEditor", "recommended"],
+  "relatedAddons": ["block-switching"],
   "enabledByDefault": true,
   "userscripts": [
     {

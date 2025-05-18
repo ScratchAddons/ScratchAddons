@@ -22,5 +22,6 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.40.0",
-  "tags": ["editor", "danger", "featured"]
+  "tags": ["editor", "danger", "featured"],
+  "relatedAddons": ["hide-delete-button", "confirmations"]
 }
