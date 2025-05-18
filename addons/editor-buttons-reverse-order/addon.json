@@ -2,7 +2,7 @@
   "name": "Reverse order of project controls",
   "description": "Moves the green flag and stop buttons to the right and the full screen button to the left, like in Scratch 2.0.",
   "tags": ["player", "theme", "featured"],
-  "relatedAddons": ["editor-stage-left", "scartch3to2"],
+  "relatedAddons": ["editor-stage-left", "scratch3to2"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userstyles": [
