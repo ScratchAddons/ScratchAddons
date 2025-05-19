@@ -1,0 +1,20 @@
+{
+  "name": "Edit variables or lists from context menus",
+  "description": "Adds an option to the block context menu to edit the variable or list.",
+  "credits": [
+    {
+      "name": "AeroKoder",
+      "link": "https://scratch.mit.edu/users/AeroKoder"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.43.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
