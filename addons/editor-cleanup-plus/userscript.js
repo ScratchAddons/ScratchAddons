@@ -103,7 +103,12 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
       });
       if (confirm(message)) {
         for (const orphan of unusedLocals) {
-          workspace.deleteVariableById(orphan.getId());
+          if (blockly.registry) {
+            // new Blockly
+            workspace.getVariableMap().deleteVariable(orphan);
+          } else {
+            workspace.deleteVariableById(orphan.getId());
+          }
         }
       }
     }
@@ -127,7 +132,12 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
       });
       if (confirm(message)) {
         for (const orphan of unusedLists) {
-          workspace.deleteVariableById(orphan.getId());
+          if (blockly.registry) {
+            // new Blockly
+            workspace.getVariableMap().deleteVariable(orphan);
+          } else {
+            workspace.deleteVariableById(orphan.getId());
+          }
         }
       }
     }

@@ -60,16 +60,33 @@ export const getOrderedTopBlockColumns = (separateOrphans, workspace) => {
   let maxWidths = {};
 
   if (separateOrphans) {
-    let topComments = w.getTopComments();
+    if (w.getTheme) {
+      // new Blockly
+      const blocks = w.getAllBlocks();
+      for (const block of blocks) {
+        for (const icon of block.getIcons()) {
+          if (icon.commentBubble) {
+            const comment = icon.commentBubble;
+            const right = comment.getRelativeToSurfaceXY().x + comment.getSize().width;
 
-    for (const comment of topComments) {
-      if (comment.setVisible) {
-        autoPositionComment(comment);
-        let right = comment.getBoundingRectangle().bottomRight.x;
+            const root = comment.getSourceBlock().getRootBlock();
+            const left = root.getRelativeToSurfaceXY().x;
+            maxWidths[root.id] = Math.max(right - left, maxWidths[root.id] || 0);
+          }
+        }
+      }
+    } else {
+      let topComments = w.getTopComments();
 
-        let root = comment.block_.getRootBlock();
-        let left = root.getBoundingRectangle().topLeft.x;
-        maxWidths[root.id] = Math.max(right - left, maxWidths[root.id] || 0);
+      for (const comment of topComments) {
+        if (comment.block_) {
+          autoPositionComment(comment);
+          let right = comment.getBoundingRectangle().bottomRight.x;
+
+          let root = comment.block_.getRootBlock();
+          let left = root.getBoundingRectangle().topLeft.x;
+          maxWidths[root.id] = Math.max(right - left, maxWidths[root.id] || 0);
+        }
       }
     }
   }
