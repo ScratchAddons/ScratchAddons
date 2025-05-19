@@ -8,7 +8,7 @@
     }
   ],
   "tags": ["editor", "codeEditor", "theme", "featured"],
-  "relatedAddons": ["data-category-tweaks-v2"],
+  "relatedAddons": ["data-category-tweaks-v2", "editor-stage-left", "editor-compact"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [

@@ -1548,7 +1548,7 @@
     "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
-  "relatedAddons": ["dark-www", "editor-theme3"],
+  "relatedAddons": ["dark-www", "editor-theme3", "stage-monitor"],
   "enabledByDefault": false,
   "libraries": ["scratch-render"]
 }
