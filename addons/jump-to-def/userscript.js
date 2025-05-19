@@ -1,4 +1,6 @@
 import Utils from "../find-bar/blockly/Utils.js";
+
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   const utils = new Utils(addon);
 

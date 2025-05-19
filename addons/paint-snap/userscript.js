@@ -3,7 +3,7 @@ import { enable, disable, loadSettings, setGuideColor, toggle } from "./state.js
 import { initUI } from "./ui.js";
 import { updateScaleTool } from "./updateScaleTool.js";
 
-/** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
+/** @param {import("addonAPI").AddonAPI} api */
 export default async function (api) {
   const { addon } = api;
   addon.self.addEventListener("disabled", disable);
