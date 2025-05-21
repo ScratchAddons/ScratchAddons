@@ -109,3 +109,7 @@
   margin-right: auto;
   transform: rotate(-90deg);
 }
+
+.scratchCommentTopBar ~ image {
+  filter: var(--editorTheme3-commentFilter);
+}

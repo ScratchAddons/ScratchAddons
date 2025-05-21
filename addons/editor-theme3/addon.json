@@ -177,6 +177,18 @@
         "g": 0.9,
         "b": 0.9
       }
+    },
+    {
+      "name": "commentFilter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        }
+      }
     }
   ],
   "dynamicEnable": true,
