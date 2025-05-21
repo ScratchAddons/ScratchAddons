@@ -122,7 +122,7 @@
     "isMajor": false
   },
   "tags": ["community", "featured"],
-  "relatedAddons": ["expanding-search-bar"],
+  "relatedAddons": ["custom-menu-bar", "expanding-search-bar"],
   "enabledByDefault": false,
   "updateUserstylesOnSettingsChange": true
 }
