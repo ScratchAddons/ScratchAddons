@@ -68,6 +68,9 @@ p.sa-animated-thumb-uploaded-thumb {
   justify-content: center;
 }
 
+.sa-animated-thumb-uploaded-thumb > img {
+  border: 1px solid var(--darkWww-border, #0000001a);
+}
 .sa-set-thumbnail-button {
   position: relative;
 }
