@@ -182,8 +182,6 @@ export default async function ({ addon, console, msg }) {
     if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   });
 
-  localStorage.removeItem("saAnimatedThumbShowTooltip");
-
   while (true) {
     await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
       markAsSeen: true,
