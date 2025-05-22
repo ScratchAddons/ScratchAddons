@@ -147,7 +147,9 @@ export default async function ({ addon, console, msg }) {
         .finally(() => {
           ignoreClickOutside = false;
           uploadFromFileButton.removeAttribute("disabled");
+          uploadFromFileButton.classList.remove("loading");
           uploadFromStageButton.removeAttribute("disabled");
+          uploadFromStageButton.classList.remove("loading");
         });
 
     const upload = () => {
@@ -156,13 +158,15 @@ export default async function ({ addon, console, msg }) {
       uploadFromStageButton.setAttribute("disabled", "true");
     };
 
-    uploadFromFileButton.addEventListener("click", () => {
+    uploadFromFileButton.addEventListener("click", (e) => {
+      e.target.classList.add("loading");
       upload();
       setter.addFileInput();
       ignoreClickOutside = true; // To stop modal from being closed
       setter.showInput();
     });
-    uploadFromStageButton.addEventListener("click", () => {
+    uploadFromStageButton.addEventListener("click", (e) => {
+      e.target.classList.add("loading");
       upload();
       addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: true });
       addon.tab.traps.vm.renderer.requestSnapshot((dataURL) => {
