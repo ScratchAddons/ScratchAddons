@@ -641,10 +641,15 @@ export default async ({ addon, msg, safeMsg }) => {
             });
           } else if (message.type === "studioactivity") {
             // We only want one message per studio
-            if (!this.studioActivity.find((obj) => obj.studioId === message.gallery_id)) {
+            // If there are more, the number of messages is shown next to the message
+            const existingMessage = this.studioActivity.find((obj) => obj.studioId === message.gallery_id);
+            if (existingMessage) {
+              existingMessage.amount++;
+            } else {
               this.studioActivity.push({
                 studioId: message.gallery_id,
                 studioTitle: message.title,
+                amount: 1,
               });
             }
             this.studioActivityAmt++;
