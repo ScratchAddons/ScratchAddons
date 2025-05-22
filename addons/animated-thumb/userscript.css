@@ -1,5 +1,5 @@
 .sa-animated-thumb-input,
-.sa-animated-thumb-popup-result-none {
+.sa-animated-thumb-result-failure.hidden {
   display: none;
 }
 
@@ -43,9 +43,10 @@
   margin-left: 0.5rem;
 }
 
-.sa-animated-thumb-popup-result-failure {
+.sa-animated-thumb-result-failure {
   margin: 1rem 0;
-  border-radius: 2px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   height: auto;
   width: auto;
   padding: 1rem;

@@ -62,8 +62,7 @@ export default async function ({ addon, console, msg }) {
       })
     );
     const modalResultArea = Object.assign(document.createElement("div"), {
-      className: "sa-animated-thumb-popup-result",
-      hidden: true,
+      className: "sa-animated-thumb-result-failure hidden",
     });
     content.appendChild(modalResultArea);
 
@@ -131,7 +130,7 @@ export default async function ({ addon, console, msg }) {
             saveConfig(projectId, stopOverwritingCheckbox.checked);
           },
           (status) => {
-            modalResultArea.hidden = false;
+            modalResultArea.classList.remove("hidden");
             switch (status) {
               case 503:
               case 500:
@@ -152,7 +151,7 @@ export default async function ({ addon, console, msg }) {
         });
 
     const upload = () => {
-      modalResultArea.className = "sa-animated-thumb-popup-result sa-animated-thumb-popup-result-none";
+      modalResultArea.classList.add("hidden");
       uploadFromFileButton.setAttribute("disabled", "true");
       uploadFromStageButton.setAttribute("disabled", "true");
     };
