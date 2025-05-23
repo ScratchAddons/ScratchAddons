@@ -124,10 +124,11 @@
   line-height: 30px;
 }
 .preview .remix-button {
-  border: 1px solid #328554;
+  background-color: #fba517;
+  border: 1px solid #fba517;
 }
-.preview .remix-button:hover {
-  background-color: #2d784c;
+.preview .remix-button:not(.disabled):hover {
+  background-color: #e29415;
 }
 .preview .see-inside-button,
 .preview .sa-tw-button.scratch {
