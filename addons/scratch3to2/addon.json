@@ -12,6 +12,18 @@
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.41.0",
+  "latestUpdate": {
+    "version": "1.43.0",
+    "newSettings": ["navbarSeparators"]
+  },
+  "settings": [
+    {
+      "id": "navbarSeparators",
+      "type": "boolean",
+      "name": "Separator lines in navigation bar",
+      "default": false
+    }
+  ],
   "userstyles": [
     {
       "url": "main.css",
@@ -71,6 +83,13 @@
     {
       "url": "download.css",
       "matches": ["https://scratch.mit.edu/download"]
+    },
+    {
+      "url": "navbar_separators.css",
+      "matches": "*",
+      "if": {
+        "settings": { "navbarSeparators": true }
+      }
     }
   ],
   "libraries": ["scratch-flash"]
