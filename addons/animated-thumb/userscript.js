@@ -166,7 +166,7 @@ export default async function ({ addon, console, msg }) {
       setter.showInput();
     });
     uploadFromStageButton.addEventListener("click", (e) => {
-      e.target.classList.add("loading");
+      uploadFromStageButton.classList.add("loading");
       upload();
       addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: true });
       addon.tab.traps.vm.renderer.requestSnapshot((dataURL) => {
