@@ -280,9 +280,8 @@ body.iframe .settings-column > .addon-setting {
 }
 body.iframe .setting-label {
   width: auto;
-  margin-bottom: 5px;
 }
-body.iframe .setting-help-icon {
+body.iframe .setting-label-container {
   margin-bottom: 5px;
 }
 body.iframe .setting-input {
