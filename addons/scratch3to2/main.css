@@ -10,6 +10,7 @@ body:not(.sa-body-editor, .scratchCommentBody),
 }
 body:not(.sa-body-editor, .scratchCommentBody) {
   color: var(--darkWww-page-scratchr2Text, #322f31);
+  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 p {
   color: inherit;
