@@ -349,6 +349,11 @@ body:not(.sa-body-editor) .select select > option {
   font-weight: bold;
   line-height: 33px;
 }
+#navigation .link > a:hover,
+#navigation .inner > ul > li.right a:hover,
+.account-nav .user-info.open {
+  background-color: var(--darkWww-navbar-scratchr2ItemHover, rgba(0, 0, 0, 0.1));
+}
 #navigation .inner > ul > li.right.join > a:hover {
   background-color: #f9a739;
   color: white;
