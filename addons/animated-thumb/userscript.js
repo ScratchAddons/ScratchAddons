@@ -159,7 +159,7 @@ export default async function ({ addon, console, msg }) {
     };
 
     uploadFromFileButton.addEventListener("click", (e) => {
-      e.target.classList.add("loading");
+      uploadFromFileButton.classList.add("loading");
       upload();
       setter.addFileInput();
       ignoreClickOutside = true; // To stop modal from being closed
