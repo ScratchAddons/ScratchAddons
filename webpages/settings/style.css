@@ -282,6 +282,9 @@ body.iframe .setting-label {
   width: auto;
   margin-bottom: 5px;
 }
+body.iframe .setting-help-icon {
+  margin-bottom: 5px;
+}
 body.iframe .setting-input {
   flex-shrink: 0;
 }
