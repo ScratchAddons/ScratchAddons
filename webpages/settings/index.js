@@ -27,6 +27,7 @@ let fuse;
     "webpages/settings/components/picker-component",
     "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-setting",
+    "webpages/settings/components/addon-notice",
     "webpages/settings/components/addon-tag",
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
