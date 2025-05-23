@@ -558,6 +558,7 @@ body:not(.sa-body-editor) .select select > option {
   display: none;
 }
 .modal-header,
+.report-modal-header,
 .youtube-video-modal-container .cards-modal-header.mint-green,
 .cards-modal-container .cards-modal-header,
 .mod-feedback .feedback-header {
@@ -570,6 +571,7 @@ body:not(.sa-body-editor) .select select > option {
   padding-top: 5px;
 }
 .modal-title,
+.report-content-label,
 .cards-modal-container .cards-modal-header .cards-title {
   color: var(--darkWww-box-scratchr2HeaderText, #554747);
   text-align: left;
