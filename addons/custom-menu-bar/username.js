@@ -9,7 +9,7 @@ export default async function ({ addon }) {
     if (addon.settings.get("compact-username")) {
       const usernameSpan = document.createElement("span");
       usernameSpan.textContent = await addon.auth.fetchUsername();
-      usernameSpan.className = "sa-profile-name";
+      usernameSpan.className = "sa-editor-profile-name";
       menuItem.appendChild(usernameSpan);
     }
   }
