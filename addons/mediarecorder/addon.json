@@ -2,6 +2,7 @@
   "name": "Project video recorder",
   "description": "Adds a \"record\" button to the editor menu bar that allows you to record the project's stage.",
   "tags": ["editor", "editorMenuBar", "recommended"],
+  "relatedAddons": ["blocks2image"],
   "userscripts": [
     {
       "url": "userscript.js",

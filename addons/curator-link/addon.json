@@ -34,5 +34,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.4.0",
   "tags": ["community"],
+  "relatedAddons": ["more-links"],
   "enabledByDefault": false
 }

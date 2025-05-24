@@ -28,6 +28,7 @@
     }
   ],
   "tags": ["editor", "theme", "featured"],
+  "relatedAddons": ["scratch3to2", "editor-buttons-reverse-order", "columns"],
   "versionAdded": "1.1.0",
   "enabledByDefault": false
 }
