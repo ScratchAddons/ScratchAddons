@@ -5,7 +5,7 @@ export default async function ({ addon, console, msg }) {
 
   let threshold = null;
   function updateThreshold() {
-    threshold = addon.settings.get("display") === "low" ? addon.settings.get("threshold") : Infinity
+    threshold = addon.settings.get("display") === "low" ? addon.settings.get("threshold") : Infinity;
   }
   addon.settings.addEventListener("change", updateThreshold);
   updateThreshold();
