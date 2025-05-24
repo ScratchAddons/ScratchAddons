@@ -1,27 +1,17 @@
 export default async function ({ addon, console, msg }) {
+  const CLASS_NAME = "desc-limit project";
+  const AREA = location.pathname.split("/")[1] === "studios" ? "studio" : "project";
   let maxLength = 5000;
-  let className = "desc-limit";
-  let area = "project";
-  if (location.pathname.split("/")[1] === "studios") {
-    className = "studio-desc-limit";
-    area = "studio";
-  }
 
   let threshold = null;
   function updateThreshold() {
-    if (addon.settings.get("display") === "low") {
-      threshold = addon.settings.get("threshold");
-    } else {
-      threshold = Infinity;
-    }
+    threshold = addon.settings.get("display") === "low" ? addon.settings.get("threshold") : Infinity
   }
-  addon.settings.addEventListener("change", () => {
-    updateThreshold();
-  });
+  addon.settings.addEventListener("change", updateThreshold);
   updateThreshold();
 
   while (true) {
-    if (area === "studio") {
+    if (AREA === "studio") {
       await addon.tab.waitForElement(".inplace-textarea.studio-description", {
         markAsSeen: true,
       });
@@ -39,15 +29,15 @@ export default async function ({ addon, console, msg }) {
     function newCharLimitCounter(location, field) {
       const element = document.createElement("span");
       element.textContent = msg("left", { num: maxLength });
-      element.className = className + " limit-hidden";
+      element.className = CLASS_NAME + " limit-hidden";
 
       const counter = location.appendChild(element);
 
       function updateVisibility() {
         if (maxLength - field.value.length <= threshold) {
-          counter.className = className;
+          counter.className = CLASS_NAME;
         } else {
-          counter.className = className + " limit-hidden";
+          counter.className = CLASS_NAME + " limit-hidden";
         }
       }
 
@@ -57,7 +47,7 @@ export default async function ({ addon, console, msg }) {
         updateVisibility();
       });
       field.addEventListener("blur", () => {
-        counter.className = className + " limit-hidden";
+        counter.className = CLASS_NAME + " limit-hidden";
       });
 
       addon.tab.displayNoneWhileDisabled(counter);
@@ -74,12 +64,10 @@ export default async function ({ addon, console, msg }) {
       });
       updateCounter();
 
-      addon.self.addEventListener("reenabled", () => {
-        updateCounter();
-      });
+      addon.self.addEventListener("reenabled", updateCounter);
     }
 
-    if (area === "studio") {
+    if (AREA === "studio") {
       // Studio Description
       newCharLimitCounter(
         document.getElementsByClassName("studio-info-section")[3],

@@ -1,14 +1,27 @@
 .desc-limit {
-  padding-left: 7px;
   font-size: 12px;
   font-weight: normal;
 }
 
-.studio-desc-limit {
-  font-size: 12px;
-  font-weight: normal;
+.project-textlabel {
+  width: 100%;
+}
+.project-textlabel .desc-limit {
+  float: right;
 }
 
-.limit-hidden {
-  display: none !important;
+.desc-limit.limit-hidden {
+  display: none;
+  animation: chLimitFadeOut 0.12s !important;
+}
+
+@keyframes chLimitFadeOut {
+  from {
+    display: revert;
+    opacity: 1;
+  }
+  to {
+    display: revert;
+    opacity: 0;
+  }
 }
