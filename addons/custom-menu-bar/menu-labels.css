@@ -6,7 +6,8 @@
   justify-content: center;
 }
 
-[class*="menu-bar_hoverable"] > span:not(.sa-editormessages-count) {
+[class*="settings-menu_dropdown-label_"],
+[class*="menu-bar_collapsible-label_"] {
   margin: 0;
   padding: 0;
 }
