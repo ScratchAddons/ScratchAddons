@@ -32,16 +32,16 @@
       "potentialValues": [
         {
           "id": "always",
-          "name": "Always visible"
+          "name": "Visible while editing"
         },
         {
           "id": "low",
-          "name": "When running low on characters"
+          "name": "Visible when low on characters"
         }
       ]
     },
     {
-      "name": "Show if characters left is less than:",
+      "name": "Show if characters left ≤",
       "id": "threshold",
       "type": "integer",
       "min": 100,
@@ -54,6 +54,6 @@
       }
     }
   ],
-  "versionAdded": "1.34.0",
+  "versionAdded": "1.43.0",
   "enabledByDefault": false
 }
