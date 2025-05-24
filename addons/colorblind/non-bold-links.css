@@ -1,0 +1,34 @@
+/* Include */
+a,
+a:link,
+a:not([href]),
+a:hover,
+a:active,
+a.black:hover,
+a.black:active,
+a.reply,
+input.link,
+input.link:hover,
+input.link:active,
+input.link.black:hover,
+input.link.black:active,
+.djangobb .username,
+.news-description h4,
+/* scratch3to2 compatibility */
+.thumbnail .thumbnail-title a,
+.about .masthead div li a,
+.about .body a,
+.thumbnail-column .thumbnail .thumbnail-info .thumbnail-title > a,
+.comment .comment-top-row .username,
+.studio-project-tile .studio-project-title {
+  font-weight: normal;
+}
+
+.slider-carousel .thumb span.title a {
+  font-weight: normal !important;
+}
+
+/* Exclude */
+.join-scratch a {
+  font-weight: bold;
+}

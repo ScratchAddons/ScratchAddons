@@ -32,11 +32,14 @@ export default async function ({ addon, console, msg }) {
     if (addon.tab.redux.state?.preview?.projectInfo?.public === false) {
       let projectToken = (
         await (
-          await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
-            headers: {
-              "x-token": await addon.auth.fetchXToken(),
-            },
-          })
+          await fetch(
+            `https://api.scratch.mit.edu/projects/${projectId}?current_time_to_get_updated_project_token=${Date.now()}`,
+            {
+              headers: {
+                "x-token": await addon.auth.fetchXToken(),
+              },
+            }
+          )
         ).json()
       ).project_token;
       search = `#?token=${projectToken}`;
@@ -55,7 +58,7 @@ export default async function ({ addon, console, msg }) {
         usp.set("settings-button", "1");
         if (username) usp.set("username", username);
         if (addon.settings.get("addons")) {
-          const enabledAddons = await addon.self.getEnabledAddons("editor");
+          const enabledAddons = await addon.self.getEnabledAddons("player");
           usp.set("addons", enabledAddons.join(","));
         }
         // Apply the same fullscreen background color, consistently with the vanilla Scratch fullscreen behavior.

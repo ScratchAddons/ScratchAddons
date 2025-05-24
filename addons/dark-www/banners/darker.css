@@ -23,6 +23,7 @@
   border-color: #004099;
 }
 .parents .title-banner.masthead,
+.guidelines-page header,
 .download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
 .gdxfor .extension-header,
 .blue-background,
@@ -52,6 +53,8 @@
 .initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::after {
   border-color: #3d2966;
 }
+.starter-projects-page .page-header,
+.projects-carousel .header,
 .boost .extension-header,
 .ev3 .extension-header,
 .wedo2 .extension-header {
@@ -96,8 +99,13 @@
 .sa-annual-report-2020 .reach-scratch-jr {
   background-color: #1c465a;
 }
+#force-account-rename,
 .financials-section,
 .sa-annual-report-2020 .directors-message,
 .sa-annual-report-2021 .founders-message {
   background-color: #16171d;
+}
+.join-flow-outer-content /* username change */ {
+  background-clip: padding-box;
+  border-color: rgba(255, 255, 255, 0.25);
 }

@@ -168,18 +168,18 @@
   font-family: monospace;
 }
 .sa-debugger-log[data-type="warn"] {
-  border-color: hsl(50deg, 100%, 75%);
-  color: hsl(39deg 100% 18%);
-  background-color: hsl(50deg 100% 95%);
+  border-color: hsl(38deg, 100%, 80%);
+  color: hsl(38deg 100% 18%);
+  background-color: hsl(38deg 100% 95%);
 }
 .sa-debugger-log[data-type="error"] {
-  border-color: hsl(0deg 100% 92%);
-  color: red;
-  background-color: hsl(0deg 100% 95%);
+  border-color: hsl(20deg 100% 85%);
+  color: hsl(20deg 100% 45%);
+  background-color: hsl(20deg 100% 95%);
 }
 
 .sa-debugger-log-repeats {
-  background-color: hsla(163, 85%, 40%, 1);
+  background-color: #29beb8;
   color: white;
   border-radius: 100px;
   padding: 1px 6px;

@@ -1,0 +1,5 @@
+{
+  "forum-post-countdown/seconds-left": "({seconds}s)",
+  "forum-post-countdown/cant-post": "You have to wait to submit this post.",
+  "forum-post-countdown/post-after-cooldown": "Post after countdown"
+}

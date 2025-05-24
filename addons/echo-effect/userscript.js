@@ -1,3 +1,5 @@
+import { updateTooltips } from "../editor-compact/force-tooltip-update.js";
+
 export default async ({ addon }) => {
   while (true) {
     const soundEditorRobot = await addon.tab.waitForElement('[class*="sound-editor_row-reverse_"] > :nth-child(10)', {
@@ -5,15 +7,15 @@ export default async ({ addon }) => {
     });
     const echoButton = document.createElement("div");
     echoButton.className = addon.tab.scratchClass("icon-button_container", "sound-editor_effect-button");
-    addon.tab.displayNoneWhileDisabled(echoButton, {
-      display: "flex",
-    });
+    addon.tab.displayNoneWhileDisabled(echoButton);
     echoButton.setAttribute("role", "button");
     echoButton.addEventListener("click", () => {
       const soundEditorContainer = soundEditorRobot.closest('[class*="sound-editor_editor-container_"]');
-      soundEditorContainer[
-        addon.tab.traps.getInternalKey(soundEditorContainer)
-      ].return.return.return.stateNode.handleEffect("echo");
+      let reactInternalInstance = soundEditorContainer[addon.tab.traps.getInternalKey(soundEditorContainer)];
+      while (!reactInternalInstance.stateNode?.handleEffect) {
+        reactInternalInstance = reactInternalInstance.return;
+      }
+      reactInternalInstance.stateNode.handleEffect("echo");
     });
     const echoIcon = Object.assign(document.createElement("img"), {
       src: addon.self.dir + "/echo.svg",
@@ -28,5 +30,6 @@ export default async ({ addon }) => {
     echoTitleWrapper.append(echoTitle);
     echoButton.append(echoIcon, echoTitleWrapper);
     soundEditorRobot.after(echoButton);
+    updateTooltips();
   }
 };

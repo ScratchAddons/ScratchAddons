@@ -62,8 +62,7 @@ export default async function ({ addon, console, msg }) {
       })
     );
     const modalResultArea = Object.assign(document.createElement("div"), {
-      className: "sa-animated-thumb-popup-result",
-      hidden: true,
+      className: "sa-animated-thumb-result-failure hidden",
     });
     content.appendChild(modalResultArea);
 
@@ -131,7 +130,7 @@ export default async function ({ addon, console, msg }) {
             saveConfig(projectId, stopOverwritingCheckbox.checked);
           },
           (status) => {
-            modalResultArea.hidden = false;
+            modalResultArea.classList.remove("hidden");
             switch (status) {
               case 503:
               case 500:
@@ -148,22 +147,26 @@ export default async function ({ addon, console, msg }) {
         .finally(() => {
           ignoreClickOutside = false;
           uploadFromFileButton.removeAttribute("disabled");
+          uploadFromFileButton.classList.remove("loading");
           uploadFromStageButton.removeAttribute("disabled");
+          uploadFromStageButton.classList.remove("loading");
         });
 
     const upload = () => {
-      modalResultArea.className = "sa-animated-thumb-popup-result sa-animated-thumb-popup-result-none";
+      modalResultArea.classList.add("hidden");
       uploadFromFileButton.setAttribute("disabled", "true");
       uploadFromStageButton.setAttribute("disabled", "true");
     };
 
-    uploadFromFileButton.addEventListener("click", () => {
+    uploadFromFileButton.addEventListener("click", (e) => {
+      uploadFromFileButton.classList.add("loading");
       upload();
       setter.addFileInput();
       ignoreClickOutside = true; // To stop modal from being closed
       setter.showInput();
     });
-    uploadFromStageButton.addEventListener("click", () => {
+    uploadFromStageButton.addEventListener("click", (e) => {
+      uploadFromStageButton.classList.add("loading");
       upload();
       addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: true });
       addon.tab.traps.vm.renderer.requestSnapshot((dataURL) => {
@@ -178,8 +181,6 @@ export default async function ({ addon, console, msg }) {
     projectId = location.href.match(/\d+/)?.[0] || projectId;
     if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   });
-
-  localStorage.removeItem("saAnimatedThumbShowTooltip");
 
   while (true) {
     await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {

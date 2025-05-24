@@ -1,0 +1,19 @@
+[class*="menu-bar_file-group"] > [class*="menu-bar_hoverable"] > img {
+  display: none;
+}
+
+[class*="menu-bar_hoverable"] {
+  justify-content: center;
+}
+
+[class*="settings-menu_dropdown-label_"],
+[class*="menu-bar_collapsible-label_"] {
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  [class*="menu-bar_file-group"] > [class*="menu-bar_hoverable"] > img {
+    display: block;
+  }
+}

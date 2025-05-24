@@ -32,7 +32,7 @@
   border-top-right-radius: 0;
   border-top-left-radius: 0.5rem;
 }
-[dir="ltr"] [class^="blocks_blocks_C530M"] .injectionDiv,
+[dir="ltr"] [class^="blocks_blocks"] .injectionDiv,
 [dir="ltr"] [class^="asset-panel_wrapper"] {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -41,12 +41,16 @@
 [dir="ltr"] [class^="gui_extension-button-container"] {
   border-bottom-left-radius: 0.5rem;
 }
+[dir="ltr"] [class^="selector_wrapper"],
+[dir="ltr"] [class^="selector_new-buttons"]::before {
+  border-bottom-left-radius: calc(0.5rem - 1px);
+}
 
 [dir="rtl"] [class^="backpack_backpack-header"] {
   border-top-left-radius: 0;
   border-top-right-radius: 0.5rem;
 }
-[dir="rtl"] [class^="blocks_blocks_C530M"] .injectionDiv,
+[dir="rtl"] [class^="blocks_blocks"] .injectionDiv,
 [dir="rtl"] [class^="asset-panel_wrapper"] {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -54,6 +58,23 @@
 }
 [dir="rtl"] [class^="gui_extension-button-container"] {
   border-bottom-right-radius: 0.5rem;
+}
+[dir="rtl"] [class^="selector_wrapper"],
+[dir="rtl"] [class^="selector_new-buttons"]::before {
+  border-bottom-right-radius: calc(0.5rem - 1px);
+}
+
+/* Move delete button confirmation to the right side */
+.ReactModal__Content[style*="width: 300px"] {
+  /* 300px (popup width)
+   + 25px (padding)
+   + 70px (sprite selector item width)
+   + 25px (padding) */
+  margin-left: 420px !important;
+}
+[class*="delete-confirmation-prompt_arrow-container_"] {
+  order: -1;
+  transform: scaleX(-1);
 }
 
 .Popover {

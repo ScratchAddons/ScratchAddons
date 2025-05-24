@@ -1,0 +1,1 @@
+{"editor-cleanup-plus/orphaned":"{count, plural, other {開発者ツール: 未使用の値ブロックを # 個見つけました。削除しますか?} }","editor-cleanup-plus/clean-plus":"きれいにする +","editor-cleanup-plus/@name":"「きれいにする」機能の改良","editor-cleanup-plus/@description":"コードエリアの右クリックメニューにある「きれいにする」機能を改良し、ブロックを複数の列に整理し、未使用の変数やリストを削除する提案を行います。"}

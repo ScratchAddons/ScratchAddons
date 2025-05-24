@@ -1,0 +1,21 @@
+{
+  "name": "Larger \"Save Now\" button",
+  "description": "Extends the size of the \"Save Now\" button in the editor, making it easier to click.",
+  "tags": ["editor", "editorMenuBar", "recommended"],
+  "versionAdded": "1.37.0",
+  "enabledByDefault": true,
+  "credits": [
+    {
+      "name": "BroJac5246",
+      "link": "https://github.com/BroJac5246/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ]
+}
