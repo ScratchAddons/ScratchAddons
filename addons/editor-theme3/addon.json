@@ -359,7 +359,7 @@
     },
     {
       "name": "Comments",
-      "description": "When using colored text on a black/white background this setting effects the borders of standalone comments.",
+      "description": "When using colored text on a black/white background this setting affects the borders of standalone comments.",
       "id": "comment-color",
       "type": "color",
       "default": "#FEF49C"
