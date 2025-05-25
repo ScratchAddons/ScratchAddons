@@ -26,18 +26,16 @@ export default async function ({ addon, console, msg }) {
       }
     }
 
-    function newCharLimitCounter(location, field) {
+    function newCharLimitCounter(field) {
       const element = document.createElement("span");
       element.textContent = msg("left", { num: maxLength });
       element.className = CLASS_NAME + " limit-hidden";
 
-      const counter = location.appendChild(element);
-
       function updateVisibility() {
         if (maxLength - field.value.length <= threshold) {
-          counter.className = CLASS_NAME;
+          element.classList.remove("limit-hidden");
         } else {
-          counter.className = CLASS_NAME + " limit-hidden";
+          element.classList.add("limit-hidden");
         }
       }
 
@@ -47,13 +45,11 @@ export default async function ({ addon, console, msg }) {
         updateVisibility();
       });
       field.addEventListener("blur", () => {
-        counter.className = CLASS_NAME + " limit-hidden";
+        element.classList.add("limit-hidden");
       });
 
-      addon.tab.displayNoneWhileDisabled(counter);
-
       function updateCounter() {
-        counter.textContent = msg("left", { num: maxLength - field.value.length });
+        element.textContent = msg("left", { num: maxLength - field.value.length });
       }
 
       // Re-count as text is entered or removed
@@ -64,24 +60,24 @@ export default async function ({ addon, console, msg }) {
       });
       updateCounter();
 
+      addon.tab.displayNoneWhileDisabled(element);
       addon.self.addEventListener("reenabled", updateCounter);
+
+      return element;
     }
 
+    // Place the character limit display and tie it to its corresponding text field
     if (AREA === "studio") {
       // Studio Description
-      newCharLimitCounter(
-        document.getElementsByClassName("studio-info-section")[3],
-        document.querySelector(".inplace-textarea.studio-description")
-      );
+      document
+        .getElementsByClassName("studio-info-section")[3]
+        .appendChild(newCharLimitCounter(document.querySelector(".inplace-textarea.studio-description")));
     } else {
+      const labels = document.querySelectorAll(".project-textlabel");
       // Project Page > Instructions
-      newCharLimitCounter(document.querySelector(".project-textlabel"), document.getElementsByName("instructions")[0]);
-
+      labels[0].appendChild(newCharLimitCounter(document.querySelector("textarea")));
       // Project Page > Notes and Credits
-      newCharLimitCounter(
-        document.querySelectorAll(".project-textlabel")[1],
-        document.querySelector('textarea[name="description"]')
-      );
+      labels[1].appendChild(newCharLimitCounter(document.querySelector(".last textarea")));
     }
   }
 }
