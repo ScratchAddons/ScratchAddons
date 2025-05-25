@@ -10,6 +10,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.41.0",
   "latestUpdate": {
