@@ -4,15 +4,22 @@
 }
 
 .project-textlabel {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
 }
-.project-textlabel .desc-limit {
-  float: right;
+.project-notes .desc-limit {
+  margin-left: auto;
 }
 
 .desc-limit.limit-hidden {
-  display: none;
   animation: chLimitFadeOut 0.12s !important;
+  display: none;
+}
+
+/* Take the place of the project preview toggle */
+.desc-limit:not(.limit-hidden) ~ .sa-toggle-project-preview {
+  display: none;
 }
 
 @keyframes chLimitFadeOut {

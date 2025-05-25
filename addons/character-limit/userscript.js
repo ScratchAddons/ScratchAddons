@@ -68,16 +68,24 @@ export default async function ({ addon, console, msg }) {
 
     // Place the character limit display and tie it to its corresponding text field
     if (AREA === "studio") {
-      // Studio Description
+      // Studio page
       document
         .getElementsByClassName("studio-info-section")[3]
         .appendChild(newCharLimitCounter(document.querySelector(".inplace-textarea.studio-description")));
+    } else if (document.body.classList.contains("sa-project-tabs-on")) {
+      // Project page with project-notes-tabs
+      await addon.tab.waitForElement(".tabs-sa", { markAsSeen: true });
+      document
+        .querySelector(".tabs-sa")
+        .after(
+          newCharLimitCounter(document.querySelector("textarea")),
+          newCharLimitCounter(document.querySelector(".last textarea"))
+        );
     } else {
+      // Normal project page
       const labels = document.querySelectorAll(".project-textlabel");
-      // Project Page > Instructions
-      labels[0].appendChild(newCharLimitCounter(document.querySelector("textarea")));
-      // Project Page > Notes and Credits
-      labels[1].appendChild(newCharLimitCounter(document.querySelector(".last textarea")));
+      labels[0].appendChild(newCharLimitCounter(document.querySelector("textarea"))); // Instructions
+      labels[1].appendChild(newCharLimitCounter(document.querySelector(".last textarea"))); // Notes and Credits
     }
   }
 }
