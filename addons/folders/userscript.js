@@ -1465,6 +1465,26 @@ export default async function ({ addon, console, msg }) {
 
   await untilInEditor();
 
+  // Update restore button
+  {
+    addon.tab.redux.initialize();
+    addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+      const e = detail;
+      if (!e.action || e.action.type !== "scratch-gui/restore-deletion/RESTORE_UPDATE") return;
+      restoreButtonMsg = null;
+    });
+
+    addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+      if (detail.action.type === "scratch-gui/menus/OPEN_MENU" && detail.action.menu === "editMenu") {
+        if (!restoreButtonMsg) return;
+        queueMicrotask(() => {
+          const restoreButton = document.querySelector('[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span');
+          restoreButton.innerText = msg(restoreButtonMsg);
+        });
+      }
+    });
+  }
+
   // Backpack
   {
     const clickListener = (e) => {
@@ -1487,63 +1507,34 @@ export default async function ({ addon, console, msg }) {
 
   // Sprite list
   {
-    addon.tab
-      .waitForElement("[class^='sprite-selector_sprite-wrapper']", {
-        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-      })
-      .then((spriteSelectorItemElement) => {
-        vm = addon.tab.traps.vm;
-        reactInternalKey = addon.tab.traps.getInternalKey(spriteSelectorItemElement);
-        const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
-        let reactInternalInstance = spriteSelectorItemElement[reactInternalKey];
-        while (!isSpriteSelectorItem(reactInternalInstance.stateNode)) {
-          reactInternalInstance = reactInternalInstance.child;
-        }
-        const spriteSelectorItemInstance = reactInternalInstance.stateNode;
-        verifySortableHOC(sortableHOCInstance);
-        verifySpriteSelectorItem(spriteSelectorItemInstance);
-        verifyVM(vm);
-        patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
-        patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
-        sortableHOCInstance.saInitialSetup();
-        patchVM();
-      });
+    const spriteSelectorItemElement = await addon.tab.waitForElement("[class^='sprite-selector_sprite-wrapper']", {
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+    });
+    vm = addon.tab.traps.vm;
+    reactInternalKey = addon.tab.traps.getInternalKey(spriteSelectorItemElement);
+    const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
+    let reactInternalInstance = spriteSelectorItemElement[reactInternalKey];
+    while (!isSpriteSelectorItem(reactInternalInstance.stateNode)) {
+      reactInternalInstance = reactInternalInstance.child;
+    }
+    const spriteSelectorItemInstance = reactInternalInstance.stateNode;
+    verifySortableHOC(sortableHOCInstance);
+    verifySpriteSelectorItem(spriteSelectorItemInstance);
+    verifyVM(vm);
+    patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
+    patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
+    sortableHOCInstance.saInitialSetup();
+    patchVM();
   }
 
   // Costume and sound list
   {
-    addon.tab
-      .waitForElement("[class*='selector_list-item']", {
-        reduxCondition: (state) =>
-          state.scratchGui.editorTab.activeTabIndex !== 0 && !state.scratchGui.mode.isPlayerOnly,
-      })
-      .then((selectorListItem) => {
-        const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
-        verifySortableHOC(sortableHOCInstance);
-        patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
-        sortableHOCInstance.saInitialSetup();
-      });
-  }
-
-  // Update restore button
-  {
-    addon.tab.redux.initialize();
-    addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
-      const e = detail;
-      if (!e.action || e.action.type !== "scratch-gui/restore-deletion/RESTORE_UPDATE") return;
-      restoreButtonMsg = null;
+    const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']", {
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex !== 0 && !state.scratchGui.mode.isPlayerOnly,
     });
-
-    while (true) {
-      const restoreButton = await addon.tab.waitForElement(
-        '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
-        {
-          markAsSeen: true,
-          reduxCondition: (state) => state.scratchGui.menus.editMenu,
-          condition: () => restoreButtonMsg !== null,
-        }
-      );
-      restoreButton.innerText = msg(restoreButtonMsg);
-    }
+    const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
+    verifySortableHOC(sortableHOCInstance);
+    patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
+    sortableHOCInstance.saInitialSetup();
   }
 }
