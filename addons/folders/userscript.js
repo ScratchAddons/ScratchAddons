@@ -1470,13 +1470,10 @@ export default async function ({ addon, console, msg }) {
     addon.tab.redux.initialize();
     addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
       const e = detail;
-      if (!e.action || e.action.type !== "scratch-gui/restore-deletion/RESTORE_UPDATE") return;
-      restoreButtonMsg = null;
-    });
-
-    addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
-      if (detail.action.type === "scratch-gui/menus/OPEN_MENU" && detail.action.menu === "editMenu") {
-        if (!restoreButtonMsg) return;
+      if (!e.action) return;
+      if (e.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE") {
+        restoreButtonMsg = null;
+      } else if (e.action.type === "scratch-gui/menus/OPEN_MENU" && e.action.menu === "editMenu" && restoreButtonMsg) {
         queueMicrotask(() => {
           const restoreButton = document.querySelector('[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span');
           restoreButton.innerText = msg(restoreButtonMsg);
