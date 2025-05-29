@@ -234,15 +234,6 @@ let fuse;
       direction() {
         return getDirection(chrome.i18n.getUILanguage());
       },
-      openReview() {
-        if (typeof browser !== "undefined") {
-          window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
-        } else {
-          window.open(
-            `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
-          );
-        }
-      },
       clearSearch() {
         this.searchInputReal = "";
       },
