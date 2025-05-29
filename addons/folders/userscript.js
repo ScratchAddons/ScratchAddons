@@ -1475,7 +1475,9 @@ export default async function ({ addon, console, msg }) {
         restoreButtonMsg = null;
       } else if (e.action.type === "scratch-gui/menus/OPEN_MENU" && e.action.menu === "editMenu" && restoreButtonMsg) {
         queueMicrotask(() => {
-          const restoreButton = document.querySelector('[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span');
+          const restoreButton = document.querySelector(
+            '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span'
+          );
           restoreButton.innerText = msg(restoreButtonMsg);
         });
       }
