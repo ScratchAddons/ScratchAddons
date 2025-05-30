@@ -63,6 +63,18 @@ export default class Tab extends Listenable {
     return blocks.addBlock(proccode, opts);
   }
   /**
+   * Adds a custom reporter block definition. Internally this is a special-cased argument reporter block.
+   * @param {string} proccode the procedure definition code
+   * @param {boolean} isBoolean - whether the block is hexagonal.
+   * @param {object} opts - options.
+   * @param {Tab~blockCallback} opts.callback - the callback, the returned value is the output of the block.
+   * @param {boolean=} opts.hidden - whether the block is hidden from the palette.
+   */
+  addReporterBlock(proccode, isBoolean, opts) {
+    blocks.init(this);
+    return blocks.addReporterBlock(proccode, isBoolean, opts);
+  }
+  /**
    * Removes a stack block definition. Should not be called in most cases.
    * @param {string} proccode the procedure definition code of the block
    */

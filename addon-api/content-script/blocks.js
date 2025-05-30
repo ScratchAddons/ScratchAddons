@@ -103,6 +103,7 @@ export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
 
   const blockData = {
     id: proccode,
+    type: "procedures_call",
     args,
     handler: callback,
     hide: !!hidden,
@@ -110,6 +111,23 @@ export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
   };
   customBlocks[proccode] = blockData;
   customBlockParamNamesIdsDefaults[proccode] = getNamesIdsDefaults(blockData);
+  queueToolboxUpdate();
+};
+
+export const addReporterBlock = (proccode, isBoolean, { callback, hidden }) => {
+  // The `proccode` parameter is not the proccode but the name of the argument
+  if (getCustomBlock(proccode)) {
+    return;
+  }
+
+  const blockData = {
+    id: proccode,
+    type: isBoolean ? "argument_reporter_boolean" : "argument_reporter_string_number",
+    handler: callback,
+    hide: !!hidden,
+    proccode,
+  };
+  customBlocks[proccode] = blockData;
   queueToolboxUpdate();
 };
 
@@ -123,14 +141,21 @@ const generateBlockXML = () => {
   for (const proccode of Object.keys(customBlocks)) {
     const blockData = customBlocks[proccode];
     if (blockData.hide) continue;
-    const [names, ids, defaults] = getNamesIdsDefaults(blockData);
-    xml +=
-      '<block type="procedures_call" gap="16"><mutation generateshadows="true" warp="false"' +
-      ` proccode="${escapeHTML(proccode)}"` +
-      ` argumentnames="${escapeHTML(JSON.stringify(names))}"` +
-      ` argumentids="${escapeHTML(JSON.stringify(ids))}"` +
-      ` argumentdefaults="${escapeHTML(JSON.stringify(defaults))}"` +
-      "></mutation></block>";
+
+    if (blockData.type === "procedures_call") {
+      const [names, ids, defaults] = getNamesIdsDefaults(blockData);
+      xml +=
+        '<block type="procedures_call" gap="16"><mutation generateshadows="true" warp="false"' +
+        ` proccode="${escapeHTML(proccode)}"` +
+        ` argumentnames="${escapeHTML(JSON.stringify(names))}"` +
+        ` argumentids="${escapeHTML(JSON.stringify(ids))}"` +
+        ` argumentdefaults="${escapeHTML(JSON.stringify(defaults))}"` +
+        "></mutation></block>";
+
+    } else {
+      xml +=
+        `<block type="${blockData.type}"><field name="VALUE">${blockData.id}</field></block>`;
+    }
   }
   if (xml.length === 0) {
     const message = scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.");
@@ -172,15 +197,20 @@ const injectWorkspace = (ScratchBlocks) => {
     const oldUpdateColour = BlockSvg.prototype.updateColour;
     BlockSvg.prototype.updateColour = function (...args) {
       // procedures_prototype also have a procedure code but we do not want to color them.
-      if (!this.isInsertionMarker() && this.type === "procedures_call") {
-        const block = this.procCode_ && getCustomBlock(this.procCode_);
-        const color = ScratchBlocks.Colours.text === "#000000" ? highContrastColor : defaultColor;
-        if (block) {
-          this.colour_ = customColor.color || color.color;
-          this.colourSecondary_ = customColor.secondaryColor || color.secondaryColor;
-          this.colourTertiary_ = customColor.tertiaryColor || color.tertiaryColor;
-          this.customContextMenu = null;
-        }
+      if (this.isInsertionMarker()) return;
+      let block;
+      if (this.type === "procedures_call") {
+        block = this.procCode_ && getCustomBlock(this.procCode_);
+      } else if (this.type === "argument_reporter_string_number" || this.type === "argument_reporter_boolean") {
+        const name = this.inputList[0].fieldRow[0].text_
+        block = name && getCustomBlock(name);
+      }
+      const color = ScratchBlocks.Colours.text === "#000000" ? highContrastColor : defaultColor;
+      if (block) {
+        this.colour_ = customColor.color || color.color;
+        this.colourSecondary_ = customColor.secondaryColor || color.secondaryColor;
+        this.colourTertiary_ = customColor.tertiaryColor || color.tertiaryColor;
+        this.customContextMenu = null;
       }
       return oldUpdateColour.call(this, ...args);
     };
@@ -314,6 +344,24 @@ export async function init(tab) {
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
+
+  const oldArgumentReporterStringNumber = vm.runtime._primitives.argument_reporter_string_number;
+  vm.runtime._primitives.argument_reporter_string_number = (args, util) => {
+    const blockData = getCustomBlock(args.VALUE);
+    if (blockData) {
+      return blockData.handler();
+    }
+    return oldArgumentReporterStringNumber.call(this, args, util)
+  }
+
+  const oldArgumentReporterBoolean = vm.runtime._primitives.argument_reporter_boolean;
+  vm.runtime._primitives.argument_reporter_boolean = (args, util) => {
+    const blockData = getCustomBlock(args.VALUE);
+    if (blockData) {
+      return blockData.handler(args, util);
+    }
+    return oldArgumentReporterBoolean.call(this, args, util)
+  }
 
   const ScratchBlocks = await tab.traps.getBlockly();
   injectWorkspace(ScratchBlocks);
