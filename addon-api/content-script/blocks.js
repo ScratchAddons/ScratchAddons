@@ -151,10 +151,8 @@ const generateBlockXML = () => {
         ` argumentids="${escapeHTML(JSON.stringify(ids))}"` +
         ` argumentdefaults="${escapeHTML(JSON.stringify(defaults))}"` +
         "></mutation></block>";
-
     } else {
-      xml +=
-        `<block type="${blockData.type}"><field name="VALUE">${blockData.id}</field></block>`;
+      xml += `<block type="${blockData.type}"><field name="VALUE">${blockData.id}</field></block>`;
     }
   }
   if (xml.length === 0) {
@@ -202,7 +200,7 @@ const injectWorkspace = (ScratchBlocks) => {
       if (this.type === "procedures_call") {
         block = this.procCode_ && getCustomBlock(this.procCode_);
       } else if (this.type === "argument_reporter_string_number" || this.type === "argument_reporter_boolean") {
-        const name = this.inputList[0].fieldRow[0].text_
+        const name = this.inputList[0].fieldRow[0].text_;
         block = name && getCustomBlock(name);
       }
       const color = ScratchBlocks.Colours.text === "#000000" ? highContrastColor : defaultColor;
@@ -351,8 +349,8 @@ export async function init(tab) {
     if (blockData) {
       return blockData.handler();
     }
-    return oldArgumentReporterStringNumber.call(this, args, util)
-  }
+    return oldArgumentReporterStringNumber.call(this, args, util);
+  };
 
   const oldArgumentReporterBoolean = vm.runtime._primitives.argument_reporter_boolean;
   vm.runtime._primitives.argument_reporter_boolean = (args, util) => {
@@ -360,8 +358,8 @@ export async function init(tab) {
     if (blockData) {
       return blockData.handler(args, util);
     }
-    return oldArgumentReporterBoolean.call(this, args, util)
-  }
+    return oldArgumentReporterBoolean.call(this, args, util);
+  };
 
   const ScratchBlocks = await tab.traps.getBlockly();
   injectWorkspace(ScratchBlocks);
