@@ -67,7 +67,7 @@ export default class Tab extends Listenable {
    * @param {string} proccode the procedure definition code
    * @param {boolean} isBoolean - whether the block is hexagonal.
    * @param {object} opts - options.
-   * @param {Tab~blockCallback} opts.callback - the callback, the returned value is the output of the block.
+   * @param {function} opts.callback - the callback, the returned value is the output of the block.
    * @param {boolean=} opts.hidden - whether the block is hidden from the palette.
    */
   addReporterBlock(proccode, isBoolean, opts) {
