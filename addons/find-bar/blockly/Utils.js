@@ -169,25 +169,7 @@ class NavigationHistory {
 
     let { sx, sy } = this.scrollPosFromOffset(view, s);
 
-    // transform.setTranslate(-600,0);
-
     workspace.scrollbar.set(sx, sy);
-
-    /*
-              let blocklySvg = document.getElementsByClassName('blocklySvg')[0];
-              let blocklyBlockCanvas = blocklySvg.getElementsByClassName('blocklyBlockCanvas')[0];
-              let transform = blocklyBlockCanvas.transform.baseVal.getItem(0);
-              let scale = blocklyBlockCanvas.transform.baseVal.getItem(1);
-
-              let transformMatrix = transform.matrix;
-              let scaleMatrix = scale.matrix;
-
-              console.log('Transform - getMetrics', s);
-              console.log('sx, sy: ', sx, sy);
-              console.log('left, top: ', view.left, view.top);
-              console.log('contentLeft, right:', s.contentLeft, s.contentTop);
-              console.log('transform, scale matrix: ', transformMatrix, scaleMatrix);
-  */
   }
 
   goForward() {
