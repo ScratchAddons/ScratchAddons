@@ -16,14 +16,10 @@ export default async function ({ addon, console, msg }) {
         markAsSeen: true,
       });
     } else {
-      await addon.tab.waitForElement(".project-notes", {
+      await addon.tab.waitForElement(".project-description-edit.last", {
         markAsSeen: true,
         reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
       });
-
-      if (!document.querySelector('[id*="frc-instructions"].inplace-textarea')) {
-        return;
-      }
     }
 
     function newCharLimitCounter(field) {
@@ -83,9 +79,9 @@ export default async function ({ addon, console, msg }) {
         );
     } else {
       // Normal project page
-      const labels = document.querySelectorAll(".project-textlabel");
-      labels[0].appendChild(newCharLimitCounter(document.querySelector("textarea"))); // Instructions
-      labels[1].appendChild(newCharLimitCounter(document.querySelector(".last textarea"))); // Notes and Credits
+      const labels = document.querySelectorAll(".project-textlabel > :first-child");
+      labels[0].after(newCharLimitCounter(document.querySelector("textarea"))); // Instructions
+      labels[1].after(newCharLimitCounter(document.querySelector(".last textarea"))); // Notes and Credits
     }
   }
 }
