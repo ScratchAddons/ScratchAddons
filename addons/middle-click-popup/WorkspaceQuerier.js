@@ -461,7 +461,6 @@ class TokenTypeStringEnum extends TokenType {
       const remainingChar = query.length - idx;
       const substr = query.lowercase.substring(idx);
 
-
       if (remainingChar < valueInfo.lower.length) {
         if (valueInfo.lower.startsWith(substr)) {
           // If all we have is a string which could be a number, it doesn't count as a defining feature.
@@ -711,7 +710,6 @@ class TokenTypeBlock extends TokenType {
     this.stringForms = [];
 
     const enumerateStringForms = (partIdx = 0, strings = [], inputs = [], length = 0) => {
-
       /**
        * @param {string} value
        * @returns string[]
@@ -749,7 +747,6 @@ class TokenTypeBlock extends TokenType {
 
           // Split the string up into parts
           strings.push(...splitIntoString(blockPart));
-
         } else if (blockPart.type === BlockInputType.ENUM) {
           for (const enumValue of blockPart.values) {
             if (this.stringForms.length >= WorkspaceQuerier.MAX_RESULTS) return;
@@ -813,8 +810,7 @@ class TokenTypeBlock extends TokenType {
 
         // Special chars get their own string part
         if (QueryInfo.SPECIAL_CHARS.indexOf(query.lowercase[i]) !== -1) {
-          if (i < query.lowercase.length)
-            wordEnd = i + 1;
+          if (i < query.lowercase.length) wordEnd = i + 1;
         } else {
           wordEnd = query.skipUnignorable(i);
         }
@@ -1106,7 +1102,7 @@ class QueryInfo {
   static IGNORABLE_CHARS = [" "];
 
   /** Characters which are treated as dividing string into 'parts' for partial matching */
-  static SPECIAL_CHARS = ["!", "@", "#", "$", "%", "^", "&", "_", "'", "\"", ".", ","];
+  static SPECIAL_CHARS = ["!", "@", "#", "$", "%", "^", "&", "_", "'", '"', ".", ","];
 
   constructor(querier, query, id) {
     /** @type {WorkspaceQuerier} */
