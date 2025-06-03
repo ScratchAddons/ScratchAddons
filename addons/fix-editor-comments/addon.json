@@ -2,6 +2,7 @@
   "name": "Better editor comments",
   "description": "Makes numerous changes to comments in the Scratch editor: fixes a bug where comments attached to blocks don't save their positions correctly after dragging, prevents block comments from spawning off-screen in large scripts, keeps block comment connections straight, and more.",
   "tags": ["editor", "codeEditor", "recommended"],
+  "relatedAddons": ["editor-comment-previews"],
   "credits": [
     {
       "name": "GarboMuffin",
