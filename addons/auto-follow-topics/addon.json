@@ -1,7 +1,7 @@
 {
   "name": "Follow topics after posting",
   "description": "Automatically follow forum topics you post on.",
-  "tags": ["forums", "community"],
+  "tags": ["forums", "community", "recommended"],
   "credits": [
     {
       "name": "Chiroyce",

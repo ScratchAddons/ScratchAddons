@@ -76,17 +76,19 @@ export default async function ({ template }) {
             return icon.slice(1);
           }
           if (icon[0] === "@") {
-            return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+            return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}" draggable="false"/>`;
           }
           if (icon[0] === "#") {
-            return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+            return `<img class="inline-icon" src="../../addons/${addon._addonId}/${
+              icon.split("#")[1]
+            }" draggable="false"/>`;
           }
         });
       },
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
         let input = this.$event.target;
-        this.addonSettings[this.setting.id] = input.validity.valid ? input.value : this.setting.default;
+        if (!input.validity.valid) this.addonSettings[this.setting.id] = this.setting.default;
       },
       keySettingKeyDown(e) {
         e.preventDefault();

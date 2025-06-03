@@ -40,7 +40,7 @@ button {
 }
 
 .message-type-title {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--content-text);
   padding: 6px;
   padding-inline-end: 9px;
@@ -69,7 +69,7 @@ button {
 .thread-list,
 .username-list {
   color: var(--description-text);
-  font-size: 12px;
+  font-size: 14px;
   padding-inline: 16px;
 }
 .fullscreen .thread-list,
@@ -96,7 +96,7 @@ button {
   cursor: pointer;
 }
 .small-icon {
-  height: 14px;
+  height: 16px;
   vertical-align: text-bottom;
 }
 .small-icon:not(.colored) {
@@ -106,8 +106,6 @@ button > .small-icon {
   margin-inline-start: -2px;
   margin-inline-end: 6px;
   vertical-align: middle;
-  width: 16px;
-  height: 16px;
 }
 .message-type-title-text {
   white-space: nowrap;
@@ -125,7 +123,7 @@ a.message-type-title-text {
 .float-right {
   margin-inline-start: 6px;
   white-space: nowrap;
-  font-size: 12px;
+  font-size: 14px;
 }
 .float-right > span {
   display: inline-block;
@@ -145,7 +143,7 @@ a.message-type-title-text {
   border: 1px solid var(--control-border);
   border-radius: 8px;
   margin: 8px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .fullscreen .comment {
   margin-inline: 12px;
@@ -168,7 +166,7 @@ a.message-type-title-text {
   white-space: break-spaces;
 }
 .comment-author {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--dark-red-text);
 }
 .comment-me .comment-author {
@@ -184,10 +182,11 @@ a.message-type-title-text {
 }
 .popout-comment {
   cursor: pointer;
-  height: 10px;
-  vertical-align: baseline;
+  height: 12px;
+  vertical-align: -1px;
   padding-left: 2px;
   filter: var(--content-icon-filter);
+  user-select: none;
 }
 [dir="rtl"] .popout-comment {
   transform: scaleX(-1);
@@ -198,9 +197,10 @@ a.message-type-title-text {
   color: var(--gray-text);
   font-size: 0.65rem;
   padding-top: 2px;
+  user-select: none;
 }
-.bold {
-  font-weight: 600;
+.delete-confirm {
+  font-weight: bold;
   color: var(--red);
 }
 .child-comment {
@@ -215,7 +215,7 @@ a.message-type-title-text {
 .reply-button-comment {
   opacity: 0;
   color: var(--blue-text);
-  font-weight: 600;
+  font-weight: 500;
   user-select: none;
 }
 .comment:hover .reply-button-comment,
@@ -227,11 +227,11 @@ a.message-type-title-text {
   width: 100%;
   box-sizing: border-box;
   height: 5rem;
-  font-family: Arial, sans-serif;
+  font-family: inherit;
   padding: 8px;
   resize: vertical;
   margin-top: 8px;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 4px;
   border: 1px solid var(--control-border);
   background-color: var(--input-background);
@@ -267,19 +267,25 @@ a.message-type-title-text {
   margin-inline-start: auto;
   font-weight: normal;
   font-variant: tabular-nums;
+  user-select: none;
+}
+
+.welcome-message {
+  padding: 6px 16px;
 }
 
 .status-container {
   padding-top: 10px;
   padding-bottom: 20px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   text-align: center;
 }
 .status-container p,
 .status-empty {
   display: block;
   margin-block: 10px;
+  user-select: none;
 }
 
 .buttons-container {
@@ -299,7 +305,7 @@ a.message-type-title-text {
   right: 0;
   background: var(--content-background);
   border-top: 1px solid var(--content-border);
-  font-size: 12px;
+  font-size: 14px;
   text-align: center;
   box-shadow: var(--content-shadow);
   line-height: 15px;
@@ -320,14 +326,17 @@ a.message-type-title-text {
   text-decoration: none;
 }
 #bottom-bar .separator {
-  padding-inline: 5px;
+  margin: auto 8px;
+  height: 15px;
+  padding: 0;
+  border-left: 1px solid var(--content-separator);
 }
 .marked-as-read {
-  font-weight: 600;
+  font-weight: bold;
 }
 .popout {
-  height: 10px;
-  vertical-align: baseline;
+  height: 12px;
+  vertical-align: -1px;
   margin-inline-start: 5px;
   opacity: 0.6;
   filter: var(--content-icon-filter);

@@ -131,10 +131,30 @@ export async function sendLegacyComment(addon, { resourceType, resourceId, conte
     });
 }
 
-export async function fetchComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
-  if (resourceType === "user")
-    return fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
-  return fetchMigratedComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
+export async function fetchComments(addon, { resourceType, resourceId, commentMessages, page = 1, commentsObj = {} }) {
+  const commentIds = commentMessages.map((message) => message.comment_id);
+  let comments;
+  if (resourceType === "user") {
+    comments = await fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
+  } else {
+    comments = await fetchMigratedComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
+  }
+  for (let message of commentMessages) {
+    if (!comments[`${resourceType[0]}_${message.comment_id}`]) {
+      // Fetching the full comment failed
+      // Show fragment instead
+      comments[`${resourceType[0]}_${message.comment_id}`] = {
+        author: message.actor_username,
+        authorId: message.actor_id,
+        content: message.comment_fragment,
+        date: message.datetime_created,
+        children: [],
+        childOf: null,
+        replyingTo: message.commentee_username,
+      };
+    }
+  }
+  return comments;
 }
 
 export async function fetchMigratedComments(

@@ -41,6 +41,7 @@
       "max": 16
     }
   ],
+  "addonPreview": true,
   "userstyles": [
     {
       "url": "styles.css",

@@ -180,3 +180,35 @@
   /* emoji-picker compatibility */
   width: auto;
 }
+#comments .control-group.tooltip {
+  display: flex;
+  flex-direction: column;
+}
+#comments .control-group.tooltip textarea {
+  margin-bottom: 8px;
+}
+#comments .control-group.tooltip.error textarea {
+  box-shadow: none;
+}
+#comments .control-group.tooltip.error .hovertext {
+  position: static;
+  box-shadow: none;
+  order: -1;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  background-color: #ffab1a;
+  padding: 4px;
+  width: 100%;
+}
+#comments .control-group.tooltip.error .hovertext .text {
+  font-size: 13px;
+}
+#comments .control-group.tooltip.error textarea:focus + .hovertext {
+  display: block !important;
+}
+#comments .control-group.tooltip.error .hovertext::after,
+#comments .control-group.tooltip.error .arrow {
+  display: none;
+}

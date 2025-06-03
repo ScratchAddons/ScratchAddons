@@ -11,8 +11,11 @@ export default async function ({ addon, console, msg }) {
     // The check can technically fail when Redux isn't supported (rare cases)
     // Just ignore in this case
   }
-  const paperCanvas =
-    paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)].child.child.child.stateNode;
+  let reactInternalInstance = paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)];
+  while (!reactInternalInstance.stateNode?.recalibrateSize) {
+    reactInternalInstance = reactInternalInstance.child;
+  }
+  const paperCanvas = reactInternalInstance.stateNode;
 
   let paperCenter;
   const storedOnionLayers = [];
@@ -571,7 +574,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   const toggleControlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(toggleControlsGroup, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(toggleControlsGroup);
 
   const toggleButton = createButton();
   toggleButton.dataset.enabled = settings.enabled;
@@ -585,7 +588,7 @@ export default async function ({ addon, console, msg }) {
   settingButton.appendChild(createButtonImage("settings"));
 
   document.body.addEventListener("click", (e) => {
-    if (areSettingsOpen() && !e.target.matches(".sa-onion-settings *")) setSettingsOpen(false);
+    if (areSettingsOpen() && !e.target.matches(".sa-onion-group *")) setSettingsOpen(false);
   });
 
   //

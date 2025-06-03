@@ -1,5 +1,74 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
+const DIVIDER = "//";
+
+/**
+ * getFolderFromName("B") === null
+ * getFolderFromName("A//b") === "A"
+ */
+const getFolderFromName = (name) => {
+  const idx = name.indexOf(DIVIDER);
+  if (idx === -1 || idx === 0) {
+    return null;
+  }
+  return name.substr(0, idx);
+};
+
+/**
+ * getNameWithoutFolder("B") === "B"
+ * getNameWithoutFolder("A//b") === "b"
+ */
+const getNameWithoutFolder = (name) => {
+  const idx = name.indexOf(DIVIDER);
+  if (idx === -1 || idx === 0) {
+    return name;
+  }
+  return name.substr(idx + DIVIDER.length);
+};
+
+/**
+ * setFolderOfName("B", "y") === "y//B"
+ * setFolderOfName("c//B", "y") === "y//B"
+ * setFolderOfName("B", null) === "B"
+ * setFolderOfName("c//B", null) === "B"
+ */
+const setFolderOfName = (name, folder) => {
+  const basename = getNameWithoutFolder(name);
+  if (folder) {
+    return `${folder}${DIVIDER}${basename}`;
+  }
+  return basename;
+};
+
+const isValidFolderName = (name) => {
+  return !name.includes(DIVIDER) && !name.endsWith("/");
+};
+
+const RESERVED_NAMES = ["_mouse_", "_stage_", "_edge_", "_myself_", "_random_"];
+const ensureNotReserved = (name) => {
+  if (name === "") return "2";
+  if (RESERVED_NAMES.includes(name)) return `${name}2`;
+  return name;
+};
+
+let currentSpriteFolder = null;
+let currentAssetFolder = null;
+
+/**
+ * Used for compatibility with other addons that trap the add costume or add sound functions.
+ * By default new assets are added to the folder that the user currently has open. This gets
+ * encoded in the name of the asset, but that information may not be added until late in the
+ * process. If you want to guarantee that your addon is aware of the asset name after
+ * accounting for folders, then pass it into this function. The asset will be modified in-place.
+ * It is safe to call this multiple times with the same asset.
+ * @param {{name: string}} asset a sound or costume asset
+ */
+export const addDefaultAssetFolderIfMissing = (asset) => {
+  if (asset && currentAssetFolder !== null && typeof getFolderFromName(asset.name) !== "string") {
+    asset.name = setFolderOfName(asset.name, currentAssetFolder);
+  }
+};
+
 export default async function ({ addon, console, msg }) {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
@@ -17,8 +86,6 @@ export default async function ({ addon, console, msg }) {
   // These two components communicate through the `name` property of the items.
   // We touch some things on the VM to make dragging items work properly.
 
-  const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
@@ -27,62 +94,8 @@ export default async function ({ addon, console, msg }) {
 
   let reactInternalKey;
 
-  let currentSpriteFolder;
-  let currentAssetFolder;
-
   let currentSpriteItems;
   let currentAssetItems;
-
-  const DIVIDER = "//";
-
-  /**
-   * getFolderFromName("B") === null
-   * getFolderFromName("A//b") === "A"
-   */
-  const getFolderFromName = (name) => {
-    const idx = name.indexOf(DIVIDER);
-    if (idx === -1 || idx === 0) {
-      return null;
-    }
-    return name.substr(0, idx);
-  };
-
-  /**
-   * getNameWithoutFolder("B") === "B"
-   * getNameWithoutFolder("A//b") === "b"
-   */
-  const getNameWithoutFolder = (name) => {
-    const idx = name.indexOf(DIVIDER);
-    if (idx === -1 || idx === 0) {
-      return name;
-    }
-    return name.substr(idx + DIVIDER.length);
-  };
-
-  /**
-   * setFolderOfName("B", "y") === "y//B"
-   * setFolderOfName("c//B", "y") === "y//B"
-   * setFolderOfName("B", null) === "B"
-   * setFolderOfName("c//B", null) === "B"
-   */
-  const setFolderOfName = (name, folder) => {
-    const basename = getNameWithoutFolder(name);
-    if (folder) {
-      return `${folder}${DIVIDER}${basename}`;
-    }
-    return basename;
-  };
-
-  const isValidFolderName = (name) => {
-    return !name.includes(DIVIDER) && !name.endsWith("/");
-  };
-
-  const RESERVED_NAMES = ["_mouse_", "_stage_", "_edge_", "_myself_", "_random_"];
-  const ensureNotReserved = (name) => {
-    if (name === "") return "2";
-    if (RESERVED_NAMES.includes(name)) return `${name}2`;
-    return name;
-  };
 
   const untilInEditor = () => {
     if (addon.tab.editorMode === "editor") return;
@@ -98,21 +111,40 @@ export default async function ({ addon, console, msg }) {
   };
 
   const getSortableHOCFromElement = (el) => {
+    let reactInternalInstance;
     const nearestSpriteSelector = el.closest("[class*='sprite-selector_sprite-selector']");
     if (nearestSpriteSelector) {
-      return nearestSpriteSelector[reactInternalKey].child.sibling.child.stateNode;
+      reactInternalInstance = nearestSpriteSelector[reactInternalKey].child.sibling;
     }
     const nearestAssetPanelWrapper = el.closest('[class*="asset-panel_wrapper"]');
     if (nearestAssetPanelWrapper) {
-      return nearestAssetPanelWrapper[reactInternalKey].child.child.stateNode;
+      reactInternalInstance = nearestAssetPanelWrapper[reactInternalKey];
+    }
+    if (reactInternalInstance) {
+      while (!isSortableHOC(reactInternalInstance.stateNode)) {
+        reactInternalInstance = reactInternalInstance.child;
+      }
+      return reactInternalInstance.stateNode;
     }
     throw new Error("cannot find SortableHOC");
   };
 
   const getBackpackFromElement = (el) => {
-    const gui = el.closest('[class*="gui_editor-wrapper"]');
-    if (!gui) throw new Error("cannot find Backpack");
-    return gui[reactInternalKey].child.sibling.child.stateNode;
+    const backpackContainer = el.closest('[class*="backpack_backpack-container_"]');
+    if (!backpackContainer) throw new Error("cannot find Backpack");
+    let reactInternalInstance = backpackContainer[reactInternalKey];
+    while (!isBackpack(reactInternalInstance.stateNode)) {
+      reactInternalInstance = reactInternalInstance.return;
+    }
+    return reactInternalInstance.stateNode;
+  };
+
+  const getSpriteSelectorItemFromElement = (el) => {
+    let reactInternalInstance = el[reactInternalKey];
+    while (!reactInternalInstance.stateNode?.props?.dragType) {
+      reactInternalInstance = reactInternalInstance.return;
+    }
+    return reactInternalInstance.stateNode;
   };
 
   const clamp = (n, min, max) => {
@@ -255,38 +287,57 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
+  const isSortableHOC = (sortableHOCInstance) => {
+    try {
+      const SortableHOC = sortableHOCInstance.constructor;
+      return (
+        Array.isArray(sortableHOCInstance.props.items) &&
+        (typeof sortableHOCInstance.props.selectedId === "string" ||
+          typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
+        typeof sortableHOCInstance.containerBox !== "undefined" &&
+        typeof SortableHOC.prototype.handleAddSortable === "function" &&
+        typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
+        typeof SortableHOC.prototype.setRef === "function"
+      );
+    } catch {
+      return false;
+    }
+  };
+
   const verifySortableHOC = (sortableHOCInstance) => {
     const SortableHOC = sortableHOCInstance.constructor;
     if (
-      Array.isArray(sortableHOCInstance.props.items) &&
-      (typeof sortableHOCInstance.props.selectedId === "string" ||
-        typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
-      typeof sortableHOCInstance.containerBox !== "undefined" &&
+      isSortableHOC(sortableHOCInstance) &&
       typeof SortableHOC.prototype.componentDidMount === "undefined" &&
-      typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
-      typeof SortableHOC.prototype.handleAddSortable === "function" &&
-      typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
-      typeof SortableHOC.prototype.setRef === "function"
+      typeof SortableHOC.prototype.componentDidUpdate === "undefined"
     )
       return;
     throw new Error("Can not comprehend SortableHOC");
   };
 
+  const isSpriteSelectorItem = (spriteSelectorItemInstance) => {
+    try {
+      const SpriteSelectorItem = spriteSelectorItemInstance.constructor;
+      return (
+        typeof spriteSelectorItemInstance.props.asset === "object" &&
+        typeof spriteSelectorItemInstance.props.name === "string" &&
+        typeof spriteSelectorItemInstance.props.dragType === "string" &&
+        typeof SpriteSelectorItem.prototype.handleClick === "function" &&
+        typeof SpriteSelectorItem.prototype.setRef === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDeleteButtonClick === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDeleteSpriteModalConfirm === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
+        typeof SpriteSelectorItem.prototype.handleExport === "function"
+      );
+    } catch {
+      return false;
+    }
+  };
+
   const verifySpriteSelectorItem = (spriteSelectorItemInstance) => {
-    const SpriteSelectorItem = spriteSelectorItemInstance.constructor;
-    if (
-      typeof spriteSelectorItemInstance.props.asset === "object" &&
-      typeof spriteSelectorItemInstance.props.name === "string" &&
-      typeof spriteSelectorItemInstance.props.dragType === "string" &&
-      typeof SpriteSelectorItem.prototype.handleClick === "function" &&
-      typeof SpriteSelectorItem.prototype.setRef === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDelete === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
-      typeof SpriteSelectorItem.prototype.handleExport === "function"
-    )
-      return;
+    if (isSpriteSelectorItem(spriteSelectorItemInstance)) return;
     throw new Error("Can not comprehend SpriteSelectorItem");
   };
 
@@ -304,14 +355,20 @@ export default async function ({ addon, console, msg }) {
     throw new Error("Can not comprehend VM");
   };
 
-  const verifyBackpack = (backpackInstance) => {
-    const Backpack = backpackInstance.constructor;
-    if (
-      typeof Backpack.prototype.handleDrop === "function" &&
-      typeof Backpack.prototype.componentDidUpdate === "undefined"
-    ) {
-      return;
+  const isBackpack = (backpackInstance) => {
+    try {
+      const Backpack = backpackInstance.constructor;
+      return (
+        typeof Backpack.prototype.handleDrop === "function" &&
+        typeof Backpack.prototype.componentDidUpdate === "undefined"
+      );
+    } catch {
+      return false;
     }
+  };
+
+  const verifyBackpack = (backpackInstance) => {
+    if (isBackpack(backpackInstance)) return;
     throw new Error("Can not comprehend Backpack");
   };
 
@@ -623,7 +680,7 @@ export default async function ({ addon, console, msg }) {
       const selectedItem = getSelectedItem(this);
       if (selectedItem) {
         const folder = getFolderFromName(selectedItem.name);
-        const currentFolder = this.state.folders.includes(folder) ? folder : null;
+        const currentFolder = this.state && this.state.folders.includes(folder) ? folder : null;
         if (type === TYPE_SPRITES) {
           currentSpriteFolder = currentFolder;
         } else if (type === TYPE_ASSETS) {
@@ -640,7 +697,7 @@ export default async function ({ addon, console, msg }) {
         }
         if (selectedItemChanged) {
           if (!selectedItem.isStage) {
-            if (typeof folder === "string" && !this.state.folders.includes(folder)) {
+            if (typeof folder === "string" && (!this.state || !this.state.folders.includes(folder))) {
               this.setState((prevState) => ({
                 folders: [...prevState.folders, folder],
               }));
@@ -711,7 +768,7 @@ export default async function ({ addon, console, msg }) {
   await addon.tab.scratchClassReady();
   addon.tab.createEditorContextMenu((ctxType, ctx) => {
     if (ctxType !== "sprite" && ctxType !== "costume" && ctxType !== "sound") return;
-    const component = ctx.target[addon.tab.traps.getInternalKey(ctx.target)].return.return.return.stateNode;
+    const component = getSpriteSelectorItemFromElement(ctx.target);
     const data = getItemData(component.props);
     if (!data) return;
     if (typeof data.folder === "string") {
@@ -870,7 +927,12 @@ export default async function ({ addon, console, msg }) {
   });
 
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
-    for (const method of ["handleDelete", "handleDuplicate", "handleExport"]) {
+    for (const method of [
+      "handleDeleteButtonClick",
+      "handleDeleteSpriteModalConfirm",
+      "handleDuplicate",
+      "handleExport",
+    ]) {
       const original = SpriteSelectorItem.prototype[method];
       SpriteSelectorItem.prototype[method] = function (...args) {
         if (typeof this.props.id === "number") {
@@ -998,14 +1060,17 @@ export default async function ({ addon, console, msg }) {
       });
     };
 
+    const originalDuplicateSprite = vm.duplicateSprite;
+    vm.duplicateSprite = function (...args) {
+      return originalDuplicateSprite.call(this, ...args).then((r) => {
+        fixTargetOrder();
+        return r;
+      });
+    };
+
     const originalAddCostume = RenderedTarget.prototype.addCostume;
     RenderedTarget.prototype.addCostume = function (...args) {
-      if (currentAssetFolder !== null) {
-        const costume = args[0];
-        if (costume && typeof getFolderFromName(costume.name) !== "string") {
-          costume.name = setFolderOfName(costume.name, currentAssetFolder);
-        }
-      }
+      addDefaultAssetFolderIfMissing(args[0]);
       const r = originalAddCostume.call(this, ...args);
       fixCostumeOrder(this);
       return r;
@@ -1013,12 +1078,7 @@ export default async function ({ addon, console, msg }) {
 
     const originalAddSound = RenderedTarget.prototype.addSound;
     RenderedTarget.prototype.addSound = function (...args) {
-      if (currentAssetFolder !== null) {
-        const sound = args[0];
-        if (sound && typeof getFolderFromName(sound.name) !== "string") {
-          sound.name = setFolderOfName(sound.name, currentAssetFolder);
-        }
-      }
+      addDefaultAssetFolderIfMissing(args[0]);
       const r = originalAddSound.call(this, ...args);
       fixSoundOrder(this);
       return r;
@@ -1314,9 +1374,13 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     vm = addon.tab.traps.vm;
-    reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
+    reactInternalKey = addon.tab.traps.getInternalKey(spriteSelectorItemElement);
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
-    const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
+    let reactInternalInstance = spriteSelectorItemElement[reactInternalKey];
+    while (!isSpriteSelectorItem(reactInternalInstance.stateNode)) {
+      reactInternalInstance = reactInternalInstance.child;
+    }
+    const spriteSelectorItemInstance = reactInternalInstance.stateNode;
     verifySortableHOC(sortableHOCInstance);
     verifySpriteSelectorItem(spriteSelectorItemInstance);
     verifyVM(vm);

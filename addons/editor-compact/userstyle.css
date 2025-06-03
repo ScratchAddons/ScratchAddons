@@ -22,18 +22,18 @@
   border: 1px solid transparent;
 }
 
-/* Menu bar */
-[class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img,
-[class*="menu-bar_divider"],
-[class*="menu-bar_help-icon"] {
-  display: none;
-}
 [class*="menu-bar_collapsible-label_"],
-[dir="rtl"] [class*="menu-bar_collapsible-label_"],
-[class*="settings-menu_dropdown-label_"],
-[dir="rtl"] [class*="settings-menu_dropdown-label_"] {
-  margin: 0;
+[class*="settings-menu_dropdown-label_"] {
+  margin-left: 0.125rem;
+  margin-right: 0.25rem;
 }
+
+[dir="rtl"] [class*="menu-bar_collapsible-label_"],
+[dir="rtl"] [class*="settings-menu_dropdown-label_"] {
+  margin-right: 0.125rem;
+  margin-left: 0.25rem;
+}
+
 @media (max-width: 1024px) {
   [class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img:first-child {
     display: inline;
@@ -153,7 +153,9 @@
   background-color: var(--editorDarkMode-selector-compactScrollbar, #c1c8d1);
 }
 [class*="sprite-selector_items-wrapper"] {
-  padding: 0.125rem;
+  padding-top: 0.125rem;
+  padding-left: 0.125rem;
+  padding-right: 0.125rem;
 }
 [class*="sprite-selector_sprite-wrapper"] {
   margin: 0.125rem;
@@ -211,6 +213,35 @@ img[class*="sprite-selector-item_sprite-image"] {
 button[class*="action-menu_more-button"] {
   width: 2rem;
   height: 2rem;
+}
+
+.sa-search-sprites-container,
+.sa-search-sprites-icon,
+.sa-search-sprites-reset {
+  width: 2rem;
+  height: 2rem;
+}
+[dir="ltr"] .sa-search-sprites-container {
+  right: 4rem;
+}
+[dir="rtl"] .sa-search-sprites-container {
+  left: 4rem;
+}
+.sa-search-sprites-container:hover,
+.sa-search-sprites-container:focus-within,
+.sa-search-sprites-container:not(.sa-search-sprites-empty) {
+  width: max(12rem, calc(100% - 5rem));
+}
+input.sa-search-sprites-box {
+  padding-inline-start: 2rem;
+}
+.sa-search-sprites-container:hover input.sa-search-sprites-box,
+.sa-search-sprites-container:focus-within input.sa-search-sprites-box,
+.sa-search-sprites-container:not(.sa-search-sprites-empty) input.sa-search-sprites-box {
+  padding-inline-end: 2rem;
+}
+.sa-search-sprites-icon {
+  padding: 0.25rem;
 }
 
 /* Project player */
@@ -279,20 +310,25 @@ button[class*="action-menu_more-button"] {
 }
 
 /* Code tab */
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .scratchCategoryMenuItem {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .scratchCategoryMenuItem,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxCategory {
   padding: 0.25rem 0;
 }
 .scratchCategoryItemBubble,
-.scratchCategoryItemIcon {
+.scratchCategoryItemIcon,
+.categoryBubble,
+.categoryIconBubble {
   width: 1rem;
   height: 1rem;
   background-size: 1rem 1rem;
 }
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolbox {
   height: calc(100% - 2rem) !important;
   scrollbar-width: none;
 }
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webkit-scrollbar {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webkit-scrollbar,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolbox::-webkit-scrollbar {
   display: none;
 }
 body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-button-container_"] {
@@ -314,6 +350,16 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 }
 [class*="selector_list-area"] > div:first-child {
   margin-top: 0.25rem;
+}
+[class*="sprite-selector-item_number"] {
+  margin: 0 -2px;
+  padding: 0 2px;
+  background-color: var(--editorDarkMode-selector2, #d9e3f2);
+  border-radius: 4px;
+}
+[class*="sprite-selector-item_sprite-selector-item_"]:hover [class*="sprite-selector-item_number"],
+[class*="sprite-selector-item_is-selected"] [class*="sprite-selector-item_number"] {
+  background-color: var(--editorDarkMode-selectorSelection, white);
 }
 [class*="selector_list-area"] img[class*="sprite-selector-item_sprite-image"] {
   max-width: 52px;
@@ -364,8 +410,10 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 [class*="paint-editor_top-align-row"] {
   padding-top: 0.5rem;
 }
-[class*="paint-editor_mode-selector"] {
-  width: min-content;
+@media (min-height: 710px) {
+  [class*="paint-editor_mode-selector"] {
+    width: min-content;
+  }
 }
 
 [class*="sound-editor_row_"] + [class*="sound-editor_row_"] {

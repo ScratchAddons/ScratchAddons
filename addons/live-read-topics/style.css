@@ -1,0 +1,11 @@
+.tcl:not(.highlighted-necropost) .sa-live-read-topics-new-posts {
+  display: none;
+}
+
+/** necropost-highlight compatibility */
+.highlighted-necropost .sa-live-read-topics-new-posts {
+  color: currentcolor !important;
+  font-weight: normal !important;
+  cursor: text;
+  text-decoration: none !important;
+}

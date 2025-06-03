@@ -16,7 +16,13 @@ input.link.black:active,
 button,
 span.comment-reply,
 #comments .more-replies .pulldown,
-#email-resend-box a {
+#email-resend-box a,
+/* scratch3to2 compatibility */
+.thumbnail .thumbnail-creator a,
+.grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.comment .comment-body .comment-bottom-row .comment-reply,
+.studio-thumb-edit-button,
+.studio-project-tile .studio-project-username {
   font-weight: bold;
 }
 

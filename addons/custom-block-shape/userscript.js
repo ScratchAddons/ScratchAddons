@@ -1,11 +1,11 @@
-import { updateAllBlocks } from "./update-all-blocks.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 export default async function ({ addon, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 
   (function (Blockly) {
     const BlockSvg = BlocklyInstance.BlockSvg;
-    var vm = addon.tab.traps.vm;
+    var originalDropdownObject = BlocklyInstance.FieldDropdown.prototype.positionArrow;
 
     const { GRID_UNIT } = BlockSvg;
 
@@ -123,24 +123,24 @@ export default async function ({ addon, console }) {
       BlockSvg.INPUT_SHAPE_HEXAGONAL_WIDTH = 12 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_SHAPE_ROUND =
         "M " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         ",0" +
         " h " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " a " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " 0 0 1 0 " +
-        8 * GRID_UNIT +
+        8 * GRID_UNIT * multiplier +
         " h " +
-        -4 * GRID_UNIT +
+        -4 * GRID_UNIT * multiplier +
         " a " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " 0 0 1 0 -" +
-        8 * GRID_UNIT +
+        8 * GRID_UNIT * multiplier +
         " z";
       BlockSvg.INPUT_SHAPE_ROUND_WIDTH = 12 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_SHAPE_HEIGHT = 8 * GRID_UNIT * multiplier;
@@ -157,9 +157,9 @@ export default async function ({ addon, console }) {
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][2] = 5 * GRID_UNIT * multiplier;
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][3] = 5 * GRID_UNIT * multiplier;
 
-      var originalDropdownObject = BlocklyInstance.FieldDropdown.prototype.positionArrow;
       BlocklyInstance.FieldDropdown.prototype.positionArrow = function (x) {
-        this.arrowY_ = 11 * multiplier;
+        const arrowHeight = 12;
+        this.arrowY_ = (BlockSvg.FIELD_HEIGHT - arrowHeight) / 2 + 1;
         return originalDropdownObject.call(this, x);
       };
 
@@ -238,7 +238,7 @@ export default async function ({ addon, console }) {
 
     function applyAndUpdate(...args) {
       applyChanges(...args);
-      updateAllBlocks(vm, addon.tab.traps.getWorkspace(), BlocklyInstance);
+      updateAllBlocks(addon.tab);
     }
 
     addon.settings.addEventListener("change", () => applyAndUpdate());

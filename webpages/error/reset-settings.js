@@ -1,15 +1,13 @@
 document.querySelector("#reset-settings-btn").onclick = () => {
   // TODO: if (!window.exportedSettings) after error page gets an "export settings" button.
-  if (true) {
-    const res = confirm(
-      "Are you sure you want to CLEAR ALL SETTINGS? If you haven't exported your settings first, click Cancel."
-    );
-    if (!res) return;
-    const res2 = prompt("Type 123 to confirm. You will lose all your Scratch Addons settings.");
-    if (res2 !== "123") {
-      alert("Settings were NOT reset.");
-      return;
-    }
+  const res = confirm(
+    "Are you sure you want to CLEAR ALL SETTINGS? If you haven't exported your settings first, click Cancel."
+  );
+  if (!res) return;
+  const res2 = prompt("Type 123 to confirm. You will lose all your Scratch Addons settings.");
+  if (res2 !== "123") {
+    alert("Settings were NOT reset.");
+    return;
   }
 
   try {

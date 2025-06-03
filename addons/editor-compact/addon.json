@@ -12,6 +12,12 @@
       "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
+  "info": [
+    {
+      "id": "hide-icons-update",
+      "text": "To hide menu bar icons, use the \"Customizable menu bar\" addon."
+    }
+  ],
   "userstyles": [
     {
       "url": "userstyle.css",
