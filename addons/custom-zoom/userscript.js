@@ -52,6 +52,11 @@ export default async function ({ addon, console }) {
   if (document.querySelector('[class^="backpack_backpack-container"]')) {
     window.dispatchEvent(new Event("resize"));
   }
+
+  if (!addon.self.enabledLate) {
+    addon.tab.traps.getWorkspace().scale = addon.settings.get("startZoom") / 100;
+  }
+
   addon.settings.addEventListener("change", update);
   while (true) {
     const selector = Blockly.registry ? ".blocklyZoomReset" : ".blocklyZoom";

@@ -26,15 +26,6 @@ body {
   user-select: none;
   position: relative;
   z-index: 10;
-  background-image: var(--dirt-background, none);
-}
-
-.navbar-start {
-  display: flex;
-  align-items: center;
-}
-.navbar-start.wide {
-  min-width: 300px;
 }
 
 h1 {
@@ -70,20 +61,22 @@ h1 {
   flex-shrink: 1;
   display: flex;
   flex-direction: column;
+  min-width: 400px;
 }
 
 .addons-container {
   overflow-y: auto;
   padding: 20px;
+  padding-top: 10px;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
   height: 100vh;
 }
 
-.addons-container.placeholder {
+.addons-container .placeholder {
   pointer-events: none;
 }
-.addons-container.placeholder .addon-body:first-child {
+.addons-container .placeholder .addon-body:first-child {
   /* Doing this instead of padding in .addons-container itself to avoid
   problems with other CSS that would also set padding on the same element,
   like the "body.iframe .addons-container" selector below */
@@ -118,6 +111,42 @@ h1 {
 .inline-icon {
   height: 16px;
   vertical-align: bottom;
+}
+
+.addons-block-header {
+  background: var(--search-toolbar-background);
+  border-bottom: 1px solid var(--control-border);
+  display: flex;
+  align-items: center;
+  padding: 10px 40px;
+  user-select: none;
+}
+
+.category-header-title {
+  flex-grow: 1;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.related-addons-header {
+  display: flex;
+  align-items: center;
+}
+
+.back-button {
+  width: 24px;
+  height: 24px;
+  vertical-align: bottom;
+  padding: 4px;
+  margin-inline-end: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  filter: var(--content-icon-filter);
+}
+
+.back-button:hover {
+  background-color: var(--hover-highlight);
 }
 
 .clear-button {
@@ -201,8 +230,14 @@ body.iframe .tooltiptext:not(.tooltiptexttop) {
 body.iframe .addon-description {
   display: none;
 }
-body.iframe .search-box {
+body.iframe .addons-block-header {
   padding: 10px;
+}
+body.iframe .search-box {
+  width: 100%;
+}
+body.iframe .navbar {
+  display: none;
 }
 body.iframe .main {
   /* No calc -60px because there's no navbar */

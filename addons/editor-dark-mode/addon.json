@@ -1585,9 +1585,7 @@
       }
     }
   ],
-  "addonPreview": {
-    "type": "editor-dark-mode"
-  },
+  "addonPreview": true,
   "presetPreview": {
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]

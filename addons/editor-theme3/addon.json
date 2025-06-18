@@ -37,6 +37,7 @@
       "text": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks."
     }
   ],
+  "relatedAddons": ["zebra-striping", "custom-block-text", "custom-block-shape"],
   "latestUpdate": {
     "isMajor": true,
     "version": "1.39.0",
@@ -175,6 +176,18 @@
         "r": 0.9,
         "g": 0.9,
         "b": 0.9
+      }
+    },
+    {
+      "name": "commentFilter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        }
       }
     }
   ],

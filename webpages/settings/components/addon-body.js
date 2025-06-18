@@ -73,8 +73,10 @@ export default async function ({ template }) {
           this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
-          this.expanded =
-            isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
+          // Do not collapse when disabling in related addons view
+          this.expanded = this.$root.relatedAddonsOpen
+            ? this.expanded
+            : isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
               : event.shiftKey
                 ? false
@@ -117,6 +119,10 @@ export default async function ({ template }) {
       },
       msg(...params) {
         return this.$root.msg(...params);
+      },
+      openRelated(clickedAddon) {
+        this.$root.openRelatedAddons(this.addon);
+        this.$root.blinkAddon(clickedAddon._addonId);
       },
     },
     watch: {

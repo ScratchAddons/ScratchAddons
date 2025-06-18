@@ -1,0 +1,4 @@
+.sa-show-trash div[class*="target-pane_target-pane_"]:hover div[class*="delete-button_delete-button_"],
+.sa-show-trash div[class*="selector_wrapper_"]:hover div[class*="delete-button_delete-button_"] {
+  display: block !important;
+}

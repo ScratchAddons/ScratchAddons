@@ -66,6 +66,11 @@
   color: #575e75;
 }
 
+.blocklyCommentTopbar > image,
+.scratchCommentTopBar ~ image {
+  filter: brightness(0);
+}
+
 /* Compatibility */
 
 .sa-block-color {

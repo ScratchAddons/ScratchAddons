@@ -1,9 +1,6 @@
 import updateToolboxXML from "../../libraries/common/cs/update-toolbox-xml.js";
-import { isScratchAprilFools25 } from "../hide-flyout/april-fools.js";
 
 export default async function ({ addon, console, msg, safeMsg }) {
-  if (await isScratchAprilFools25(addon.tab.redux)) return;
-
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const SMALL_GAP = 8;
@@ -52,7 +49,7 @@ export default async function ({ addon, console, msg, safeMsg }) {
       for (const blockXML of xml) {
         if (blockXML.hasAttribute("id")) {
           const id = blockXML.getAttribute("id");
-          const variable = workspace.getVariableById(id);
+          const variable = workspace.getVariableMap().getVariableById(id);
           if (!variable || !variable.isLocal) {
             global.push(blockXML);
           } else {
