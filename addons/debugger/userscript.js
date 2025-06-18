@@ -615,10 +615,7 @@ export default async function ({ addon, console, msg }) {
     ogSetVariableTo.call(this, args, util);
   };
 
-  document.addEventListener("logMessage", (e) => {
-    logMessage(e.detail.msg, e.detail.thread, e.detail.type);
-    console.log(e.detail);
-  });
+  document.addEventListener("logMessage", (e) => logMessage(e.detail.msg, e.detail.thread, e.detail.type));
 
   while (true) {
     await addon.tab.waitForElement(

@@ -26,5 +26,7 @@
   "editor-project-formatter/list": "list",
   "editor-project-formatter/proccedure": "custom block",
 
-  "editor-project-formatter/formatter-config-save": "Save to Project"
+  "editor-project-formatter/formatter-config-save": "Save to Project",
+  "editor-project-formatter/added-by": "Added by Scratch Addons\"Project formatter\" addon."
+
 }

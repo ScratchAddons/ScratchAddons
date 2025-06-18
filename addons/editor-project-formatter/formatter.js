@@ -281,11 +281,14 @@ export default class EditorFormatter {
     });
   }
   /**Creates a format message.
-   * @param {"warn"|"error"} level - The message level
-   * @param {"sprite"|"costume"|"list"|"variable"|"procedure"} type - Type of the subject
+   * @param {"warn"|"error"} level - The message level.
+   * @param {"sprite"|"costume"|"list"|"variable"|"procedure"} type - Type of the subject.
+   * @param {string} subject - Subject of the format message.
+   * @param {"sprite"|"costume"|"list"|"variable"|"procedure"} errMsg - The main message.
    */
   newFormatMessage(level, type, subject, errMsg) {
     const formatErrorType = level === "error" ? "format-error" : "format-warn";
+    errMsg.replace(/{([^{}]+)}/, () => {});
     return this.m(formatErrorType, { type: type, subject: subject, "err-msg": errMsg });
   }
 
@@ -301,6 +304,7 @@ export default class EditorFormatter {
    */
   craftMenuOption(title, { callback, imgSrc = "", separator = false }) {
     const opt = document.createElement("li");
+    opt.title = this.msg("added-by");
     if (separator) {
       opt.setAttribute("class", this.addon.tab.scratchClass("menu_menu-item", "menu_hoverable", "menu_menu-section"));
     } else {
@@ -337,7 +341,11 @@ export default class EditorFormatter {
   }
 
   checkFormatting(scope) {
-    const msg = this.newFormatMessage("warn", "sprite", "Sprite1", "ur code is ugly");
+    const formatErrors = this.formatterUtils.checkFormatting();
+    let logs;
+    for (const err of formatErrors) {
+      logs.push(this.newFormatMessage(err.level, err.type, err.subject, err.msg));
+    }
     this.createFormatIssuesModal(msg, scope);
     this.formatterUtils.logToDebugger(parseEncodedHTML(msg), null, "warn");
   }
@@ -474,6 +482,19 @@ export default class EditorFormatter {
       return select;
     };
 
+    const createText = (type, text) => {
+      const HTML_TEXT_TYPES = ["p", "span"];
+
+      if (HTML_TEXT_TYPES.includes(type)) {
+        const txt = document.createElement(type);
+
+        txt.innerText = text;
+        return txt;
+      } else {
+        throw new Error("Type is not HTML text.");
+      }
+    };
+
     const rulesDiv = document.createElement("div");
     rulesDiv.className = "sa-format-options-header-section";
 
@@ -561,27 +582,68 @@ export default class EditorFormatter {
     const plusImg = document.createElement("img");
 
     plusImg.src = this.addonAssets.getFileFromAssets("plus.svg");
-    plusImg.className = "sa-formatter-options-plus-icon";
+    plusImg.className = "sa-formatter-options-custom-rules-button-icon";
 
     const minusImg = document.createElement("img");
 
     minusImg.src = this.addonAssets.getFileFromAssets("minus.svg");
-    minusImg.className = "sa-formatter-options-plus-icon";
+    minusImg.className = "sa-formatter-options-custom-rules-button-icon";
 
+    const buttonContent = document.createElement("div");
+    buttonContent.style.display = "flex";
+    buttonContent.style.alignItems = "center";
+    buttonContent.style.gap = "8px";
+
+    // Add custom rule button
     const addCustomRuleButton = document.createElement("button");
-
-    addCustomRuleButton.appendChild(plusImg);
     addCustomRuleButton.className = "sa-formatter-options-custom-rule-button";
 
+    let addRuleButtonContent = buttonContent.cloneNode();
+    addRuleButtonContent.append(createText("p", "Create New Custom Rule"), plusImg);
+
+    addCustomRuleButton.appendChild(addRuleButtonContent);
+
+    // Remove latest custom rule button
     const removeCustomRuleButton = document.createElement("button");
-    removeCustomRuleButton.appendChild(minusImg);
     removeCustomRuleButton.className = "sa-formatter-options-custom-rule-button";
 
+    let removeRuleButtonContent = buttonContent.cloneNode();
+    removeRuleButtonContent.append(createText("p", "Remove Latest Custom Rule"), minusImg);
+
+    removeCustomRuleButton.appendChild(removeRuleButtonContent);
+
+    // Button placement
     const mainCustomRuleButtonRow = document.createElement("div");
     mainCustomRuleButtonRow.className = "sa-formatter-options-main-custom-rule-button-row";
     mainCustomRuleButtonRow.append(addCustomRuleButton, removeCustomRuleButton);
 
     customRulesDiv.appendChild(mainCustomRuleButtonRow);
+
+    // Validation Functions
+    /**
+     * Function that validates input values and returns a validation result
+     * @typedef {Function | (input) => { result: boolean, msg: ?string }} ValidationFunction
+     * @property {ValidationFunction} validationFunc  - Whether validation passed (true) or failed (false)
+     * @property {?string} msg - Error message if validation failed, null otherwise
+     */
+
+    /**
+     * @param {string} formatLogic - The format logic to validate
+     * @returns {{result: boolean, msg: string|null}} Validation result object
+     */
+    const validateRuleFormatLogic = (formatLogic) => {
+      const dividedString = formatLogic
+        .replace(/\([^()]*\)/g, "")
+        .split(".")
+        .slice(1);
+      const FORMAT_LOGIC_KEYWORDS = ["toCamelCase", "toUpperCase", "formatRegex"];
+
+      return !(
+        formatLogic.startsWith("subject") && FORMAT_LOGIC_KEYWORDS.some((keyword) => dividedString.includes(keyword))
+      )
+        ? { result: false, msg: `The format rule's syntax is invalid.` }
+        : { result: true, msg: null };
+    };
 
     const createCustomRule = ({
       name = null,
@@ -601,18 +663,29 @@ export default class EditorFormatter {
         level: level ?? "error",
         msg: msg ?? "{val} is not {val.case}",
         formatLogic: formatLogic ?? "subject.toUppercase.toCamelCase.formatRegex(/huh/)",
+        scope: "all",
         id: id ?? uid(),
       };
 
       if (!id && !this.formatterUtils.customRules[id])
         this.formatterUtils.customRules[customRuleData.id] = customRuleData;
 
+      /**
+       * Options for making inputs
+       * @typedef {Object} InputOptions
+       * @property {number} minLength - Minimum length for string inputs.
+       * @property {number} maxLength - Maximum length for string inputs.
+       * @property {number} min - Minimum number limit for number inputs.
+       * @property {number} max - Maximum number limit for number inputs.
+       * @property {ValidationFunction} validationFunc - The validation function.
+       */
+
       /**Helper function to create inputs.
-       * @param {string} id ID of the input.
-       * @param {string} labelText The label's text.
-       * @param {string} parentId The parent's ID from the custom rules list.
-       * @param {?string} [type="string"] Type of the label.
-       * @param {?Object} opts Options of the input.
+       * @param {string} id - ID of the input.
+       * @param {string} labelText - The label's text.
+       * @param {string} parentId - The parent's ID from the custom rules list.
+       * @param {?"string"|"number"|"boolean"|"bool-toggle"|"dropdown"} [type="string"] - Type of the label.
+       * @param {?InputOptions} opts - Options of the input.
        */
       const createInput = (id, labelText, parentId, type = "string", opts) => {
         const inputContainer = document.createElement("div");
@@ -622,6 +695,10 @@ export default class EditorFormatter {
           display: "flex",
           alignItems: "center",
         });
+
+        const validationMsg = document.createElement("span");
+        validationMsg.className = "sa-formatter-options-validation-message";
+        validationMsg.style.display = "none";
 
         const input = document.createElement("input");
         input.id = id;
@@ -636,23 +713,26 @@ export default class EditorFormatter {
             input.maxLength = opts.maxLength ?? 8;
 
             // Input Validation
-            const validationMsg = document.createElement("span");
-            validationMsg.className = "sa-formatter-options-validation-message";
-            validationMsg.style.display = "none";
+            const strValidationMsg = validationMsg.cloneNode();
 
             input.addEventListener("input", (e) => {
               if (e.target.value.length < input.minLength) {
                 input.classList.add("sa-formatter-options-custom-rule-input_invalid");
-                validationMsg.style.display = "block";
+                strValidationMsg.style.display = "block";
 
-                validationMsg.textContent = `Input must be atleast ${input.minLength} characters`;
+                strValidationMsg.textContent = `Input must be atleast ${input.minLength} characters`;
+              } else if (opts?.validationFunc && !opts?.validationFunc(e.target.value).result) {
+                input.classList.add("sa-formatter-options-custom-rule-input_invalid");
+                strValidationMsg.style.display = "block";
+
+                strValidationMsg.textContent = opts.validationFunc(e.target.value).msg;
               } else {
                 input.classList.remove("sa-formatter-options-custom-rule-input_invalid");
-                validationMsg.style.display = "none";
+                strValidationMsg.style.display = "none";
               }
             });
 
-            inputContainer.append(input, validationMsg);
+            inputContainer.append(input, strValidationMsg);
             break;
           }
           case "number": {
@@ -664,54 +744,58 @@ export default class EditorFormatter {
             input.max = opts.max ?? Infinity;
 
             // Input Validation
-            const validationMsg = document.createElement("span");
-            validationMsg.className = "sa-formatter-options-validation-message";
-            validationMsg.style.display = "none";
+            const numValidationMsg = validationMsg.cloneNode();
 
             input.addEventListener("input", (e) => {
-              if (e.target.value.length > input.max) {
+              if (e.target.value.length < input.min) {
                 input.classList.add("sa-formatter-options-custom-rule-input_invalid");
-                validationMsg.style.display = "block";
+                numValidationMsg.style.display = "block";
 
-                validationMsg.textContent = `Input must be greater than "${input.min}"`;
-              } else if (e.target.value.length < input.min) {
+                numValidationMsg.textContent = `Input must not be greater than ${input.max}`;
+              } else if (opts?.validationFunc && !opts?.validationFunc(e.target.value).result) {
                 input.classList.add("sa-formatter-options-custom-rule-input_invalid");
-                validationMsg.style.display = "block";
+                numValidationMsg.style.display = "block";
 
-                validationMsg.textContent = `Input must not be greater than ${input.max}`;
+                numValidationMsg.textContent = opts.validationFunc(e.target.value).msg;
               } else {
                 input.classList.remove("sa-formatter-options-custom-rule-input_invalid");
-                validationMsg.style.display = "none";
+                numValidationMsg.style.display = "none";
               }
             });
 
-            inputContainer.append(input, validationMsg);
+            inputContainer.append(input, numValidationMsg);
             break;
           }
           case "bool-toggle": {
+            // Doesn't require validation.
             input.type = "checkbox";
-
-            const toggle = document.createElement("div");
-            toggle.classList.add("sa-formatter-options-toggle-switch");
-
             input.className = "sa-formatter-options-toggle-input";
             input.checked = Cast.toBoolean(this.formatterUtils.customRules[parentId][input.id]);
+
+            input.addEventListener("change", (e) => {
+              this.formatterUtils.customRules[parentId][input.id] = e.target.checked;
+            });
+
+            const toggle = document.createElement("label");
+            toggle.classList.add("sa-formatter-options-toggle-switch");
 
             const slider = document.createElement("span");
             slider.className = "sa-formatter-options-toggle-slider";
 
             toggle.append(input, slider);
-
             inputContainer.appendChild(toggle);
             break;
           }
           case "boolean": {
+            // Doesn't require validation.
+
             input.type = "checkbox";
             inputContainer.appendChild(input);
 
             break;
           }
           case "dropdown": {
+            // Doesn't require validation.
             if (!opts.dropdownData) throw new Error('Dropdown data is missing while input type is "dropdown".');
             const dropdown = createDropdown(opts.dropdownData, `sa-formatter-options-custom-rule-input_${type}`);
 
@@ -749,8 +833,12 @@ export default class EditorFormatter {
       customRuleDiv.append(
         createInput("name", "Rule Name", customRuleDiv.id, "string", { minLength: 4, maxLength: 16 }),
         createInput("enabled", "Enabled", customRuleDiv.id, "bool-toggle"),
-        createInput("logic", "Rule Logic", customRuleDiv.id, "string", { minLength: 4, maxLength: 16 }),
-        createInput("level", "Rule Level", customRuleDiv.id, "dropdown", {
+        createInput("logic", "Logic", customRuleDiv.id, "string", {
+          minLength: 1,
+          maxLength: 300,
+          validationFunc: undefined,
+        }),
+        createInput("level", "Log Level", customRuleDiv.id, "dropdown", {
           dropdownData: [
             {
               text: "Error",
@@ -765,6 +853,12 @@ export default class EditorFormatter {
               value: "notice",
             },
           ],
+        }),
+        createInput("msg", "Logging Message", customRuleDiv.id, "string", { minLength: 1, maxLength: 120 }),
+        createInput("formatLogic", "Formatting Logic", customRuleDiv.id, "string", {
+          minLength: 1,
+          maxLength: 300,
+          validationFunc: validateRuleFormatLogic,
         })
       );
 

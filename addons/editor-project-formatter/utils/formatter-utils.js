@@ -30,8 +30,6 @@ import DebuggerConsole from "../../debugger/debugger-module.js";
  * @property {?OptionValues[]} values - Available values to select. Only use with "select".
  */
 
-const DEFAULT_COMMENT_SIZE = 200;
-
 /**Checks if the block belongs to the "Debugger" category. */
 function isDebuggerBlock(block) {
   const DEBUGGER_BLOCKS = [
@@ -48,6 +46,23 @@ function isDebuggerBlock(block) {
   } catch {
     return false;
   }
+}
+
+function isTitleCase(str) {
+  const words = str.split(" ");
+
+  // Check each word
+  for (let word of words) {
+    if (word.length > 0 && (word[0] !== word[0].toUpperCase() || word.slice(1) !== word.slice(1).toLowerCase())) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isCamelCase(str) {
+  return /^[a-z]+([A-Z][a-z]*)*$/.test(str);
 }
 
 /**
@@ -129,10 +144,17 @@ export default class FormatterUtils {
         },
       },
       {
-        name: "Avoid Capitalized Custom Blocks",
+        name: "Avoid Capitalized Custom Block Names",
         level: "error",
         id: "custom-block-no-capitalized",
         description: "Makes sure that custom blocks aren't capitalized.",
+        enabled: false,
+      },
+      {
+        name: "Camel Case Sprite Names",
+        level: "error",
+        id: "camel-case-sprites",
+        description: "Makes sprite names in CamelCase.",
         enabled: false,
       }
     );
@@ -285,7 +307,7 @@ export default class FormatterUtils {
       rule.enabled = enabled;
       rule.level = level;
     } else {
-      console.error(`Rule with ID ${id} not found.`);
+      console.warn(`Rule with ID ${id} not found.`);
     }
   }
 
@@ -395,7 +417,7 @@ export default class FormatterUtils {
         v.filter(
             (v) =>
               v.type === "list" && !globalLists.map((obj) => obj.name).includes(v.name)
-          ).map((v) => ({ tenamext: v.name, id: v.id }))
+          ).map((v) => ({ name: v.name, id: v.id }))
       )
       .flat(1);
 
@@ -409,25 +431,52 @@ export default class FormatterUtils {
 
   checkFormatRule(ruleID, val, type, { isGlobal = false }) {
     const rule = this.getRuleByID(ruleID);
+    const DATA_CATEGORY_TYPES = ["variable", "list"];
 
     if (ignoreList.has(val.id)) return;
     if (rule.enabled) {
       switch (rule.id) {
         case "griffpatch-style": {
-          // prettier-ignore
-          const isValidName = isGlobal ? val.text === val.text.toUpperCase() : val.text === val.text.toLowerCase()
-          if (!isValidName) {
+          if (DATA_CATEGORY_TYPES.includes(type)) {
+            // prettier-ignore
+            const isValidName = isGlobal ? val.name === val.name.toUpperCase() : val.name === val.name.toLowerCase()
+
+            if (!isValidName) {
+              this.formatErrors.push({
+                type: type,
+                level: rule.level,
+                subject: val.text,
+                ruleID: rule.id,
+                msg: "{val} must be in {isGlobal}",
+              });
+            }
+          } else {
+            if (!isTitleCase(val.name)) {
+              this.formatErrors.push({
+                type: type,
+                level: rule.level,
+                subject: val.text,
+                ruleID: rule.id,
+                msg: "{val} must be in Title Case",
+              });
+            }
+          }
+          break;
+        }
+        case "camel-case-sprites": {
+          if (!isCamelCase(val.name) && type === "sprite") {
             this.formatErrors.push({
               type: type,
               level: rule.level,
               subject: val.text,
-              msg: "",
+              ruleID: rule.id,
+              msg: '"{val}" must be in CamelCase',
             });
           }
           break;
         }
         default:
-          this.console.error(`Couldn't find rule "${rule.id}"`);
+          this.console.warn(`Couldn't find rule "${rule.id}"`);
           break;
       }
     }
@@ -443,9 +492,9 @@ export default class FormatterUtils {
 
   /**
    * Formats a variable using a rule.
-   * @param {string} rule The rule used to format the variable name.
-   * @param { {name: string, id: string}} targetVariable The target variable to format the name of.
-   * @param {boolean} isList Is the variable a list?
+   * @param {string} rule The rule used to format the variable/list name.
+   * @param { {name: string, id: string}} targetVariable The target variable/list to format the name of.
+   * @param {boolean} isList Is it a list?
    * @param {object} opts Optional options.
    */
   _formatVariable(rule, targetVariable, isList, { isGlobal = false }) {
@@ -476,20 +525,12 @@ export default class FormatterUtils {
   _formatVariables() {
     const variables = this.getVariables();
     for (const variable of variables.local) {
-      const variableData = { name: variable.text, id: variable.value };
-      this._formatVariable(
-        "griffpatch-style",
-        variableData,
-        false,
-        {
-          isGlobal: false,
-        },
-        util
-      );
+      this._formatVariable("griffpatch-style", variable, false, {
+        isGlobal: false,
+      });
     }
     for (const variable of variables.global) {
-      const variableData = { name: variable.text, id: variable.value };
-      this._formatVariable("griffpatch-style", variableData, false, {
+      this._formatVariable("griffpatch-style", variable, false, {
         isGlobal: true,
       });
     }
@@ -498,29 +539,15 @@ export default class FormatterUtils {
   _formatLists(util) {
     const lists = this.getLists();
     for (const list of lists.local) {
-      const listData = { name: list.text, id: list.value };
       // Since list are just like variables, we can also use this function to format list names too.
-      this._formatVariable(
-        "griffpatch-style",
-        listData,
-        true,
-        {
-          isGlobal: false,
-        },
-        util
-      );
+      this._formatVariable("griffpatch-style", list, true, {
+        isGlobal: false,
+      });
     }
     for (const list of lists.global) {
-      const listData = { name: list.text, id: list.value };
-      this._formatVariable(
-        "griffpatch-style",
-        listData,
-        true,
-        {
-          isGlobal: true,
-        },
-        util
-      );
+      this._formatVariable("griffpatch-style", list, true, {
+        isGlobal: true,
+      });
     }
   }
 
@@ -548,11 +575,11 @@ export default class FormatterUtils {
 
   _checkSpriteFormatting() {
     const targets = this.runtime.targets.filter((t) => t.isSprite()).map((t) => ({ text: t.sprite.name, value: t.id }));
-    console.log("checking sprites");
+    this.console.log("checking sprites");
     for (const target of targets) {
       // Format check
-      this.checkFormatRule("camelCaseOnly", target, "sprite");
-      this.checkCustomFormatRules(target, "sprite");
+      this.checkFormatRule("griffpatch-style", target, "sprite", { isGlobal: false });
+      // this.checkCustomFormatRules(target, "sprite");
     }
   }
   formatCustomBlock(block) {
@@ -577,9 +604,8 @@ export default class FormatterUtils {
     for (const block in blocks) {
       if (!ignoreList.has(blocks[block].value)) {
         // prettier-ignore
-        this.checkFormatRule("customNoCapitalized", blocks[block].text, "custom_block");
+        this.checkFormatRule("custom-block-no-capitalized", blocks[block].text, "custom_block");
         // prettier-ignore
-        this.checkFormatRule("camelCaseOnly", blocks[block].text, "custom_block");
         this.checkCustomFormatRules(blocks[block].text, "custom_block");
       }
     }
@@ -594,8 +620,10 @@ export default class FormatterUtils {
       this.checkFormatRule("griffpatch-style", variable, "variable", {
         isGlobal: false,
       });
-      this.checkFormatRule("camelCaseOnly", variable, "variable");
-      this.checkCustomFormatRules(variable, "variable");
+      this.checkFormatRule("local-var-startswith-special-char", variable, "variable", {
+        isGlobal: false,
+      });
+      // this.checkCustomFormatRules(variable, "variable");
     }
 
     // Global variable format check
@@ -604,8 +632,7 @@ export default class FormatterUtils {
       this.checkFormatRule("griffpatch-style", variable, "variable", {
         isGlobal: true,
       });
-      this.checkFormatRule("camelCaseOnly", variable, "variable");
-      this.checkCustomFormatRules(variable, "variable");
+      // this.checkCustomFormatRules(variable, "variable");
     }
   }
 
@@ -618,8 +645,8 @@ export default class FormatterUtils {
       this.checkFormatRule("griffpatch-style", list, "list", {
         isGlobal: false,
       });
-      this.checkFormatRule("camelCaseOnly", list, "list");
-      this.checkCustomFormatRules(list, "list");
+      this.checkFormatRule("local-var-startswith-special-char", list, "list");
+      // this.checkCustomFormatRules(list, "list");
     }
 
     // Global variable format check
@@ -628,12 +655,15 @@ export default class FormatterUtils {
       this.checkFormatRule("griffpatch-style", list, "list", {
         isGlobal: true,
       });
-      this.checkFormatRule("camelCaseOnly", list, "list");
-      this.checkCustomFormatRules(list, "list");
+      // this.checkCustomFormatRules(list, "list");
     }
   }
 
-  checkFormatting() {
+  getWorkspace() {
+    return this.addon.tab.traps.getWorkspace();
+  }
+
+  checkFormatting(_isInsideSprite) {
     this.formatErrors = [];
 
     this._checkSpriteFormatting();
@@ -654,15 +684,10 @@ export default class FormatterUtils {
     this._formatLists();
     this.console.info("formatting completed");
 
-    this.addon.tab.traps.getBlockly().then((ScratchBlocks) => {
-      const oldCleanUpFunc = ScratchBlocks.WorkspaceSvg.prototype.cleanUp;
-      const self = this;
-      ScratchBlocks.WorkspaceSvg.prototype.cleanUp = function () {
-        oldCleanUpFunc.call(this);
-        if (cleanUpOrphans) {
-          self.cleanUpOrphans();
-        }
-      };
-    });
+    const workspace = this.getWorkspace();
+    workspace.cleanUp();
+    if (cleanUpOrphans) {
+      this.cleanUpOrphans();
+    }
   }
 }
