@@ -278,11 +278,13 @@ body.iframe .settings-column > .addon-setting {
   flex-direction: column;
   align-items: flex-start;
 }
-body.iframe .setting-label {
-  width: auto;
-}
 body.iframe .setting-label-container {
   margin-bottom: 5px;
+  width: auto;
+  max-width: calc(100% - 66px); /* prevent setting description tooltip from overflowing */
+}
+body.iframe .setting-label-container:not(:has(.tooltip)) {
+  max-width: none;
 }
 body.iframe .setting-input {
   flex-shrink: 0;
@@ -292,7 +294,7 @@ body.iframe .addon-setting.boolean-setting {
   flex-direction: row;
   align-items: center;
 }
-body.iframe .addon-setting.boolean-setting .setting-label {
+body.iframe .addon-setting.boolean-setting .setting-label-container {
   margin-bottom: 0;
 }
 body.iframe .presets-column > .setting-label {
