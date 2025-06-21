@@ -868,6 +868,9 @@ class TokenTypeBlock extends TokenType {
    * @yields {Token[]}
    */
   *_parseSubtokens(query, idx, subtokenProviders, depth, tokenProviderIdx = 0, parseNextToken = true) {
+    if (tokenProviderIdx >= subtokenProviders.length)
+      return;
+
     idx = query.skipIgnorable(idx);
     let tokenProvider = subtokenProviders[tokenProviderIdx];
 
