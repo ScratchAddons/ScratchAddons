@@ -70,7 +70,7 @@ export default async function ({ addon, console }) {
       // We account for this with a hacky method of adding the delimiter at the end of the last label input
       if (fnName === "addLabelExternal") {
         const lastInput = proc.inputList[proc.inputList.length - 1];
-        if (lastInput.type === INPUT_DUMMY) {
+        if (lastInput?.type === INPUT_DUMMY) {
           lastInput.fieldRow[0].setValue(lastInput.fieldRow[0].getValue() + " %l");
         }
       }
