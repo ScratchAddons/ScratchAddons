@@ -18,6 +18,12 @@
   white-space: normal;
 }
 
+@media (max-width: 700px) {
+  .badge {
+    margin-inline-start: 8px;
+  }
+}
+
 .badge.blue {
   background: #175ef8;
   border-color: #0e44b8;
