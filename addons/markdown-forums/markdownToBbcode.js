@@ -28,6 +28,9 @@ const options = {
         ? `[quote ${author[1]}]${text.split("\n").slice(1).join("\n")}[/quote]`
         : `[quote]${text}[/quote]\n`;
     },
+    html({ text }) {
+      return text.replace(/</g, "[").replace(/>/g, "]");
+    },
     heading({ tokens, depth }) {
       const { open, close } = HEADING_LEVELS[depth];
       return `${open}${this.parser.parseInline(tokens)}${close}\n`;
