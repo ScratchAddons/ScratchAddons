@@ -105,6 +105,10 @@ const options = {
       return `[s]${this.parser.parseInline(tokens)}[/s]`;
     },
     link({ href, tokens }) {
+      const specialLinkMatch = href.match(/^([a-z]+):(.*)$/);
+      if (specialLinkMatch && SPECIAL_LINKS.has(specialLinkMatch[1])) {
+        return `[${specialLinkMatch[1]} ${url(specialLinkMatch[2])}]${this.parser.parseInline(tokens)}[/${specialLinkMatch[1]}]`;
+      }
       return `[url ${url(href)}]${this.parser.parseInline(tokens)}[/url]`;
     },
     image({ href, text }) {
@@ -139,3 +143,5 @@ const HEADING_LEVELS = {
   5: { open: "[u]", close: "[/u]" },
   6: { open: "[b]", close: "[/b]" },
 };
+
+const SPECIAL_LINKS = new Set(["wp", "wiki", "google", "dictionary"]);
