@@ -27,10 +27,7 @@ export async function updateAllBlocks(
         if (blockly.registry) {
           // new Blockly
           toolbox.render(workspace.options.languageTree);
-          toolbox.selectItem_(
-            null,
-            toolbox.contents_.find((item) => item.id_ === selectedItemId)
-          );
+          toolbox.selectItem_(null, toolbox.contents.get(selectedItemId));
         } else {
           toolbox.categoryMenu_.populate(workspace.options.languageTree);
           toolbox.selectCategoryById(selectedItemId, false);

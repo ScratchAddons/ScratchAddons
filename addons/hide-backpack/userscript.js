@@ -50,6 +50,7 @@ function createBackpackButton(addon) {
     Object.assign(document.createElement("img"), {
       src: `${addon.self.dir}/backpack.svg`,
       alt: "",
+      draggable: false,
     })
   );
   moveResizeButtons(addon, 36);

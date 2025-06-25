@@ -82,7 +82,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
       ({ addonId, manifest }) =>
         (manifest.popup._addonId = addonId) &&
         Object.assign(manifest.popup, {
-          html: `../../popups/${addonId}/${manifest.popup.html}`,
+          html: `../../popups/${addonId}/popup.html`,
         })
     );
   popupObjects.push({
@@ -114,7 +114,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (newState === true) {
       manifest.popup._addonId = addonId;
       Object.assign(manifest.popup, {
-        html: `../../popups/${addonId}/${manifest.popup.html}`,
+        html: `../../popups/${addonId}/popup.html`,
       });
 
       vue.popups.push(manifest.popup);

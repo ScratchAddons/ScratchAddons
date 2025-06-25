@@ -17,5 +17,6 @@
     }
   ],
   "dynamicDisable": true,
-  "dynamicEnable": true
+  "dynamicEnable": true,
+  "libraries": ["scratch-www", "scratch-gui"]
 }

@@ -1537,9 +1537,7 @@
       }
     }
   ],
-  "addonPreview": {
-    "type": "editor-dark-mode"
-  },
+  "addonPreview": true,
   "presetPreview": {
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
@@ -1550,5 +1548,6 @@
     "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "libraries": ["scratch-render"]
 }

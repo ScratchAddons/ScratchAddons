@@ -5,7 +5,9 @@ export default async function ({ addon, console, msg }) {
 
   function makeStyle() {
     let style = document.createElement("style");
-    style.textContent = `
+    style.textContent = Blockly.registry
+      ? ""
+      : `
     .blocklyText {
         fill: ${Blockly.Colours.text};
         font-family: "Helvetica Neue", Helvetica, sans-serif;
@@ -19,19 +21,25 @@ export default async function ({ addon, console, msg }) {
         fill: ${Blockly.Colours.text} !important;
     }
     `;
-    for (let userstyle of document.querySelectorAll(`
+    for (let scratchStyle of document.querySelectorAll(`
+      style[id^='blockly-'],
       .scratch-addons-style[data-addon-id="editor-theme3"],
       .sa-custom-block-text-style
     `)) {
-      if (userstyle.disabled) continue;
-      style.textContent += userstyle.textContent;
+      if (scratchStyle.disabled) continue;
+      style.textContent += scratchStyle.textContent;
     }
     return style;
   }
 
   function setCSSVars(element) {
+    element.setAttribute("class", document.querySelector(".injectionDiv").className);
     for (let property of document.documentElement.style) {
-      if (property.startsWith("--editorTheme3-") || property.startsWith("--customBlockText-"))
+      if (
+        property.startsWith("--colour-") ||
+        property.startsWith("--editorTheme3-") ||
+        property.startsWith("--customBlockText-")
+      )
         element.style.setProperty(property, document.documentElement.style.getPropertyValue(property));
     }
   }
@@ -128,6 +136,7 @@ export default async function ({ addon, console, msg }) {
     const { backdrop, container, content, closeButton } = modal;
     let remove = modal.remove;
     container.classList.add("sa-export-container");
+    container.classList.add("sa-export-loading"); // hide while loading to avoid layout shift
     content.classList.add("sa-export-content");
 
     backdrop.addEventListener("click", remove);
@@ -138,20 +147,30 @@ export default async function ({ addon, console, msg }) {
     const image = document.createElement("img");
     image.classList.add("sa-export-image");
 
+    const loadingContainer = document.createElement("div");
+    loadingContainer.classList.add("sa-export-loading-container");
+    backdrop.append(loadingContainer);
+
+    const loadingSpinner = document.createElement("span");
+    loadingSpinner.classList.add("sa-spinner", "sa-spinner-white");
+    loadingContainer.append(loadingSpinner);
+
     const loadingText = document.createElement("div");
     loadingText.classList.add("sa-export-loading-text");
     loadingText.textContent = msg("loading");
-    content.append(loadingText);
+    loadingContainer.append(loadingText);
 
     exportBlock(true, false, true, block).then((result) => {
       image.src = result;
-      content.removeChild(loadingText);
     });
 
     image.onload = function () {
       const aspect = image.width / image.height;
       if (aspect >= 1) image.classList.add("wide");
       else image.classList.add("tall");
+
+      backdrop.removeChild(loadingContainer);
+      container.classList.remove("sa-export-loading");
     };
 
     imageContainer.append(image);
@@ -164,12 +183,29 @@ export default async function ({ addon, console, msg }) {
     const svgButton = document.createElement("button");
     const pngButton = document.createElement("button");
 
-    copyButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-copy-button" });
-    copyButton.textContent = msg("clipboard");
-    svgButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-svg-button" });
+    const copyIconContainer = document.createElement("span");
+    const copyIcon = document.createElement("img");
+    const downloadIconContainer = document.createElement("span");
+    const downloadIcon = document.createElement("img");
+
+    copyButton.className = "sa-export-copy-button";
+    copyIconContainer.className = "sa-export-button-icon";
+    copyIcon.src = addon.self.dir + "/copy.svg";
+    copyIcon.draggable = false;
+    copyIconContainer.appendChild(copyIcon);
+    copyButton.appendChild(copyIconContainer);
+    copyButton.appendChild(new Text(msg("clipboard")));
+
+    svgButton.className = "sa-export-svg-button";
     svgButton.textContent = msg("svg");
+
     pngButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-png-button" });
-    pngButton.textContent = msg("png");
+    downloadIconContainer.className = "sa-export-button-icon";
+    downloadIcon.src = addon.self.dir + "/download.svg";
+    downloadIcon.draggable = false;
+    downloadIconContainer.appendChild(downloadIcon);
+    pngButton.appendChild(downloadIconContainer);
+    pngButton.appendChild(new Text(msg("png")));
 
     buttonContainer.append(copyButton);
     buttonContainer.append(svgButton);
@@ -225,12 +261,14 @@ export default async function ({ addon, console, msg }) {
       }, {});
     };
 
-    const externalImages = /*Object.*/ groupBy(Array.from(svg.querySelectorAll("image")), (item) => {
-      const iconUrl = item.getAttribute("xlink:href");
-      if (iconUrl.startsWith("data:")) return "data:";
-      else return iconUrl;
-    });
-    delete externalImages["data:"];
+    const getHref = (item) => item.getAttribute("xlink:href") || item.getAttribute("href");
+    const externalImages = /*Object.*/ groupBy(
+      Array.from(svg.querySelectorAll("image")).filter((item) => {
+        const iconUrl = getHref(item);
+        return iconUrl && !iconUrl.startsWith("data:");
+      }),
+      (item) => getHref(item)
+    );
 
     // replace external images with data URIs
     await Promise.all(
@@ -241,7 +279,10 @@ export default async function ({ addon, console, msg }) {
           reader.addEventListener("load", () => resolve(reader.result));
           reader.readAsDataURL(blob);
         });
-        externalImages[iconUrl].forEach((item) => item.setAttribute("xlink:href", dataUri));
+        externalImages[iconUrl].forEach((item) => {
+          item.removeAttribute("href");
+          item.setAttribute("xlink:href", dataUri);
+        });
       })
     );
     if (isExportPNG) {
@@ -254,7 +295,7 @@ export default async function ({ addon, console, msg }) {
   function selectedBlocks(scale, block) {
     let svg = exSVG.cloneNode();
 
-    let svgchild = block.svgGroup_;
+    let svgchild = block.svgGroup || block.svgGroup_; // new Blockly || old Blockly
     const translateY = Math.abs(svgchild.getBBox().y) * scale + scale;
     svgchild = svgchild.cloneNode(true);
     svgchild.setAttribute("transform", `translate(${scale},${translateY}) scale(${scale})`);
@@ -273,6 +314,7 @@ export default async function ({ addon, console, msg }) {
 
     // Loop before cloneNode so getBBox() works.
     svgchild.childNodes.forEach((g) => {
+      if (!g.getAttribute("transform")) return;
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
       xArr.push(x * scale);
@@ -286,6 +328,12 @@ export default async function ({ addon, console, msg }) {
 
     svgchild = svgchild.cloneNode(true);
     svgchild.setAttribute("transform", `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`);
+
+    // Include comment text in the exported SVG
+    for (const textarea of svgchild.querySelectorAll(".blocklyTextarea")) {
+      textarea.innerText = textarea.value;
+    }
+
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);

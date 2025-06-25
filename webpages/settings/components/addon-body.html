@@ -66,8 +66,7 @@
       >
         <div class="setting-label">{{ msg("preview") }}</div>
         <component
-          :is="'preview-' + addon.addonPreview.type"
-          :options="addon.addonPreview"
+          :is="'preview-' + addon._addonId"
           :settings="addonSettings"
           :hovered-setting-id="hoveredSettingId"
           @areahover="highlightSetting"
@@ -107,6 +106,14 @@
           </button>
         </div>
       </div>
+      <div class="related-addons" v-if="addon._relatedAddons && !isIframe">
+        <div class="addon-message">
+          <span class="related-addons-text">{{msg('relatedAddons')}}</span>
+          <span v-for="addonManifest of addon._relatedAddons">
+            <a @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -141,16 +148,23 @@
     font-size: 13px;
   }
   .addon-credits a,
+  .related-addons a,
   .addon-license a {
     color: var(--blue-text);
+    cursor: pointer;
   }
 
-  .addon-credits > span {
+  .addon-credits > span,
+  .related-addons span {
     margin-inline-end: 0.5rem;
   }
 
-  .addon-credits > span:not(:first-child):not(:last-child)::after {
+  .addon-credits > span:not(:first-child):not(:last-child)::after,
+  .related-addons span:not(:first-child):not(:last-child)::after {
     content: ",";
+  }
+  .related-addons-text {
+    font-weight: bold;
   }
   .addon-name {
     margin-inline-start: 10px;
@@ -285,6 +299,13 @@
     margin: 10px 0;
     display: flex;
     align-items: center;
+  }
+  .related-addons > .addon-message {
+    flex-wrap: wrap;
+    padding: 6px;
+    padding-left: 10px;
+    border: none;
+    font-size: 14px;
   }
   .addon-notice {
     border-color: var(--notice-border);

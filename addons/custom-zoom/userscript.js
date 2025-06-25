@@ -1,4 +1,6 @@
 export default async function ({ addon, console }) {
+  const Blockly = await addon.tab.traps.getBlockly();
+
   const speeds = {
     none: "0s",
     short: "0.2s",
@@ -16,7 +18,12 @@ export default async function ({ addon, console }) {
   const customZoomAreaElement = document.createElement("div");
   customZoomAreaElement.className = "sa-custom-zoom-area";
   customZoomAreaElement.addEventListener("mousedown", (e) => {
+    // old Blockly
     getElementAtPoint(e).dispatchEvent(new MouseEvent("mousedown", e));
+  });
+  customZoomAreaElement.addEventListener("pointerdown", (e) => {
+    // new Blockly
+    getElementAtPoint(e).dispatchEvent(new PointerEvent("pointerdown", e));
   });
   customZoomAreaElement.addEventListener("wheel", (e) => {
     e.preventDefault();
@@ -26,7 +33,8 @@ export default async function ({ addon, console }) {
   function update() {
     if (addon.tab.editorMode !== "editor") return;
 
-    const { zoomOptions } = addon.tab.traps.getWorkspace().options;
+    const workspace = addon.tab.traps.getWorkspace();
+    const zoomOptions = workspace.options.zoom || workspace.options.zoomOptions; // new Blockly || old Blockly
     zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
     zoomOptions.minScale = addon.settings.get("minZoom") / 100;
     zoomOptions.startScale = addon.settings.get("startZoom") / 100;
@@ -44,9 +52,15 @@ export default async function ({ addon, console }) {
   if (document.querySelector('[class^="backpack_backpack-container"]')) {
     window.dispatchEvent(new Event("resize"));
   }
+
+  if (!addon.self.enabledLate) {
+    addon.tab.traps.getWorkspace().scale = addon.settings.get("startZoom") / 100;
+  }
+
   addon.settings.addEventListener("change", update);
   while (true) {
-    await addon.tab.waitForElement(".blocklyZoom", {
+    const selector = Blockly.registry ? ".blocklyZoomReset" : ".blocklyZoom";
+    await addon.tab.waitForElement(selector, {
       markAsSeen: true,
       reduxEvents: [
         "scratch-gui/mode/SET_PLAYER",

@@ -35,6 +35,11 @@
   color: #ffffff;
 }
 
+.blocklyCommentTopbar > image,
+.scratchCommentTopBar ~ image {
+  filter: brightness(0) invert(1);
+}
+
 /* Compatibility */
 
 .sa-block-color {

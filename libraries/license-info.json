@@ -60,6 +60,34 @@
   "Roboto": {
     "license": "Apache-2.0"
   },
+  "scratch-www": {
+    "license": "BSD-3-Clause",
+    "year": "2021",
+    "fullname": "Scratch Foundation"
+  },
+  "scratch-gui": {
+    "license": "BSD-3-Clause",
+    "year": "2016",
+    "fullname": "Massachusetts Institute of Technology"
+  },
+  "scratch-paint": {
+    "license": "BSD-3-Clause",
+    "year": "2016",
+    "fullname": "Massachusetts Institute of Technology"
+  },
+  "scratch-vm": {
+    "license": "BSD-3-Clause",
+    "year": "2016",
+    "fullname": "Massachusetts Institute of Technology"
+  },
+  "scratch-render": {
+    "license": "BSD-3-Clause",
+    "year": "2016",
+    "fullname": "Massachusetts Institute of Technology"
+  },
+  "scratch-flash": {
+    "license": "GPL-2.0"
+  },
   "marked": {
     "license": "MIT",
     "year": "2011-2018, 2018+",

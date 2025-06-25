@@ -34,10 +34,6 @@
       "matches": ["isNotScratchWWW"]
     },
     {
-      "url": "scratchr2_errors.css",
-      "matches": ["isNotScratchWWW"]
-    },
-    {
       "url": "forums.css",
       "matches": ["https://scratch.mit.edu/discuss/*"]
     },
@@ -129,5 +125,6 @@
       ],
       "default": "box"
     }
-  ]
+  ],
+  "libraries": ["scratch-www"]
 }

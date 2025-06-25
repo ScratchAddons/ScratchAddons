@@ -35,6 +35,7 @@
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
 .blocklyDropDownDiv .blocklyMenu .blocklyMenuItem:hover,
+.blocklyDropDownDiv .blocklyMenu .u-dropdown-selected-item,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight,
 .sa-contextmenu-colored .blocklyContextMenu .blocklyMenuItem:hover {
   background-color: var(--editorTheme3-hoveredItem, rgba(0, 0, 0, 0.2));
@@ -107,4 +108,9 @@
   margin-left: 0;
   margin-right: auto;
   transform: rotate(-90deg);
+}
+
+.blocklyCommentTopbar > image,
+.scratchCommentTopBar ~ image {
+  filter: var(--editorTheme3-commentFilter);
 }

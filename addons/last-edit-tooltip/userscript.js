@@ -26,7 +26,9 @@ export default async function ({ addon, console, msg }) {
     });
     let dateMod = data.history.modified ? dateFormatterWithMonthName.format(new Date(data.history.modified)) : "?";
     let dateShared = data.history.shared ? dateFormatterWithMonthName.format(new Date(data.history.shared)) : "?";
-    let dataTitle = `${msg("shared", { date: dateShared })}
+    let dateCreated = data.history.created ? dateFormatterWithMonthName.format(new Date(data.history.created)) : "?";
+    let dataTitle = `${msg("created", { date: dateCreated })}
+${msg("shared", { date: dateShared })}
 ${msg("modified", { date: dateMod })}`;
     element.setAttribute("title", dataTitle);
 
