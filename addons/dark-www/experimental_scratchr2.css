@@ -690,3 +690,8 @@ input.link.black {
   border-color: var(--darkWww-page-forumErrorColor);
   color: var(--darkWww-page-forumErrorColor);
 }
+
+/* Reported profile comments */
+#comments .comment.just_removed {
+  background-color: #f003;
+}
