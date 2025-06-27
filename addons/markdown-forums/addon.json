@@ -1,0 +1,27 @@
+{
+  "name": "Markdown in forums",
+  "description": "Allows using Markdown in forum posts by converting it to BBCode.",
+  "tags": ["community", "forums"],
+  "versionAdded": "1.40.0",
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "libraries": ["marked"],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
