@@ -41,12 +41,10 @@
           >
             <img v-if="popup.icon" :src="popup.icon" class="popup-icon" draggable="false" />
             <a class="popup-title">{{ popup.name }}</a>
-            <a
+            <span
               v-if="popup.fullscreen"
               class="popout"
-              href="../../popups/{{ popup._addonId }}/popup.html"
-              target="_blank"
-              @click="closePopup()"
+              @click="openInNewTab(popup)"
             >
               <img
                 src="../../images/icons/popout.svg"
@@ -54,7 +52,7 @@
                 title="{{ msg('openInNewTab') }}"
                 draggable="false"
               />
-            </a>
+            </span>
           </div>
         </div>
       </div>

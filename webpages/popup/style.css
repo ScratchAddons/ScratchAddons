@@ -123,6 +123,9 @@ body {
 .popup-title {
   padding-inline-start: 5px;
 }
+.popout {
+  cursor: pointer;
+}
 .popout > .popout-img {
   display: inline-block;
   vertical-align: -3px;
