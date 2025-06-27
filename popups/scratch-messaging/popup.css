@@ -70,6 +70,7 @@ button {
 .username-list {
   color: var(--description-text);
   font-size: 14px;
+  -moz-text-size-adjust: none;
   padding-inline: 16px;
 }
 .fullscreen .thread-list,
@@ -144,6 +145,7 @@ a.message-type-title-text {
   border-radius: 8px;
   margin: 8px;
   font-size: 14px;
+  -moz-text-size-adjust: none;
 }
 .fullscreen .comment {
   margin-inline: 12px;
