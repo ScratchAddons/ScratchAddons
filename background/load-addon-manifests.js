@@ -14,6 +14,7 @@ const localizeSettings = (addonId, setting, tableId) => {
       remixIcon: "@remix.svg",
       adminusersIcon: "@adminusers.svg",
       usersIcon: "@users.svg",
+      addToSettingsMenuIcon: "@addtosettingsmenu.svg",
     },
     setting.name
   );
