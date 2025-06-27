@@ -7,6 +7,7 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   height: 100vh;
+  height: 100svh;
   overflow: hidden;
   color: var(--content-text);
   font-size: 14px;

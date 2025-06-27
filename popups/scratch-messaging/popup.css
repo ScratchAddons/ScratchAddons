@@ -4,6 +4,7 @@ button {
 
 .contents {
   max-height: calc(100vh - 32px);
+  max-height: calc(100svh - 32px);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
