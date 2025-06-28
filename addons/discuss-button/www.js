@@ -1,29 +1,26 @@
 export default async function ({ addon }) {
-  if (addon.tab.clientVersion === "scratchr2") return;
-  let span;
-  const change = async (enabled) => {
-    if (await addon.auth.fetchIsLoggedIn()) {
-      const username = await addon.auth.fetchUsername();
-      const dropdown = await addon.tab.waitForElement(".dropdown");
-      if (!enabled) {
-        span?.remove();
-        span = null;
-        return;
-      }
-      const profileSpans = dropdown.childNodes[0].childNodes[0];
-      if (!span) {
-        span = profileSpans.appendChild(document.createElement("span"));
-        span.className = "sa-profile-name";
-        span.textContent = username;
-      }
+  let menuItem;
+
+  const change = async () => {
+    if (!addon.auth.fetchIsLoggedIn()) return;
+
+    if (addon.settings.get("compact-nav") && !addon.self.disabled) {
+      const span = menuItem.appendChild(document.createElement("span"));
+      span.className = "sa-profile-name";
+      span.textContent = await addon.auth.fetchUsername();
+    } else {
+      menuItem.querySelector(".sa-profile-name")?.remove();
     }
   };
-  if (addon.settings.get("compact-nav")) change(true);
-  addon.settings.addEventListener("change", () => {
-    change(addon.settings.get("compact-nav"));
-  });
-  addon.self.addEventListener("disabled", () => change(false));
-  addon.self.addEventListener("reenabled", () => {
-    change(addon.settings.get("compact-nav"));
-  });
+
+  addon.settings.addEventListener("change", change);
+  addon.self.addEventListener("disabled", change);
+  addon.self.addEventListener("reenabled", change);
+
+  while (true) {
+    menuItem = await addon.tab.waitForElement(".account-nav .dropdown > :first-child > :first-child", {
+      markAsSeen: true,
+    });
+    change();
+  }
 }
