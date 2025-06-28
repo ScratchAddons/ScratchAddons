@@ -329,6 +329,10 @@ body.iframe .search-box input {
 }
 
 @media (max-width: 1000px) {
+  .permissions-block h2 {
+    font-size: 2rem;
+  }
+
   .permissions-steps {
     flex-direction: column;
     align-items: center;
