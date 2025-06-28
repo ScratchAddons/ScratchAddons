@@ -68,6 +68,11 @@ export default async function ({ addon, console, msg }) {
       logMessage(content, thread, "error");
     },
   });
+  addon.tab.addReporterBlock("\u200B\u200Bis in editor?\u200B\u200B", true, {
+    callback: () => {
+      return document.body.classList.contains("sa-body-editor") ? true : 0;
+    },
+  });
 
   const vm = addon.tab.traps.vm;
   await new Promise((resolve, reject) => {
