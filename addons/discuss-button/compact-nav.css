@@ -13,8 +13,8 @@
   display: block;
   font-size: 0.75rem;
   font-weight: normal;
-  line-height: 0;
-  padding-bottom: 15px;
+  line-height: normal;
+  padding-bottom: 8px;
   white-space: normal;
 }
 
