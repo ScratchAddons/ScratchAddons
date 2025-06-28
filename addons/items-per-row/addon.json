@@ -2,7 +2,6 @@
   "name": "More items per row",
   "description": "Lets you change the number of items displayed in a single row in a grid of projects, studios, or users.",
   "tags": ["community", "featured"],
-  "relatedAddons": ["custom-zoom"],
   "credits": [
     {
       "name": "Maximouse",

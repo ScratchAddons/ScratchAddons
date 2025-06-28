@@ -104,7 +104,6 @@
   ],
   "versionAdded": "1.5.0",
   "tags": ["editor", "costumeEditor", "recommended"],
-  "relatedAddons": ["paint-snap"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false,

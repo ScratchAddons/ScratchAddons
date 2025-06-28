@@ -2,7 +2,7 @@
   "name": "Costume editor snapping",
   "description": "Snap objects in the costume editor to bounding boxes and vector nodes.",
   "tags": ["editor", "costumeEditor", "featured"],
-  "relatedAddons": ["script-snap", "onion-skinning"],
+  "relatedAddons": ["script-snap"],
   "versionAdded": "1.30.0",
   "userscripts": [
     {
