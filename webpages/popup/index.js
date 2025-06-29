@@ -47,6 +47,12 @@ const vue = new Vue({
         setTimeout(() => document.querySelector("iframe:not([style='display: none;'])").focus(), 0);
       }
     },
+    openInNewTab(popup) {
+      chrome.tabs.create({
+        url: `../../popups/${popup._addonId}/popup.html`,
+      });
+      this.closePopup();
+    },
     iframeSrc(addonId) {
       return vue.popups.find((addon) => addon._addonId === addonId).html;
     },

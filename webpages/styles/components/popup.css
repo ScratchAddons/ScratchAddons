@@ -19,12 +19,15 @@ body {
   color: var(--content-text);
 }
 
-body.fullscreen {
-  width: 55%;
-  min-height: calc(100% - 2px);
-  height: auto;
-  border: 1px solid var(--control-border);
-  box-shadow: var(--fullscreen-popup-shadow);
+@media (min-width: 700px) {
+  body.fullscreen {
+    width: 55%;
+    min-width: 700px;
+    min-height: calc(100% - 2px);
+    height: auto;
+    border: 1px solid var(--control-border);
+    box-shadow: var(--fullscreen-popup-shadow);
+  }
 }
 
 [v-cloak] {

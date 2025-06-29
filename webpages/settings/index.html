@@ -308,10 +308,8 @@
       <div class="addon-block settings-block">
         <div class="addon-body">
           <div class="addon-topbar">
-            <span class="addon-name"
-              ><img src="../../images/icons/theme.svg" class="icon-type" draggable="false" /> {{
-              msg("scratchAddonsTheme") }}
-            </span>
+            <img src="../../images/icons/theme.svg" class="icon-type addon-icon" draggable="false" />
+            <span class="addon-name-and-tags">{{ msg("scratchAddonsTheme") }}</span>
           </div>
           <div class="addon-settings">
             <span class="addon-description-full">{{ msg("scratchAddonsThemeDescription") }}</span>
@@ -332,28 +330,24 @@
         </div>
         <div class="addon-body">
           <div class="addon-topbar">
-            <span class="addon-name"
-              ><img
-                src="../../images/icons/import-export.svg"
-                class="icon-type"
-                :class="{'dark': theme === false}"
-                draggable="false"
-              />
-              {{ msg("exportAndImportSettings") }}
-            </span>
+            <img
+              src="../../images/icons/import-export.svg"
+              class="icon-type addon-icon"
+              :class="{'dark': theme === false}"
+              draggable="false"
+            />
+            <span class="addon-name-and-tags">{{ msg("exportAndImportSettings") }}</span>
           </div>
           <div class="addon-settings">
             <span class="addon-description-full">{{ msg("exportAndImportSettingsDescription") }}</span>
             <span class="addon-description-full">{{ msg("useBrowserSync") }}</span>
-            <div class="addon-setting">
-              <div class="filter-selector">
+            <div class="addon-setting export-actions">
+              <div class="export-actions-group">
                 <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
-              </div>
-              <div class="filter-selector">
                 <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
                 <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
               </div>
-              <div class="filter-selector" style="margin-left: 16px">
+              <div class="export-actions-group">
                 <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
               </div>
             </div>
@@ -361,9 +355,8 @@
         </div>
         <div class="addon-body">
           <div class="addon-topbar">
-            <span class="addon-name"
-              ><img src="../../images/icons/translate.svg" class="icon-type" draggable="false" />{{ msg("language") }}
-            </span>
+            <img src="../../images/icons/translate.svg" class="icon-type addon-icon" draggable="false" />
+            <span class="addon-name-and-tags">{{ msg("language") }}</span>
           </div>
           <div class="addon-settings">
             <div class="addon-setting" style="margin-top: 0">
