@@ -370,6 +370,18 @@
       }
     },
     {
+      "name": "navbar-scratchr2Divider",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
       "name": "box-text",
       "value": {
         "type": "textColor",
