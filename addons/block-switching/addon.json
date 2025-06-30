@@ -20,6 +20,7 @@
     }
   ],
   "tags": ["editor", "codeEditor", "recommended"],
+  "relatedAddons": ["middle-click-popup"],
   "settings": [
     {
       "name": "Motion blocks",

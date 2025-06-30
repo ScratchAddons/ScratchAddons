@@ -32,7 +32,7 @@
       "text": "The new High Contrast block colors are available as a preset below."
     }
   ],
-  "relatedAddons": ["zebra-striping", "custom-block-text", "custom-block-shape"],
+  "relatedAddons": ["editor-dark-mode", "custom-block-shape", "transparent-orphans", "zebra-striping"],
   "latestUpdate": {
     "isMajor": true,
     "version": "1.39.0",
