@@ -1,0 +1,72 @@
+#scratch-invite-modal {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 400px;
+  height: 480px;
+  background-color: #fff;
+  border: 2px solid #333;
+  padding: 15px;
+  z-index: 10000;
+  overflow-y: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+}
+
+#scratch-invite-modal h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.25rem;
+}
+
+#scratch-invite-modal button {
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: 1px solid #444;
+  background-color: #eee;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+#scratch-invite-modal button:hover {
+  background-color: #ddd;
+}
+
+#scratch-invite-modal ul {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-left: 20px;
+  margin: 0 0 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #fafafa;
+}
+
+#scratch-invite-modal ul li {
+  padding: 4px 0;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+#scratch-invite-modal > button[style] {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-weight: bold;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  width: 26px;
+  height: 26px;
+  line-height: 20px;
+  padding: 0;
+}
+
+#scratch-invite-modal > button[style]:hover {
+  background-color: #d32f2f;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Invite Recent Users",
+  "description": "Easily invite recent users (followers, commenters) to a Scratch studio.",
+  "author": "VIGARPAST_777",
+  "version": "1.0.0",
+  "repo": "https://github.com/VIGARPAST-777-2/Invite-active-users-to-studios/",
+  "manifest_version": 2,
+  "homepage": "https://scratch.mit.edu/users/VIGARPAST_777/",
+  "tags": ["studio", "invite", "followers", "comments"],
+  "enabled": false,
+  "category": "studio",
+  "style": "style.css",
+  "icon": "icon.png"
+}
