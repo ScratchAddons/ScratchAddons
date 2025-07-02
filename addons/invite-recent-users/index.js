@@ -1,11 +1,8 @@
-// index.js
 import { addons, storage } from 'scratch-addons';
 
-// Nombre de usuario por defecto
 const DEFAULT_USERNAME = 'griffpatch';
 let studioId = null;
 
-// Obtiene token CSRF para la API
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -13,7 +10,6 @@ function getCookie(name) {
   return null;
 }
 
-// Invita a un usuario con la API oficial Scratch
 async function inviteUser(studioId, username) {
   try {
     const csrfToken = getCookie('scratchcsrftoken');
@@ -41,7 +37,6 @@ async function inviteUser(studioId, username) {
   }
 }
 
-// Obtiene seguidores del usuario
 async function fetchFollowers(username, offset = 0) {
   const url = `https://api.scratch.mit.edu/users/${encodeURIComponent(username)}/followers?limit=40&offset=${offset}`;
   const res = await fetch(url);
@@ -50,7 +45,6 @@ async function fetchFollowers(username, offset = 0) {
   return data.map(u => u.username);
 }
 
-// Verifica si usuario existe
 async function checkUserExists(username) {
   try {
     const res = await fetch(`https://api.scratch.mit.edu/users/${encodeURIComponent(username)}`);
@@ -62,7 +56,6 @@ async function checkUserExists(username) {
   }
 }
 
-// Guarda y carga usuarios invitados en storage de ScratchAddons
 function getInvitedUsers(studioId) {
   const data = storage.get(`inviteRecentInvited_${studioId}`);
   return data ? JSON.parse(data) : [];
@@ -76,12 +69,9 @@ function saveInvitedUser(studioId, username) {
   }
 }
 
-// Inserta botón y panel en la página
 function insertInviteButton() {
   const managersSection = document.querySelector('.studio-managers');
-  if (!managersSection) return; // No estamos en página correcta
-
-  // No añadir botón si ya existe
+  if (!managersSection) return;
   if (document.getElementById('invite-recent-users-button')) return;
 
   const btn = document.createElement('button');
@@ -91,25 +81,18 @@ function insertInviteButton() {
   btn.style.marginBottom = '10px';
   btn.style.display = 'block';
 
-  // Insertar botón justo antes de managersSection
   managersSection.parentNode.insertBefore(btn, managersSection);
 
-  // Evento click para mostrar panel
   btn.addEventListener('click', () => {
-    if (document.getElementById('invite-recent-users-panel')) {
-      // Si panel abierto, cerrar
-      document.getElementById('invite-recent-users-panel').remove();
-    } else {
-      showPanel();
-    }
+    const panel = document.getElementById('invite-recent-users-panel');
+    if (panel) panel.remove();
+    else showPanel();
   });
 }
 
-// Función para mostrar panel
 async function showPanel() {
   if (!studioId) return;
 
-  // Crear panel
   const panel = document.createElement('div');
   panel.id = 'invite-recent-users-panel';
   panel.style = `
@@ -206,7 +189,6 @@ async function showPanel() {
 
     updateStatus('Invitation process finished.');
 
-    // Filtrar los ya invitados
     invitedUsers = getInvitedUsers(studioId);
     followers = followers.filter(u => !invitedUsers.includes(u));
     renderFollowers();
@@ -236,11 +218,9 @@ async function showPanel() {
 
   inviteAllBtn.addEventListener('click', inviteAllFollowers);
 
-  // Carga inicial
   loadFollowers(true);
 }
 
-// Registro del addon para ScratchAddons
 addons.register({
   id: 'invite-recent-users',
   name: 'Invite Recent Followers',
