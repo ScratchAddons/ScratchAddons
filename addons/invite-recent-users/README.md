@@ -1,3 +1,5 @@
+#Help me please (check the tampermonkey.js comments)
+
 # Invite Recent Users
 
 Invite Recent Users is a Scratch Addons extension that allows you to easily invite recent users — such as followers and commenters — to your Scratch studio with just a few clicks.
