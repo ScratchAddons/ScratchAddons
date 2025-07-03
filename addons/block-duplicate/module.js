@@ -70,7 +70,8 @@ export async function load(addon) {
             // setGroup(false) will be called in endDrag() (overridden below)
             ScratchBlocks.Events.fire(new (ScratchBlocks.Events.get(ScratchBlocks.Events.BLOCK_CREATE))(newBlock));
           }
-          if (e.ctrlKey || e.metaKey) {
+          const isCherryPickingInverted = invertCherryPicking && this.targetBlock.getParent();
+          if ((e.ctrlKey || e.metaKey) === !isCherryPickingInverted) {
             // Holding both Ctrl/Cmd and Alt -> duplicate a single block
             const nextBlock = newBlock.getNextBlock();
             if (nextBlock) {
@@ -79,17 +80,36 @@ export async function load(addon) {
           }
           this.targetBlock = newBlock;
           ScratchBlocks.common.setSelected(newBlock);
+          newBlock.dragStrategy.saIsDuplicating = true;
         }
       }
 
       oldUpdateIsDragging.call(this, e);
     };
 
-    // By default, both Ctrl/Cmd and Alt can be used for cherry picking.
-    // Exclude Alt if duplication is enabled.
     const oldStartDrag = ScratchBlocks.dragging.BlockDragStrategy.prototype.startDrag;
     ScratchBlocks.dragging.BlockDragStrategy.prototype.startDrag = function (e) {
-      if (enableDuplication) Object.defineProperty(e, "altKey", { value: false });
+      if (this.block.isShadow()) {
+        oldStartDrag.call(this, e);
+        return;
+      }
+
+      if (enableDuplication) {
+        // By default, both Ctrl/Cmd and Alt can be used for cherry picking.
+        // Exclude Alt if duplication is enabled.
+        Object.defineProperty(e, "altKey", { value: false });
+      }
+
+      const isDuplicating = this.saIsDuplicating;
+      delete this.saIsDuplicating;
+      const isCherryPickingInverted = invertCherryPicking && (isDuplicating || this.block.getParent());
+      if (isCherryPickingInverted) {
+        const modifierKeyPressed = e.ctrlKey || e.metaKey || e.altKey;
+        Object.defineProperty(e, "ctrlKey", { value: !modifierKeyPressed });
+        Object.defineProperty(e, "metaKey", { value: !modifierKeyPressed });
+        if (!enableDuplication) Object.defineProperty(e, "altKey", { value: !modifierKeyPressed });
+      }
+
       oldStartDrag.call(this, e);
     };
 
@@ -97,7 +117,7 @@ export async function load(addon) {
     ScratchBlocks.dragging.BlockDragStrategy.prototype.endDrag = function (e) {
       oldEndDrag.call(this, e);
       ScratchBlocks.Events.setGroup(false);
-    }
+    };
 
     return;
   }
