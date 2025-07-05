@@ -75,5 +75,6 @@
     "newSettings": ["no_borders"]
   },
   "tags": ["community", "theme"],
+  "relatedAddons": ["editor-compact"],
   "enabledByDefault": false
 }
