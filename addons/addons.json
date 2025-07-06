@@ -160,6 +160,7 @@
   "no-sprite-confirm",
   "costume-editor-shortcuts",
   "live-read-topics",
+  "user-post-count",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -188,6 +189,5 @@
   "remove-curved-stage-border",
   "columns",
   "editor-compact",
-  "editor-theme3",
-  "user-post-count"
+  "editor-theme3"
 ]
