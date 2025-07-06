@@ -1,4 +1,4 @@
-<h1 style="color:red">This text is red</h1>
+<h1 style="color:red">⚠️ Help me to make an addond with this</h1>
 
 # Talk with ChatGPT on Scratch
 
