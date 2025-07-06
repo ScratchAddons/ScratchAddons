@@ -1,6 +1,6 @@
 {
-  "name": "Show post count",
-  "description": "Adds the number of forum posts below the username on profile pages.",
+  "name": "Show unread messages count",
+  "description": "Adds the number of unread messages below the username on profile pages.",
   "credits": [
     {
       "name": "VIGARPAST_777",
