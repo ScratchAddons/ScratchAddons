@@ -1,3 +1,5 @@
+<h1 style="color:red">This text is red</h1>
+
 # Talk with ChatGPT on Scratch
 
 This is a Tampermonkey script that adds a handy **Talk with ChatGPT** button on Scratch’s website.  
