@@ -1,0 +1,43 @@
+{
+  "name": "Show post count",
+  "description": "Adds the number of forum posts below the username on profile pages.",
+  "credits": [
+    {
+      "name": "VIGARPAST_777",
+      "link": "https://scratch.mit.edu/users/VIGARPAST_777/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["profiles"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["profiles"]
+    },
+    {
+      "url": "hover.css",
+      "matches": ["profiles"],
+      "if": {
+        "settings": { "only-on-hover": true }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "id": "only-on-hover",
+      "name": "Only show when hovering over username",
+      "default": false,
+      "type": "boolean"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "tags": ["community", "profiles"],
+  "versionAdded": "1.0.0",
+  "enabledByDefault": false
+}
