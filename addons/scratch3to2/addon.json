@@ -2,6 +2,7 @@
   "name": "Scratch 3.0 \u2192 2.0",
   "description": "Makes Scratch 3.0-styled pages look like Scratch 2.0.",
   "tags": ["community", "theme", "featured"],
+  "relatedAddons": ["scratchr2", "editor-stage-left", "editor-buttons-reverse-order", "old-studio-layout"],
   "credits": [
     {
       "name": "Maximouse",

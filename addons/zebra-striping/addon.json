@@ -14,7 +14,7 @@
       "link": "https://scratch.mit.edu/users/thecolaber"
     }
   ],
-  "relatedAddons": ["editor-theme3", "custom-block-text", "custom-block-shape"],
+  "relatedAddons": ["editor-theme3"],
   "tags": ["editor", "codeEditor", "featured"],
   "userscripts": [
     {
