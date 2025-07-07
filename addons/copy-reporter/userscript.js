@@ -92,13 +92,24 @@ export default async function ({ addon, console, msg }) {
 
   if (ScratchBlocks.registry) {
     // new Blockly
+    const onVisualReport = (data) => {
+      reportValue(data.id, data.value);
+    };
+
     const vm = addon.tab.traps.vm;
     for (const existingListener of vm.listeners("VISUAL_REPORT")) {
       vm.removeListener("VISUAL_REPORT", existingListener);
     }
-    vm.on("VISUAL_REPORT", (data) => {
-      reportValue(data.id, data.value);
-    });
+    vm.on("VISUAL_REPORT", onVisualReport);
+
+    const blocksWrapper = document.querySelector("[class*='gui_blocks-wrapper_']");
+    let reactInternalInstance = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
+    while (!reactInternalInstance.stateNode?.ScratchBlocks) {
+      reactInternalInstance = reactInternalInstance.child;
+    }
+    const blocksComponent = reactInternalInstance.stateNode;
+    const Blocks = blocksComponent.constructor;
+    Blocks.prototype.onVisualReport = onVisualReport;
   } else {
     ScratchBlocks.WorkspaceSvg.prototype.reportValue = reportValue;
   }
