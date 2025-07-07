@@ -10,6 +10,7 @@ body:not(.sa-body-editor, .scratchCommentBody),
 }
 body:not(.sa-body-editor, .scratchCommentBody) {
   color: var(--darkWww-page-scratchr2Text, #322f31);
+  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 p {
   color: inherit;
@@ -228,7 +229,8 @@ body:not(.sa-body-editor) .select select > option {
   line-height: 35px;
 }
 #navigation .inner > ul > li.search {
-  margin: 6px 10px;
+  margin: 0;
+  padding: 6px 10px;
   height: auto;
   border-left: 1px solid transparent;
 }
@@ -347,6 +349,11 @@ body:not(.sa-body-editor) .select select > option {
   padding: 0 10px;
   font-weight: bold;
   line-height: 33px;
+}
+#navigation .link > a:hover,
+#navigation .inner > ul > li.right a:hover,
+.account-nav .user-info.open {
+  background-color: var(--darkWww-navbar-scratchr2ItemHover, rgba(0, 0, 0, 0.1));
 }
 #navigation .inner > ul > li.right.join > a:hover {
   background-color: #f9a739;
@@ -551,6 +558,7 @@ body:not(.sa-body-editor) .select select > option {
   display: none;
 }
 .modal-header,
+.report-modal-header,
 .youtube-video-modal-container .cards-modal-header.mint-green,
 .cards-modal-container .cards-modal-header,
 .mod-feedback .feedback-header {
@@ -563,6 +571,7 @@ body:not(.sa-body-editor) .select select > option {
   padding-top: 5px;
 }
 .modal-title,
+.report-content-label,
 .cards-modal-container .cards-modal-header .cards-title {
   color: var(--darkWww-box-scratchr2HeaderText, #554747);
   text-align: left;
