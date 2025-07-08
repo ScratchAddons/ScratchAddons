@@ -9,6 +9,7 @@
   - dynamic enable/disable?
 */
 import { VarTranspiler } from "./transpile.js";
+import { ScratchAddonsProcedureBlocks } from "./scratchaddons_procedures.js";
 
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
@@ -400,7 +401,7 @@ export default async function ({ addon, msg, console }) {
   };
 
   const varTranspiler = new VarTranspiler(vm, ScratchBlocks);
-  varTranspiler.init();
+  varTranspiler.init(ScratchAddonsProcedureBlocks);
 
   let hasSetUpInputButtons = false;
   while (true) {

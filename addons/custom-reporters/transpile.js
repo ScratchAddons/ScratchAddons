@@ -3,7 +3,6 @@
  */
 
 import { getStackBlock, getReturnVar, uid } from "./util.js";
-import { ScratchAddonsProcedureBlocks } from "./scratchaddons_procedures.js";
 
 /**
  * Base transpiler class, to be extended for each transpilation scheme
@@ -13,19 +12,23 @@ class Transpiler {
     this.vm = vm;
   }
 
-  init() {
+  init(blockPackage) {
     if (!this.vm.editingTarget) {
       throw new Error("editingTarget must be ready before Transpiler#init is called");
     }
+
     this.vm.editingTarget.blocks.constructor.prototype.getStackBlock = getStackBlock;
     this.vm.editingTarget.constructor.prototype.getReturnVar = getReturnVar;
+
     this.transpileTargetToSA(this.vm.editingTarget);
+
     const setEditingTarget = this.vm.constructor.prototype.setEditingTarget;
     const transpilerThis = this;
     this.vm.constructor.prototype.setEditingTarget = function (targetId) {
       setEditingTarget.call(this, targetId);
       transpilerThis.transpileTargetToSA(this.editingTarget);
     };
+
     const toJSON = this.vm.constructor.prototype.toJSON;
     this.vm.constructor.prototype.toJSON = function (optTargetId) {
       if (optTargetId) {
@@ -44,34 +47,40 @@ class Transpiler {
       }
       return json;
     };
+
     const registerBlockPackages = this.vm.runtime.constructor.prototype._registerBlockPackages;
     this.vm.runtime.constructor.prototype._registerBlockPackages = function () {
       registerBlockPackages.call(this);
-      const packageObject = new ScratchAddonsProcedureBlocks(this);
+      const packageObject = new blockPackage(this);
       const packagePrimitives = packageObject.getPrimitives();
       for (const op in packagePrimitives) {
         if (Object.prototype.hasOwnProperty.call(packagePrimitives, op)) {
           this._primitives[op] = packagePrimitives[op].bind(packageObject);
         }
       }
-      const eq = this._primitives.operator_equals;
-      this._primitives.operator_equals = function (...args) {
-        console.log("operator_equals!");
-        return eq(...args);
-      };
     };
     this.vm.runtime._registerBlockPackages();
+
     const g = this.vm.runtime.getOpcodeFunction;
-    this.vm.runtime.getOpcodeFunction = function (a) {
-      console.log(a);
-      return g.call(this, a);
+    let functionBind = Function.prototype.bind;
+    Function.prototype.bind = function (thisArg) {
+      const unbound = this;
+      return functionBind.call(function (args, util) {
+        if (typeof util !== "undefined") {
+          console.log(util)
+          blockPackage.polluteThread(util.thread.constructor.prototype);
+        }
+        unbound.call(thisArg, args, util);
+      }, this);
     };
+    this.vm.runtime._registerBlockPackages();
+    Function.prototype.bind = functionBind;
+
     this.vm.editingTarget.blocks.constructor.prototype.getProcedureParamNamesIdsAndDefaults = function (name) {
       const cachedNames = this._cache.procedureParamNames[name];
       if (typeof cachedNames !== "undefined") {
         return cachedNames;
       }
-
       for (const id in this._blocks) {
         if (!Object.prototype.hasOwnProperty.call(this._blocks, id)) continue;
         const block = this._blocks[id];
@@ -89,16 +98,15 @@ class Transpiler {
           return this._cache.procedureParamNames[name];
         }
       }
-
       this._cache.procedureParamNames[name] = null;
       return null;
     };
+
     this.vm.editingTarget.blocks.constructor.prototype.getProcedureDefinition = function (name) {
       const blockID = this._cache.procedureDefinitions[name];
       if (typeof blockID !== "undefined") {
         return blockID;
       }
-
       for (const id in this._blocks) {
         if (!Object.prototype.hasOwnProperty.call(this._blocks, id)) continue;
         const block = this._blocks[id];
@@ -110,7 +118,6 @@ class Transpiler {
           }
         }
       }
-
       this._cache.procedureDefinitions[name] = null;
       return null;
     };
