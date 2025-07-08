@@ -89,16 +89,16 @@ export default async function ({ addon, msg, console }) {
     updateArgumentReporterNames_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateArgumentReporterNames_,
   };
 
-  ScratchBlocks.Blocks['procedures_call_reporter'] = {
+  ScratchBlocks.Blocks["procedures_call_reporter"] = {
     /**
      * Block for calling a procedure with no return value.
      * @this ScratchBlocks.Block
      */
-    init: function() {
+    init: function () {
       this.jsonInit({
-        "extensions": ["colours_more", "output_string", "output_number", "procedure_call_contextmenu"]
+        extensions: ["colours_more", "output_string", "output_number", "procedure_call_contextmenu"],
       });
-      this.procCode_ = '';
+      this.procCode_ = "";
       this.argumentIds_ = [];
       this.warp_ = false;
     },
@@ -118,19 +118,19 @@ export default async function ({ addon, msg, console }) {
 
     // Only exists on the external caller.
     attachShadow_: ScratchBlocks.ScratchBlocks.ProcedureUtils.attachShadow_,
-    buildShadowDom_: ScratchBlocks.ScratchBlocks.ProcedureUtils.buildShadowDom_
+    buildShadowDom_: ScratchBlocks.ScratchBlocks.ProcedureUtils.buildShadowDom_,
   };
 
-  ScratchBlocks.Blocks['procedures_call_boolean'] = {
+  ScratchBlocks.Blocks["procedures_call_boolean"] = {
     /**
      * Block for calling a procedure with no return value.
      * @this ScratchBlocks.Block
      */
-    init: function() {
+    init: function () {
       this.jsonInit({
-        "extensions": ["colours_more", "output_boolean", "procedure_call_contextmenu"]
+        extensions: ["colours_more", "output_boolean", "procedure_call_contextmenu"],
       });
-      this.procCode_ = '';
+      this.procCode_ = "";
       this.argumentIds_ = [];
       this.warp_ = false;
     },
@@ -150,7 +150,7 @@ export default async function ({ addon, msg, console }) {
 
     // Only exists on the external caller.
     attachShadow_: ScratchBlocks.ScratchBlocks.ProcedureUtils.attachShadow_,
-    buildShadowDom_: ScratchBlocks.ScratchBlocks.ProcedureUtils.buildShadowDom_
+    buildShadowDom_: ScratchBlocks.ScratchBlocks.ProcedureUtils.buildShadowDom_,
   };
 
   ScratchBlocks.Blocks["procedures_definition_reporter"] = {
@@ -274,7 +274,11 @@ export default async function ({ addon, msg, console }) {
       myBlocksCat.removeAttribute("custom");
       myBlocksCat.innerHTML = "";
       const myBlocks = [];
-      for (const blockid of blocks._scripts.filter((bid) => blocks._blocks[bid].opcode === "procedures_definition_reporter" || blocks._blocks[bid].opcode === "procedures_definition")) {
+      for (const blockid of blocks._scripts.filter(
+        (bid) =>
+          blocks._blocks[bid].opcode === "procedures_definition_reporter" ||
+          blocks._blocks[bid].opcode === "procedures_definition"
+      )) {
         const blockEl = toolboxXML.createElement("block");
         const definitionBlock = blocks._getCustomBlockInternal(blocks._blocks[blockid]);
         blockEl.setAttribute("type", "procedures_call" + definitionBlock.opcode.substr("procedures_prototype".length));
@@ -284,15 +288,16 @@ export default async function ({ addon, msg, console }) {
         const argids = JSON.parse(mutation.argumentids);
         const argdefaults = JSON.parse(mutation.argumentdefaults);
         for (let i = 0; i < argids.length; i++) {
-          if (argdefaults[i] === "") { // is there a better way to determine if this argument is a string/number?
+          if (argdefaults[i] === "") {
+            // is there a better way to determine if this argument is a string/number?
             blockEl.innerHTML += `<value name="${encodeXML(argids[i])}">
               <shadow type="text">
                 <field name="TEXT"></field>
               </shadow>
-            </value>`
+            </value>`;
           }
         }
-        myBlocks.push(blockEl)
+        myBlocks.push(blockEl);
       }
       myBlocks.sort((a, b) => {
         const procA = a.firstChild.getAttribute("proccode");
@@ -411,8 +416,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-        addon.self.dir
-      }/stack.svg">
+                  addon.self.dir
+                }/stack.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("stack")}</span>
                 </div>
@@ -421,8 +426,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-        addon.self.dir
-      }/reporter.svg">
+                  addon.self.dir
+                }/reporter.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("numortext")}</span>
                 </div>
@@ -431,8 +436,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-        addon.self.dir
-      }/predicate.svg">
+                  addon.self.dir
+                }/predicate.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("boolean")}</span>
                 </div>
