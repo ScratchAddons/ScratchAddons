@@ -55,12 +55,12 @@ export class ScratchAddonsProcedureBlocks {
     Thread.pushProcReporterCalls = function (outerBlock) {
       for (const { block } of Object.values(this.target.blocks.getInputs(outerBlock) ?? {})) {
         const inputBlock = this.target.blocks.getBlock(block);
-        console.log("input opcode: %s", inputBlock.opcode)
+        console.log("input opcode: %s", inputBlock.opcode);
         if (inputBlock.opcode === "procedures_call_reporter" || inputBlock.opcode === "procedures_call_boolean") {
           this.pushStack(block);
           let stackFrame = this.stackFrames.at(-1);
           stackFrame._sa_proper_call = true;
-          console.log('pushed custom reporter call')
+          console.log("pushed custom reporter call");
           continue;
         }
         this.pushProcReporterCalls(block);
@@ -86,12 +86,12 @@ export class ScratchAddonsProcedureBlocks {
       }
       let block = this.target.blocks.getBlock(peeked);
       if (block?.opcode) {
-        console.log(block.opcode)
+        console.log(block.opcode);
       }
       this.pushProcReporterCalls(block);
       stackFrame._sa_inputs_inspected = true;
       return this.stack.at(-1);
-    }
+    };
   }
 
   /**
@@ -115,7 +115,7 @@ export class ScratchAddonsProcedureBlocks {
 
   call(args, util) {
     if (util.thread.peekStackFrame()._sa_proper_call) {
-      console.log('got proper call')
+      console.log("got proper call");
       if (!util.stackFrame.executed) {
         const procedureCode = args.mutation.proccode;
         const paramNamesIdsAndDefaults = util.getProcedureParamNamesIdsAndDefaults(procedureCode);
@@ -144,7 +144,7 @@ export class ScratchAddonsProcedureBlocks {
         util.startProcedure(procedureCode);
       }
     } else {
-      console.log('got non-proper call')
+      console.log("got non-proper call");
       const target = util.target;
       const proccode = args.mutation.proccode;
       const variableInfo = target.getReturnVar(proccode);
