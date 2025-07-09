@@ -61,20 +61,18 @@ class Transpiler {
     };
     this.vm.runtime._registerBlockPackages();
 
-    const g = this.vm.runtime.getOpcodeFunction;
-    let functionBind = Function.prototype.bind;
-    Function.prototype.bind = function (thisArg) {
-      const unbound = this;
-      return functionBind.call(function (args, util) {
-        if (typeof util !== "undefined") {
-          console.log(util)
-          blockPackage.polluteThread(util.thread.constructor.prototype);
-        }
-        unbound.call(thisArg, args, util);
-      }, this);
-    };
-    this.vm.runtime._registerBlockPackages();
-    Function.prototype.bind = functionBind;
+    let runtimePushThread = this.vm.runtime.constructor.prototype._pushThread;
+    this.vm.runtime.constructor.prototype._pushThread = function(id, target, ops) {
+      let thread = runtimePushThread.call(this, id, target, ops);
+      blockPackage.polluteThread(thread.constructor.prototype);
+      return thread;
+    }
+
+    // const g = this.vm.runtime.getOpcodeFunction;
+    // this.vm.runtime.getOpcodeFunction = function (a) {
+    //   console.log(a);
+    //   return g.call(this, a);
+    // };
 
     this.vm.editingTarget.blocks.constructor.prototype.getProcedureParamNamesIdsAndDefaults = function (name) {
       const cachedNames = this._cache.procedureParamNames[name];

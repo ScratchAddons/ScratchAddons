@@ -18,6 +18,7 @@ export class ScratchAddonsProcedureBlocks {
     StackFrame.reset = function () {
       oldReset.call(this);
       this._sa_proper_call = false;
+      this._sa_inputs_inspected = false;
     };
   }
 
@@ -54,23 +55,43 @@ export class ScratchAddonsProcedureBlocks {
     Thread.pushProcReporterCalls = function (outerBlock) {
       for (const { block } of Object.values(this.target.blocks.getInputs(outerBlock) ?? {})) {
         const inputBlock = this.target.blocks.getBlock(block);
+        console.log("input opcode: %s", inputBlock.opcode)
         if (inputBlock.opcode === "procedures_call_reporter" || inputBlock.opcode === "procedures_call_boolean") {
           this.pushStack(block);
           let stackFrame = this.stackFrames.at(-1);
           stackFrame._sa_proper_call = true;
+          console.log('pushed custom reporter call')
           continue;
         }
         this.pushProcReporterCalls(block);
       }
     };
 
-    Thread.goToNextBlock = function () {
-      const nextBlockId = this.target.blocks.getNextBlock(this.peekStack());
-      this.reuseStackForNextBlock(nextBlockId);
-      ScratchAddonsProcedureBlocks.polluteStackFrame(this.stackFrames.at(-1).constructor.prototype);
-      let nextBlock = this.target.blocks.getBlock(nextBlockId);
-      this.pushProcReporterCalls(nextBlock);
-    };
+    // Thread.goToNextBlock = function () {
+    //   const nextBlockId = this.target.blocks.getNextBlock(this.peekStack());
+    //   this.reuseStackForNextBlock(nextBlockId);
+    //   ScratchAddonsProcedureBlocks.polluteStackFrame(this.stackFrames.at(-1).constructor.prototype);
+    //   let nextBlock = this.target.blocks.getBlock(nextBlockId);
+    //   this.pushProcReporterCalls(nextBlock);
+    // };
+    Thread.peekStack = function () {
+      const peeked = this.stack.length > 0 ? this.stack.at(-1) : null;
+      if (peeked === null) {
+        return null;
+      }
+      const stackFrame = this.peekStackFrame();
+      ScratchAddonsProcedureBlocks.polluteStackFrame(stackFrame.constructor.prototype);
+      if (stackFrame._sa_inputs_inspected) {
+        return peeked;
+      }
+      let block = this.target.blocks.getBlock(peeked);
+      if (block?.opcode) {
+        console.log(block.opcode)
+      }
+      this.pushProcReporterCalls(block);
+      stackFrame._sa_inputs_inspected = true;
+      return this.stack.at(-1);
+    }
   }
 
   /**
@@ -93,7 +114,8 @@ export class ScratchAddonsProcedureBlocks {
   }
 
   call(args, util) {
-    if (true || util.thread.peekStackFrame()._sa_proper_call) {
+    if (util.thread.peekStackFrame()._sa_proper_call) {
+      console.log('got proper call')
       if (!util.stackFrame.executed) {
         const procedureCode = args.mutation.proccode;
         const paramNamesIdsAndDefaults = util.getProcedureParamNamesIdsAndDefaults(procedureCode);
@@ -122,6 +144,7 @@ export class ScratchAddonsProcedureBlocks {
         util.startProcedure(procedureCode);
       }
     } else {
+      console.log('got non-proper call')
       const target = util.target;
       const proccode = args.mutation.proccode;
       const variableInfo = target.getReturnVar(proccode);
