@@ -2,7 +2,7 @@ name: Sync strings with Transifex
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * Sun"
 jobs:
   transifex:
     name: Transifex
