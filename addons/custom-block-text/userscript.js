@@ -54,8 +54,11 @@ export default async function ({ addon, console }) {
   document.head.appendChild(textShadowCss);
 
   const updateBlockly = () => {
-    blocklyInstance.Field.cacheWidths_ = {}; // Clear text width cache
-    // If font size has changed, middle click popup needs to clear it's cache too
+    if (!blocklyInstance.registry) {
+      // old Blockly
+      blocklyInstance.Field.cacheWidths_ = {}; // Clear text width cache
+    }
+    // If font size has changed, middle click popup needs to clear its cache too
     clearTextWidthCache();
 
     updateAllBlocks(addon.tab);
