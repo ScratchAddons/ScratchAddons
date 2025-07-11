@@ -47,8 +47,14 @@ export default async function ({ addon, console }) {
   const textShadowCss = createStyle();
   textShadowCss.textContent = `
     .blocklyDraggable > .blocklyText,
-    .blocklyDraggable > g > text {
+    .blocklyDraggable > g > text,
+    .scratch-renderer.default-theme .blocklyEditableField > .blocklyDropdownText,
+    .scratch-renderer.high-contrast-theme .blocklyEditableField > .blocklyDropdownText {
       text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+    }
+    .scratch-renderer.default-theme .blocklyEditableField > text,
+    .scratch-renderer.high-contrast-theme .blocklyEditableField > text {
+      text-shadow: none;
     }`;
   textShadowCss.disabled = true;
   document.head.appendChild(textShadowCss);
