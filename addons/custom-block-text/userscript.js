@@ -34,7 +34,11 @@ export default async function ({ addon, console }) {
   const boldCss = createStyle();
   boldCss.textContent = `
     .blocklyText,
-    .blocklyHtmlInput {
+    .blocklyHtmlInput,
+    .scratch-renderer.default-theme .blocklyText,
+    .scratch-renderer.default-theme .blocklyHtmlInput,
+    .scratch-renderer.high-contrast-theme .blocklyText,
+    .scratch-renderer.high-contrast-theme .blocklyHtmlInput {
       font-weight: bold;
     }`;
   boldCss.disabled = true;
