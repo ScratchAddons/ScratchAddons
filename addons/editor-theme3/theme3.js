@@ -618,10 +618,10 @@ export default async function ({ addon, console, msg }) {
 
   if (Blockly.registry) {
     // new Blockly
-    const oldFieldNUmberShowNumPad = FieldNumber.prototype.showNumPad_;
+    const oldFieldNumberShowNumPad = FieldNumber.prototype.showNumPad_;
     FieldNumber.prototype.showNumPad_ = function () {
       // Number pad
-      oldFieldNUmberShowNumPad.call(this);
+      oldFieldNumberShowNumPad.call(this);
       Blockly.DropDownDiv.setColour(
         this.sourceBlock_.getParent().getColour(),
         this.sourceBlock_.getParent().getColourTertiary()
