@@ -18,3 +18,8 @@
   display: flex;
   width: 100%;
 }
+
+/* Disable character-limit's animation which can look weird with the toggle */
+:is(.description-block:first-child, .sa-project-tabs-wrapper) .desc-limit.limit-hidden {
+  animation: none !important;
+}

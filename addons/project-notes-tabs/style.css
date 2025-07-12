@@ -1,4 +1,4 @@
-/* preview-project-description compatibility */
+/* Compatibility with preview-project-description & character-limit */
 .sa-project-tabs-wrapper {
   margin: 0;
   width: 100%;
@@ -55,4 +55,9 @@ body.sa-project-tabs-on .preview .project-description {
 body.sa-project-tabs-on .project-textlabel {
   /* Hide labels with CSS instead of removing them with JS */
   display: none;
+}
+
+/* character-limit addon */
+.desc-limit {
+  align-self: center;
 }

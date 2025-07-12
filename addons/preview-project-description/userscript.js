@@ -95,6 +95,9 @@ export default async function ({ addon, console, msg }) {
   }
 
   async function enablePreview() {
+    // character-limit addon: Remove all character limit displays
+    document.querySelectorAll(".desc-limit").forEach((element) => element.remove());
+
     if (document.body.classList.contains("sa-project-tabs-on")) {
       // Disable the project-notes-tabs addon if it's enabled.
       disableTabs();
