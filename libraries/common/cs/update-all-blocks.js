@@ -21,9 +21,13 @@ export async function updateAllBlocks(
       if (updateFlyout) {
         if (blockly.registry) {
           // new Blockly: can't use clearWorkspaceAndLoadFromXml() here because it breaks the flyout
+          // Events have to be reenabled here because flyout.show() creates new blocks with new IDs
+          // and the VM needs to be notified about that.
+          blockly.Events.enable();
           flyout.setRecyclingEnabled(false);
           flyout.show(toolbox.getInitialFlyoutContents());
           flyout.setRecyclingEnabled(true);
+          blockly.Events.disable();
         } else {
           const flyoutWorkspace = flyout.getWorkspace();
           blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
