@@ -10,7 +10,7 @@ Be sure to follow our [code of conduct](https://github.com/ScratchAddons/Scratch
 
 Found a bug? Have an idea? You can [open an issue](https://github.com/ScratchAddons/ScratchAddons/issues/new/choose) to report bugs and send feedback! But first, be sure to [search for existing issues](https://github.com/ScratchAddons/ScratchAddons/issues). If there are no similar issues, you can create a new one. You can also open a [discussion](https://github.com/ScratchAddons/ScratchAddons/discussions) to suggest ideas or ask questions. We will take a look at it.
 
-We also have a [feedback form](https://scratchaddons.com/feedback) on our website, which you can access by clicking "Send Feedback" in Scratch Addons' full screen settings page.
+We also have a [feedback form](https://scratchaddons.com/feedback) on our website, which you can access by clicking "Send Feedback" in Scratch Addons' settings page.
 
 ## Contributing code
 
