@@ -416,13 +416,18 @@ export default class Tab extends Listenable {
     const sharedSpaces = {
       stageHeader: {
         // Non-fullscreen stage header only
-        element: () => q("[class^='stage-header_stage-size-row']"),
+        element: () =>
+          q("[class*='stage-header_setThumbnailButton_']")
+            ? q("[class*='stage-header_rightSection_']")
+            : q("[class*='stage-header_stage-size-row_']"),
         from: () => [],
         until: () => [
           // Small/big stage buttons (for editor mode)
-          q("[class^='stage-header_stage-size-toggle-group']"),
+          q("[class*='stage-header_stage-size-toggle-group_']"),
           // Full screen icon (for player mode)
-          q("[class^='stage-header_stage-size-row']").lastChild,
+          q("[class*='stage-header_setThumbnailButton_']")
+            ? q("[class*='stage-header_rightSection_']").lastChild
+            : q("[class*='stage-header_stage-size-row_']").lastChild,
         ],
       },
       fullscreenStageHeader: {
