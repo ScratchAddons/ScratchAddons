@@ -116,12 +116,13 @@ p.sa-animated-thumb-uploaded-thumb {
 .sa-animated-thumb-tooltip {
   transform: unset;
   top: 100%;
-  left: -75%;
-  right: -75%;
+  left: -125px;
+  right: -125px;
   margin-left: 0;
-  min-width: 150%;
+  min-width: 250px;
   height: auto;
-  line-height: 1rem;
+  line-height: normal;
+  text-align: center;
 }
 
 [dir="ltr"] [class*="stage-header_setThumbnailButton_"].sa-has-dropdown {
@@ -190,4 +191,14 @@ p.sa-animated-thumb-uploaded-thumb {
   margin-inline-end: 0.5rem;
   width: 20px;
   height: 20px;
+}
+
+.sa-set-thumbnail-info-box {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
+  border-radius: 0.5rem;
+}
+
+.sa-set-thumbnail-info-box-title {
+  font-weight: bold;
 }
