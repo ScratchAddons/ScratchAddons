@@ -135,6 +135,7 @@ export default async function ({ addon, console, msg }) {
             thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
             content.classList.add("sa-animated-thumb-successful");
             saveConfig(projectId, stopOverwritingCheckbox.checked);
+            if (skipFirstStep) open();
           },
           (status) => {
             modalResultArea.classList.remove("hidden");
@@ -149,6 +150,7 @@ export default async function ({ addon, console, msg }) {
               default:
                 modalResultArea.textContent = msg("error");
             }
+            if (skipFirstStep) open();
           }
         )
         .finally(() => {
@@ -157,7 +159,6 @@ export default async function ({ addon, console, msg }) {
           uploadFromFileButton.classList.remove("loading");
           uploadFromStageButton.removeAttribute("disabled");
           uploadFromStageButton.classList.remove("loading");
-          if (skipFirstStep) open();
         });
 
     const upload = () => {
