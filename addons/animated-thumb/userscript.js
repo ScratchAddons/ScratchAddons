@@ -190,16 +190,20 @@ export default async function ({ addon, console, msg }) {
     });
   };
 
-  addon.tab.addEventListener("urlChange", () => {
+  const onUrlChange = () => {
     projectId = location.href.match(/\d+/)?.[0] || projectId;
     if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
-  });
+  };
+  addon.tab.addEventListener("urlChange", onUrlChange);
 
   await addon.tab.waitForElement(".guiPlayer [class*='stage-header_stage-size-row_']", {
     reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
   });
   if (document.querySelector("[class*='stage-header_setThumbnailButton_']")) {
     // Scratch update
+
+    blockOverwriting(false);
+    addon.tab.removeEventListener("urlChange", onUrlChange);
 
     let uploadButton = null;
     let tooltip = null;
