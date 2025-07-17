@@ -169,6 +169,7 @@ body:not(.sa-body-editor) input.formik-radio-input,
 .wedo .project-card,
 .transfer-host-modal .cancel-button,
 .transfer-host-modal .transfer-password-input,
+.update-thumbnail-info-modal .update-thumbnail-info-modal-inner,
 .comments-container .sa-emoji-picker,
 .studio-compose-container .sa-emoji-picker {
   background-color: var(--darkWww-box);
@@ -198,6 +199,7 @@ body:not(.sa-body-editor) .button.white,
   border-color: transparent !important;
   color: var(--darkWww-box-text);
 }
+body:not(.sa-body-editor) [class*="stage-header_rightSection_"],
 .expect .keynote .card {
   background-color: transparent;
 }

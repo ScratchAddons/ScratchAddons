@@ -551,6 +551,7 @@ body:not(.sa-body-editor) .select select > option {
   display: none;
 }
 .modal-header,
+.update-thumbnail-info-modal .update-thumbnail-info-modal-title,
 .youtube-video-modal-container .cards-modal-header.mint-green,
 .cards-modal-container .cards-modal-header {
   padding: 5px 15px;
@@ -562,6 +563,7 @@ body:not(.sa-body-editor) .select select > option {
   padding-top: 5px;
 }
 .modal-title,
+.update-thumbnail-info-modal .update-thumbnail-info-modal-title,
 .cards-modal-container .cards-modal-header .cards-title {
   color: var(--darkWww-box-scratchr2HeaderText, #554747);
   text-align: left;
