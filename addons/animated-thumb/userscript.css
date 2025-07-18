@@ -172,11 +172,16 @@ p.sa-animated-thumb-uploaded-thumb {
   position: absolute;
   z-index: 50; /* above monitors */
   top: calc(100% + 3px);
-  right: 0;
   width: max-content;
   padding: 0.5rem 0.75rem;
   border: 1px solid #3373cc;
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+}
+[dir="ltr"] [class*="stage-header_rightSection_"] .sa-set-thumbnail-upload-button {
+  right: 0;
+}
+[dir="rtl"] [class*="stage-header_rightSection_"] .sa-set-thumbnail-upload-button {
+  left: 0;
 }
 
 [class*="stage-header_rightSection_"] .sa-set-thumbnail-upload-button:hover {
