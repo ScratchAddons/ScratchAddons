@@ -116,10 +116,10 @@ p.sa-animated-thumb-uploaded-thumb {
 .sa-animated-thumb-tooltip {
   transform: unset;
   top: 100%;
-  left: -125px;
-  right: -125px;
+  left: auto;
+  right: -136px;
   margin-left: 0;
-  min-width: 250px;
+  width: 300px;
   height: auto;
   line-height: normal;
   text-align: center;

@@ -72,3 +72,8 @@
   left: auto;
   right: 0;
 }
+
+[dir="rtl"] .sa-animated-thumb-tooltip {
+  right: auto;
+  left: -136px;
+}
