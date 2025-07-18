@@ -227,7 +227,10 @@ export default async function ({ addon, console, msg }) {
         title: msg("added-by"),
       });
       uploadButton.insertBefore(
-        Object.assign(document.createElement("img"), { src: addon.self.dir + "/upload.svg" }),
+        Object.assign(document.createElement("img"), {
+          // src: addon.self.dir + "/upload.svg"
+          src: addon.self.dir + "../../../images/cs/icon.svg",
+        }),
         uploadButton.firstChild
       );
       uploadButton.addEventListener("click", (e) => {
