@@ -20,6 +20,7 @@ export default async function ({ addon }) {
   while (true) {
     menuItem = await addon.tab.waitForElement(".account-nav .dropdown > :first-child > :first-child", {
       markAsSeen: true,
+      reduxCondition: (state) => state?.scratchGui?.mode?.isPlayerOnly ?? true,
     });
     change();
   }
