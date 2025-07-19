@@ -4,7 +4,6 @@ import Auth from "./Auth.js";
 
 /**
  * An addon that loads as a popup.
- * @extends Addon
  * @property {Popup} popup
  */
 export default class PopupAddon extends Addon {
@@ -15,9 +14,7 @@ export default class PopupAddon extends Addon {
     this.popup = new Popup(this);
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get _path() {
     return chrome.runtime.getURL("");
   }

@@ -1,5 +1,6 @@
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 

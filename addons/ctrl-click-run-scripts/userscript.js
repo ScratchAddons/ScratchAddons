@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   await new Promise((resolve, reject) => {

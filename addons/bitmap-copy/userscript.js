@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console }) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
   addon.tab.redux.initialize();

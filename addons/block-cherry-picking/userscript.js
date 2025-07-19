@@ -1,5 +1,6 @@
 import * as sharedModule from "../block-duplicate/module.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const update = () => {
     sharedModule.setCherryPicking(!addon.self.disabled, addon.settings.get("invertDrag"));

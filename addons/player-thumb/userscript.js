@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   if (addon.tab.editorMode === "editor") return;
 

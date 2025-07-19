@@ -1,5 +1,6 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   await new Promise((resolve) => {
     if (addon.tab.traps.vm.editingTarget) return resolve();

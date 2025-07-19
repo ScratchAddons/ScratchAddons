@@ -1,6 +1,5 @@
 /**
  * Wrapper class for EventTarget.
- * @extends EventTarget
  */
 export default class Listenable extends EventTarget {
   constructor(...args) {
@@ -10,9 +9,7 @@ export default class Listenable extends EventTarget {
     }
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   dispatchEvent(...args) {
     return super.dispatchEvent(...args);
   }

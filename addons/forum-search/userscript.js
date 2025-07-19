@@ -245,6 +245,7 @@ function appendSearch(box, query, filter, page, term, msg) {
     });
 }
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   // create the search bar
   let search = document.createElement("form");

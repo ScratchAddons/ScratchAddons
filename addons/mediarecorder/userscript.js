@@ -1,5 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console, msg }) => {
   const MAX_RECORD_TIME = 600; // seconds
   const DEFAULT_SETTINGS = {

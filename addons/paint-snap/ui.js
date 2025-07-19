@@ -1,6 +1,6 @@
 import { setSnapFrom, setSnapTo, snapOn, snapFrom, snapTo, toggle, threshold, setThreshold } from "./state.js";
 
-/** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */
+/** @param {import("addonAPI").AddonAPI} */
 export function initUI({ addon, msg }) {
   const createGroup = () => {
     const el = document.createElement("div");
