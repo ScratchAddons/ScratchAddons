@@ -531,7 +531,6 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
 .subactions .share-date {
   margin: 0;
   padding: 5px 15px;
-  border-right: 1px solid var(--darkWww-border-15, #bbb);
   color: var(--darkWww-gray-scratchr2BlackText, black);
   font-size: 13px;
   line-height: 30px;
@@ -554,8 +553,12 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   font-size: 13px;
   font-weight: normal;
 }
+.subactions .action-buttons > .action-button:first-child,
+.subactions .action-buttons > :first-child > .action-button {
+  border-left: 1px solid var(--darkWww-border-15, #bbb);
+}
 .subactions .action-buttons > .action-button:last-child {
-  border: none;
+  border-right: none;
 }
 .subactions .action-buttons .action-button.studio-button::before,
 .subactions .action-buttons .action-button.copy-link-button::before,

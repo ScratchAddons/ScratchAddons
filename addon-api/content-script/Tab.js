@@ -15,6 +15,22 @@ const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
 
+const PROJECT_ACTIONS_CSS = `
+  @media (min-width: 768px) {
+    .preview > .inner > .preview-row:nth-child(3) {
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      margin-right: auto;
+    }
+
+    .subactions {
+      display: contents;
+    }
+  }`;
+
 /**
  * APIs specific to userscripts.
  * @extends Listenable
@@ -456,12 +472,32 @@ export default class Tab extends Listenable {
         until: () => [],
       },
       beforeProjectActionButtons: {
-        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        element: () => {
+          if (!q("#sa-project-actions-css")) {
+            document.head.appendChild(
+              Object.assign(document.createElement("style"), {
+                id: "sa-project-actions-css",
+                textContent: PROJECT_ACTIONS_CSS,
+              })
+            );
+          }
+          return q(".flex-row.subactions > .flex-row.action-buttons");
+        },
         from: () => [],
         until: () => [q(".report-button"), q(".action-buttons > div")],
       },
       afterCopyLinkButton: {
-        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        element: () => {
+          if (!q("#sa-project-actions-css")) {
+            document.head.appendChild(
+              Object.assign(document.createElement("style"), {
+                id: "sa-project-actions-css",
+                textContent: PROJECT_ACTIONS_CSS,
+              })
+            );
+          }
+          return q(".flex-row.subactions > .flex-row.action-buttons");
+        },
         from: () => [q(".copy-link-button")],
         until: () => [],
       },
