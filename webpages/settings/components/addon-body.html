@@ -18,7 +18,7 @@
       <div class="addon-check">
         <div
           v-show="expanded && addon._enabled"
-          v-if="addon.presets"
+          v-if="addon.presets && !isIframe"
           class="addon-buttons"
           title="{{ msg('export') }}"
           @click="exportPreset"
@@ -27,7 +27,7 @@
         </div>
         <div
           v-show="expanded && addon._enabled"
-          v-if="addon.presets"
+          v-if="addon.presets && !isIframe"
           class="addon-buttons"
           title="{{ msg('import') }}"
           @click="importPreset"
