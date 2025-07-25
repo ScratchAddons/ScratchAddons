@@ -1517,8 +1517,8 @@
       "description": "The colors used by Scratch Lab",
       "values": {
         "page": "#e5f0ff",
-        "primary": "#855cd6",
-        "highlightText": "#855cd6",
+        "primary": "#4d97ff",
+        "highlightText": "#4d97ff",
         "menuBar": "#3cb371",
         "popup": "#4d97ffe6",
         "activeTab": "#ffffff",
