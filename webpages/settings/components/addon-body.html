@@ -18,6 +18,24 @@
       <div class="addon-check">
         <div
           v-show="expanded && addon._enabled"
+          v-if="addon.presets"
+          class="addon-buttons"
+          title="{{ msg('export') }}"
+          @click="exportPreset"
+        >
+          <img src="../../images/icons/save.svg" class="icon-type" draggable="false" />
+        </div>
+        <div
+          v-show="expanded && addon._enabled"
+          v-if="addon.presets"
+          class="addon-buttons"
+          title="{{ msg('import') }}"
+          @click="importPreset"
+        >
+          <img src="../../images/icons/upload.svg" class="icon-type" draggable="false" />
+        </div>
+        <div
+          v-show="expanded && addon._enabled"
           v-if="addon.settings"
           class="addon-buttons"
           title="{{ msg('resetToDefault') }}"
