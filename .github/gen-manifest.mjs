@@ -3,7 +3,7 @@ const PERMISSIONS_IGNORED_IN_FIREFOX = [];
 // These host permissions below should be removed during production manifest gen.
 const PERMISSIONS_ALWAYS_IGNORED = [
   "scripting",
-  "https://scratchfoundation.github.io/scratch-gui/*",
+  "https://scratchfoundation.github.io/scratch-editor/*",
   "https://scratchfoundation.github.io/*",
   "http://localhost:8333/*",
   "http://localhost:8601/*",
