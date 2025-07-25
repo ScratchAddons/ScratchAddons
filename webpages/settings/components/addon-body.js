@@ -91,11 +91,11 @@ export default async function ({ template }) {
         inputElem.click();
       },
       exportPreset() {
-        const preset = Object.assign({
+        const preset = {
           addonId: this.addon._addonId,
           id: "custom-preset",
           values: this.addonSettings,
-        });
+        };
         const blob = new Blob([JSON.stringify(preset)], { type: "application/json" });
         const name = this.addon.name.replaceAll(" ", "-").toLowerCase();
         downloadBlob(`${name}.json`, blob);
