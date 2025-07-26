@@ -17,122 +17,29 @@
     {
       "name": "Change on regular key press",
       "id": "regular",
-      "type": "select",
-      "default": "one",
-      "potentialValues": [
-        {
-          "id": "none",
-          "name": "None"
-        },
-        {
-          "id": "hundredth",
-          "name": "0.01"
-        },
-        {
-          "id": "tenth",
-          "name": "0.1"
-        },
-        {
-          "id": "one",
-          "name": "1"
-        },
-        {
-          "id": "ten",
-          "name": "10"
-        }
-      ],
-      "if": { "settings": { "useCustom": false } }
-    },
-    {
-      "name": "Change on regular key press",
-      "id": "regularCustom",
-      "type": "untranslated",
-      "default": "1",
-      "max": 8,
-      "if": { "settings": { "useCustom": true } }
+      "type": "number",
+      "default": 1,
+      "min": 0,
+      "max": 9999999999.999998,
+      "step": "any"
     },
     {
       "name": "Change on Shift+Key",
       "id": "shift",
-      "type": "select",
-      "default": "ten",
-      "potentialValues": [
-        {
-          "id": "none",
-          "name": "None"
-        },
-        {
-          "id": "hundredth",
-          "name": "0.01"
-        },
-        {
-          "id": "tenth",
-          "name": "0.1"
-        },
-        {
-          "id": "one",
-          "name": "1"
-        },
-        {
-          "id": "ten",
-          "name": "10"
-        }
-      ],
-      "if": { "settings": { "useCustom": false } }
-    },
-
-    {
-      "name": "Change on Shift+Key",
-      "id": "shiftCustom",
-      "type": "untranslated",
-      "default": "10",
-      "max": 8,
-      "if": { "settings": { "useCustom": true } }
+      "type": "number",
+      "default": 10,
+      "min": 0,
+      "max": 9999999999.999998,
+      "step": "any"
     },
     {
       "name": "Change on Alt+Key",
       "id": "alt",
-      "type": "select",
-      "default": "tenth",
-      "potentialValues": [
-        {
-          "id": "none",
-          "name": "None"
-        },
-        {
-          "id": "hundredth",
-          "name": "0.01"
-        },
-        {
-          "id": "tenth",
-          "name": "0.1"
-        },
-        {
-          "id": "one",
-          "name": "1"
-        },
-        {
-          "id": "ten",
-          "name": "10"
-        }
-      ],
-      "if": { "settings": { "useCustom": false } }
-    },
-
-    {
-      "name": "Change on Alt+Key",
-      "id": "altCustom",
-      "type": "untranslated",
-      "default": "0.1",
-      "max": 8,
-      "if": { "settings": { "useCustom": true } }
-    },
-
-    {
-      "name": "Use custom values",
-      "id": "useCustom",
-      "type": "boolean",
-      "default": false
+      "type": "number",
+      "default": 0.1,
+      "min": 0,
+      "max": 9999999999.999998,
+      "step": "any"
     }
   ],
   "credits": [
@@ -142,6 +49,10 @@
     },
     {
       "name": "World_Languages"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "dynamicDisable": true,
