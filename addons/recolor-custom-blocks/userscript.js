@@ -74,7 +74,7 @@ export default async function ({ addon, msg, console }) {
   }
 
   const setBlockColor = (block, colors, isEdited) => {
-    debugger;
+
 
     // If the color is already set to colors, don't do it again
     if(blockHasColor(block, colors)) {
