@@ -74,13 +74,14 @@ export default async function ({ addon, msg, console }) {
   }
 
   const setBlockColor = (block, colors, isEdited) => {
+    debugger;
+
     // If the color is already set to colors, don't do it again
     if(blockHasColor(block, colors)) {
       return
     }
     block.setColourFromRawValues_(colors.primary, colors.secondary, colors.tertiary, colors.quaternary);
     block.recolorCustomBlocksIsEdited = isEdited;
-
     if(block.type === "procedures_declaration") {
       // In the custom block editing screen, we need to recolor text input's rings and all child blocks
       block.inputList.forEach((input) => {
@@ -164,8 +165,8 @@ export default async function ({ addon, msg, console }) {
   const handleBlock = (block) => {
     const type = block.type ?? "";
     // We want to only color custom procedures, and not their arguments.
-    // Custom procedures dragged from the flyout have type "text", so blacklisting blocks is easier
-    if(block.getCategory() !== null || type.startsWith("argument")) {
+    // Custom procedures dragged from the flyout have type "text", so we check if it's parent has custom colors (meaning it would have to be an argument)
+    if(block.getCategory() !== null || type.startsWith("argument") || block.getParent()?.recolorCustomBlocksIsEdited === true) {
       return;
     }
     const textContent = getTextContent(block);
