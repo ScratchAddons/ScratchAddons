@@ -1,0 +1,20 @@
+{
+  "name": "Recolor Custom Blocks",
+  "description": "Change the color of custom blocks by adding a block category (such as motion, events, etc) followed by a colon (:) ",
+  "credits": [
+    {
+      "name": "FlamedDogo99",
+      "link": "https://github.com/FlamedDogo99"
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.43.0"
+}
