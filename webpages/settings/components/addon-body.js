@@ -75,8 +75,11 @@ export default async function ({ template }) {
             let preset;
             try {
               preset = JSON.parse(text);
+              if (!preset.addonId) throw "Missing addon ID";
               if (preset.addonId !== this.addon._addonId) {
-                throw "Incorrect or missing addon ID";
+                console.warn(`Incorrect addon ID: ${preset.addonId}`)
+                alert(this.msg("incorrectAddonImport", this.$root.manifestsById[preset.addonId].name));
+                return;
               }
             } catch (e) {
               console.warn(`Error importing settings file for ${this.addon._addonId}:`, e);
