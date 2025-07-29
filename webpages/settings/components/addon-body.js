@@ -1,3 +1,4 @@
+import downloadBlob from "../../../libraries/common/cs/download-blob.js";
 const isIframe = window.parent !== window;
 
 export default async function ({ template }) {
@@ -11,6 +12,7 @@ export default async function ({ template }) {
         everExpanded: this.getDefaultExpanded(),
         hoveredSettingId: null,
         highlightedSettingId: null,
+        isDropdownOpen: false,
       };
     },
     computed: {
@@ -53,6 +55,57 @@ export default async function ({ template }) {
           this.$root.updateSettings(this.addon);
           console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
         }
+      },
+      importPreset() {
+        const inputElem = Object.assign(document.createElement("input"), {
+          hidden: true,
+          type: "file",
+          accept: "application/json",
+        });
+        inputElem.addEventListener(
+          "change",
+          async (e) => {
+            const text = await inputElem.files[0].text();
+            inputElem.remove();
+            let preset;
+            try {
+              preset = JSON.parse(text);
+              if (!preset.addonId) throw "Missing addon ID";
+              if (preset.addonId !== this.addon._addonId) {
+                console.warn(`Incorrect addon ID: ${preset.addonId}`);
+                alert(this.msg("incorrectAddonImport", this.$root.manifestsById[preset.addonId].name));
+                return;
+              }
+            } catch (e) {
+              console.warn(`Error importing settings file for ${this.addon._addonId}:`, e);
+              alert(chrome.i18n.getMessage("importFailed"));
+              return;
+            }
+            this.loadPreset(preset);
+          },
+          { once: true }
+        );
+        inputElem.addEventListener(
+          "cancel",
+          () => {
+            inputElem.remove();
+          },
+          { once: true }
+        );
+        document.body.appendChild(inputElem);
+        inputElem.click();
+        this.toggleDropdown();
+      },
+      exportPreset() {
+        const preset = {
+          addonId: this.addon._addonId,
+          id: "custom-preset",
+          values: this.addonSettings,
+        };
+        const blob = new Blob([JSON.stringify(preset)], { type: "application/json" });
+        const name = this.addon.name.replaceAll(" ", "-").toLowerCase();
+        downloadBlob(`${name}.json`, blob);
+        this.toggleDropdown();
       },
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
@@ -124,6 +177,13 @@ export default async function ({ template }) {
         this.$root.openRelatedAddons(this.addon);
         this.$root.blinkAddon(clickedAddon._addonId);
       },
+      toggleDropdown() {
+        this.isDropdownOpen = !this.isDropdownOpen;
+        this.$root.closePickers({ isTrusted: true }, null, {
+          callCloseDropdowns: false,
+        });
+        this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+      },
     },
     watch: {
       groupId(newValue) {
@@ -138,7 +198,17 @@ export default async function ({ template }) {
         if (newValue === true) this.everExpanded = true;
       },
     },
+    events: {
+      closeResetDropdowns(...params) {
+        return this.$root.closeResetDropdowns(...params);
+      },
+    },
     ready() {
+      this.$root.$on("close-reset-dropdowns", (except) => {
+        if (this.isDropdownOpen && this !== except) {
+          this.isDropdownOpen = false;
+        }
+      });
       const onHashChange = () => {
         if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
           this.expanded = true;

@@ -1,9 +1,9 @@
 <template>
-  <div :class="{'setting-dropdown': true, open: isOpen}">
+  <div class="setting-dropdown dropdown-parent" :class="{open: isOpen}">
     <button type="button" class="large-button clear-button" :disabled="!enabled" @click="toggle" :title="msg('reset')">
       <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
     </button>
-    <ul>
+    <ul class="dropdown-list">
       <li @click="resetToDefault">
         <span v-if="setting.type === 'color'" class="color-preview"
           ><span :style="{backgroundColor: setting.default}"></span

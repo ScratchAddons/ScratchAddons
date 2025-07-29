@@ -334,6 +334,9 @@
   "importFailed": {
     "message": "The settings file is invalid. Please try again."
   },
+  "incorrectAddonImport": {
+    "message": "The selected file is for the \"$1\" addon."
+  },
   "confirmImport": {
     "message": "Confirm"
   },
