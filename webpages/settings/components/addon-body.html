@@ -19,7 +19,7 @@
         <div
           v-show="expanded && addon._enabled"
           v-if="addon.settings"
-          class="addon-split-button setting-table-dropdown"
+          class="addon-split-button dropdown-parent"
           :class="{open: isDropdownOpen}"
         >
           <button
@@ -33,7 +33,7 @@
             <button class="addon-buttons addon-split-button-dropdown" @click="toggleDropdown">
               <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
             </button>
-            <ul>
+            <ul class="dropdown-list">
               <li @click="importPreset">{{ msg('import') }}</li>
               <li @click="exportPreset">{{ msg('export') }}</li>
             </ul>
@@ -267,6 +267,10 @@
   [disabled] {
     cursor: initial !important;
   }
+  .addon-split-button {
+    align-self: flex-start;
+    display: flex;
+  }
   .addon-split-button-button {
     margin: 0;
     border-radius: 4px 0 0 4px;
@@ -285,6 +289,50 @@
   .addon-split-button.open .addon-split-button-dropdown {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+  }
+
+  .dropdown-parent {
+    position: relative;
+  }
+  .dropdown-parent.open .dropdown-list {
+    display: block;
+  }
+  .dropdown-list {
+    position: absolute;
+    top: calc(100% - 1px);
+    right: 0;
+    margin: 0;
+    padding: 6px 0;
+    display: none;
+    z-index: 3;
+    border-radius: 4px;
+    border-top-right-radius: 0;
+    background: var(--button-background);
+    color: var(--content-text);
+    border: 1px solid var(--control-border);
+  }
+  .dropdown-list li {
+    padding: 6px 12px;
+    list-style: none;
+    white-space: nowrap;
+    text-align: start;
+    transition: 0.2s ease;
+    user-select: none;
+  }
+  .dropdown-list li:hover {
+    background: var(--button-hover-background);
+  }
+  .dropdown-list.align-start {
+    right: auto;
+    left: 0;
+    border-radius: 4px;
+    border-top-left-radius: 0;
+  }
+  [dir="rtl"] .dropdown-list.align-start {
+    left: auto;
+    right: 0;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 0;
   }
 
   .btn-dropdown {
