@@ -29,7 +29,7 @@
     {
       "id": "aboutHighContrast",
       "type": "info",
-      "text": "The new High Contrast block colors are available as a preset below."
+      "text": "The High Contrast block colors are available as a preset below."
     }
   ],
   "relatedAddons": ["editor-dark-mode", "custom-block-shape", "transparent-orphans", "zebra-striping"],
