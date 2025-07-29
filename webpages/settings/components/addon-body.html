@@ -17,31 +17,28 @@
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
         <div
-          v-show="expanded && addon._enabled"
-          v-if="addon.presets && !isIframe"
-          class="addon-buttons"
-          title="{{ msg('export') }}"
-          @click="exportPreset"
-        >
-          <img src="../../images/icons/download.svg" class="icon-type" draggable="false" />
-        </div>
-        <div
-          v-show="expanded && addon._enabled"
-          v-if="addon.presets && !isIframe"
-          class="addon-buttons"
-          title="{{ msg('import') }}"
-          @click="importPreset"
-        >
-          <img src="../../images/icons/import.svg" class="icon-type" draggable="false" />
-        </div>
-        <div
-          v-show="expanded && addon._enabled"
+          class="addon-split-button setting-table-dropdown"
+          :class="{open: isDropdownOpen}"
           v-if="addon.settings"
-          class="addon-buttons"
-          title="{{ msg('resetToDefault') }}"
-          @click="loadDefaults"
+          v-show="expanded && addon._enabled"
         >
-          <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
+          <div
+            class="addon-buttons addon-split-button-button"
+            title="{{ msg('resetToDefault') }}"
+            @click="loadDefaults"
+          >
+            <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
+          </div>
+          <div
+            class="addon-buttons addon-split-button-dropdown"
+            @click="isDropdownOpen = !isDropdownOpen"
+          >
+            <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
+            <ul v-click-outside="isDropdownOpen = false">
+              <li @click="importPreset">{{ msg('import') }}</li>
+              <li @click="exportPreset">{{ msg('export') }}</li>
+            </ul>
+          </div>
         </div>
         <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
       </div>
@@ -424,6 +421,7 @@
   .addon-check {
     margin-inline-start: auto;
     padding: 5px;
+    gap: 8px;
     display: flex;
     align-items: center;
   }

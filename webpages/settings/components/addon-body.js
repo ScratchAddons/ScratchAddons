@@ -12,6 +12,7 @@ export default async function ({ template }) {
         everExpanded: this.getDefaultExpanded(),
         hoveredSettingId: null,
         highlightedSettingId: null,
+        isDropdownOpen: false,
       };
     },
     computed: {
