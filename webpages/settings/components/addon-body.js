@@ -85,9 +85,13 @@ export default async function ({ template }) {
           },
           { once: true }
         );
-        inputElem.addEventListener("cancel", () => {
-          inputElem.remove();
-        }, { once: true });
+        inputElem.addEventListener(
+          "cancel",
+          () => {
+            inputElem.remove();
+          },
+          { once: true }
+        );
         document.body.appendChild(inputElem);
         inputElem.click();
         this.toggleDropdown();
