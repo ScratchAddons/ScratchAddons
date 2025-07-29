@@ -78,7 +78,7 @@ export default async function ({ template }) {
               preset = JSON.parse(text);
               if (!preset.addonId) throw "Missing addon ID";
               if (preset.addonId !== this.addon._addonId) {
-                console.warn(`Incorrect addon ID: ${preset.addonId}`)
+                console.warn(`Incorrect addon ID: ${preset.addonId}`);
                 alert(this.msg("incorrectAddonImport", this.$root.manifestsById[preset.addonId].name));
                 return;
               }
