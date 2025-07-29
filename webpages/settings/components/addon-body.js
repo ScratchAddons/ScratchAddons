@@ -65,13 +65,7 @@ export default async function ({ template }) {
         inputElem.addEventListener(
           "change",
           async (e) => {
-            const file = inputElem.files[0];
-            if (!file) {
-              inputElem.remove();
-              alert(chrome.i18n.getMessage("fileNotSelected"));
-              return;
-            }
-            const text = await file.text();
+            const text = await inputElem.files[0].text();
             inputElem.remove();
             let preset;
             try {
@@ -91,6 +85,9 @@ export default async function ({ template }) {
           },
           { once: true }
         );
+        inputElem.addEventListener("cancel", () => {
+          inputElem.remove();
+        }, { once: true });
         document.body.appendChild(inputElem);
         inputElem.click();
         this.toggleDropdown();
