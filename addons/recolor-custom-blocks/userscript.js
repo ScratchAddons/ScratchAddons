@@ -1,11 +1,10 @@
-
-import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
-
-const uriHeader = "data:image/svg+xml;base64,";
+const uriHeader = "data:image/svg+xml;base64,"
 
 export default async function ({ addon, msg, console }) {
+
   const Blockly = await addon.tab.traps.getBlockly();
-  const vm = addon.tab.traps.vm;
+
+  let originalUpdateDeclarationProcCode;
 
   const hexToRGB = (hexString) => {
     const decimal = parseInt(hexString.substring(1), 16);
@@ -31,20 +30,45 @@ export default async function ({ addon, msg, console }) {
   // Best guess colors given a target block color
   const getFakeBlockColors = (hexString) => {
     return {
-      primary: hexString,
-      secondary: multiply(hexString, { r: 0.9, g: 0.9, b: 0.9 }),
-      tertiary: multiply(hexString, { r: 0.8, g: 0.8, b: 0.8 }),
-      quaternary: multiply(hexString, { r: 0.8, g: 0.8, b: 0.8 })
+      colourPrimary: hexString,
+      colourSecondary: multiply(hexString, { r: 0.9, g: 0.9, b: 0.9 }),
+      colourTertiary: multiply(hexString, { r: 0.8, g: 0.8, b: 0.8 }),
+      colourQuaternary: multiply(hexString, { r: 0.8, g: 0.8, b: 0.8 })
+    }
+  }
+  // Standardize colour names between Blockly verions
+  const getBlocklyColors = (colorName) => {
+    if(Blockly.registry) {
+      const workspace = addon.tab.traps.getWorkspace()
+      const colors = workspace.getTheme().blockStyles[colorName];
+      if(colors === null || typeof colors !== "object") {
+        return null;
+      }
+      return colors
+    } else {
+      const colors = Blockly.Colours[colorName];
+      if(colors === null || typeof colors !== "object") {
+        return null;
+      }
+      return {
+        colourPrimary: colors.primary,
+        colourSecondary: colors.secondary,
+        colourTertiary: colors.tertiary,
+        colourQuaternary: colors.colourQuaternary
+      }
     }
   }
 
   const blockHasColor = (block, colors) => {
-    return block.getColour() === colors.primary &&
-           block.getColourSecondary() === colors.secondary &&
-           block.getColourTertiary() === colors.tertiary &&
-           block.getColourQuaternary() === colors.quaternary;
+    const customColor = block.recolorCustomBlock
+    if(!customColor) {
+      return false
+    }
+    return customColor.colourPrimary === colors.colourPrimary &&
+        customColor.colourSecondary === colors.colourSecondary &&
+        customColor.colourTertiary === colors.colourTertiary &&
+        customColor.colourQuaternary === colors.colourQuaternary;
   }
-
   const setProcedureButtonColor = (iconElement, colors) => {
     let svg = atob(iconElement.src.replace(uriHeader, ""));
 
@@ -54,7 +78,7 @@ export default async function ({ addon, msg, console }) {
     const editedComment = "/*rcb edit*/";
     const endStyleIndex = svg.indexOf("</style>");
     const editedCommentIndex = svg.indexOf(editedComment);
-    const appendedStyles = editedComment + ".cls-3{fill:" + colors.primary + ";}.cls-3,.cls-4{stroke:" + colors.tertiary + ";}.cls-4{fill:" + colors.secondary + ";}text.cls-4{fill:#fff;stroke:unset;}"
+    const appendedStyles = editedComment + ".cls-3{fill:" + colors.colourPrimary + ";}.cls-3,.cls-4{stroke:" + colors.colourTertiary + ";}.cls-4{fill:" + colors.colourSecondary + ";}text.cls-4{fill:#fff;stroke:unset;}"
     if(editedCommentIndex === -1) {
       svg = svg.substring(0, endStyleIndex) + appendedStyles + svg.substring(endStyleIndex);
     } else {
@@ -74,111 +98,65 @@ export default async function ({ addon, msg, console }) {
   }
 
   const setBlockColor = (block, colors, isEdited) => {
-
-
-    // If the color is already set to colors, don't do it again
+    // If we've already set this color, don't
     if(blockHasColor(block, colors)) {
       return
     }
-    block.setColourFromRawValues_(colors.primary, colors.secondary, colors.tertiary, colors.quaternary);
-    block.recolorCustomBlocksIsEdited = isEdited;
-    if(block.type === "procedures_declaration") {
-      // In the custom block editing screen, we need to recolor text input's rings and all child blocks
-      block.inputList.forEach((input) => {
-        if(input.fieldRow.length !== 0) {
-          input.fieldRow.forEach((row) => {
-            row.box_.setAttribute("fill", colors.tertiary);
-          })
-        }
-      })
-      block.getChildren().forEach((child) => {
-        child.setColourFromRawValues_(child.getColour(), child.getColourSecondary(), colors.tertiary,  child.getColourQuaternary());
-        child.recolorCustomBlocksIsEdited = isEdited;
-      })
-      // And we need to update the custom procedure options row
-      setCustomProcedureOptionsColor(colors)
+    //
+    if(!block.recolorCustomBlock) {
+      block.recolorCustomBlock = {}
+    }
+    // We're storing our custom colors on a separate part of the block object
+    // This is used by Blockly's applyColour / updateColour methods later
+    block.recolorCustomBlock.colourPrimary = colors.colourPrimary;
+    block.recolorCustomBlock.colourSecondary = colors.colourSecondary;
+    block.recolorCustomBlock.colourTertiary = colors.colourTertiary;
+    block.recolorCustomBlock.colourQuaternary = colors.colourQuaternary;
+    block.recolorCustomBlock.isEdited = isEdited;
 
-    } else if(block.type === "procedures_prototype") {
-      // For some reason, switching colors from the custom procedure menu sets
-      // procedures_prototype's child block's tertiary color to the previous tertiary color.
-      block.getChildren().forEach((child) => {
-        // For if some reason someone puts a non argument reporter in the procedures_prototype
-        const correctTertiaryColor = Blockly.Colours[child.getCategory() ?? "more"].tertiary
-        child.setColourFromRawValues_(child.getColour(), child.getColourSecondary(), correctTertiaryColor, child.getColourQuaternary());
-        child.recolorCustomBlocksIsEdited = isEdited
-      });
+    if(Blockly.registry) {
+      block.applyColour()
     } else {
-      // Elsewise, we need to recolor the text inputs on the block
-      block.getChildren().forEach((child) => {
-        if(child.type === "text") {
-          child.setColourFromRawValues_(child.getColour(), child.getColourSecondary(), colors.tertiary, child.getColourQuaternary());
-          child.recolorCustomBlocksIsEdited = isEdited
-        }
-      });
+      block.updateColour(this)
     }
 
+    if(block.type === "procedures_declaration") {
+      // If there's a procedures_declaration, we're in the custom block editing screen
+      // and need to recolor the buttons
+      setCustomProcedureOptionsColor(colors);
+      // Old blockly doesn't update the box color of fields in a procedures_declaration
+      if(!Blockly.registry) {
+        block.inputList.forEach((input) => {
+          const box_ = input.fieldRow?.[0]?.box_
+          if (box_) {
+            box_.setAttribute('fill', block.getColourTertiary());
+          }
+        });
+      }
+    }
   }
-
-  const getTextContent = (block) => {
-    // If the block has rendered on the screen, get the text displayed. This allows us to catch reporters
-    const text_ = block.inputList?.[0]?.fieldRow?.[0]?.text_;
-    if(text_ && text_ !== "") {
-      return text_;
-    }
-    // If that doesn't work, check the block's procCode for info.
-    const procCode_ = block.procCode_;
-    if(procCode_ && procCode_ !== "") {
-      return procCode_;
-    }
-    // If that fails, we need to interrogate the vm for block details
-    const blocks = vm.editingTarget?.blocks;
-    if(blocks) {
-      const vmBlock = blocks.getBlock(block.id);
-      // If the vm can't even find anything, give up
-      if(!vmBlock) {
-        return "";
-      }
-      const proccode = vmBlock.mutation?.proccode;
-      if(proccode && proccode !== "") {
-        return proccode;
-      }
-      const value = vmBlock.fields?.VALUE?.value;
-      if(value && value !== "") {
-        return value;
-      }
-    }
-    return "";
-  }
-
-  const updateExistingBlocks = () => {
-    const workspace = addon.tab.traps.getWorkspace();
-    const flyout = workspace && workspace.getFlyout();
-    if (workspace && flyout) {
-      const allBlocks = [...workspace.getAllBlocks(), ...flyout.getWorkspace().getAllBlocks()];
-
-      for (const block of allBlocks) {
-        handleBlock(block);
-      }
-    }
-  };
 
   const handleBlock = (block) => {
-    const type = block.type ?? "";
-    // We want to only color custom procedures, and not their arguments.
-    // Custom procedures dragged from the flyout have type "text", so we check if it's parent has custom colors (meaning it would have to be an argument)
-    if(block.getCategory() !== null || type.startsWith("argument") || block.getParent()?.recolorCustomBlocksIsEdited === true) {
+    // Get type of block
+    const blockStyle = Blockly.registry ? block.getStyleName() : (block.getCategory() ?? "more")
+    // We only want to let procedure_ blocks through, but sometimes procedure's type and category aren't set right
+    // It's easier to just do a blacklist
+    if(blockStyle !== "more" || (block.type ?? "").startsWith("argument")) {
       return;
     }
-    const textContent = getTextContent(block);
 
-    // Color formatting done with "color:"
+    // There used to be a lot of shenanigans here, but with the applyColour / updateColour
+    // methods, we don't generally deal with blocks that haven't been rendered yet
+    const textContent = block.procCode_ ?? ""
+
     const firstColonIndex = textContent.indexOf(":");
-    if(firstColonIndex !== -1) {
+    if(firstColonIndex !== -1 && !addon.self.disabled) {
       const colorCandidateString = textContent.substring(0,firstColonIndex);
 
-      const colorCandidate = Blockly.Colours[colorCandidateString]
-      // Blockly.Colours contains string entries, which we don't want to accidentally select
-      if(colorCandidate && typeof colorCandidate === "object") {
+
+      const colorCandidate = getBlocklyColors(colorCandidateString);
+      // If we can get a valid Blockly color from colorCandidateString, set the block color
+      if(colorCandidate) {
         setBlockColor(block, colorCandidate, true);
         return;
       }
@@ -193,34 +171,111 @@ export default async function ({ addon, msg, console }) {
 
     }
     // If the block doesn't qualify for a color change, check to see if it needs to be reverted
-    if(block.recolorCustomBlocksIsEdited) {
-      setBlockColor(block, Blockly.Colours[block.getCategory() ?? "more"], false);
+    if(block.recolorCustomBlock?.isEdited) {
+      setBlockColor(block, getBlocklyColors("more"), false);
     }
   }
 
-  const originalRender = Blockly.BlockSvg.prototype.render;
-  Blockly.BlockSvg.prototype.render = function (opt_bubble) {
-    const original = originalRender.call(this, opt_bubble);
-    handleBlock(this);
-    return original;
+  // Allows us to catch most cases of blocks needing to be colored.
+  // Does not catch live-updating the procedure_declaration blocks, or changes to blocks
+  // after they've been edited
+  const oldBlockInitSvg = Blockly.BlockSvg.prototype.initSvg;
+  Blockly.BlockSvg.prototype.initSvg = function (...args) {
+    handleBlock(this)
+    return oldBlockInitSvg.call(this, ...args);
   };
+
+  function getExistingProceduresDeclarationBlock() {
+    // addon.tab.traps.getWorkspace() will never return the procedure declaration editor
+    return Blockly.getMainWorkspace()
+        .getAllBlocks()
+        .find((block) => block.type === "procedures_declaration");
+  }
+  function polluteProcedureDeclaration(procedureDeclaration) {
+    procedureDeclaration.onChangeFn = function (...args) {
+      originalUpdateDeclarationProcCode.call(this, ...args);
+      // This is called every time the procedures_declaration block is updated, allowing
+      // us to change the block in real-time
+      if(!addon.self.disabled) {
+        handleBlock(this);
+      }
+    };
+  }
+  // We want Blockly to insert our changes to onChangeFn, so we throw our changes
+  // into procedures_declaration's init. No more weird redux event problems!
+  const originalInit = Blockly.Blocks["procedures_declaration"].init;
+  Blockly.Blocks["procedures_declaration"].init = function () {
+    originalInit.call(this);
+    originalUpdateDeclarationProcCode = this.onChangeFn;
+    polluteProcedureDeclaration(this);
+  };
+
+  if(Blockly.registry) {
+    const oldApplyColour = Blockly.BlockSvg.prototype.applyColour;
+    Blockly.BlockSvg.prototype.applyColour = function (...args) {
+      if (!this.isInsertionMarker() && this.getStyleName() === "more") {
+        const block = this.procCode_ && this.recolorCustomBlock
+        // If the block has a procCode and has been set to be recolored, recolor it
+        if (block) {
+          const color = this.recolorCustomBlock
+          this.style = {
+            ...this.style,
+            colourPrimary: color.colourPrimary,
+            colourSecondary: color.colourSecondary,
+            colourTertiary: color.colourTertiary,
+            colourQuaternary: color.colourQuaternary
+          };
+          this.pathObject.setStyle(this.style);
+          this.customContextMenu = null;
+        }
+      }
+      return oldApplyColour.call(this, ...args);
+    }
+  } else {
+    const oldUpdateColour = Blockly.BlockSvg.prototype.updateColour;
+    Blockly.BlockSvg.prototype.updateColour = function (...args) {
+      if (!this.isInsertionMarker() && this.getCategory?.() == null) {
+        const block = this.procCode_ && this.recolorCustomBlock
+        if (block) {
+          const color = this.recolorCustomBlock
+          this.colour_ = color.colourPrimary;
+          this.colourSecondary_ = color.colourSecondary;
+          this.colourTertiary_ = color.colourTertiary;
+          this.colourQuaternary_ = color.colourQuaternary
+          this.customContextMenu = null;
+        }
+      }
+      return oldUpdateColour.call(this, ...args);
+    };
+  }
+
+
+  const updateExistingBlocks = () => {
+    const workspace = addon.tab.traps.getWorkspace();
+    const flyout = workspace && workspace.getFlyout();
+    if (workspace && flyout) {
+      const allBlocks = [...workspace.getAllBlocks(), ...flyout.getWorkspace().getAllBlocks()];
+      for (const block of allBlocks) {
+        handleBlock(block);
+      }
+    }
+  }
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    // Toolbox updates fire when switching between sprites & stage, when custom blocks are edited,
-    // and when the project first loads, which is exactly when Blockly.BlockSvg.prototype.render
-    // doesn't fire
-    if (e.detail.action.type === "scratch-gui/toolbox/UPDATE_TOOLBOX") {
+    // We need to catch updates from editing a custom procedure, as Blockly.BlockSvg.prototype.initSvg doesn't
+    if (e.detail.action.type === "scratch-gui/custom-procedures/DEACTIVATE_CUSTOM_PROCEDURES") {
       // Timeout to wait until the elements are rendered
       setTimeout(updateExistingBlocks, 0);
     }
   });
 
-  addon.settings.addEventListener("change", () => updateExistingBlocks());
-  addon.self.addEventListener("disabled", () => updateAllBlocks(addon.tab));
+  addon.self.addEventListener("disabled", () => updateExistingBlocks());
   addon.self.addEventListener("reenabled", () => updateExistingBlocks());
+  // If the custom block screen is already open, update it with our onChangeFn
+  if (addon.tab.redux.state.scratchGui.customProcedures.active) {
+    polluteProcedureDeclaration(getExistingProceduresDeclarationBlock());
+  }
   updateExistingBlocks();
-
-
 
 }
