@@ -51,7 +51,7 @@ const onDataTransferred = (value) => {
   clearTimeout(timeout);
   if (interactions < threshold) {
     // Reset counter after 1.2s
-    timeout = setTimeout(() => interactions = 0, 1200);
+    timeout = setTimeout(() => (interactions = 0), 1200);
   } else {
     onlineFeaturesDetected();
   }
