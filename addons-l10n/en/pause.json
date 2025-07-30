@@ -1,4 +1,5 @@
 {
   "pause/pause": "Pause",
-  "pause/play": "Resume"
+  "pause/play": "Resume",
+  "pause/cannot-pause": "This project cannot be paused"
 }
