@@ -283,7 +283,6 @@ export default async function ({ addon, msg, console }) {
 
 
   const updateExistingBlocks = () => {
-    debugger;
     const workspace = addon.tab.traps.getWorkspace();
     const flyout = workspace && workspace.getFlyout();
     if (workspace && flyout) {
