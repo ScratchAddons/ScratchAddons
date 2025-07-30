@@ -18,11 +18,11 @@ const scanForOnlineFeatures = (vm, console, msg) => {
     }
   }
 
-  const keys = Object.keys(cloudVariables);
+  const names = Object.keys(cloudVariables);
   const values = Object.values(cloudVariables);
 
   const varsHaveInvalidNumbers = values.some((i) => String(Number(i)) !== i);
-  const areVarNamesSequential = keys.some((i) => i.endsWith("2")) && keys.some((i) => i.endsWith("3"));
+  const areVarNamesSequential = names.some((i) => i.endsWith("2")) && names.some((i) => i.endsWith("3"));
   const usesUsernameBlock = allBlocks.some((block) => block.opcode === "sensing_username");
 
   if (varsHaveInvalidNumbers && areVarNamesSequential && usesUsernameBlock) {
@@ -51,7 +51,7 @@ const onDataTransferred = (value) => {
   clearTimeout(timeout);
   if (interactions < threshold) {
     // Reset counter after 1.2s
-    timeout = setTimeout(() => (interactions = 0), 1200);
+    timeout = setTimeout(() => interactions = 0, 1200);
   } else {
     onlineFeaturesDetected();
   }
@@ -67,6 +67,7 @@ export const checkForOnlineFeatures = async (addon, console, msg) => {
   await addon.tab.redux.waitForState((state) => state.scratchGui.projectState.loadingState.startsWith("SHOWING"));
   scanForOnlineFeatures(addon.tab.traps.vm, console, msg);
   if (hasOnlineFeatures === undefined) {
+    // Watch for cloud variable updates
     const originalSend = addon.tab.traps.vm.runtime.ioDevices.cloud.provider.connection.send;
     addon.tab.traps.vm.runtime.ioDevices.cloud.provider.connection.send = function (data) {
       originalSend.call(this, data);
