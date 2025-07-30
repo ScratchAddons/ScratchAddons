@@ -14,6 +14,12 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.43.0"

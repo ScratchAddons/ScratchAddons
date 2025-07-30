@@ -1,0 +1,9 @@
+/* When middle middle-click-popup creates it's block renders, it uses the block's current colors, */
+/* but overrides them with .sa-block-color-. Disabling this for sa-mcp-preview-block allows us */
+/* to see the our custom block colors */
+.sa-mcp-preview-block .sa-block-color-more {
+    --sa-block-background-primary: unset;
+    --sa-block-background-secondary: unset;
+    --sa-block-background-tertiary: unset;
+    --sa-block-field-background: unset;
+}
