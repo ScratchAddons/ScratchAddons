@@ -4,7 +4,6 @@ export default async function ({ addon, msg, console }) {
 
   const Blockly = await addon.tab.traps.getBlockly();
 
-  let originalUpdateDeclarationProcCode;
 
   const hexToRGB = (hexString) => {
     const decimal = parseInt(hexString.substring(1), 16);
@@ -36,7 +35,7 @@ export default async function ({ addon, msg, console }) {
       colourQuaternary: multiply(hexString, { r: 0.8, g: 0.8, b: 0.8 })
     }
   }
-  // Standardize colour names between Blockly verions
+  // Standardize colour names between Blockly
   const getBlocklyColors = (colorName) => {
     if(Blockly.registry) {
       const workspace = addon.tab.traps.getWorkspace()
@@ -54,7 +53,7 @@ export default async function ({ addon, msg, console }) {
         colourPrimary: colors.primary,
         colourSecondary: colors.secondary,
         colourTertiary: colors.tertiary,
-        colourQuaternary: colors.colourQuaternary
+        colourQuaternary: colors.quaternary
       }
     }
   }
@@ -99,11 +98,11 @@ export default async function ({ addon, msg, console }) {
 
   const setBlockColor = (block, colors, isEdited) => {
     // If we've already set this color, don't
-    if(blockHasColor(block, colors)) {
+    if (blockHasColor(block, colors)) {
       return
     }
     //
-    if(!block.recolorCustomBlock) {
+    if (!block.recolorCustomBlock) {
       block.recolorCustomBlock = {}
     }
     // We're storing our custom colors on a separate part of the block object
@@ -114,25 +113,54 @@ export default async function ({ addon, msg, console }) {
     block.recolorCustomBlock.colourQuaternary = colors.colourQuaternary;
     block.recolorCustomBlock.isEdited = isEdited;
 
-    if(Blockly.registry) {
-      block.applyColour()
-    } else {
-      block.updateColour(this)
-    }
-
-    if(block.type === "procedures_declaration") {
+    if (block.type === "procedures_declaration") {
       // If there's a procedures_declaration, we're in the custom block editing screen
       // and need to recolor the buttons
       setCustomProcedureOptionsColor(colors);
-      // Old blockly doesn't update the box color of fields in a procedures_declaration
-      if(!Blockly.registry) {
+      if (Blockly.registry) {
+        block.getChildren().forEach((child) => {
+          // Recolor the input field to match the block. By default, it's the more primary color
+          const htmlInput_ = child.inputList?.[0]?.fieldRow?.[0]?.htmlInput_
+          if (htmlInput_) {
+            const changeBorderColor = (htmlInput, colorPrimary) => {
+              htmlInput.style.border = "0.9px solid " + colorPrimary;
+            }
+            // Wait until the next frame or the color gets reset
+            setTimeout(changeBorderColor, 0, htmlInput_, colors.colourPrimary);
+          }
+        });
+        // For some reason pathObject.svgPath isn't updating when applyColor is called
+        const pathSelected = block.pathObject?.svgPathSelected;
+        if(pathSelected) {
+          // This makes this harder to set from other addons, but I am stumped on how else to achieve this
+          pathSelected.setAttribute("fill", colors.colourPrimary);
+          pathSelected.setAttribute("stroke", colors.colourTertiary)
+        }
+      } else {
+        // Updating the colour does not update the background of fields in procedure_declaration
         block.inputList.forEach((input) => {
           const box_ = input.fieldRow?.[0]?.box_
           if (box_) {
-            box_.setAttribute('fill', block.getColourTertiary());
+            box_.setAttribute('fill', colors.colourTertiary);
           }
         });
       }
+    }
+    if (Blockly.registry) {
+      block.applyColour()
+        block.getChildren().forEach((child) => {
+          // Make sure children's stroke color isn't messed up
+          child.applyColour();
+        });
+    } else {
+      block.updateColour(this)
+      const isProceduresPrototype = block.type === "procedures_prototype"
+      block.getChildren().forEach((child) => {
+        // Make sure children's stroke color isn't messed up
+        // Also for some reason procedures_prototype's stroke color refuses to update, so we set it the hard way
+        isProceduresPrototype && (child.colourTertiary_ = Blockly.Colours[child.getCategory() ?? "more"].tertiary);
+        child.updateColour();
+      });
     }
   }
 
@@ -144,7 +172,12 @@ export default async function ({ addon, msg, console }) {
     if(blockStyle !== "more" || (block.type ?? "").startsWith("argument")) {
       return;
     }
-
+    // If we encounter a procedures_declaration, it means the edit block modal is open
+    // If so, inject our changes if we haven't already
+    if(block.type === "procedures_declaration" && !block.recolorCustomBlockInjected) {
+      shimOnChangeFn(block)
+      return;
+    }
     // There used to be a lot of shenanigans here, but with the applyColour / updateColour
     // methods, we don't generally deal with blocks that haven't been rendered yet
     const textContent = block.procCode_ ?? ""
@@ -152,7 +185,6 @@ export default async function ({ addon, msg, console }) {
     const firstColonIndex = textContent.indexOf(":");
     if(firstColonIndex !== -1 && !addon.self.disabled) {
       const colorCandidateString = textContent.substring(0,firstColonIndex);
-
 
       const colorCandidate = getBlocklyColors(colorCandidateString);
       // If we can get a valid Blockly color from colorCandidateString, set the block color
@@ -167,8 +199,6 @@ export default async function ({ addon, msg, console }) {
         setBlockColor(block, fakeColor, true);
         return;
       }
-
-
     }
     // If the block doesn't qualify for a color change, check to see if it needs to be reverted
     if(block.recolorCustomBlock?.isEdited) {
@@ -181,34 +211,38 @@ export default async function ({ addon, msg, console }) {
   // after they've been edited
   const oldBlockInitSvg = Blockly.BlockSvg.prototype.initSvg;
   Blockly.BlockSvg.prototype.initSvg = function (...args) {
-    handleBlock(this)
+    handleBlock(this);
     return oldBlockInitSvg.call(this, ...args);
   };
 
-  function getExistingProceduresDeclarationBlock() {
-    // addon.tab.traps.getWorkspace() will never return the procedure declaration editor
-    return Blockly.getMainWorkspace()
-        .getAllBlocks()
-        .find((block) => block.type === "procedures_declaration");
-  }
-  function polluteProcedureDeclaration(procedureDeclaration) {
-    procedureDeclaration.onChangeFn = function (...args) {
-      originalUpdateDeclarationProcCode.call(this, ...args);
-      // This is called every time the procedures_declaration block is updated, allowing
-      // us to change the block in real-time
+  // onChangeFn is called for every block, so we can shim it do recolor
+  // the custom procedure options row and block
+  const shimOnChangeFn = (block) => {
+    // If we've already injected this, don't
+    if(block.recolorCustomBlockInjected) return;
+    block.recolorCustomBlockInjected = true;
+    let oldOnChangeFn = block.onChangeFn;
+    block.onChangeFn = function(...args) {
+      oldOnChangeFn.call(this, ...args);
+      // There's not an easy way to un-inject this when the addon is disabled
+      // We just have to manually check it each time
       if(!addon.self.disabled) {
         handleBlock(this);
       }
-    };
+    }
   }
-  // We want Blockly to insert our changes to onChangeFn, so we throw our changes
-  // into procedures_declaration's init. No more weird redux event problems!
-  const originalInit = Blockly.Blocks["procedures_declaration"].init;
-  Blockly.Blocks["procedures_declaration"].init = function () {
-    originalInit.call(this);
-    originalUpdateDeclarationProcCode = this.onChangeFn;
-    polluteProcedureDeclaration(this);
-  };
+
+  const enableAddon = () => {
+    updateExistingBlocks()
+    if (addon.tab.redux.state.scratchGui.customProcedures.active) {
+      // If the modal is open, we need to call handleBlock on the procedure_declaration to
+      // get the shim injected and recolor the block if needed
+      const editBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
+      if(editBlock?.type === "procedures_declaration") {
+        handleBlock(editBlock);
+      }
+    }
+  }
 
   if(Blockly.registry) {
     const oldApplyColour = Blockly.BlockSvg.prototype.applyColour;
@@ -226,7 +260,6 @@ export default async function ({ addon, msg, console }) {
             colourQuaternary: color.colourQuaternary
           };
           this.pathObject.setStyle(this.style);
-          this.customContextMenu = null;
         }
       }
       return oldApplyColour.call(this, ...args);
@@ -242,7 +275,6 @@ export default async function ({ addon, msg, console }) {
           this.colourSecondary_ = color.colourSecondary;
           this.colourTertiary_ = color.colourTertiary;
           this.colourQuaternary_ = color.colourQuaternary
-          this.customContextMenu = null;
         }
       }
       return oldUpdateColour.call(this, ...args);
@@ -251,6 +283,7 @@ export default async function ({ addon, msg, console }) {
 
 
   const updateExistingBlocks = () => {
+    debugger;
     const workspace = addon.tab.traps.getWorkspace();
     const flyout = workspace && workspace.getFlyout();
     if (workspace && flyout) {
@@ -271,11 +304,8 @@ export default async function ({ addon, msg, console }) {
   });
 
   addon.self.addEventListener("disabled", () => updateExistingBlocks());
-  addon.self.addEventListener("reenabled", () => updateExistingBlocks());
-  // If the custom block screen is already open, update it with our onChangeFn
-  if (addon.tab.redux.state.scratchGui.customProcedures.active) {
-    polluteProcedureDeclaration(getExistingProceduresDeclarationBlock());
-  }
-  updateExistingBlocks();
+  addon.self.addEventListener("reenabled", () => enableAddon());
+
+  enableAddon();
 
 }
