@@ -302,6 +302,16 @@ export default async function ({ addon, msg, console }) {
     }
   });
 
+  // toolbox.refreshTheme doesn't trigger applyColour or initSvg, so we need to apply our changes manually
+  if(Blockly.registry) {
+    const toolbox = addon.tab.traps.getWorkspace().getToolbox();
+    const oldRefreshTheme = toolbox.refreshTheme;
+    toolbox.refreshTheme = function (...args) {
+      setTimeout(updateExistingBlocks, 0);
+      return oldRefreshTheme.call(this, ...args)
+    }
+  }
+
   addon.self.addEventListener("disabled", () => updateExistingBlocks());
   addon.self.addEventListener("reenabled", () => enableAddon());
 
