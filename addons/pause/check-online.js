@@ -1,7 +1,7 @@
 let hasOnlineFeatures;
 
 /** Guesses whether the project has cloud variable features */
-const scanForOnlineFeatures = (vm, console, msg) => {
+const scanForOnlineFeatures = (vm, console, msg, element) => {
   // Well, only if it actually has cloud variables :P
   if (!vm.runtime.hasCloudData()) {
     hasOnlineFeatures = false;
@@ -27,9 +27,8 @@ const scanForOnlineFeatures = (vm, console, msg) => {
 
   if (varsHaveInvalidNumbers && areVarNamesSequential && usesUsernameBlock) {
     // It's definitely online
-    onlineFeaturesDetected();
-    document.querySelector(".pause-btn").title = msg("cannot-pause");
-    console.log("Online features detected - pause disabled.");
+    hasOnlineFeatures = true;
+    disablePauseButton(console, msg, element);
   } else if (varsHaveInvalidNumbers || areVarNamesSequential || usesUsernameBlock) {
     // It might be online, we'll analyze during runtime
     threshold = 5;
@@ -53,19 +52,20 @@ const onDataTransferred = (value) => {
     // Reset counter after 1.2s
     timeout = setTimeout(() => (interactions = 0), 1200);
   } else {
-    onlineFeaturesDetected();
+    hasOnlineFeatures = true;
   }
 };
 
-function onlineFeaturesDetected() {
-  hasOnlineFeatures = true;
-  document.querySelector(".pause-btn").classList.add("disabled");
+function disablePauseButton(console, msg, pauseBtnElement) {
+  console.log("Online features detected - pause disabled.");
+  pauseBtnElement.classList.add("disabled");
+  pauseBtnElement.title = msg("cannot-pause");
 }
 
 export const getHasOnlineFeatures = () => hasOnlineFeatures;
-export const checkForOnlineFeatures = async (addon, console, msg) => {
+export const checkForOnlineFeatures = async (addon, console, msg, element) => {
   await addon.tab.redux.waitForState((state) => state.scratchGui.projectState.loadingState.startsWith("SHOWING"));
-  scanForOnlineFeatures(addon.tab.traps.vm, console, msg);
+  scanForOnlineFeatures(addon.tab.traps.vm, console, msg, element);
   if (hasOnlineFeatures === undefined) {
     // Watch for cloud variable updates
     const originalSend = addon.tab.traps.vm.runtime.ioDevices.cloud.provider.connection.send;
@@ -74,22 +74,16 @@ export const checkForOnlineFeatures = async (addon, console, msg) => {
       const json = JSON.parse(data);
       if (!hasOnlineFeatures && json.name) {
         onDataTransferred(json.value);
-        if (hasOnlineFeatures) {
-          document.querySelector(".pause-btn").title = msg("cannot-pause");
-          console.log("Online features detected - pause disabled.");
-        }
+        if (hasOnlineFeatures) disablePauseButton(console, msg, element);
       }
     };
     const originalOnMessage = addon.tab.traps.vm.runtime.ioDevices.cloud.provider.connection.onmessage;
     addon.tab.traps.vm.runtime.ioDevices.cloud.provider.connection.onmessage = function (message) {
       originalOnMessage.call(this, message);
-      const json = JSON.parse(message.data);
+      const json = JSON.parse(message.data.split("\n")[0]);
       if (!hasOnlineFeatures && json.name) {
         onDataTransferred(json.value);
-        if (hasOnlineFeatures) {
-          document.querySelector(".pause-btn").title = msg("cannot-pause");
-          console.log("Online features detected - pause disabled.");
-        }
+        if (hasOnlineFeatures) disablePauseButton(console, msg, element);
       }
     };
   }

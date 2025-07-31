@@ -3,27 +3,26 @@ import { checkForOnlineFeatures, getHasOnlineFeatures } from "./check-online.js"
 
 export default async function ({ addon, console, msg }) {
   setup(addon);
-  checkForOnlineFeatures(addon, console, msg);
 
-  function togglePause() {
+  const togglePause = () => {
     if (getHasOnlineFeatures() && !isPaused()) return;
     setPaused(!isPaused());
-  }
+  };
+  const setSrc = () => {
+    img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg");
+    img.title = isPaused() ? msg("play") : msg("pause");
+  };
 
   const img = document.createElement("img");
   img.className = "pause-btn";
   img.draggable = false;
   img.title = msg("pause");
-
-  const setSrc = () => {
-    img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg");
-    img.title = isPaused() ? msg("play") : msg("pause");
-  };
   img.addEventListener("click", togglePause);
   addon.tab.displayNoneWhileDisabled(img);
   addon.self.addEventListener("disabled", () => setPaused(false));
   setSrc();
   onPauseChanged(setSrc);
+  checkForOnlineFeatures(addon, console, msg, img);
 
   document.addEventListener(
     "keydown",
