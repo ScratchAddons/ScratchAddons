@@ -713,5 +713,7 @@ let fuse;
     }
   });
 
-  chrome.runtime.sendMessage("checkPermissions");
+  if (!isIframe) {
+    chrome.runtime.sendMessage("checkPermissions");
+  }
 })();
