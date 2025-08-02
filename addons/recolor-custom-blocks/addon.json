@@ -1,6 +1,6 @@
 {
   "name": "Recolor Custom Blocks",
-  "description": "Change the color of custom blocks by adding a block category (such as motion, events, etc) followed by a colon (:) ",
+  "description": "Changes the colors of custom blocks that start with the name of a category followed by a colon (:), for example \"looks: animate\".",
   "credits": [
     {
       "name": "FlamedDogo99",

@@ -4,7 +4,6 @@ export default async function ({ addon, msg, console }) {
 
   const Blockly = await addon.tab.traps.getBlockly();
 
-
   const hexToRGB = (hexString) => {
     const decimal = parseInt(hexString.substring(1), 16);
     return {r: decimal >> 16, g: decimal >> 8 & 255, b: decimal & 255};
@@ -72,12 +71,16 @@ export default async function ({ addon, msg, console }) {
     let svg = atob(iconElement.src.replace(uriHeader, ""));
 
     // To change the menu item colors, we are inserting our own css after scratch's in the style tag
-    // We want to avoid adding unneeded styling, so we keep our changes after the "ccbc edit" comment
+    // We want to avoid adding unneeded styling, so we keep our changes after the "rcb edit" comment
     // This allows us to remove old changes, and not be negatively effected by theme3 recoloring them
     const editedComment = "/*rcb edit*/";
     const endStyleIndex = svg.indexOf("</style>");
     const editedCommentIndex = svg.indexOf(editedComment);
-    const appendedStyles = editedComment + ".cls-3{fill:" + colors.colourPrimary + ";}.cls-3,.cls-4{stroke:" + colors.colourTertiary + ";}.cls-4{fill:" + colors.colourSecondary + ";}text.cls-4{fill:#fff;stroke:unset;}"
+    const appendedStyles = editedComment +
+        ".cls-3{ fill: " + colors.colourPrimary + ";}" +
+        ".cls-3, .cls-4{ stroke: " + colors.colourTertiary + ";}" +
+        ".cls-4{ fill: " + colors.colourSecondary + ";}" +
+        "text.cls-4{ fill:#fff; stroke:unset;}"
     if(editedCommentIndex === -1) {
       svg = svg.substring(0, endStyleIndex) + appendedStyles + svg.substring(endStyleIndex);
     } else {
@@ -129,24 +132,24 @@ export default async function ({ addon, msg, console }) {
             setTimeout(changeBorderColor, 0, htmlInput_, colors.colourPrimary);
           }
         });
-        // For some reason pathObject.svgPath isn't updating when applyColor is called
-        const pathSelected = block.pathObject?.svgPathSelected;
-        if(pathSelected) {
-          // This makes this harder to set from other addons, but I am stumped on how else to achieve this
-          pathSelected.setAttribute("fill", colors.colourPrimary);
-          pathSelected.setAttribute("stroke", colors.colourTertiary)
-        }
       } else {
         // Updating the colour does not update the background of fields in procedure_declaration
         block.inputList.forEach((input) => {
           const box_ = input.fieldRow?.[0]?.box_
-          if (box_) {
+          if (box_ && !box_.editorTheme3) {
             box_.setAttribute('fill', colors.colourTertiary);
           }
         });
       }
     }
     if (Blockly.registry) {
+      // For some reason pathObject.svgPathSelected isn't updating when applyColor is called
+      const pathSelected = block.pathObject?.svgPathSelected;
+      if(pathSelected) {
+        // This makes this harder to set from other addons, but I am stumped on how else to achieve this
+        pathSelected.setAttribute("fill", colors.colourPrimary);
+        pathSelected.setAttribute("stroke", colors.colourTertiary)
+      }
       block.applyColour()
         block.getChildren().forEach((child) => {
           // Make sure children's stroke color isn't messed up
@@ -176,7 +179,6 @@ export default async function ({ addon, msg, console }) {
     // If so, inject our changes if we haven't already
     if(block.type === "procedures_declaration" && !block.recolorCustomBlockInjected) {
       shimOnChangeFn(block)
-      return;
     }
     // There used to be a lot of shenanigans here, but with the applyColour / updateColour
     // methods, we don't generally deal with blocks that haven't been rendered yet
@@ -260,6 +262,13 @@ export default async function ({ addon, msg, console }) {
             colourQuaternary: color.colourQuaternary
           };
           this.pathObject.setStyle(this.style);
+          // Procedures prototype blocks set their tertiary color from their parents tertiary color
+          if(this.type === "procedures_prototype") {
+            const applyColorResult = oldApplyColour.call(this, ...args);
+            this.style.colourTertiary = color.colourTertiary;
+            this.pathObject.svgPath.setAttribute("stroke", color.colourTertiary);
+            return applyColorResult;
+          }
         }
       }
       return oldApplyColour.call(this, ...args);
@@ -275,6 +284,13 @@ export default async function ({ addon, msg, console }) {
           this.colourSecondary_ = color.colourSecondary;
           this.colourTertiary_ = color.colourTertiary;
           this.colourQuaternary_ = color.colourQuaternary
+          // Procedures prototype blocks set their tertiary color from their parents tertiary color
+          if(this.type === "procedures_prototype") {
+            const updateColorResult = oldUpdateColour.call(this, ...args);
+            this.colourTertiary_ = color.colourTertiary;
+            this.svgPath_.setAttribute("stroke", color.colourTertiary);
+            return updateColorResult;
+          }
         }
       }
       return oldUpdateColour.call(this, ...args);
@@ -312,9 +328,10 @@ export default async function ({ addon, msg, console }) {
     }
   }
 
-  addon.self.addEventListener("disabled", () => updateExistingBlocks());
+  addon.self.addEventListener("disabled", () => enableAddon());
   addon.self.addEventListener("reenabled", () => enableAddon());
 
   enableAddon();
+
 
 }
