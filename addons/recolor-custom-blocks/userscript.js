@@ -1,3 +1,5 @@
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+
 const uriHeader = "data:image/svg+xml;base64,"
 
 export default async function ({ addon, msg, console }) {
@@ -175,11 +177,7 @@ export default async function ({ addon, msg, console }) {
     if(blockStyle !== "more" || (block.type ?? "").startsWith("argument")) {
       return;
     }
-    // If we encounter a procedures_declaration, it means the edit block modal is open
-    // If so, inject our changes if we haven't already
-    if(block.type === "procedures_declaration" && !block.recolorCustomBlockInjected) {
-      shimOnChangeFn(block)
-    }
+
     // There used to be a lot of shenanigans here, but with the applyColour / updateColour
     // methods, we don't generally deal with blocks that haven't been rendered yet
     const textContent = block.procCode_ ?? ""
@@ -192,6 +190,7 @@ export default async function ({ addon, msg, console }) {
       // If we can get a valid Blockly color from colorCandidateString, set the block color
       if(colorCandidate) {
         setBlockColor(block, colorCandidate, true);
+        block.recolorCustomBlock.prefixEnd = firstColonIndex + 1;
         return;
       }
       // If we can get a valid Hex color from the colorCandidateString, make fake colors
@@ -199,6 +198,8 @@ export default async function ({ addon, msg, console }) {
       if(isHexColor(colorCandidateString)) {
         const fakeColor = getFakeBlockColors(colorCandidateString);
         setBlockColor(block, fakeColor, true);
+        block.recolorCustomBlock.prefixEnd = firstColonIndex + 1;
+
         return;
       }
     }
@@ -208,13 +209,15 @@ export default async function ({ addon, msg, console }) {
     }
   }
 
-  // Allows us to catch most cases of blocks needing to be colored.
-  // Does not catch live-updating the procedure_declaration blocks, or changes to blocks
-  // after they've been edited
+  // We use this to catch when procedures_declaration is rendered so we can shim the onChangeFn
   const oldBlockInitSvg = Blockly.BlockSvg.prototype.initSvg;
   Blockly.BlockSvg.prototype.initSvg = function (...args) {
-    handleBlock(this);
-    return oldBlockInitSvg.call(this, ...args);
+    const initSvgResult = oldBlockInitSvg.call(this, ...args)
+    if(this.type === "procedures_declaration" && !this.recolorCustomBlockInjected) {
+      shimOnChangeFn(this)
+      handleBlock(this);
+    }
+    return initSvgResult;
   };
 
   // onChangeFn is called for every block, so we can shim it do recolor
@@ -233,9 +236,9 @@ export default async function ({ addon, msg, console }) {
       }
     }
   }
-
   const enableAddon = () => {
-    updateExistingBlocks()
+    // Refreshing the blocks allows us to change displayName later
+    updateExistingBlocks();
     if (addon.tab.redux.state.scratchGui.customProcedures.active) {
       // If the modal is open, we need to call handleBlock on the procedure_declaration to
       // get the shim injected and recolor the block if needed
@@ -299,6 +302,7 @@ export default async function ({ addon, msg, console }) {
 
 
   const updateExistingBlocks = () => {
+    updateAllBlocks(addon.tab)
     const workspace = addon.tab.traps.getWorkspace();
     const flyout = workspace && workspace.getFlyout();
     if (workspace && flyout) {
@@ -308,15 +312,40 @@ export default async function ({ addon, msg, console }) {
       }
     }
   }
-
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    // We need to catch updates from editing a custom procedure, as Blockly.BlockSvg.prototype.initSvg doesn't
-    if (e.detail.action.type === "scratch-gui/custom-procedures/DEACTIVATE_CUSTOM_PROCEDURES") {
-      // Timeout to wait until the elements are rendered
-      setTimeout(updateExistingBlocks, 0);
+  // Creates a modified version of a block's createAllInputs_ function
+  const customCreateAllInputs = (oldCreateAllInputs) => {
+    return function(...args) {
+      if (addon.self.disabled) return oldCreateAllInputs.call(this, ...args);
+      handleBlock(this)
+      const prefixEnd = this.recolorCustomBlock?.prefixEnd
+      if (prefixEnd && addon.settings.get("hideColorPrefix")) {
+        const originalProcCode = this.procCode_;
+        this.procCode_ = this.procCode_.slice(prefixEnd);
+        const ret = oldCreateAllInputs.call(this, ...args);
+        this.procCode_ = originalProcCode;
+        return ret;
+      }
+      return oldCreateAllInputs.call(this, ...args);
     }
-  });
+  }
+  // Pollute procedures_call's and procedures_prototype's createAllInputs_ functions
+  for(const fn of ["procedures_call", "procedures_prototype"]) {
+    if(Blockly.registry) {
+      const oldInit = Blockly.Blocks[fn].init;
+      Blockly.Blocks[fn].init = function(...args) {
+        const initResult = oldInit.call(this, ...args);
+        debugger;
+
+        const oldCreateAllInputs = this.createAllInputs_;
+        this.createAllInputs_ = customCreateAllInputs(oldCreateAllInputs);
+        return initResult;
+      }
+    } else {
+      const originalCreateAllInputs = Blockly.Blocks[fn].createAllInputs_;
+      Blockly.Blocks[fn].createAllInputs_ = customCreateAllInputs(originalCreateAllInputs);
+    }
+  }
+
 
   // toolbox.refreshTheme doesn't trigger applyColour or initSvg, so we need to apply our changes manually
   if(Blockly.registry) {
@@ -328,10 +357,12 @@ export default async function ({ addon, msg, console }) {
     }
   }
 
-  addon.self.addEventListener("disabled", () => enableAddon());
+
+  addon.self.addEventListener("disabled", () => updateAllBlocks(addon.tab));
   addon.self.addEventListener("reenabled", () => enableAddon());
+  addon.settings.addEventListener("change", () => updateAllBlocks(addon.tab));
+
 
   enableAddon();
-
 
 }

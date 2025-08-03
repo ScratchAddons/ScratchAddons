@@ -20,6 +20,14 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Hide color prefixes",
+      "id": "hideColorPrefix",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.43.0"
