@@ -481,6 +481,14 @@ export default async function ({ addon, console, msg }) {
         this.getOutlinePath(name).setAttribute("fill", this.style.colourSecondary);
       }
     };
+
+    const oldBlockSetStyle = Blockly.BlockSvg.prototype.setStyle;
+    Blockly.BlockSvg.prototype.setStyle = function (...args) {
+      // Prevent hat from being overridden when theme changes
+      const hat = this.hat;
+      oldBlockSetStyle.call(this, ...args);
+      this.hat = hat;
+    };
   } else {
     const oldBlockSetColour = Blockly.Block.prototype.setColour;
     Blockly.Block.prototype.setColour = function (colour, colourSecondary, colourTertiary) {
@@ -880,7 +888,6 @@ export default async function ({ addon, console, msg }) {
                 },
               ])
             ),
-            startHats: true,
           }
         )
       );
