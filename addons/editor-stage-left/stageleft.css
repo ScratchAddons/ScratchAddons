@@ -99,3 +99,15 @@
 .sa-stage-hidden [class*="gui_tab-list_"] {
   padding-inline-start: calc(240px + 1.125rem);
 }
+
+/* search-sprites compatibility */
+
+.sa-small-stage [dir="ltr"] .sa-search-sprites-container {
+  right: auto;
+  left: calc(100% - 7.5rem);
+}
+
+.sa-small-stage [dir="rtl"] .sa-search-sprites-container {
+  left: auto;
+  right: calc(100% - 7.5rem);
+}
