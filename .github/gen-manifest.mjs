@@ -7,7 +7,6 @@ const PERMISSIONS_ALWAYS_IGNORED = [
   "https://scratchfoundation.github.io/*",
   "http://localhost:8333/*",
   "http://localhost:8601/*",
-  "http://localhost:8602/*",
   "http://localhost/*",
 ];
 
