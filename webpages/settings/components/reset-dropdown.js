@@ -21,7 +21,7 @@ export default async function ({ template }) {
         this.$root.closePickers({ isTrusted: true }, null, {
           callCloseDropdowns: false,
         });
-        this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+        this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
       },
       resetToDefault() {
         this.$parent.addonSettings[this.setting.id] = this.setting.default;

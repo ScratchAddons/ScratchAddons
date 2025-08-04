@@ -182,7 +182,7 @@ export default async function ({ template }) {
         this.$root.closePickers({ isTrusted: true }, null, {
           callCloseDropdowns: false,
         });
-        this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+        this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
       },
     },
     watch: {
@@ -199,8 +199,8 @@ export default async function ({ template }) {
       },
     },
     events: {
-      closeResetDropdowns(...params) {
-        return this.$root.closeResetDropdowns(...params);
+      closeDropdowns(...params) {
+        return this.$root.closeDropdowns(...params);
       },
     },
     ready() {

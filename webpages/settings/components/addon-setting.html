@@ -42,7 +42,7 @@
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
-          <div v-click-outside="closeResetDropdowns">
+          <div v-click-outside="closeDropdowns">
             <button
               :disabled="!addon._enabled"
               class="addon-buttons addon-split-button-dropdown"
@@ -139,7 +139,7 @@
           :setting="setting"
           :enabled="addon._enabled"
           :presets="addon.presets"
-          v-click-outside="closeResetDropdowns"
+          v-click-outside="closeDropdowns"
         ></reset-dropdown
       ></template>
       <template v-if="!tableChild && !showResetDropdown"
