@@ -67,13 +67,22 @@ export default async function ({ template }) {
           async (e) => {
             const text = await inputElem.files[0].text();
             inputElem.remove();
-            let preset;
+            let obj;
             try {
-              preset = JSON.parse(text);
-              if (!preset.addonId) throw "Missing addon ID";
-              if (preset.addonId !== this.addon._addonId) {
-                console.warn(`Incorrect addon ID: ${preset.addonId}`);
-                alert(this.msg("incorrectAddonImport", this.$root.manifestsById[preset.addonId].name));
+              obj = JSON.parse(text);
+              if (!obj.addonId) {
+                // Check if it's a full extension settings file
+                const settings = obj?.addons?.[this.addon._addonId]?.settings;
+                if (settings) {
+                  this.loadPreset({ id: "extracted-settings", values: settings });
+                  return;
+                } else {
+                  throw "Missing addon ID";
+                }
+              }
+              if (obj.addonId !== this.addon._addonId) {
+                console.warn(`Incorrect addon ID: ${obj.addonId}`);
+                alert(this.msg("incorrectAddonImport", this.$root.manifestsById[obj.addonId].name));
                 return;
               }
             } catch (e) {
@@ -81,7 +90,7 @@ export default async function ({ template }) {
               alert(chrome.i18n.getMessage("importFailed"));
               return;
             }
-            this.loadPreset(preset);
+            this.loadPreset(obj);
           },
           { once: true }
         );
