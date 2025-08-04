@@ -85,13 +85,35 @@ export default async function ({ addon, console }) {
    * Switch costume editor tool if a valid shortcut was pressed.
    */
   function handleKeyDown(event) {
-    if (isUserTyping || event.ctrlKey || event.altKey || event.metaKey) return;
+    if (isUserTyping || event.altKey) return;
+    if (event.ctrlKey || event.metaKey) {
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        switchCostume(event.key === "ArrowLeft");
+        event.cancelBubble = true;
+        event.preventDefault();
+      }
+    } else {
+      const localizationId = shortcutToToolLocalizationId[event.key.toLowerCase()];
+      if (!localizationId) return;
 
-    const localizationId = shortcutToToolLocalizationId[event.key.toLowerCase()];
-    if (!localizationId) return;
+      const localizedToolName = addon.tab.scratchMessage(localizationId);
+      switchTool(localizedToolName);
+    }
+  }
 
-    const localizedToolName = addon.tab.scratchMessage(localizationId);
-    switchTool(localizedToolName);
+  function switchCostume(up) {
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== COSTUME_EDITOR_TAB_INDEX) return;
+    const selected = document.querySelector("div[class*='sprite-selector-item_is-selected']");
+    const node = up ? selected.parentNode.previousSibling : selected.parentNode.nextSibling;
+    if (!node) return;
+    const wrapper = node.closest("div[class*=gui_flex-wrapper]");
+    node.querySelector("div[class^='sprite-selector-item_sprite-name']").click();
+    node.scrollIntoView({
+      behavior: "auto",
+      block: "center",
+      inline: "start",
+    });
+    wrapper.scrollTop = 0;
   }
 
   /**
