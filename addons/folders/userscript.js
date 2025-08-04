@@ -768,7 +768,7 @@ export default async function ({ addon, console, msg }) {
     });
   };
 
-  function getRestoreFun(type, lastCostumeDeleted) {
+  function restore(type, lastCostumeDeleted) {
     // Reintegrate the only and last costume to the folder
     if (lastCostumeDeleted !== null) {
       // type === "costume"
