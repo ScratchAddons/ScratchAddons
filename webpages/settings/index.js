@@ -264,7 +264,7 @@ let fuse;
         if (callCloseDropdowns) this.closeDropdowns();
       },
       closeDropdowns(e, leaveOpen) {
-        this.$emit("close-reset-dropdowns", leaveOpen);
+        this.$emit("close-dropdowns", leaveOpen);
       },
       exportSettings() {
         serializeSettings().then((serialized) => {

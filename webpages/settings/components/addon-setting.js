@@ -9,7 +9,7 @@ export default async function ({ template }) {
       };
     },
     ready() {
-      this.$root.$on("close-reset-dropdowns", (except) => {
+      this.$root.$on("close-dropdowns", (except) => {
         if (this.rowDropdownOpen && this !== except) {
           this.rowDropdownOpen = false;
         }
