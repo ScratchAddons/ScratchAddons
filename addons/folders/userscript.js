@@ -893,7 +893,7 @@ export default async function ({ addon, console, msg }) {
             addon.tab.redux.dispatch({
               type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
               state: {
-                restoreFun: getRestoreFun.bind(this, type, null),
+                restoreFun: restore.bind(this, type, null),
                 deletedItem: "Sprite",
               },
             });
@@ -929,7 +929,7 @@ export default async function ({ addon, console, msg }) {
             addon.tab.redux.dispatch({
               type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
               state: {
-                restoreFun: getRestoreFun.bind(this, type, lastCostumeRemoved),
+                restoreFun: restore.bind(this, type, lastCostumeRemoved),
                 deletedItem: type === "costume" ? "Costume" : "Sound",
               },
             });
