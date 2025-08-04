@@ -793,7 +793,7 @@ export default async function ({ addon, console, msg }) {
     }
 
     restorationFunctions.reverse();
-    restorationFunctions.forEach((restore) => restore());
+    restorationFunctions.forEach((restoreFun) => restoreFun());
     restorationFunctions = [];
   }
 
