@@ -103,8 +103,8 @@ export default async function ({ addon, console }) {
 
   function switchCostume(up) {
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== COSTUME_EDITOR_TAB_INDEX) return;
-    const selected = document.querySelector("div[class*='sprite-selector-item_is-selected']");
-    const node = up ? selected.parentNode.previousSibling : selected.parentNode.nextSibling;
+    const selected = document.querySelector("div[class*='sprite-selector-item_is-selected']").parentNode;
+    const node = up ? selected.previousSibling : selected.nextSibling;
     if (!node) return;
     const wrapper = node.closest("div[class*=gui_flex-wrapper]");
     node.querySelector("div[class^='sprite-selector-item_sprite-name']").click();
