@@ -38,7 +38,7 @@
             </div>
           </div>
         </div>
-        <div class="addon-split-button dropdown-parent" :class="{open: rowDropdownOpen}">
+        <div class="addon-split-button setting-table-dropdown dropdown-parent" :class="{open: rowDropdownOpen}">
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
@@ -358,6 +358,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+  .setting-table-dropdown {
+    align-self: flex-start;
   }
 
   @media (max-width: 700px) {
