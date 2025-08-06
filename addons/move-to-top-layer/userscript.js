@@ -17,6 +17,7 @@ export default async function ({ addon, console, msg }) {
         !e.target.closest("div[class^='delete-button_delete-button_']") &&
         !e.target.closest(".sa-sprite-properties-info-btn")
       ) {
+        // TODO: folders compatibility
         const spriteName = parentDiv.querySelector("div[class^='sprite-selector-item_sprite-name']").innerText;
         spriteToFront(spriteName);
       }
@@ -24,7 +25,12 @@ export default async function ({ addon, console, msg }) {
   });
   addon.tab.createEditorContextMenu(
     (ctx) => {
-      spriteToFront(ctx.name);
+      if (typeof ctx.name === "object") {
+        // folders compatibility
+        spriteToFront(ctx.name.realName);
+      } else {
+        spriteToFront(ctx.name);
+      }
     },
     {
       types: ["sprite"],
