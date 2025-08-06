@@ -2,19 +2,25 @@
 
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
+
+  function spriteToFront(name) {
+    const target = vm.runtime.getSpriteTargetByName(name);
+    target.goToFront();
+    target.setVisible(true);
+  }
+
   document.body.addEventListener("click", (e) => {
     if (e.shiftKey && !addon.self.disabled) {
       const parentDiv = e.target.closest("div[class^='sprite-selector_sprite-wrapper']");
       if (parentDiv) {
         const spriteName = parentDiv.querySelector("div[class^='sprite-selector-item_sprite-name']").innerText;
-        // move the sprite with that name to front
-        vm.runtime.getSpriteTargetByName(spriteName).goToFront();
+        spriteToFront(spriteName);
       }
     }
   });
   addon.tab.createEditorContextMenu(
     (ctx) => {
-      vm.runtime.getSpriteTargetByName(ctx.name).goToFront();
+      spriteToFront(ctx.name);
     },
     {
       types: ["sprite"],
