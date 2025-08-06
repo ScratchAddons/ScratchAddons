@@ -11,6 +11,14 @@
   grid-template-columns: 250px minmax(0, 1fr);
   position: relative;
 }
+.mod-fetching::after,
+.studio-project-tile .studio-project-image {
+  background-color: var(--darkWww-page-studioPlaceholder, #a4c9fe);
+}
+.mod-fetching {
+  background-color: var(--darkWww-page-studioPlaceholder, #a4c9fe) !important;
+  color: var(--darkWww-page-studioPlaceholder, #a4c9fe) !important;
+}
 .studio-info-section:first-child /* title */ {
   position: absolute;
   top: 0;

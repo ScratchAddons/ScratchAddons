@@ -43,3 +43,13 @@
   filter: grayscale(80%);
   pointer-events: none;
 }
+
+@media (max-width: 700px) {
+  .filter-options {
+    flex-wrap: wrap;
+  }
+  .filter-option {
+    flex-grow: 1;
+    text-align: center;
+  }
+}

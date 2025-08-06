@@ -18,5 +18,6 @@
   "dynamicDisable": false,
   "dynamicEnable": false,
   "tags": ["community", "forums"],
+  "relatedAddons": ["true-youtube-links"],
   "enabledByDefault": false
 }

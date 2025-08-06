@@ -19,18 +19,26 @@ export async function updateAllBlocks(
     const flyout = workspace.getFlyout();
     if (toolbox && flyout && (updateFlyout || updateCategories)) {
       if (updateFlyout) {
-        const flyoutWorkspace = flyout.getWorkspace();
-        blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+        if (blockly.registry) {
+          // new Blockly: can't use clearWorkspaceAndLoadFromXml() here because it breaks the flyout
+          // Events have to be reenabled here because flyout.show() creates new blocks with new IDs
+          // and the VM needs to be notified about that.
+          blockly.Events.enable();
+          flyout.setRecyclingEnabled(false);
+          flyout.show(toolbox.getInitialFlyoutContents());
+          flyout.setRecyclingEnabled(true);
+          blockly.Events.disable();
+        } else {
+          const flyoutWorkspace = flyout.getWorkspace();
+          blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+        }
       }
       if (updateCategories) {
         const selectedItemId = toolbox.getSelectedItem().id_;
         if (blockly.registry) {
           // new Blockly
           toolbox.render(workspace.options.languageTree);
-          toolbox.selectItem_(
-            null,
-            toolbox.contents_.find((item) => item.id_ === selectedItemId)
-          );
+          toolbox.selectItem_(null, toolbox.contents.get(selectedItemId));
         } else {
           toolbox.categoryMenu_.populate(workspace.options.languageTree);
           toolbox.selectCategoryById(selectedItemId, false);

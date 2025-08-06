@@ -29,14 +29,10 @@
     {
       "id": "aboutHighContrast",
       "type": "info",
-      "text": "The new High Contrast block colors are available as a preset below."
-    },
-    {
-      "id": "whatsInsertionMarker",
-      "type": "info",
-      "text": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks."
+      "text": "The High Contrast block colors are available as a preset below."
     }
   ],
+  "relatedAddons": ["editor-dark-mode", "custom-block-shape", "transparent-orphans", "zebra-striping"],
   "latestUpdate": {
     "isMajor": true,
     "version": "1.39.0",
@@ -175,6 +171,18 @@
         "r": 0.9,
         "g": 0.9,
         "b": 0.9
+      }
+    },
+    {
+      "name": "commentFilter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        }
       }
     }
   ],
@@ -351,6 +359,7 @@
     },
     {
       "name": "Comments",
+      "description": "When using colored text on a black/white background this setting affects the borders of standalone comments.",
       "id": "comment-color",
       "type": "color",
       "default": "#FEF49C"
@@ -393,6 +402,7 @@
     },
     {
       "name": "Insertion marker style",
+      "description": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks.",
       "id": "fillStyle",
       "type": "select",
       "default": "gray",
@@ -605,5 +615,6 @@
   "presetPreview": {
     "type": "palette",
     "colors": ["motion-color", "looks-color", "sounds-color", "events-color", "control-color", "sensing-color"]
-  }
+  },
+  "libraries": ["scratch-www", "scratch-gui", "scratch-blocks"]
 }

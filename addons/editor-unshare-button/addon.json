@@ -20,5 +20,6 @@
     }
   ],
   "tags": ["editor", "editorMenuBar"],
+  "relatedAddons": ["share-through-mystuff"],
   "versionAdded": "1.20.0"
 }

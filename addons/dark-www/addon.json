@@ -2,6 +2,7 @@
   "name": "Website dark mode and customizable colors",
   "description": "Customize colors used by the Scratch website. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
   "tags": ["community", "theme", "featured"],
+  "relatedAddons": ["editor-dark-mode"],
   "credits": [
     {
       "name": "Maximouse",
@@ -153,6 +154,17 @@
         "r": 0.98,
         "g": 0.98,
         "b": 0.98
+      }
+    },
+    {
+      "name": "page-studioPlaceholder",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "transparentSource": "#4d97ff80"
       }
     },
     {
@@ -359,6 +371,18 @@
       }
     },
     {
+      "name": "navbar-scratchr2Divider",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
       "name": "box-text",
       "value": {
         "type": "textColor",
@@ -508,6 +532,18 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.2)",
         "white": "rgba(255, 255, 255, 0.2)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-strongBlueText",
+      "value": {
+        "type": "textColor",
+        "black": "#056dff",
+        "white": "#80b5ff",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1519,6 +1555,17 @@
       }
     },
     {
+      "name": "blue-studioPlaceholder",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "transparentSource": "#4d97ff80"
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
@@ -2357,7 +2404,7 @@
   "userstyles": [
     {
       "url": "experimental_scratchr2.css",
-      "matches": ["isNotScratchWWW"]
+      "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"]
     },
     {
       "url": "experimental_scratchwww.css",
@@ -2651,6 +2698,8 @@
         "link": "#1aa0d8",
         "footer": "#ececec",
         "border": "#0000001a",
+        "messageIndicatorColor": "#f9a739",
+        "messageIndicatorOnMessagesPage": "#f9a739",
         "darkBanners": "off",
         "darkForumCode": false
       }
@@ -2670,6 +2719,8 @@
         "link": "#25aff4",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "off",
         "darkForumCode": false
       }
@@ -2717,8 +2768,10 @@
       }
     }
   ],
+  "addonPreview": true,
   "presetPreview": {
     "type": "palette",
     "colors": ["button", "navbar", "page", "box", "gray", "blue"]
-  }
+  },
+  "libraries": ["scratch-www"]
 }

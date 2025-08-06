@@ -32,8 +32,13 @@ let fuse;
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
     "webpages/settings/components/modal",
+    "webpages/settings/components/previews/compact-messages",
+    "webpages/settings/components/previews/dark-www",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
+    "webpages/settings/components/previews/stage-monitor",
+    "webpages/settings/components/previews/stage-monitor-preset",
+    "webpages/settings/components/previews/workspace-dots",
   ]);
 
   Vue.directive("click-outside", {
@@ -84,12 +89,17 @@ let fuse;
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
         moreSettingsOpen: false,
+        relatedAddonsOpen: false,
+        relatedToAddonName: null,
+        relatedAddons: [],
+        relatedAddonsHistory: [],
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
         manifests: [],
         manifestsById: {},
         selectedCategory: "all",
+        previousCategory: "all",
         searchInput: "",
         searchInputReal: "",
         addonSettings: {},
@@ -180,6 +190,41 @@ let fuse;
         }
         location.hash = "";
       },
+      openRelatedAddons(addonManifest, log = true) {
+        this.relatedToAddonName = addonManifest.name;
+        this.relatedAddons.length = 0;
+        if (this.relatedAddonsHistory.length === 0) {
+          this.previousCategory = this.selectedCategory;
+          this.selectedCategory = "all";
+          this.relatedAddonsOpen = true;
+        }
+        if (log) this.relatedAddonsHistory.push(addonManifest);
+        for (const relatedManifest of addonManifest._relatedAddons) {
+          this.relatedAddons.push(relatedManifest);
+        }
+      },
+      backRelatedAddon() {
+        const addon = this.relatedAddonsHistory.pop();
+        if (this.relatedAddonsHistory.length === 0) {
+          this.relatedAddonsOpen = false;
+          this.selectedCategory = this.previousCategory;
+        } else {
+          this.openRelatedAddons(this.relatedAddonsHistory.at(-1), false);
+        }
+        this.blinkAddon(addon._addonId);
+      },
+      blinkAddon(addonId) {
+        setTimeout(() => {
+          const addonElem = document.getElementById("addon-" + addonId);
+          if (!addonElem) return;
+          addonElem.scrollIntoView();
+          // Browsers sometimes ignore :target for the elements dynamically appended.
+          // Use CSS class to initiate the blink animation.
+          addonElem.classList.add("addon-blink");
+          // 2s (animation length) + 1ms
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
+      },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
       },
@@ -189,17 +234,12 @@ let fuse;
       direction() {
         return getDirection(chrome.i18n.getUILanguage());
       },
-      openReview() {
-        if (typeof browser !== "undefined") {
-          window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
-        } else {
-          window.open(
-            `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
-          );
-        }
-      },
       clearSearch() {
         this.searchInputReal = "";
+      },
+      clearAndFocusSearch() {
+        this.clearSearch();
+        document.querySelector("#searchBox").focus();
       },
       setTheme(mode) {
         setGlobalTheme(mode);
@@ -221,10 +261,10 @@ let fuse;
       },
       closePickers(e, leaveOpen, { callCloseDropdowns = true } = {}) {
         this.$emit("close-pickers", leaveOpen);
-        if (callCloseDropdowns) this.closeResetDropdowns();
+        if (callCloseDropdowns) this.closeDropdowns();
       },
-      closeResetDropdowns(e, leaveOpen) {
-        this.$emit("close-reset-dropdowns", leaveOpen);
+      closeDropdowns(e, leaveOpen) {
+        this.$emit("close-dropdowns", leaveOpen);
       },
       exportSettings() {
         serializeSettings().then((serialized) => {
@@ -526,6 +566,16 @@ let fuse;
       cleanManifests.push(deepClone(manifest));
     }
 
+    for (const { manifest } of manifests) {
+      if (manifest.relatedAddons) {
+        manifest._relatedAddons = manifest.relatedAddons.map(
+          (relatedAddonId) =>
+            manifests.find(({ addonId }) => addonId === relatedAddonId)?.manifest ??
+            console.warn("Invalid related addon:", relatedAddonId, "found on addon manifest of:", manifest._addonId)
+        );
+      }
+    }
+
     // Manifest objects will now be owned by Vue
     for (const { manifest } of manifests) {
       Vue.set(vue.manifestsById, manifest._addonId, manifest);
@@ -604,16 +654,7 @@ let fuse;
 
         const addon = vue.manifestsById[addonId];
         vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-        setTimeout(() => {
-          const addonElem = document.getElementById("addon-" + addonId);
-          if (!addonElem) return;
-          addonElem.scrollIntoView();
-          // Browsers sometimes ignore :target for the elements dynamically appended.
-          // Use CSS class to initiate the blink animation.
-          addonElem.classList.add("addon-blink");
-          // 2s (animation length) + 1ms
-          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
-        }, 0);
+        this.blinkAddon(addonId);
       }
     }, 0);
 
@@ -672,5 +713,7 @@ let fuse;
     }
   });
 
-  chrome.runtime.sendMessage("checkPermissions");
+  if (!isIframe) {
+    chrome.runtime.sendMessage("checkPermissions");
+  }
 })();

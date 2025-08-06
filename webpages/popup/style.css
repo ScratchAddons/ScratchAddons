@@ -7,7 +7,7 @@ body {
   height: var(--height, 599px);
   overflow: hidden;
   margin: 0;
-  background-color: var(--brand-orange); /* Firefox popup arrow */
+  background-color: var(--page-background);
   font-family: "Roboto", sans-serif;
   color: var(--white-text);
 }
@@ -19,6 +19,7 @@ body {
 #header {
   display: flex;
   height: 60px;
+  background-color: var(--brand-orange);
 }
 .header-button {
   cursor: pointer;
@@ -121,6 +122,9 @@ body {
 }
 .popup-title {
   padding-inline-start: 5px;
+}
+.popout {
+  cursor: pointer;
 }
 .popout > .popout-img {
   display: inline-block;

@@ -19,6 +19,12 @@
       "note": "addon version",
       "id": "addonVersion",
       "link": "https://github.com/Secret-chest"
+    },
+    {
+      "name": "Google",
+      "note": "icons",
+      "id": "icons",
+      "link": "https://fonts.google.com/icons?icon.set=Material+Icons"
     }
   ],
   "enabledByDefault": false,

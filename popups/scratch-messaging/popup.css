@@ -4,6 +4,7 @@ button {
 
 .contents {
   max-height: calc(100vh - 32px);
+  max-height: calc(100svh - 32px);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
@@ -49,9 +50,11 @@ button {
   align-items: center;
   user-select: none;
 }
-.fullscreen .message-type-title {
-  padding: 10px;
-  padding-inline-end: 12px;
+@media (min-width: 700px) {
+  .message-type-title {
+    padding: 10px;
+    padding-inline-end: 12px;
+  }
 }
 .message-type-title:not(.hover-reverse) {
   position: sticky;
@@ -70,11 +73,14 @@ button {
 .username-list {
   color: var(--description-text);
   font-size: 14px;
+  -moz-text-size-adjust: none;
   padding-inline: 16px;
 }
-.fullscreen .thread-list,
-.fullscreen .username-list {
-  padding-inline: 20px;
+@media (min-width: 700px) {
+  .thread-list,
+  .username-list {
+    padding-inline: 20px;
+  }
 }
 .thread-list {
   padding-bottom: 20px;
@@ -114,8 +120,10 @@ button > .small-icon {
   margin-inline-end: auto;
   margin-inline-start: 6px;
 }
-html.fullscreen .message-type-title-text {
-  margin-inline-start: 10px;
+@media (min-width: 700px) {
+  .message-type-title-text {
+    margin-inline-start: 10px;
+  }
 }
 a.message-type-title-text {
   color: var(--content-text);
@@ -144,9 +152,12 @@ a.message-type-title-text {
   border-radius: 8px;
   margin: 8px;
   font-size: 14px;
+  -moz-text-size-adjust: none;
 }
-.fullscreen .comment {
-  margin-inline: 12px;
+@media (min-width: 700px) {
+  .comment {
+    margin-inline: 12px;
+  }
 }
 .comment.unread,
 .unread .comment {
@@ -206,8 +217,10 @@ a.message-type-title-text {
 .child-comment {
   margin-inline-start: 3em;
 }
-.fullscreen .child-comment {
-  margin-inline-start: calc(3em + 12px);
+@media (min-width: 700px) {
+  .child-comment {
+    margin-inline-start: calc(3em + 12px);
+  }
 }
 .unread {
   font-weight: 500;
@@ -326,7 +339,10 @@ a.message-type-title-text {
   text-decoration: none;
 }
 #bottom-bar .separator {
-  padding-inline: 5px;
+  margin: auto 8px;
+  height: 15px;
+  padding: 0;
+  border-left: 1px solid var(--content-separator);
 }
 .marked-as-read {
   font-weight: bold;

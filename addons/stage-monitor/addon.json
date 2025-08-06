@@ -138,10 +138,15 @@
       }
     }
   ],
+  "addonPreview": true,
+  "presetPreview": {
+    "type": "stage-monitor-preset"
+  },
   "dynamicEnable": true,
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
   "tags": ["player", "theme"],
+  "relatedAddons": ["editor-dark-mode"],
   "versionAdded": "1.39.0"
 }

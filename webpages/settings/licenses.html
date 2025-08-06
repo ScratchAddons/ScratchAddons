@@ -9,6 +9,11 @@
       /* Imports are here to attempt to speed up load */
       @import url("../styles/colors.css");
       @import url("../styles/components/licenses.css");
+
+      .licenses-body pre {
+        /* Workaround for a Firefox bug. Doesn't work if it's in licenses.css. */
+        width: calc(100vw - 4rem);
+      }
     </style>
     <link rel="icon" href="../../images/icon.png" id="favicon" />
     <link rel="stylesheet" href="style.css" />

@@ -8,12 +8,27 @@ import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
-const isScratchGui =
-  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
+const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 
 const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
+
+const PROJECT_ACTIONS_CSS = `
+  @media (min-width: 768px) {
+    .preview > .inner > .preview-row:nth-child(3) {
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      margin-right: auto;
+    }
+
+    .subactions {
+      display: contents;
+    }
+  }`;
 
 /**
  * APIs specific to userscripts.
@@ -416,13 +431,18 @@ export default class Tab extends Listenable {
     const sharedSpaces = {
       stageHeader: {
         // Non-fullscreen stage header only
-        element: () => q("[class^='stage-header_stage-size-row']"),
+        element: () =>
+          q("[class*='stage-header_setThumbnailButton_']")
+            ? q("[class*='stage-header_rightSection_']")
+            : q("[class*='stage-header_stage-size-row_']"),
         from: () => [],
         until: () => [
           // Small/big stage buttons (for editor mode)
-          q("[class^='stage-header_stage-size-toggle-group']"),
+          q("[class*='stage-header_stage-size-toggle-group_']"),
           // Full screen icon (for player mode)
-          q("[class^='stage-header_stage-size-row']").lastChild,
+          q("[class*='stage-header_setThumbnailButton_']")
+            ? q("[class*='stage-header_rightSection_']").lastChild
+            : q("[class*='stage-header_stage-size-row_']").lastChild,
         ],
       },
       fullscreenStageHeader: {
@@ -451,12 +471,32 @@ export default class Tab extends Listenable {
         until: () => [],
       },
       beforeProjectActionButtons: {
-        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        element: () => {
+          if (!q("#sa-project-actions-css")) {
+            document.head.appendChild(
+              Object.assign(document.createElement("style"), {
+                id: "sa-project-actions-css",
+                textContent: PROJECT_ACTIONS_CSS,
+              })
+            );
+          }
+          return q(".flex-row.subactions > .flex-row.action-buttons");
+        },
         from: () => [],
         until: () => [q(".report-button"), q(".action-buttons > div")],
       },
       afterCopyLinkButton: {
-        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        element: () => {
+          if (!q("#sa-project-actions-css")) {
+            document.head.appendChild(
+              Object.assign(document.createElement("style"), {
+                id: "sa-project-actions-css",
+                textContent: PROJECT_ACTIONS_CSS,
+              })
+            );
+          }
+          return q(".flex-row.subactions > .flex-row.action-buttons");
+        },
         from: () => [q(".copy-link-button")],
         until: () => [],
       },
@@ -757,6 +797,30 @@ export default class Tab extends Listenable {
     createdAnyBlockContextMenus = true;
 
     this.traps.getBlockly().then((ScratchBlocks) => {
+      if (ScratchBlocks.registry) {
+        // new Blockly
+        const oldGenerateContextMenu = ScratchBlocks.BlockSvg.prototype.generateContextMenu;
+        ScratchBlocks.BlockSvg.prototype.generateContextMenu = function (...args) {
+          let items = oldGenerateContextMenu.call(this, ...args);
+          for (const { callback, blocks, flyout } of contextMenuCallbacks) {
+            let injectMenu =
+              // Block in workspace
+              (blocks && !this.isInFlyout) ||
+              // Block in flyout
+              (flyout && this.isInFlyout);
+            if (injectMenu) {
+              try {
+                items = callback(items, this);
+              } catch (e) {
+                console.error("Error while calling context menu callback: ", e);
+              }
+            }
+          }
+          return items;
+        };
+        return;
+      }
+
       const oldShow = ScratchBlocks.ContextMenu.show;
       ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
         const gesture = ScratchBlocks.mainWorkspace.currentGesture_;

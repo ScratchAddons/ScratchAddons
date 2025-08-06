@@ -124,10 +124,11 @@
   line-height: 30px;
 }
 .preview .remix-button {
-  border: 1px solid #328554;
+  background-color: #fba517;
+  border: 1px solid #fba517;
 }
-.preview .remix-button:hover {
-  background-color: #2d784c;
+.preview .remix-button:not(.disabled):hover {
+  background-color: #e29415;
 }
 .preview .see-inside-button,
 .preview .sa-tw-button.scratch {
@@ -223,6 +224,13 @@ body:not(.sa-body-editor) [class*="green-flag_green-flag_"]:hover,
 body:not(.sa-body-editor) [class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
   background-image: url("%addon-self-dir%/assets/green_flag_hover.png");
 }
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps] {
+  background-image: url("%addon-self-dir%/assets/green_flag_60fps.png");
+}
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps]:hover,
+body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps][class*="green-flag_is-active_"] {
+  background-image: url("%addon-self-dir%/assets/green_flag_60fps_hover.png");
+}
 body:not(.sa-body-editor) [class*="stop-all_stop-all_"] {
   background-image: url("%addon-self-dir%/assets/stop_hover.png");
   opacity: 1;
@@ -249,13 +257,36 @@ body:not(.sa-body-editor) [class*="stage-header_stage-size-row_"] > * {
 }
 body:not(.sa-body-editor) [class*="stage-header_stage-button_"] {
   background-color: transparent;
+  border: none;
+}
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:not(.sa-gamepad-container *) {
   background-image: url("%addon-self-dir%/assets/full_screen.png");
   background-repeat: no-repeat;
   background-position: center center;
-  border: none;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"] {
+body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gamepad-container *) {
   display: none;
+}
+[class*="stage-header_rightSection_"] [class*="stage-header_setThumbnailButton_"] {
+  height: 26px;
+  padding: 0 10px;
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 24px;
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+[class*="stage-header_rightSection_"] [class*="stage-header_setThumbnailButton_"]:hover {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+}
+[class*="stage-header_rightSection_"] [class*="stage-header_setThumbnailButton_"]:active {
+  filter: none;
 }
 [class*="stage-header_embed-scratch-logo_"] img {
   padding: 0.8rem 2.4rem; /* hide original image */
@@ -302,18 +333,9 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   display: none;
 }
 
-/* player-thumb compatibility */
-body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper"] {
-  position: relative;
-}
-body:not(.sa-body-editor) div[class*="loader_background_"],
-body:not(.sa-body-editor) .sa-project-thumb {
-  border-radius: 0;
-}
-body:not(.sa-body-editor) :not([class*="stage-wrapper_full-screen_"]) > div[class*="loader_background_"],
-body:not(.sa-body-editor) .sa-project-thumb.loading {
-  top: 38px;
-  height: calc(100% - 39px);
+/* Scratch's Set Thumbnail modal */
+.update-thumbnail-info-modal .update-thumbnail-info-modal-title {
+  height: auto;
 }
 
 /* Description */
@@ -509,7 +531,6 @@ body:not(.sa-body-editor) .sa-project-thumb.loading {
 .subactions .share-date {
   margin: 0;
   padding: 5px 15px;
-  border-right: 1px solid var(--darkWww-border-15, #bbb);
   color: var(--darkWww-gray-scratchr2BlackText, black);
   font-size: 13px;
   line-height: 30px;
@@ -532,8 +553,12 @@ body:not(.sa-body-editor) .sa-project-thumb.loading {
   font-size: 13px;
   font-weight: normal;
 }
+.subactions .action-buttons > .action-button:first-child,
+.subactions .action-buttons > :first-child > .action-button {
+  border-left: 1px solid var(--darkWww-border-15, #bbb);
+}
 .subactions .action-buttons > .action-button:last-child {
-  border: none;
+  border-right: none;
 }
 .subactions .action-buttons .action-button.studio-button::before,
 .subactions .action-buttons .action-button.copy-link-button::before,
@@ -610,7 +635,7 @@ body:not(.sa-body-editor) .sa-project-thumb.loading {
   height: 46px; /* two lines */
 }
 
-/* Set Thumbnail modal */
+/* animated-thumb modal */
 .sa-animated-thumb-popup-content {
   padding: 0;
 }
