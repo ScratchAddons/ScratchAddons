@@ -14,7 +14,7 @@
   ],
   "versionAdded": "1.28.0",
   "latestUpdate": {
-    "version": "1.41.0",
+    "version": "1.43.0",
     "temporaryNotice": "You can now use the context menu (open by right clicking or touching and holding) to jump to custom block definitions."
   },
   "tags": ["editor", "codeEditor", "recommended"],
