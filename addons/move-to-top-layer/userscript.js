@@ -12,12 +12,11 @@ export default async function ({ addon, console, msg }) {
   document.body.addEventListener("click", (e) => {
     if (e.shiftKey && !addon.self.disabled) {
       const parentDiv = e.target.closest("div[class^='sprite-selector_sprite-wrapper']");
-      if (parentDiv) {
-        if (
-          e.target.closest("div[class^='delete-button_delete-button_']") ||
-          e.target.closest(".sa-sprite-properties-info-btn")
-        )
-          return;
+      if (
+        parentDiv &&
+        !e.target.closest("div[class^='delete-button_delete-button_']") &&
+        !e.target.closest(".sa-sprite-properties-info-btn")
+      ) {
         const spriteName = parentDiv.querySelector("div[class^='sprite-selector-item_sprite-name']").innerText;
         spriteToFront(spriteName);
       }
