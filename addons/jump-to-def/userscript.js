@@ -48,7 +48,7 @@ export default async function ({ addon, msg, console }) {
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (!addon.self.disabled && block.type === "procedures_call") {
-        items.splice(3, 0, {
+        items.push({
           enabled: true,
           text: msg("to-def"),
           callback: () => jumpToBlockDefinition(block),
