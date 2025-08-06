@@ -1,0 +1,12 @@
+<template>
+  <div :class="['addon-message', 'addon-' + (info.type || 'info')]" v-show="shouldShow">
+    <img
+      :src="'../../images/icons/' + {
+            'warning': 'warning.svg',
+            'notice': 'notice.svg',
+            'info': 'help.svg',
+          }[info.type || 'info']"
+      draggable="false"
+    />{{ info.text }}
+  </div>
+</template>
