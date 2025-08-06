@@ -347,21 +347,30 @@ const WELL_KNOWN_PATTERNS = {
   // scratch-www routes, not including project pages
   // Matches /projects (an error page) but not /projects/<id>
   scratchWWWNoProject:
-    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects|cookies|accounts\/bad-username)\/?)?$/,
+    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps?)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects|cookies|accounts\/bad-username)\/?)?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {
   isNotScratchWWW: (match) => {
     const { projects, projectEmbeds, scratchWWWNoProject } = WELL_KNOWN_PATTERNS;
-    // Server errors and emails are neither r2 nor www
     return !(
       projects.test(match) ||
       projectEmbeds.test(match) ||
       scratchWWWNoProject.test(match) ||
-      /^\/(?:50[03]\/?$|cdn\/|emails\/)/.test(match)
+      EXCLUDE_PATTERN.test(match)
     );
   },
 };
+
+// Addons don't run on these pages unless they explicitly ask to:
+// - error pages
+// - emails
+// - My Classes
+const EXCLUDE_PATTERN = /^\/(?:[0-9]{3}\/?$|cdn\/|emails\/|educators\/classes\/?$)/;
+
+// These match all Scratch URLs except the excluded pages listed above
+const EVERYTHING_MATCH = "*";
+const LEGACY_EVERYTHING_MATCH = "https://scratch.mit.edu/*";
 
 function matchesIf(injectable, settings) {
   // injectable.if is guaranteed to exist
@@ -418,8 +427,9 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
   const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
   const scratchOrigin = parsedURL.port === "8333" ? "http://localhost:8333" : "https://scratch.mit.edu";
   const isScratchOrigin = parsedOrigin === scratchOrigin;
-  // "*" is used for any URL on Scratch origin
-  if (matches === "*") return isScratchOrigin;
+  if (matches === EVERYTHING_MATCH) {
+    return isScratchOrigin && !EXCLUDE_PATTERN.test(parsedPathname);
+  }
   // matches becomes RegExp if it is a string that starts with ^
   // See load-addon-manifests.js
   if (matches instanceof RegExp) {
@@ -427,7 +437,9 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
     return matches.test(matchURL);
   }
   for (const match of matches) {
-    if (match instanceof RegExp) {
+    if (match === LEGACY_EVERYTHING_MATCH) {
+      if (isScratchOrigin && !EXCLUDE_PATTERN.test(parsedPathname)) return true;
+    } else if (match instanceof RegExp) {
       if (match._scratchDomainImplied && !isScratchOrigin) continue;
       if (match.test(match._scratchDomainImplied ? parsedPathname : originPath)) {
         return true;

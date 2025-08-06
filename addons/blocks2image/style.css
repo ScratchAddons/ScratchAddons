@@ -1,0 +1,97 @@
+@import url("../../libraries/common/cs/spinner.css");
+
+.sa-export-container {
+  box-sizing: border-box;
+  width: 700px;
+  max-width: 85%;
+  margin-top: 12vh;
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sa-export-image-container {
+  display: flex;
+  align-items: center;
+  max-height: 60vh;
+  max-width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: auto;
+}
+
+.sa-export-image {
+  object-fit: contain;
+  pointer-events: none;
+  margin-top: auto;
+  padding: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sa-export-image.wide {
+  max-width: 200vw;
+  max-height: 50vh;
+}
+
+.sa-export-image.tall {
+  max-width: 40vw;
+  max-height: 200vh;
+}
+
+.sa-export-button-container {
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding: 0 2.25rem;
+}
+
+.sa-export-copy-button {
+  margin-inline-end: auto;
+}
+
+.sa-export-button-container button {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.sa-export-button-container button + button {
+  margin-inline-start: 0.5rem;
+}
+
+.sa-export-button-icon {
+  margin-inline-end: 0.5rem;
+  height: 0;
+  display: flex;
+  align-items: center;
+}
+
+.sa-export-copy-button img {
+  filter: var(--editorDarkMode-input-filter, none);
+}
+
+.sa-export-png-button img {
+  filter: var(--editorDarkMode-primary-filter, none);
+}
+
+.sa-export-container.sa-export-loading {
+  visibility: hidden;
+}
+
+.sa-export-loading-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sa-export-loading-text {
+  color: white;
+  font-size: 1rem;
+  user-select: none;
+}

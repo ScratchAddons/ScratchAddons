@@ -58,5 +58,7 @@
     "newSettings": ["always"],
     "isMajor": true
   },
-  "tags": ["editor", "projectPlayer", "recommended"]
+  "tags": ["player", "recommended"],
+  "relatedAddons": ["mute-project"],
+  "libraries": ["scratch-gui"]
 }

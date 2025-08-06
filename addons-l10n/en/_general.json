@@ -6,5 +6,6 @@
   "_general/blocks/clockwise": "clockwise",
   "_general/blocks/anticlockwise": "anti-clockwise",
   "_general/meta/managedBySa": "Managed by Scratch Addons",
-  "_general/meta/addonSettings": "Addon Settings"
+  "_general/meta/addonSettings": "Addon Settings",
+  "_general/meta/message-from-sa": "Message from Scratch Addons"
 }

@@ -29,8 +29,6 @@ export default async function ({ addon, console, msg }) {
     togglePreview(checkboxInput.checked);
   });
 
-  const REACT_CONTAINER_PREFIX = "__reactContainere$";
-
   let currentlyEnabled = false;
   let wasEverEnabled = false;
 
@@ -109,12 +107,14 @@ export default async function ({ addon, console, msg }) {
 
     forceReactRerender();
 
-    if (!document.querySelector(".project-description")) {
-      // Something went wrong for some reason...
-      console.log("Failed to show preview of project notes.");
-      checkboxInput.checked = false;
-      currentlyEnabled = false;
-    }
+    setTimeout(() => {
+      if (!document.querySelector(".project-description")) {
+        // Something went wrong for some reason...
+        console.log("Failed to show preview of project notes.");
+        checkboxInput.checked = false;
+        currentlyEnabled = false;
+      }
+    }, 0);
   }
 
   function forceReactRerender() {
@@ -130,7 +130,7 @@ export default async function ({ addon, console, msg }) {
     // Override the render function of the Preview component
     // https://github.com/scratchfoundation/scratch-www/blob/fdcb700/src/views/preview/project-view.jsx
     const reactRootElement = document.querySelector("#app");
-    const reactContainerKey = Object.keys(reactRootElement).find((key) => key.startsWith(REACT_CONTAINER_PREFIX));
+    const reactContainerKey = addon.tab.traps.getInternalContainerKey(reactRootElement);
     let instance = reactRootElement[reactContainerKey];
     while (!instance.stateNode || typeof instance.stateNode.handleUpdateProjectId !== "function") {
       instance = instance.child;
