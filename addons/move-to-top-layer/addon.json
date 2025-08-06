@@ -12,7 +12,7 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.37.0",
+    "version": "1.43.0",
     "temporaryNotice": "The context menu can now be used to move sprites to the front layer."
   },
   "userscripts": [
