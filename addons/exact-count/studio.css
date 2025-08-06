@@ -1,0 +1,45 @@
+@import url("../../libraries/common/cs/spinner.css");
+
+.studio-tab-nav li .tab-count {
+  position: relative;
+}
+
+.studio-tab-nav li .tab-count .sa-exact-count-tooltip {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin: 0;
+  margin-top: 1rem;
+  transform: translate(-50%, 0);
+  width: max-content;
+  pointer-events: none;
+}
+
+.studio-tab-nav li .tab-count:hover .sa-exact-count-tooltip {
+  display: block;
+}
+
+.studio-tab-nav li .tab-count .sa-exact-count-tooltip::before {
+  display: block;
+  top: -0.5rem;
+  left: 50%;
+  margin-left: -0.5rem;
+  transform: rotate(135deg);
+}
+
+.studio-tab-nav li .tab-count.sa-exact-count-loading {
+  position: relative;
+  color: color-mix(in srgb, currentcolor, transparent);
+}
+
+.studio-tab-nav li .tab-count .sa-spinner {
+  position: absolute;
+  top: calc(50% - 11.4px);
+  left: calc(50% - 11.4px);
+}
+
+.studio-tab-nav .active > li .tab-count .sa-spinner {
+  background-image: url(https://scratch.mit.edu/svgs/modal/spinner-white.svg);
+  filter: var(--darkWww-button-filter, none);
+}

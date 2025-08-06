@@ -1,5 +1,6 @@
 {
   "animated-thumb/set-thumbnail": "Set Thumbnail",
+  "animated-thumb/dropdown-upload": "Upload Custom Thumbnail",
   "animated-thumb/added-by": "Button added by Scratch Addons browser extension",
   "animated-thumb/description": "Upload a thumbnail from a file, or click \"Use Stage\" to use the current stage as the thumbnail.",
   "animated-thumb/keep-thumb": "Stop thumbnail auto-saving (Recommended)",
@@ -12,5 +13,7 @@
   "animated-thumb/error": "Thumbnail could not be uploaded.",
   "animated-thumb/too-big": "The file is too big.",
   "animated-thumb/gif": "Projects with an animated thumbnail might not appear on the Scratch front page and search results. Upload anyway?",
-  "animated-thumb/if-unsuccessful": "If this is not the thumbnail you uploaded just now, the Scratch server might be having a problem. Please wait a few hours and try again."
+  "animated-thumb/if-unsuccessful": "If this is not the thumbnail you uploaded just now, the Scratch server might be having a problem. Please wait a few hours and try again.",
+  "animated-thumb/info-box": "To upload a custom thumbnail using the thumbnail uploader addon, click the arrow icon next to the \"Set Thumbnail\" button.",
+  "animated-thumb/info-tooltip": "To upload a custom thumbnail using the thumbnail uploader addon from Scratch Addons, click the arrow icon."
 }

@@ -41,7 +41,8 @@
       "default": 60
     }
   ],
-  "tags": ["editor", "projectPlayer", "featured"],
+  "tags": ["player", "featured"],
   "versionAdded": "1.1.0",
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "libraries": ["scratch-gui"]
 }

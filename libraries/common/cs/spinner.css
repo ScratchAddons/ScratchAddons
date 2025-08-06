@@ -34,3 +34,8 @@
   animation-delay: 0s, 0.25s;
   animation-iteration-count: 1, infinite;
 }
+
+.sa-spinner-white {
+  background-image: url(https://scratch.mit.edu/svgs/modal/spinner-white.svg);
+  filter: none;
+}

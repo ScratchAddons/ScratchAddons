@@ -11,6 +11,11 @@ try {
 if (window.frameElement && window.frameElement.getAttribute("src") === null)
   throw "Scratch Addons: iframe without src attribute ignored";
 if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
+if (new URL(location.href).hostname === "localhost") {
+  if (!["8333", "8601"].includes(new URL(location.href).port)) {
+    throw "Scratch Addons: this localhost port is not supported";
+  }
+}
 
 const MAX_USERSTYLES_PER_ADDON = 100;
 
@@ -95,8 +100,12 @@ const cs = {
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
   copyImage(dataURL) {
-    // Firefox only
+    // Firefox 109-126 only
     return new Promise((resolve, reject) => {
+      if (typeof Clipboard.prototype.write === "function") {
+        reject("Use browser API instead");
+        return;
+      }
       browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
         (res) => {
           resolve();
@@ -400,6 +409,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         if (everLoadedUserscriptAddons.has(addonId)) {
           if (!dynamicDisable) return;
           // Addon was reenabled
+          document.querySelector(`[data-sa-hide-disabled-style=${addonId}]`).remove();
           _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
         } else {
           if (!dynamicEnable) return;
@@ -447,6 +457,10 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
           removeAddonStyles(addonId);
         }
         disabledDynamicAddons.add(addonId);
+        const style = document.createElement("style");
+        style.dataset.saHideDisabledStyle = addonId;
+        style.textContent = `[data-sa-hide-disabled=${addonId}] { display: none !important; }`;
+        document.body.appendChild(style);
         _page_.fireEvent({ name: "disabled", addonId, target: "self" });
       } else {
         everLoadedUserscriptAddons.delete(addonId);
@@ -542,7 +556,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
 if (location.pathname.startsWith("/discuss/")) {
-  // We do this first as sb2 runs fast.
+  // We do this first as scratchblocks runs fast.
+  // Used by better-quoter.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
@@ -551,7 +566,8 @@ if (location.pathname.startsWith("/discuss/")) {
   if (document.readyState !== "loading") {
     setTimeout(preserveBlocks, 0);
   } else {
-    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
+    // { capture: true } is needed to run before jQuery's listener
+    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true, capture: true });
   }
 }
 
@@ -588,28 +604,10 @@ const showBanner = () => {
   const notifOuterBody = document.createElement("div");
   const notifInnerBody = Object.assign(document.createElement("div"), {
     id: "sa-notification",
-    style: `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 700px;
-    max-height: 270px;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #222;
-    color: white;
-    z-index: 99999;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-shadow: none;
-    box-shadow: 0 0 20px 0px #0000009e;
-    font-size: 14px;
-    line-height: normal;`,
   });
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=oRo0tMWEpiA",
+    href: "https://www.youtube.com/watch?v=vuL5lV0l3fY",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
@@ -617,30 +615,24 @@ const showBanner = () => {
   // Thumbnails were 100px height
   */
   const notifImage = Object.assign(document.createElement("img"), {
+    className: "sa-notification-image",
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
     src: chrome.runtime.getURL("/images/cs/icon.png"),
-    style: "height: 150px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
-    style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
-    style: "font-size: 18px; line-height: normal; display: inline-block; margin-bottom: 12px;",
+    className: "sa-notification-title",
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("img"), {
-    style: `
-    float: right;
-    cursor: pointer;
-    width: 24px;`,
+    className: "sa-notification-close",
     title: chrome.i18n.getMessage("close"),
     src: chrome.runtime.getURL("../images/cs/close.svg"),
+    draggable: false,
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
-
-  const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
-  const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
   //
   const _uiLanguage = chrome.i18n.getUILanguage();
@@ -648,14 +640,13 @@ const showBanner = () => {
   //
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE + "font-weight: bold;",
+    className: "sa-notification-subtitle",
     textContent: chrome.i18n
       .getMessage("extensionHasUpdated", DOLLARS)
       .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_38", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_42", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -665,25 +656,17 @@ const showBanner = () => {
             .outerHTML,
           */
           Object.assign(document.createElement("a"), {
-            // href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
-            href: `https://scratchaddons.com/${_localeSlash}feedback?ext_version=${
-              chrome.runtime.getManifest().version
-            }&utm_source=extension&utm_medium=updatenotification&utm_campaign=mv3`,
+            href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
-            style: NOTIF_LINK_STYLE,
-            // textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
-            textContent: chrome.i18n.getMessage("sendFeedbackNotification"),
+            textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
         ][Number(i) - 1]
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_38"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_42"),
   });
-  const notifFooter = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE,
-  });
+  const notifFooter = document.createElement("span");
   const uiLanguage = chrome.i18n.getUILanguage();
   const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
   const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
@@ -692,7 +675,6 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
-    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
@@ -700,17 +682,15 @@ const showBanner = () => {
       chrome.runtime.getManifest().version
     }&${utm}`,
     target: "_blank",
-    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("feedback"),
   });
   const notifFooterTranslate = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/translate",
     target: "_blank",
-    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("translate"),
   });
   const notifFooterLegal = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE + "font-size: 12px;",
+    className: "sa-notification-legal",
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
@@ -721,8 +701,8 @@ const showBanner = () => {
   notifFooter.appendChild(makeBr());
   notifFooter.appendChild(notifFooterLegal);
 
-  notifText.appendChild(notifTitle);
   notifText.appendChild(notifClose);
+  notifText.appendChild(notifTitle);
   notifText.appendChild(makeBr());
   notifText.appendChild(notifInnerText0);
   notifText.appendChild(makeBr());
@@ -740,6 +720,87 @@ const showBanner = () => {
   notifOuterBody.appendChild(notifInnerBody);
 
   document.body.appendChild(notifOuterBody);
+
+  document.body.appendChild(
+    Object.assign(document.createElement("style"), {
+      textContent: `
+        #sa-notification {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 700px;
+          max-width: calc(100% - 60px);
+          max-height: calc(100vh - 60px);
+          max-height: calc(100svh - 60px);
+          overflow-y: auto;
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          border-radius: 10px;
+          background-color: #222;
+          color: white;
+          z-index: 99999;
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          text-shadow: none;
+          box-shadow: 0 0 20px 0px #0000009e;
+          font-size: 14px;
+          line-height: normal;
+        }
+
+        .sa-notification-image {
+          height: 150px;
+          border-radius: 5px;
+          padding: 20px;
+        }
+
+        #sa-notification-text {
+          margin: 12px;
+        }
+
+        #sa-notification-text > span {
+          display: block;
+          color: white !important;
+        }
+
+        .sa-notification-title {
+          font-size: 18px;
+          line-height: normal;
+        }
+
+        .sa-notification-close {
+          float: right;
+          cursor: pointer;
+          margin-left: 12px;
+          margin-bottom: 12px;
+          width: 24px;
+        }
+
+        .sa-notification-subtitle {
+          font-weight: bold;
+        }
+
+        #sa-notification-text a {
+          color: #1aa0d8;
+          font-weight: normal;
+          text-decoration: underline;
+        }
+
+        .sa-notification-legal {
+          font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+          #sa-notification {
+            flex-direction: column;
+          }
+
+          .sa-notification-image {
+            display: none;
+          }
+        }
+      `,
+    })
+  );
 };
 
 const handleBanner = async () => {

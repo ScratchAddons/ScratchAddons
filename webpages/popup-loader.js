@@ -50,7 +50,7 @@ async function getActualCookieStore() {
   return current?.cookieStoreId || undefined;
 }
 
-async function refetchCookies(needsRequest = true) {
+async function refetchCookies(needsRequest = false) {
   if (needsRequest) {
     try {
       await fetch("https://scratch.mit.edu/csrf_token/");
@@ -156,8 +156,7 @@ async function refetchSession(addon) {
     scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
   msg.locale = scratchAddons.l10n.locale;
 
-  const fileName = popupData.popup.script;
-  const module = await import(chrome.runtime.getURL(`/popups/${addonId}/${fileName}`));
+  const module = await import(chrome.runtime.getURL(`/popups/${addonId}/popup.js`));
   module.default({
     addon: addon,
     console,
