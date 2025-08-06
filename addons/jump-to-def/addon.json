@@ -1,6 +1,6 @@
 {
   "name": "Jump to custom block definition",
-  "description": "Right click on a custom block for an option to go to its definition. You can also middle click or Shift+Click on a custom block to immediately go to its definition.",
+  "description": "Jump to a custom block's definition by middle-clicking or Shift+clicking on the block or selecting \"Go to Definition\" in the right click context menu.",
   "credits": [
     {
       "name": "griffpatch"
@@ -15,7 +15,7 @@
   "versionAdded": "1.28.0",
   "latestUpdate": {
     "version": "1.41.0",
-    "temporaryNotice": "You can now use the context menu (open by right clicking or touching and holding) instead of the keyboard shortcut to jump to custom block definitions."
+    "temporaryNotice": "You can now use the context menu (open by right clicking or touching and holding) to jump to custom block definitions."
   },
   "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": true,
