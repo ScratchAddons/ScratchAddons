@@ -7,3 +7,16 @@
     --sa-block-background-tertiary: unset;
     --sa-block-field-background: unset;
 }
+.recolorCustomBlockButton {
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin: 3px;
+    border-color: rgb(118, 118, 118);
+    border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    background: fieldtext;
+
+}

@@ -1,4 +1,4 @@
-import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+import {updateAllBlocks} from "../../libraries/common/cs/update-all-blocks.js";
 
 const uriHeader = "data:image/svg+xml;base64,"
 
@@ -15,16 +15,16 @@ export default async function ({ addon, msg, console }) {
   }
   const multiply = (hexString, {r, g, b}) => {
     const c = hexToRGB(hexString);
-    const multiplied = {r: r * c.r, g: g * c.g, b: b * c.b}
+    const multiplied = {r: r * c.r, g: g * c.g, b: b * c.b};
     return RGBtoHex(multiplied);
   }
 
   const isHexColor = (hexString) => {
     if(!hexString.startsWith("#")) {
-      return false
+      return false;
     }
     const hex = hexString.substring(1);
-    return typeof hex === 'string' && hex.length === 6 && !isNaN(Number('0x' + hex))
+    return typeof hex === 'string' && hex.length === 6 && !isNaN(Number('0x' + hex));
   }
 
   // Best guess colors given a target block color
@@ -34,7 +34,7 @@ export default async function ({ addon, msg, console }) {
       colourSecondary: multiply(hexString, { r: 0.9, g: 0.9, b: 0.9 }),
       colourTertiary: multiply(hexString, { r: 0.8, g: 0.8, b: 0.8 }),
       colourQuaternary: multiply(hexString, { r: 0.8, g: 0.8, b: 0.8 })
-    }
+    };
   }
   // Standardize colour names between Blockly
   const getBlocklyColors = (colorName) => {
@@ -94,21 +94,21 @@ export default async function ({ addon, msg, console }) {
   const setCustomProcedureOptionsColor = (colors) => {
     const optionsRowElement = document.querySelectorAll("[class^=custom-procedures_options-row_]")?.[0];
     if(optionsRowElement) {
-      const imgElements = optionsRowElement.getElementsByTagName('img')
+      const imgElements = optionsRowElement.getElementsByTagName('img');
       for(const element of imgElements) {
-        setProcedureButtonColor(element, colors)
+        setProcedureButtonColor(element, colors);
       }
     }
   }
 
-  const setBlockColor = (block, colors, isEdited) => {
+  const setBlockColor = (block, colors, isEdited, firstColonIndex) => {
     // If we've already set this color, don't
     if (blockHasColor(block, colors)) {
-      return
+      return;
     }
-    //
+
     if (!block.recolorCustomBlock) {
-      block.recolorCustomBlock = {}
+      block.recolorCustomBlock = {};
     }
     // We're storing our custom colors on a separate part of the block object
     // This is used by Blockly's applyColour / updateColour methods later
@@ -117,15 +117,21 @@ export default async function ({ addon, msg, console }) {
     block.recolorCustomBlock.colourTertiary = colors.colourTertiary;
     block.recolorCustomBlock.colourQuaternary = colors.colourQuaternary;
     block.recolorCustomBlock.isEdited = isEdited;
+    block.recolorCustomBlock.prefixEnd = firstColonIndex + 1; // Used for color menu
+    block.recolorCustomBlock.prefix = block.procCode_.slice(0,firstColonIndex); // Used for color menu
 
     if (block.type === "procedures_declaration") {
+      // Update our color button's styling to match the block
+      block.colorButton.style.background = colors.colourPrimary;
+      block.colorButton.style.borderColor = colors.colourTertiary;
+
       // If there's a procedures_declaration, we're in the custom block editing screen
       // and need to recolor the buttons
       setCustomProcedureOptionsColor(colors);
       if (Blockly.registry) {
         block.getChildren().forEach((child) => {
           // Recolor the input field to match the block. By default, it's the more primary color
-          const htmlInput_ = child.inputList?.[0]?.fieldRow?.[0]?.htmlInput_
+          const htmlInput_ = child.inputList?.[0]?.fieldRow?.[0]?.htmlInput_;
           if (htmlInput_) {
             const changeBorderColor = (htmlInput, colorPrimary) => {
               htmlInput.style.border = "0.9px solid " + colorPrimary;
@@ -137,7 +143,7 @@ export default async function ({ addon, msg, console }) {
       } else {
         // Updating the colour does not update the background of fields in procedure_declaration
         block.inputList.forEach((input) => {
-          const box_ = input.fieldRow?.[0]?.box_
+          const box_ = input.fieldRow?.[0]?.box_;
           if (box_ && !box_.editorTheme3) {
             box_.setAttribute('fill', colors.colourTertiary);
           }
@@ -150,15 +156,15 @@ export default async function ({ addon, msg, console }) {
       if(pathSelected) {
         // This makes this harder to set from other addons, but I am stumped on how else to achieve this
         pathSelected.setAttribute("fill", colors.colourPrimary);
-        pathSelected.setAttribute("stroke", colors.colourTertiary)
+        pathSelected.setAttribute("stroke", colors.colourTertiary);
       }
       block.applyColour()
-        block.getChildren().forEach((child) => {
-          // Make sure children's stroke color isn't messed up
-          child.applyColour();
-        });
+      block.getChildren().forEach((child) => {
+        // Make sure children's stroke color isn't messed up
+        child.applyColour();
+      });
     } else {
-      block.updateColour(this)
+      block.updateColour(this);
       const isProceduresPrototype = block.type === "procedures_prototype"
       block.getChildren().forEach((child) => {
         // Make sure children's stroke color isn't messed up
@@ -189,36 +195,151 @@ export default async function ({ addon, msg, console }) {
       const colorCandidate = getBlocklyColors(colorCandidateString);
       // If we can get a valid Blockly color from colorCandidateString, set the block color
       if(colorCandidate) {
-        setBlockColor(block, colorCandidate, true);
-        block.recolorCustomBlock.prefixEnd = firstColonIndex + 1;
+        setBlockColor(block, colorCandidate, true, firstColonIndex);
         return;
       }
       // If we can get a valid Hex color from the colorCandidateString, make fake colors
       // for it and set the block color
       if(isHexColor(colorCandidateString)) {
         const fakeColor = getFakeBlockColors(colorCandidateString);
-        setBlockColor(block, fakeColor, true);
-        block.recolorCustomBlock.prefixEnd = firstColonIndex + 1;
+        setBlockColor(block, fakeColor, true, firstColonIndex);
 
         return;
       }
     }
     // If the block doesn't qualify for a color change, check to see if it needs to be reverted
     if(block.recolorCustomBlock?.isEdited) {
-      setBlockColor(block, getBlocklyColors("more"), false);
+      setBlockColor(block, getBlocklyColors("more"), false, 0);
     }
   }
 
-  // We use this to catch when procedures_declaration is rendered so we can shim the onChangeFn
+  const updateDeclarationPrefix = (block, prefix, categoryField) => {
+    const recolorCustomBlock = block.recolorCustomBlock;
+    if(recolorCustomBlock?.isEdited) {
+      block.procCode_ = block.procCode_.slice(recolorCustomBlock?.prefixEnd);
+    }
+    if(prefix === "reset") {
+      categoryField.setValue();
+    } else {
+      block.procCode_ = prefix + ":" + block.procCode_;
+    }
+    block.updateDisplay_();
+  }
+  // Make a fake block with a dropdown to allow us to display dropdown menus
+  const addColorChangeMenu = (block) => {
+    Blockly.Blocks["recolorcategorymenu"] = {}; // Needs to exist for new Blockly
+    // Get a svg representation of the block, so that jsonInit thinks it's real
+    let recolorcategorymenublock = new Blockly.BlockSvg(Blockly.getMainWorkspace(),"recolorcategorymenu");
+    // Call jsonInit on our fake block, which ends up creating the field dropdown we want
+    Blockly.Block.prototype.jsonInit.call(recolorcategorymenublock,{
+      "type": "recolorcategorymenublock",
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "STYLE",
+          "options": [
+            [Blockly.Msg.CATEGORY_MOTION, "motion"],
+            [Blockly.Msg.CATEGORY_LOOKS, "looks"],
+            [Blockly.Msg.CATEGORY_SOUND, "sounds"],
+            [Blockly.Msg.CATEGORY_EVENTS, "event"],
+            [Blockly.Msg.CATEGORY_CONTROL, "control"],
+            [Blockly.Msg.CATEGORY_SENSING, "sensing"],
+            [Blockly.Msg.CATEGORY_OPERATORS, "operators"],
+            [Blockly.Msg.CATEGORY_VARIABLES, "data"],
+            [scratchAddons.l10n.messages["data-category-tweaks-v2/list-category"] ?? Blockly.Msg.LIST_MODAL_TITLE, "data_lists"],
+            [addon.tab.redux.state.locales.messages["gui.extension.pen.name"], "pen"],
+            ["-", "reset"],
+          ],
+        }
+      ]
+    });
+    const categoryField = recolorcategorymenublock.inputList[0].fieldRow[0];
+    // To show the popup, we need fieldGroup_.getBoundingClientRect to be valid, as it's used to
+    // determine where the block is placed
+    categoryField.fieldGroup_ = {};
+
+    // Get results from onItemSelected
+    const onItemSelectedMethodName = Blockly.registry ? "onItemSelected_" : "onItemSelected";
+    let oldOnItemSelected = categoryField[onItemSelectedMethodName];
+    categoryField[onItemSelectedMethodName] = function(...args) {
+      updateDeclarationPrefix(block, args[1].getValue(),categoryField);
+      return oldOnItemSelected.apply(this, args);
+    }
+
+    // Create the menu item in the block edit screen
+    const proceduresBody = document.querySelectorAll("[class^=custom-procedures_body_]")?.[0];
+    if(proceduresBody) {
+      proceduresBody.addEventListener("click", (e) => {
+          if(e.target.className === "recolorCustomBlockButton") return;
+          Blockly.DropDownDiv.hideWithoutAnimation();
+      })
+      // Main color button
+      const colorButton = document.createElement("button");
+      colorButton.style.background = getBlocklyColors("more").colourPrimary;
+      colorButton.style.borderColor = getBlocklyColors("more").colourTertiary;
+
+      colorButton.classList.add("recolorCustomBlockButton")
+      colorButton.addEventListener("click", (e) => {
+        // Make the menu's colors match the block
+        if(Blockly.registry) {
+          recolorcategorymenublock.style = block.style;
+        } else {
+          recolorcategorymenublock.colour_ = block.colour_;
+          recolorcategorymenublock.colourSecondary_ = block.colourSecondary_;
+          recolorcategorymenublock.colourTertiary_ = block.colourTertiary_;
+          recolorcategorymenublock.colourQuaternary = block.colourQuaternary_;
+        }
+
+        // Make the selected item match the block's prefix
+        const prefix = block?.recolorCustomBlock?.prefix;
+        if(prefix) {
+          const matchingPrefix = categoryField.menuGenerator_.find((item) => item[1] === prefix);
+          if(!matchingPrefix) {
+            categoryField.menuGenerator_.push([prefix, prefix]);
+          }
+          categoryField.setValue(prefix);
+        } else {
+          categoryField.setValue("reset");
+        }
+
+        // Make the menu appear over the button
+        categoryField.fieldGroup_.getBoundingClientRect = function() {
+          return colorButton.getBoundingClientRect();
+        }
+        // Show the menu
+        categoryField.showEditor_();
+      });
+
+      // Extra elements to match layout of other menu items
+      const span = document.createElement("span");
+      span.innerHTML = addon.tab.redux.state.locales.messages["gui.howtos.animate-char.step_changecolor"] ?? "Change Color";
+      const label = document.createElement("label");
+      label.appendChild(colorButton);
+      label.appendChild(span);
+      const div = document.createElement("div");
+      div.classList.add("custom-procedures_color_row");
+      div.appendChild(label);
+      proceduresBody.insertBefore(div, proceduresBody.lastChild);
+
+      // When the block is updated, we want to be able to recolor the button
+      block.colorButton = colorButton;
+    }
+
+  }
+  // We use this to catch when procedures_declaration is rendered so we can modify
+  // procedure_declaration's Blockly instance, and associated ui
   const oldBlockInitSvg = Blockly.BlockSvg.prototype.initSvg;
   Blockly.BlockSvg.prototype.initSvg = function (...args) {
-    const initSvgResult = oldBlockInitSvg.call(this, ...args)
+    const initSvgResult = oldBlockInitSvg.call(this, ...args);
     if(this.type === "procedures_declaration" && !this.recolorCustomBlockInjected) {
-      shimOnChangeFn(this)
+      addColorChangeMenu(this);
+      shimOnChangeFn(this);
       handleBlock(this);
     }
     return initSvgResult;
   };
+
 
   // onChangeFn is called for every block, so we can shim it do recolor
   // the custom procedure options row and block
@@ -236,6 +357,7 @@ export default async function ({ addon, msg, console }) {
       }
     }
   }
+
   const enableAddon = () => {
     // Refreshing the blocks allows us to change displayName later
     updateExistingBlocks();
@@ -253,10 +375,10 @@ export default async function ({ addon, msg, console }) {
     const oldApplyColour = Blockly.BlockSvg.prototype.applyColour;
     Blockly.BlockSvg.prototype.applyColour = function (...args) {
       if (!this.isInsertionMarker() && this.getStyleName() === "more") {
-        const block = this.procCode_ && this.recolorCustomBlock
+        const block = this.procCode_ && this.recolorCustomBlock;
         // If the block has a procCode and has been set to be recolored, recolor it
         if (block) {
-          const color = this.recolorCustomBlock
+          const color = this.recolorCustomBlock;
           this.style = {
             ...this.style,
             colourPrimary: color.colourPrimary,
@@ -280,9 +402,9 @@ export default async function ({ addon, msg, console }) {
     const oldUpdateColour = Blockly.BlockSvg.prototype.updateColour;
     Blockly.BlockSvg.prototype.updateColour = function (...args) {
       if (!this.isInsertionMarker() && this.getCategory?.() == null) {
-        const block = this.procCode_ && this.recolorCustomBlock
+        const block = this.procCode_ && this.recolorCustomBlock;
         if (block) {
-          const color = this.recolorCustomBlock
+          const color = this.recolorCustomBlock;
           this.colour_ = color.colourPrimary;
           this.colourSecondary_ = color.colourSecondary;
           this.colourTertiary_ = color.colourTertiary;
@@ -316,8 +438,8 @@ export default async function ({ addon, msg, console }) {
   const customCreateAllInputs = (oldCreateAllInputs) => {
     return function(...args) {
       if (addon.self.disabled) return oldCreateAllInputs.call(this, ...args);
-      handleBlock(this)
-      const prefixEnd = this.recolorCustomBlock?.prefixEnd
+      handleBlock(this);
+      const prefixEnd = this.recolorCustomBlock?.prefixEnd;
       if (prefixEnd && addon.settings.get("hideColorPrefix")) {
         const originalProcCode = this.procCode_;
         this.procCode_ = this.procCode_.slice(prefixEnd);
@@ -334,8 +456,6 @@ export default async function ({ addon, msg, console }) {
       const oldInit = Blockly.Blocks[fn].init;
       Blockly.Blocks[fn].init = function(...args) {
         const initResult = oldInit.call(this, ...args);
-        debugger;
-
         const oldCreateAllInputs = this.createAllInputs_;
         this.createAllInputs_ = customCreateAllInputs(oldCreateAllInputs);
         return initResult;
@@ -345,7 +465,6 @@ export default async function ({ addon, msg, console }) {
       Blockly.Blocks[fn].createAllInputs_ = customCreateAllInputs(originalCreateAllInputs);
     }
   }
-
 
   // toolbox.refreshTheme doesn't trigger applyColour or initSvg, so we need to apply our changes manually
   if(Blockly.registry) {
@@ -357,11 +476,9 @@ export default async function ({ addon, msg, console }) {
     }
   }
 
-
   addon.self.addEventListener("disabled", () => updateAllBlocks(addon.tab));
   addon.self.addEventListener("reenabled", () => enableAddon());
   addon.settings.addEventListener("change", () => updateAllBlocks(addon.tab));
-
 
   enableAddon();
 
