@@ -6,6 +6,87 @@ export default async function ({ addon, msg, console }) {
 
   const Blockly = await addon.tab.traps.getBlockly();
 
+  //
+  class ColorPicker extends Blockly.FieldColourSlider {
+    constructor(workspace) {
+      super("#ffffff");
+      this.category = null;
+      this.workspace = workspace
+      this.boundingRect = null;
+      this.themeColors = null;
+      this.width = null;
+      this.height = null;
+      this.valueCallback = null;
+      // Dumb way to not deal with juggling sourceBlock_ and parentBlock_ definitions
+      this.sourceBlock_ = this;
+      this.parentBlock_ = this;
+    }
+    getCategory() {
+      if(!this.category) {
+        throw new Error("No category provided")
+      }
+      return this.category
+    }
+    getSvgRoot() {
+      return this;
+    }
+    getBoundingClientRect() {
+      if(!this.boundingRect) {
+        throw new Error("Cannot invoke without bounding rect")
+      }
+      return this.boundingRect;
+    }
+    getColour() {
+      if(!this.themeColors) {
+        throw new Error("Cannot invoke without themeColors")
+      }
+      return this.themeColors.colourPrimary;
+    }
+    getColourSecondary() {
+      if(!this.themeColors) {
+        throw new Error("Cannot invoke without themeColors")
+      }
+      return this.themeColors.colourSecondary;
+    }
+    getColourTertiary() {
+      if(!this.themeColors) {
+        throw new Error("Cannot invoke without themeColors")
+      }
+      return this.themeColors.colourTertiary;
+    }
+    getColourQuaternary() {
+      if(!this.themeColors) {
+        throw new Error("Cannot invoke without themeColors")
+      }
+      return this.themeColors.colourQuaternary;
+    }
+    setColour(color) {
+      this.valueCallback?.(color);
+    }
+    setValue(color) {
+      super.setValue(color);
+      this.valueCallback?.(color);
+    }
+    getValue(value) {
+      return this.colour_;
+    }
+
+    showPopup(colorElement, displayColor, category, themeColors, valueCallback) {
+      this.themeColors = themeColors
+      this.category = category;
+      this.colour_ = displayColor;
+      this.valueCallback = valueCallback
+      const boundingRect = colorElement.getBoundingClientRect()
+      this.boundingRect = boundingRect;
+      this.width = boundingRect.width;
+      this.height = boundingRect.height
+      super.showEditor_();
+    }
+    hidePopup() {
+      Blockly.DropDownDiv.hideWithoutAnimation();
+    }
+  }
+
   const hexToRGB = (hexString) => {
     const decimal = parseInt(hexString.substring(1), 16);
     return {r: decimal >> 16, g: decimal >> 8 & 255, b: decimal & 255};
@@ -122,8 +203,9 @@ export default async function ({ addon, msg, console }) {
 
     if (block.type === "procedures_declaration") {
       // Update our color button's styling to match the block
-      block.colorButton.style.background = colors.colourPrimary;
-      block.colorButton.style.borderColor = colors.colourTertiary;
+      const prefix = isEdited ? block.procCode_.slice(0,firstColonIndex) : "more";
+      const currentColorElement = getColorElement(block.colorMenu, prefix);
+      setColorListActive(currentColorElement, prefix, colors);
 
       // If there's a procedures_declaration, we're in the custom block editing screen
       // and need to recolor the buttons
@@ -213,118 +295,112 @@ export default async function ({ addon, msg, console }) {
     }
   }
 
-  const updateDeclarationPrefix = (block, prefix, categoryField) => {
+  const updateDeclarationPrefix = (block, prefix) => {
     const recolorCustomBlock = block.recolorCustomBlock;
     if(recolorCustomBlock?.isEdited) {
       block.procCode_ = block.procCode_.slice(recolorCustomBlock?.prefixEnd);
     }
-    if(prefix === "reset") {
-      categoryField.setValue();
-    } else {
+    if(prefix !== "more") {
       block.procCode_ = prefix + ":" + block.procCode_;
     }
+
     block.updateDisplay_();
+    handleBlock(block)
   }
-  // Make a fake block with a dropdown to allow us to display dropdown menus
-  const addColorChangeMenu = (block) => {
-    Blockly.Blocks["recolorcategorymenu"] = {}; // Needs to exist for new Blockly
-    // Get a svg representation of the block, so that jsonInit thinks it's real
-    let recolorcategorymenublock = new Blockly.BlockSvg(Blockly.getMainWorkspace(),"recolorcategorymenu");
-    // Call jsonInit on our fake block, which ends up creating the field dropdown we want
-    Blockly.Block.prototype.jsonInit.call(recolorcategorymenublock,{
-      "type": "recolorcategorymenublock",
-      "message0": "%1",
-      "args0": [
-        {
-          "type": "field_dropdown",
-          "name": "STYLE",
-          "options": [
-            [Blockly.Msg.CATEGORY_MOTION, "motion"],
-            [Blockly.Msg.CATEGORY_LOOKS, "looks"],
-            [Blockly.Msg.CATEGORY_SOUND, "sounds"],
-            [Blockly.Msg.CATEGORY_EVENTS, "event"],
-            [Blockly.Msg.CATEGORY_CONTROL, "control"],
-            [Blockly.Msg.CATEGORY_SENSING, "sensing"],
-            [Blockly.Msg.CATEGORY_OPERATORS, "operators"],
-            [Blockly.Msg.CATEGORY_VARIABLES, "data"],
-            [scratchAddons.l10n.messages["data-category-tweaks-v2/list-category"] ?? Blockly.Msg.LIST_MODAL_TITLE, "data_lists"],
-            [addon.tab.redux.state.locales.messages["gui.extension.pen.name"], "pen"],
-            ["-", "reset"],
-          ],
-        }
-      ]
-    });
-    const categoryField = recolorcategorymenublock.inputList[0].fieldRow[0];
-    // To show the popup, we need fieldGroup_.getBoundingClientRect to be valid, as it's used to
-    // determine where the block is placed
-    categoryField.fieldGroup_ = {};
 
-    // Get results from onItemSelected
-    const onItemSelectedMethodName = Blockly.registry ? "onItemSelected_" : "onItemSelected";
-    let oldOnItemSelected = categoryField[onItemSelectedMethodName];
-    categoryField[onItemSelectedMethodName] = function(...args) {
-      updateDeclarationPrefix(block, args[1].getValue(),categoryField);
-      return oldOnItemSelected.apply(this, args);
+  const createColorButton = (colors) => {
+
+    const colorButton = document.createElement("button");
+    colorButton.classList.add("scratchCategoryItemBubble")
+    colorButton.classList.add("sa-rcb-colorButton")
+    colorButton.style.backgroundColor = colors.colourPrimary;
+    colorButton.style.borderColor = colors.colourTertiary;
+
+    const checkmarkSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    checkmarkSvg.classList.add("sa-rcb-colorButtonCheck")
+    checkmarkSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    checkmarkSvg.setAttribute("viewBox", "0 0 24 24");
+    checkmarkSvg.innerHTML = `<path class="blocklyFlyoutCheckboxPath" d="M6.25 12.5L10.416666666666666 16.666666666666668L18.75 8.333333333333334"></path>`
+
+    colorButton.appendChild(checkmarkSvg);
+
+    return colorButton;
+  }
+
+  const getColorElement = (colorMenu, prefix) => {
+    for(const childNode of colorMenu.childNodes) {
+      if(childNode["saRcbColorId"] === prefix) {
+        return childNode;
+      }
     }
+    return colorMenu.lastChild; // Color picker
+  }
 
-    // Create the menu item in the block edit screen
+  const setColorListActive = (activeElement, prefix, colors) => {
+    if(activeElement.classList.contains("active")) return
+    activeElement.parentNode.childNodes.forEach((childNode) => {
+      childNode.firstChild.classList.remove("active");
+    })
+    activeElement.firstChild.classList.add("active");
+    if(activeElement.currentColor) {
+      activeElement.currentColor = prefix;
+      activeElement.style.backgroundColor = colors.colourPrimary;
+    }
+  }
+
+  const addColorMenu = (block) => {
     const proceduresBody = document.querySelectorAll("[class^=custom-procedures_body_]")?.[0];
-    if(proceduresBody) {
-      proceduresBody.addEventListener("click", (e) => {
-          if(e.target.className === "recolorCustomBlockButton") return;
-          Blockly.DropDownDiv.hideWithoutAnimation();
-      })
-      // Main color button
-      const colorButton = document.createElement("button");
-      colorButton.style.background = getBlocklyColors("more").colourPrimary;
-      colorButton.style.borderColor = getBlocklyColors("more").colourTertiary;
+    const optionsRow = proceduresBody.querySelectorAll("[class^=custom-procedures_options-row_]")?.[0];
 
-      colorButton.classList.add("recolorCustomBlockButton")
-      colorButton.addEventListener("click", (e) => {
-        // Make the menu's colors match the block
-        if(Blockly.registry) {
-          recolorcategorymenublock.style = block.style;
-        } else {
-          recolorcategorymenublock.colour_ = block.colour_;
-          recolorcategorymenublock.colourSecondary_ = block.colourSecondary_;
-          recolorcategorymenublock.colourTertiary_ = block.colourTertiary_;
-          recolorcategorymenublock.colourQuaternary = block.colourQuaternary_;
-        }
+    const proceduresColorRow = document.createElement("div")
+    proceduresColorRow.classList.add("sa-rcb-custom-procedures_colors-row");
+    proceduresBody.insertBefore(proceduresColorRow, optionsRow.nextSibling);
 
-        // Make the selected item match the block's prefix
-        const prefix = block?.recolorCustomBlock?.prefix;
-        if(prefix) {
-          const matchingPrefix = categoryField.menuGenerator_.find((item) => item[1] === prefix);
-          if(!matchingPrefix) {
-            categoryField.menuGenerator_.push([prefix, prefix]);
-          }
-          categoryField.setValue(prefix);
-        } else {
-          categoryField.setValue("reset");
-        }
+    const colorList = ["motion", "looks", "sounds", "event", "control", "sensing", "operators", "data", "data_lists", "more", "pen"];
 
-        // Make the menu appear over the button
-        categoryField.fieldGroup_.getBoundingClientRect = function() {
-          return colorButton.getBoundingClientRect();
-        }
-        // Show the menu
-        categoryField.showEditor_();
+    colorList.forEach((category) => {
+      const categoryIcon = createColorButton(getBlocklyColors(category));
+      categoryIcon.addEventListener("click", (e) => {
+        updateDeclarationPrefix(block, category);
+        setColorListActive(categoryIcon);
       });
+      if(category === "more") {
+        categoryIcon.firstChild.classList.add("active")
+      }
+      categoryIcon["saRcbColorId"] = category;
+      proceduresColorRow.appendChild(categoryIcon);
+    });
 
-      // Extra elements to match layout of other menu items
-      const span = document.createElement("span");
-      span.innerHTML = addon.tab.redux.state.locales.messages["gui.howtos.animate-char.step_changecolor"] ?? "Change Color";
-      const label = document.createElement("label");
-      label.appendChild(colorButton);
-      label.appendChild(span);
-      const div = document.createElement("div");
-      div.classList.add("custom-procedures_color_row");
-      div.appendChild(label);
-      proceduresBody.insertBefore(div, proceduresBody.lastChild);
+    const colorPicker = new ColorPicker(Blockly.getMainWorkspace());
+    const randomColor = "#" + Math.random().toString(16).slice(-6);
+    const RandomBlockColors = getFakeBlockColors(randomColor)
+    const pickerIcon = createColorButton(RandomBlockColors);
+    pickerIcon.classList.add("sa-rcb-colorPicker")
+    pickerIcon.currentColor = randomColor
+    pickerIcon.style.borderColor = "";
 
-      // When the block is updated, we want to be able to recolor the button
-      block.colorButton = colorButton;
-    }
+    pickerIcon.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const currentColor = pickerIcon.currentColor;
+      const blockColors = block.recolorCustomBlock ?? getFakeBlockColors(currentColor)
+      setColorListActive(pickerIcon, currentColor, blockColors);
+      const category = "more"
+      colorPicker.showPopup(pickerIcon, currentColor, category, blockColors, (newColor) => {
+        //Todo: Rate limiting?
+        const newFakeColors = getFakeBlockColors(newColor)
+        pickerIcon.currentColor = newColor;
+        pickerIcon.style.backgroundColor = newFakeColors.colourPrimary;
+        updateDeclarationPrefix(block, newColor)
+      });
+    });
+    proceduresColorRow.appendChild(pickerIcon);
+    block.colorMenu = proceduresColorRow;
+
+    proceduresBody.addEventListener("click", (e) => {
+      if(!e.target?.currentColor) { // Anything besides custom color button
+        colorPicker.hidePopup();
+      }
+    });
 
   }
   // We use this to catch when procedures_declaration is rendered so we can modify
@@ -333,7 +409,7 @@ export default async function ({ addon, msg, console }) {
   Blockly.BlockSvg.prototype.initSvg = function (...args) {
     const initSvgResult = oldBlockInitSvg.call(this, ...args);
     if(this.type === "procedures_declaration" && !this.recolorCustomBlockInjected) {
-      addColorChangeMenu(this);
+      addColorMenu(this);
       shimOnChangeFn(this);
       handleBlock(this);
     }
