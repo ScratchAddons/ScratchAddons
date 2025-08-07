@@ -298,7 +298,8 @@ export default async function ({ addon, console }) {
 
   const catBlockConstructor = (block) => {
     let svgPath;
-    if (block.pathObject) svgPath = block.pathObject.svgPath; // new Blockly
+    if (block.pathObject)
+      svgPath = block.pathObject.svgPath; // new Blockly
     else svgPath = block.svgPath_;
 
     block.catPath_ = createSvgElement("g", {}, block.getSvgRoot());
