@@ -352,6 +352,54 @@
       }
     },
     {
+      "name": "helpIcon-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "invert(100%)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "descriptionUnfocused-color",
+      "value": {
+        "type": "textColor",
+        "black": "rgb(123 123 146)",
+        "white": "rgb(172 172 188)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "descriptionBox-color",
+      "value": {
+        "type": "textColor",
+        "black": "#b9d6ff",
+        "white": "#203652",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "descriptionFocused-color",
+      "value": {
+        "type": "textColor",
+        "black": "hsla(225, 15%, 40%, 1)",
+        "white": "white",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "menuBar-border",
       "value": {
         "type": "textColor",
