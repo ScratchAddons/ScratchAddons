@@ -295,7 +295,7 @@ export default async function ({ addon, console, msg }) {
   function selectedBlocks(scale, block) {
     let svg = exSVG.cloneNode();
 
-    let svgchild = block.svgGroup || block.svgGroup_; // new Blockly || old Blockly
+    let svgchild = block.getSvgRoot();
     const translateY = Math.abs(svgchild.getBBox().y) * scale + scale;
     svgchild = svgchild.cloneNode(true);
     svgchild.setAttribute("transform", `translate(${scale},${translateY}) scale(${scale})`);
