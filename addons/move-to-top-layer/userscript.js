@@ -1,15 +1,42 @@
 // Initial code was written by Norbiros
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
+
+  function spriteToFront(name) {
+    const target = vm.runtime.getSpriteTargetByName(name);
+    target.goToFront();
+    target.setVisible(true);
+  }
+
   document.body.addEventListener("click", (e) => {
     if (e.shiftKey && !addon.self.disabled) {
       const parentDiv = e.target.closest("div[class^='sprite-selector_sprite-wrapper']");
-      if (parentDiv) {
+      if (
+        parentDiv &&
+        !e.target.closest("div[class^='delete-button_delete-button_']") &&
+        !e.target.closest(".sa-sprite-properties-info-btn")
+      ) {
+        // TODO: folders compatibility
         const spriteName = parentDiv.querySelector("div[class^='sprite-selector-item_sprite-name']").innerText;
-        // move the sprite with that name to front
-        vm.runtime.getSpriteTargetByName(spriteName).goToFront();
+        spriteToFront(spriteName);
       }
     }
   });
+  addon.tab.createEditorContextMenu(
+    (ctx) => {
+      if (typeof ctx.name === "object") {
+        // folders compatibility
+        spriteToFront(ctx.name.realName);
+      } else {
+        spriteToFront(ctx.name);
+      }
+    },
+    {
+      types: ["sprite"],
+      position: "assetContextMenuAfterExport",
+      order: 1,
+      label: msg("move-to-front-layer"),
+    }
+  );
 }
