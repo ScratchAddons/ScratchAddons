@@ -31,6 +31,12 @@
       "default": true
     },
     {
+      "name": "Project titles",
+      "id": "titles",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Forum signatures",
       "id": "signature",
       "type": "boolean",
@@ -39,12 +45,6 @@
     {
       "name": "Forum Scratchblocks",
       "id": "blocks",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Project titles",
-      "id": "titles",
       "type": "boolean",
       "default": true
     }
@@ -63,7 +63,7 @@
       "runAtComplete": false
     },
     {
-      "url": "disable.js",
+      "url": "resetScroll.js",
       "matches": ["projects", "profiles", "topics"]
     }
   ],

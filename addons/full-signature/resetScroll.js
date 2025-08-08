@@ -1,5 +1,5 @@
 export default async function ({ addon, console }) {
-  addon.self.addEventListener("disabled", () => {
+  function resetScroll() {
     document
       .querySelectorAll(
         ".activity-stream, .activity-ul, .postsignature, .project-title.no-edit, .scratchblocks, .blocks3"
@@ -8,5 +8,8 @@ export default async function ({ addon, console }) {
         el.scrollTop = 0;
         el.scrollLeft = 0;
       });
-  });
+  }
+
+  addon.self.addEventListener("disabled", resetScroll);
+  addon.settings.addEventListener("change", resetScroll);
 }

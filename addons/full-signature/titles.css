@@ -1,4 +1,5 @@
 .preview .project-title.no-edit {
   overflow-x: auto;
   text-overflow: clip;
+  scrollbar-width: thin;
 }
