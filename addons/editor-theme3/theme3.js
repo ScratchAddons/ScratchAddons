@@ -880,23 +880,22 @@ export default async function ({ addon, console, msg }) {
       // new Blockly: update theme
       if (!workspace) workspace = addon.tab.traps.getWorkspace();
       workspace.setTheme(
-          Blockly.Theme.defineTheme(
-              "default", // Scratch's CSS expects the name to be "default" or "high-contrast"
-              {
-                blockStyles: Object.fromEntries(
-                    categories.map((category) => [
-                      category.colorId,
-                      {
-                        colourPrimary: primaryColor(category),
-                        colourSecondary: secondaryColor(category),
-                        colourTertiary: tertiaryColor(category),
-                        colourQuaternary: fieldBackground(category),
-                      },
-                    ])
-                ),
-                startHats: true,
-              }
-          )
+        Blockly.Theme.defineTheme(
+          "default", // Scratch's CSS expects the name to be "default" or "high-contrast"
+          {
+            blockStyles: Object.fromEntries(
+              categories.map((category) => [
+                category.colorId,
+                {
+                  colourPrimary: primaryColor(category),
+                  colourSecondary: secondaryColor(category),
+                  colourTertiary: tertiaryColor(category),
+                  colourQuaternary: fieldBackground(category),
+                },
+              ])
+            ),
+          }
+        )
       );
       workspace.refreshTheme();
       // used by editor-colored-context-menus
