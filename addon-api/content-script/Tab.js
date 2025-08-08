@@ -8,8 +8,7 @@ import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
-const isScratchGui =
-  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
+const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 
 const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];

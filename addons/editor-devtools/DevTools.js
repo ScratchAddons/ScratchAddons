@@ -379,56 +379,6 @@ export default class DevTools {
     this.updateMousePosition(e);
   }
 
-  eventKeyDownDocument(e) {
-    const switchCostume = (up) => {
-      // todo: select previous costume
-      let selected = this.costTabBody.querySelector("div[class*='sprite-selector-item_is-selected']");
-      let node = up ? selected.parentNode.previousSibling : selected.parentNode.nextSibling;
-      if (node) {
-        let wrapper = node.closest("div[class*=gui_flex-wrapper]");
-        node.querySelector("div[class^='sprite-selector-item_sprite-name']").click();
-        node.scrollIntoView({
-          behavior: "auto",
-          block: "center",
-          inline: "start",
-        });
-        wrapper.scrollTop = 0;
-      }
-    };
-
-    if (this.addon.tab.editorMode !== "editor") {
-      return;
-    }
-
-    let ctrlKey = e.ctrlKey || e.metaKey;
-
-    if (e.key === "ArrowLeft" && ctrlKey) {
-      if (document.activeElement.tagName === "INPUT") {
-        return;
-      }
-
-      if (this.isCostumeEditor()) {
-        switchCostume(true);
-        e.cancelBubble = true;
-        e.preventDefault();
-        return true;
-      }
-    }
-
-    if (e.key === "ArrowRight" && ctrlKey) {
-      if (document.activeElement.tagName === "INPUT") {
-        return;
-      }
-
-      if (this.isCostumeEditor()) {
-        switchCostume(false);
-        e.cancelBubble = true;
-        e.preventDefault();
-        return true;
-      }
-    }
-  }
-
   _canPaste() {
     // Don't paste if the mouse is outside the blockly SVG
     const bounds = document.querySelector("svg.blocklySvg").getBoundingClientRect();
@@ -516,8 +466,6 @@ export default class DevTools {
     this.codeTab = guiTabs[0];
     this.costTab = guiTabs[1];
     this.costTabBody = document.querySelector("div[aria-labelledby='" + this.costTab.id + "']");
-
-    this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDownDocument(...e), true);
 
     const blockly = await this.addon.tab.traps.getBlockly();
     let keyEventTarget;

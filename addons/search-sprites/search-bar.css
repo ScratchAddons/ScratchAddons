@@ -4,7 +4,7 @@
 
 .sa-search-sprites-container {
   position: absolute;
-  z-index: 21; /* above workspace scrollbar in small stage mode */
+  z-index: 46; /* $z-index-add-button */
   bottom: 0.75rem;
   display: flex;
   width: 2.75rem;

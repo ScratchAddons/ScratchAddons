@@ -29,7 +29,7 @@
     {
       "id": "aboutHighContrast",
       "type": "info",
-      "text": "The new High Contrast block colors are available as a preset below."
+      "text": "The High Contrast block colors are available as a preset below."
     }
   ],
   "relatedAddons": ["editor-dark-mode", "custom-block-shape", "transparent-orphans", "zebra-striping"],
@@ -183,6 +183,22 @@
           "type": "settingValue",
           "settingId": "comment-color"
         }
+      }
+    },
+    {
+      "name": "text-shadow",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "text"
+        },
+        "options": {
+          "black": "rgba(0, 0, 0, 0.15)",
+          "colorOnWhite": "rgba(0, 0, 0, 0.15)",
+          "colorOnBlack": "#000000"
+        },
+        "default": "rgba(0, 0, 0, 0.4)"
       }
     }
   ],
