@@ -319,11 +319,11 @@ export default async function ({ addon, msg, console }) {
     colorButton.style.backgroundColor = colors.colourPrimary;
     colorButton.style.borderColor = colors.colourTertiary;
 
-    const checkmarkSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    checkmarkSvg.classList.add("sa-rcb-colorButtonCheck")
-    checkmarkSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    checkmarkSvg.setAttribute("viewBox", "0 0 24 24");
-    checkmarkSvg.innerHTML = `<path class="blocklyFlyoutCheckboxPath" d="M6.25 12.5L10.416666666666666 16.666666666666668L18.75 8.333333333333334"></path>`
+    const checkmarkSvg = Object.assign(document.createElement("img"), {
+      className: "sa-rcb-colorButtonCheck",
+      src: addon.self.dir + "/assets/checkmark.svg",
+      draggable: false,
+    });
 
     colorButton.appendChild(checkmarkSvg);
 

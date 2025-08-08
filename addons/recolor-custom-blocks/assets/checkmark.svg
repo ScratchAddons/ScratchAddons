@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <defs>
+        <style>
+            .blocklyFlyoutCheckboxPath {
+                fill: transparent;
+                stroke: white;
+                stroke-width: 3;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+        </style>
+    </defs>
+    <path class="blocklyFlyoutCheckboxPath" d="M6.25 12.5L10.416666666666666 16.666666666666668L18.75 8.333333333333334"></path>
+</svg>
