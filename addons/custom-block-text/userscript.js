@@ -53,6 +53,8 @@ export default async function ({ addon, console }) {
     }
     div[theme="high-contrast"] .blocklyDraggable > .blocklyText,
     div[theme="high-contrast"] .blocklyDraggable > g > text,
+    .high-contrast-theme .blocklyDraggable > .blocklyText,
+    .high-contrast-theme .blocklyDraggable > g > text,
     .scratch-renderer.high-contrast-theme .blocklyEditableField > .blocklyDropdownText {
       text-shadow: 1px 1px 0 var(--editorTheme3-text-shadow, rgba(0, 0, 0, 0.15));
     }
