@@ -1,0 +1,35 @@
+{
+  "name": "Recolor custom blocks",
+  "description": "Changes the colors of custom blocks that start with the name of a category followed by a colon (:), for example \"looks: animate\".",
+  "credits": [
+    {
+      "name": "FlamedDogo99",
+      "link": "https://github.com/FlamedDogo99"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "relatedAddons": ["data-category-tweaks-v2", "editor-theme3"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hide color prefixes",
+      "id": "hideColorPrefix",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.43.0"
+}

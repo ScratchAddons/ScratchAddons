@@ -291,9 +291,13 @@ export default async function ({ addon, console, msg }) {
       if (block.isShadow() && block.getParent()) block = block.getParent();
       if (isColoredTextMode() || textMode() === "black") {
         let primary;
-        if (block.isShadow() && block.getParent()) primary = block.getParent().getColour();
+        let tertiary = block.getColourTertiary();
+        if (block.recolorCustomBlock?.isEdited) {
+          primary = block.recolorCustomBlock.colourPrimary;
+          tertiary = block.recolorCustomBlock.colourTertiary;
+        } else if (block.isShadow() && block.getParent()) primary = block.getParent().getColour();
         else primary = block.getColour();
-        if (isColoredTextMode()) return alphaBlend(primary, multiply(block.getColourTertiary(), { a: 0.25 }));
+        if (isColoredTextMode()) return alphaBlend(primary, multiply(tertiary, { a: 0.25 }));
         else return brighten(primary, { r: 0.4, g: 0.4, b: 0.4 });
       }
       return block.getColourTertiary();
@@ -309,6 +313,9 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return "#000000";
     if (field) {
       let block = field.sourceBlock_;
+      if (block.recolorCustomBlock?.isEdited) {
+        return block.recolorCustomBlock.colourTertiary;
+      }
       if (block.isShadow() && block.getParent()) block = block.getParent();
       return block.getColourTertiary();
     }
@@ -597,12 +604,18 @@ export default async function ({ addon, console, msg }) {
     Blockly.FieldTextInput.prototype.init = function () {
       // Text inputs
       oldFieldTextInputInit.call(this);
-      if (this.sourceBlock_.isShadow()) return;
-      // Labels in custom block editor
-      this.box_.setAttribute(
-        "fill",
-        isColoredTextMode() ? fieldBackground(this) : this.sourceBlock_.getColourTertiary()
-      );
+      const updateBox_ = () => {
+        if (this.sourceBlock_.isShadow()) return;
+        // Labels in custom block editor
+        this.box_.setAttribute(
+          "fill",
+          isColoredTextMode() ? fieldBackground(this) : this.sourceBlock_.getColourTertiary()
+        );
+      };
+      if (this.box_) {
+        if (!this.box_) this.box_.updateBox_ = updateBox_;
+        updateBox_();
+      }
     };
 
     const oldFieldTextInputRemovableShowEditor = Blockly.FieldTextInputRemovable.prototype.showEditor_;
@@ -906,6 +919,12 @@ export default async function ({ addon, console, msg }) {
       if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
       else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
       Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
+      if (addon.tab.redux.state.scratchGui.customProcedures.active) {
+        const declarationBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
+        if (declarationBlock?.type === "procedures_declaration") {
+          declarationBlock.updateDisplay_();
+        }
+      }
     }
 
     const safeTextColor = encodeURIComponent(uncoloredTextColor());
