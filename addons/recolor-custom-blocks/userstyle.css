@@ -2,55 +2,55 @@
 /* but overrides them with .sa-block-color-. Disabling this for sa-mcp-preview-block allows us */
 /* to see the our custom block colors */
 .sa-mcp-preview-block .sa-block-color-more {
-    --sa-block-background-primary: unset;
-    --sa-block-background-secondary: unset;
-    --sa-block-background-tertiary: unset;
-    --sa-block-field-background: unset;
+  --sa-block-background-primary: unset;
+  --sa-block-background-secondary: unset;
+  --sa-block-background-tertiary: unset;
+  --sa-block-field-background: unset;
 }
 .recolorCustomBlockButton {
-    width: 13px;
-    height: 13px;
-    padding: 0;
-    margin: 3px;
-    /*border-color: rgb(118, 118, 118);*/
-    /*border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));*/
-    border-radius: 3px;
-    border-style: solid;
-    border-width: 1px;
-    background: fieldtext;
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  margin: 3px;
+  /*border-color: rgb(118, 118, 118);*/
+  /*border-color: light-dark(rgb(118, 118, 118), rgb(133, 133, 133));*/
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px;
+  background: fieldtext;
 }
 
 .sa-rcb-custom-procedures_colors-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 1.5em;
-    margin-top: 1.5em;
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5em;
+  margin-top: 1.5em;
 }
 .sa-rcb-colorButton {
-    flex-grow: 1;
-    aspect-ratio: 1;
-    width: unset;
-    height: unset;
-    overflow: hidden;
-    border: 2px solid;
-    transition: all 0.2s;
-    border-radius: 100%;
-    margin: 0 auto 0.125rem;
+  flex-grow: 1;
+  aspect-ratio: 1;
+  width: unset;
+  height: unset;
+  overflow: hidden;
+  border: 2px solid;
+  transition: all 0.2s;
+  border-radius: 100%;
+  margin: 0 auto 0.125rem;
 }
 .sa-rcb-colorButton:hover {
-    filter: brightness(120%);
+  filter: brightness(120%);
 }
 
 .sa-rcb-colorButtonCheck {
-    display: none;
+  display: none;
 }
 .sa-rcb-colorButtonCheck.active {
-    display: unset;
+  display: unset;
 }
 
 .sa-rcb-colorButton.sa-rcb-colorPicker {
-    border-bottom-color: #FF6680;
-    border-top-color: #59C059;
-    border-right-color: #FFBF00;
-    border-left-color: #4C97FF;
+  border-bottom-color: #ff6680;
+  border-top-color: #59c059;
+  border-right-color: #ffbf00;
+  border-left-color: #4c97ff;
 }
