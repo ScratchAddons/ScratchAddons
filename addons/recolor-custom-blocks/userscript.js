@@ -226,8 +226,12 @@ export default async function ({ addon, msg, console }) {
         // Updating the colour does not update the background of fields in procedure_declaration
         block.inputList.forEach((input) => {
           const box_ = input.fieldRow?.[0]?.box_;
-          if (box_ && !box_.editorTheme3) {
-            box_.setAttribute('fill', colors.colourTertiary);
+          if (box_) {
+            if(box_.updateBox_) {
+              box_.updateBox_();
+            } else {
+              box_.setAttribute('fill', colors.colourTertiary);
+            }
           }
         });
       }
@@ -311,7 +315,6 @@ export default async function ({ addon, msg, console }) {
   const createColorButton = (colors) => {
 
     const colorButton = document.createElement("button");
-    colorButton.classList.add("scratchCategoryItemBubble")
     colorButton.classList.add("sa-rcb-colorButton")
     colorButton.style.backgroundColor = colors.colourPrimary;
     colorButton.style.borderColor = colors.colourTertiary;
@@ -442,7 +445,9 @@ export default async function ({ addon, msg, console }) {
       // get the shim injected and recolor the block if needed
       const editBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
       if(editBlock?.type === "procedures_declaration") {
-        handleBlock(editBlock);
+        addColorMenu(this);
+        shimOnChangeFn(this);
+        handleBlock(this);
       }
     }
   }
@@ -507,6 +512,13 @@ export default async function ({ addon, msg, console }) {
       const allBlocks = [...workspace.getAllBlocks(), ...flyout.getWorkspace().getAllBlocks()];
       for (const block of allBlocks) {
         handleBlock(block);
+      }
+    }
+    if (addon.tab.redux.state.scratchGui.customProcedures.active) {
+
+      const declarationBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
+      if (declarationBlock?.type === "procedures_declaration") {
+        handleBlock(this);
       }
     }
   }
