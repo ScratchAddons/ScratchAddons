@@ -48,9 +48,15 @@ export default async function ({ addon, console }) {
   textShadowCss.textContent = `
     .blocklyDraggable > .blocklyText,
     .blocklyDraggable > g > text,
-    .scratch-renderer.default-theme .blocklyEditableField > .blocklyDropdownText,
+    .scratch-renderer.default-theme .blocklyEditableField > .blocklyDropdownText {
+      text-shadow: 1px 1px 0 var(--editorTheme3-text-shadow, rgba(0, 0, 0, 0.4));
+    }
+    div[theme="high-contrast"] .blocklyDraggable > .blocklyText,
+    div[theme="high-contrast"] .blocklyDraggable > g > text,
+    .high-contrast-theme .blocklyDraggable > .blocklyText,
+    .high-contrast-theme .blocklyDraggable > g > text,
     .scratch-renderer.high-contrast-theme .blocklyEditableField > .blocklyDropdownText {
-      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+      text-shadow: 1px 1px 0 var(--editorTheme3-text-shadow, rgba(0, 0, 0, 0.15));
     }
     .scratch-renderer.default-theme .blocklyEditableField > text,
     .scratch-renderer.high-contrast-theme .blocklyEditableField > text {
