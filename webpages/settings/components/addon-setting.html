@@ -38,11 +38,11 @@
             </div>
           </div>
         </div>
-        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
+        <div class="addon-split-button setting-table-dropdown dropdown-parent" :class="{open: rowDropdownOpen}">
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
-          <div v-click-outside="closeResetDropdowns">
+          <div v-click-outside="closeDropdowns">
             <button
               :disabled="!addon._enabled"
               class="addon-buttons addon-split-button-dropdown"
@@ -50,7 +50,7 @@
             >
               <img class="icon-type" src="../../images/icons/expand.svg" draggable="false" />
             </button>
-            <ul>
+            <ul class="dropdown-list align-start">
               <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
             </ul>
           </div>
@@ -139,7 +139,7 @@
           :setting="setting"
           :enabled="addon._enabled"
           :presets="addon.presets"
-          v-click-outside="closeResetDropdowns"
+          v-click-outside="closeDropdowns"
         ></reset-dropdown
       ></template>
       <template v-if="!tableChild && !showResetDropdown"
@@ -177,7 +177,6 @@
     height: 32px;
     box-sizing: border-box;
     padding: 0 12px;
-    margin-left: auto;
     border-radius: 4px 0 0 4px;
     font-family: inherit;
     font-size: 14px;
@@ -268,10 +267,6 @@
     min-width: 70px;
   }
 
-  .setting-dropdown,
-  .setting-table-dropdown {
-    position: relative;
-  }
   .setting-dropdown.open .clear-button {
     border-bottom-right-radius: 0;
     background: var(--button-hover-background);
@@ -284,21 +279,6 @@
   }
   .iframe[dir="rtl"] .setting-dropdown.open .clear-button {
     border-bottom-left-radius: 4px;
-  }
-  .setting-dropdown ul,
-  .setting-table-dropdown ul {
-    position: absolute;
-    top: calc(100% - 1px);
-    right: 0;
-    margin: 0;
-    padding: 6px 0;
-    display: none;
-    z-index: 3;
-    border-radius: 4px;
-    border-top-right-radius: 0;
-    background: var(--button-background);
-    color: var(--content-text);
-    border: 1px solid var(--control-border);
   }
   .iframe .setting-dropdown ul {
     right: auto;
@@ -315,23 +295,6 @@
     left: auto;
     right: -100px;
     border-top-left-radius: 4px;
-  }
-  .setting-dropdown.open ul,
-  .setting-table-dropdown.open ul {
-    display: block;
-  }
-  .setting-dropdown li,
-  .setting-table-dropdown li {
-    padding: 6px 12px;
-    list-style: none;
-    white-space: nowrap;
-    text-align: start;
-    transition: 0.2s ease;
-    user-select: none;
-  }
-  .setting-dropdown li:hover,
-  .setting-table-dropdown li:hover {
-    background: var(--button-hover-background);
   }
   .setting-dropdown li > * {
     vertical-align: middle;
@@ -398,18 +361,19 @@
   }
   .setting-table-dropdown {
     align-self: flex-start;
-    display: flex;
   }
-  .setting-table-dropdown ul {
-    right: auto;
-    left: 0;
-    border-radius: 4px;
-    border-top-left-radius: 0;
-  }
-  [dir="rtl"] .setting-table-dropdown ul {
-    left: auto;
-    right: 0;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 0;
+
+  @media (max-width: 700px) {
+    .setting-label-container {
+      width: auto;
+      margin-bottom: 5px;
+      max-width: calc(100% - 66px); /* prevent setting description tooltip from overflowing */
+    }
+    .setting-label-container:not(:has(.tooltip)) {
+      max-width: none;
+    }
+    .setting-input {
+      flex-shrink: 0;
+    }
   }
 </style>

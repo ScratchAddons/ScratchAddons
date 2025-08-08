@@ -36,6 +36,7 @@
 }
 .messages-header-unread {
   padding: 2px 4px;
+  text-shadow: none;
 }
 .messages-admin-list {
   padding: 0 20px;

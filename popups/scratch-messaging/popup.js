@@ -636,16 +636,20 @@ export default async ({ addon, msg, safeMsg }) => {
           } else if (message.type === "remixproject") {
             this.remixes.push({
               parentTitle: message.parent_title,
-              remixTitle: message.title,
               actor: message.actor_username,
               projectId: message.project_id,
             });
           } else if (message.type === "studioactivity") {
             // We only want one message per studio
-            if (!this.studioActivity.find((obj) => obj.studioId === message.gallery_id)) {
+            // If there are more, the number of messages is shown next to the message
+            const existingMessage = this.studioActivity.find((obj) => obj.studioId === message.gallery_id);
+            if (existingMessage) {
+              existingMessage.amount++;
+            } else {
               this.studioActivity.push({
                 studioId: message.gallery_id,
                 studioTitle: message.title,
+                amount: 1,
               });
             }
             this.studioActivityAmt++;
@@ -770,14 +774,14 @@ export default async ({ addon, msg, safeMsg }) => {
             rel="noopener noreferrer"
             href="https://scratch.mit.edu/users/${remix.actor}/"
         >${remix.actor}</a>`;
-        const title = `<a target="_blank"
+        const link = `<a target="_blank"
             rel="noopener noreferrer"
             href="https://scratch.mit.edu/projects/${remix.projectId}/"
             style="text-decoration: underline"
-        >${escapeHTML(remix.remixTitle)}</a>`;
+        >${msg("remix-link")}</a>`;
         return safeMsg("remix-as", {
           actor,
-          title,
+          link,
           parentTitle: escapeHTML(remix.parentTitle),
         });
       },

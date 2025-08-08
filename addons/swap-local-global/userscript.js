@@ -430,7 +430,7 @@ export default async function ({ addon, msg, console }) {
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (!addon.self.disabled && block.type.startsWith("data_")) {
-        const variable = block.workspace.getVariableById(block.getVars()[0]);
+        const variable = block.workspace.getVariableMap().getVariableById(block.getVars()[0]);
         if (variable) {
           if (items.length > 0) {
             if (items[0].text === ScratchBlocks.ScratchMsgs.translate("RENAME_VARIABLE")) {

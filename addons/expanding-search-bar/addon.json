@@ -11,7 +11,7 @@
   "userscripts": [
     {
       "url": "expanding-search-bar.js",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["https://scratch.mit.edu/*", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "runAtComplete": false
     }
   ],
@@ -19,5 +19,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.16.0",
   "tags": ["community", "featured"],
+  "relatedAddons": ["discuss-button"],
   "enabledByDefault": false
 }

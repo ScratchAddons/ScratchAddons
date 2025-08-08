@@ -2,7 +2,7 @@
   <div
     class="category"
     :class="{
-        sel: category.id === selectedCategory,
+        sel: category.id === selectedCategory && !this.$root.relatedAddonsOpen,
         hasParent: category.parent,
       }"
     v-show="shouldShow"

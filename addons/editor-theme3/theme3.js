@@ -481,6 +481,14 @@ export default async function ({ addon, console, msg }) {
         this.getOutlinePath(name).setAttribute("fill", this.style.colourSecondary);
       }
     };
+
+    const oldBlockSetStyle = Blockly.BlockSvg.prototype.setStyle;
+    Blockly.BlockSvg.prototype.setStyle = function (...args) {
+      // Prevent hat from being overridden when theme changes
+      const hat = this.hat;
+      oldBlockSetStyle.call(this, ...args);
+      this.hat = hat;
+    };
   } else {
     const oldBlockSetColour = Blockly.Block.prototype.setColour;
     Blockly.Block.prototype.setColour = function (colour, colourSecondary, colourTertiary) {
@@ -618,10 +626,10 @@ export default async function ({ addon, console, msg }) {
 
   if (Blockly.registry) {
     // new Blockly
-    const oldFieldNUmberShowNumPad = FieldNumber.prototype.showNumPad_;
+    const oldFieldNumberShowNumPad = FieldNumber.prototype.showNumPad_;
     FieldNumber.prototype.showNumPad_ = function () {
       // Number pad
-      oldFieldNUmberShowNumPad.call(this);
+      oldFieldNumberShowNumPad.call(this);
       Blockly.DropDownDiv.setColour(
         this.sourceBlock_.getParent().getColour(),
         this.sourceBlock_.getParent().getColourTertiary()
@@ -880,7 +888,6 @@ export default async function ({ addon, console, msg }) {
                 },
               ])
             ),
-            startHats: true,
           }
         )
       );

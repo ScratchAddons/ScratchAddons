@@ -19,6 +19,7 @@
     }
   ],
   "tags": ["editor", "codeEditor", "recommended"],
+  "relatedAddons": ["block-switching"],
   "enabledByDefault": true,
   "userscripts": [
     {
@@ -64,11 +65,5 @@
     "temporaryNotice": "This addon was completely reworked. You can now type inputs and reporters inside other blocks, and autocomplete using the Tab key.",
     "isMajor": true
   },
-  "info": [
-    {
-      "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
-      "id": "developer-tools"
-    }
-  ],
   "libraries": ["scratch-blocks"]
 }

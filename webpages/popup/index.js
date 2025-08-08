@@ -25,8 +25,6 @@ const vue = new Vue({
   },
   methods: {
     msg(message, ...params) {
-      const now = Date.now() / 1000;
-      if (message === "extensionName" && now < 1743595200 && now > 1743422400) return "Scratch Potatoes 🥔";
       return chrome.i18n.getMessage(message, ...params);
     },
     direction() {
@@ -48,6 +46,12 @@ const vue = new Vue({
         if (!this.popupsWithIframes.includes(popup)) this.popupsWithIframes.push(popup);
         setTimeout(() => document.querySelector("iframe:not([style='display: none;'])").focus(), 0);
       }
+    },
+    openInNewTab(popup) {
+      chrome.tabs.create({
+        url: `../../popups/${popup._addonId}/popup.html`,
+      });
+      this.closePopup();
     },
     iframeSrc(addonId) {
       return vue.popups.find((addon) => addon._addonId === addonId).html;
@@ -84,7 +88,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
       ({ addonId, manifest }) =>
         (manifest.popup._addonId = addonId) &&
         Object.assign(manifest.popup, {
-          html: `../../popups/${addonId}/${manifest.popup.html}`,
+          html: `../../popups/${addonId}/popup.html`,
         })
     );
   popupObjects.push({
@@ -116,7 +120,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (newState === true) {
       manifest.popup._addonId = addonId;
       Object.assign(manifest.popup, {
-        html: `../../popups/${addonId}/${manifest.popup.html}`,
+        html: `../../popups/${addonId}/popup.html`,
       });
 
       vue.popups.push(manifest.popup);
