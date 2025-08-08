@@ -101,6 +101,7 @@
     }
   ],
   "tags": ["community", "featured"],
+  "relatedAddons": ["full-signature"],
   "latestUpdate": {
     "newSettings": ["searchExploreScroll"],
     "version": "1.36.0"
