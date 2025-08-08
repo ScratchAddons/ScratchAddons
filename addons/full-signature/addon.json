@@ -106,9 +106,10 @@
   ],
   "versionAdded": "1.0.0",
   "latestUpdate": {
-    "version": "1.40.0",
+    "version": "1.43.0",
     "newSettings": ["titles"]
   },
   "tags": ["community", "forums", "recommended", "profiles"],
+  "relatedAddons": ["infinite-scroll"],
   "enabledByDefault": true
 }
