@@ -40,6 +40,7 @@
 .sa-debugger-interface [class*="card_header-buttons_"] {
   background-color: #29beb8;
   border-color: #3aa8a4;
+  text-wrap-mode: nowrap;
 }
 
 .sa-debugger-interface h1 {
@@ -87,6 +88,18 @@
 }
 .sa-debugger-tabs li.sa-debugger-tab-selected img {
   filter: none;
+}
+
+.sa-debugger-header-buttons {
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(4, 1fr);
+  direction: rtl;
+}
+
+.sa-debugger-header-buttons > div {
+  min-width: 0;
 }
 
 .sa-debugger-header-buttons img {
