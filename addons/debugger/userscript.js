@@ -514,11 +514,11 @@ export default async function ({ addon, console, msg }) {
     tabContentContainer.appendChild(tab.content);
 
     removeAllChildren(buttonContainerElement);
-    buttonContainerElement.appendChild(unpauseButton.element);
+    buttonContainerElement.prepend(unpauseButton.element);
     for (const button of tab.buttons) {
-      buttonContainerElement.appendChild(button.element);
+      buttonContainerElement.prepend(button.element);
     }
-    buttonContainerElement.appendChild(closeButton.element);
+    buttonContainerElement.prepend(closeButton.element);
 
     if (isInterfaceVisible) {
       activeTab.show();
