@@ -107,7 +107,7 @@
   height: 20px;
 }
 
-.sa-debugger-unpause {
+.sa-debugger-unpause:not(:hover) {
   animation: saDebuggerUnpause 2s infinite alternate;
 }
 
