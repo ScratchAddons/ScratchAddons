@@ -1,0 +1,20 @@
+{
+  "name": "Hide blocks",
+  "description": "Allows you to hide code blocks in the scratch code editor to reduce lag.",
+  "credits": [
+    {
+      "name": "RedPanda247",
+      "link": "https://github.com/RedPanda247"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "player", "featured"],
+  "versionAdded": "1.42.0"
+}
