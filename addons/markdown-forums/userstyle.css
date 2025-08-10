@@ -1,0 +1,31 @@
+#id_body {
+  font-family: monospace;
+}
+
+.sa-markdown-forums-original {
+  display: none;
+}
+
+.markItUp .markItUpButton7 .sa-markdown-forums-h1 a {
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h1.png");
+}
+
+.markItUp .markItUpButton7 .sa-markdown-forums-h2 a {
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h2.png");
+}
+
+.markItUp .markItUpButton7 .sa-markdown-forums-h3 a {
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h3.png");
+}
+
+.markItUp .markItUpButton7 .sa-markdown-forums-h4 a {
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h4.png");
+}
+
+.markItUp .markItUpButton7 .sa-markdown-forums-h5 a {
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h5.png");
+}
+
+.markItUp .markItUpButton7 .sa-markdown-forums-h6 a {
+  background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h6.png");
+}

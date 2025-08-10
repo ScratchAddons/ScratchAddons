@@ -87,5 +87,10 @@
   },
   "scratch-flash": {
     "license": "GPL-2.0"
+  },
+  "marked": {
+    "license": "MIT",
+    "year": "2011-2018, 2018+",
+    "fullname": "MarkedJS (https://github.com/markedjs/), Christopher Jeffrey (https://github.com/chjj/)"
   }
 }
