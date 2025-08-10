@@ -16,8 +16,8 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.35.0",
-    "temporaryNotice": "The maximum recording time has been increased to 10 minutes (600 seconds)."
+    "version": "1.41.0",
+    "temporaryNotice": "A new \"Video resolution\" option has been added, to allow making high resolution recordings."
   },
   "versionAdded": "1.6.0",
   "enabledByDefault": false
