@@ -18,9 +18,8 @@ export default async function ({ addon, console, msg }) {
         !e.target.closest(".sa-sprite-properties-info-btn")
       ) {
         const reactInternalKey = addon.tab.traps.getInternalKey(parentDiv);
-        const spriteId = parentDiv[reactInternalKey].child.key;
-        if (!spriteId.startsWith("&__")) {
-          // Not a folder
+        const spriteId = parentDiv[reactInternalKey].child.stateNode.props.id;
+        if (typeof spriteId === "string") {
           spriteToFront(spriteId);
         }
       }
