@@ -28,7 +28,7 @@ export default async function ({ addon, console, msg }) {
   });
   addon.tab.createEditorContextMenu(
     (ctx) => {
-      console.log(ctx)
+      console.log(ctx);
       spriteToFront(ctx.itemId);
     },
     {
