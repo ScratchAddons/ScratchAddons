@@ -20,6 +20,7 @@ export default async function ({ addon, console, msg }) {
         const reactInternalKey = addon.tab.traps.getInternalKey(parentDiv);
         const spriteId = parentDiv[reactInternalKey].child.stateNode.props.id;
         if (typeof spriteId === "string") {
+          // Not a folder itself
           spriteToFront(spriteId);
         }
       }
