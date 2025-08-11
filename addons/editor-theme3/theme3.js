@@ -1,5 +1,6 @@
 import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+// Module for sharing addon values and methods with recolor-custom-blocks
 import { registerAddon, shareMethod } from "./module.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
@@ -148,7 +149,7 @@ const arrowShadowPath =
 const arrowShadowColor = "#231f20";
 
 export default async function ({ addon, console, msg }) {
-  // share info with recolor-custom-blocks
+  // Register the addon to share information through the module
   registerAddon(addon, "editor-theme3");
 
   // Will be replaced with the current Scratch theme's colors when entering the editor
@@ -161,9 +162,11 @@ export default async function ({ addon, console, msg }) {
     }
     return addon.settings.get("text");
   };
+  // textMode() used by recolor-custom-blocks to determine the styling of non-category colored blocks
   shareMethod("editor-theme3", textMode, "textMode");
 
   const isColoredTextMode = () => textMode() === "colorOnWhite" || textMode() === "colorOnBlack";
+  // isColoredTextMode() Used by recolor-custom blocks to determine the styling of recolored custom block modal buttons
   shareMethod("editor-theme3", isColoredTextMode, "isColoredTextMode");
 
   const primaryColor = (category) => {
@@ -299,6 +302,7 @@ export default async function ({ addon, console, msg }) {
       if (isColoredTextMode() || textMode() === "black") {
         let primary;
         let tertiary = block.getColourTertiary();
+        // If a color is specified by recolor-custom-blocks, use that instead
         if (block.recolorCustomBlock?.isEdited) {
           primary = block.recolorCustomBlock.colourPrimary;
           tertiary = block.recolorCustomBlock.colourTertiary;
@@ -320,7 +324,7 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return "#000000";
     if (field) {
       let block = field.sourceBlock_;
-      if (block.recolorCustomBlock?.isEdited) {
+      if (block.recolorCustomBlock?.isEdited) { // If custom-recolor-blocks sets the color, use it's tertiary color instead
         return block.recolorCustomBlock.colourTertiary;
       }
       if (block.isShadow() && block.getParent()) block = block.getParent();
@@ -604,13 +608,14 @@ export default async function ({ addon, console, msg }) {
       // Text inputs
       oldFieldTextInputInit.call(this);
 
-      // As this change is undetectable from other addons, we save a copy of our update function to the element
+      // The background if editable fields in procedure_declaration are not changed by changing the block's color
+      // Manually setting the color here is not easily detectable by other addons, so we share this method
+      // so other addons (recolor-custom-blocks) can pass their own colors / fields in for compatibility
       const updateBox_ = () => {
         if (this.sourceBlock_.isShadow()) return;
         // Labels in custom block editor
-        // If we're recolored by recolor-custom-blocks, use that
         const recolorCustomBlock = this?.sourceBlock_?.recolorCustomBlock;
-        const colorTertiary = recolorCustomBlock?.isEdited
+        const colorTertiary = recolorCustomBlock?.isEdited // Use recolor-custom-block's colors if needed
           ? recolorCustomBlock.colourTertiary
           : this.sourceBlock_.getColourTertiary();
         this.box_.setAttribute("fill", isColoredTextMode() ? fieldBackground(this) : colorTertiary);
@@ -922,7 +927,9 @@ export default async function ({ addon, console, msg }) {
       if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
       else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
       Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
+      // If the custom block editing modal is open, we need to apply our color changes
       if (addon.tab.redux.state.scratchGui.customProcedures.active) {
+        // This should always be procedures_declaration, but it can crash if its not
         const declarationBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
         if (declarationBlock?.type === "procedures_declaration") {
           declarationBlock.updateDisplay_();
