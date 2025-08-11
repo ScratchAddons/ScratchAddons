@@ -1,6 +1,6 @@
 import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
-import { registerAddon, shareMethod} from "./module.js"
+import { registerAddon, shareMethod } from "./module.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const uriHeader = "data:image/svg+xml;base64,";
@@ -142,9 +142,9 @@ const defaultColors = {
 
 // From https://github.com/scratchfoundation/scratch-blocks/blob/2e3a31e/media/dropdown-arrow.svg
 const arrowPath =
-    "M6.36,7.79a1.43,1.43,0,0,1-1-.42L1.42,3.45a1.44,1.44,0,0,1,0-2c0.56-.56,9.31-0.56,9.87,0a1.44,1.44,0,0,1,0,2L7.37,7.37A1.43,1.43,0,0,1,6.36,7.79Z";
+  "M6.36,7.79a1.43,1.43,0,0,1-1-.42L1.42,3.45a1.44,1.44,0,0,1,0-2c0.56-.56,9.31-0.56,9.87,0a1.44,1.44,0,0,1,0,2L7.37,7.37A1.43,1.43,0,0,1,6.36,7.79Z";
 const arrowShadowPath =
-    "M12.71,2.44A2.41,2.41,0,0,1,12,4.16L8.08,8.08a2.45,2.45,0,0,1-3.45,0L0.72,4.16A2.42,2.42,0,0,1,0,2.44,2.48,2.48,0,0,1,.71.71C1,0.47,1.43,0,6.36,0S11.75,0.46,12,.71A2.44,2.44,0,0,1,12.71,2.44Z";
+  "M12.71,2.44A2.41,2.41,0,0,1,12,4.16L8.08,8.08a2.45,2.45,0,0,1-3.45,0L0.72,4.16A2.42,2.42,0,0,1,0,2.44,2.48,2.48,0,0,1,.71.71C1,0.47,1.43,0,6.36,0S11.75,0.46,12,.71A2.44,2.44,0,0,1,12.71,2.44Z";
 const arrowShadowColor = "#231f20";
 
 export default async function ({ addon, console, msg }) {
@@ -203,10 +203,10 @@ export default async function ({ addon, console, msg }) {
     visibleMonitors.forEach((monitor, i) => {
       const opcodePrefix = monitor.opcode.split("_")[0];
       let colorId =
-          {
-            sound: "sounds",
-            procedures: "more",
-          }[opcodePrefix] || opcodePrefix;
+        {
+          sound: "sounds",
+          procedures: "more",
+        }[opcodePrefix] || opcodePrefix;
       if (monitor.opcode === "data_listcontents") colorId = "data_lists";
       let category = categories.find((category) => category.colorId === colorId);
       if (!category) category = extensionsCategory;
@@ -230,13 +230,13 @@ export default async function ({ addon, console, msg }) {
   updateMonitorColors();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (
-        [
-          "scratch-gui/mode/SET_PLAYER",
-          "fontsLoaded/SET_FONTS_LOADED",
-          "scratch-gui/locales/SELECT_LOCALE",
-          "scratch-gui/theme/SET_THEME",
-          "scratch-gui/monitors/UPDATE_MONITORS",
-        ].includes(e.detail.action.type)
+      [
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/theme/SET_THEME",
+        "scratch-gui/monitors/UPDATE_MONITORS",
+      ].includes(e.detail.action.type)
     ) {
       // Timeout to wait until the elements are rendered
       setTimeout(updateMonitorColors, 0);
@@ -299,11 +299,10 @@ export default async function ({ addon, console, msg }) {
       if (isColoredTextMode() || textMode() === "black") {
         let primary;
         let tertiary = block.getColourTertiary();
-        if(block.recolorCustomBlock?.isEdited) {
+        if (block.recolorCustomBlock?.isEdited) {
           primary = block.recolorCustomBlock.colourPrimary;
           tertiary = block.recolorCustomBlock.colourTertiary;
-        }
-        else if(block.isShadow() && block.getParent()) primary = block.getParent().getColour();
+        } else if (block.isShadow() && block.getParent()) primary = block.getParent().getColour();
         else primary = block.getColour();
         if (isColoredTextMode()) return alphaBlend(primary, multiply(tertiary, { a: 0.25 }));
         else return brighten(primary, { r: 0.4, g: 0.4, b: 0.4 });
@@ -321,8 +320,8 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return "#000000";
     if (field) {
       let block = field.sourceBlock_;
-      if(block.recolorCustomBlock?.isEdited) {
-        return block.recolorCustomBlock.colourTertiary
+      if (block.recolorCustomBlock?.isEdited) {
+        return block.recolorCustomBlock.colourTertiary;
       }
       if (block.isShadow() && block.getParent()) block = block.getParent();
       return block.getColourTertiary();
@@ -349,19 +348,19 @@ export default async function ({ addon, console, msg }) {
     else createSvgElement = Blockly.utils.createSvgElement;
     const arrow = createSvgElement("g");
     arrow.appendChild(
-        createSvgElement("path", {
-          d: arrowShadowPath,
-          fill: arrowShadowColor,
-          "fill-opacity": 0.1,
-          transform: "translate(0, 1.6)",
-        })
+      createSvgElement("path", {
+        d: arrowShadowPath,
+        fill: arrowShadowColor,
+        "fill-opacity": 0.1,
+        transform: "translate(0, 1.6)",
+      })
     );
     arrow.appendChild(
-        createSvgElement("path", {
-          d: arrowPath,
-          fill: color,
-          transform: "translate(0, 1.6)",
-        })
+      createSvgElement("path", {
+        d: arrowPath,
+        fill: color,
+        transform: "translate(0, 1.6)",
+      })
     );
     return arrow;
   };
@@ -415,8 +414,8 @@ export default async function ({ addon, console, msg }) {
   if (Blockly.registry) {
     // new Blockly
     const ScratchContinuousCategory = Blockly.registry.getClass(
-        Blockly.registry.Type.TOOLBOX_ITEM,
-        Blockly.ToolboxCategory.registrationName
+      Blockly.registry.Type.TOOLBOX_ITEM,
+      Blockly.ToolboxCategory.registrationName
     );
     const oldCategoryCreateIconDom = ScratchContinuousCategory.prototype.createIconDom_;
     ScratchContinuousCategory.prototype.createIconDom_ = function () {
@@ -610,15 +609,14 @@ export default async function ({ addon, console, msg }) {
         if (this.sourceBlock_.isShadow()) return;
         // Labels in custom block editor
         // If we're recolored by recolor-custom-blocks, use that
-        const recolorCustomBlock = this?.sourceBlock_?.recolorCustomBlock
-        const colorTertiary = recolorCustomBlock?.isEdited ? recolorCustomBlock.colourTertiary : this.sourceBlock_.getColourTertiary();
-        this.box_.setAttribute(
-          "fill",
-          isColoredTextMode() ? fieldBackground(this) : colorTertiary
-        );
-      }
+        const recolorCustomBlock = this?.sourceBlock_?.recolorCustomBlock;
+        const colorTertiary = recolorCustomBlock?.isEdited
+          ? recolorCustomBlock.colourTertiary
+          : this.sourceBlock_.getColourTertiary();
+        this.box_.setAttribute("fill", isColoredTextMode() ? fieldBackground(this) : colorTertiary);
+      };
       shareMethod("editor-theme3", updateBox_, "updateBox_");
-      if(this.box_) {
+      if (this.box_) {
         updateBox_(this);
       }
     };
@@ -649,8 +647,8 @@ export default async function ({ addon, console, msg }) {
       // Number pad
       oldFieldNumberShowNumPad.call(this);
       Blockly.DropDownDiv.setColour(
-          this.sourceBlock_.getParent().getColour(),
-          this.sourceBlock_.getParent().getColourTertiary()
+        this.sourceBlock_.getParent().getColour(),
+        this.sourceBlock_.getParent().getColourTertiary()
       );
     };
   }
@@ -802,8 +800,8 @@ export default async function ({ addon, console, msg }) {
     // Octave buttons in "play note" dropdown
     const group = oldFieldNoteAddOctaveButton.call(this, ...args);
     group
-        .querySelector("image")
-        .setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `${iconPath()}/arrow_button.svg`);
+      .querySelector("image")
+      .setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `${iconPath()}/arrow_button.svg`);
     return group;
   };
 
@@ -924,7 +922,7 @@ export default async function ({ addon, console, msg }) {
       if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
       else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
       Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
-      if(addon.tab.redux.state.scratchGui.customProcedures.active) {
+      if (addon.tab.redux.state.scratchGui.customProcedures.active) {
         const declarationBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
         if (declarationBlock?.type === "procedures_declaration") {
           declarationBlock.updateDisplay_();
@@ -998,7 +996,7 @@ export default async function ({ addon, console, msg }) {
         markAsSeen: true,
         reduxEvents: ["scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES"],
         reduxCondition: (state) =>
-            state.scratchGui.editorTab.activeTabIndex === 0 && !state.scratchGui.mode.isPlayerOnly,
+          state.scratchGui.editorTab.activeTabIndex === 0 && !state.scratchGui.mode.isPlayerOnly,
       });
       // Get img.src, remove data:image... header, then atob() decodes base64 to get the actual <svg> tags.
       let svg = atob(iconElement.src.replace(uriHeader, ""));
@@ -1006,14 +1004,14 @@ export default async function ({ addon, console, msg }) {
       // Find and replace the default color codes in the svg with our custom ones
       // Placeholder values are used to prevent hex codes replacing each other (see PR #7545 changes)
       svg = svg
-          .replace("#ff6680", "%primary%") // Primary block color
-          .replace("#ff4d6a", "%inner%") // Inside empty boolean/reporter input slots
-          .replace("#f35", "%outline%") // Border around edges of block
-          .replace("#fff", "%labeltext%") // Text color for "Add a label" icon
-          .replace("%primary%", primaryColor(myBlocksCategory))
-          .replace("%inner%", isColoredTextMode() ? fieldBackground(myBlocksCategory) : tertiaryColor(myBlocksCategory))
-          .replace("%outline%", tertiaryColor(myBlocksCategory))
-          .replace("%labeltext%", isColoredTextMode() ? tertiaryColor(myBlocksCategory) : uncoloredTextColor());
+        .replace("#ff6680", "%primary%") // Primary block color
+        .replace("#ff4d6a", "%inner%") // Inside empty boolean/reporter input slots
+        .replace("#f35", "%outline%") // Border around edges of block
+        .replace("#fff", "%labeltext%") // Text color for "Add a label" icon
+        .replace("%primary%", primaryColor(myBlocksCategory))
+        .replace("%inner%", isColoredTextMode() ? fieldBackground(myBlocksCategory) : tertiaryColor(myBlocksCategory))
+        .replace("%outline%", tertiaryColor(myBlocksCategory))
+        .replace("%labeltext%", isColoredTextMode() ? tertiaryColor(myBlocksCategory) : uncoloredTextColor());
 
       //console.log(svg);
       iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
@@ -1022,30 +1020,30 @@ export default async function ({ addon, console, msg }) {
 
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(
-        "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2) ul",
-        {
-          markAsSeen: true,
-          reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-        }
+      "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2) ul",
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      }
     );
     // We're running in the new version of the editor that includes this menu.
 
     colorModeSubmenu.addEventListener(
-        "click",
-        (e) => {
-          if (addon.self.disabled) return;
-          if (!e.target.closest(".sa-colormode-submenu")) {
-            // Something went wrong with the code below this event listener
-            return;
-          }
-          if (e.target.closest(".sa-theme3-link")) {
-            window.open("https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-theme3");
-            e.stopPropagation();
-            return;
-          }
+      "click",
+      (e) => {
+        if (addon.self.disabled) return;
+        if (!e.target.closest(".sa-colormode-submenu")) {
+          // Something went wrong with the code below this event listener
+          return;
+        }
+        if (e.target.closest(".sa-theme3-link")) {
+          window.open("https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-theme3");
           e.stopPropagation();
-        },
-        { capture: true }
+          return;
+        }
+        e.stopPropagation();
+      },
+      { capture: true }
     );
 
     const elementToClone = colorModeSubmenu.querySelector("[class*=settings-menu_selected_]").closest("li");
