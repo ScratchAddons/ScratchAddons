@@ -184,6 +184,22 @@
           "settingId": "comment-color"
         }
       }
+     },
+    {
+      "name": "text-shadow",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "text"
+        },
+        "options": {
+          "black": "rgba(0, 0, 0, 0.15)",
+          "colorOnWhite": "rgba(0, 0, 0, 0.15)",
+          "colorOnBlack": "#000000"
+        },
+        "default": "rgba(0, 0, 0, 0.4)"
+      }
     }
   ],
   "dynamicEnable": true,
