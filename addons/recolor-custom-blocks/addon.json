@@ -1,6 +1,6 @@
 {
   "name": "Recolor custom blocks",
-  "description": "Changes the colors of custom blocks that start with the name of a category followed by a colon (:), for example \"looks: animate\".",
+  "description": "Adds an option to choose a custom color when creating a block. This feature works by adding the color code or category name at the beginning of the block's label.",
   "credits": [
     {
       "name": "FlamedDogo99",
