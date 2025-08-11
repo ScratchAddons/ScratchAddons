@@ -658,12 +658,12 @@ export default async function ({ addon, console }) {
   };
 
   const reenableAddon = () => {
-    updateExistingBlocks();
+    enableAddon();
     // If the edit block modal is open when we reenable the addon, unhide the menu and update the block
     if (addon.tab.redux.state.scratchGui.customProcedures.active) {
       // This should always be the block in the edit block modal, but it causes a crash when it's not
       const declarationBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
-      if (declarationBlock?.type === "procedures_declaration") {
+      if (declarationBlock?.type === "procedures_declaration" && !declarationBlock?.recolorCustomBlockInjected) {
         updateBlockColors(declarationBlock);
         declarationBlock.colorMenu.style.display = "";
       }
