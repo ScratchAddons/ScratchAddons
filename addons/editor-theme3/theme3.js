@@ -324,7 +324,8 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return "#000000";
     if (field) {
       let block = field.sourceBlock_;
-      if (block.recolorCustomBlock?.isEdited) { // If custom-recolor-blocks sets the color, use it's tertiary color instead
+      if (block.recolorCustomBlock?.isEdited) {
+        // If custom-recolor-blocks sets the color, use it's tertiary color instead
         return block.recolorCustomBlock.colourTertiary;
       }
       if (block.isShadow() && block.getParent()) block = block.getParent();
