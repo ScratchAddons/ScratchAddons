@@ -295,8 +295,10 @@ export default async function ({ addon, console, msg }) {
         })
         .then(() => {
           // Remove the tooltip
-          tooltip.remove();
-          localStorage.setItem("saAnimatedThumbHideDropdownTooltip", "1");
+          if (tooltip) {
+            tooltip.remove();
+            localStorage.setItem("saAnimatedThumbHideDropdownTooltip", "1");
+          }
 
           // Add message to the Set Thumbnail modal when it's opened instead
           addon.tab
