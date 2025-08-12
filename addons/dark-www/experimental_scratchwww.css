@@ -711,7 +711,7 @@ p.callout,
 .input,
 .row .col-sm-9 input[type="radio"]:not(:checked),
 .extension-landing .tip-box,
-.checkbox-container input[type=checkbox]:not(:checked) {
+.checkbox-container input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border);
 }
 .grid .thumbnail,
