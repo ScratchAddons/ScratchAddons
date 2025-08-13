@@ -899,7 +899,7 @@ export default async function ({ addon, console, msg }) {
             });
             queueMicrotask(() => {
               if (restorationFunctions.length > 1) {
-                restoreButtonMsg = "restore-sprites";
+                restoreButtonMsg = "/_general/restore/sprites";
               }
             });
           } else if (type === "costume" || type === "sound") {
@@ -935,7 +935,7 @@ export default async function ({ addon, console, msg }) {
             });
             queueMicrotask(() => {
               if (restorationFunctions.length + (lastCostumeRemoved !== null) > 1) {
-                restoreButtonMsg = `restore-${type}s`;
+                restoreButtonMsg = `/_general/restore/${type}s`;
               }
             });
           }

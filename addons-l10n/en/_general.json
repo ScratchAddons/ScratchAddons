@@ -5,6 +5,11 @@
   "_general/blocks/green-flag": "flag",
   "_general/blocks/clockwise": "clockwise",
   "_general/blocks/anticlockwise": "anti-clockwise",
+
+  "_general/restore/sprites": "Restore Sprites",
+  "_general/restore/costumes": "Restore Costumes",
+  "_general/restore/sounds": "Restore Sounds",
+
   "_general/meta/managedBySa": "Managed by Scratch Addons",
   "_general/meta/addonSettings": "Addon Settings",
   "_general/meta/message-from-sa": "Message from Scratch Addons"
