@@ -264,6 +264,12 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:not(.sa-gamepad-
   background-repeat: no-repeat;
   background-position: center center;
 }
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:active {
+  background-color: transparent;
+}
+body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"] {
+  filter: none;
+}
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gamepad-container *) {
   display: none;
 }
