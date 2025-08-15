@@ -612,12 +612,11 @@ const showBanner = () => {
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
-  // Thumbnails were 100px height
   */
   const notifImage = Object.assign(document.createElement("img"), {
     className: "sa-notification-image",
-    // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.png"),
+    alt: chrome.i18n.getMessage("extensionUpdateImageAlt_v1_43"),
+    src: chrome.runtime.getURL("/images/cs/update-v1.43.png"),
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -646,15 +645,10 @@ const showBanner = () => {
       .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_42", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_43", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
-          /*
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
-            .outerHTML,
-          */
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
@@ -664,7 +658,7 @@ const showBanner = () => {
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_42"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_43"),
   });
   const notifFooter = document.createElement("span");
   const uiLanguage = chrome.i18n.getUILanguage();
@@ -729,9 +723,10 @@ const showBanner = () => {
           bottom: 20px;
           right: 20px;
           width: 700px;
-          max-width: calc(100% - 60px);
-          max-height: calc(100vh - 60px);
-          max-height: calc(100svh - 60px);
+          max-width: calc(100% - 40px);
+          max-height: calc(100vh - 40px);
+          max-height: calc(100svh - 40px);
+          box-sizing: border-box;
           overflow-y: auto;
           display: flex;
           align-items: center;
@@ -748,8 +743,10 @@ const showBanner = () => {
         }
 
         .sa-notification-image {
-          height: 150px;
-          border-radius: 5px;
+          /* Thumbnails were 100px height */
+          /* Extension icon was 150px by 150px */
+          height: 120px;
+          /* border-radius: 5px; */
           padding: 20px;
         }
 
@@ -792,9 +789,33 @@ const showBanner = () => {
         @media (max-width: 600px) {
           #sa-notification {
             flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 1em;
+          }
+
+          #sa-notification-text {
+            display: contents;
+          }
+
+          .sa-notification-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+          }
+
+          .sa-notification-title,
+          .sa-notification-subtitle {
+            order: -2;
+            padding-right: 36px;
           }
 
           .sa-notification-image {
+            order: -1;
+            padding: 0;
+          }
+
+          #sa-notification-text > br {
             display: none;
           }
         }
