@@ -1,0 +1,5 @@
+[class*="selector_list-area"] {
+    scroll-behavior: auto !important;
+    overflow-anchor: none;
+    overflow-x: hidden; /* This addon also fixes horizontal bar appearing while dragging */
+}
