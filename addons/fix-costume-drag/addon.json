@@ -1,0 +1,34 @@
+{
+  "name": "Fix dragging costumes and sounds",
+  "description": "Fixes a bug in the costumes and sounds tab where dragging a costume/sound while scrolling doesn't place it as expected.",
+  "credits": [
+    {
+      "name": "mysinginmonsters",
+      "link": "https://scratch.mit.edu/users/mysinginmonsters/"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Drag at top/bottom to scroll",
+      "id": "drag-scroll",
+      "type": "boolean",
+      "default": false,
+      "description": "Drag costumes/sounds at the top or bottom of the panel to automatically scroll."
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "costumeEditor"],
+  "versionAdded": "1.43.0",
+  "dynamicEnable": true
+}
