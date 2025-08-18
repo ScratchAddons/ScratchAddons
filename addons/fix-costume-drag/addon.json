@@ -7,6 +7,15 @@
       "link": "https://scratch.mit.edu/users/mysinginmonsters/"
     }
   ],
+  "settings": [
+    {
+      "name": "Drag at top/bottom to scroll",
+      "id": "drag-scroll",
+      "type": "boolean",
+      "default": false,
+      "description": "Drag costumes/sounds at the top or bottom of the panel to automatically scroll."
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
