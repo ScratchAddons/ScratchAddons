@@ -1,9 +1,11 @@
+.categoryBubble::after,
 .scratchCategoryItemBubble::after {
   /* block-palette-icons */
   filter: brightness(0);
 }
 
-.blocklyEditableText > text {
+.blocklyEditableText > text,
+.scratch-renderer.default-theme .blocklyEditableField > text {
   fill: var(--editorTheme3-inputColor-blackText);
 }
 .sa-theme3-editable-label .blocklyHtmlInput {
@@ -12,16 +14,21 @@
 }
 
 .blocklyDropDownDiv .goog-menuitem,
+.blocklyDropDownDiv .blocklyMenuItem,
 .blocklyNumPadButton {
   color: black;
 }
-.blocklyDropDownDiv .blocklyText {
+.blocklyDropDownDiv .blocklyText,
+.blocklyDropDownDiv.scratch-renderer.default-theme .blocklyText {
   /* "Play note" dropdown */
   fill: black;
 }
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
+.blocklyDropDownDiv .blocklyMenu .blocklyMenuItem:hover,
+.blocklyDropDownDiv .blocklyMenu .u-dropdown-selected-item,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight,
+.sa-contextmenu-colored .blocklyContextMenu .blocklyMenuItem:hover {
   background-color: var(--editorTheme3-hoveredItem, rgba(255, 255, 255, 0.3));
 }
 

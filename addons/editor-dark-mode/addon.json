@@ -233,6 +233,16 @@
       }
     },
     {
+      "name": "primary-iconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
       "name": "primary-transparent35",
       "value": {
         "type": "multiply",
@@ -1527,9 +1537,7 @@
       }
     }
   ],
-  "addonPreview": {
-    "type": "editor-dark-mode"
-  },
+  "addonPreview": true,
   "presetPreview": {
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
@@ -1540,5 +1548,7 @@
     "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
-  "enabledByDefault": false
+  "relatedAddons": ["dark-www", "editor-theme3", "stage-monitor"],
+  "enabledByDefault": false,
+  "libraries": ["scratch-render"]
 }

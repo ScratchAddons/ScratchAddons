@@ -21,16 +21,13 @@
   ],
   "info": [
     {
-      "id": "tutorials-button-update",
-      "text": "The \"Hide Tutorials button\" addon has been moved here as a setting."
-    },
-    {
       "type": "notice",
       "id": "small-screens",
       "text": "The text labels may be automatically replaced by icons on smaller windows."
     }
   ],
   "tags": ["editor", "editorMenuBar", "featured"],
+  "relatedAddons": ["discuss-button", "editor-compact"],
   "settings": [
     {
       "name": "Show menu...",
@@ -55,6 +52,12 @@
     {
       "name": "Hide Tutorials button",
       "id": "hide-tutorials-button",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Hide Debug button",
+      "id": "hide-debug-button",
       "type": "boolean",
       "default": false
     },
@@ -122,11 +125,35 @@
           "hide-tutorials-button": true
         }
       }
+    },
+    {
+      "url": "debug-hide.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "hide-debug-button": true
+        }
+      }
+    },
+    {
+      "url": "divider-hide.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "hide-tutorials-button": true,
+          "hide-debug-button": true
+        }
+      }
     }
   ],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true,
   "enabledByDefault": false,
-  "versionAdded": "1.36.0"
+  "versionAdded": "1.36.0",
+  "latestUpdate": {
+    "version": "1.40.0",
+    "newSettings": ["hide-debug-button"],
+    "isMajor": true
+  }
 }

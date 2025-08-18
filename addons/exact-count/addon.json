@@ -18,10 +18,6 @@
     {
       "id": "studioClick",
       "text": "To see the exact number of projects in a studio, enable the \"exact count for studios\" setting below and click the \"100+\" label on the studio's Projects tab."
-    },
-    {
-      "id": "setting-removal",
-      "text": "The forum setting has been removed since the ScratchDB database used by it is offline."
     }
   ],
   "settings": [
@@ -67,5 +63,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.2.0",
   "tags": ["community", "recommended", "profiles", "studios"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "libraries": ["scratch-www"]
 }

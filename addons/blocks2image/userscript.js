@@ -1,9 +1,13 @@
+import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
+
 export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   function makeStyle() {
     let style = document.createElement("style");
-    style.textContent = `
+    style.textContent = Blockly.registry
+      ? ""
+      : `
     .blocklyText {
         fill: ${Blockly.Colours.text};
         font-family: "Helvetica Neue", Helvetica, sans-serif;
@@ -17,19 +21,25 @@ export default async function ({ addon, console, msg }) {
         fill: ${Blockly.Colours.text} !important;
     }
     `;
-    for (let userstyle of document.querySelectorAll(`
+    for (let scratchStyle of document.querySelectorAll(`
+      style[id^='blockly-'],
       .scratch-addons-style[data-addon-id="editor-theme3"],
       .sa-custom-block-text-style
     `)) {
-      if (userstyle.disabled) continue;
-      style.textContent += userstyle.textContent;
+      if (scratchStyle.disabled) continue;
+      style.textContent += scratchStyle.textContent;
     }
     return style;
   }
 
   function setCSSVars(element) {
+    element.setAttribute("class", document.querySelector(".injectionDiv").className);
     for (let property of document.documentElement.style) {
-      if (property.startsWith("--editorTheme3-") || property.startsWith("--customBlockText-"))
+      if (
+        property.startsWith("--colour-") ||
+        property.startsWith("--editorTheme3-") ||
+        property.startsWith("--customBlockText-")
+      )
         element.style.setProperty(property, document.documentElement.style.getPropertyValue(property));
     }
   }
@@ -39,34 +49,55 @@ export default async function ({ addon, console, msg }) {
   exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
   exSVG.setAttribute("version", "1.1");
 
-  const enabledAddons = await addon.self.getEnabledAddons("codeEditor");
+  enableContextMenuSeparators(addon.tab);
 
-  addon.tab.createBlockContextMenu(
-    (items) => {
-      if (addon.self.disabled) return items;
-      let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
-
-      const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
-      const insertBeforeIndex =
-        pasteItemIndex !== -1
-          ? // If "paste" button exists, add own items before it
-            pasteItemIndex
-          : // If there's no such button, insert at end
-            items.length;
-
-      items.splice(insertBeforeIndex, 0, {
-        enabled: !!svgchild?.childNodes?.length,
-        text: msg("saveAll"),
+  if (Blockly.registry) {
+    // new Blockly
+    Blockly.ContextMenuRegistry.registry.register(
+      addSeparator({
+        displayText: msg("saveAll"),
+        preconditionFn: () => {
+          if (addon.self.disabled) return "hidden";
+          if (document.querySelector("svg.blocklySvg g.blocklyBlockCanvas > g.blocklyBlock")) return "enabled";
+          return "disabled";
+        },
         callback: () => {
           exportPopup();
         },
-        separator: true,
-      });
+        scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+        id: "saSaveAllAsImage",
+        weight: 9, // after Add Comment
+      })
+    );
+  } else {
+    addon.tab.createBlockContextMenu(
+      (items) => {
+        if (addon.self.disabled) return items;
+        let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
 
-      return items;
-    },
-    { workspace: true }
-  );
+        const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+        const insertBeforeIndex =
+          pasteItemIndex !== -1
+            ? // If "paste" button exists, add own items before it
+              pasteItemIndex
+            : // If there's no such button, insert at end
+              items.length;
+
+        items.splice(insertBeforeIndex, 0, {
+          enabled: !!svgchild?.childNodes?.length,
+          text: msg("saveAll"),
+          callback: () => {
+            exportPopup();
+          },
+          separator: true,
+        });
+
+        return items;
+      },
+      { workspace: true }
+    );
+  }
+
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (addon.self.disabled) return items;
@@ -78,14 +109,18 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
 
-      items.splice(insertBeforeIndex, 0, {
-        enabled: true,
-        text: msg("save"),
-        callback: () => {
-          exportPopup(block);
-        },
-        separator: true,
-      });
+      items.splice(
+        insertBeforeIndex,
+        0,
+        addSeparator({
+          enabled: true,
+          text: msg("save"),
+          callback: () => {
+            exportPopup(block);
+          },
+          separator: true,
+        })
+      );
 
       return items;
     },
@@ -101,6 +136,7 @@ export default async function ({ addon, console, msg }) {
     const { backdrop, container, content, closeButton } = modal;
     let remove = modal.remove;
     container.classList.add("sa-export-container");
+    container.classList.add("sa-export-loading"); // hide while loading to avoid layout shift
     content.classList.add("sa-export-content");
 
     backdrop.addEventListener("click", remove);
@@ -111,20 +147,30 @@ export default async function ({ addon, console, msg }) {
     const image = document.createElement("img");
     image.classList.add("sa-export-image");
 
+    const loadingContainer = document.createElement("div");
+    loadingContainer.classList.add("sa-export-loading-container");
+    backdrop.append(loadingContainer);
+
+    const loadingSpinner = document.createElement("span");
+    loadingSpinner.classList.add("sa-spinner", "sa-spinner-white");
+    loadingContainer.append(loadingSpinner);
+
     const loadingText = document.createElement("div");
     loadingText.classList.add("sa-export-loading-text");
     loadingText.textContent = msg("loading");
-    content.append(loadingText);
+    loadingContainer.append(loadingText);
 
     exportBlock(true, false, true, block).then((result) => {
       image.src = result;
-      content.removeChild(loadingText);
     });
 
     image.onload = function () {
       const aspect = image.width / image.height;
       if (aspect >= 1) image.classList.add("wide");
       else image.classList.add("tall");
+
+      backdrop.removeChild(loadingContainer);
+      container.classList.remove("sa-export-loading");
     };
 
     imageContainer.append(image);
@@ -137,12 +183,29 @@ export default async function ({ addon, console, msg }) {
     const svgButton = document.createElement("button");
     const pngButton = document.createElement("button");
 
-    copyButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-copy-button" });
-    copyButton.textContent = msg("clipboard");
-    svgButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-svg-button" });
+    const copyIconContainer = document.createElement("span");
+    const copyIcon = document.createElement("img");
+    const downloadIconContainer = document.createElement("span");
+    const downloadIcon = document.createElement("img");
+
+    copyButton.className = "sa-export-copy-button";
+    copyIconContainer.className = "sa-export-button-icon";
+    copyIcon.src = addon.self.dir + "/copy.svg";
+    copyIcon.draggable = false;
+    copyIconContainer.appendChild(copyIcon);
+    copyButton.appendChild(copyIconContainer);
+    copyButton.appendChild(new Text(msg("clipboard")));
+
+    svgButton.className = "sa-export-svg-button";
     svgButton.textContent = msg("svg");
+
     pngButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-png-button" });
-    pngButton.textContent = msg("png");
+    downloadIconContainer.className = "sa-export-button-icon";
+    downloadIcon.src = addon.self.dir + "/download.svg";
+    downloadIcon.draggable = false;
+    downloadIconContainer.appendChild(downloadIcon);
+    pngButton.appendChild(downloadIconContainer);
+    pngButton.appendChild(new Text(msg("png")));
 
     buttonContainer.append(copyButton);
     buttonContainer.append(svgButton);
@@ -179,9 +242,9 @@ export default async function ({ addon, console, msg }) {
   async function exportBlock(isExportPNG, copyToClipboard, returnData, block) {
     let svg;
     if (block) {
-      svg = selectedBlocks(isExportPNG, block);
+      svg = selectedBlocks(isExportPNG ? 2 : 1, block);
     } else {
-      svg = allBlocks(isExportPNG);
+      svg = allBlocks(isExportPNG ? 2 : 1);
     }
     // resolve nbsp whitespace
     svg.querySelectorAll("text").forEach((text) => {
@@ -198,12 +261,14 @@ export default async function ({ addon, console, msg }) {
       }, {});
     };
 
-    const externalImages = /*Object.*/ groupBy(Array.from(svg.querySelectorAll("image")), (item) => {
-      const iconUrl = item.getAttribute("xlink:href");
-      if (iconUrl.startsWith("data:")) return "data:";
-      else return iconUrl;
-    });
-    delete externalImages["data:"];
+    const getHref = (item) => item.getAttribute("xlink:href") || item.getAttribute("href");
+    const externalImages = /*Object.*/ groupBy(
+      Array.from(svg.querySelectorAll("image")).filter((item) => {
+        const iconUrl = getHref(item);
+        return iconUrl && !iconUrl.startsWith("data:");
+      }),
+      (item) => getHref(item)
+    );
 
     // replace external images with data URIs
     await Promise.all(
@@ -214,62 +279,61 @@ export default async function ({ addon, console, msg }) {
           reader.addEventListener("load", () => resolve(reader.result));
           reader.readAsDataURL(blob);
         });
-        externalImages[iconUrl].forEach((item) => item.setAttribute("xlink:href", dataUri));
+        externalImages[iconUrl].forEach((item) => {
+          item.removeAttribute("href");
+          item.setAttribute("xlink:href", dataUri);
+        });
       })
     );
-    if (!isExportPNG) {
-      exportData(new XMLSerializer().serializeToString(svg));
-    } else {
+    if (isExportPNG) {
       return exportPNG(svg, copyToClipboard, returnData);
+    } else {
+      exportData(new XMLSerializer().serializeToString(svg));
     }
   }
 
-  function selectedBlocks(isExportPNG, block) {
+  function selectedBlocks(scale, block) {
     let svg = exSVG.cloneNode();
 
-    let svgchild = block.svgGroup_;
+    let svgchild = block.getSvgRoot();
+    const translateY = Math.abs(svgchild.getBBox().y) * scale + scale;
     svgchild = svgchild.cloneNode(true);
-    let dataShapes = svgchild.getAttribute("data-shapes");
-    let translateY = 0; // blocks no hat
-    const scale = isExportPNG ? 2 : 1;
-    if (dataShapes === "c-block c-1 hat") {
-      translateY = 20; // for My block
-    }
-    if (dataShapes === "hat") {
-      translateY = 16; // for Events
-      if (enabledAddons.includes("cat-blocks")) {
-        translateY += 16; // for cat ears
-      }
-    }
-    svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
+    svgchild.setAttribute("transform", `translate(${scale},${translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
     return svg;
   }
 
-  function allBlocks(isExportPNG) {
+  function allBlocks(scale) {
     let svg = exSVG.cloneNode();
-
     let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
-    svgchild = svgchild.cloneNode(true);
-
+    let translateY = 0;
     let xArr = [];
     let yArr = [];
 
+    // Loop before cloneNode so getBBox() works.
     svgchild.childNodes.forEach((g) => {
+      if (!g.getAttribute("transform")) return;
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
-      xArr.push(x * (isExportPNG ? 2 : 1));
-      yArr.push(y * (isExportPNG ? 2 : 1));
+      xArr.push(x * scale);
+      yArr.push(y * scale);
+
+      // This seems to work since the actual positioning is done with translate.
+      if (translateY === 0) translateY = Math.abs(g.getBBox().y) * scale + scale;
     });
 
-    svgchild.setAttribute(
-      "transform",
-      `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18 * (isExportPNG ? 2 : 1)}) ${
-        isExportPNG ? "scale(2)" : ""
-      }`
-    );
+    translateY -= Math.min(...yArr);
+
+    svgchild = svgchild.cloneNode(true);
+    svgchild.setAttribute("transform", `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`);
+
+    // Include comment text in the exported SVG
+    for (const textarea of svgchild.querySelectorAll(".blocklyTextarea")) {
+      textarea.innerText = textarea.value;
+    }
+
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
@@ -301,8 +365,8 @@ export default async function ({ addon, console, msg }) {
       document.body.append(iframe);
       iframe.contentDocument.write(serializer.serializeToString(svg));
       let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-      svg.setAttribute("width", width + "px");
-      svg.setAttribute("height", height + "px");
+      svg.setAttribute("width", width + 4 + "px");
+      svg.setAttribute("height", height + 4 + "px");
 
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");

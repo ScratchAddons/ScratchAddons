@@ -14,13 +14,20 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects", "projectEmbeds"]
+      "matches": ["projects"]
+    },
+    {
+      "url": "scratch3to2.css",
+      "matches": ["projects"],
+      "if": {
+        "addonEnabled": ["scratch3to2"]
+      }
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects", "projectEmbeds"],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],

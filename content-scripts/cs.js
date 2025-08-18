@@ -12,7 +12,7 @@ if (window.frameElement && window.frameElement.getAttribute("src") === null)
   throw "Scratch Addons: iframe without src attribute ignored";
 if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
 if (new URL(location.href).hostname === "localhost") {
-  if (!["8333", "8601", "8602"].includes(new URL(location.href).port)) {
+  if (!["8333", "8601"].includes(new URL(location.href).port)) {
     throw "Scratch Addons: this localhost port is not supported";
   }
 }
@@ -556,7 +556,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
 if (location.pathname.startsWith("/discuss/")) {
-  // We do this first as sb2 runs fast.
+  // We do this first as scratchblocks runs fast.
+  // Used by better-quoter.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
@@ -565,7 +566,8 @@ if (location.pathname.startsWith("/discuss/")) {
   if (document.readyState !== "loading") {
     setTimeout(preserveBlocks, 0);
   } else {
-    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
+    // { capture: true } is needed to run before jQuery's listener
+    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true, capture: true });
   }
 }
 
@@ -602,59 +604,34 @@ const showBanner = () => {
   const notifOuterBody = document.createElement("div");
   const notifInnerBody = Object.assign(document.createElement("div"), {
     id: "sa-notification",
-    style: `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 700px;
-    max-height: 270px;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #222;
-    color: white;
-    z-index: 99999;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-shadow: none;
-    box-shadow: 0 0 20px 0px #0000009e;
-    font-size: 14px;
-    line-height: normal;`,
   });
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=oRo0tMWEpiA",
+    href: "https://www.youtube.com/watch?v=vuL5lV0l3fY",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
-  // Thumbnails were 100px height
   */
   const notifImage = Object.assign(document.createElement("img"), {
-    // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.png"),
-    style: "height: 150px; border-radius: 5px; padding: 20px",
+    className: "sa-notification-image",
+    alt: chrome.i18n.getMessage("extensionUpdateImageAlt_v1_43"),
+    src: chrome.runtime.getURL("/images/cs/update-v1.43.png"),
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
-    style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
-    style: "font-size: 18px; line-height: normal; display: inline-block; margin-bottom: 12px;",
+    className: "sa-notification-title",
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("img"), {
-    style: `
-    float: right;
-    cursor: pointer;
-    width: 24px;`,
+    className: "sa-notification-close",
     title: chrome.i18n.getMessage("close"),
     src: chrome.runtime.getURL("../images/cs/close.svg"),
+    draggable: false,
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
-
-  const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
-  const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
   //
   const _uiLanguage = chrome.i18n.getUILanguage();
@@ -662,38 +639,28 @@ const showBanner = () => {
   //
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE + "font-weight: bold;",
+    className: "sa-notification-subtitle",
     textContent: chrome.i18n
       .getMessage("extensionHasUpdated", DOLLARS)
       .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_39", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_43", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
-          /*
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
-            .outerHTML,
-          */
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
-            style: NOTIF_LINK_STYLE,
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
         ][Number(i) - 1]
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_39"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_43"),
   });
-  const notifFooter = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE,
-  });
+  const notifFooter = document.createElement("span");
   const uiLanguage = chrome.i18n.getUILanguage();
   const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
   const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
@@ -702,7 +669,6 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
-    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
@@ -710,17 +676,15 @@ const showBanner = () => {
       chrome.runtime.getManifest().version
     }&${utm}`,
     target: "_blank",
-    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("feedback"),
   });
   const notifFooterTranslate = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/translate",
     target: "_blank",
-    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("translate"),
   });
   const notifFooterLegal = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE + "font-size: 12px;",
+    className: "sa-notification-legal",
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
@@ -731,8 +695,8 @@ const showBanner = () => {
   notifFooter.appendChild(makeBr());
   notifFooter.appendChild(notifFooterLegal);
 
-  notifText.appendChild(notifTitle);
   notifText.appendChild(notifClose);
+  notifText.appendChild(notifTitle);
   notifText.appendChild(makeBr());
   notifText.appendChild(notifInnerText0);
   notifText.appendChild(makeBr());
@@ -750,6 +714,114 @@ const showBanner = () => {
   notifOuterBody.appendChild(notifInnerBody);
 
   document.body.appendChild(notifOuterBody);
+
+  document.body.appendChild(
+    Object.assign(document.createElement("style"), {
+      textContent: `
+        #sa-notification {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 700px;
+          max-width: calc(100% - 40px);
+          max-height: calc(100vh - 40px);
+          max-height: calc(100svh - 40px);
+          box-sizing: border-box;
+          overflow-y: auto;
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          border-radius: 10px;
+          background-color: #222;
+          color: white;
+          z-index: 99999;
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          text-shadow: none;
+          box-shadow: 0 0 20px 0px #0000009e;
+          font-size: 14px;
+          line-height: normal;
+        }
+
+        .sa-notification-image {
+          /* Thumbnails were 100px height */
+          /* Extension icon was 150px by 150px */
+          height: 120px;
+          /* border-radius: 5px; */
+          padding: 20px;
+        }
+
+        #sa-notification-text {
+          margin: 12px;
+        }
+
+        #sa-notification-text > span {
+          display: block;
+          color: white !important;
+        }
+
+        .sa-notification-title {
+          font-size: 18px;
+          line-height: normal;
+        }
+
+        .sa-notification-close {
+          float: right;
+          cursor: pointer;
+          margin-left: 12px;
+          margin-bottom: 12px;
+          width: 24px;
+        }
+
+        .sa-notification-subtitle {
+          font-weight: bold;
+        }
+
+        #sa-notification-text a {
+          color: #1aa0d8;
+          font-weight: normal;
+          text-decoration: underline;
+        }
+
+        .sa-notification-legal {
+          font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+          #sa-notification {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 1em;
+          }
+
+          #sa-notification-text {
+            display: contents;
+          }
+
+          .sa-notification-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+          }
+
+          .sa-notification-title,
+          .sa-notification-subtitle {
+            order: -2;
+            padding-right: 36px;
+          }
+
+          .sa-notification-image {
+            order: -1;
+            padding: 0;
+          }
+
+          #sa-notification-text > br {
+            display: none;
+          }
+        }
+      `,
+    })
+  );
 };
 
 const handleBanner = async () => {

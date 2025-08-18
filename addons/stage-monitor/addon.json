@@ -14,11 +14,11 @@
   "userstyles": [
     {
       "url": "monitors.css",
-      "matches": ["projects"]
+      "matches": ["projects", "projectEmbeds"]
     },
     {
       "url": "monitor-values.css",
-      "matches": ["projects"],
+      "matches": ["projects", "projectEmbeds"],
       "if": {
         "settings": { "customValueColor": true }
       }
@@ -138,10 +138,15 @@
       }
     }
   ],
+  "addonPreview": true,
+  "presetPreview": {
+    "type": "stage-monitor-preset"
+  },
   "dynamicEnable": true,
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
-  "tags": ["editor", "theme", "projectPlayer"],
+  "tags": ["player", "theme"],
+  "relatedAddons": ["editor-dark-mode"],
   "versionAdded": "1.39.0"
 }
