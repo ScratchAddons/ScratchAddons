@@ -14,6 +14,29 @@
       "type": "boolean",
       "default": false,
       "description": "Drag costumes/sounds at the top or bottom of the panel to automatically scroll."
+    },
+    {
+      "name": "Scroll speed",
+      "id": "scroll-speed",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "slow",
+          "name": "Slow"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "fast",
+          "name": "Fast"
+        }
+      ],
+      "default": "default",
+      "if": {
+        "settings": { "drag-scroll": true }
+      }
     }
   ],
   "userscripts": [
