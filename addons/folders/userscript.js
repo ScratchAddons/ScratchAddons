@@ -1,4 +1,12 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+import {
+  getSortableHOCFromElement,
+  isSortableHOC,
+  verifySortableHOC,
+  setReactInternalKey,
+  getReactInternalKey,
+  TYPE_ASSETS,
+} from "../folders/module.js";
 
 const DIVIDER = "//";
 
@@ -87,12 +95,9 @@ export default async function ({ addon, console, msg }) {
   // We touch some things on the VM to make dragging items work properly.
 
   const TYPE_SPRITES = 1;
-  const TYPE_ASSETS = 2;
 
   // We run too early, will be set later
   let vm;
-
-  let reactInternalKey;
 
   let currentSpriteItems;
   let currentAssetItems;
@@ -113,29 +118,10 @@ export default async function ({ addon, console, msg }) {
     });
   };
 
-  const getSortableHOCFromElement = (el) => {
-    let reactInternalInstance;
-    const nearestSpriteSelector = el.closest("[class*='sprite-selector_sprite-selector']");
-    if (nearestSpriteSelector) {
-      reactInternalInstance = nearestSpriteSelector[reactInternalKey].child.sibling;
-    }
-    const nearestAssetPanelWrapper = el.closest('[class*="asset-panel_wrapper"]');
-    if (nearestAssetPanelWrapper) {
-      reactInternalInstance = nearestAssetPanelWrapper[reactInternalKey];
-    }
-    if (reactInternalInstance) {
-      while (!isSortableHOC(reactInternalInstance.stateNode)) {
-        reactInternalInstance = reactInternalInstance.child;
-      }
-      return reactInternalInstance.stateNode;
-    }
-    throw new Error("cannot find SortableHOC");
-  };
-
   const getBackpackFromElement = (el) => {
     const backpackContainer = el.closest('[class*="backpack_backpack-container_"]');
     if (!backpackContainer) throw new Error("cannot find Backpack");
-    let reactInternalInstance = backpackContainer[reactInternalKey];
+    let reactInternalInstance = backpackContainer[getReactInternalKey()];
     while (!isBackpack(reactInternalInstance.stateNode)) {
       reactInternalInstance = reactInternalInstance.return;
     }
@@ -143,7 +129,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   const getSpriteSelectorItemFromElement = (el) => {
-    let reactInternalInstance = el[reactInternalKey];
+    let reactInternalInstance = el[getReactInternalKey()];
     while (!reactInternalInstance.stateNode?.props?.dragType) {
       reactInternalInstance = reactInternalInstance.return;
     }
@@ -288,34 +274,6 @@ export default async function ({ addon, console, msg }) {
       target.sprite.sounds = items;
       vm.emitTargetsUpdate();
     }
-  };
-
-  const isSortableHOC = (sortableHOCInstance) => {
-    try {
-      const SortableHOC = sortableHOCInstance.constructor;
-      return (
-        Array.isArray(sortableHOCInstance.props.items) &&
-        (typeof sortableHOCInstance.props.selectedId === "string" ||
-          typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
-        typeof sortableHOCInstance.containerBox !== "undefined" &&
-        typeof SortableHOC.prototype.handleAddSortable === "function" &&
-        typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
-        typeof SortableHOC.prototype.setRef === "function"
-      );
-    } catch {
-      return false;
-    }
-  };
-
-  const verifySortableHOC = (sortableHOCInstance) => {
-    const SortableHOC = sortableHOCInstance.constructor;
-    if (
-      isSortableHOC(sortableHOCInstance) &&
-      typeof SortableHOC.prototype.componentDidMount === "undefined" &&
-      typeof SortableHOC.prototype.componentDidUpdate === "undefined"
-    )
-      return;
-    throw new Error("Can not comprehend SortableHOC");
   };
 
   const isSpriteSelectorItem = (spriteSelectorItemInstance) => {
@@ -1510,9 +1468,9 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     vm = addon.tab.traps.vm;
-    reactInternalKey = addon.tab.traps.getInternalKey(spriteSelectorItemElement);
+    setReactInternalKey(addon.tab.traps.getInternalKey(spriteSelectorItemElement));
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
-    let reactInternalInstance = spriteSelectorItemElement[reactInternalKey];
+    let reactInternalInstance = spriteSelectorItemElement[getReactInternalKey()];
     while (!isSpriteSelectorItem(reactInternalInstance.stateNode)) {
       reactInternalInstance = reactInternalInstance.child;
     }
