@@ -1,55 +1,17 @@
+// Helper functions for patching SortableHOC taken from the folders addon by GarboMuffin
+import {
+  getSortableHOCFromElement,
+  isSortableHOC,
+  verifySortableHOC,
+  setReactInternalKey,
+  getReactInternalKey,
+  TYPE_ASSETS,
+} from "../folders/module.js";
+
 export default async function ({ addon, console }) {
-  // Helper functions for patching SortableHOC taken from the folders addon by GarboMuffin
-
-  let reactInternalKey;
-  const TYPE_ASSETS = 2;
-
-  const getSortableHOCFromElement = (el) => {
-    let reactInternalInstance;
-    const nearestSpriteSelector = el.closest("[class*='sprite-selector_sprite-selector']");
-    if (nearestSpriteSelector) {
-      reactInternalInstance = nearestSpriteSelector[reactInternalKey].child.sibling;
-    }
-    const nearestAssetPanelWrapper = el.closest('[class*="asset-panel_wrapper"]');
-    if (nearestAssetPanelWrapper) {
-      reactInternalInstance = nearestAssetPanelWrapper[reactInternalKey];
-    }
-    if (reactInternalInstance) {
-      while (!isSortableHOC(reactInternalInstance.stateNode)) {
-        reactInternalInstance = reactInternalInstance.child;
-      }
-      return reactInternalInstance.stateNode;
-    }
-    throw new Error("cannot find SortableHOC");
-  };
-
-  const isSortableHOC = (sortableHOCInstance) => {
-    try {
-      const SortableHOC = sortableHOCInstance.constructor;
-      return (
-        Array.isArray(sortableHOCInstance.props.items) &&
-        (typeof sortableHOCInstance.props.selectedId === "string" ||
-          typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
-        typeof sortableHOCInstance.containerBox !== "undefined" &&
-        typeof SortableHOC.prototype.handleAddSortable === "function" &&
-        typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
-        typeof SortableHOC.prototype.setRef === "function"
-      );
-    } catch {
-      return false;
-    }
-  };
-
-  const verifySortableHOC = (sortableHOCInstance) => {
-    const SortableHOC = sortableHOCInstance.constructor;
-    if (
-      isSortableHOC(sortableHOCInstance) &&
-      typeof SortableHOC.prototype.componentDidMount === "undefined" &&
-      typeof SortableHOC.prototype.componentDidUpdate === "undefined"
-    )
-      return;
-    throw new Error("Can not comprehend SortableHOC");
-  };
+  // Settings
+  let dragScrollSetting;
+  let scrollSpeedSetting;
 
   // indexForPositionOnList taken from https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/drag-utils.js
   const indexForPositionOnList = ({ x, y }, boxes, isRtl) => {
@@ -153,11 +115,11 @@ export default async function ({ addon, console }) {
         }
 
         // Setting Drag at top/bottom to scroll
-        if (addon.settings.get("drag-scroll")) {
+        if (dragScrollSetting) {
           const containerRect = scrollContainer.getBoundingClientRect();
           const edgeSize = 30; // Distance from the top/bottom to trigger scroll
           let scrollSpeed;
-          switch (addon.settings.get("scroll-speed")) {
+          switch (scrollSpeedSetting) {
             case "slow":
               scrollSpeed = 3;
               break;
@@ -179,11 +141,16 @@ export default async function ({ addon, console }) {
     };
   };
 
+  addon.settings.addEventListener("change", function () {
+    dragScrollSetting = addon.settings.get("drag-scroll");
+    scrollSpeedSetting = addon.settings.get("scroll-speed");
+  });
+
   // Taken from folders addon by GarboMuffin
   const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-area']", {
     reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex !== 0 && !state.scratchGui.mode.isPlayerOnly,
   });
-  reactInternalKey = addon.tab.traps.getInternalKey(selectorListItem);
+  setReactInternalKey(addon.tab.traps.getInternalKey(selectorListItem));
   const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
   verifySortableHOC(sortableHOCInstance);
   patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
