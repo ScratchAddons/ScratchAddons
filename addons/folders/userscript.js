@@ -1475,7 +1475,7 @@ export default async function ({ addon, console, msg }) {
       reactInternalInstance = reactInternalInstance.child;
     }
     const spriteSelectorItemInstance = reactInternalInstance.stateNode;
-    verifySortableHOC(sortableHOCInstance);
+    verifySortableHOC(sortableHOCInstance, false);
     verifySpriteSelectorItem(spriteSelectorItemInstance);
     verifyVM(vm);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
@@ -1490,7 +1490,7 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex !== 0 && !state.scratchGui.mode.isPlayerOnly,
     });
     const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
-    verifySortableHOC(sortableHOCInstance);
+    verifySortableHOC(sortableHOCInstance, false);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
     sortableHOCInstance.saInitialSetup();
   }

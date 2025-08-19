@@ -9,9 +9,14 @@ import {
 } from "../folders/module.js";
 
 export default async function ({ addon, console }) {
-  // Settings
+  // Related to settings
   let dragScrollSetting;
   let scrollSpeedSetting;
+  let disabled = false;
+  const DEFAULT_SCROLL_SPEED = 6;
+  const SLOW_SCROLL_SPEED = 3;
+  const FAST_SCROLL_SPEED = 10;
+  let scrollSpeed = DEFAULT_SCROLL_SPEED;
 
   // indexForPositionOnList taken from https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/drag-utils.js
   const indexForPositionOnList = ({ x, y }, boxes, isRtl) => {
@@ -63,11 +68,17 @@ export default async function ({ addon, console }) {
 
   // Here is the original: https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/sortable-hoc.jsx
   const patchSortableHOC = (SortableHOC, type) => {
-    // Save original function
+    // Save original functions
     const originalCWRP = SortableHOC.prototype.componentWillReceiveProps;
+    const originalGetMouseOverIndex = SortableHOC.prototype.getMouseOverIndex;
 
     SortableHOC.prototype.componentWillReceiveProps = function (newProps) {
       originalCWRP.call(this, newProps);
+
+      // Just call original function if disabled
+      if (disabled) {
+        return;
+      }
 
       const scrollContainer = this.ref.querySelector('[class*="selector_list-area"]');
 
@@ -97,6 +108,11 @@ export default async function ({ addon, console }) {
 
     // While dragging
     SortableHOC.prototype.getMouseOverIndex = function () {
+      // Just call original function if disabled
+      if (disabled) {
+        return originalGetMouseOverIndex.call(this);
+      }
+
       let index = null;
       if (this.props.dragInfo.currentOffset) {
         const scrollContainer = this.ref.querySelector('[class*="selector_list-area"]');
@@ -118,17 +134,6 @@ export default async function ({ addon, console }) {
         if (dragScrollSetting) {
           const containerRect = scrollContainer.getBoundingClientRect();
           const edgeSize = 30; // Distance from the top/bottom to trigger scroll
-          let scrollSpeed;
-          switch (scrollSpeedSetting) {
-            case "slow":
-              scrollSpeed = 3;
-              break;
-            case "fast":
-              scrollSpeed = 10;
-              break;
-            default:
-              scrollSpeed = 6;
-          }
 
           if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
             scrollContainer.scrollTop -= scrollSpeed;
@@ -141,9 +146,28 @@ export default async function ({ addon, console }) {
     };
   };
 
+  // When changed settings
   addon.settings.addEventListener("change", function () {
     dragScrollSetting = addon.settings.get("drag-scroll");
     scrollSpeedSetting = addon.settings.get("scroll-speed");
+    switch (scrollSpeedSetting) {
+      case "slow":
+        scrollSpeed = SLOW_SCROLL_SPEED;
+        break;
+      case "fast":
+        scrollSpeed = FAST_SCROLL_SPEED;
+        break;
+      default:
+        scrollSpeed = DEFAULT_SCROLL_SPEED;
+    }
+  });
+
+  // When enabled/disabled function
+  addon.self.addEventListener("disabled", function () {
+    disabled = true;
+  });
+  addon.self.addEventListener("reenabled", function () {
+    disabled = false;
   });
 
   // Taken from folders addon by GarboMuffin
@@ -152,6 +176,6 @@ export default async function ({ addon, console }) {
   });
   setReactInternalKey(addon.tab.traps.getInternalKey(selectorListItem));
   const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
-  verifySortableHOC(sortableHOCInstance);
+  verifySortableHOC(sortableHOCInstance, true);
   patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
 }
