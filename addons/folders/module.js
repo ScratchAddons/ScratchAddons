@@ -31,7 +31,7 @@ export const getSortableHOCFromElement = (el) => {
   throw new Error("cannot find SortableHOC");
 };
 
-export const isSortableHOC = (sortableHOCInstance) => {
+const isSortableHOC = (sortableHOCInstance) => {
   try {
     const SortableHOC = sortableHOCInstance.constructor;
     return (

@@ -1,22 +1,15 @@
 // Helper functions for patching SortableHOC taken from the folders addon by GarboMuffin
-import {
-  getSortableHOCFromElement,
-  isSortableHOC,
-  verifySortableHOC,
-  setReactInternalKey,
-  getReactInternalKey,
-  TYPE_ASSETS,
-} from "../folders/module.js";
+import { getSortableHOCFromElement, verifySortableHOC, setReactInternalKey, TYPE_ASSETS } from "../folders/module.js";
 
 export default async function ({ addon, console }) {
   // Related to settings
-  let dragScrollSetting;
-  let scrollSpeedSetting;
-  let disabled = false;
-  const DEFAULT_SCROLL_SPEED = 6;
-  const SLOW_SCROLL_SPEED = 3;
-  const FAST_SCROLL_SPEED = 10;
-  let scrollSpeed = DEFAULT_SCROLL_SPEED;
+  const SPEED_PRESETS = {
+    slow: 3,
+    default: 6,
+    fast: 12,
+  };
+  let scrollSpeed = SPEED_PRESETS[addon.settings.get("scroll-speed")];
+  let dragScrollSetting = addon.settings.get("drag-scroll");
 
   // indexForPositionOnList taken from https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/drag-utils.js
   const indexForPositionOnList = ({ x, y }, boxes, isRtl) => {
@@ -76,7 +69,7 @@ export default async function ({ addon, console }) {
       originalCWRP.call(this, newProps);
 
       // Just call original function if disabled
-      if (disabled) {
+      if (addon.self.disabled) {
         return;
       }
 
@@ -109,7 +102,7 @@ export default async function ({ addon, console }) {
     // While dragging
     SortableHOC.prototype.getMouseOverIndex = function () {
       // Just call original function if disabled
-      if (disabled) {
+      if (addon.self.disabled) {
         return originalGetMouseOverIndex.call(this);
       }
 
@@ -149,25 +142,7 @@ export default async function ({ addon, console }) {
   // When changed settings
   addon.settings.addEventListener("change", function () {
     dragScrollSetting = addon.settings.get("drag-scroll");
-    scrollSpeedSetting = addon.settings.get("scroll-speed");
-    switch (scrollSpeedSetting) {
-      case "slow":
-        scrollSpeed = SLOW_SCROLL_SPEED;
-        break;
-      case "fast":
-        scrollSpeed = FAST_SCROLL_SPEED;
-        break;
-      default:
-        scrollSpeed = DEFAULT_SCROLL_SPEED;
-    }
-  });
-
-  // When enabled/disabled function
-  addon.self.addEventListener("disabled", function () {
-    disabled = true;
-  });
-  addon.self.addEventListener("reenabled", function () {
-    disabled = false;
+    scrollSpeed = SPEED_PRESETS[addon.settings.get("scroll-speed")];
   });
 
   // Taken from folders addon by GarboMuffin
