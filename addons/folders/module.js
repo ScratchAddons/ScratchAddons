@@ -1,3 +1,6 @@
+// Helper functions for patching SortableHOC
+// https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/sortable-hoc.jsx
+
 let reactInternalKey;
 export const TYPE_ASSETS = 2;
 
@@ -45,12 +48,13 @@ export const isSortableHOC = (sortableHOCInstance) => {
   }
 };
 
-export const verifySortableHOC = (sortableHOCInstance) => {
+export const verifySortableHOC = (sortableHOCInstance, ignoreReactMethods) => {
   const SortableHOC = sortableHOCInstance.constructor;
   if (
     isSortableHOC(sortableHOCInstance) &&
-    typeof SortableHOC.prototype.componentDidMount === "undefined" &&
-    typeof SortableHOC.prototype.componentDidUpdate === "undefined"
+    ((typeof SortableHOC.prototype.componentDidMount === "undefined" &&
+      typeof SortableHOC.prototype.componentDidUpdate === "undefined") ||
+      ignoreReactMethods == true)
   )
     return;
   throw new Error("Can not comprehend SortableHOC");
