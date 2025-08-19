@@ -1,7 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 import {
   getSortableHOCFromElement,
-  isSortableHOC,
   verifySortableHOC,
   setReactInternalKey,
   getReactInternalKey,
