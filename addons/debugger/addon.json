@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Debug blocks only work for Scratch Addons users with this enabled. The \"is in editor?\" block cannot therefore it cannot be used as an anti-cheat method.",
+      "text": "Debug blocks only work for Scratch Addons users with this enabled. The \"is in editor?\" block cannot therefore be used as an anti-cheat method.",
       "id": "debuggerBlocks"
     }
   ],
