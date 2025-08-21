@@ -152,7 +152,7 @@ const generateBlockXML = () => {
         ` argumentdefaults="${escapeHTML(JSON.stringify(defaults))}"` +
         "></mutation></block>";
     } else {
-      xml += `<block type="${blockData.type}"><field name="VALUE">${blockData.id}</field></block>`;
+      xml += `<block type="${escapeHTML(blockData.type)}"><field name="VALUE">${escapeHTML(blockData.id)}</field></block>`;
     }
   }
   if (xml.length === 0) {
