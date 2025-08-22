@@ -1,6 +1,6 @@
 {
-  "name": "Fix dragging costumes and sounds",
-  "description": "Fixes a bug in the costumes and sounds tab where dragging a costume/sound while scrolling doesn't place it as expected.",
+  "name": "Improve dragging costumes and sounds",
+  "description": "Adds auto-scrolling to the assets panel and fixes a bug where dragging while scrolling doesn't place the asset as expected.",
   "credits": [
     {
       "name": "mysinginmonsters",
@@ -9,17 +9,15 @@
   ],
   "settings": [
     {
-      "name": "Drag at top/bottom to scroll",
-      "id": "drag-scroll",
-      "type": "boolean",
-      "default": false,
-      "description": "Drag costumes/sounds at the top or bottom of the panel to automatically scroll."
-    },
-    {
-      "name": "Scroll speed",
+      "name": "Auto-scroll speed",
       "id": "scroll-speed",
       "type": "select",
+      "description": "Drag a costume or sound at the top or bottom of the asset panel to auto-scroll",
       "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
         {
           "id": "slow",
           "name": "Slow"
@@ -33,10 +31,7 @@
           "name": "Fast"
         }
       ],
-      "default": "default",
-      "if": {
-        "settings": { "drag-scroll": true }
-      }
+      "default": "default"
     }
   ],
   "userscripts": [
@@ -52,7 +47,7 @@
     }
   ],
   "tags": ["editor", "costumeEditor"],
-  "versionAdded": "1.43.0",
+  "versionAdded": "1.44.0",
   "dynamicEnable": true,
   "dynamicDisable": true
 }

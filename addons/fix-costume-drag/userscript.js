@@ -4,12 +4,12 @@ import { getSortableHOCFromElement, verifySortableHOC, setReactInternalKey, TYPE
 export default async function ({ addon, console }) {
   // Related to settings
   const SPEED_PRESETS = {
+    none: 0,
     slow: 3,
     default: 6,
-    fast: 12,
+    fast: 12
   };
   let scrollSpeed = SPEED_PRESETS[addon.settings.get("scroll-speed")];
-  let dragScrollSetting = addon.settings.get("drag-scroll");
 
   // indexForPositionOnList taken from https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/drag-utils.js
   const indexForPositionOnList = ({ x, y }, boxes, isRtl) => {
@@ -124,15 +124,13 @@ export default async function ({ addon, console }) {
         }
 
         // Setting Drag at top/bottom to scroll
-        if (dragScrollSetting) {
-          const containerRect = scrollContainer.getBoundingClientRect();
-          const edgeSize = 30; // Distance from the top/bottom to trigger scroll
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const edgeSize = 30; // Distance from the top/bottom to trigger scroll
 
-          if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
-            scrollContainer.scrollTop -= scrollSpeed;
-          } else if (this.props.dragInfo.currentOffset.y > containerRect.bottom - edgeSize) {
-            scrollContainer.scrollTop += scrollSpeed;
-          }
+        if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
+          scrollContainer.scrollTop -= scrollSpeed;
+        } else if (this.props.dragInfo.currentOffset.y > containerRect.bottom - edgeSize) {
+          scrollContainer.scrollTop += scrollSpeed;
         }
       }
       return index;
@@ -141,7 +139,6 @@ export default async function ({ addon, console }) {
 
   // When changed settings
   addon.settings.addEventListener("change", function () {
-    dragScrollSetting = addon.settings.get("drag-scroll");
     scrollSpeed = SPEED_PRESETS[addon.settings.get("scroll-speed")];
   });
 
