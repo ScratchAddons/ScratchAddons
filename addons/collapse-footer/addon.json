@@ -49,6 +49,22 @@
       "default": "default"
     },
     {
+      "name": "Toggle on",
+      "id": "mode",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "hover",
+          "name": "Hover"
+        },
+        {
+          "id": "click",
+          "name": "Click"
+        }
+      ],
+      "default": "hover"
+    },
+    {
       "name": "Only on infinite scrolling pages",
       "id": "infiniteScroll",
       "type": "boolean",
@@ -73,5 +89,10 @@
   "tags": ["community"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.35.0"
+  "versionAdded": "1.35.0",
+  "latestUpdate": {
+    "version": "1.36.0",
+    "isMajor": true,
+    "newSettings": ["openOnClick"]
+  }
 }

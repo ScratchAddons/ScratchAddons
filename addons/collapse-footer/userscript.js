@@ -11,6 +11,26 @@ export default async function ({ addon, console }) {
   icon.draggable = false;
   footer.insertBefore(icon, footer.firstChild);
 
+  let collapseTimeout;
+
+  function collapseFooter() {
+    collapseTimeout = setTimeout(() => {
+      footer.classList.remove("expanded");
+    }, 200);
+  }
+
+  function instantCollapseFooter(event) {
+    // Only hide if the click is outside the footer
+    if (!footer.contains(event.target)) footer.classList.remove("expanded");
+  }
+
+  function expandFooter() {
+    footer.classList.add("transition", "expanded");
+    if (collapseTimeout) {
+      clearTimeout(collapseTimeout);
+    }
+  }
+
   if (!(addon.settings.get("infiniteScroll") && enabledAddons.includes("infinite-scroll"))) {
     // If the setting is enabled, infinate-scroll
     // adds the class on the pages it runs on instead
@@ -28,18 +48,22 @@ export default async function ({ addon, console }) {
     root.style.setProperty("--footer-hover-height", "410px");
   }
 
-  let collapseTimeout;
+  function setup() {
+    footer.addEventListener(addon.settings.get("mode") === "click" ? "click" : "mouseover", expandFooter);
 
-  footer.addEventListener("mouseover", () => {
-    footer.classList.add("transition", "expanded");
-    if (collapseTimeout) {
-      clearTimeout(collapseTimeout);
+    if (addon.settings.get("mode") === "click") {
+      document.addEventListener("mousedown", instantCollapseFooter);
+    } else {
+      footer.addEventListener("mouseout", collapseFooter);
     }
-  });
+  }
+  setup();
 
-  footer.addEventListener("mouseout", () => {
-    collapseTimeout = setTimeout(() => {
-      footer.classList.remove("expanded");
-    }, 200);
+  addon.settings.addEventListener("change", () => {
+    document.removeEventListener("mousedown", instantCollapseFooter);
+    footer.removeEventListener("mouseout", collapseFooter);
+    footer.removeEventListener("click", expandFooter);
+    footer.removeEventListener("mouseover", expandFooter);
+    setup();
   });
 }
