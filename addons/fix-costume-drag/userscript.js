@@ -7,7 +7,7 @@ export default async function ({ addon, console }) {
     none: 0,
     slow: 3,
     default: 6,
-    fast: 12
+    fast: 12,
   };
   let scrollSpeed = SPEED_PRESETS[addon.settings.get("scroll-speed")];
 
