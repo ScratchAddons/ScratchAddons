@@ -30,44 +30,6 @@
   margin-right: 1rem;
 }
 
-.sa-animated-thumb-popup-actions {
-  display: flex;
-  justify-content: center !important;
-}
-
-.sa-animated-thumb-popup-actions button {
-  margin: 0 2rem;
-}
-
-.sa-animated-thumb-popup-actions button:disabled {
-  opacity: 0.75;
-}
-
-.sa-animated-thumb-popup-buttons button {
-  margin-left: 0.5rem;
-}
-
-.sa-animated-thumb-popup-actions .loading::before {
-  display: inline-block;
-  margin-top: -2px;
-  margin-right: 0.25rem;
-  background-repeat: no-repeat;
-  background-position: center center;
-  width: 1.125rem;
-  height: 1.125rem;
-  vertical-align: middle;
-  content: "";
-
-  background-image: url(https://scratch.mit.edu/svgs/modal/spinner-white.svg);
-  background-size: 100%;
-  filter: var(--darkWww-button-filter);
-  animation-name: spin-intro, spin;
-  animation-duration: 0.25s, 1s;
-  animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
-  animation-delay: 0s, 0.25s;
-  animation-iteration-count: 1, infinite;
-}
-
 .sa-animated-thumb-result-failure {
   margin: 1rem 0;
   border-radius: 5px;
@@ -95,22 +57,6 @@ p.sa-animated-thumb-uploaded-thumb {
 
 .sa-animated-thumb-uploaded-thumb > img {
   border: 1px solid var(--darkWww-border, #0000001a);
-}
-
-.sa-set-thumbnail-button {
-  position: relative;
-}
-.sa-set-thumbnail-button::before {
-  background-image: url(rectangle.svg);
-  display: inline-block;
-  margin-right: 0.25rem;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: contain;
-  width: 0.875rem;
-  height: 0.875rem;
-  vertical-align: bottom;
-  content: "";
 }
 
 .sa-animated-thumb-tooltip {

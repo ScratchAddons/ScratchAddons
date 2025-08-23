@@ -1,11 +1,8 @@
 import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
-import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 
 export default async function ({ addon, console, msg }) {
   let projectId = location.href.match(/\d+/)?.[0];
-  const createModal = ({
-    skipFirstStep = false, // if true, open file selection dialog immediately
-  } = {}) => {
+  const createModal = () => {
     // User Interface
     let ignoreClickOutside = false;
     const {
@@ -16,32 +13,10 @@ export default async function ({ addon, console, msg }) {
       open,
       remove,
     } = addon.tab.createModal(msg("set-thumbnail"), {
-      isOpen: !skipFirstStep,
+      isOpen: false,
     });
     container.classList.add("sa-animated-thumb-popup");
     content.classList.add("sa-animated-thumb-popup-content");
-    if (!skipFirstStep) {
-      content.appendChild(
-        Object.assign(document.createElement("p"), {
-          textContent: msg("description"),
-          className: "sa-animated-thumb-text",
-        })
-      );
-    }
-    const modalButtons = Object.assign(document.createElement("div"), {
-      className: "flex-row action-buttons sa-animated-thumb-popup-actions",
-    });
-    const uploadFromFileButton = Object.assign(document.createElement("button"), {
-      textContent: msg("select-file"),
-      className: "button action-button sa-animated-thumb-popup-action",
-    });
-    const uploadFromStageButton = Object.assign(document.createElement("button"), {
-      textContent: msg("use-stage"),
-      className: "button action-button sa-animated-thumb-popup-action",
-    });
-    modalButtons.appendChild(uploadFromFileButton);
-    modalButtons.appendChild(uploadFromStageButton);
-    if (!skipFirstStep) content.appendChild(modalButtons);
     const modalResultArea = Object.assign(document.createElement("div"), {
       className: "sa-animated-thumb-result-failure hidden",
     });
@@ -108,7 +83,7 @@ export default async function ({ addon, console, msg }) {
             if (canceled) return;
             thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
             content.classList.add("sa-animated-thumb-successful");
-            if (skipFirstStep) open();
+            open();
           },
           (status) => {
             modalResultArea.classList.remove("hidden");
@@ -123,21 +98,15 @@ export default async function ({ addon, console, msg }) {
               default:
                 modalResultArea.textContent = msg("error");
             }
-            if (skipFirstStep) open();
+            open();
           }
         )
         .finally(() => {
           ignoreClickOutside = false;
-          uploadFromFileButton.removeAttribute("disabled");
-          uploadFromFileButton.classList.remove("loading");
-          uploadFromStageButton.removeAttribute("disabled");
-          uploadFromStageButton.classList.remove("loading");
         });
 
     const upload = () => {
       modalResultArea.classList.add("hidden");
-      uploadFromFileButton.setAttribute("disabled", "true");
-      uploadFromStageButton.setAttribute("disabled", "true");
     };
 
     const uploadFromFile = () => {
@@ -146,28 +115,12 @@ export default async function ({ addon, console, msg }) {
       ignoreClickOutside = true; // To stop modal from being closed
       setter.showInput();
     };
-    if (skipFirstStep) uploadFromFile();
-    uploadFromFileButton.addEventListener("click", (e) => {
-      uploadFromFileButton.classList.add("loading");
-      uploadFromFile();
-    });
-    uploadFromStageButton.addEventListener("click", (e) => {
-      uploadFromStageButton.classList.add("loading");
-      upload();
-      addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: true });
-      addon.tab.traps.vm.renderer.requestSnapshot((dataURL) => {
-        addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: false });
-        setter.upload(dataURLToBlob(dataURL));
-      });
-      addon.tab.traps.vm.renderer.draw();
-    });
+    uploadFromFile();
   };
 
   await addon.tab.waitForElement(".guiPlayer [class*='stage-header_stage-size-row_']", {
     reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
   });
-  if (document.querySelector("[class*='stage-header_setThumbnailButton_']")) {
-    // Scratch update
 
     let uploadButton = null;
     let tooltip = null;
@@ -199,7 +152,7 @@ export default async function ({ addon, console, msg }) {
       );
       uploadButton.addEventListener("click", (e) => {
         e.stopPropagation();
-        createModal({ skipFirstStep: true });
+        createModal();
       });
       parent.appendChild(uploadButton);
       document.addEventListener("click", () => closeDropdown(), { once: true });
@@ -284,25 +237,4 @@ export default async function ({ addon, console, msg }) {
             });
         });
     }
-  } else {
-    while (true) {
-      await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
-        markAsSeen: true,
-        reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-      });
-      if (!document.querySelector(".form-group.project-title")) continue;
-      const element = Object.assign(document.createElement("button"), {
-        textContent: msg("set-thumbnail"),
-        className: "button action-button sa-set-thumbnail-button",
-        title: msg("added-by"),
-      });
-      addon.tab.displayNoneWhileDisabled(element);
-      element.addEventListener("click", () => createModal());
-      addon.tab.appendToSharedSpace({
-        space: "beforeProjectActionButtons",
-        order: 0,
-        element,
-      });
-    }
-  }
-}
+ }
