@@ -1,0 +1,21 @@
+{
+  "name": "Extend wrapped C blocks while dragging",
+  "description": "Makes dragged C blocks extend when wrapping them around blocks, like in Scratch 2.0.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "codeEditor", "theme"],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.36.0"
+}
