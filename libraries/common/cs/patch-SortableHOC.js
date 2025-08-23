@@ -1,4 +1,5 @@
 // Helper functions for patching SortableHOC
+// Made by GarboMuffin
 // https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/sortable-hoc.jsx
 
 let reactInternalKey;

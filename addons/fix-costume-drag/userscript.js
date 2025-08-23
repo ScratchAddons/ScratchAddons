@@ -1,5 +1,10 @@
 // Helper functions for patching SortableHOC taken from the folders addon by GarboMuffin
-import { getSortableHOCFromElement, verifySortableHOC, setReactInternalKey, TYPE_ASSETS } from "../folders/module.js";
+import {
+  getSortableHOCFromElement,
+  verifySortableHOC,
+  setReactInternalKey,
+  TYPE_ASSETS,
+} from "../../libraries/common/cs/patch-SortableHOC.js";
 
 export default async function ({ addon, console }) {
   // Related to settings

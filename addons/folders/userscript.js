@@ -5,7 +5,7 @@ import {
   setReactInternalKey,
   getReactInternalKey,
   TYPE_ASSETS,
-} from "../folders/module.js";
+} from "../../libraries/common/cs/patch-SortableHOC.js";
 
 const DIVIDER = "//";
 
