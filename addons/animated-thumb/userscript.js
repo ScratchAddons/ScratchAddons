@@ -145,8 +145,7 @@ export default async function ({ addon, console, msg }) {
       });
       uploadButton.insertBefore(
         Object.assign(document.createElement("img"), {
-          // src: addon.self.dir + "/upload.svg"
-          src: addon.self.dir + "../../../images/cs/icon.svg",
+          src: addon.self.dir + "/upload.svg"
         }),
         uploadButton.firstChild
       );
