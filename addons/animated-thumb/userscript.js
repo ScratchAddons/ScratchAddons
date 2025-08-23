@@ -1,11 +1,8 @@
 import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
-import { init, saveConfig, isOverwritingEnabled, blockOverwriting } from "./persistent-thumb.js";
 
 export default async function ({ addon, console, msg }) {
-  init(console);
   let projectId = location.href.match(/\d+/)?.[0];
-  if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   const createModal = ({
     skipFirstStep = false, // if true, open file selection dialog immediately
   } = {}) => {
@@ -45,29 +42,6 @@ export default async function ({ addon, console, msg }) {
     modalButtons.appendChild(uploadFromFileButton);
     modalButtons.appendChild(uploadFromStageButton);
     if (!skipFirstStep) content.appendChild(modalButtons);
-    const stopOverwritingRow = Object.assign(document.createElement("p"), {
-      className: "sa-animated-thumb-text",
-    });
-    const stopOverwritingCheckbox = Object.assign(document.createElement("input"), {
-      type: "checkbox",
-      checked: true,
-      id: "sa-animated-thumb-stop-overwrite",
-    });
-    const stopOverwritingLabel = Object.assign(document.createElement("label"), {
-      textContent: msg("keep-thumb"),
-      htmlFor: "sa-animated-thumb-stop-overwrite",
-    });
-    stopOverwritingRow.appendChild(stopOverwritingCheckbox);
-    stopOverwritingRow.appendChild(stopOverwritingLabel);
-    if (!skipFirstStep) {
-      content.appendChild(stopOverwritingRow);
-      content.appendChild(
-        Object.assign(document.createElement("p"), {
-          textContent: msg("keep-thumb-desc"),
-          className: "sa-animated-thumb-text",
-        })
-      );
-    }
     const modalResultArea = Object.assign(document.createElement("div"), {
       className: "sa-animated-thumb-result-failure hidden",
     });
@@ -134,7 +108,6 @@ export default async function ({ addon, console, msg }) {
             if (canceled) return;
             thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
             content.classList.add("sa-animated-thumb-successful");
-            saveConfig(projectId, stopOverwritingCheckbox.checked);
             if (skipFirstStep) open();
           },
           (status) => {
@@ -190,20 +163,11 @@ export default async function ({ addon, console, msg }) {
     });
   };
 
-  const onUrlChange = () => {
-    projectId = location.href.match(/\d+/)?.[0] || projectId;
-    if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
-  };
-  addon.tab.addEventListener("urlChange", onUrlChange);
-
   await addon.tab.waitForElement(".guiPlayer [class*='stage-header_stage-size-row_']", {
     reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
   });
   if (document.querySelector("[class*='stage-header_setThumbnailButton_']")) {
     // Scratch update
-
-    blockOverwriting(false);
-    addon.tab.removeEventListener("urlChange", onUrlChange);
 
     let uploadButton = null;
     let tooltip = null;
