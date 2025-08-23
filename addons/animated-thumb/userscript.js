@@ -17,15 +17,11 @@ export default async function ({ addon, console, msg }) {
     });
     container.classList.add("sa-animated-thumb-popup");
     content.classList.add("sa-animated-thumb-popup-content");
-    const modalResultArea = Object.assign(document.createElement("div"), {
-      className: "sa-animated-thumb-result-failure hidden",
-    });
-    content.appendChild(modalResultArea);
 
     content.appendChild(
       Object.assign(document.createElement("p"), {
         textContent: msg("successful"),
-        className: "sa-animated-thumb-text sa-animated-thumb-show-on-success",
+        className: "sa-animated-thumb-text",
       })
     );
     const thumbImage = Object.assign(document.createElement("img"), {
@@ -34,14 +30,14 @@ export default async function ({ addon, console, msg }) {
       height: 240,
     });
     const thumbImageWrapper = Object.assign(document.createElement("p"), {
-      className: "sa-animated-thumb-show-on-success sa-animated-thumb-uploaded-thumb",
+      className: "sa-animated-thumb-uploaded-thumb",
     });
     thumbImageWrapper.appendChild(thumbImage);
     content.appendChild(thumbImageWrapper);
     content.appendChild(
       Object.assign(document.createElement("p"), {
         textContent: msg("if-unsuccessful"),
-        className: "sa-animated-thumb-text sa-animated-thumb-show-on-success",
+        className: "sa-animated-thumb-text",
       })
     );
 
@@ -82,35 +78,27 @@ export default async function ({ addon, console, msg }) {
           (canceled) => {
             if (canceled) return;
             thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
-            content.classList.add("sa-animated-thumb-successful");
             open();
           },
           (status) => {
-            modalResultArea.classList.remove("hidden");
             switch (status) {
               case 503:
               case 500:
-                modalResultArea.textContent = msg("server-error");
+                alert(msg("server-error"));
                 break;
               case 413:
-                modalResultArea.textContent = msg("too-big");
+                alert(msg("too-big"));
                 break;
               default:
-                modalResultArea.textContent = msg("error");
+                alert(msg("error"));
             }
-            open();
           }
         )
         .finally(() => {
           ignoreClickOutside = false;
         });
 
-    const upload = () => {
-      modalResultArea.classList.add("hidden");
-    };
-
     const uploadFromFile = () => {
-      upload();
       setter.addFileInput();
       ignoreClickOutside = true; // To stop modal from being closed
       setter.showInput();
