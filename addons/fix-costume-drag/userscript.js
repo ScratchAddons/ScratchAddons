@@ -73,8 +73,8 @@ export default async function ({ addon, console }) {
     SortableHOC.prototype.componentWillReceiveProps = function (newProps) {
       originalCWRP.call(this, newProps);
 
-      // Just call original function if disabled
-      if (addon.self.disabled) {
+      // Just call original function if disabled or is a sprite
+      if (addon.self.disabled || this.props.dragInfo.dragType == "SPRITE") {
         return;
       }
 
@@ -106,8 +106,8 @@ export default async function ({ addon, console }) {
 
     // While dragging
     SortableHOC.prototype.getMouseOverIndex = function () {
-      // Just call original function if disabled
-      if (addon.self.disabled) {
+      // Just call original function if disabled or is a sprite
+      if (addon.self.disabled || this.props.dragInfo.dragType == "SPRITE") {
         return originalGetMouseOverIndex.call(this);
       }
 
