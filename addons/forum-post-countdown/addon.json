@@ -11,13 +11,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["topics"]
+      "matches": ["newPostScreens"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["topics"]
+      "matches": ["newPostScreens"]
     }
   ],
   "credits": [
