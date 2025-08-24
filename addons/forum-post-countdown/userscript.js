@@ -3,7 +3,8 @@ export default async function ({ addon, msg }) {
 
   let message = document.querySelector(".success");
 
-  if (message) {
+  // This message is not translated by Scratch
+  if (message && message.innerText !== "Post updated.") {
     localStorage.setItem("sa-forum-post-countdown", Date.now());
   }
 
