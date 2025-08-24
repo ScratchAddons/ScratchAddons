@@ -2,18 +2,15 @@ import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
 
 export default async function ({ addon, console, msg }) {
   let projectId = location.href.match(/\d+/)?.[0];
-  const createModal = () => {
-    // User Interface
-    let ignoreClickOutside = false;
+  const openModal = () => {
     const {
       backdrop,
       container,
       content,
       closeButton: headerCloseButton,
-      open,
       remove,
     } = addon.tab.createModal(msg("set-thumbnail"), {
-      isOpen: false,
+      isOpen: true,
     });
     container.classList.add("sa-animated-thumb-popup");
     content.classList.add("sa-animated-thumb-popup-content");
@@ -25,6 +22,7 @@ export default async function ({ addon, console, msg }) {
       })
     );
     const thumbImage = Object.assign(document.createElement("img"), {
+      src: `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`,
       alt: "",
       width: 320,
       height: 240,
@@ -41,25 +39,8 @@ export default async function ({ addon, console, msg }) {
       })
     );
 
-    // Logic
-    const setter = new ThumbSetter(null, (file) => {
-      // Confirm for GIF files about animated files
-      if (file.type === "image/gif" && !confirm(msg("gif"))) {
-        return Promise.reject("Aborted");
-      }
-      return Promise.resolve();
-    });
-    let handleClickOutside;
-    const closePopup = () => {
-      setter.removeFileInput();
-      remove();
-    };
-    handleClickOutside = (e) => {
-      if (ignoreClickOutside) return;
-      closePopup();
-    };
-    backdrop.addEventListener("click", handleClickOutside);
-    headerCloseButton.addEventListener("click", handleClickOutside);
+    backdrop.addEventListener("click", remove);
+    headerCloseButton.addEventListener("click", remove);
 
     const buttonRow = Object.assign(document.createElement("div"), {
       className: "flex-row action-buttons sa-animated-thumb-popup-buttons",
@@ -68,17 +49,26 @@ export default async function ({ addon, console, msg }) {
       textContent: msg("close"),
       className: "button action-button close-button white",
     });
-    closeButton.addEventListener("click", closePopup, { once: true });
+    closeButton.addEventListener("click", remove, { once: true });
     buttonRow.appendChild(closeButton);
     content.appendChild(buttonRow);
+  };
+
+  function uploadFromFile() {
+    const setter = new ThumbSetter(null, (file) => {
+      // Confirm for GIF files about animated files
+      if (file.type === "image/gif" && !confirm(msg("gif"))) {
+        return Promise.reject("Aborted");
+      }
+      return Promise.resolve();
+    });
 
     setter.onFinished = (promise) =>
       promise
         .then(
           (canceled) => {
             if (canceled) return;
-            thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
-            open();
+            openModal();
           },
           (status) => {
             switch (status) {
@@ -94,17 +84,10 @@ export default async function ({ addon, console, msg }) {
             }
           }
         )
-        .finally(() => {
-          ignoreClickOutside = false;
-        });
 
-    const uploadFromFile = () => {
       setter.addFileInput();
-      ignoreClickOutside = true; // To stop modal from being closed
       setter.showInput();
-    };
-    uploadFromFile();
-  };
+  }
 
   await addon.tab.waitForElement(".guiPlayer [class*='stage-header_stage-size-row_']", {
     reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
@@ -139,7 +122,7 @@ export default async function ({ addon, console, msg }) {
       );
       uploadButton.addEventListener("click", (e) => {
         e.stopPropagation();
-        createModal();
+        uploadFromFile();
       });
       parent.appendChild(uploadButton);
       document.addEventListener("click", () => closeDropdown(), { once: true });
