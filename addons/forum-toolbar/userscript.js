@@ -1,7 +1,6 @@
-import { insert, wrapSelection, getSelection } from "../../libraries/thirdparty/cs/text-field-edit.js";
+import { createButton, createDropdown } from "./lib.js";
 export default async ({ addon, console, msg }) => {
   await addon.tab.waitForElement(".markItUpButton16");
-  const textBox = document.querySelector(".markItUpEditor");
   /*
    * Available spaces are: (from left to right)
    * forumToolbarTextDecoration
@@ -33,83 +32,6 @@ export default async ({ addon, console, msg }) => {
     addon.tab.displayNoneWhileDisabled(element);
     element.style.display = `${display.join("")}none${")".repeat(buttons.length)}`;
   };
-  const createDropdown = (name, ...buttons) => {
-    const liTag = document.createElement("li");
-    liTag.classList.add("markItUpButton");
-    liTag.classList.add("markItUpDropMenu");
-    liTag.classList.add("sa-forum-toolbar-" + name);
-    liTag.dataset.name = name;
-    const buttonName = msg(name);
-    const aTag = Object.assign(document.createElement("a"), {
-      href: "#",
-      textContent: buttonName,
-      title: buttonName,
-    });
-    liTag.append(aTag);
-    const ulTag = document.createElement("ul");
-    ulTag.hidden = true;
-    buttons.forEach((button) => {
-      button.style.display = `var(--forumToolbar-${button.dataset.name}, none)`;
-      ulTag.append(button);
-    });
-    liTag.addEventListener("click", (e) => e.preventDefault());
-    liTag.addEventListener("mouseover", () => {
-      ulTag.style.display = "block";
-    });
-    liTag.addEventListener("mouseout", () => {
-      ulTag.style.display = "none";
-    });
-    liTag.append(ulTag);
-    return liTag;
-  };
-  /**
-   * There are four ways to use this:
-   * 1) use openWith (and closeWith optionally) - useful for static values e.g. emoji, [center]
-   * 2) use replaceWith - useful for replacing selection with static text
-   * 3) use promptTag/promptContent along with tag - useful for inserting a tag with parameter e.g. [url]
-   * 4) use callback - useful if you're not inserting
-   */
-  const createButton = (
-    name,
-    { openWith, replaceWith, closeWith, tag, promptTag, promptContent, callback, defaultSelection }
-  ) => {
-    const liTag = document.createElement("li");
-    liTag.classList.add("markItUpButton");
-    liTag.classList.add("sa-forum-toolbar-" + name);
-    liTag.dataset.name = name;
-    const buttonName = msg(name);
-    const aTag = Object.assign(document.createElement("a"), {
-      href: "#",
-      textContent: buttonName,
-      title: buttonName,
-    });
-    liTag.append(aTag);
-    liTag.addEventListener("click", (e) => {
-      e.preventDefault();
-      let ow = openWith,
-        cw = closeWith,
-        rw = replaceWith;
-      if (promptTag) {
-        const value = prompt(msg("prompt-" + name), defaultSelection ? getSelection(textBox).trim() : undefined);
-        if (value !== null) {
-          ow = `[${tag}${value ? `=${value}` : ""}]`;
-          cw = `[/${tag}]`;
-        }
-      } else if (promptContent) {
-        const value = getSelection(textBox) || prompt(msg("prompt-" + name));
-        if (value !== null) rw = `[${tag}]${value}[/${tag}]`;
-      }
-      if (typeof rw === "string") {
-        insert(textBox, rw);
-      } else if (typeof ow === "string" || typeof cw === "string") {
-        wrapSelection(textBox, ow || "", cw || "");
-      } else if (callback) {
-        callback();
-      }
-      textBox.focus();
-    });
-    return liTag;
-  };
 
   /**
    * To add buttons,
@@ -125,6 +47,7 @@ export default async ({ addon, console, msg }) => {
     createButton("color", {
       tag: "color",
       promptTag: true,
+      msg,
     }),
     1
   );
@@ -133,26 +56,34 @@ export default async ({ addon, console, msg }) => {
     "forumToolbarLinkDecoration",
     createDropdown(
       "link",
-      createButton("wp", {
-        tag: "wp",
-        promptTag: true,
-        defaultSelection: true,
-      }),
-      createButton("wiki", {
-        tag: "wiki",
-        promptTag: true,
-        defaultSelection: true,
-      }),
-      createButton("google", {
-        tag: "google",
-        promptTag: true,
-        defaultSelection: true,
-      }),
-      createButton("dictionary", {
-        tag: "dictionary",
-        promptTag: true,
-        defaultSelection: true,
-      })
+      msg,
+      [
+        createButton("wp", {
+          tag: "wp",
+          promptTag: true,
+          defaultSelection: true,
+          msg,
+        }),
+        createButton("wiki", {
+          tag: "wiki",
+          promptTag: true,
+          defaultSelection: true,
+          msg,
+        }),
+        createButton("google", {
+          tag: "google",
+          promptTag: true,
+          defaultSelection: true,
+          msg,
+        }),
+        createButton("dictionary", {
+          tag: "dictionary",
+          promptTag: true,
+          defaultSelection: true,
+          msg,
+        }),
+      ],
+      "forumToolbar"
     ),
     2
   );
@@ -162,6 +93,7 @@ export default async ({ addon, console, msg }) => {
     createButton("center", {
       openWith: "[center]",
       closeWith: "[/center]",
+      msg,
     }),
     1
   );
@@ -170,6 +102,7 @@ export default async ({ addon, console, msg }) => {
     createButton("code", {
       tag: "code",
       promptTag: true,
+      msg,
     }),
     2
   );
