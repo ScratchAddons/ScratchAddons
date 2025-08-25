@@ -3,7 +3,6 @@
 // https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/sortable-hoc.jsx
 
 let reactInternalKey;
-export const TYPE_ASSETS = 2;
 
 export function setReactInternalKey(value) {
   reactInternalKey = value;

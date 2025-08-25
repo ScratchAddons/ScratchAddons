@@ -4,7 +4,6 @@ import {
   verifySortableHOC,
   setReactInternalKey,
   getReactInternalKey,
-  TYPE_ASSETS,
 } from "../../libraries/common/cs/patch-SortableHOC.js";
 
 const DIVIDER = "//";
@@ -94,6 +93,7 @@ export default async function ({ addon, console, msg }) {
   // We touch some things on the VM to make dragging items work properly.
 
   const TYPE_SPRITES = 1;
+  const TYPE_ASSETS = 2;
 
   // We run too early, will be set later
   let vm;

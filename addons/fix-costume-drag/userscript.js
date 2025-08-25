@@ -3,7 +3,6 @@ import {
   getSortableHOCFromElement,
   verifySortableHOC,
   setReactInternalKey,
-  TYPE_ASSETS,
 } from "../../libraries/common/cs/patch-SortableHOC.js";
 
 export default async function ({ addon, console }) {
@@ -65,7 +64,7 @@ export default async function ({ addon, console }) {
   };
 
   // Here is the original: https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/sortable-hoc.jsx
-  const patchSortableHOC = (SortableHOC, type) => {
+  const patchSortableHOC = (SortableHOC) => {
     // Save original functions
     const originalCWRP = SortableHOC.prototype.componentWillReceiveProps;
     const originalGetMouseOverIndex = SortableHOC.prototype.getMouseOverIndex;
@@ -114,11 +113,12 @@ export default async function ({ addon, console }) {
       let index = null;
       if (this.props.dragInfo.currentOffset) {
         const scrollContainer = this.ref.querySelector('[class*="selector_list-area"]');
+        const containerRect = scrollContainer.getBoundingClientRect();
         const x = this.props.dragInfo.currentOffset.x; // x isn't affected
         const y =
           this.props.dragInfo.currentOffset.y +
           scrollContainer.scrollTop -
-          scrollContainer.getBoundingClientRect().top -
+          containerRect.top -
           this.initialScrollTop +
           96;
 
@@ -129,9 +129,7 @@ export default async function ({ addon, console }) {
         }
 
         // Setting Drag at top/bottom to scroll
-        const containerRect = scrollContainer.getBoundingClientRect();
         const edgeSize = 30; // Distance from the top/bottom to trigger scroll
-
         if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
           scrollContainer.scrollTop -= scrollSpeed;
         } else if (this.props.dragInfo.currentOffset.y > containerRect.bottom - edgeSize) {
@@ -154,5 +152,5 @@ export default async function ({ addon, console }) {
   setReactInternalKey(addon.tab.traps.getInternalKey(selectorListItem));
   const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
   verifySortableHOC(sortableHOCInstance, true);
-  patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
+  patchSortableHOC(sortableHOCInstance.constructor);
 }
