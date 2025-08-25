@@ -122,70 +122,70 @@ export default async function ({ addon, console, msg }) {
     reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
   });
 
-    let uploadButton = null;
-    let tooltip = null;
+  let uploadButton = null;
+  let tooltip = null;
 
-    const closeDropdown = () => {
-      if (!uploadButton) return;
-      uploadButton.remove();
-      uploadButton = null;
-    };
+  const closeDropdown = () => {
+    if (!uploadButton) return;
+    uploadButton.remove();
+    uploadButton = null;
+  };
 
-    const toggleDropdown = (parent) => {
-      if (uploadButton) {
-        closeDropdown();
-        return;
-      }
-      uploadButton = Object.assign(document.createElement("button"), {
-        className: addon.tab.scratchClass("button_outlined-button", "stage-header_setThumbnailButton", {
-          others: "sa-set-thumbnail-upload-button",
-        }),
-        textContent: msg("dropdown-upload"),
-        title: msg("added-by"),
-      });
-      uploadButton.insertBefore(
-        Object.assign(document.createElement("img"), {
-          src: addon.self.dir + "/upload.svg"
-        }),
-        uploadButton.firstChild
-      );
-      uploadButton.addEventListener("click", (e) => {
-        e.stopPropagation();
-        createModal();
-      });
-      parent.appendChild(uploadButton);
-      document.addEventListener("click", () => closeDropdown(), { once: true });
-    };
-
-    while (true) {
-      const setThumbnailButton = await addon.tab.waitForElement("[class*='stage-header_setThumbnailButton_']", {
-        markAsSeen: true,
-        reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-        reduxEvents: ["scratch-gui/mode/SET_PLAYER", "scratch-gui/mode/SET_FULL_SCREEN"],
-      });
-      setThumbnailButton.classList.add("sa-has-dropdown");
-      const dropdownContainer = Object.assign(document.createElement("div"), {
-        className: "sa-set-thumbnail-dropdown-container",
-      });
-      const dropdownButton = Object.assign(document.createElement("button"), {
-        className: "sa-set-thumbnail-dropdown-button",
-      });
-      dropdownButton.appendChild(
-        Object.assign(document.createElement("img"), {
-          src: "/static/blocks-media/default/dropdown-arrow.svg",
-          draggable: false,
-        })
-      );
-      dropdownButton.addEventListener("click", (e) => {
-        toggleDropdown(dropdownContainer);
-        e.stopPropagation();
-      });
-      dropdownContainer.appendChild(dropdownButton);
-      addon.tab.displayNoneWhileDisabled(dropdownContainer);
-      addon.tab.appendToSharedSpace({
-        space: "stageHeader",
-        order: -1,
-        element: dropdownContainer,
-      });
+  const toggleDropdown = (parent) => {
+    if (uploadButton) {
+      closeDropdown();
+      return;
     }
- }
+    uploadButton = Object.assign(document.createElement("button"), {
+      className: addon.tab.scratchClass("button_outlined-button", "stage-header_setThumbnailButton", {
+        others: "sa-set-thumbnail-upload-button",
+      }),
+      textContent: msg("dropdown-upload"),
+      title: msg("added-by"),
+    });
+    uploadButton.insertBefore(
+      Object.assign(document.createElement("img"), {
+        src: addon.self.dir + "/upload.svg",
+      }),
+      uploadButton.firstChild
+    );
+    uploadButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      createModal();
+    });
+    parent.appendChild(uploadButton);
+    document.addEventListener("click", () => closeDropdown(), { once: true });
+  };
+
+  while (true) {
+    const setThumbnailButton = await addon.tab.waitForElement("[class*='stage-header_setThumbnailButton_']", {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "scratch-gui/mode/SET_FULL_SCREEN"],
+    });
+    setThumbnailButton.classList.add("sa-has-dropdown");
+    const dropdownContainer = Object.assign(document.createElement("div"), {
+      className: "sa-set-thumbnail-dropdown-container",
+    });
+    const dropdownButton = Object.assign(document.createElement("button"), {
+      className: "sa-set-thumbnail-dropdown-button",
+    });
+    dropdownButton.appendChild(
+      Object.assign(document.createElement("img"), {
+        src: "/static/blocks-media/default/dropdown-arrow.svg",
+        draggable: false,
+      })
+    );
+    dropdownButton.addEventListener("click", (e) => {
+      toggleDropdown(dropdownContainer);
+      e.stopPropagation();
+    });
+    dropdownContainer.appendChild(dropdownButton);
+    addon.tab.displayNoneWhileDisabled(dropdownContainer);
+    addon.tab.appendToSharedSpace({
+      space: "stageHeader",
+      order: -1,
+      element: dropdownContainer,
+    });
+  }
+}
