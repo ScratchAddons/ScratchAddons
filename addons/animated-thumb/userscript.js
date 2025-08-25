@@ -177,17 +177,8 @@ export default async function ({ addon, console, msg }) {
         })
       );
       dropdownButton.addEventListener("click", (e) => {
-        if (document.querySelector(".tooltip-set-thumbnail")) {
-          // User hasn't clicked Set Thumbnail yet. Show the modal.
-          setThumbnailButton.click();
-        } else {
-          if (tooltip) {
-            tooltip.remove();
-            localStorage.setItem("saAnimatedThumbHideDropdownTooltip", "1");
-          }
-          toggleDropdown(dropdownContainer);
-          e.stopPropagation();
-        }
+        toggleDropdown(dropdownContainer);
+        e.stopPropagation();
       });
       dropdownContainer.appendChild(dropdownButton);
       addon.tab.displayNoneWhileDisabled(dropdownContainer);
@@ -196,44 +187,5 @@ export default async function ({ addon, console, msg }) {
         order: -1,
         element: dropdownContainer,
       });
-
-      if (!localStorage.getItem("saAnimatedThumbHideDropdownTooltip")) {
-        tooltip = Object.assign(document.createElement("div"), {
-          className: "validation-message validation-info sa-animated-thumb-tooltip",
-          textContent: msg("info-tooltip"),
-        });
-        dropdownContainer.appendChild(tooltip);
-      }
-
-      addon.tab
-        .waitForElement(".tooltip-set-thumbnail", {
-          reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-        })
-        .then(() => {
-          // Remove the tooltip
-          if (tooltip) {
-            tooltip.remove();
-            localStorage.setItem("saAnimatedThumbHideDropdownTooltip", "1");
-          }
-
-          // Add message to the Set Thumbnail modal when it's opened instead
-          addon.tab
-            .waitForElement(".update-thumbnail-info-modal-inner", {
-              reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-            })
-            .then((infoContent) => {
-              const message = Object.assign(document.createElement("div"), {
-                className: "sa-set-thumbnail-info-box",
-              });
-              message.appendChild(
-                Object.assign(document.createElement("div"), {
-                  className: "sa-set-thumbnail-info-box-title",
-                  textContent: msg("/_general/meta/message-from-sa"),
-                })
-              );
-              message.appendChild(document.createTextNode(msg("info-box")));
-              infoContent.insertBefore(message, infoContent.lastChild);
-            });
-        });
     }
  }

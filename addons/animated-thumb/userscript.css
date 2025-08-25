@@ -59,18 +59,6 @@ p.sa-animated-thumb-uploaded-thumb {
   border: 1px solid var(--darkWww-border, #0000001a);
 }
 
-.sa-animated-thumb-tooltip {
-  transform: unset;
-  top: 100%;
-  left: auto;
-  right: -136px;
-  margin-left: 0;
-  width: 300px;
-  height: auto;
-  line-height: normal;
-  text-align: center;
-}
-
 [dir="ltr"] [class*="stage-header_setThumbnailButton_"].sa-has-dropdown {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -144,12 +132,3 @@ p.sa-animated-thumb-uploaded-thumb {
   height: 20px;
 }
 
-.sa-set-thumbnail-info-box {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
-  border-radius: 0.5rem;
-}
-
-.sa-set-thumbnail-info-box-title {
-  font-weight: bold;
-}
