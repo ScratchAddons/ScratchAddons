@@ -1,0 +1,3 @@
+{
+  "character-limit/left": "{num, plural, one {# character left} other {# characters left}}"
+}

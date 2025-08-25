@@ -1,0 +1,59 @@
+{
+  "name": "Character limit display",
+  "description": "Adds character limit displays for the instructions, notes and credits, and studio description fields while typing.",
+  "tags": ["community", "projectPage"],
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects", "https://scratch.mit.edu/studios/*"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects", "https://scratch.mit.edu/studios/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Visibility",
+      "id": "display",
+      "type": "select",
+      "default": "always",
+      "potentialValues": [
+        {
+          "id": "always",
+          "name": "Visible while editing"
+        },
+        {
+          "id": "low",
+          "name": "Visible when low on characters"
+        }
+      ]
+    },
+    {
+      "name": "Show if characters left ≤",
+      "id": "threshold",
+      "type": "integer",
+      "min": 100,
+      "max": 4999,
+      "default": 1000,
+      "if": {
+        "settings": {
+          "display": "low"
+        }
+      }
+    }
+  ],
+  "versionAdded": "1.43.0",
+  "enabledByDefault": false
+}
