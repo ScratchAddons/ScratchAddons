@@ -1,16 +1,6 @@
 export default async function ({ addon, console }) {
   const enabledAddons = await addon.self.getEnabledAddons("community");
-  const footer = await addon.tab.waitForElement("#footer");
   const root = document.documentElement;
-
-  const icon = document.createElement("img");
-  icon.src = addon.self.dir + "/icon.svg";
-  icon.height = 16;
-  icon.width = 16;
-  icon.className = "sa-footer-arrow";
-  icon.draggable = false;
-  footer.insertBefore(icon, footer.firstChild);
-  addon.tab.displayNoneWhileDisabled(icon);
 
   if (!(addon.settings.get("infiniteScroll") && enabledAddons.includes("infinite-scroll"))) {
     // If the setting is enabled, infinate-scroll
@@ -22,18 +12,34 @@ export default async function ({ addon, console }) {
     root.style.setProperty("--footer-hover-height", "250px");
   }
 
-  let collapseTimeout;
+  while (true) {
+    const footer = await addon.tab.waitForElement("#footer", {
+      markAsSeen: true,
+      reduxCondition: (state) => (state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true),
+    });
 
-  footer.addEventListener("mouseover", () => {
-    footer.classList.add("transition", "expanded");
-    if (collapseTimeout) {
-      clearTimeout(collapseTimeout);
-    }
-  });
+    const icon = document.createElement("img");
+    icon.src = addon.self.dir + "/icon.svg";
+    icon.height = 16;
+    icon.width = 16;
+    icon.className = "sa-footer-arrow";
+    icon.draggable = false;
+    footer.insertBefore(icon, footer.firstChild);
+    addon.tab.displayNoneWhileDisabled(icon);
 
-  footer.addEventListener("mouseout", () => {
-    collapseTimeout = setTimeout(() => {
-      footer.classList.remove("expanded");
-    }, 200);
-  });
+    let collapseTimeout;
+
+    footer.addEventListener("mouseover", () => {
+      footer.classList.add("transition", "expanded");
+      if (collapseTimeout) {
+        clearTimeout(collapseTimeout);
+      }
+    });
+
+    footer.addEventListener("mouseout", () => {
+      collapseTimeout = setTimeout(() => {
+        footer.classList.remove("expanded");
+      }, 200);
+    });
+  }
 }
