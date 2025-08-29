@@ -10,6 +10,12 @@
       "name": "ZenithKnight"
     }
   ],
+  "info": [
+    {
+      "id": "firefoxMobileBug",
+      "text": "On Firefox for Android, this addon may work better if the \"Scroll to hide toolbar\" option in Firefox settings \u2192 Customize is turned off."
+    }
+  ],
   "customCssVariables": [
     {
       "name": "expandSpeed",
