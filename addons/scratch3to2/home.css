@@ -210,8 +210,3 @@
 #curator-link {
   font-weight: bold;
 }
-
-/* collapse-footer */
-:root {
-  --footer-hover-height: 332px !important;
-}
