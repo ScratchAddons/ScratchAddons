@@ -10,6 +10,7 @@ export default async function ({ addon, console }) {
   icon.className = "sa-footer-arrow";
   icon.draggable = false;
   footer.insertBefore(icon, footer.firstChild);
+  addon.tab.displayNoneWhileDisabled(icon);
 
   if (!(addon.settings.get("infiniteScroll") && enabledAddons.includes("infinite-scroll"))) {
     // If the setting is enabled, infinate-scroll
