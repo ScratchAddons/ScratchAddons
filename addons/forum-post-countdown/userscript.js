@@ -1,10 +1,10 @@
 export default async function ({ addon, msg }) {
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
-  let message = document.querySelector(".success");
+  const message = document.querySelector(".success")?.innerText;
 
-  // This message is not translated by Scratch
-  if (message && message.innerText !== "Post updated.") {
+  // These messages are not translated by Scratch
+  if (message === "Your reply saved." || message === "Topic saved.") {
     localStorage.setItem("sa-forum-post-countdown", Date.now());
   }
 
