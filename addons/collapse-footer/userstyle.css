@@ -38,6 +38,7 @@
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 4px;
+  object-fit: contain;
 }
 
 .sa-collapse-footer #footer.expanded .sa-footer-arrow {
