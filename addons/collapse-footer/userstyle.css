@@ -15,7 +15,7 @@
   z-index: 20;
 }
 .sa-collapse-footer #footer.transition {
-  transition-duration: var(--collapseFooter-expandSpeed);
+  transition: height var(--collapseFooter-expandSpeed);
 }
 .sa-collapse-footer #footer .lists dl {
   margin-top: 0;
