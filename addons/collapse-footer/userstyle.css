@@ -45,7 +45,7 @@
 }
 
 :root {
-  --footer-hover-height: 328px; /* How high the hovered footer is (for donor text fix) */
+  --footer-hover-height: 300px; /* Can be modified by the userscript and by other addons */
 }
 
 /* old-studio-layout compatibility */

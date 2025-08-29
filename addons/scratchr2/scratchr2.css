@@ -708,3 +708,8 @@ select:focus {
   background: var(--darkWww-box, white);
   color: var(--darkWww-link, #855cd6);
 }
+
+/* collapse-footer */
+:root {
+  --footer-hover-height: 328px !important;
+}

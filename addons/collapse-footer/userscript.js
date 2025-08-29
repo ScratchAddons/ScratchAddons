@@ -17,15 +17,8 @@ export default async function ({ addon, console }) {
     document.body.classList.add("sa-collapse-footer");
   }
 
-  if (addon.tab.clientVersion === "scratchr2" && !enabledAddons.includes("scratchr2")) {
+  if (addon.tab.clientVersion === "scratchr2") {
     root.style.setProperty("--footer-hover-height", "250px");
-  }
-
-  if (location.pathname.split("/")[1] === "") {
-    // Moves the donor text into the footer on the front page
-    const donor = document.getElementById("donor");
-    footer.appendChild(donor);
-    root.style.setProperty("--footer-hover-height", "410px");
   }
 
   let collapseTimeout;
