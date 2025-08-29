@@ -48,6 +48,12 @@
   --footer-hover-height: 300px; /* Can be modified by the userscript and by other addons */
 }
 
+@media (max-width: 639px) {
+  :root {
+    --footer-hover-height: 200px;
+  }
+}
+
 /* old-studio-layout compatibility */
 
 .studio-projects .studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton),
