@@ -223,13 +223,13 @@ export default async function ({ addon, console }) {
         block.svgFace_.style.transform = "translate(" + dx + "px, " + dy + "px)";
       }
     };
-    if (addon.settings.get("watch") === true) {
-      attachMouseMoveListener(block);
-    }
+    attachMouseMoveListener(block);
   };
 
   const attachMouseMoveListener = (block) => {
-    document.addEventListener("mousemove", block.windowListener);
+    if (addon.settings.get("watch") === true) {
+      document.addEventListener("mousemove", block.windowListener);
+    }
   };
 
   const detachMouseMoveListener = (block) => {
