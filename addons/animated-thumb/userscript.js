@@ -153,11 +153,14 @@ export default async function ({ addon, console, msg }) {
   };
 
   while (true) {
-    const setThumbnailButton = await addon.tab.waitForElement("[class*='stage-header_rightSection_'] > [class*='stage-header_setThumbnailButton_']", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly
-    });
-    console.log("Hi")
+    const setThumbnailButton = await addon.tab.waitForElement(
+      "[class*='stage-header_rightSection_'] > [class*='stage-header_setThumbnailButton_']",
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+      }
+    );
+    console.log("Hi");
     setThumbnailButton.classList.add("sa-has-dropdown");
     const dropdownContainer = Object.assign(document.createElement("div"), {
       className: "sa-set-thumbnail-dropdown-container",
