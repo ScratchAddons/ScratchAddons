@@ -1,0 +1,20 @@
+{
+  "name": "Show full text on hover",
+  "description": "Hover your mouse over overflowed text on profile pages and studios to see the full text.",
+  "credits": [
+    {
+      "name": "mysinginmonsters",
+      "link": "https://scratch.mit.edu/users/mysinginmonsters/"
+    }
+  ],
+  "tags": ["community", "profiles", "studios"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*", "studios"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.44.0"
+}
