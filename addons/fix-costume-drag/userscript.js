@@ -128,7 +128,7 @@ export default async function ({ addon, console }) {
           index = indexForPositionOnList({ x, y }, this.boxes, this.props.isRtl);
         }
 
-        // Setting Drag at top/bottom to scroll
+        // Auto scroll
         const edgeSize = 30; // Distance from the top/bottom to trigger scroll
         if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
           scrollContainer.scrollTop -= scrollSpeed;
