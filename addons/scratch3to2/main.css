@@ -467,7 +467,7 @@ body:not(.sa-body-editor) .select select > option {
 
 /* Footer */
 #footer {
-  height: 260px;
+  height: 220px;
   padding-top: 20px;
   padding-bottom: 0;
   background-color: var(--darkWww-footer-scratchr2, #ececec);
@@ -503,16 +503,10 @@ body:not(.sa-body-editor) .select select > option {
 .language-chooser .select select {
   margin-right: 30px;
 }
-#donor {
-  background-color: var(--darkWww-footer-scratchr2, #ececec);
-  box-shadow: inset 0 -10px 10px -10px rgba(0, 0, 0, 0.14);
-  color: var(--darkWww-footer-scratchr2Text, #666);
-  font-size: 13px;
-}
 
 /* collapse-footer */
 :root {
-  --footer-hover-height: 250px !important;
+  --footer-hover-height: 210px !important;
 }
 
 /* Modals */
