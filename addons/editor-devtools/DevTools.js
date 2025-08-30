@@ -1,7 +1,6 @@
 import DomHelpers from "./DomHelpers.js";
 import UndoGroup from "../../libraries/common/cs/UndoGroup.js";
 import { getVariableUsesById } from "../../libraries/common/cs/devtools-utils.js";
-import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
 
 export default class DevTools {
   constructor(addon, msg, m) {
@@ -74,8 +73,6 @@ export default class DevTools {
   async addContextMenus() {
     const blockly = await this.addon.tab.traps.getBlockly();
 
-    enableContextMenuSeparators(this.addon.tab);
-
     const pasteCallback = () => {
       let target;
       if (blockly.registry)
@@ -91,26 +88,33 @@ export default class DevTools {
 
     if (blockly.registry) {
       // new Blockly
-      blockly.ContextMenuRegistry.registry.register(
-        addSeparator({
-          displayText: this.m("paste"),
-          preconditionFn: () => (this.clipboardHasData ? "enabled" : "disabled"),
-          callback: pasteCallback,
-          scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
-          id: "saPaste",
-          weight: 10, // after Save All as Image
-        })
-      );
+      blockly.ContextMenuRegistry.registry.register({
+        separator: true,
+        scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+        id: "saPasteSeparator",
+        weight: 11, // after Save All as Image
+      });
+      blockly.ContextMenuRegistry.registry.register({
+        displayText: this.m("paste"),
+        preconditionFn: () => (this.clipboardHasData ? "enabled" : "disabled"),
+        callback: pasteCallback,
+        scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+        id: "saPaste",
+        weight: 12, // after separator
+      });
     } else {
       this.addon.tab.createBlockContextMenu(
         (items, block) => {
-          items.push({
-            enabled: blockly.clipboardXml_,
-            text: this.m("paste"),
-            separator: true,
-            _isDevtoolsFirstItem: true,
-            callback: pasteCallback,
-          });
+          items.push(
+            {
+              separator: true,
+              _isDevtoolsFirstItem: true,
+            },
+            {
+              enabled: blockly.clipboardXml_,
+              text: this.m("paste"),
+              callback: pasteCallback,
+            });
           return items;
         },
         { workspace: true }
@@ -120,23 +124,25 @@ export default class DevTools {
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         items.push(
-          addSeparator({
+          {
+            separator: true,
+            _isDevtoolsFirstItem: true,
+          },
+          {
             enabled: true,
             text: this.m("make-space"),
-            _isDevtoolsFirstItem: true,
             callback: () => {
               this.makeSpace(block);
             },
-            separator: true,
-          }),
-          addSeparator({
+          },
+          { separator: true },
+          {
             enabled: true,
             text: this.m("copy-all"),
             callback: () => {
               this.eventCopyClick(blockly, block);
-            },
-            separator: true,
-          }),
+            }
+          },
           {
             enabled: true,
             text: this.m("copy-block"),
@@ -162,7 +168,8 @@ export default class DevTools {
         if (block.type.startsWith("data_")) {
           this.selVarID = block.getVars()[0];
           items.push(
-            addSeparator({
+            { separator: true },
+            {
               enabled: true,
               text: this.m("swap", { var: block.type.includes("list") ? this.m("lists") : this.m("variables") }),
               callback: () => {
@@ -173,9 +180,7 @@ export default class DevTools {
                   this.doReplaceVariable(this.selVarID, varName, v.type);
                 }
               },
-              separator: true,
-            })
-          );
+            });
         }
         return items;
       },
@@ -201,27 +206,19 @@ export default class DevTools {
     const copyShortcut = shortcuts[blockly.ShortcutItems.names.COPY];
     const oldCopyCallback = copyShortcut.callback;
     copyShortcut.callback = newCallback(oldCopyCallback);
-    blockly.ShortcutRegistry.registry.register(copyShortcut, true);
+    blockly.ShortcutRegistry.registry.unregister(copyShortcut.name);
+    blockly.ShortcutRegistry.registry.register(copyShortcut);
 
     const cutShortcut = shortcuts[blockly.ShortcutItems.names.CUT];
     const oldCutCallback = cutShortcut.callback;
     cutShortcut.callback = newCallback(oldCutCallback);
-    blockly.ShortcutRegistry.registry.register(cutShortcut, true);
+    blockly.ShortcutRegistry.registry.unregister(cutShortcut.name);
+    blockly.ShortcutRegistry.registry.register(cutShortcut);
 
     // New Blockly copies a single block by default, so this is needed to make Copy All work
     const oldBlockToCopyData = blockly.BlockSvg.prototype.toCopyData;
-    blockly.BlockSvg.prototype.toCopyData = function (...args) {
-      let data = oldBlockToCopyData.call(this, ...args);
-      if (!data) return null;
-      data = {
-        ...data,
-        blockState: blockly.serialization.blocks.save(this, {
-          addCoordinates: true,
-          addNextBlocks: devtools.copyAll,
-        }),
-      };
-      devtools.copyAll = false;
-      return data;
+    blockly.BlockSvg.prototype.toCopyData = function () {
+      return oldBlockToCopyData.call(this, devtools.copyAll);
     };
   }
 
