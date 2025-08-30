@@ -160,7 +160,6 @@ export default async function ({ addon, console, msg }) {
         reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
       }
     );
-    console.log("Hi");
     setThumbnailButton.classList.add("sa-has-dropdown");
     const dropdownContainer = Object.assign(document.createElement("div"), {
       className: "sa-set-thumbnail-dropdown-container",
