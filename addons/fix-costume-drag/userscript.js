@@ -140,7 +140,7 @@ export default async function ({ addon, console }) {
     };
   };
 
-  // When changed settings
+  // When settings changed
   addon.settings.addEventListener("change", function () {
     scrollSpeed = SPEED_PRESETS[addon.settings.get("scroll-speed")];
   });
