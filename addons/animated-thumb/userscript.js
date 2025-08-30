@@ -118,12 +118,7 @@ export default async function ({ addon, console, msg }) {
     uploadFromFile();
   };
 
-  await addon.tab.waitForElement(".guiPlayer [class*='stage-header_stage-size-row_']", {
-    reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-  });
-
   let uploadButton = null;
-  let tooltip = null;
 
   const closeDropdown = () => {
     if (!uploadButton) return;
@@ -158,11 +153,11 @@ export default async function ({ addon, console, msg }) {
   };
 
   while (true) {
-    const setThumbnailButton = await addon.tab.waitForElement("[class*='stage-header_setThumbnailButton_']", {
+    const setThumbnailButton = await addon.tab.waitForElement("[class*='stage-header_rightSection_'] > [class*='stage-header_setThumbnailButton_']", {
       markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "scratch-gui/mode/SET_FULL_SCREEN"],
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly
     });
+    console.log("Hi")
     setThumbnailButton.classList.add("sa-has-dropdown");
     const dropdownContainer = Object.assign(document.createElement("div"), {
       className: "sa-set-thumbnail-dropdown-container",
