@@ -407,11 +407,14 @@ export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   const getBlockById = (id) => {
     const workspace = addon.tab.traps.getWorkspace();
+    if (!workspace) return null;
     const flyoutWorkspace = workspace.getFlyout().getWorkspace();
     return workspace.getBlockById(id) || flyoutWorkspace.getBlockById(id);
   };
   vm.on("SCRIPT_GLOW_ON", ({ id }) => {
+    if (addon.tab.editorMode !== "editor") return;
     const block = getBlockById(id);
+    if (!block) return;
     // For performance, don't follow the mouse when the stack is glowing
     detachMouseMoveListener(block);
     resetFacePosition(block);
@@ -425,7 +428,10 @@ export default async function ({ addon, console }) {
     }
   });
   vm.on("SCRIPT_GLOW_OFF", ({ id }) => {
-    attachMouseMoveListener(getBlockById(id));
+    if (addon.tab.editorMode !== "editor") return;
+    const block = getBlockById(id);
+    if (!block) return;
+    attachMouseMoveListener(block);
   });
 
   const update = () => {
