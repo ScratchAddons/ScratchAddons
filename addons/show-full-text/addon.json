@@ -1,23 +1,17 @@
 {
   "name": "Show full text on hover",
-  "description": "Hover your mouse over overflowed text to see the full text.",
+  "description": "Hover your mouse over overflowed text on profile pages and studios to see the full text.",
   "credits": [
     {
       "name": "mysinginmonsters",
       "link": "https://scratch.mit.edu/users/mysinginmonsters/"
     }
   ],
-  "tags": ["community", "profiles","studios"],
+  "tags": ["community", "profiles", "studios"],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"]
-    }
-  ],
-  "userstyles": [
-    {
-      "url": "style.css",
-      "matches": ["projects"]
+      "matches": ["https://scratch.mit.edu/users/*", "studios"]
     }
   ],
   "dynamicEnable": true,
