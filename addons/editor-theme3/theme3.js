@@ -816,23 +816,23 @@ export default async function ({ addon, console, msg }) {
       else primaryColor = this.sourceBlock_.getColour();
       Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
     };
-  }
-  const oldFieldMatrixUpdateMatrix = FieldMatrix.prototype.updateMatrix_;
-  FieldMatrix.prototype.updateMatrix_ = function () {
-    oldFieldMatrixUpdateMatrix.call(this);
-    const matrix = this.getValue();
-    for (let i = 0; i < matrix.length; i++) {
-      if (matrix[i] !== "0") {
-        this.fillMatrixNode_(this.ledButtons_, i, uncoloredTextColor());
-        this.fillMatrixNode_(this.ledThumbNodes_, i, uncoloredTextColor());
+    const oldFieldMatrixUpdateMatrix = FieldMatrix.prototype.updateMatrix_;
+    FieldMatrix.prototype.updateMatrix_ = function () {
+      oldFieldMatrixUpdateMatrix.call(this);
+      const matrix = this.getValue();
+      for (let i = 0; i < matrix.length; i++) {
+        if (matrix[i] !== "0") {
+          this.fillMatrixNode_(this.ledButtons_, i, uncoloredTextColor());
+          this.fillMatrixNode_(this.ledThumbNodes_, i, uncoloredTextColor());
+        }
       }
-    }
-  };
-  const oldFieldMatrixCreateButton = FieldMatrix.prototype.createButton_;
-  FieldMatrix.prototype.createButton_ = function (fill) {
-    if (fill === "#FFFFFF") fill = uncoloredTextColor();
-    return oldFieldMatrixCreateButton.call(this, fill);
-  };
+    };
+    const oldFieldMatrixCreateButton = FieldMatrix.prototype.createButton_;
+    FieldMatrix.prototype.createButton_ = function (fill) {
+      if (fill === "#FFFFFF") fill = uncoloredTextColor();
+      return oldFieldMatrixCreateButton.call(this, fill);
+    };
+  }
 
   let FieldVerticalSeparator;
   if (Blockly.registry)
@@ -842,10 +842,11 @@ export default async function ({ addon, console, msg }) {
   FieldVerticalSeparator.prototype[fieldMethodName] = function () {
     // Vertical line between extension icon and block label
     oldFieldVerticalSeparatorInit.call(this);
-    if (this.lineElement_) {
+    const lineElement = this.lineElement || this.lineElement_; // new Blockly || old Blockly
+    if (lineElement) {
       if (isColoredTextMode() || textMode() === "black")
-        this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
-      else this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourSecondary());
+        lineElement.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
+      else lineElement.setAttribute("stroke", this.sourceBlock_.getColourSecondary());
     }
   };
 
@@ -892,7 +893,7 @@ export default async function ({ addon, console, msg }) {
         )
       );
       workspace.refreshTheme();
-      // used by editor-colored-context-menus
+      // used by Blockly and editor-colored-context-menus
       document.body.style.setProperty("--colour-text", uncoloredTextColor());
     }
     addon.tab.setCustomBlockColor({
