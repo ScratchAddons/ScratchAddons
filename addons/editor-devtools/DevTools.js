@@ -114,7 +114,8 @@ export default class DevTools {
               enabled: blockly.clipboardXml_,
               text: this.m("paste"),
               callback: pasteCallback,
-            });
+            }
+          );
           return items;
         },
         { workspace: true }
@@ -141,7 +142,7 @@ export default class DevTools {
             text: this.m("copy-all"),
             callback: () => {
               this.eventCopyClick(blockly, block);
-            }
+            },
           },
           {
             enabled: true,
@@ -180,7 +181,8 @@ export default class DevTools {
                   this.doReplaceVariable(this.selVarID, varName, v.type);
                 }
               },
-            });
+            }
+          );
         }
         return items;
       },

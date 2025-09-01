@@ -118,17 +118,13 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        {
-          enabled: true,
-          text: msg("save"),
-          callback: () => {
-            exportPopup(block);
-          },
-        }
-      );
+      items.splice(insertBeforeIndex, 0, {
+        enabled: true,
+        text: msg("save"),
+        callback: () => {
+          exportPopup(block);
+        },
+      });
       items.splice(insertBeforeIndex, 0, { separator: true });
 
       return items;
