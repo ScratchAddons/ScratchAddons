@@ -5,6 +5,8 @@ const PERMISSIONS_ALWAYS_IGNORED = [
   "scripting",
   "https://scratchfoundation.github.io/scratch-editor/*",
   "https://scratchfoundation.github.io/*",
+  "https://mxmou.github.io/scratch-gui/*",
+  "https://mxmou.github.io/*",
   "http://localhost:8333/*",
   "http://localhost:8601/*",
   "http://localhost/*",
