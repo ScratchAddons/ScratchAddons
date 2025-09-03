@@ -13,7 +13,18 @@ export async function updateAllBlocks(
 
   if (workspace) {
     if (updateMainWorkspace) {
-      blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(workspace), workspace);
+      let clearWorkspaceAndLoadFromXml;
+      const xml = blockly.Xml.workspaceToDom(workspace);
+      if (blockly.registry) {
+        // new Blockly: use Scratch's modified implementation instead of the one from Blockly
+        clearWorkspaceAndLoadFromXml = blockly.clearWorkspaceAndLoadFromXml;
+        if (!xml.querySelector("variables")) {
+          xml.appendChild(blockly.utils.xml.createElement("variables"));
+        }
+      } else {
+        clearWorkspaceAndLoadFromXml = blockly.Xml.clearWorkspaceAndLoadFromXml;
+      }
+      clearWorkspaceAndLoadFromXml(xml, workspace);
     }
     const toolbox = workspace.getToolbox();
     const flyout = workspace.getFlyout();

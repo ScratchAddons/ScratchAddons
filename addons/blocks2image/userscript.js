@@ -1,5 +1,3 @@
-import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
-
 export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
@@ -49,26 +47,37 @@ export default async function ({ addon, console, msg }) {
   exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
   exSVG.setAttribute("version", "1.1");
 
-  enableContextMenuSeparators(addon.tab);
-
   if (Blockly.registry) {
     // new Blockly
-    Blockly.ContextMenuRegistry.registry.register(
-      addSeparator({
-        displayText: msg("saveAll"),
-        preconditionFn: () => {
-          if (addon.self.disabled) return "hidden";
-          if (document.querySelector("svg.blocklySvg g.blocklyBlockCanvas > g.blocklyBlock")) return "enabled";
-          return "disabled";
-        },
-        callback: () => {
-          exportPopup();
-        },
+    const registerSeparator = () => {
+      Blockly.ContextMenuRegistry.registry.register({
+        separator: true,
         scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
-        id: "saSaveAllAsImage",
+        id: "saSaveAllAsImageSeparator",
         weight: 9, // after Add Comment
-      })
-    );
+      });
+    };
+    const unregisterSeparator = () => {
+      Blockly.ContextMenuRegistry.registry.unregister("saSaveAllAsImageSeparator");
+    };
+    registerSeparator();
+    addon.self.addEventListener("disabled", unregisterSeparator);
+    addon.self.addEventListener("reenabled", registerSeparator);
+
+    Blockly.ContextMenuRegistry.registry.register({
+      displayText: msg("saveAll"),
+      preconditionFn: () => {
+        if (addon.self.disabled) return "hidden";
+        if (document.querySelector("svg.blocklySvg g.blocklyBlockCanvas > g.blocklyBlock")) return "enabled";
+        return "disabled";
+      },
+      callback: () => {
+        exportPopup();
+      },
+      scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+      id: "saSaveAllAsImage",
+      weight: 10, // after separator
+    });
   } else {
     addon.tab.createBlockContextMenu(
       (items) => {
@@ -89,8 +98,8 @@ export default async function ({ addon, console, msg }) {
           callback: () => {
             exportPopup();
           },
-          separator: true,
         });
+        items.splice(insertBeforeIndex, 0, { separator: true });
 
         return items;
       },
@@ -109,18 +118,14 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        addSeparator({
-          enabled: true,
-          text: msg("save"),
-          callback: () => {
-            exportPopup(block);
-          },
-          separator: true,
-        })
-      );
+      items.splice(insertBeforeIndex, 0, {
+        enabled: true,
+        text: msg("save"),
+        callback: () => {
+          exportPopup(block);
+        },
+      });
+      items.splice(insertBeforeIndex, 0, { separator: true });
 
       return items;
     },
