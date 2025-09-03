@@ -5,7 +5,7 @@
   margin: 0;
   height: 0;
   background-color: transparent;
-  border-top: 1px solid var(--darkWww-border, hsla(0, 0%, 0%, 0.15));
+  border-top: 1px solid var(--editorDarkMode-input-divider, hsla(0, 0%, 0%, 0.15));
 }
 
 .blocklyContextMenu > .blocklyMenuSeparator:first-child {
