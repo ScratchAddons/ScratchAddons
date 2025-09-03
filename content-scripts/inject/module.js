@@ -37,7 +37,7 @@ const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
 const comlinkIframe4 = document.getElementById("scratchaddons-iframe-4");
 const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
 
-const isScratchGui = location.origin.endsWith(".github.io") || location.port === "8601";
+const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 
 const page = {
   _globalState: null,
