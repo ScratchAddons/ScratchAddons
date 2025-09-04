@@ -11,19 +11,16 @@
 .sa-rcb-custom-procedures_colors-row {
   display: flex;
   justify-content: space-between;
-  gap: 1.5em;
   margin-top: 1.5em;
 }
 .sa-rcb-colorButton {
-  flex-grow: 1;
   aspect-ratio: 1;
-  width: unset;
-  height: unset;
+  height: 1.9rem;
   overflow: hidden;
   border: 2px solid;
   transition: all 0.2s;
   border-radius: 100%;
-  margin: 0 auto 0.125rem;
+  margin-bottom: 0.125rem;
   padding: 4px;
 }
 .sa-rcb-colorButton:hover {

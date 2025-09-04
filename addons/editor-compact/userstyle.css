@@ -557,3 +557,7 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 [class*="custom-procedures_body"] [role="button"] {
   padding: 0.5rem;
 }
+.sa-rcb-colorButton {
+  height: 1.5rem;
+  padding: 0 !important;
+}
