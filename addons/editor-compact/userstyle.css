@@ -554,6 +554,9 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 .blocklyTextRemoveIcon {
   top: -35px;
 }
+.sa-reorder-inputs-arrow {
+  top: -44px;
+}
 [class*="custom-procedures_body"] [role="button"] {
   padding: 0.5rem;
 }
