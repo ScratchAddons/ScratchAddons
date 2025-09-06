@@ -196,7 +196,7 @@ export default async function ({ addon, console, msg }) {
       console.warn("Could not export gamepad settings");
       return;
     }
-    const existingComment = findOptionsComment();
+    let existingComment = findOptionsComment();
     if (existingComment) {
       const parsedExistingSettingsMap = parseOptionsComment(existingComment);
       if (parsedExistingSettingsMap) {
@@ -205,6 +205,8 @@ export default async function ({ addon, console, msg }) {
         const mergedMap = new Map([...parsedExistingSettingsMap, ...exportedSettingsMap]);
         existingComment.text = formatMapAsComment(mergedMap);
       } else {
+        // In case of corrupted settings, remove the bad comment (a new one will be created below)
+        removeStoredMappings();
         existingComment = null;
       }
     }
