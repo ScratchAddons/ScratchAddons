@@ -1,4 +1,4 @@
-export function createToolbar(heatmapManager, config, polluteStepThread, msg) {
+export function createToolbar(heatmapManager, config, polluteStepThread, unpollutStepThread, msg) {
   const toolbar = document.createElement("ul");
   toolbar.className = "sa-timing-toolbar sa-debugger-tabs";
 
@@ -18,14 +18,22 @@ export function createToolbar(heatmapManager, config, polluteStepThread, msg) {
     {
       initialText: msg("timing-view-line-by-line"),
       toggledText: msg("timing-view-timers"),
+      disabled: false,
+      tooltipText: null,
       toggleState: () => {
         config.showLineByLine = !config.showLineByLine;
-        if (!config.isStepThreadPolluted) polluteStepThread();
+        if (config.showLineByLine && !config.isStepThreadPolluted) {
+          polluteStepThread();
+        } else if (!config.showLineByLine && config.isStepThreadPolluted) {
+          unpollutStepThread();
+        }
       },
     },
     {
       initialText: msg("timing-show-heatmap"),
       toggledText: msg("timing-hide-heatmap"),
+      disabled: false,
+      tooltipText: null,
       toggleState: () => {
         config.showHeatmap = !config.showHeatmap;
         heatmapSlider.style.display = config.showHeatmap ? "block" : "none";
@@ -34,23 +42,36 @@ export function createToolbar(heatmapManager, config, polluteStepThread, msg) {
     },
   ];
 
-  for (const { initialText, toggledText, toggleState } of items) {
+  for (const item of items) {
+    const { initialText, toggledText, toggleState } = item;
     const li = document.createElement("li");
 
     const textSpan = document.createElement("span");
     textSpan.textContent = initialText;
-
     li.appendChild(textSpan);
 
     li.addEventListener("click", () => {
+      if (item.disabled) return;
       toggleState();
       textSpan.textContent = textSpan.textContent === initialText ? toggledText : initialText;
     });
 
+    if (item.tooltipText) li.title = item.tooltipText;
+    
+    item.element = li;
     toolbar.appendChild(li);
   }
 
   toolbar.appendChild(heatmapSlider);
 
+  const updateDisabledState = (singleStepActive) => {
+    const lineByLineItem = items[0];
+    lineByLineItem.disabled = singleStepActive;
+    lineByLineItem.tooltipText = singleStepActive ? msg("timing-disabled-single-step") : null;
+    lineByLineItem.element.classList.toggle("sa-timing-disabled", singleStepActive);
+    lineByLineItem.element.title = lineByLineItem.tooltipText || "";
+  };
+
+  toolbar.updateDisabledState = updateDisabledState;
   return toolbar;
 }

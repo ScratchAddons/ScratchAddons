@@ -53,5 +53,6 @@
   "debugger/timing-ratio-time": "Ratio Time",
   "debugger/timing-percent-time": "Percent Time",
   "debugger/timing-call-count": "Call Count",
-  "debugger/timing-no-timers": "No timers started."
+  "debugger/timing-no-timers": "No timers started.",
+  "debugger/timing-disabled-single-step": "Cannot profile line-by-line while single-stepping"
 }

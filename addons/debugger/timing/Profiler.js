@@ -9,7 +9,10 @@ class Profiler {
 
   polluteStepThread(vm) {
     this.config.isStepThreadPolluted = true;
-    const originalStepThread = vm.runtime.sequencer.stepThread;
+    this.vm = vm;
+    this.originalStepThread = vm.runtime.sequencer.stepThread;
+    this.threadPrototype = null;
+    this.originalBlockGlowDescriptor = null;
     const profiler = this;
     let propSet = false;
 
@@ -24,6 +27,7 @@ class Profiler {
     - manthread.blockGlowInFrame is set once after execute() so we use this to reset runtime.profiler and stop it triggering further
     */
 
+    this.originalProfilerDescriptor = Object.getOwnPropertyDescriptor(vm.runtime, "profiler");
     Object.defineProperty(vm.runtime, "profiler", {
       get() {
         if (profiler.profilerActive) profiler.profile();
@@ -34,11 +38,15 @@ class Profiler {
     vm.runtime.sequencer.stepThread = function (...args) {
       if (!propSet) {
         // we define the property inside stepThread because initially there isn't an activeThread for us to use.
-        Object.defineProperty(Object.getPrototypeOf(this.activeThread), "blockGlowInFrame", {
+        profiler.threadPrototype = Object.getPrototypeOf(this.activeThread);
+        profiler.originalBlockGlowDescriptor = Object.getOwnPropertyDescriptor(profiler.threadPrototype, "blockGlowInFrame");
+        
+        Object.defineProperty(profiler.threadPrototype, "blockGlowInFrame", {
           set(value) {
             profiler.profilerActive = true;
             this._blockGlowInFrame = value;
           },
+          configurable: true,
         });
         propSet = true;
       }
@@ -46,7 +54,7 @@ class Profiler {
       profiler.profilerActive = true;
       profiler.thread = this.activeThread;
 
-      const result = originalStepThread.apply(this, args);
+      const result = profiler.originalStepThread.apply(this, args);
 
       profiler.profilerActive = false;
       if (profiler.currentBlock !== null) profiler.tm.stopTimer(profiler.currentBlock);
@@ -54,6 +62,32 @@ class Profiler {
 
       return result;
     };
+  }
+
+  /*
+  Cleanup to prevent VM crashes when single-step debugger also hooks blockGlowInFrame.
+  Store original state, make properties configurable, restore on cleanup.
+  */
+  unpollutStepThread() {
+    if (!this.config.isStepThreadPolluted) return;
+    
+    this.vm.runtime.sequencer.stepThread = this.originalStepThread;
+    
+    if (this.originalProfilerDescriptor) {
+      Object.defineProperty(this.vm.runtime, "profiler", this.originalProfilerDescriptor);
+    } else {
+      delete this.vm.runtime.profiler;
+    }
+    
+    if (this.threadPrototype) {
+      if (this.originalBlockGlowDescriptor) {
+        Object.defineProperty(this.threadPrototype, "blockGlowInFrame", this.originalBlockGlowDescriptor);
+      } else {
+        delete this.threadPrototype.blockGlowInFrame;
+      }
+    }
+    
+    this.config.isStepThreadPolluted = false;
   }
 
   profile() {

@@ -391,6 +391,11 @@
   margin-bottom: 0px;
 }
 
+.sa-timing-disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
 .sa-timing-content .sa-debugger-block-preview {
   width: 100px;
   text-wrap: nowrap;

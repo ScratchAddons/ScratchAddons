@@ -5,6 +5,7 @@ import { createToolbar } from "./ui-components/toolbar.js";
 import { createTableHeader } from "./ui-components/tableHeader.js";
 import TableRows from "./ui-components/TableRows.js"; // Importing the extended LogView class
 import downloadBlob from "../../../libraries/common/cs/download-blob.js";
+import { isPaused, onPauseChanged, getRunningThread } from "../module.js";
 
 export default async function createTimingTab({ debug, addon, console, msg }) {
   function createContent() {
@@ -70,7 +71,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   const timingManager = new TimingManager(addon.settings, config, profiler);
   const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows);
-  const toolbar = createToolbar(heatmapManager, config, polluteStepThread, msg);
+  const toolbar = createToolbar(heatmapManager, config, polluteStepThread, () => profiler.unpollutStepThread(), msg);
   profiler.tm = timingManager;
 
   const content = createContent();
@@ -81,6 +82,19 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   debug.addAfterStepCallback(() => {
     tableRows.updateLogRows(timingManager.getTimers(), config.showLineByLine);
   });
+
+  // Handle single-step state changes
+  const handleSingleStepChange = (paused) => {
+    const isSingleStepping = paused && getRunningThread();
+    if (isSingleStepping && config.showLineByLine) {
+      config.showLineByLine = false;
+      profiler.unpollutStepThread();
+    }
+    toolbar.updateDisabledState(paused); // Disable UI during any pause
+  };
+  
+  handleSingleStepChange(isPaused());
+  onPauseChanged(handleSingleStepChange);
 
   addon.settings.addEventListener("change", function () {
     updatePercentageHeader();
