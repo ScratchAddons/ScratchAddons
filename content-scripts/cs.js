@@ -593,7 +593,9 @@ function forumWarning(key) {
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     const extensionsPage = /Firefox/.test(navigator.userAgent) ? "about:addons" : "chrome://extensions";
     let text1 = document.createElement("span");
-    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, DOLLARS)).replace("$1", reportLink.outerHTML).replace("$2", extensionsPage);
+    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, DOLLARS))
+      .replace("$1", reportLink.outerHTML)
+      .replace("$2", extensionsPage);
     addonError.appendChild(text1);
     errorList.appendChild(addonError);
   }
