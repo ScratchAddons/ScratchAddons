@@ -39,8 +39,11 @@ class Profiler {
       if (!propSet) {
         // we define the property inside stepThread because initially there isn't an activeThread for us to use.
         profiler.threadPrototype = Object.getPrototypeOf(this.activeThread);
-        profiler.originalBlockGlowDescriptor = Object.getOwnPropertyDescriptor(profiler.threadPrototype, "blockGlowInFrame");
-        
+        profiler.originalBlockGlowDescriptor = Object.getOwnPropertyDescriptor(
+          profiler.threadPrototype,
+          "blockGlowInFrame"
+        );
+
         Object.defineProperty(profiler.threadPrototype, "blockGlowInFrame", {
           set(value) {
             profiler.profilerActive = true;
@@ -70,15 +73,15 @@ class Profiler {
   */
   unpollutStepThread() {
     if (!this.config.isStepThreadPolluted) return;
-    
+
     this.vm.runtime.sequencer.stepThread = this.originalStepThread;
-    
+
     if (this.originalProfilerDescriptor) {
       Object.defineProperty(this.vm.runtime, "profiler", this.originalProfilerDescriptor);
     } else {
       delete this.vm.runtime.profiler;
     }
-    
+
     if (this.threadPrototype) {
       if (this.originalBlockGlowDescriptor) {
         Object.defineProperty(this.threadPrototype, "blockGlowInFrame", this.originalBlockGlowDescriptor);
@@ -86,7 +89,7 @@ class Profiler {
         delete this.threadPrototype.blockGlowInFrame;
       }
     }
-    
+
     this.config.isStepThreadPolluted = false;
   }
 

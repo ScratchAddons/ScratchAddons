@@ -92,7 +92,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     }
     toolbar.updateDisabledState(paused); // Disable UI during any pause
   };
-  
+
   handleSingleStepChange(isPaused());
   onPauseChanged(handleSingleStepChange);
 

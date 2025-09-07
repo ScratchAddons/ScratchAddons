@@ -57,7 +57,7 @@ export function createToolbar(heatmapManager, config, polluteStepThread, unpollu
     });
 
     if (item.tooltipText) li.title = item.tooltipText;
-    
+
     item.element = li;
     toolbar.appendChild(li);
   }
