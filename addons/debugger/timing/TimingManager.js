@@ -4,7 +4,7 @@ class TimingManager {
     this.settings = settings;
     this.config = config;
 
-    this.timers = {};
+    this.timers = Object.create(null);
     this.lastTimerLabel = null;
   }
 
@@ -42,7 +42,7 @@ class TimingManager {
   }
 
   clearTimers() {
-    this.timers = {};
+    this.timers = Object.create(null);
   }
 
   getTimers() {
