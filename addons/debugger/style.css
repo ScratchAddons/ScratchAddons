@@ -349,8 +349,11 @@
   text-align: center;
 }
 
-.sa-timing-timer > span:first-child {
+.sa-timing-timer > :first-child {
   width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sa-timing-header {
