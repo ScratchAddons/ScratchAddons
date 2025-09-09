@@ -47,8 +47,3 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-
-body.sa-hide-eye-dropper-background div[class*="stage_color-picker-background"] {
-  /* Do not show eye dropper background if the color picker is "fake" */
-  display: none;
-}
