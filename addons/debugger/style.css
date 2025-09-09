@@ -323,7 +323,6 @@
   position: absolute;
   top: 0px;
   width: 100%;
-  height: 20px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -331,6 +330,8 @@
   padding-left: 4px;
   font-family: monospace;
   justify-content: space-around;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .sa-timing-content {
@@ -345,7 +346,7 @@
 }
 
 .sa-timing-timer > span {
-  width: 90px;
+  width: 95px;
   text-align: center;
 }
 
