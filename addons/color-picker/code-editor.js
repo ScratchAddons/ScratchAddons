@@ -59,21 +59,17 @@ export default async ({ addon, console, msg }) => {
     ScratchBlocks.DropDownDiv.showPositionedByBlock(this, this.sourceBlock_);
     return r;
   };
-  const originalCallbackFactory = ScratchBlocks.FieldColourSlider.prototype.sliderCallbackFactory_;
-  ScratchBlocks.FieldColourSlider.prototype.sliderCallbackFactory_ = function (...args) {
-    const f = originalCallbackFactory.call(this, ...args);
-    return (event) => {
-      const r = f(event);
-      const div = ScratchBlocks.DropDownDiv.getContentDiv();
-      if (div) {
-        const saColorPickerColor = div.querySelector(".sa-color-picker-color.sa-color-picker-code-color");
-        const saColorPickerText = div.querySelector(".sa-color-picker-text.sa-color-picker-code-text");
-        if (!saColorPickerColor || !saColorPickerText) return r;
-        const color = this.getValue();
-        saColorPickerColor.value = color || "#000000";
-        saColorPickerText.value = color || "";
-      }
-      return r;
-    };
+  const originalUpdateDom = ScratchBlocks.FieldColourSlider.prototype.updateDom_;
+  ScratchBlocks.FieldColourSlider.prototype.updateDom_ = function (...args) {
+    originalUpdateDom.call(this, ...args);
+    const div = ScratchBlocks.DropDownDiv.getContentDiv();
+    if (div) {
+      const saColorPickerColor = div.querySelector(".sa-color-picker-color.sa-color-picker-code-color");
+      const saColorPickerText = div.querySelector(".sa-color-picker-text.sa-color-picker-code-text");
+      if (!saColorPickerColor || !saColorPickerText) return;
+      const color = this.getValue();
+      saColorPickerColor.value = color || "#000000";
+      saColorPickerText.value = color || "";
+    }
   };
 };
