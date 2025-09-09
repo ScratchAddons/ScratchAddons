@@ -1,0 +1,30 @@
+{
+  "name": "Compact Profile Sliders",
+  "description": "Groups Scratch profile sliders side by side, making profiles more compact and easier to browse.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "This addon arranges profile sliders in pairs and enables horizontal scrolling for better visibility.",
+      "id": "profileCompactNotice"
+    }
+  ],
+  "credits": [
+    {
+      "name": "VIGARPAST_777",
+      "link": "https://scratch.mit.edu/users/VIGARPAST_777/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["users"]
+    }
+  ],
+  "settings": [],
+  "tags": ["profile", "layout", "ui"],
+  "versionAdded": "1.0.0",
+  "enabledByDefault": true,
+  "libraries": []
+}
