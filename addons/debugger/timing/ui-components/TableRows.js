@@ -64,11 +64,11 @@ class TableRows extends LogView {
   }
 
   updateLogRows(timers, showLineByLine) {
-    this.tableHeader.style.display = Object.keys(timers).length === 0 ? "none" : "flex";
     this.rows = Object.entries(timers).map(([label, value]) => ({ label, ...value }));
     this.rows = this.rows.filter((timer) =>
       showLineByLine ? timer.label === timer.blockId : timer.label !== timer.blockId
     );
+    this.tableHeader.style.display = this.rows.length === 0 ? "none" : "flex";
     if (this.sortHeader !== "null") this.sortRows();
     this.totalTimerTime = this.getTotalTime();
     this.minTimerTime = timers["control"]
