@@ -69,8 +69,13 @@ export default async ({ addon, console, msg }) => {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalShowEditor = ScratchBlocks.FieldColourSlider.prototype.showEditor_;
   ScratchBlocks.FieldColourSlider.prototype.showEditor_ = function (...args) {
+    // Don't show the dropdown until the color picker has been added
+    const oldShowPositionedByBlock = ScratchBlocks.DropDownDiv.showPositionedByBlock;
+    ScratchBlocks.DropDownDiv.showPositionedByBlock = () => {};
     const r = originalShowEditor.call(this, ...args);
     addColorPicker(this);
+    ScratchBlocks.DropDownDiv.showPositionedByBlock = oldShowPositionedByBlock;
+    ScratchBlocks.DropDownDiv.showPositionedByBlock(this, this.sourceBlock_);
     return r;
   };
   const originalCallbackFactory = ScratchBlocks.FieldColourSlider.prototype.sliderCallbackFactory_;
