@@ -1,43 +1,26 @@
-export default async function({ addon }) {
-    await addon.tab.waitForElement('.box.slider-carousel-container', { markAsSeen: true });
+export default async function ({ addon, console }) {
+  const sliders = Array.from(document.querySelectorAll(".box.slider-carousel-container"))
+    .filter(el => !el.dataset.compacted);
 
-    const arrangeSliders = () => {
-        const sliders = Array.from(document.querySelectorAll('.box.slider-carousel-container'));
+  for (let i = 0; i < sliders.length; i += 2) {
+    const left = sliders[i];
+    const right = sliders[i + 1];
+    if (!left) break;
 
-        for (let i = 0; i < sliders.length - 1; i += 2) {
-            const left = sliders[i];
-            const right = sliders[i + 1];
+    const wrapper = document.createElement("div");
+    wrapper.className = "sa-compact-wrapper";
 
-            const wrapper = document.createElement('div');
-            wrapper.style.display = 'flex';
-            wrapper.style.justifyContent = 'space-between';
-            wrapper.style.marginBottom = '20px';
+    left.dataset.compacted = "true";
+    wrapper.appendChild(left);
 
-            left.style.width = '48%';
-            right.style.width = '48%';
-            left.style.display = 'block';
-            right.style.display = 'block';
+    if (right) {
+      right.dataset.compacted = "true";
+      wrapper.appendChild(right);
+    }
 
-            const container = left.parentNode;
-            container.insertBefore(wrapper, left);
-            wrapper.appendChild(left);
-            wrapper.appendChild(right);
-
-            [left, right].forEach(box => {
-                const carousel = box.querySelector('.slider-carousel, .sliderCarousel');
-                if (carousel) {
-                    carousel.style.overflowX = 'auto';
-                    carousel.style.scrollBehavior = 'smooth';
-                }
-            });
-        }
-    };
-
-    arrangeSliders();
-
-    const observer = new MutationObserver(() => {
-        arrangeSliders();
-    });
-
-    observer.observe(document.querySelector('#profile') || document.body, { childList: true, subtree: true });
+    const parent = left.parentNode;
+    if (parent) {
+      parent.insertBefore(wrapper, right ? right.nextSibling : left.nextSibling);
+    }
+  }
 }
