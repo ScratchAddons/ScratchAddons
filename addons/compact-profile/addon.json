@@ -1,6 +1,6 @@
 {
-  "name": "Compact profile sliders",
-  "description": "Displays profile sliders (projects, favorites, followers, etc.) side by side instead of stacked vertically.",
+  "name": "Compact Scratch Profiles",
+  "description": "Groups profile sliders into pairs in the order: Shared, Favorites, Studios I follow, Studios I curate, Following, Followers.",
   "credits": [
     {
       "name": "VIGARPAST_777",
@@ -15,11 +15,10 @@
   ],
   "userstyles": [
     {
-      "url": "userstyles.css",
+      "url": "userstyle.css",
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
-  "settings": [],
-  "versionAdded": "1.0.0",
-  "tags": ["community", "profiles", "ui", "layout"]
+  "tags": ["profiles", "community", "featured"],
+  "versionAdded": "1.0.0"
 }
