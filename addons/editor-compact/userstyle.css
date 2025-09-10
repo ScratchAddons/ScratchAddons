@@ -475,6 +475,15 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 .sa-debugger-tabs li + li {
   margin-inline-start: 0.25rem;
 }
+.sa-debugger-footer {
+  padding: 0.25rem 0.5rem;
+}
+.sa-debugger-footer-buttons {
+  gap: 0.25rem;
+}
+.sa-debugger-footer-buttons > div {
+  padding: 0.25rem 0.5rem;
+}
 
 [class*="modal_header"],
 [class*="library_filter-bar"] {

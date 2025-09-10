@@ -286,7 +286,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 4px 8px;
+  padding: 0.4rem 0.7rem;
   color: white;
   cursor: pointer;
   gap: 4px;
