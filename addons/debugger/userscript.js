@@ -110,6 +110,12 @@ export default async function ({ addon, console, msg }) {
   const tabContentContainer = Object.assign(document.createElement("div"), {
     className: "sa-debugger-tab-content",
   });
+  const interfaceFooter = Object.assign(document.createElement("div"), {
+    className: "sa-debugger-footer",
+  });
+  const footerButtonContainer = Object.assign(document.createElement("div"), {
+    className: "sa-debugger-footer-buttons",
+  });
 
   let isInterfaceVisible = false;
   const setInterfaceVisible = (_isVisible) => {
@@ -159,7 +165,8 @@ export default async function ({ addon, console, msg }) {
   interfaceHeader.addEventListener("mousedown", handleStartDrag);
 
   interfaceHeader.append(tabListElement, buttonContainerElement);
-  interfaceContainer.append(interfaceHeader, tabContentContainer);
+  interfaceFooter.appendChild(footerButtonContainer);
+  interfaceContainer.append(interfaceHeader, tabContentContainer, interfaceFooter);
   document.body.append(interfaceContainer);
   moveInterface(0, 0); // necessary to initialize position if running scratch-gui locally
 
@@ -220,6 +227,7 @@ export default async function ({ addon, console, msg }) {
   const closeButton = createHeaderButton({
     text: msg("close"),
     icon: addon.self.dir + "/icons/close.svg",
+    description: msg("close"),
   });
   closeButton.element.addEventListener("click", () => setInterfaceVisible(false));
 
@@ -514,11 +522,13 @@ export default async function ({ addon, console, msg }) {
     tabContentContainer.appendChild(tab.content);
 
     removeAllChildren(buttonContainerElement);
-    buttonContainerElement.appendChild(unpauseButton.element);
-    for (const button of tab.buttons) {
-      buttonContainerElement.appendChild(button.element);
-    }
     buttonContainerElement.appendChild(closeButton.element);
+    
+    removeAllChildren(footerButtonContainer);
+    footerButtonContainer.appendChild(unpauseButton.element);
+    for (const button of tab.buttons) {
+      footerButtonContainer.appendChild(button.element);
+    }
 
     if (isInterfaceVisible) {
       activeTab.show();
