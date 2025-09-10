@@ -1,26 +1,30 @@
-export default async function ({ addon, console }) {
-  const sliders = Array.from(document.querySelectorAll(".box.slider-carousel-container"))
-    .filter(el => !el.dataset.compacted);
+export default async function({ addon }) {
+    const sliders = Array.from(document.querySelectorAll('.box.slider-carousel-container'));
 
-  for (let i = 0; i < sliders.length; i += 2) {
-    const left = sliders[i];
-    const right = sliders[i + 1];
-    if (!left) break;
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "sa-compact-wrapper";
-
-    left.dataset.compacted = "true";
-    wrapper.appendChild(left);
-
-    if (right) {
-      right.dataset.compacted = "true";
-      wrapper.appendChild(right);
+    function findSlider(keywords) {
+        return sliders.find(box => {
+            const title = box.querySelector('.box-head h4')?.textContent.toLowerCase() || '';
+            return keywords.some(k => title.includes(k));
+        }) || null;
     }
 
-    const parent = left.parentNode;
-    if (parent) {
-      parent.insertBefore(wrapper, right ? right.nextSibling : left.nextSibling);
+    const shared    = findSlider(["compartid", "shared", "partagé", "geteilt", "公開"]);
+    const favorites = findSlider(["favorit", "favorites", "favoris", "favoriten", "收藏"]);
+    const studiosFollowing = findSlider(["siguiendo estudios", "studios i follow", "studios que sigo", "suivis", "gefolgte studios", "追蹤工作室"]);
+    const studiosCurated   = findSlider(["estudios que curo", "curated studios", "ateliers gérés", "verwaltete studios", "管理的工作室"]);
+    const following = findSlider(["siguiendo", "following", "abonnements", "folgt", "關注"]);
+    const followers = findSlider(["seguidores", "followers", "abonnés", "folger", "粉絲"]);
+
+    function makeRow(left, right) {
+        if (!left) return;
+        const row = document.createElement('div');
+        row.className = 'tm-compact-row';
+        left.parentNode.insertBefore(row, left);
+        row.appendChild(left);
+        if (right) row.appendChild(right);
     }
-  }
+
+    makeRow(shared, favorites);
+    makeRow(studiosFollowing, studiosCurated);
+    makeRow(following, followers);
 }
