@@ -1,0 +1,11 @@
+.sa-compact-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sa-compact-wrapper .box.slider-carousel-container {
+  flex: 1;
+  max-width: 48%;
+}
