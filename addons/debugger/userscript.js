@@ -523,7 +523,7 @@ export default async function ({ addon, console, msg }) {
 
     removeAllChildren(buttonContainerElement);
     buttonContainerElement.appendChild(closeButton.element);
-    
+
     removeAllChildren(footerButtonContainer);
     footerButtonContainer.appendChild(unpauseButton.element);
     for (const button of tab.buttons) {
