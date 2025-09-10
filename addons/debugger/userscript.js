@@ -529,10 +529,10 @@ export default async function ({ addon, console, msg }) {
     for (const button of tab.buttons) {
       footerButtonContainer.appendChild(button.element);
     }
-    
+
     // Hide footer if all buttons are hidden
-    const allButtons = [unpauseButton.element, ...tab.buttons.map(b => b.element)];
-    const hasVisibleButtons = allButtons.some(button => {
+    const allButtons = [unpauseButton.element, ...tab.buttons.map((b) => b.element)];
+    const hasVisibleButtons = allButtons.some((button) => {
       const style = getComputedStyle(button);
       return style.display !== "none";
     });
