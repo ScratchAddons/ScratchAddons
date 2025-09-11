@@ -111,7 +111,7 @@
   gap: 10px;
 }
 
-.sa-debugger-footer-buttons > div {
+.sa-debugger-footer-buttons [class*="card_shrink-expand-button"] {
   background-color: #29beb8;
   border: 1px solid #3aa8a4;
   border-radius: 4px;
@@ -124,7 +124,7 @@
   gap: 4px;
 }
 
-.sa-debugger-footer-buttons > div:hover {
+.sa-debugger-footer-buttons [class*="card_shrink-expand-button"]:hover {
   background-color: #3aa8a4;
 }
 
@@ -136,6 +136,13 @@
 .sa-debugger-footer-buttons span {
   font-size: 12px;
   font-weight: 500;
+}
+
+.sa-debugger-unpause-container {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+  padding-right: 10px;
 }
 
 .sa-debugger-tab-content {

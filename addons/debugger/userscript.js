@@ -218,8 +218,13 @@ export default async function ({ addon, console, msg }) {
   });
   unpauseButton.element.classList.add("sa-debugger-unpause");
   unpauseButton.element.addEventListener("click", () => setPaused(false));
+  
+  const unpauseContainer = Object.assign(document.createElement("div"), {
+    className: "sa-debugger-unpause-container",
+  });
+  unpauseContainer.appendChild(unpauseButton.element);
   const updateUnpauseVisibility = (paused) => {
-    unpauseButton.element.style.display = paused ? "" : "none";
+    unpauseContainer.style.display = paused ? "" : "none";
     setTimeout(updateFooterVisibility, 0); // Have to wait for other modules to update their buttons
   };
   updateUnpauseVisibility(isPaused());
@@ -537,7 +542,7 @@ export default async function ({ addon, console, msg }) {
     buttonContainerElement.appendChild(closeButton.element);
 
     removeAllChildren(footerButtonContainer);
-    footerButtonContainer.appendChild(unpauseButton.element);
+    footerButtonContainer.appendChild(unpauseContainer);
     for (const button of tab.buttons) {
       footerButtonContainer.appendChild(button.element);
     }
