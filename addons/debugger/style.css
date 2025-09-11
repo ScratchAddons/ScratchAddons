@@ -66,6 +66,7 @@
   border-radius: 1rem;
   color: white;
   cursor: pointer;
+  font-weight: bold;
 }
 .sa-debugger-tabs li + li {
   margin-inline-start: 10px;
@@ -113,7 +114,7 @@
 
 .sa-debugger-footer-buttons [class*="card_shrink-expand-button"] {
   background-color: #29beb8;
-  border: 1px solid #3aa8a4;
+  font-weight: bold;
   border-radius: 4px;
   display: flex;
   flex-direction: row;
@@ -122,6 +123,7 @@
   color: white;
   cursor: pointer;
   gap: 4px;
+  font-size: 12px;
 }
 
 .sa-debugger-footer-buttons [class*="card_shrink-expand-button"]:hover {
@@ -131,11 +133,6 @@
 .sa-debugger-footer-buttons img {
   width: 16px;
   height: 16px;
-}
-
-.sa-debugger-footer-buttons span {
-  font-size: 12px;
-  font-weight: 500;
 }
 
 .sa-debugger-unpause-container {
