@@ -101,6 +101,7 @@
   padding: 8px 15px;
   width: 100%;
   box-sizing: border-box;
+  cursor: auto;
 }
 
 .sa-debugger-footer-buttons {
