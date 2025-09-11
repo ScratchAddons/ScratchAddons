@@ -130,7 +130,6 @@
 .sa-debugger-footer-buttons img {
   width: 16px;
   height: 16px;
-  filter: brightness(0) invert(1);
 }
 
 .sa-debugger-footer-buttons span {
