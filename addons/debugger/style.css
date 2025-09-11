@@ -35,6 +35,9 @@
   background-color: white;
   width: 565px;
   height: 26rem;
+  resize: auto;
+  min-width: 300px;
+  min-height: 200px;
 }
 
 .sa-debugger-interface [class*="card_header-buttons_"] {
@@ -55,7 +58,9 @@
   align-items: center;
   padding: 0 15px;
   font-size: 0.75rem;
+  overflow: hidden;
 }
+
 .sa-debugger-tabs li {
   margin: 0;
   display: flex;
