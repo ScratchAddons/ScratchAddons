@@ -485,6 +485,10 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
   padding: 0.25rem 0.5rem;
 }
 
+.sa-debugger-unpause-container:not(:last-child) {
+  padding-right: 0.25rem;
+}
+
 [class*="modal_header"],
 [class*="library_filter-bar"] {
   height: 2rem;
