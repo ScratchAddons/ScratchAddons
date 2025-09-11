@@ -155,18 +155,15 @@
 }
 
 .sa-debugger-unpause {
-  animation: saBorderPulse 1.2s ease-in-out infinite alternate;
-}
-.sa-debugger-unpause img {
-  animation: saBorderPulse 1.2s ease-in-out infinite alternate;
+  animation: saBorderPulse 1.5s ease-in-out infinite alternate;
 }
 
 @keyframes saBorderPulse {
   0% {
-    box-shadow: 0 0 4px 2px rgb(41 190 184 / 76%);
+    box-shadow: 0 0 6px 2px rgb(41 190 184 / 0%);
   }
   100% {
-    box-shadow: 0 0 10px 5px rgb(41 190 184 / 0%);
+    box-shadow: 0 0 6px 2px rgb(41 190 184 / 76%);
   }
 }
 
