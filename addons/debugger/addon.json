@@ -85,7 +85,7 @@
   "versionAdded": "1.16.0",
   "latestUpdate": {
     "version": "1.44.0",
-    "temporaryNotice": "The debugger modal is now resizable.",
+    "temporaryNotice": "The debugger modal is now resizable."
   },
   "libraries": ["chartjs", "scratch-gui", "scratch-vm"]
 }
