@@ -226,7 +226,6 @@ export default async function ({ addon, console, msg }) {
   onPauseChanged(updateUnpauseVisibility);
 
   const closeButton = createHeaderButton({
-    text: msg("close"),
     icon: addon.self.dir + "/icons/close.svg",
     description: msg("close"),
   });
