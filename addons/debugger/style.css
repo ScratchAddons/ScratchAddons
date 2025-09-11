@@ -94,17 +94,48 @@
   height: 20px;
 }
 
-.sa-debugger-unpause {
-  animation: saDebuggerUnpause 2s infinite alternate;
+.sa-debugger-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  padding: 8px 15px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-@keyframes saDebuggerUnpause {
-  0% {
-    background-color: rgba(0, 0, 0, 0.15);
-  }
-  100% {
-    background-color: rgba(0, 0, 0, 0);
-  }
+.sa-debugger-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.sa-debugger-footer-buttons > div {
+  background-color: #29beb8;
+  border: 1px solid #3aa8a4;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.4rem 0.7rem;
+  color: white;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.sa-debugger-footer-buttons > div:hover {
+  background-color: #3aa8a4;
+}
+
+.sa-debugger-footer-buttons img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.sa-debugger-footer-buttons span {
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .sa-debugger-tab-content {
@@ -261,56 +292,4 @@
 }
 .sa-debugger-block-preview[data-shape="stacked"] {
   border-radius: 3px;
-}
-
-.sa-debugger-footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.15);
-  display: flex;
-  justify-content: center;
-  padding: 8px 15px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.sa-debugger-footer-buttons {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-}
-
-.sa-debugger-footer-buttons > div {
-  background-color: #29beb8;
-  border: 1px solid #3aa8a4;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0.4rem 0.7rem;
-  color: white;
-  cursor: pointer;
-  gap: 4px;
-}
-
-.sa-debugger-footer-buttons > div:hover {
-  background-color: #3aa8a4;
-}
-
-.sa-debugger-footer-buttons img {
-  width: 16px;
-  height: 16px;
-  filter: brightness(0) invert(1);
-}
-
-.sa-debugger-footer-buttons span {
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.sa-debugger-header-buttons > div[title] span {
-  display: none;
-}
-
-.sa-debugger-footer-buttons .sa-debugger-unpause {
-  animation: none !important;
 }
