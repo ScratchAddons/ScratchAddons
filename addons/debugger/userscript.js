@@ -170,7 +170,7 @@ export default async function ({ addon, console, msg }) {
   document.body.append(interfaceContainer);
   moveInterface(0, 0); // necessary to initialize position if running scratch-gui locally
 
-  const createHeaderButton = ({ text, icon, description }) => {
+  const createIconButton = ({ text, icon, description }) => {
     const button = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("card_shrink-expand-button"),
       draggable: false,
@@ -212,7 +212,7 @@ export default async function ({ addon, console, msg }) {
     };
   };
 
-  const unpauseButton = createHeaderButton({
+  const unpauseButton = createIconButton({
     text: msg("unpause"),
     icon: addon.self.dir + "/icons/play.svg",
   });
@@ -230,7 +230,7 @@ export default async function ({ addon, console, msg }) {
   updateUnpauseVisibility(isPaused());
   onPauseChanged(updateUnpauseVisibility);
 
-  const closeButton = createHeaderButton({
+  const closeButton = createIconButton({
     icon: addon.self.dir + "/icons/close.svg",
     description: msg("close"),
   });
@@ -489,7 +489,7 @@ export default async function ({ addon, console, msg }) {
 
   const api = {
     debug: {
-      createHeaderButton,
+      createIconButton: createIconButton,
       createHeaderTab,
       setHasUnreadMessage,
       addAfterStepCallback,
