@@ -218,7 +218,7 @@ export default async function ({ addon, console, msg }) {
   });
   unpauseButton.element.classList.add("sa-debugger-unpause");
   unpauseButton.element.addEventListener("click", () => setPaused(false));
-  
+
   const unpauseContainer = Object.assign(document.createElement("div"), {
     className: "sa-debugger-unpause-container",
   });
