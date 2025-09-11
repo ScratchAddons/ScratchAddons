@@ -59,7 +59,7 @@
   align-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 7px 15px 7px 15px;
+  padding: 7px 15px;
   padding-right: 0px;
   font-size: 0.75rem;
 }
