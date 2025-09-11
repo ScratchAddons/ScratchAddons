@@ -230,11 +230,23 @@ export default async function ({ addon, console, msg }) {
   updateUnpauseVisibility(isPaused());
   onPauseChanged(updateUnpauseVisibility);
 
-  const closeButton = createIconButton({
-    icon: addon.self.dir + "/icons/close.svg",
-    description: msg("close"),
+  // Close button structure copied from addon-api/content-script/modal.js
+  const closeContainer = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("modal_header-item", "modal_header-item-close"),
   });
-  closeButton.element.addEventListener("click", () => setInterfaceVisible(false));
+  const closeButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("close-button_close-button", "close-button_large"),
+    title: msg("close"),
+  });
+  closeContainer.appendChild(closeButton);
+  closeButton.appendChild(
+    Object.assign(document.createElement("img"), {
+      className: addon.tab.scratchClass("close-button_close-icon"),
+      src: import.meta.url + "/../../../images/cs/close-s3.svg",
+      draggable: false,
+    })
+  );
+  closeButton.addEventListener("click", () => setInterfaceVisible(false));
 
   const originalStep = vm.runtime._step;
   const afterStepCallbacks = [];
@@ -539,7 +551,7 @@ export default async function ({ addon, console, msg }) {
     tabContentContainer.appendChild(tab.content);
 
     removeAllChildren(buttonContainerElement);
-    buttonContainerElement.appendChild(closeButton.element);
+    buttonContainerElement.appendChild(closeContainer);
 
     removeAllChildren(footerButtonContainer);
     footerButtonContainer.appendChild(unpauseContainer);
