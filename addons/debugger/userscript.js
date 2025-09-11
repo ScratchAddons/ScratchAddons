@@ -220,6 +220,7 @@ export default async function ({ addon, console, msg }) {
   unpauseButton.element.addEventListener("click", () => setPaused(false));
   const updateUnpauseVisibility = (paused) => {
     unpauseButton.element.style.display = paused ? "" : "none";
+    setTimeout(updateFooterVisibility, 0); // Have to wait for other modules to update their buttons
   };
   updateUnpauseVisibility(isPaused());
   onPauseChanged(updateUnpauseVisibility);
@@ -507,6 +508,18 @@ export default async function ({ addon, console, msg }) {
   }
   messagesLoggedBeforeLogsTabLoaded.length = 0;
 
+  function updateFooterVisibility() {
+    // Show footer only if buttons are visible
+    interfaceFooter.style.display = "none";
+    const allButtons = footerButtonContainer.children;
+    for (const button of allButtons) {
+      if (button.style.display !== "none") {
+        interfaceFooter.style.display = "";
+        return;
+      }
+    }
+  }
+
   let activeTab;
   const setActiveTab = (tab) => {
     if (tab === activeTab) return;
@@ -530,13 +543,7 @@ export default async function ({ addon, console, msg }) {
       footerButtonContainer.appendChild(button.element);
     }
 
-    // Hide footer if all buttons are hidden
-    const allButtons = [unpauseButton.element, ...tab.buttons.map((b) => b.element)];
-    const hasVisibleButtons = allButtons.some((button) => {
-      const style = getComputedStyle(button);
-      return style.display !== "none";
-    });
-    interfaceFooter.style.display = hasVisibleButtons ? "" : "none";
+    updateFooterVisibility();
 
     if (isInterfaceVisible) {
       activeTab.show();
