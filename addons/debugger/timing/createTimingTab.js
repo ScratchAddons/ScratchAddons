@@ -31,7 +31,9 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
         unpollutStepThread();
       }
       // Update button text
-      lineByLineButton.element.textContent = config.showLineByLine ? msg("timing-view-timers") : msg("timing-view-line-by-line");
+      lineByLineButton.element.textContent = config.showLineByLine
+        ? msg("timing-view-timers")
+        : msg("timing-view-line-by-line");
     });
 
     return lineByLineButton;
