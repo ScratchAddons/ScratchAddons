@@ -95,19 +95,10 @@
   filter: none;
 }
 
-.sa-debugger-header-buttons {
-  height: 100%;
-}
-
 .sa-debugger-header-buttons [class*="modal_header-item-close"] {
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 0px;
-}
-
-.sa-debugger-header-buttons img {
-  width: 20px;
-  height: 20px;
 }
 
 .sa-debugger-footer {
