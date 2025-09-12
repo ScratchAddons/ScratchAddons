@@ -20,7 +20,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   }
 
   function createToolsButton() {
-    const toolsButton = debug.createHeaderButton({
+    const toolsButton = debug.createIconButton({
       text: msg("tools"),
       icon: addon.self.dir + "/icons/tools.svg",
     });
@@ -33,7 +33,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   }
 
   function createExportButton() {
-    const exportButton = debug.createHeaderButton({
+    const exportButton = debug.createIconButton({
       text: msg("export"),
       icon: addon.self.dir + "/icons/download-white.svg",
     });
