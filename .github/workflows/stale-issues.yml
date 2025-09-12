@@ -15,7 +15,7 @@ jobs:
         with:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
-      - name: Execute Action
+      - name: Execute Stale Action
         uses: actions/stale@v9
         with:
           stale-issue-message: 'Ping! There has been no activity for 7 days.'
@@ -26,4 +26,15 @@ jobs:
           stale-issue-label: 'status: stale'
           stale-pr-label: 'status: stale'
           operations-per-run: 30
+          repo-token: ${{ steps.generate-token.outputs.token }}
+      - name: Execute Abandoned Action
+        uses: actions/stale@v9
+        with:
+          stale-pr-message: 'Ping! There has been no activity for 1 year.'
+          days-before-stale: -1
+          days-before-close: -1
+          days-before-pr-stale: 360
+          stale-pr-label: 'status: abandoned'
+          operations-per-run: 30
+          exempt-all-pr-assignees: true
           repo-token: ${{ steps.generate-token.outputs.token }}
