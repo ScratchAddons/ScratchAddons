@@ -158,7 +158,7 @@
     box-shadow: 0 0 6px 2px rgb(41 190 184 / 0%);
   }
   100% {
-    box-shadow: 0 0 6px 2px rgb(41 190 184 / 76%);
+    box-shadow: 0 0 0 4px rgb(41 190 184 / 35%);
   }
 }
 
