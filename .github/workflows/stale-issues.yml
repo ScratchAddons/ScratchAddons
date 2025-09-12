@@ -33,7 +33,7 @@ jobs:
           stale-pr-message: 'Ping! There has been no activity for 1 year.'
           days-before-stale: -1
           days-before-close: -1
-          days-before-pr-stale: 360
+          days-before-pr-stale: 365
           stale-pr-label: 'status: abandoned'
           operations-per-run: 30
           exempt-all-pr-assignees: true
