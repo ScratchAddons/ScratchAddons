@@ -96,9 +96,7 @@
 }
 
 .sa-debugger-header-buttons [class*="modal_header-item-close"] {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  padding-left: 0px;
+  padding: 0 12px 0 0;
 }
 
 .sa-debugger-footer {
