@@ -371,29 +371,6 @@
   color: #855cd6;
 }
 
-.sa-timing-toolbar {
-  background: #25aba5;
-  transform: translateY(-100%);
-  transition:
-    transform 0.15s ease-in-out,
-    visibility 0.15s ease-in-out,
-    margin 0.15s ease-in-out;
-  display: flex;
-  justify-content: space-evenly;
-  padding: 10px 0;
-  visibility: hidden;
-  color: white;
-  border-radius: 0 0 0.75rem 0.75rem;
-  margin-bottom: -51px;
-  z-index: 1000;
-}
-
-.sa-timing-toolbar.show {
-  transform: translateY(0%);
-  visibility: visible;
-  border: 1px solid hsla(0, 0%, 0%, 0.15);
-  margin-bottom: 0px;
-}
 
 .sa-timing-disabled {
   opacity: 0.5;
