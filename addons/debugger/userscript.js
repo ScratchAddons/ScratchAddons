@@ -110,6 +110,12 @@ export default async function ({ addon, console, msg }) {
   const tabContentContainer = Object.assign(document.createElement("div"), {
     className: "sa-debugger-tab-content",
   });
+  const interfaceFooter = Object.assign(document.createElement("div"), {
+    className: "sa-debugger-footer",
+  });
+  const footerButtonContainer = Object.assign(document.createElement("div"), {
+    className: "sa-debugger-footer-buttons",
+  });
 
   let isInterfaceVisible = false;
   const setInterfaceVisible = (_isVisible) => {
@@ -159,11 +165,12 @@ export default async function ({ addon, console, msg }) {
   interfaceHeader.addEventListener("mousedown", handleStartDrag);
 
   interfaceHeader.append(tabListElement, buttonContainerElement);
-  interfaceContainer.append(interfaceHeader, tabContentContainer);
+  interfaceFooter.appendChild(footerButtonContainer);
+  interfaceContainer.append(interfaceHeader, tabContentContainer, interfaceFooter);
   document.body.append(interfaceContainer);
   moveInterface(0, 0); // necessary to initialize position if running scratch-gui locally
 
-  const createHeaderButton = ({ text, icon, description }) => {
+  const createIconButton = ({ text, icon, description }) => {
     const button = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("card_shrink-expand-button"),
       draggable: false,
@@ -205,23 +212,41 @@ export default async function ({ addon, console, msg }) {
     };
   };
 
-  const unpauseButton = createHeaderButton({
+  const unpauseButton = createIconButton({
     text: msg("unpause"),
     icon: addon.self.dir + "/icons/play.svg",
   });
   unpauseButton.element.classList.add("sa-debugger-unpause");
   unpauseButton.element.addEventListener("click", () => setPaused(false));
+
+  const unpauseContainer = Object.assign(document.createElement("div"), {
+    className: "sa-debugger-unpause-container",
+  });
+  unpauseContainer.appendChild(unpauseButton.element);
   const updateUnpauseVisibility = (paused) => {
-    unpauseButton.element.style.display = paused ? "" : "none";
+    unpauseContainer.style.display = paused ? "" : "none";
+    setTimeout(updateFooterVisibility, 0); // Have to wait for other modules to update their buttons
   };
   updateUnpauseVisibility(isPaused());
   onPauseChanged(updateUnpauseVisibility);
 
-  const closeButton = createHeaderButton({
-    text: msg("close"),
-    icon: addon.self.dir + "/icons/close.svg",
+  // Close button structure copied from addon-api/content-script/modal.js
+  const closeContainer = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("modal_header-item", "modal_header-item-close"),
   });
-  closeButton.element.addEventListener("click", () => setInterfaceVisible(false));
+  const closeButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("close-button_close-button", "close-button_large"),
+    title: msg("close"),
+  });
+  closeContainer.appendChild(closeButton);
+  closeButton.appendChild(
+    Object.assign(document.createElement("img"), {
+      className: addon.tab.scratchClass("close-button_close-icon"),
+      src: import.meta.url + "/../../../images/cs/close-s3.svg",
+      draggable: false,
+    })
+  );
+  closeButton.addEventListener("click", () => setInterfaceVisible(false));
 
   const originalStep = vm.runtime._step;
   const afterStepCallbacks = [];
@@ -476,7 +501,7 @@ export default async function ({ addon, console, msg }) {
 
   const api = {
     debug: {
-      createHeaderButton,
+      createIconButton: createIconButton,
       createHeaderTab,
       setHasUnreadMessage,
       addAfterStepCallback,
@@ -499,6 +524,18 @@ export default async function ({ addon, console, msg }) {
   }
   messagesLoggedBeforeLogsTabLoaded.length = 0;
 
+  function updateFooterVisibility() {
+    // Show footer only if buttons are visible
+    interfaceFooter.style.display = "none";
+    const allButtons = footerButtonContainer.children;
+    for (const button of allButtons) {
+      if (button.style.display !== "none") {
+        interfaceFooter.style.display = "";
+        return;
+      }
+    }
+  }
+
   let activeTab;
   const setActiveTab = (tab) => {
     if (tab === activeTab) return;
@@ -514,11 +551,15 @@ export default async function ({ addon, console, msg }) {
     tabContentContainer.appendChild(tab.content);
 
     removeAllChildren(buttonContainerElement);
-    buttonContainerElement.appendChild(unpauseButton.element);
+    buttonContainerElement.appendChild(closeContainer);
+
+    removeAllChildren(footerButtonContainer);
+    footerButtonContainer.appendChild(unpauseContainer);
     for (const button of tab.buttons) {
-      buttonContainerElement.appendChild(button.element);
+      footerButtonContainer.appendChild(button.element);
     }
-    buttonContainerElement.appendChild(closeButton.element);
+
+    updateFooterVisibility();
 
     if (isInterfaceVisible) {
       activeTab.show();
