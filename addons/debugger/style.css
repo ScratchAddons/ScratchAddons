@@ -59,7 +59,7 @@
   align-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 7px 15px;
+  padding: 8px 15px;
   padding-right: 0px;
   font-size: 0.75rem;
 }
@@ -96,7 +96,7 @@
 }
 
 .sa-debugger-header-buttons [class*="modal_header-item-close"] {
-  padding: 0 12px 0 0;
+  padding: 0 13px 0 0;
 }
 
 .sa-debugger-footer {
