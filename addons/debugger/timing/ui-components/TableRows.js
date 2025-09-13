@@ -92,12 +92,12 @@ class TableRows extends LogView {
 
   getTotalTime(showLineByLine = false) {
     // First check if we have any line-by-line data when profiling is enabled
-    const hasLineByLineData = showLineByLine && this.rows.some(row => row.label === row.blockId);
-    
+    const hasLineByLineData = showLineByLine && this.rows.some((row) => row.label === row.blockId);
+
     return Object.values(this.rows).reduce((total, row) => {
       const isLineByLine = row.label === row.blockId;
       const isTimer = row.label !== row.blockId;
-      
+
       // If profiling is enabled and we have line-by-line data, only include line-by-line data
       // If profiling is enabled but no line-by-line data exists, fall back to timer data
       // If profiling is disabled, only include timer data
