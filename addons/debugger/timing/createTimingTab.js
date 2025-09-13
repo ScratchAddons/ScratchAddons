@@ -199,6 +199,17 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     }
   });
 
+  // Handle sprite switching to reapply heatmap
+  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+    if (detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
+      if (config.showHeatmap) {
+        setTimeout(() => {
+          heatmapManager.showHeatmapFn(1.0);
+        }, 10);
+      }
+    }
+  });
+
   addon.settings.addEventListener("change", function () {
     updatePercentageHeader();
   });
