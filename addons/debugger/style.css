@@ -450,9 +450,9 @@
   pointer-events: auto;
 }
 
-/* Heatmap toggle button specific styles */
+/* Shared checkbox styles for timing controls */
 
-.sa-timing-heatmap-checkbox {
+.sa-timing-checkbox {
   margin-left: 4px;
   cursor: pointer;
   transform: scale(1.2);
@@ -465,15 +465,15 @@
   border-radius: 2px;
 }
 
-.sa-timing-heatmap-checkbox:checked {
+.sa-timing-checkbox:checked {
   background-color: white;
   position: relative;
 }
 
-.sa-timing-heatmap-checkbox:checked::after {
+.sa-timing-checkbox:checked::after {
   content: "";
   position: absolute;
-  left: 3.7px;
+  left: 3.75px;
   top: 1px;
   width: 3px;
   height: 6px;

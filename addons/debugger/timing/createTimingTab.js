@@ -26,7 +26,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     // Add checkbox to the right side of the button
     const checkbox = Object.assign(document.createElement("input"), {
       type: "checkbox",
-      className: "sa-timing-heatmap-checkbox",
+      className: "sa-timing-checkbox",
     });
 
     // Add specific class
@@ -66,7 +66,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     // Add checkbox to the right side of the button
     const checkbox = Object.assign(document.createElement("input"), {
       type: "checkbox",
-      className: "sa-timing-heatmap-checkbox",
+      className: "sa-timing-checkbox",
     });
 
     // Add specific class to disable hover effect
