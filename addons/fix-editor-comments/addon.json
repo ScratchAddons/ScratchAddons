@@ -38,7 +38,7 @@
     {
       "name": "Fix dragging blocks with comments",
       "id": "fix-drag",
-      "description": "Fixes a bug where if you move a block with a comment attached to it, the comment will appear to move with it initially, but then jump back to where it was before once you switch sprites or reload the project.",
+      "description": "Fixes a bug where if you move a block with a comment attached to it, the comment will go back to where it was before once you switch sprites or reload the project.",
       "type": "boolean",
       "default": true
     },
@@ -59,7 +59,7 @@
     {
       "name": "Always spawn block comments next to block",
       "id": "leash",
-      "description": "Normally, if you add a comment attached to a block and there are any blocks below it in the same script that are longer, the comment will be placed to the right of those blocks and potentially end up off-screen, even if it has room to be placed next to the block you're attaching it to. With this setting, comments will always be inserted right next to the block you're attaching it to.",
+      "description": "When attaching a comment to a block, makes them appear next to that block instead of after the longest block in the script, which can potentially be offscreen.",
       "type": "boolean",
       "default": true
     },
