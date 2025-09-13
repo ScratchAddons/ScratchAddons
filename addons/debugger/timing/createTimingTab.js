@@ -112,6 +112,26 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     return exportButton;
   }
 
+  function createClearButton() {
+    const clearButton = debug.createIconButton({
+      text: msg("clear"),
+      icon: addon.self.dir + "/icons/delete.svg",
+    });
+
+    clearButton.element.addEventListener("click", () => {
+      // Clear both timers and profiling (line-by-line) data
+      timingManager.clearTimers();
+      // Update the table to show empty state
+      tableRows.updateLogRows(timingManager.getTimers(), config.showLineByLine);
+      // Hide heatmap if it's currently shown
+      if (config.showHeatmap) {
+        heatmapManager.hideHeatmapFn();
+      }
+    });
+
+    return clearButton;
+  }
+
   function updatePercentageHeader() {
     const value = addon.settings.get("show_ratio_time");
     config.showRatioTime = value;
@@ -141,6 +161,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   const content = createContent();
   const exportButton = createExportButton();
+  const clearButton = createClearButton();
   const lineByLineButton = createLineByLineButton();
   const heatmapButton = createHeatmapButton();
 
@@ -195,7 +216,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   return {
     tab,
     content,
-    buttons: [exportButton, lineByLineButton, heatmapButton],
+    buttons: [exportButton, clearButton, lineByLineButton, heatmapButton],
     show: () => tableRows.show(),
     hide: () => tableRows.hide(),
     startTimer: timingManager.startTimer.bind(timingManager),
