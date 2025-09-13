@@ -130,6 +130,21 @@ export default async function ({ addon, console }) {
     }
   };
 
+  // Overriding the getter is the only way to change the minimum width of inputs
+  const FieldInput = Object.getPrototypeOf(Blockly.FieldTextInput.prototype).constructor;
+  const oldSizeProperty = Object.getOwnPropertyDescriptor(FieldInput.prototype, "size_");
+  Object.defineProperty(FieldInput.prototype, "size_", {
+    ...oldSizeProperty,
+    get() {
+      const size = this.size;
+      if (addon.self.disabled) return size;
+      const multiplier = addon.settings.get("paddingSize") / 100;
+      const minWidth = 14 * multiplier;
+      if (size.width < minWidth) size.width = minWidth;
+      return size;
+    },
+  });
+
   const ScratchCommentIcon = Blockly.registry.getClass(
     Blockly.registry.Type.ICON,
     Blockly.icons.IconType.COMMENT.toString()
