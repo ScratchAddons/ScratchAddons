@@ -50,10 +50,10 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       type: "checkbox",
       className: "sa-timing-heatmap-checkbox",
     });
-    
+
     // Add specific class to disable hover effect
     heatmapButton.element.classList.add("sa-timing-heatmap-toggle");
-    
+
     // Append checkbox to button
     heatmapButton.element.appendChild(checkbox);
 
@@ -62,7 +62,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       // Don't double-toggle if clicking directly on checkbox
       if (e.target !== checkbox) {
         checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change'));
+        checkbox.dispatchEvent(new Event("change"));
       }
     });
 
