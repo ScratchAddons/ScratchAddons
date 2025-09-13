@@ -41,19 +41,39 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   function createHeatmapButton() {
     const heatmapButton = debug.createIconButton({
-      text: msg("timing-show-heatmap"),
-      icon: addon.self.dir + "/icons/tools.svg",
+      text: msg("timing-heatmap"),
+      icon: addon.self.dir + "/icons/flame.svg",
     });
 
-    heatmapButton.element.addEventListener("click", () => {
-      config.showHeatmap = !config.showHeatmap;
+    // Add checkbox to the right side of the button
+    const checkbox = Object.assign(document.createElement("input"), {
+      type: "checkbox",
+      className: "sa-timing-heatmap-checkbox",
+    });
+    
+    // Add specific class to disable hover effect
+    heatmapButton.element.classList.add("sa-timing-heatmap-toggle");
+    
+    // Append checkbox to button
+    heatmapButton.element.appendChild(checkbox);
+
+    // Make entire button clickable to toggle checkbox
+    heatmapButton.element.addEventListener("click", (e) => {
+      // Don't double-toggle if clicking directly on checkbox
+      if (e.target !== checkbox) {
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
+      }
+    });
+
+    // Handle checkbox change
+    checkbox.addEventListener("change", () => {
+      config.showHeatmap = checkbox.checked;
       if (config.showHeatmap) {
         heatmapManager.showHeatmapFn(1.0);
       } else {
         heatmapManager.hideHeatmapFn();
       }
-      // Update button text
-      heatmapButton.element.textContent = config.showHeatmap ? msg("timing-hide-heatmap") : msg("timing-show-heatmap");
     });
 
     return heatmapButton;
