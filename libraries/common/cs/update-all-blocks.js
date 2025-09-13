@@ -64,15 +64,17 @@ export async function updateAllBlocks(
   }
 
   blockly.Events.enable();
-  
+
   // Emit event to notify that blocks have been updated
-  updateAllBlocksEvents.dispatchEvent(new CustomEvent('blocksUpdated', {
-    detail: { 
-      updateMainWorkspace,
-      updateFlyout, 
-      updateCategories
-    }
-  }));
+  updateAllBlocksEvents.dispatchEvent(
+    new CustomEvent("blocksUpdated", {
+      detail: {
+        updateMainWorkspace,
+        updateFlyout,
+        updateCategories,
+      },
+    })
+  );
 }
 
 // Export the event emitter for external subscriptions

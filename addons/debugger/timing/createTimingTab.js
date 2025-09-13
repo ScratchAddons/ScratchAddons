@@ -191,7 +191,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   onPauseChanged(handleSingleStepChange);
 
   // Listen for blocks being updated/recreated and reapply heatmap if needed
-  updateAllBlocksEvents.addEventListener('blocksUpdated', () => {
+  updateAllBlocksEvents.addEventListener("blocksUpdated", () => {
     if (config.showHeatmap) {
       setTimeout(() => {
         heatmapManager.showHeatmapFn(1.0);

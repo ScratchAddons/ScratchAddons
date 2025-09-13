@@ -11,16 +11,16 @@ function recursiveFillBlock(block, fill = null) {
   block.svgPath_.style.fill = fillColor;
 
   // Set text color for blocks with heatmap applied
-  const textElements = block.svgGroup_.querySelectorAll('text');
+  const textElements = block.svgGroup_.querySelectorAll("text");
   if (fill !== null) {
     // Heatmap is being applied - force white text
-    textElements.forEach(textEl => {
-      textEl.style.setProperty('fill', 'white', 'important');
+    textElements.forEach((textEl) => {
+      textEl.style.setProperty("fill", "white", "important");
     });
   } else {
     // Heatmap is being removed - remove our inline styles
-    textElements.forEach(textEl => {
-      textEl.style.removeProperty('fill');
+    textElements.forEach((textEl) => {
+      textEl.style.removeProperty("fill");
     });
   }
 
