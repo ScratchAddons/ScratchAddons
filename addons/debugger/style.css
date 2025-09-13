@@ -367,6 +367,7 @@
 
 .sa-timing-header span {
   cursor: pointer;
+  user-select: none;
 }
 
 .sa-timing-header span.active-header {

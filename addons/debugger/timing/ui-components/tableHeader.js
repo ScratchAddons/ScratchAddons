@@ -37,7 +37,7 @@ export function createTableHeader(config, msg) {
   tableHeader.querySelectorAll("span, a").forEach((headerElement) => {
     headerElement.style.cursor = "pointer";
     headerElement.addEventListener("click", () => {
-      const timerKey = headerClassKeyMapping[headerElement.className];
+      const timerKey = headerClassKeyMapping[headerElement.classList[0]];
       if (config.sortHeader === timerKey) {
         config.sortDirection = config.sortDirection === "descending" ? "ascending" : "descending";
       } else {
