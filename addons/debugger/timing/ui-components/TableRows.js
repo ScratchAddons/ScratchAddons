@@ -19,8 +19,18 @@ class TableRows extends LogView {
   }
 
   getRowValues(timer) {
+    let displayLabel = timer.label;
+    
+    // For line-by-line timers (where label === blockId), use the human-readable block text
+    if (timer.label === timer.blockId && timer.targetId !== null && timer.blockId !== null) {
+      const preview = this.debug.createBlockPreview(timer.targetId, timer.blockId);
+      if (preview !== null) {
+        displayLabel = `${timer.idx}: ${preview.textContent}`;
+      }
+    }
+    
     const rowValues = {
-      label: timer.label,
+      label: displayLabel,
       totalTime: timer.totalTime.toFixed(1),
       avgTime: (timer.totalTime / timer.callCount).toFixed(2),
       percent: this.config.showRatioTime
