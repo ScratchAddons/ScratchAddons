@@ -65,12 +65,15 @@ class TableRows extends LogView {
 
   updateLogRows(timers, showLineByLine) {
     this.rows = Object.entries(timers).map(([label, value]) => ({ label, ...value }));
-    this.rows = this.rows.filter((timer) =>
-      showLineByLine ? timer.label === timer.blockId : timer.label !== timer.blockId
-    );
+    // Always show timers, optionally add line-by-line data
+    this.rows = this.rows.filter((timer) => {
+      const isLineByLine = timer.label === timer.blockId;
+      const isTimer = timer.label !== timer.blockId;
+      return isTimer || (showLineByLine && isLineByLine);
+    });
     this.tableHeader.style.display = this.rows.length === 0 ? "none" : "flex";
     if (this.sortHeader !== "null") this.sortRows();
-    this.totalTimerTime = this.getTotalTime();
+    this.totalTimerTime = this.getTotalTime(showLineByLine);
     this.minTimerTime = timers["control"]
       ? timers["control"].totalTime
       : Math.min(...this.rows.map((t) => t.totalTime));
@@ -87,8 +90,24 @@ class TableRows extends LogView {
     this.rows.sort((a, b) => (sortDirection === "ascending" ? 1 : -1) * (a[sortHeader] - b[sortHeader]));
   }
 
-  getTotalTime() {
-    return Object.values(this.rows).reduce((total, row) => total + row.totalTime, 0);
+  getTotalTime(showLineByLine = false) {
+    // First check if we have any line-by-line data when profiling is enabled
+    const hasLineByLineData = showLineByLine && this.rows.some(row => row.label === row.blockId);
+    
+    return Object.values(this.rows).reduce((total, row) => {
+      const isLineByLine = row.label === row.blockId;
+      const isTimer = row.label !== row.blockId;
+      
+      // If profiling is enabled and we have line-by-line data, only include line-by-line data
+      // If profiling is enabled but no line-by-line data exists, fall back to timer data
+      // If profiling is disabled, only include timer data
+      if (hasLineByLineData && isLineByLine) {
+        return total + row.totalTime;
+      } else if ((!showLineByLine || !hasLineByLineData) && isTimer) {
+        return total + row.totalTime;
+      }
+      return total;
+    }, 0);
   }
 }
 

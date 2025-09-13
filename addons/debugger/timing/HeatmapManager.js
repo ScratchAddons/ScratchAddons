@@ -26,13 +26,14 @@ function recursiveFillBlock(block, fill = null) {
 }
 
 class HeatmapManager {
-  constructor(getWorkspace, tableRows) {
+  constructor(getWorkspace, tableRows, config) {
     this.getWorkspace = getWorkspace;
     this.tableRows = tableRows;
+    this.config = config;
   }
 
   showHeatmapFn(heatmapMax) {
-    const totalTimerTime = this.tableRows.getTotalTime();
+    const totalTimerTime = this.tableRows.getTotalTime(this.config.showLineByLine);
     const timerPercentTimes = this.tableRows.rows.map((t) => t.totalTime / totalTimerTime);
     const min = Math.min(...timerPercentTimes);
     const max = Math.max(...timerPercentTimes) * heatmapMax;

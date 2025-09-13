@@ -19,21 +19,39 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   function createLineByLineButton() {
     const lineByLineButton = debug.createIconButton({
-      text: msg("timing-view-line-by-line"),
-      icon: addon.self.dir + "/icons/tools2.svg",
+      text: msg("timing-profiling"),
+      icon: addon.self.dir + "/icons/speedometer.svg",
     });
 
-    lineByLineButton.element.addEventListener("click", () => {
-      config.showLineByLine = !config.showLineByLine;
+    // Add checkbox to the right side of the button
+    const checkbox = Object.assign(document.createElement("input"), {
+      type: "checkbox",
+      className: "sa-timing-heatmap-checkbox",
+    });
+
+    // Add specific class
+    lineByLineButton.element.classList.add("sa-timing-profiling-toggle");
+
+    // Append checkbox to button
+    lineByLineButton.element.appendChild(checkbox);
+
+    // Make entire button clickable to toggle checkbox
+    lineByLineButton.element.addEventListener("click", (e) => {
+      // Don't double-toggle if clicking directly on checkbox
+      if (e.target !== checkbox) {
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event("change"));
+      }
+    });
+
+    // Handle checkbox change
+    checkbox.addEventListener("change", () => {
+      config.showLineByLine = checkbox.checked;
       if (config.showLineByLine && !config.isStepThreadPolluted) {
         polluteStepThread();
       } else if (!config.showLineByLine && config.isStepThreadPolluted) {
         unpollutStepThread();
       }
-      // Update button text
-      lineByLineButton.element.textContent = config.showLineByLine
-        ? msg("timing-view-timers")
-        : msg("timing-view-line-by-line");
     });
 
     return lineByLineButton;
@@ -118,7 +136,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   const unpollutStepThread = () => profiler.unpollutStepThread();
 
   const timingManager = new TimingManager(addon.settings, config, profiler);
-  const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows);
+  const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows, config);
   profiler.tm = timingManager;
 
   const content = createContent();
