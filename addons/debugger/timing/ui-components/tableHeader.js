@@ -4,15 +4,26 @@ export function createTableHeader(config, msg) {
     style: "display:none",
   });
 
-  tableHeader.innerHTML = `
-      <span class = 'timing-label'>${msg("timing-label")}</span>
-      <span class = 'timing-total-time'>${msg("timing-total-time")}</span>
-      <span class = 'timing-average-time'>${msg("timing-average-time")}</span>
-      <span class = 'timing-percent-time'>${msg("timing-percent-time")}</span>
-      <span class = 'timing-call-count'>${msg("timing-call-count")}</span>
-    `;
+  // Create header spans dynamically
+  const headerConfigs = [
+    { className: "timing-label", messageKey: "timing-label" },
+    { className: "timing-total-time", messageKey: "timing-total-time" },
+    { className: "timing-average-time", messageKey: "timing-average-time" },
+    { className: "timing-percent-time", messageKey: "timing-percent-time" },
+    { className: "timing-call-count", messageKey: "timing-call-count" },
+  ];
 
-  const percentHeader = tableHeader.querySelector(".timing-percent-time");
+  let percentHeader;
+  headerConfigs.forEach(({ className, messageKey }) => {
+    const span = document.createElement("span");
+    span.className = className;
+    span.textContent = msg(messageKey);
+    tableHeader.appendChild(span);
+    
+    if (className === "timing-percent-time") {
+      percentHeader = span;
+    }
+  });
 
   // Mapping from table header textContent to timer keys
   const headerClassKeyMapping = {
