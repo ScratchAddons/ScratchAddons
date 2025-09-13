@@ -2,6 +2,7 @@ import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js"
 
 export default async function ({ addon, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
+  if (BlocklyInstance.registry) return;
 
   (function (Blockly) {
     const BlockSvg = BlocklyInstance.BlockSvg;
