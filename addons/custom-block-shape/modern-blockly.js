@@ -31,6 +31,7 @@ export default async function ({ addon, console }) {
     constants.BOTTOM_ROW_MIN_HEIGHT = GRID_UNIT * multiplier;
     constants.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT = 6 * GRID_UNIT * multiplier;
 
+    constants.EMPTY_STATEMENT_INPUT_HEIGHT = 6 * GRID_UNIT * multiplier;
     constants.STATEMENT_BOTTOM_SPACER = -constants.NOTCH_HEIGHT;
     constants.STATEMENT_INPUT_SPACER_MIN_WIDTH = 40 * GRID_UNIT * multiplier;
 
