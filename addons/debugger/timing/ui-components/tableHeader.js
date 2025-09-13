@@ -19,7 +19,7 @@ export function createTableHeader(config, msg) {
     span.className = className;
     span.textContent = msg(messageKey);
     tableHeader.appendChild(span);
-    
+
     if (className === "timing-percent-time") {
       percentHeader = span;
     }
