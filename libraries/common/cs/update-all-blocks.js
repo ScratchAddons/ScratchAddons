@@ -1,3 +1,6 @@
+// Event emitter for updateAllBlocks
+const updateAllBlocksEvents = new EventTarget();
+
 export async function updateAllBlocks(
   tab,
   { updateMainWorkspace = true, updateFlyout = true, updateCategories = false } = {}
@@ -61,4 +64,16 @@ export async function updateAllBlocks(
   }
 
   blockly.Events.enable();
+  
+  // Emit event to notify that blocks have been updated
+  updateAllBlocksEvents.dispatchEvent(new CustomEvent('blocksUpdated', {
+    detail: { 
+      updateMainWorkspace,
+      updateFlyout, 
+      updateCategories
+    }
+  }));
 }
+
+// Export the event emitter for external subscriptions
+export { updateAllBlocksEvents };

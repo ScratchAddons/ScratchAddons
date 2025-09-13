@@ -3,6 +3,7 @@ import HeatmapManager from "./HeatmapManager.js";
 import Profiler from "./Profiler.js";
 import { createTableHeader } from "./ui-components/tableHeader.js";
 import TableRows from "./ui-components/TableRows.js"; // Importing the extended LogView class
+import { updateAllBlocksEvents } from "../../../libraries/common/cs/update-all-blocks.js";
 import downloadBlob from "../../../libraries/common/cs/download-blob.js";
 import { isPaused, onPauseChanged, getRunningThread } from "../module.js";
 
@@ -189,16 +190,12 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   handleSingleStepChange(isPaused());
   onPauseChanged(handleSingleStepChange);
 
-  // Handle sprite switching to reapply heatmap
-  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
-    if (detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
-      // When sprite switches and heatmap is enabled, reapply the heatmap
-      if (config.showHeatmap) {
-        // Use setTimeout to ensure blocks are recreated before applying heatmap
-        setTimeout(() => {
-          heatmapManager.showHeatmapFn(1.0);
-        }, 10);
-      }
+  // Listen for blocks being updated/recreated and reapply heatmap if needed
+  updateAllBlocksEvents.addEventListener('blocksUpdated', () => {
+    if (config.showHeatmap) {
+      setTimeout(() => {
+        heatmapManager.showHeatmapFn(1.0);
+      }, 10);
     }
   });
 
