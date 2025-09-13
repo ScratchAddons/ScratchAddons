@@ -317,7 +317,8 @@
 .sa-debugger-block-preview[data-shape="round"] {
   border-radius: 100px;
 }
-.sa-debugger-block-preview[data-shape="stacked"] {
+.sa-debugger-block-preview[data-shape="stacked"],
+.sa-debugger-block-preview[data-shape="undefined"] {
   border-radius: 3px;
 }
 
