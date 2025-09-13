@@ -20,7 +20,7 @@ class TableRows extends LogView {
 
   getRowValues(timer) {
     let displayLabel = timer.label;
-    
+
     // For line-by-line timers (where label === blockId), use the human-readable block text
     if (timer.label === timer.blockId && timer.targetId !== null && timer.blockId !== null) {
       const preview = this.debug.createBlockPreview(timer.targetId, timer.blockId);
@@ -28,7 +28,7 @@ class TableRows extends LogView {
         displayLabel = `${timer.idx}: ${preview.textContent}`;
       }
     }
-    
+
     const rowValues = {
       label: displayLabel,
       totalTime: timer.totalTime.toFixed(1),
