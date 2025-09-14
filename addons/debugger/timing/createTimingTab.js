@@ -106,7 +106,6 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     heatmapButton.element.appendChild(sliderContainer);
 
     // Slider state
-    let currentHeatmapMax = 1.0;
     let isDragging = false;
     let hasInteractedWithSlider = false;
 
@@ -117,18 +116,18 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     };
 
     // Initialize slider position
-    updateSliderPosition(currentHeatmapMax);
+    updateSliderPosition(config.currentHeatmapMax);
 
     // Slider interaction handlers
     const handleSliderInteraction = (e) => {
       e.stopPropagation(); // Prevent checkbox toggle
       const rect = sliderTrack.getBoundingClientRect();
       const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-      currentHeatmapMax = x / rect.width;
-      updateSliderPosition(currentHeatmapMax);
+      config.currentHeatmapMax = x / rect.width;
+      updateSliderPosition(config.currentHeatmapMax);
 
       if (config.showHeatmap) {
-        heatmapManager.showHeatmapFn(currentHeatmapMax);
+        heatmapManager.showHeatmapFn(config.currentHeatmapMax);
       }
     };
 
@@ -172,7 +171,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       sliderContainer.style.display = checkbox.checked ? "block" : "none";
 
       if (config.showHeatmap) {
-        heatmapManager.showHeatmapFn(currentHeatmapMax);
+        heatmapManager.showHeatmapFn(config.currentHeatmapMax);
       } else {
         heatmapManager.hideHeatmapFn();
       }
@@ -212,7 +211,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
       if (config.showHeatmap) {
         heatmapManager.hideHeatmapFn();
-        setTimeout(() => config.showHeatmap && heatmapManager.startRealtimeUpdates(1.0), 10);
+        setTimeout(() => config.showHeatmap && heatmapManager.startRealtimeUpdates(config.currentHeatmapMax), 10);
       }
     });
 
@@ -233,6 +232,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     sortHeader: null,
     sortDirection: "descending",
     isStepThreadPolluted: false,
+    currentHeatmapMax: 1.0, // Store heatmap max value for reapply operations
   };
   const { tableHeader, percentHeader } = createTableHeader(config, msg);
   const tableRows = new TableRows(config, debug, msg, tableHeader);
@@ -286,7 +286,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   updateAllBlocksEvents.addEventListener("blocksUpdated", () => {
     if (config.showHeatmap) {
       setTimeout(() => {
-        heatmapManager.showHeatmapFn(1.0);
+        heatmapManager.showHeatmapFn(config.currentHeatmapMax);
       }, 10);
     }
   });
@@ -296,7 +296,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     if (detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
       if (config.showHeatmap) {
         setTimeout(() => {
-          heatmapManager.showHeatmapFn(1.0);
+          heatmapManager.showHeatmapFn(config.currentHeatmapMax);
         }, 10);
       }
     }
@@ -321,7 +321,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       tableRows.show();
       // Restart real-time heatmap updates when tab is shown
       if (config.showHeatmap) {
-        heatmapManager.startRealtimeUpdates(1.0);
+        heatmapManager.startRealtimeUpdates(config.currentHeatmapMax);
       }
     },
     hide: () => {
