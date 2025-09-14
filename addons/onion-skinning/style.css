@@ -12,6 +12,18 @@
   background-color: #855cd6;
 }
 
+/* Dropdown arrow */
+.sa-onion-button + .sa-onion-button .sa-onion-image {
+  width: 8px;
+  height: auto;
+  margin-top: 5px;
+  scale: 1 -1;
+}
+.sa-onion-button[data-enabled="false"] + .sa-onion-button:not([data-enabled="true"]) {
+  opacity: 0.33;
+  pointer-events: none;
+}
+
 .sa-onion-group {
   position: relative;
   flex-direction: row;
