@@ -485,7 +485,7 @@ export default async function ({ addon, console, msg }) {
         try {
           blockConstructor.init.call(fakeBlock);
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
       }
       if (!jsonData) {
