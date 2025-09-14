@@ -32,6 +32,15 @@ export default async function ({ addon, console }) {
     }
   });
 
+  // flag-menu addon
+  (async () => {
+    const menuItem = await addon.tab.waitForElement("#sa-flag-menu-mute", {
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
+    menuItem.style.display = "block";
+    addon.tab.displayNoneWhileDisabled(menuItem);
+  })();
+
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,

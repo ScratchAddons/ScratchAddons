@@ -1,0 +1,40 @@
+/* Hide context menu items related to other addons by default */
+#sa-flag-menu-fps, #sa-flag-menu-mute {
+  display: none;
+}
+
+/* Styles reused from https://github.com/scratchfoundation/scratch-gui/blob/develop/src/components/context-menu/context-menu.css */
+
+.flag-context-menu {
+  min-width: 130px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  text-align: left;
+  background-color: white;
+  border: 1px solid #00000026;
+  border-radius: calc(0.5rem / 2);
+  box-shadow: 0px 0px 5px 1px #00000026;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10000;
+  position: fixed;
+  pointer-events: none;
+}
+
+.flag-context-menu.ctx-menu-open {
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+
+.flag-menu-item {
+  padding: 8px 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.1s ease;
+}
+
+.flag-menu-item:hover {
+  background: #855cd6;
+  color: white;
+}

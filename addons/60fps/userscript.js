@@ -10,6 +10,23 @@ export default async function ({ addon, console }) {
   const fastFlag = addon.self.dir + "/svg/fast-flag.svg";
   let vanillaFlag = null;
 
+  // flag-menu addon
+  function updateToggleFramerateLabel(menuItem) {
+    if (!menuItem) return;
+    const number = mode
+      ? 30
+      : addon.settings.get("framerate");
+    menuItem.textContent = `switch to ${number} fps`;
+  }
+  (async () => {
+    const menuItem = await addon.tab.waitForElement("#sa-flag-menu-fps", {
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
+    menuItem.style.display = "block";
+    addon.tab.displayNoneWhileDisabled(menuItem);
+    updateToggleFramerateLabel(menuItem);
+  })();
+
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
@@ -43,6 +60,7 @@ export default async function ({ addon, console }) {
         }
       } else setFPS(30);
       updateFlag();
+      updateToggleFramerateLabel(document.getElementById("sa-flag-menu-fps"));
     };
     const flagListener = (e) => {
       if (addon.self.disabled) return;
@@ -68,6 +86,7 @@ export default async function ({ addon, console }) {
       if (vm.runtime._steppingInterval) {
         setFPS(addon.settings.get("framerate"));
       }
+      updateToggleFramerateLabel(document.getElementById("sa-flag-menu-fps"));
     });
     addon.self.addEventListener("disabled", () => changeMode(false));
     vm.runtime.start = function () {
