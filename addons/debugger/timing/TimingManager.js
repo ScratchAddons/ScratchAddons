@@ -10,7 +10,11 @@ class TimingManager {
   }
 
   startTimer(label, targetId = null, blockId = null) {
-    if (label == "") return;
+    // Use a default key for empty labels
+    const isEmptyLabel = label === "";
+    if (isEmptyLabel) {
+      label = "__empty_timer__";
+    }
 
     if (label !== blockId && this.lastTimerLabel !== null && this.settings.get("auto_stop_timing")) {
       this.stopTimer(this.lastTimerLabel);
@@ -22,6 +26,10 @@ class TimingManager {
       this.timers[label].startTime = currentTime;
       this.timers[label].callCount += 1;
       this.timers[label].isActive = true;
+      // Update display label in case it wasn't stored before
+      if (this.timers[label].displayLabel === undefined) {
+        this.timers[label].displayLabel = isEmptyLabel ? "" : label;
+      }
     } else {
       this.timers[label] = {
         startTime: currentTime,
@@ -31,6 +39,7 @@ class TimingManager {
         blockId: blockId,
         idx: Object.keys(this.timers).length,
         isActive: true,
+        displayLabel: isEmptyLabel ? "" : label, // Store the original label for display purposes
       };
     }
 
@@ -43,6 +52,10 @@ class TimingManager {
   }
 
   stopTimer(label) {
+    // Use the same default key for empty labels
+    if (label === "") {
+      label = "__empty_timer__";
+    }
     const currentTime = performance.now();
     if (this.timers[label] && this.timers[label].isActive) {
       this.timers[label].totalTime += currentTime - this.timers[label].startTime;

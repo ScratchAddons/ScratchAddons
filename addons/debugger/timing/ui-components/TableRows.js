@@ -19,7 +19,11 @@ class TableRows extends LogView {
   }
 
   getRowValues(timer) {
-    let displayLabel = timer.label;
+    let displayLabel = timer.displayLabel !== undefined ? timer.displayLabel : timer.label;
+    // Ensure empty labels have height by using a non-breaking space
+    if (displayLabel === "") {
+      displayLabel = "\u00A0"; // non-breaking space
+    }
 
     // For line-by-line timers (where label === blockId), use the human-readable block text
     if (timer.label === timer.blockId && timer.targetId !== null && timer.blockId !== null) {
@@ -59,10 +63,12 @@ class TableRows extends LogView {
         labelElem.setAttribute("data-shape", preview.getAttribute("data-shape"));
       }
       if (timer.label !== timer.blockId) {
-        labelElem.textContent = timer.label;
+        const { label } = this.getRowValues(timer);
+        labelElem.textContent = label;
       }
     } else {
-      labelElem = createInfoElement(timer.label);
+      const { label } = this.getRowValues(timer);
+      labelElem = createInfoElement(label);
     }
 
     const { totalTime, avgTime, percent, callCount } = this.getRowValues(timer);

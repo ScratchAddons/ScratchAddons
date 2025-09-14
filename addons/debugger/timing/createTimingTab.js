@@ -204,6 +204,10 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       // Create CSV rows
       const rows = tableRows.rows.map((row) => {
         const values = Object.values(tableRows.getRowValues(row));
+        // Convert non-breaking space back to empty string for CSV export
+        if (values[0] === "\u00A0") {
+          values[0] = "";
+        }
         // Escape any commas in the label by wrapping in quotes
         values[0] = values[0].includes(",") ? `"${values[0]}"` : values[0];
         return values.join(",");
