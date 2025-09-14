@@ -190,9 +190,28 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     });
 
     exportButton.element.addEventListener("click", () => {
-      const csvContent = tableRows.rows.map((row) => Object.values(tableRows.getRowValues(row)).join(",")).join("\n");
+      if (tableRows.rows.length === 0) return;
+
+      // Create CSV headers
+      const headers = [
+        "Label",
+        "Total Time (ms)",
+        "Avg Time (ms)",
+        config.showRatioTime ? "Ratio Time" : "Percent Time",
+        "Call Count"
+      ];
+
+      // Create CSV rows
+      const rows = tableRows.rows.map((row) => {
+        const values = Object.values(tableRows.getRowValues(row));
+        // Escape any commas in the label by wrapping in quotes
+        values[0] = values[0].includes(',') ? `"${values[0]}"` : values[0];
+        return values.join(",");
+      });
+
+      const csvContent = [headers.join(","), ...rows].join("\n");
       const filename = `timing_${tableRows.rows[0].label}.csv`;
-      if (csvContent) downloadBlob(filename, new Blob([csvContent], { type: "text/plain" }));
+      downloadBlob(filename, new Blob([csvContent], { type: "text/plain" }));
     });
 
     return exportButton;
