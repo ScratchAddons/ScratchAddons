@@ -52,9 +52,11 @@ class HeatmapManager {
     this.modifiedTimers = new Set(); // Track timers that have been modified since last heatmap update
     this.realtimeUpdateInterval = null;
     this.lastHeatmapTime = 0;
+    this.currentHeatmapMax = 1.0; // Store current heatmap max for real-time updates
   }
 
   showHeatmapFn(heatmapMax) {
+    this.currentHeatmapMax = heatmapMax; // Store the current heatmap max
     this.updateAllTimers(heatmapMax);
     this.lastHeatmapTime = performance.now();
     this.modifiedTimers.clear();
@@ -112,7 +114,7 @@ class HeatmapManager {
     this.stopRealtimeUpdates(); // Clear any existing interval
     this.realtimeUpdateInterval = setInterval(() => {
       if (this.config.showHeatmap && this.isProjectRunning() && this.modifiedTimers.size > 0) {
-        this.updateHeatmapColors(heatmapMax, true); // true = only modified timers
+        this.updateHeatmapColors(this.currentHeatmapMax, true); // true = only modified timers
       }
     }, 100); // Update every 100ms
   }

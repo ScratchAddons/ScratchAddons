@@ -70,16 +70,97 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       className: "sa-timing-checkbox",
     });
 
+    // Create slider container (initially hidden)
+    const sliderContainer = Object.assign(document.createElement("div"), {
+      className: "sa-timing-heatmap-slider-container",
+    });
+
+    // Create slider track
+    const sliderTrack = Object.assign(document.createElement("div"), {
+      className: "sa-timing-heatmap-slider-track",
+    });
+
+    // Create slider thumb
+    const sliderThumb = Object.assign(document.createElement("div"), {
+      className: "sa-timing-heatmap-slider-thumb",
+    });
+
+    sliderTrack.appendChild(sliderThumb);
+    sliderContainer.appendChild(sliderTrack);
+
+    // Create a wrapper for the original button content (icon + text + checkbox)
+    const buttonContentWrapper = Object.assign(document.createElement("div"), {
+      className: "sa-timing-heatmap-content-wrapper",
+    });
+
+    // Move existing content into the wrapper
+    const existingContent = Array.from(heatmapButton.element.children);
+    existingContent.forEach(child => buttonContentWrapper.appendChild(child));
+
     // Add specific class to disable hover effect
     heatmapButton.element.classList.add("sa-timing-heatmap-toggle");
 
-    // Append checkbox to button
-    heatmapButton.element.appendChild(checkbox);
+    // Append wrapper with checkbox and slider to button
+    buttonContentWrapper.appendChild(checkbox);
+    heatmapButton.element.appendChild(buttonContentWrapper);
+    heatmapButton.element.appendChild(sliderContainer);
 
-    // Make entire button clickable to toggle checkbox
+    // Slider state
+    let currentHeatmapMax = 1.0;
+    let isDragging = false;
+    let hasInteractedWithSlider = false;
+
+    // Update slider position based on value
+    const updateSliderPosition = (value) => {
+      const percentage = value * 100;
+      sliderThumb.style.left = `${percentage}%`;
+    };
+
+    // Initialize slider position
+    updateSliderPosition(currentHeatmapMax);
+
+    // Slider interaction handlers
+    const handleSliderInteraction = (e) => {
+      e.stopPropagation(); // Prevent checkbox toggle
+      const rect = sliderTrack.getBoundingClientRect();
+      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+      currentHeatmapMax = x / rect.width;
+      updateSliderPosition(currentHeatmapMax);
+
+      if (config.showHeatmap) {
+        heatmapManager.showHeatmapFn(currentHeatmapMax);
+      }
+    };
+
+    const handleMouseMove = (e) => {
+      if (isDragging) {
+        handleSliderInteraction(e);
+      }
+    };
+
+    const handleMouseUp = () => {
+      isDragging = false;
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+
+      // Set a flag to prevent button toggle for a short time after dragging
+      hasInteractedWithSlider = true;
+      setTimeout(() => {
+        hasInteractedWithSlider = false;
+      }, 50); // 50ms delay to prevent accidental toggles
+    };
+
+    sliderTrack.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      handleSliderInteraction(e);
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    });
+
+    // Make entire button clickable to toggle checkbox (except slider area)
     heatmapButton.element.addEventListener("click", (e) => {
-      // Don't double-toggle if clicking directly on checkbox
-      if (e.target !== checkbox) {
+      // Don't toggle if clicking on checkbox, slider, or recently interacted with slider
+      if (e.target !== checkbox && !sliderContainer.contains(e.target) && !hasInteractedWithSlider) {
         checkbox.checked = !checkbox.checked;
         checkbox.dispatchEvent(new Event("change"));
       }
@@ -88,12 +169,17 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     // Handle checkbox change
     checkbox.addEventListener("change", () => {
       config.showHeatmap = checkbox.checked;
+      sliderContainer.style.display = checkbox.checked ? "block" : "none";
+
       if (config.showHeatmap) {
-        heatmapManager.showHeatmapFn(1.0);
+        heatmapManager.showHeatmapFn(currentHeatmapMax);
       } else {
         heatmapManager.hideHeatmapFn();
       }
     });
+
+    // Initially hide slider
+    sliderContainer.style.display = "none";
 
     return heatmapButton;
   }

@@ -485,3 +485,50 @@
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
+
+/* Heatmap button layout modifications */
+.sa-timing-heatmap-toggle {
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+
+.sa-timing-heatmap-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Heatmap slider styles */
+.sa-timing-heatmap-slider-container {
+  width: 100%;
+  margin-top: 4px;
+  padding: 0 8px 4px 8px;
+  box-sizing: border-box;
+}
+
+.sa-timing-heatmap-slider-track {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+.sa-timing-heatmap-slider-thumb {
+  position: absolute;
+  top: -4px;
+  left: 100%;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+  cursor: grab;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.sa-timing-heatmap-slider-thumb:active {
+  cursor: grabbing;
+}
