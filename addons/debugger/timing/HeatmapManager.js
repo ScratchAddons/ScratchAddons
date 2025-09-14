@@ -55,16 +55,7 @@ class HeatmapManager {
   }
 
   showHeatmapFn(heatmapMax) {
-    const totalTimerTime = this.tableRows.getTotalTime(this.config.showLineByLine);
-    const timerPercentTimes = this.tableRows.rows.map((t) => t.totalTime / totalTimerTime);
-    const min = Math.min(...timerPercentTimes);
-    const max = Math.max(...timerPercentTimes) * heatmapMax;
-
-    this.updateBlocks((block, timer) => {
-      recursiveFillBlock(block, valueToHeatmapColor(timer.totalTime / totalTimerTime, min, max));
-      this.coloredBlocks.add(timer.blockId); // Track this block as colored
-    });
-
+    this.updateAllTimers(heatmapMax);
     this.lastHeatmapTime = performance.now();
     this.modifiedTimers.clear();
     this.startRealtimeUpdates(heatmapMax);
@@ -90,10 +81,16 @@ class HeatmapManager {
 
   updateBlocks(fillFn) {
     const workspace = this.getWorkspace();
-    this.tableRows.rows.forEach((timer) => {
-      const block = workspace.blockDB_[timer.blockId];
-      if (block) fillFn(block, timer);
-    });
+    this.tableRows.rows
+      .filter((timer) => {
+        // Filter timers based on current profiling mode
+        const isLineByLineTimer = timer.label === timer.blockId;
+        return this.config.showLineByLine ? isLineByLineTimer : !isLineByLineTimer;
+      })
+      .forEach((timer) => {
+        const block = workspace.blockDB_[timer.blockId];
+        if (block) fillFn(block, timer);
+      });
   }
 
   // Check if the project is currently running by looking at active threads
@@ -115,7 +112,7 @@ class HeatmapManager {
     this.stopRealtimeUpdates(); // Clear any existing interval
     this.realtimeUpdateInterval = setInterval(() => {
       if (this.config.showHeatmap && this.isProjectRunning() && this.modifiedTimers.size > 0) {
-        this.updateModifiedTimers(heatmapMax);
+        this.updateHeatmapColors(heatmapMax, true); // true = only modified timers
       }
     }, 100); // Update every 100ms
   }
@@ -126,27 +123,45 @@ class HeatmapManager {
     this.realtimeUpdateInterval = null;
   }
 
-  // Update only the modified timers to improve performance
-  updateModifiedTimers(heatmapMax) {
+  // Update all timers (full heatmap refresh)
+  updateAllTimers(heatmapMax) {
+    this.updateHeatmapColors(heatmapMax, false);
+  }
+
+  // Consolidated method to update heatmap colors
+  updateHeatmapColors(heatmapMax, onlyModified = false) {
     const totalTimerTime = this.tableRows.getTotalTime(this.config.showLineByLine);
     if (totalTimerTime === 0) return;
 
-    const timerPercentTimes = this.tableRows.rows.map((t) => t.totalTime / totalTimerTime);
-    const min = Math.min(...timerPercentTimes);
-    const max = Math.max(...timerPercentTimes) * heatmapMax;
     const workspace = this.getWorkspace();
 
-    this.tableRows.rows
-      .filter((timer) => this.modifiedTimers.has(timer.blockId))
-      .forEach((timer) => {
-        const block = workspace.blockDB_[timer.blockId];
-        if (block) {
-          recursiveFillBlock(block, valueToHeatmapColor(timer.totalTime / totalTimerTime, min, max));
-          this.coloredBlocks.add(timer.blockId);
-        }
-      });
+    // Filter timers first, then calculate min/max from the filtered set
+    const filteredTimers = this.tableRows.rows.filter((timer) => {
+      // Filter by profiling mode
+      const isLineByLineTimer = timer.label === timer.blockId;
+      const matchesMode = this.config.showLineByLine ? isLineByLineTimer : !isLineByLineTimer;
 
-    this.modifiedTimers.clear();
+      // If only updating modified timers, check if this timer was modified
+      return matchesMode && (!onlyModified || this.modifiedTimers.has(timer.blockId));
+    });
+
+    if (filteredTimers.length === 0) return;
+
+    const timerPercentTimes = filteredTimers.map((t) => t.totalTime / totalTimerTime);
+    const min = Math.min(...timerPercentTimes);
+    const max = Math.max(...timerPercentTimes) * heatmapMax;
+
+    filteredTimers.forEach((timer) => {
+      const block = workspace.blockDB_[timer.blockId];
+      if (block) {
+        recursiveFillBlock(block, valueToHeatmapColor(timer.totalTime / totalTimerTime, min, max));
+        this.coloredBlocks.add(timer.blockId);
+      }
+    });
+
+    if (onlyModified) {
+      this.modifiedTimers.clear();
+    }
   }
 }
 
