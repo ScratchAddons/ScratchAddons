@@ -120,13 +120,13 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     });
 
     clearButton.element.addEventListener("click", () => {
-      // Clear both timers and profiling (line-by-line) data
       timingManager.clearTimers();
-      // Update the table to show empty state
       tableRows.updateLogRows(timingManager.getTimers(), config.showLineByLine);
-      // Hide heatmap if it's currently shown
+      heatmapManager.modifiedTimers.clear();
+
       if (config.showHeatmap) {
         heatmapManager.hideHeatmapFn();
+        setTimeout(() => config.showHeatmap && heatmapManager.startRealtimeUpdates(1.0), 10);
       }
     });
 
@@ -157,8 +157,9 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   const unpolluteStepThread = () => profiler.unpolluteStepThread();
 
   const timingManager = new TimingManager(addon.settings, config, profiler);
-  const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows, config);
+  const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows, config, addon.tab.traps.vm);
   profiler.tm = timingManager;
+  timingManager.heatmapManager = heatmapManager; // Connect them for real-time updates
 
   const content = createContent();
   const exportButton = createExportButton();
@@ -225,8 +226,20 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     tab,
     content,
     buttons: [exportButton, clearButton, lineByLineButton, heatmapButton],
-    show: () => tableRows.show(),
-    hide: () => tableRows.hide(),
+    show: () => {
+      tableRows.show();
+      // Restart real-time heatmap updates when tab is shown
+      if (config.showHeatmap) {
+        heatmapManager.startRealtimeUpdates(1.0);
+      }
+    },
+    hide: () => {
+      tableRows.hide();
+      // Stop real-time heatmap updates when tab is hidden
+      if (config.showHeatmap) {
+        heatmapManager.stopRealtimeUpdates();
+      }
+    },
     startTimer: timingManager.startTimer.bind(timingManager),
     stopTimer: timingManager.stopTimer.bind(timingManager),
     clearTimers: timingManager.clearTimers.bind(timingManager),

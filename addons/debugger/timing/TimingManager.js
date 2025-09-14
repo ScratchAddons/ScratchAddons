@@ -6,6 +6,7 @@ class TimingManager {
 
     this.timers = Object.create(null);
     this.lastTimerLabel = null;
+    this.heatmapManager = null; // Will be set by createTimingTab.js
   }
 
   startTimer(label, targetId = null, blockId = null) {
@@ -32,6 +33,12 @@ class TimingManager {
         isActive: true,
       };
     }
+
+    // Notify heatmap manager of timer modification for real-time updates
+    if (this.heatmapManager && blockId) {
+      this.heatmapManager.markTimerModified(blockId);
+    }
+
     if (label !== blockId) this.lastTimerLabel = label;
   }
 
@@ -40,6 +47,11 @@ class TimingManager {
     if (this.timers[label] && this.timers[label].isActive) {
       this.timers[label].totalTime += currentTime - this.timers[label].startTime;
       this.timers[label].isActive = false;
+
+      // Notify heatmap manager of timer modification for real-time updates
+      if (this.heatmapManager && this.timers[label].blockId) {
+        this.heatmapManager.markTimerModified(this.timers[label].blockId);
+      }
     }
     if (label === this.lastTimerLabel) this.lastTimerLabel = null;
   }
