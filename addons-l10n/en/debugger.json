@@ -42,8 +42,6 @@
   "debugger/log-cloud-data-nan": "Failed to set cloud variable '{var}'. Cloud variables can only contain numbers.",
   "debugger/log-cloud-data-too-long": "Failed to set cloud variable '{var}'. Cloud variables can only contain a maximum of 256 digits.",
   "debugger/timing-profiling": "Profiling",
-  "debugger/timing-show-rtc": "Show Operation Cost",
-  "debugger/timing-hide-rtc": "Hide Operation Cost",
   "debugger/timing-heatmap": "Heatmap",
   "debugger/timing-label": "Label",
   "debugger/timing-total-time": "Total Time",
@@ -51,6 +49,5 @@
   "debugger/timing-ratio-time": "Ratio Time",
   "debugger/timing-percent-time": "Percent Time",
   "debugger/timing-call-count": "Call Count",
-  "debugger/timing-no-timers": "No timers started.",
-  "debugger/timing-disabled-single-step": "Cannot profile line-by-line while single-stepping"
+  "debugger/timing-no-timers": "No timers started."
 }
