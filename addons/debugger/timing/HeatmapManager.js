@@ -44,6 +44,7 @@ class HeatmapManager {
     this.getWorkspace = getWorkspace;
     this.tableRows = tableRows;
     this.config = config;
+    this.coloredBlocks = new Set(); // Track all blocks that have been colored
   }
 
   showHeatmapFn(heatmapMax) {
@@ -54,10 +55,20 @@ class HeatmapManager {
 
     this.updateBlocks((block, timer) => {
       recursiveFillBlock(block, valueToHeatmapColor(timer.totalTime / totalTimerTime, min, max));
+      this.coloredBlocks.add(timer.blockId); // Track this block as colored
     });
   }
 
   hideHeatmapFn() {
+    // Reset all previously colored blocks, not just current timer blocks
+    const workspace = this.getWorkspace();
+    this.coloredBlocks.forEach((blockId) => {
+      const block = workspace.blockDB_[blockId];
+      if (block) {
+        recursiveFillBlock(block);
+      }
+    });
+    // Also reset any current timer blocks
     this.updateBlocks((block) => recursiveFillBlock(block));
   }
 
