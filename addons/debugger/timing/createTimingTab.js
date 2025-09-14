@@ -198,14 +198,14 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
         "Total Time (ms)",
         "Avg Time (ms)",
         config.showRatioTime ? "Ratio Time" : "Percent Time",
-        "Call Count"
+        "Call Count",
       ];
 
       // Create CSV rows
       const rows = tableRows.rows.map((row) => {
         const values = Object.values(tableRows.getRowValues(row));
         // Escape any commas in the label by wrapping in quotes
-        values[0] = values[0].includes(',') ? `"${values[0]}"` : values[0];
+        values[0] = values[0].includes(",") ? `"${values[0]}"` : values[0];
         return values.join(",");
       });
 
