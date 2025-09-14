@@ -19,7 +19,10 @@
   margin-top: 5px;
   scale: 1 -1;
 }
-[class^="paint-editor_zoom-controls_"] ~ div > .sa-onion-button[data-enabled="false"] + .sa-onion-button:not([data-enabled="true"]) {
+[class^="paint-editor_zoom-controls_"]
+  ~ div
+  > .sa-onion-button[data-enabled="false"]
+  + .sa-onion-button:not([data-enabled="true"]) {
   opacity: 0.33;
   pointer-events: none;
 }
