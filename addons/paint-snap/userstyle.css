@@ -12,13 +12,13 @@
 }
 
 /* Dropdown arrow */
-.sa-paint-snap-button + .sa-paint-snap-button .sa-paint-snap-image {
+[class^="paint-editor_zoom-controls_"] ~ div > .sa-paint-snap-button + .sa-paint-snap-button .sa-paint-snap-image {
   width: 8px;
   height: auto;
   margin-top: 5px;
   scale: 1 -1;
 }
-.sa-paint-snap-button[data-enabled="false"] + .sa-paint-snap-button:not([data-enabled="true"]) {
+[class^="paint-editor_zoom-controls_"] ~ div > .sa-paint-snap-button[data-enabled="false"] + .sa-paint-snap-button:not([data-enabled="true"]) {
   opacity: 0.33;
   pointer-events: none;
 }
