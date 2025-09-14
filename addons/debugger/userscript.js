@@ -163,7 +163,7 @@ export default async function ({ addon, console, msg }) {
     moveInterface(lastX, lastY);
   });
   interfaceHeader.addEventListener("pointerdown", handleStartDrag);
-  interfaceHeader.addEventListener("touchstart", (e) => e.preventDefault());
+  interfaceHeader.addEventListener("touchmove", (e) => e.preventDefault());
 
   interfaceHeader.append(tabListElement, buttonContainerElement);
   interfaceFooter.appendChild(footerButtonContainer);
