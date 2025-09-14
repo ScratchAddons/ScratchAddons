@@ -460,7 +460,7 @@
 /* Shared checkbox styles for timing controls */
 
 .sa-timing-checkbox {
-  margin-left: 4px;
+  margin-right: 4px;
   cursor: pointer;
   transform: scale(1.2);
   appearance: none;

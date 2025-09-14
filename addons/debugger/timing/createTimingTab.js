@@ -24,7 +24,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       icon: addon.self.dir + "/icons/speedometer.svg",
     });
 
-    // Add checkbox to the right side of the button
+    // Add checkbox to the left side of the button
     const checkbox = Object.assign(document.createElement("input"), {
       type: "checkbox",
       className: "sa-timing-checkbox",
@@ -33,8 +33,8 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     // Add specific class
     lineByLineButton.element.classList.add("sa-timing-profiling-toggle");
 
-    // Append checkbox to button
-    lineByLineButton.element.appendChild(checkbox);
+    // Prepend checkbox to button (left side)
+    lineByLineButton.element.insertBefore(checkbox, lineByLineButton.element.firstChild);
 
     // Make entire button clickable to toggle checkbox
     lineByLineButton.element.addEventListener("click", (e) => {
@@ -64,7 +64,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       icon: addon.self.dir + "/icons/flame.svg",
     });
 
-    // Add checkbox to the right side of the button
+    // Add checkbox to the left side of the button
     const checkbox = Object.assign(document.createElement("input"), {
       type: "checkbox",
       className: "sa-timing-checkbox",
@@ -88,7 +88,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     sliderTrack.appendChild(sliderThumb);
     sliderContainer.appendChild(sliderTrack);
 
-    // Create a wrapper for the original button content (icon + text + checkbox)
+    // Create a wrapper for the original button content (checkbox + icon + text)
     const buttonContentWrapper = Object.assign(document.createElement("div"), {
       className: "sa-timing-heatmap-content-wrapper",
     });
@@ -100,8 +100,8 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     // Add specific class to disable hover effect
     heatmapButton.element.classList.add("sa-timing-heatmap-toggle");
 
-    // Append wrapper with checkbox and slider to button
-    buttonContentWrapper.appendChild(checkbox);
+    // Prepend checkbox to wrapper (left side)
+    buttonContentWrapper.insertBefore(checkbox, buttonContentWrapper.firstChild);
     heatmapButton.element.appendChild(buttonContentWrapper);
     heatmapButton.element.appendChild(sliderContainer);
 
