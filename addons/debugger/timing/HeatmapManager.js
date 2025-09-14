@@ -98,9 +98,11 @@ class HeatmapManager {
 
   // Check if the project is currently running by looking at active threads
   isProjectRunning() {
-    return this.vm?.runtime?.threads.some(thread =>
-      !thread.updateMonitor && [0, 2, 3].includes(thread.status) // STATUS_RUNNING, STATUS_YIELD, STATUS_YIELD_TICK
-    ) || false;
+    return (
+      this.vm?.runtime?.threads.some(
+        (thread) => !thread.updateMonitor && [0, 2, 3].includes(thread.status) // STATUS_RUNNING, STATUS_YIELD, STATUS_YIELD_TICK
+      ) || false
+    );
   }
 
   // Mark a timer as modified for real-time updates
@@ -135,8 +137,8 @@ class HeatmapManager {
     const workspace = this.getWorkspace();
 
     this.tableRows.rows
-      .filter(timer => this.modifiedTimers.has(timer.blockId))
-      .forEach(timer => {
+      .filter((timer) => this.modifiedTimers.has(timer.blockId))
+      .forEach((timer) => {
         const block = workspace.blockDB_[timer.blockId];
         if (block) {
           recursiveFillBlock(block, valueToHeatmapColor(timer.totalTime / totalTimerTime, min, max));

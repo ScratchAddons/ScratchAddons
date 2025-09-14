@@ -157,7 +157,12 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   const unpolluteStepThread = () => profiler.unpolluteStepThread();
 
   const timingManager = new TimingManager(addon.settings, config, profiler);
-  const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows, config, addon.tab.traps.vm);
+  const heatmapManager = new HeatmapManager(
+    () => addon.tab.traps.getWorkspace(),
+    tableRows,
+    config,
+    addon.tab.traps.vm
+  );
   profiler.tm = timingManager;
   timingManager.heatmapManager = heatmapManager; // Connect them for real-time updates
 
