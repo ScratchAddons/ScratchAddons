@@ -39,14 +39,14 @@
     {
       "name": "Hover custom blocks to preview definition comments",
       "id": "hover-view-procedure",
-      "description": "Hover over the use of a custom block to preview the comment attached to its definition block.",
+      "description": "Hover over a custom block to preview the comment attached to its definition.",
       "type": "boolean",
       "default": true
     },
     {
       "name": "Delay duration",
       "id": "delay",
-      "description": "Choose how long you need to hover over a comment or block to display the preview.",
+      "description": "The delay before the preview is displayed.",
       "type": "select",
       "potentialValues": [
         {
