@@ -16,12 +16,14 @@ class Profiler {
     if (desc && typeof desc.set === "function" && desc.set.__profilerPatched) return;
 
     Object.defineProperty(thread, "blockGlowInFrame", {
-      get() { return this._blockGlowInFrame; },
+      get() {
+        return this._blockGlowInFrame;
+      },
       set(v) {
         profiler.profilerActive = true;
         this._blockGlowInFrame = v;
       },
-      configurable: true
+      configurable: true,
     });
     Object.getOwnPropertyDescriptor(thread, "blockGlowInFrame").set.__profilerPatched = true;
   }
@@ -98,7 +100,7 @@ class Profiler {
   }
 
   profile() {
-    this.profilerActive = false;  // set to false so that it won't be triggered during execute (which contains a profile get)
+    this.profilerActive = false; // set to false so that it won't be triggered during execute (which contains a profile get)
 
     const blockId = this.thread.peekStack();
     if (blockId === null || this.thread.blockContainer._blocks[blockId]?.isMonitored === true) return;
