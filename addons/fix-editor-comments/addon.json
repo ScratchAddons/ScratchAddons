@@ -50,7 +50,7 @@
       "default": true
     },
     {
-      "name": "Directly edit standalone comments",
+      "name": "Directly edit comments",
       "id": "standalone-edit",
       "description": "Fixes a problem with comments that are not attached to blocks where if you click to edit a comment's contents, the text caret will not always get placed where you click.",
       "type": "boolean",
