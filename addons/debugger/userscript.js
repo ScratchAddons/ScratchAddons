@@ -466,6 +466,11 @@ export default async function ({ addon, console, msg }) {
         formatProcedureCode(proccode)
       );
       category = "more";
+    } else if (block.opcode === "control_stop") {
+      // Procedural block - jsonInit not called, so we can't handle it with the fakeBlock approach
+      text = ScratchBlocks.ScratchMsgs.translate("CONTROL_STOP", "stop");
+      category = "control";
+      shape = "stacked";
     } else {
       // Try to call things like https://github.com/scratchfoundation/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
       var jsonData;
@@ -480,7 +485,7 @@ export default async function ({ addon, console, msg }) {
         try {
           blockConstructor.init.call(fakeBlock);
         } catch (e) {
-          // ignore
+          console.log(e)
         }
       }
       if (!jsonData) {
