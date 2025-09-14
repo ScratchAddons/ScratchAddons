@@ -132,6 +132,9 @@ class HeatmapManager {
 
   // Consolidated method to update heatmap colors
   updateHeatmapColors(heatmapMax, onlyModified = false) {
+    // Early return if heatmap is disabled
+    if (!this.config.showHeatmap) return;
+
     const totalTimerTime = this.tableRows.getTotalTime(this.config.showLineByLine);
     if (totalTimerTime === 0) return;
 
