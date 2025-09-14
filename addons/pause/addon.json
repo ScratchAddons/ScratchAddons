@@ -40,7 +40,7 @@
       "type": "boolean",
       "id": "auto-pause",
       "name": "Pause automatically",
-      "description": "The project pauses automatically when the window does not have focus. May not work on all projects.",
+      "description": "The project pauses automatically when the window does not have focus. Does not apply to cloud projects.",
       "default": false
     }
   ],
