@@ -380,10 +380,12 @@
   cursor: not-allowed !important;
 }
 
-.sa-timing-content .sa-debugger-block-preview {
-  width: 100px;
+.sa-timing-content .sa-debugger-block-preview, .sa-timing-content .sa-debugger-log-link{
+  width: 115px;
   text-wrap: nowrap;
   text-align: center;
+  margin: 0px;
+  box-sizing: border-box;
 }
 
 /* Tooltip container (the second item) */
