@@ -138,12 +138,12 @@ export default async function ({ addon, console, msg }) {
     mouseOffsetY = e.clientY - interfaceContainer.offsetTop;
     lastX = e.clientX;
     lastY = e.clientY;
-    document.addEventListener("mouseup", handleStopDrag);
-    document.addEventListener("mousemove", handleDragInterface);
+    document.addEventListener("pointerup", handleStopDrag);
+    document.addEventListener("pointermove", handleDragInterface);
   };
   const handleStopDrag = () => {
-    document.removeEventListener("mouseup", handleStopDrag);
-    document.removeEventListener("mousemove", handleDragInterface);
+    document.removeEventListener("pointerup", handleStopDrag);
+    document.removeEventListener("pointermove", handleDragInterface);
   };
   const moveInterface = (x, y) => {
     lastX = x;
@@ -162,7 +162,8 @@ export default async function ({ addon, console, msg }) {
   window.addEventListener("resize", () => {
     moveInterface(lastX, lastY);
   });
-  interfaceHeader.addEventListener("mousedown", handleStartDrag);
+  interfaceHeader.addEventListener("pointerdown", handleStartDrag);
+  interfaceHeader.addEventListener("touchmove", (e) => e.preventDefault());
 
   interfaceHeader.append(tabListElement, buttonContainerElement);
   interfaceFooter.appendChild(footerButtonContainer);
