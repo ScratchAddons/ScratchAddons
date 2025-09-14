@@ -36,7 +36,7 @@
     {
       "name": "Remember previously used color",
       "id": "persistence",
-      "description": "Fixes an issue where the fill/outline colors sometimes reset back to the defaults when switching tools.",
+      "description": "Fixes a Scratch issue where the fill/outline colors sometimes reset back to the defaults when switching tools.",
       "type": "boolean",
       "default": true
     }

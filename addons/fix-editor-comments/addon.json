@@ -38,7 +38,7 @@
     {
       "name": "Fix dragging blocks with comments",
       "id": "fix-drag",
-      "description": "Fixes a bug where if you move a block with a comment attached to it, the comment will go back to where it was before once you switch sprites or reload the project.",
+      "description": "Fixes a Scratch bug where if you move a block with a comment attached to it, the comment will go back to where it was before once you switch sprites or reload the project.",
       "type": "boolean",
       "default": true
     },
