@@ -1,5 +1,6 @@
 /* Hide context menu items related to other addons by default */
-#sa-flag-menu-fps, #sa-flag-menu-mute {
+#sa-flag-menu-fps,
+#sa-flag-menu-mute {
   display: none;
 }
 

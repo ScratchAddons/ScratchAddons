@@ -13,9 +13,7 @@ export default async function ({ addon, console }) {
   // flag-menu addon
   function updateToggleFramerateLabel(menuItem) {
     if (!menuItem) return;
-    const number = mode
-      ? 30
-      : addon.settings.get("framerate");
+    const number = mode ? 30 : addon.settings.get("framerate");
     menuItem.textContent = `switch to ${number} fps`;
   }
   (async () => {

@@ -22,7 +22,7 @@ export default async function ({ addon, console }) {
       className: "flag-menu-item",
       id: "sa-flag-menu-mute",
       textContent: "toggle mute",
-    }),
+    })
   );
 
   function closeContextMenu() {
