@@ -95,7 +95,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
     // Move existing content into the wrapper
     const existingContent = Array.from(heatmapButton.element.children);
-    existingContent.forEach(child => buttonContentWrapper.appendChild(child));
+    existingContent.forEach((child) => buttonContentWrapper.appendChild(child));
 
     // Add specific class to disable hover effect
     heatmapButton.element.classList.add("sa-timing-heatmap-toggle");
