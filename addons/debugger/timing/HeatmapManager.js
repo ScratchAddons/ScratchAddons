@@ -1,6 +1,6 @@
 function valueToHeatmapColor(value, min = 0, max = 1) {
   const clampedValue = Math.max(min, Math.min(max, value));
-  const normalizedValue = (clampedValue - min) / (max - min);
+  const normalizedValue = max <= min ? 1 : (clampedValue - min) / (max - min);
   const r = Math.round(255 * normalizedValue);
   const b = Math.round(255 * (1 - normalizedValue));
   return `#${((1 << 24) | (r << 16) | b).toString(16).slice(1).toUpperCase()}`;
