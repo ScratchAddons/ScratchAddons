@@ -39,30 +39,35 @@
     {
       "name": "Fix dragging blocks with comments",
       "id": "fix-drag",
+      "description": "Fixes a Scratch bug where if you move a block with a comment attached to it, the comment will go back to where it was before once you switch sprites or reload the project.",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Add scroll bars to clipped comments",
+      "name": "Add scroll bars",
       "id": "scroll",
+      "description": "Adds scroll bars to long comments and allows you to scroll through them with the scroll wheel.",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Directly edit standalone comments",
+      "name": "Directly edit comments",
       "id": "standalone-edit",
+      "description": "Fixes a problem with comments that are not attached to blocks where if you click to edit a comment's contents, the text caret will not always get placed where you click.",
       "type": "boolean",
       "default": true
     },
     {
       "name": "Always spawn block comments next to block",
       "id": "leash",
+      "description": "When attaching a comment to a block, makes them appear next to that block instead of after the longest block in the script, which can potentially be offscreen.",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Keep block comment connections straight",
+      "name": "Keep connections straight",
       "id": "straighten",
+      "description": "Keeps the line connecting comments to blocks horizontal.",
       "type": "boolean",
       "default": false
     }
