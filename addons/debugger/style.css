@@ -490,6 +490,8 @@
 .sa-timing-heatmap-toggle {
   flex-direction: column !important;
   align-items: stretch !important;
+  margin-top: -8px;
+  margin-bottom: -8px;
 }
 
 .sa-timing-heatmap-content-wrapper {
