@@ -20,6 +20,7 @@ class TimingManager {
     if (this.timers[label]) {
       this.timers[label].startTime = currentTime;
       this.timers[label].callCount += 1;
+      this.timers[label].isActive = true;
     } else {
       this.timers[label] = {
         startTime: currentTime,
@@ -28,6 +29,7 @@ class TimingManager {
         targetId: targetId,
         blockId: blockId,
         idx: Object.keys(this.timers).length,
+        isActive: true,
       };
     }
     if (label !== blockId) this.lastTimerLabel = label;
@@ -35,8 +37,9 @@ class TimingManager {
 
   stopTimer(label) {
     const currentTime = performance.now();
-    if (this.timers[label]) {
+    if (this.timers[label] && this.timers[label].isActive) {
       this.timers[label].totalTime += currentTime - this.timers[label].startTime;
+      this.timers[label].isActive = false;
     }
     if (label === this.lastTimerLabel) this.lastTimerLabel = null;
   }
