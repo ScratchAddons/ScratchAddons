@@ -51,7 +51,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       if (config.showLineByLine && !config.isStepThreadPolluted) {
         polluteStepThread();
       } else if (!config.showLineByLine && config.isStepThreadPolluted) {
-        unpollutStepThread();
+        unpolluteStepThread();
       }
     });
 
@@ -154,7 +154,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   const profiler = new Profiler(config);
   // function to pollute stepThread with our new Profiler to handle line by line profiling
   const polluteStepThread = () => profiler.polluteStepThread(addon.tab.traps.vm, timingManager);
-  const unpollutStepThread = () => profiler.unpollutStepThread();
+  const unpolluteStepThread = () => profiler.unpolluteStepThread();
 
   const timingManager = new TimingManager(addon.settings, config, profiler);
   const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows, config);
@@ -176,7 +176,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     const isSingleStepping = paused && getRunningThread();
     if (isSingleStepping && config.showLineByLine) {
       config.showLineByLine = false;
-      profiler.unpollutStepThread();
+      profiler.unpolluteStepThread();
     }
     // Update button disabled states
     lineByLineButton.element.disabled = isSingleStepping;
