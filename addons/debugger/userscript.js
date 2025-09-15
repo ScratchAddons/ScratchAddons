@@ -194,14 +194,17 @@ export default async function ({ addon, console, msg }) {
     if (description) {
       button.title = description;
     }
-    const imageElement = Object.assign(document.createElement("img"), {
-      src: icon,
-      draggable: false,
-    });
+    let imageElement = null;
+    if (icon) {
+      imageElement = Object.assign(document.createElement("img"), {
+        src: icon,
+        draggable: false,
+      });
+      button.appendChild(imageElement);
+    }
     const textElement = Object.assign(document.createElement("span"), {
       textContent: text,
     });
-    button.appendChild(imageElement);
     button.appendChild(textElement);
     return {
       element: button,

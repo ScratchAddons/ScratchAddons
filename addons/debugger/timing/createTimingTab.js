@@ -21,7 +21,6 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   function createLineByLineButton() {
     const lineByLineButton = debug.createIconButton({
       text: msg("timing-profiling"),
-      icon: addon.self.dir + "/icons/speedometer.svg",
     });
 
     // Add checkbox to the left side of the button
@@ -61,7 +60,6 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   function createHeatmapButton() {
     const heatmapButton = debug.createIconButton({
       text: msg("timing-heatmap"),
-      icon: addon.self.dir + "/icons/flame.svg",
     });
 
     // Add checkbox to the left side of the button
