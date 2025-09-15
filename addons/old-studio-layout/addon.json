@@ -30,6 +30,10 @@
   "injectAsStyleElt": true,
   "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.17.0",
+  "latestUpdate": {
+    "version": "1.44.0",
+    "temporaryNotice": "Now supports mobile devices."
+  },
   "userscripts": [
     {
       "url": "classes.js",
