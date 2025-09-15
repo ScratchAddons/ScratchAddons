@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   let greenFlag;
 
   const contextMenu = Object.assign(document.createElement("nav"), {
@@ -10,7 +10,7 @@ export default async function ({ addon, console }) {
       role: "menuitem",
       className: "flag-menu-item",
       id: "sa-flag-menu-turbo",
-      textContent: "toggle turbo mode",
+      textContent: msg("toggle-turbo"),
     }),
     Object.assign(document.createElement("div"), {
       role: "menuitem",
@@ -21,7 +21,7 @@ export default async function ({ addon, console }) {
       role: "menuitem",
       className: "flag-menu-item",
       id: "sa-flag-menu-mute",
-      textContent: "toggle mute",
+      textContent: msg("toggle-mute"),
     })
   );
 

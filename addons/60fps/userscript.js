@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   // TODO: test whether e.altKey is true in chromebooks when alt+clicking.
   // If so, no timeout needed, similar to mute-project addon.
 
@@ -13,8 +13,8 @@ export default async function ({ addon, console }) {
   // flag-menu addon
   function updateToggleFramerateLabel(menuItem) {
     if (!menuItem) return;
-    const number = mode ? 30 : addon.settings.get("framerate");
-    menuItem.textContent = `switch to ${number} fps`;
+    const fps = mode ? 30 : addon.settings.get("framerate");
+    menuItem.textContent = msg("/flag-menu/set-fps", { fps });
   }
   (async () => {
     const menuItem = await addon.tab.waitForElement("#sa-flag-menu-fps", {
