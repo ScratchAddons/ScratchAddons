@@ -21,7 +21,6 @@ export default async function ({ addon, console, msg }) {
       role: "menuitem",
       className: addon.tab.scratchClass("context-menu_menu-item"),
       id: "sa-flag-menu-mute",
-      textContent: msg("mute"),
     })
   );
 
