@@ -12,8 +12,8 @@
   margin: 2px 0 0;
   font-size: 0.85rem;
   text-align: left;
-  background-color: white;
-  border: 1px solid #00000026;
+  background-color: var(--editorDarkMode-input, white);
+  border: 1px solid var(--editorDarkMode-border, #00000026);
   border-radius: calc(0.5rem / 2);
   box-shadow: 0px 0px 5px 1px #00000026;
   pointer-events: none;
@@ -30,12 +30,13 @@
 
 .flag-menu-item {
   padding: 8px 12px;
+  color: var(--editorDarkMode-input-text);
   white-space: nowrap;
   cursor: pointer;
   transition: 0.1s ease;
 }
 
 .flag-menu-item:hover {
-  background: #855cd6;
-  color: white;
+  background-color: var(--editorDarkMode-primary, #855cd6);
+  color: var(--editorDarkMode-primary-text, white);
 }
