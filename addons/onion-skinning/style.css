@@ -12,17 +12,12 @@
   background-color: #855cd6;
 }
 
-/* Dropdown arrow */
-[class^="paint-editor_zoom-controls_"] ~ div > .sa-onion-button + .sa-onion-button .sa-onion-image {
+.sa-onion-arrow .sa-onion-image {
   width: 8px;
   height: auto;
   margin-top: 5px;
-  scale: 1 -1;
 }
-[class^="paint-editor_zoom-controls_"]
-  ~ div
-  > .sa-onion-button[data-enabled="false"]
-  + .sa-onion-button:not([data-enabled="true"]) {
+.sa-onion-button[data-enabled="false"] + .sa-onion-arrow:not([data-enabled="true"]) {
   opacity: 0.33;
   pointer-events: none;
 }
