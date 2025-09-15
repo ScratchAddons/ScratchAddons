@@ -1,13 +1,6 @@
 {
   "name": "Old studio layout",
   "description": "Reverts the layout of the studio page back to the one used before the studio update.",
-  "info": [
-    {
-      "type": "notice",
-      "text": "This addon doesn't work well on mobile devices and in small windows.",
-      "id": "mobile"
-    }
-  ],
   "tags": ["community", "theme", "studios", "featured"],
   "relatedAddons": ["scratch3to2", "items-per-row", "studio-followers"],
   "credits": [
