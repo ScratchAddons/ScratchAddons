@@ -14,10 +14,13 @@
 .sa-paint-snap-arrow .sa-paint-snap-image {
   width: 8px;
   height: auto;
-  margin-top: 5px;
+}
+.sa-paint-snap-arrow {
+  display: flex;
+  align-items: center;
 }
 .sa-paint-snap-button[data-enabled="false"] + .sa-paint-snap-arrow:not([data-enabled="true"]) {
-  opacity: 0.33;
+  opacity: 0.5;
   pointer-events: none;
 }
 

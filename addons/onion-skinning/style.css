@@ -15,10 +15,13 @@
 .sa-onion-arrow .sa-onion-image {
   width: 8px;
   height: auto;
-  margin-top: 5px;
+}
+.sa-onion-arrow {
+  display: flex;
+  align-items: center;
 }
 .sa-onion-button[data-enabled="false"] + .sa-onion-arrow:not([data-enabled="true"]) {
-  opacity: 0.33;
+  opacity: 0.5;
   pointer-events: none;
 }
 
