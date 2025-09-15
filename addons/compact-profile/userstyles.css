@@ -1,14 +1,10 @@
-.tm-compact-row {
+.sa-slider-flex-wrapper {
     display: flex;
     justify-content: space-between;
-    gap: 16px;
     margin-bottom: 20px;
 }
-.tm-compact-row .box.slider-carousel-container {
-    flex: 1;
-    max-width: 48%;
-}
-.tm-compact-row .slider-carousel {
+
+.sa-slider-flex-wrapper .slider-carousel {
     overflow-x: auto;
     scroll-behavior: smooth;
 }
