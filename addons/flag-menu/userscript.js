@@ -10,7 +10,7 @@ export default async function ({ addon, console, msg }) {
       role: "menuitem",
       className: addon.tab.scratchClass("context-menu_menu-item"),
       id: "sa-flag-menu-turbo",
-      textContent: msg("toggle-turbo"),
+      textContent: msg("turbo-on"),
     }),
     Object.assign(document.createElement("div"), {
       role: "menuitem",
@@ -50,6 +50,13 @@ export default async function ({ addon, console, msg }) {
   contextMenu.style.opacity = 0; // Setting opacity here fixes a visual glitch on dynamic enable
   addon.tab.displayNoneWhileDisabled(contextMenu);
   addon.self.addEventListener("disabled", closeContextMenu);
+
+  addon.tab.traps.vm.on("TURBO_MODE_ON", () => {
+    contextMenu.querySelector("#sa-flag-menu-turbo").textContent = msg("turbo-off");
+  });
+  addon.tab.traps.vm.on("TURBO_MODE_OFF", () => {
+    contextMenu.querySelector("#sa-flag-menu-turbo").textContent = msg("turbo-on");
+  });
 
   while (true) {
     greenFlag = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
