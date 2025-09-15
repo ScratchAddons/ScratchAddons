@@ -15,7 +15,7 @@ export default async function ({ addon, console }) {
       // queueMicrotask isn't enough on new Blockly
       setTimeout(changeBackpackVisibility, 0);
     }
-  })
+  });
 
   while (true) {
     originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
