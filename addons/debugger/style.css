@@ -472,6 +472,15 @@
   border-radius: 2px;
 }
 
+/* Make checkbox buttons same height as icon buttons */
+.sa-timing-profiling-toggle {
+  height: 16px;
+}
+
+.sa-timing-heatmap-content-wrapper {
+  height: 16px;
+}
+
 .sa-timing-checkbox:checked {
   background-color: white;
   position: relative;
