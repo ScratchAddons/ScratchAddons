@@ -3,33 +3,33 @@ export default async function ({ addon, console, msg }) {
 
   const contextMenu = Object.assign(document.createElement("nav"), {
     role: "menu",
-    className: "flag-context-menu",
+    className: addon.tab.scratchClass("context-menu_context-menu", { others: "sa-flag-context-menu" }),
   });
   contextMenu.append(
     Object.assign(document.createElement("div"), {
       role: "menuitem",
-      className: "flag-menu-item",
+      className: addon.tab.scratchClass("context-menu_menu-item"),
       id: "sa-flag-menu-turbo",
       textContent: msg("toggle-turbo"),
     }),
     Object.assign(document.createElement("div"), {
       role: "menuitem",
-      className: "flag-menu-item",
+      className: addon.tab.scratchClass("context-menu_menu-item"),
       id: "sa-flag-menu-fps",
     }),
     Object.assign(document.createElement("div"), {
       role: "menuitem",
-      className: "flag-menu-item",
+      className: addon.tab.scratchClass("context-menu_menu-item"),
       id: "sa-flag-menu-mute",
       textContent: msg("toggle-mute"),
     })
   );
 
   function closeContextMenu() {
-    contextMenu.classList.remove("ctx-menu-open");
+    contextMenu.classList.remove("sa-flag-menu-open");
   }
   document.addEventListener("mousedown", (e) => {
-    if (!e.target.closest(".flag-context-menu")) closeContextMenu();
+    if (!e.target.closest("[role='menu']")) closeContextMenu();
   });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeContextMenu();
@@ -62,7 +62,7 @@ export default async function ({ addon, console, msg }) {
     greenFlag.addEventListener("contextmenu", (e) => {
       if (addon.self.disabled) return;
       e.preventDefault();
-      contextMenu.classList.add("ctx-menu-open");
+      contextMenu.classList.add("sa-flag-menu-open");
       contextMenu.style.left = e.clientX + "px";
       contextMenu.style.top = e.clientY + "px";
     });

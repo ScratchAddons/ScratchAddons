@@ -53,8 +53,7 @@
 [class*="menu-bar_menu-bar-menu"] {
   margin-top: 2rem;
 }
-[class*="menu_menu-item"],
-.flag-menu-item {
+[class*="menu_menu-item"] {
   line-height: 1.75rem;
   padding: 0 0.5rem;
 }
