@@ -21,7 +21,7 @@ export default async function ({ addon, console, msg }) {
       role: "menuitem",
       className: addon.tab.scratchClass("context-menu_menu-item"),
       id: "sa-flag-menu-mute",
-      textContent: msg("toggle-mute"),
+      textContent: msg("mute"),
     })
   );
 
@@ -53,7 +53,7 @@ export default async function ({ addon, console, msg }) {
   addon.self.addEventListener("disabled", closeContextMenu);
 
   while (true) {
-    greenFlag = await addon.tab.waitForElement("[class^='green-flag']", {
+    greenFlag = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });

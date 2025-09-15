@@ -1,5 +1,6 @@
 {
   "flag-menu/toggle-turbo": "toggle turbo mode",
   "flag-menu/set-fps": "switch to {fps} fps",
-  "flag-menu/toggle-mute": "toggle mute"
+  "flag-menu/mute": "mute project",
+  "flag-menu/unmute": "unmute project"
 }
