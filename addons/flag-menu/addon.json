@@ -29,5 +29,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.44.0",
   "tags": ["player", "featured"],
+  "enabledByDefault": true,
   "relatedAddons": ["60fps", "mute-project"]
 }
