@@ -43,7 +43,6 @@ export async function updateBadge(defaultStoreId) {
         const color = isLoggedIn ? badgeSettings.color : "#dd2222";
         // The badge will show incorrect message count in other auth contexts.
         // Blocked on Chrome implementing store ID-based tab query
-        console.log(":br", color, text);
         await Promise.all([chrome.action.setBadgeBackgroundColor({ color }), chrome.action.setBadgeText({ text })]);
         return;
       }
