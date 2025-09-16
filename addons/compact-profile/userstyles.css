@@ -1,10 +1,11 @@
-.sa-slider-flex-wrapper {
+
+.sa-compact-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-.sa-slider-flex-wrapper .slider-carousel {
+.sa-compact-row .slider-carousel {
   overflow-x: auto;
   scroll-behavior: smooth;
 }
