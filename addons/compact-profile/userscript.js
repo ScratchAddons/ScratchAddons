@@ -1,45 +1,32 @@
 export default async function ({ addon }) {
-    const groupSliders = () => {
-        const allSliders = Array.from(document.querySelectorAll('.box.slider-carousel-container'));
-        const parentContainer = allSliders[0]?.parentNode;
-        if (!allSliders.length || !parentContainer) return;
+  function groupSliders() {
+    const boxes = Array.from(document.querySelectorAll(".box.slider-carousel-container"));
 
-        const order = [];
-        allSliders.forEach(slider => {
-            const carousel = slider.querySelector('.slider-carousel');
-            if (!carousel) return;
-            const items = carousel.querySelectorAll('li');
-            if (!items.length) return;
+    const order = [
+      "shared",
+      "favorites",
+      "studios-following",
+      "studios-curating",
+      "following",
+      "followers"
+    ];
 
-            if (carousel.querySelector('.gallery')) order.push(slider);
-            else order.push(slider);
-        });
+    const orderedBoxes = [];
+    order.forEach(id => {
+      const box = boxes.find(el => el.querySelector(`#${id}`));
+      if (box) orderedBoxes.push(box);
+    });
 
-        for (let i = 0; i < order.length - 1; i += 2) {
-            const left = order[i];
-            const right = order[i + 1];
+    for (let i = 0; i < orderedBoxes.length - 1; i += 2) {
+      const left = orderedBoxes[i];
+      const right = orderedBoxes[i + 1];
+      const parent = document.createElement("div");
+      parent.className = "sa-compact-row";
+      left.parentNode.insertBefore(parent, left);
+      parent.appendChild(left);
+      parent.appendChild(right);
+    }
+  }
 
-            const flexWrapper = document.createElement('div');
-            flexWrapper.className = 'sa-slider-flex-wrapper';
-            left.style.width = '48%';
-            right.style.width = '48%';
-            left.style.display = 'block';
-            right.style.display = 'block';
-
-            parentContainer.insertBefore(flexWrapper, left);
-            flexWrapper.appendChild(left);
-            flexWrapper.appendChild(right);
-
-            [left, right].forEach(box => {
-                const carousel = box.querySelector('.slider-carousel');
-                if (carousel) {
-                    carousel.style.overflowX = 'auto';
-                    carousel.style.scrollBehavior = 'smooth';
-                }
-            });
-        }
-    };
-
-    window.addEventListener('load', groupSliders);
-    addon.self.addEventListener('enabled', groupSliders);
-};
+  groupSliders();
+}
