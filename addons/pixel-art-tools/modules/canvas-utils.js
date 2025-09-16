@@ -65,6 +65,6 @@ export function createCanvasUtilsModule(paper, state) {
 
   return {
     applyPixelGrid,
-    resizeBitmapCanvas
+    resizeBitmapCanvas,
   };
 }

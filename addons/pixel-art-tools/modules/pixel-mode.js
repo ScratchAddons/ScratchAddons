@@ -102,8 +102,7 @@ export function createPixelModeModule(addon, state, redux, msg, canvasUtils, bru
           "scratch-paint/formats/CHANGE_FORMAT",
         ],
         reduxCondition: (store) =>
-          store.scratchGui.editorTab.activeTabIndex === 1 &&
-          !store.scratchGui.mode.isPlayerOnly,
+          store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
       });
 
       addon.tab.appendToSharedSpace({
@@ -152,6 +151,6 @@ export function createPixelModeModule(addon, state, redux, msg, canvasUtils, bru
     setPixelMode,
     setupZoomControls,
     handleDisabled,
-    handleReenabled
+    handleReenabled,
   };
 }

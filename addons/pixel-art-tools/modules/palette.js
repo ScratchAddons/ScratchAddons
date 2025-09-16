@@ -48,7 +48,6 @@ export function createPaletteModule(addon, state, redux, msg) {
     }
   };
 
-
   const toggleEditingPaletteColor = (index) => {
     if (state.editingPaletteIndex === index) {
       // Already editing this color, exit edit mode
@@ -177,7 +176,7 @@ export function createPaletteModule(addon, state, redux, msg) {
       `# ${msg("paletteExportLabel")}`,
       "Name: Scratch Addons Pixel Palette",
       "Columns: 0",
-      "#"
+      "#",
     ].join("\n");
     const body = state.palette
       .map((hex) => {
@@ -296,8 +295,7 @@ export function createPaletteModule(addon, state, redux, msg) {
           "scratch-paint/formats/CHANGE_FORMAT",
         ],
         reduxCondition: (store) =>
-          store.scratchGui.editorTab.activeTabIndex === 1 &&
-          !store.scratchGui.mode.isPlayerOnly,
+          store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
       });
 
       // Use shared space API
@@ -316,6 +314,6 @@ export function createPaletteModule(addon, state, redux, msg) {
     renderPalette,
     addPaletteColor,
     setupPalettePanel,
-    updatePaletteColorFromFill
+    updatePaletteColorFromFill,
   };
 }

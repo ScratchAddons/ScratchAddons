@@ -15,11 +15,11 @@ export function createBrushControlsModule(addon, state, redux) {
     const format = redux.state?.scratchPaint?.format;
     const isBrush = mode === "BIT_BRUSH" || mode === "BIT_LINE";
     const isBitmap = format && format.startsWith("BITMAP");
-    
+
     // Show our custom brush controls only in bitmap mode with brush tools and pixel mode enabled
     const showCustomControls = isBrush && isBitmap && state.enabled;
     state.brushButtons.dataset.visible = showCustomControls ? "true" : "false";
-    
+
     // Hide/show original number input based on whether we're showing custom controls
     const numberInput = document.querySelector("[class*='mode-tools'] input[type='number']");
     if (numberInput) {
@@ -71,8 +71,7 @@ export function createBrushControlsModule(addon, state, redux) {
       try {
         const container = await addon.tab.waitForElement("[class*='mode-tools']", {
           reduxCondition: (store) =>
-            store.scratchGui.editorTab.activeTabIndex === 1 &&
-            !store.scratchGui.mode.isPlayerOnly,
+            store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
         });
         if (!container) return;
 
@@ -94,9 +93,11 @@ export function createBrushControlsModule(addon, state, redux) {
     // Re-setup on relevant Redux events
     redux.addEventListener("statechanged", ({ detail }) => {
       if (!detail?.action?.type) return;
-      if (detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB" ||
-          detail.action.type === "scratch-paint/modes/CHANGE_MODE" ||
-          detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
+      if (
+        detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB" ||
+        detail.action.type === "scratch-paint/modes/CHANGE_MODE" ||
+        detail.action.type === "scratch-paint/formats/CHANGE_FORMAT"
+      ) {
         insertBrushControls();
       }
     });
@@ -105,6 +106,6 @@ export function createBrushControlsModule(addon, state, redux) {
   return {
     updateBrushSelection,
     updateBrushControlVisibility,
-    setupBrushControls
+    setupBrushControls,
   };
 }

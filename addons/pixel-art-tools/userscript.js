@@ -44,7 +44,6 @@ export default async function ({ addon, msg, console }) {
   redux.addEventListener("statechanged", ({ detail }) => {
     if (!detail || !detail.prev || !detail.next) return;
 
-
     if (detail.action.type === "scratch-paint/modes/CHANGE_MODE") {
       brushControls.updateBrushControlVisibility();
     }
