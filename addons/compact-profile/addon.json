@@ -1,6 +1,6 @@
 {
-  "name": "Compact Scratch Profile Sliders",
-  "description": "Groups all sliders on Scratch profiles in pairs for shared projects, favorited projects, followed studios, curated studios, following, and followers.",
+  "name": "Compact profile sliders",
+  "description": "Rearranges Scratch profile sections into a cleaner two-column layout by pairing sliders side by side.",
   "credits": [
     {
       "name": "VIGARPAST_777",
@@ -19,7 +19,7 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
-  "settings": [],
+  "tags": ["community", "profiles", "layout"],
   "versionAdded": "1.0.0",
-  "tags": ["profiles", "community", "sliders"]
+  "enabledByDefault": false
 }
