@@ -72,6 +72,7 @@ export function initUI({ addon, msg }) {
   const settingButton = createButton();
   settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
   settingButton.title = msg("settings");
+  settingButton.classList.add("sa-paint-snap-arrow");
   settingButton.appendChild(createButtonImage("settings"));
   controlsGroup.appendChild(settingButton);
 
