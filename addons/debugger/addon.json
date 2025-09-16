@@ -103,7 +103,9 @@
   "versionAdded": "1.16.0",
   "latestUpdate": {
     "version": "1.44.0",
-    "temporaryNotice": "New timing tab to help you with micro-optimisation of your project and the debugger window is now resizable."
+    "temporaryNotice": "New timing tab to help you with micro-optimization of your project and the debugger window is now resizable.",
+    "newSettings": ["auto_stop_timing", "show_ratio_time"],
+    "isMajor": true
   },
   "libraries": ["chartjs", "scratch-gui", "scratch-vm"]
 }
