@@ -1,0 +1,13 @@
+{
+  "pixel-art-tools/name": "Pixel art tools",
+  "pixel-art-tools/pixelModeButton": "Pixel mode",
+  "pixel-art-tools/paletteTitle": "Palette",
+  "pixel-art-tools/addColor": "Add current color",
+  "pixel-art-tools/importPalette": "Import",
+  "pixel-art-tools/exportPalette": "Export",
+  "pixel-art-tools/emptyPalette": "Add colors with the + button or import a .gpl palette.",
+  "pixel-art-tools/paletteExportLabel": "Palette exported from Scratch Addons",
+  "pixel-art-tools/paletteFull": "Palette is full",
+  "pixel-art-tools/colorAlreadyExists": "Color already in palette",
+  "pixel-art-tools/sizeSeparator": "x"
+}
