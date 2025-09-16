@@ -20,6 +20,8 @@
     }
   ],
   "settings": [],
-  "versionAdded": "1.44.0",
-  "tags": ["profiles", "ui", "featured"]
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["profiles", "ui", "featured"],
+  "versionAdded": "1.44.0"
 }
