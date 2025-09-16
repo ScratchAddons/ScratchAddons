@@ -1,11 +1,10 @@
 .sa-slider-flex-wrapper {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .sa-slider-flex-wrapper .slider-carousel {
-    overflow-x: auto;
-    scroll-behavior: smooth;
+  overflow-x: auto;
+  scroll-behavior: smooth;
 }
-
