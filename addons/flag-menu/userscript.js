@@ -1,8 +1,8 @@
 export default async function ({ addon, console, msg }) {
   let greenFlag;
 
-  const contextMenuClass = addon.tab.scratchClass("context-menu_context-menu") ||
-    addon.tab.scratchClass("context-menu_context-menu-content"); // React 16 || React 18
+  const contextMenuClass =
+    addon.tab.scratchClass("context-menu_context-menu") || addon.tab.scratchClass("context-menu_context-menu-content"); // React 16 || React 18
   const contextMenu = Object.assign(document.createElement("nav"), {
     role: "menu",
     className: `${contextMenuClass} sa-flag-context-menu`,
@@ -14,7 +14,7 @@ export default async function ({ addon, console, msg }) {
       id,
       textContent: text,
     });
-    item.addEventListener("mouseenter", () => item.setAttribute("data-highlighted", ""))
+    item.addEventListener("mouseenter", () => item.setAttribute("data-highlighted", ""));
     item.addEventListener("mouseleave", () => item.removeAttribute("data-highlighted"));
     return item;
   };
