@@ -1,18 +1,25 @@
 {
   "name": "Compact Scratch Profile Sliders",
-  "description": "Groups Scratch profile sliders in pairs for a more compact layout, fully language-independent.",
+  "description": "Rearranges the profile sections into a cleaner two-column layout by pairing sliders side by side, making profiles more compact and readable.",
+  "credits": [
+    {
+      "name": "VIGARPAST_777",
+      "link": "https://scratch.mit.edu/users/VIGARPAST_777/"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["users"]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyles.css",
-      "matches": ["users"]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
+  "settings": [],
   "versionAdded": "1.44.0",
-  "tags": ["community", "profiles"]
+  "tags": ["profiles", "ui", "featured"]
 }
