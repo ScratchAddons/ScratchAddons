@@ -90,6 +90,7 @@ export default async function ({ addon, console, msg }) {
     container.onclick = addEmoji;
     const item = document.createElement("img");
     item.src = addon.tab.clientVersion === "scratch-www" ? emoji.image : emoji.imager2; //We have to do a check here so that better emojis works on the picker on profiles
+    item.draggable = false;
     item.classList.add(
       addon.tab.clientVersion === "scratch-www" ? "emoji" : "easter-egg",
       "sa-emoji-picker-item-inner"

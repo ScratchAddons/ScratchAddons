@@ -34,7 +34,10 @@
   z-index: 492;
   background-color: white;
   width: 565px;
-  height: 25rem;
+  height: 26rem;
+  resize: auto;
+  min-width: 300px;
+  min-height: 200px;
 }
 
 .sa-debugger-interface [class*="card_header-buttons_"] {
@@ -53,9 +56,14 @@
   margin: 0;
   display: flex;
   align-items: center;
-  padding: 0 15px;
+  align-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 15px;
+  padding-right: 0px;
   font-size: 0.75rem;
 }
+
 .sa-debugger-tabs li {
   margin: 0;
   display: flex;
@@ -66,9 +74,7 @@
   border-radius: 1rem;
   color: white;
   cursor: pointer;
-}
-.sa-debugger-tabs li + li {
-  margin-inline-start: 10px;
+  font-weight: bold;
 }
 .sa-debugger-tabs li:hover {
   background-color: rgba(0, 0, 0, 0.15);
@@ -89,21 +95,70 @@
   filter: none;
 }
 
-.sa-debugger-header-buttons img {
-  width: 20px;
-  height: 20px;
+.sa-debugger-header-buttons [class*="modal_header-item-close"] {
+  padding: 0 13px 0 0;
+}
+
+.sa-debugger-footer {
+  border-top: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  display: flex;
+  justify-content: center;
+  padding: 8px 15px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: auto;
+}
+
+.sa-debugger-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.sa-debugger-footer-buttons [class*="card_shrink-expand-button"] {
+  background-color: #29beb8;
+  font-weight: bold;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.4rem 0.7rem;
+  color: white;
+  cursor: pointer;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.sa-debugger-footer-buttons [class*="card_shrink-expand-button"]:hover {
+  background-color: #3aa8a4;
+}
+
+.sa-debugger-footer-buttons img {
+  width: 16px;
+  height: 16px;
+}
+
+.sa-debugger-unpause-container {
+  display: flex;
+  align-items: center;
+}
+
+.sa-debugger-unpause-container:not(:last-child) {
+  border-right: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  padding-right: 10px;
 }
 
 .sa-debugger-unpause {
-  animation: saDebuggerUnpause 2s infinite alternate;
+  animation: saBorderPulse 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes saDebuggerUnpause {
+@keyframes saBorderPulse {
   0% {
-    background-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px rgb(41 190 184 / 0%);
   }
   100% {
-    background-color: rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 4px rgb(41 190 184 / 35%);
   }
 }
 
@@ -168,18 +223,18 @@
   font-family: monospace;
 }
 .sa-debugger-log[data-type="warn"] {
-  border-color: hsl(50deg, 100%, 75%);
-  color: hsl(39deg 100% 18%);
-  background-color: hsl(50deg 100% 95%);
+  border-color: hsl(38deg, 100%, 80%);
+  color: hsl(38deg 100% 18%);
+  background-color: hsl(38deg 100% 95%);
 }
 .sa-debugger-log[data-type="error"] {
-  border-color: hsl(0deg 100% 92%);
-  color: red;
-  background-color: hsl(0deg 100% 95%);
+  border-color: hsl(20deg 100% 85%);
+  color: hsl(20deg 100% 45%);
+  background-color: hsl(20deg 100% 95%);
 }
 
 .sa-debugger-log-repeats {
-  background-color: hsla(163, 85%, 40%, 1);
+  background-color: #29beb8;
   color: white;
   border-radius: 100px;
   padding: 1px 6px;

@@ -8,12 +8,27 @@ import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
-const isScratchGui =
-  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
+const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 
 const contextMenuCallbacks = [];
-const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
+const CONTEXT_MENU_ORDER = ["jump-to-def", "editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
+
+const PROJECT_ACTIONS_CSS = `
+  @media (min-width: 768px) {
+    .preview > .inner > .preview-row:nth-child(3) {
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      margin-right: auto;
+    }
+
+    .subactions {
+      display: contents;
+    }
+  }`;
 
 /**
  * APIs specific to userscripts.
@@ -157,6 +172,7 @@ export default class Tab extends Listenable {
    * Use this as an optimization and do not rely on the behavior.
    * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
    * Use this as an optimization and do not rely on the behavior.
+   * @param {boolean=} opts.resizeEvent - True if the selector should be resolved on window resize, in addition to the reduxEvents.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
@@ -171,7 +187,8 @@ export default class Tab extends Listenable {
       }
     }
     const { reduxCondition, condition } = opts;
-    let listener;
+    let reduxListener;
+    let resizeListener;
     let combinedCondition = () => {
       if (condition && !condition()) return false;
       if (this.redux.state) {
@@ -182,20 +199,24 @@ export default class Tab extends Listenable {
       // if it runs a little earlier. Just don't error out.
       return true;
     };
-    if (opts.reduxEvents) {
+    if (opts.reduxEvents || opts.resizeEvent) {
       const oldCondition = combinedCondition;
       let satisfied = false;
       combinedCondition = () => {
         if (oldCondition && !oldCondition()) return false;
         return satisfied;
       };
-      listener = ({ detail }) => {
-        if (opts.reduxEvents.includes(detail.action.type)) {
+      reduxListener = ({ detail }) => {
+        if (opts.reduxEvents && opts.reduxEvents.includes(detail.action.type)) {
           satisfied = true;
         }
       };
       this.redux.initialize();
-      this.redux.addEventListener("statechanged", listener);
+      this.redux.addEventListener("statechanged", reduxListener);
+      resizeListener = () => {
+        if (opts.resizeEvent) satisfied = true;
+      };
+      window.addEventListener("resize", resizeListener);
     }
     const promise = scratchAddons.sharedObserver.watch({
       query: selector,
@@ -203,9 +224,10 @@ export default class Tab extends Listenable {
       condition: combinedCondition,
       elementCondition: opts.elementCondition || null,
     });
-    if (listener) {
+    if (reduxListener || resizeListener) {
       promise.then((match) => {
-        this.redux.removeEventListener("statechanged", listener);
+        this.redux.removeEventListener("statechanged", reduxListener);
+        window.removeEventListener("resize", resizeListener);
         return match;
       });
     }
@@ -216,7 +238,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    if (isScratchGui) {
+    if (isScratchGui || location.pathname === "/projects/editor" || location.pathname === "/projects/editor/") {
       // Note that scratch-gui does not change the URL when going fullscreen.
       if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
       return "editor";
@@ -409,13 +431,18 @@ export default class Tab extends Listenable {
     const sharedSpaces = {
       stageHeader: {
         // Non-fullscreen stage header only
-        element: () => q("[class^='stage-header_stage-size-row']"),
+        element: () =>
+          q("[class*='stage-header_setThumbnailButton_']")
+            ? q("[class*='stage-header_rightSection_']")
+            : q("[class*='stage-header_stage-size-row_']"),
         from: () => [],
         until: () => [
           // Small/big stage buttons (for editor mode)
-          q("[class^='stage-header_stage-size-toggle-group']"),
+          q("[class*='stage-header_stage-size-toggle-group_']"),
           // Full screen icon (for player mode)
-          q("[class^='stage-header_stage-size-row']").lastChild,
+          q("[class*='stage-header_setThumbnailButton_']")
+            ? q("[class*='stage-header_rightSection_']").lastChild
+            : q("[class*='stage-header_stage-size-row_']").lastChild,
         ],
       },
       fullscreenStageHeader: {
@@ -444,12 +471,32 @@ export default class Tab extends Listenable {
         until: () => [],
       },
       beforeProjectActionButtons: {
-        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        element: () => {
+          if (!q("#sa-project-actions-css")) {
+            document.head.appendChild(
+              Object.assign(document.createElement("style"), {
+                id: "sa-project-actions-css",
+                textContent: PROJECT_ACTIONS_CSS,
+              })
+            );
+          }
+          return q(".flex-row.subactions > .flex-row.action-buttons");
+        },
         from: () => [],
         until: () => [q(".report-button"), q(".action-buttons > div")],
       },
       afterCopyLinkButton: {
-        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        element: () => {
+          if (!q("#sa-project-actions-css")) {
+            document.head.appendChild(
+              Object.assign(document.createElement("style"), {
+                id: "sa-project-actions-css",
+                textContent: PROJECT_ACTIONS_CSS,
+              })
+            );
+          }
+          return q(".flex-row.subactions > .flex-row.action-buttons");
+        },
         from: () => [q(".copy-link-button")],
         until: () => [],
       },
@@ -750,6 +797,30 @@ export default class Tab extends Listenable {
     createdAnyBlockContextMenus = true;
 
     this.traps.getBlockly().then((ScratchBlocks) => {
+      if (ScratchBlocks.registry) {
+        // new Blockly
+        const oldGenerateContextMenu = ScratchBlocks.BlockSvg.prototype.generateContextMenu;
+        ScratchBlocks.BlockSvg.prototype.generateContextMenu = function (...args) {
+          let items = oldGenerateContextMenu.call(this, ...args);
+          for (const { callback, blocks, flyout } of contextMenuCallbacks) {
+            let injectMenu =
+              // Block in workspace
+              (blocks && !this.isInFlyout) ||
+              // Block in flyout
+              (flyout && this.isInFlyout);
+            if (injectMenu) {
+              try {
+                items = callback(items, this);
+              } catch (e) {
+                console.error("Error while calling context menu callback: ", e);
+              }
+            }
+          }
+          return items;
+        };
+        return;
+      }
+
       const oldShow = ScratchBlocks.ContextMenu.show;
       ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
         const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
@@ -774,16 +845,27 @@ export default class Tab extends Listenable {
           }
         }
 
+        const oldCreateWidget = ScratchBlocks.ContextMenu.createWidget_;
+        ScratchBlocks.ContextMenu.createWidget_ = function (...args) {
+          oldCreateWidget.call(this, ...args);
+          // Add styles to separator items
+          // This must be done before ContextMenu.position_() is called because it changes the height
+          const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
+          items.forEach((item, i) => {
+            if (item.separator) {
+              const itemElt = blocklyContextMenu.children[i];
+              itemElt.setAttribute("role", "separator");
+              itemElt.style.padding = "0";
+              if (i !== 0) {
+                itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+              }
+            }
+          });
+        };
+
         oldShow.call(this, event, items, rtl);
 
-        const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
-        items.forEach((item, i) => {
-          if (i !== 0 && item.separator) {
-            const itemElt = blocklyContextMenu.children[i];
-            itemElt.style.paddingTop = "2px";
-            itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-          }
-        });
+        ScratchBlocks.ContextMenu.createWidget_ = oldCreateWidget;
       };
     });
   }

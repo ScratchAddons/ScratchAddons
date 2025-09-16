@@ -32,10 +32,15 @@ export async function updateBadge(defaultStoreId) {
     ) {
       db = await MessageCache.openDatabase();
       const count = await db.get("count", defaultStoreId);
+      const tooltipCount = isLoggedIn ? (count > 0 ? ` (${String(count)})` : "") : " (?)";
+      chrome.action.setTitle({
+        title: `${chrome.i18n.getMessage("extensionName")}${tooltipCount}`,
+      });
       // Do not show 0, unless that 0 means logged out
       if (count || !isLoggedIn) {
+        const displayCount = count < 1000 ? String(count) : count <= 9000 ? Math.floor(count / 1000) + "k" : "9k+";
+        const text = isLoggedIn ? String(displayCount) : "?";
         const color = isLoggedIn ? badgeSettings.color : "#dd2222";
-        const text = isLoggedIn ? String(count) : "?";
         // The badge will show incorrect message count in other auth contexts.
         // Blocked on Chrome implementing store ID-based tab query
         console.log(":br", color, text);
@@ -52,6 +57,7 @@ export async function updateBadge(defaultStoreId) {
   // Hide badge when logged out and showOffline is false,
   // or when the logged-in user has no unread messages,
   // or when the addon is disabled
+  chrome.action.setTitle({ title: "" });
   await chrome.action.setBadgeText({ text: "" });
 }
 

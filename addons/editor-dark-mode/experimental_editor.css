@@ -2,7 +2,10 @@
 [class*="gui_body-wrapper_"],
 [class*="gui_tab_"]:not([class*="gui_is-selected_"]):hover,
 [class*="backpack_backpack-item_"] > div,
-[class*="custom-procedures_workspace_"] .blocklySvg {
+[class*="custom-procedures_workspace_"] .blocklySvg,
+[class*="record-modal_meter-container_"],
+[class*="meter_mask_"],
+[class*="record-modal_waveform-container_"] {
   background-color: var(--editorDarkMode-page);
   color: var(--editorDarkMode-page-text);
 }
@@ -88,6 +91,7 @@
 [class*="menu-bar_menu-bar-item_"][class*="menu-bar_hoverable_"]:hover,
 [class*="menu_menu-item_"][class*="menu_active_"],
 [class*="menu_menu-item_"]:hover,
+[class*="menu_menu-item_"][class*="menu_expanded_"],
 [class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-thumb {
   background-color: var(--editorDarkMode-menuBar-border);
 }
@@ -113,7 +117,8 @@
   background-color: var(--editorDarkMode-selector);
   color-scheme: var(--editorDarkMode-selector-colorScheme);
 }
-[class*="sprite-selector-item_sprite-info_"] {
+[class*="sprite-selector-item_sprite-info_"],
+[class*="library_library-category-title_"] {
   color: var(--editorDarkMode-selector-text);
 }
 [class*="card_card_"] {
@@ -158,15 +163,17 @@
 .sa-body-editor [class*="stage-header_stage-size-row_"] > *,
 .sa-body-editor [class*="stage-header_unselect-wrapper_"],
 [class*="sprite-info_sprite-info_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="stage-selector_stage-selector_"],
 [class*="stage-selector_header_"],
+[class*="drag-layer_image_"],
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
+.scratchColourSlider::-webkit-slider-thumb,
 [class*="asset-panel_wrapper_"],
 [class*="color-button_outline-swatch_"]::after,
 [class*="slider_handle_"],
 [class*="sound-editor_button_"],
 [class*="library-item_library-item_"],
-.s3devDDOut.vis, /* devtools style */
 .sa-find-dropdown-out.visible, /* find-bar style */
 .sa-mcp-container, /* middle-click-popup style */
 [class*="prompt_body_"],
@@ -193,17 +200,25 @@
 [class*="library-item_featured-extension-metadata_"],
 [class*="record-modal_help-text_"],
 [class*="webgl-modal_body_"] > *,
-.sa-editor-modal-content p {
+.sa-editor-modal-content p,
+.sa-debugger-tab-content h2 {
   color: var(--editorDarkMode-accent-text);
 }
 .blocklyFlyoutButton:hover {
   fill: var(--editorDarkMode-accent);
 }
-.blocklyFlyoutButton:hover .blocklyText {
+.blocklyFlyoutButton:hover .blocklyText,
+.scratch-renderer.default-theme .blocklyFlyoutButton:hover .blocklyText {
   fill: var(--editorDarkMode-accent-text);
 }
+.scratch-renderer.high-contrast-theme .blocklyFlyoutButton:hover .blocklyText {
+  fill: var(--editorDarkMode-accent-text) !important;
+}
 [class*="selector_new-buttons_"]::before {
-  background: linear-gradient(var(--editorDarkMode-accent-opacity0), var(--editorDarkMode-accent));
+  background: linear-gradient(var(--editorDarkMode-accent-gradient-opacity0), var(--editorDarkMode-accent-gradient));
+}
+[class*="library-item_library-item-inset-image-container_"] {
+  border-color: var(--editorDarkMode-accent);
 }
 .sa-float-bar-dropdown > li.sa-boolean::before /* middle-click-popup style */ {
   border-top: 9px solid var(--editorDarkMode-accent);
@@ -218,7 +233,7 @@
 img[class*="tool-select-base_tool-select-icon_"],
 [class*="paint-editor_button-group-button-icon_"],
 [class*="mode-tools_mode-tools-icon_"],
-[class*="library-item_library-item-image_"][src*="static/assets"] /* sound icon */,
+[class*="library-item_library-item-image_"][src*="data:"] /* sound icon */,
 [class*="library-item_featured-extension-metadata-detail_"] img {
   filter: var(--editorDarkMode-accent-filter);
 }
@@ -228,12 +243,37 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="font-dropdown_font-dropdown_"][class*="dropdown_mod-open_"] {
   color: var(--editorDarkMode-accent-openFontDropdownText);
 }
+[dir="ltr"] [class*="fixed-tools_mod-dashed-border_"],
+[dir="rtl"] [class*="fixed-tools_mod-dashed-border_"],
+[dir="ltr"] [class*="paint-editor_mod-dashed-border_"],
+[dir="rtl"] [class*="paint-editor_mod-dashed-border_"],
+[dir="ltr"] [class*="mode-tools_mod-dashed-border_"],
+[dir="rtl"] [class*="mode-tools_mod-dashed-border_"],
+[class*="paint-editor_editor-container-top_"],
+[dir="ltr"] [class*="sound-editor_input-group_"],
+[dir="rtl"] [class*="sound-editor_input-group_"],
+[dir="rtl"] [class*="sound-editor_row-reverse_"] > [class*="sound-editor_input-group_"],
+[class*="prompt_cloud-option_"] {
+  border-color: var(--editorDarkMode-accent-divider);
+}
+[class*="sound-editor_round-button_"] {
+  border-color: var(--editorDarkMode-accent-transparent75);
+}
 [class*="alert_alert_"][class*="alert_success_"] {
   background-color: var(--editorDarkMode-accent-success);
   box-shadow: 0 0 0 2px var(--editorDarkMode-accent-success);
 }
 [class*="alert_alert_"][class*="alert_warn_"] {
   background-color: var(--editorDarkMode-accent-error);
+}
+[class*="blocks_drag-over_"]::after,
+[class*="backpack_drag-over_"]::after,
+[class*="sprite-selector_scroll-wrapper-dragging_"],
+[class*="sprite-selector_raised_"],
+[class*="sprite-selector_raised_"]:hover,
+[class*="stage-selector_raised_"],
+[class*="stage-selector_raised_"] [class*="stage-selector_header_"] {
+  background-color: var(--editorDarkMode-accent-dropHighlight);
 }
 [class*="alert_alert-message_"] {
   color: var(--editorDarkMode-accent-text);
@@ -249,7 +289,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="input_input-form_"],
 [class*="input_input-form_"],
 [class*="context-menu_context-menu_"],
+[class*="context-menu_context-menu-content_"],
 .blocklyWidgetDiv .goog-menu,
+.blocklyWidgetDiv .blocklyMenu,
 [class*="filter_filter_"],
 [class*="prompt_button-row_"] button,
 [class*="prompt_variable-name-text-input_"],
@@ -274,8 +316,11 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="color-picker_row-header_"],
 [class*="filter_filter-input_"],
 [class*="filter_filter-input_"]::placeholder,
+[class*="context-menu_menu-item_"],
 .blocklyWidgetDiv .goog-menuitem,
-.scratchColourPickerLabel {
+.blocklyMenuItem,
+.scratchColourPickerLabel,
+.valueReportBox {
   color: var(--editorDarkMode-input-text);
 }
 .Popover-tipShape,
@@ -284,7 +329,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyFlyoutCheckbox {
   fill: var(--editorDarkMode-input);
 }
-.blocklyBlockCanvas g:not(.checked) .blocklyFlyoutCheckboxPath {
+.blocklyBlockCanvas g:not(.checked) .blocklyFlyoutCheckboxPath,
+.blocklyBubbleCanvas > g:not(.checked) .blocklyFlyoutCheckboxPath {
   stroke: var(--editorDarkMode-input);
 }
 .blocklyDropDownDiv[style*="background-color: rgb(255, 255, 255)"] {
@@ -297,9 +343,6 @@ img[class*="tool-select-base_tool-select-icon_"],
 .sa-onion-settings .sa-onion-image {
   filter: var(--editorDarkMode-input-filter);
 }
-.blocklyZoom > image {
-  filter: var(--editorDarkMode-workspace-codeZoomFilter);
-}
 [class*="input_input-form_"]::placeholder,
 [class*="input_input-form_"]::placeholder {
   color: var(--editorDarkMode-input-transparentText);
@@ -307,9 +350,20 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-content {
   color: var(--editorDarkMode-input-transparentText) !important;
 }
+.blocklyMenuItemDisabled {
+  color: var(--editorDarkMode-input-transparentText);
+}
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
+.scratchColourSlider::-webkit-slider-thumb,
 [class*="slider_handle_"] {
   box-shadow: 0 0 0 4px var(--editorDarkMode-input-foregroundShadow);
+}
+[class*="context-menu_menu-item-bordered_"] {
+  border-color: var(--editorDarkMode-input-divider);
+}
+.blocklyWidgetDiv .goog-menuitem,
+.blocklyMenuItem {
+  border-color: var(--editorDarkMode-input-divider) !important;
 }
 [class*="question_question-input_"] [class*="input_input-form_"] {
   /* Don't affect ask prompt */
@@ -336,9 +390,12 @@ img[class*="tool-select-base_tool-select-icon_"],
 
 /* Block category menu background */
 .blocklyToolboxDiv,
+.blocklyToolbox,
 .scratchCategoryMenu {
   background: var(--editorDarkMode-categoryMenu);
   color: var(--editorDarkMode-categoryMenu-text);
+  --colour-toolboxSelected: var(--editorDarkMode-categoryMenu-selection);
+  --colour-toolboxText: var(--editorDarkMode-categoryMenu-text);
 }
 .scratchCategoryMenuItem.categorySelected {
   background-color: var(--editorDarkMode-categoryMenu-selection);
@@ -347,6 +404,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .scratchCategoryMenuItem:hover {
   color: var(--editorDarkMode-categoryMenu-hoverText) !important;
 }
+.blocklyToolboxCategory:hover {
+  color: var(--editorDarkMode-categoryMenu-hoverText);
+}
 
 /* Block palette background */
 .blocklyFlyoutBackground {
@@ -354,8 +414,14 @@ img[class*="tool-select-base_tool-select-icon_"],
   fill-opacity: 1;
 }
 .blocklyFlyoutLabelText,
-.blocklyFlyoutButton .blocklyText {
+.scratch-renderer.default-theme .blocklyFlyoutLabelText,
+.scratch-renderer.high-contrast-theme .blocklyFlyoutLabelText,
+.blocklyFlyoutButton .blocklyText,
+.scratch-renderer.default-theme .blocklyFlyoutButton .blocklyText {
   fill: var(--editorDarkMode-palette-text);
+}
+.scratch-renderer.high-contrast-theme .blocklyFlyoutButton .blocklyText {
+  fill: var(--editorDarkMode-palette-text) !important;
 }
 .blocklyFlyoutScrollbar .blocklyScrollbarHandle,
 .blocklyFlyoutScrollbar .blocklyScrollbarBackground:hover + .blocklyScrollbarHandle,
@@ -374,8 +440,10 @@ img[class*="tool-select-base_tool-select-icon_"],
 }
 
 /* Primary color */
+[class*="backpack_more_"],
 [class*="sprite-selector-item_is-selected_"] [class*="sprite-selector-item_sprite-info_"],
 [class*="delete-button_delete-button-visible_"],
+[class*="delete-confirmation-prompt_body_"],
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header_"],
 [class*="font-dropdown_mod-menu-item_"]:hover:not(:active),
 [class*="tool-select-base_mod-tool-select_"][class*="tool-select-base_is-selected_"],
@@ -387,12 +455,11 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="audio-trimmer_selection-background_"],
 [class*="tag-button_tag-button_"]:not([class*="tag-button_active_"]),
 [class*="action-menu_button_"],
-[class*="context-menu_menu-item_"]:hover,
-.blocklyWidgetDiv .goog-menuitem-highlight,
-.blocklyWidgetDiv .goog-menuitem-hover {
+[class*="context-menu_menu-item_"]:hover {
   background-color: var(--editorDarkMode-primary);
   color: var(--editorDarkMode-primary-text);
 }
+[class*="delete-button_delete-button-clicked_"],
 [class*="context-menu_menu-item-danger_"]:hover {
   background-color: hsla(30, 100%, 55%, 1);
 }
@@ -409,17 +476,25 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="stage_frame_"],
 [class*="sprite-selector-item_sprite-selector-item_"]:hover,
 [class*="stage-selector_stage-selector_"]:hover,
+[class*="drag-layer_image_"],
 [class*="sound-editor_button_"]:focus::before,
 [class*="library-item_library-item_"]:hover {
   border-color: var(--editorDarkMode-primary);
+}
+.sa-body-editor input {
+  outline-color: var(--editorDarkMode-primary);
 }
 [class*="green-flag_green-flag_"]:hover,
 [class*="stop-all_stop-all_"]:hover,
 .pause-btn:hover,
 [class*="toggle-buttons_button_"][aria-pressed="true"],
 [class*="icon-button_container_"]:not([class*="tool-select-base_is-selected_"]):active,
-[class*="record-modal_waveform-container_"] {
+.blocklyWidgetDiv .goog-menuitem-highlight,
+.blocklyWidgetDiv .goog-menuitem-hover {
   background-color: var(--editorDarkMode-primary-transparent15);
+}
+:root {
+  --colour-contextualMenuHover: var(--editorDarkMode-primary-transparent15);
 }
 [class*="library_filter-bar_"],
 .sa-body-editor [class*="stage-header_stage-button_"]:active,
@@ -465,6 +540,11 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="action-menu_main-button_"]:hover {
   box-shadow: 0 0 0 6px var(--editorDarkMode-primary-transparent35);
 }
+[class*="dial_gauge-path_"] {
+  fill: var(--editorDarkMode-primary-transparent35);
+  stroke: var(--editorDarkMode-primary);
+}
+[class*="delete-confirmation-prompt_label_"],
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header-title_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
@@ -482,6 +562,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .sa-paint-snap-button[data-enabled="true"] .sa-paint-snap-image,
 .sa-onion-button[data-enabled="true"] .sa-onion-image {
   filter: var(--editorDarkMode-primary-filter2);
+}
+[class*="delete-confirmation-prompt_arrow-container_"] [class*="delete-confirmation-prompt_delete-icon_"] {
+  filter: var(--editorDarkMode-primary-iconFilter);
 }
 [class*="action-menu_more-buttons-outer_"],
 [class*="action-menu_more-button_"] {
@@ -502,6 +585,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 /* Text and icon highlight color */
 .sa-body-editor a:link,
 [class*="gui_tab_"][class*="gui_is-selected_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="dropdown_dropdown_"],
 [class*="record-modal_playing-text_"],
 [class*="record-modal_button-row_"] button,
@@ -511,13 +595,14 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="gui_tab_"][class*="gui_is-selected_"] img,
 [class*="toggle-buttons_button_"][aria-pressed="true"] > img,
 [class*="sprite-info_is-active_"] [class*="sprite-info_icon_"],
+[class*="delete-confirmation-prompt_button-row_"] [class*="delete-confirmation-prompt_delete-icon_"],
 [class*="fixed-tools_button-group-button-icon_"],
 [class*="color-picker_swap-button_"] [class*="labeled-icon-button_edit-field-icon_"],
 [class*="dropdown_dropdown-icon_"],
 [class*="sound-editor_undo-icon_"],
 [class*="sound-editor_redo-icon_"],
 [class*="sound-editor_tool-button_"] img,
-[class*="audio-trimmer_trim-handle_"] img,
+[class*="audio-trimmer_selector_"] /* <-- don't match record modal */ [class*="audio-trimmer_trim-handle_"] img,
 [class*="filter_filter-icon_"],
 img[src="/static/assets/7911235b3ccae7b7452ba3da6b5e9c7f.svg"] /* record modal play */,
 img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYmxhY2siIGZpbGwtb3BhY2l0eT0iMSIgZmlsdGVyPSJ1cmwoI2ZpbHRlci0yKSIgeGxpbms6aHJlZj0iI3BhdGgtMSI+PC91c2U+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iIzg1NUNENiIg"] /* record modal stop */,
@@ -532,6 +617,8 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="blocks_blocks_"] .injectionDiv,
 [class*="blocks_blocks_"] .blocklyToolboxDiv,
 [dir="rtl"] [class*="blocks_blocks_"] .blocklyToolboxDiv,
+[class*="blocks_blocks_"] .blocklyToolbox,
+[dir="rtl"] [class*="blocks_blocks_"] .blocklyToolbox,
 [class*="blocks_blocks_"] .blocklyFlyout,
 [dir="rtl"] [class*="blocks_blocks_"] .blocklyFlyout,
 [class*="backpack_backpack-header_"],
@@ -545,6 +632,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="input_input-form_"],
 [class*="sprite-info_sprite-info_"],
 [class*="sprite-selector-item_sprite-selector-item_"],
+div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="stage-selector_stage-selector_"],
 [class*="stage-selector_header_"],
 [class*="stage-selector_costume-canvas_"],
@@ -561,14 +649,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="color-button_color-button-arrow_"],
 [class*="color-picker_divider_"],
 [class*="color-picker_swatch_"],
-[dir="ltr"] [class*="fixed-tools_mod-dashed-border_"],
-[dir="rtl"] [class*="fixed-tools_mod-dashed-border_"],
-[dir="ltr"] [class*="paint-editor_mod-dashed-border_"],
-[dir="rtl"] [class*="paint-editor_mod-dashed-border_"],
-[dir="ltr"] [class*="mode-tools_mod-dashed-border_"],
-[dir="rtl"] [class*="mode-tools_mod-dashed-border_"],
 [class*="dropdown_dropdown_"],
-[class*="paint-editor_editor-container-top_"],
 [class*="paint-editor_canvas-container_"],
 [class*="paint-editor_button-group-button_"],
 [dir="ltr"] [class*="paint-editor_button-group-button_"]:first-of-type,
@@ -576,20 +657,19 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="sound-editor_button_"],
 [dir="ltr"] [class*="sound-editor_button-group_"] [class*="sound-editor_button_"]:first-of-type,
 [dir="rtl"] [class*="sound-editor_button-group_"] [class*="sound-editor_button_"]:first-of-type,
-[dir="ltr"] [class*="sound-editor_input-group_"],
-[dir="rtl"] [class*="sound-editor_input-group_"],
-[dir="rtl"] [class*="sound-editor_row-reverse_"] > [class*="sound-editor_input-group_"],
 .sa-var-manager td,
+[class*="library-item_library-item_"],
 [class*="context-menu_context-menu_"],
-[class*="context-menu_menu-item-bordered_"],
+[class*="context-menu_context-menu-content_"],
 .blocklyWidgetDiv .goog-menu,
+.blocklyWidgetDiv .blocklyMenu,
 .scratchEyedropper,
 .Popover-body,
 .sa-onion-settings,
 .sa-paint-snap-settings,
 [class*="prompt_variable-name-text-input_"],
-[class*="prompt_cloud-option_"],
 [class*="prompt_button-row_"] button,
+[class*="custom-procedures_option-card_"],
 [class*="custom-procedures_button-row_"] button,
 [class*="slider-prompt_min-input_"],
 [class*="slider-prompt_max-input_"],
@@ -599,7 +679,6 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 .sa-debugger-log {
   border-color: var(--editorDarkMode-border);
 }
-.blocklyWidgetDiv .goog-menuitem,
 .blocklyDropDownDiv[style*="background-color: rgb(255, 255, 255)"] {
   border-color: var(--editorDarkMode-border) !important;
 }
@@ -631,8 +710,14 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
   otherwise they would be too dark in dark mode. */
   mix-blend-mode: normal;
 }
+.blocklyToolboxCategory:not(.blocklyToolboxSelected):hover {
+  /* Remove Blockly's default hover highlight from categories. */
+  background-color: transparent;
+}
 .blocklyWidgetDiv .goog-menuitem-highlight {
-  border-color: transparent !important;
+  border: none;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .sa-opacity-slider {
@@ -654,18 +739,4 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 .Popover .resize-sensor {
   /* The <object> gets a white background if color-scheme is dark. */
   color-scheme: light;
-}
-/* For `editor-comment-previews` */
-.sa-comment-preview-inner {
-  color: var(--editorDarkMode-input-text);
-  background-color: var(--editorDarkMode-input-transparent90);
-}
-@supports (backdrop-filter: blur(16px)) {
-  .sa-comment-preview-inner {
-    background-color: var(--editorDarkMode-input-transparent75);
-    backdrop-filter: blur(16px);
-  }
-}
-.sa-comment-preview-reduce-transparency {
-  background-color: var(--editorDarkMode-input);
 }

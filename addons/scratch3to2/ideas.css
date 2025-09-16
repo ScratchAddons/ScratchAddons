@@ -1,0 +1,103 @@
+/* Page */
+#view {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+
+/* Idea generator */
+.banner-wrapper {
+  background-color: transparent;
+}
+.banner-wrapper .banner-description .title {
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+}
+.banner-wrapper .banner-description p {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.banner-wrapper .banner-description p a {
+  color: var(--darkWww-link-scratchr2, #855cd6);
+  font-weight: normal;
+  text-decoration: none;
+}
+.banner-wrapper .banner-description p a:hover {
+  text-decoration: underline;
+}
+
+/* Sections */
+.tips,
+.physical-ideas {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+  text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
+}
+.tips .section-header,
+.physical-ideas .section-header,
+.physical-ideas h3 {
+  color: var(--darkWww-gray-scratchr2HeaderText, #554747);
+}
+
+/* Buttons */
+.button {
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+.button:hover {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+}
+a:has(> .button):hover {
+  text-decoration: none;
+}
+.button img {
+  filter: var(--darkWww-box-filterInverted, brightness(0.4));
+}
+
+/* YouTube videos & written guides */
+.youtube-videos .inner .section-header div .section-title,
+.playlist .playlist-title {
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+}
+.youtube-videos .inner .section-header div .section-description a,
+.youtube-videos .inner .download-cards span a {
+  text-decoration: none;
+}
+.youtube-videos .inner .section-header div .section-description a:hover.banner-description,
+.youtube-videos .inner .download-cards span a:hover {
+  text-decoration: underline;
+}
+.youtbe-video-button .video-info .video-title {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.youtbe-video-button .video-info .video-metadata {
+  color: var(--darkWww-page-scratchr2GrayText, #999);
+}
+.youtube-video-modal-container .youtube-player {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.cards-modal-container .cards-modal-navigation .navigation-button {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+.cards-modal-container .cards-modal-navigation .navigation-button img {
+  filter: none;
+}
+
+/* Bottom area (visually part of the footer) */
+.gray-area {
+  background-color: var(--darkWww-footer-scratchr2, #ececec);
+  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.14);
+  color: var(--darkWww-footer-scratchr2Text, #666);
+}
+.gray-area h3 {
+  color: var(--darkWww-footer-scratchr2Text, #666);
+}
+#footer {
+  box-shadow: inset 0 -10px 10px -10px rgba(0, 0, 0, 0.14);
+}

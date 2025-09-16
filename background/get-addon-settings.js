@@ -1,4 +1,6 @@
 import minifySettings from "../libraries/common/minify-settings.js";
+import changeAddonState from "./imports/change-addon-state.js";
+import { onReady } from "./imports/on-ready.js";
 
 /**
  Since presets can change independently of others, we have to keep track of
@@ -168,6 +170,21 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       addonsEnabled["workspace-dots"] = true;
       if (!addonSettings["workspace-dots"]) addonSettings["workspace-dots"] = {};
       addonSettings["workspace-dots"]["theme"] = "none";
+    }
+
+    if (addonSettings["editor-theme3"]?._version === 3) {
+      // Detected update to v1.39 (code below will set the version to 4)
+      if (addonsEnabled["msg-count-badge"] && chrome.action.getUserSettings) {
+        chrome.action
+          .getUserSettings()
+          .then((userSettings) => {
+            if (userSettings?.isOnToolbar === false) {
+              // Disable addon if extension not pinned to toolbar
+              onReady(() => changeAddonState("msg-count-badge", false));
+            }
+          })
+          .catch(() => {});
+      }
     }
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
@@ -715,6 +732,17 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
           delete settings.hideToolbar;
           delete settings.hoverToolbar;
           madeAnyChanges = madeChangesToAddon = true;
+        }
+
+        if (addonId === "editor-cleanup-plus" && addonsEnabled[addonId] === undefined) {
+          if (addonSettings["editor-devtools"]?.enableCleanUpPlus !== undefined) {
+            const enabledStatus =
+              addonsEnabled["editor-devtools"] && addonSettings["editor-devtools"].enableCleanUpPlus;
+            addonsEnabled[addonId] = enabledStatus;
+            madeAnyChanges = true;
+          } else {
+            // Respect the value of enabledByDefault (by doing nothing)
+          }
         }
       }
 

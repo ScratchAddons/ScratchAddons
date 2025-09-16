@@ -1,3 +1,4 @@
+import downloadBlob from "../../../libraries/common/cs/download-blob.js";
 const isIframe = window.parent !== window;
 
 export default async function ({ template }) {
@@ -11,6 +12,7 @@ export default async function ({ template }) {
         everExpanded: this.getDefaultExpanded(),
         hoveredSettingId: null,
         highlightedSettingId: null,
+        isDropdownOpen: false,
       };
     },
     computed: {
@@ -20,6 +22,7 @@ export default async function ({ template }) {
       addonIconSrc() {
         const map = {
           editor: "puzzle",
+          player: "player",
           community: "web",
           theme: "brush",
           easterEgg: "egg-easter",
@@ -53,6 +56,66 @@ export default async function ({ template }) {
           console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
         }
       },
+      importPreset() {
+        const inputElem = Object.assign(document.createElement("input"), {
+          hidden: true,
+          type: "file",
+          accept: "application/json",
+        });
+        inputElem.addEventListener(
+          "change",
+          async (e) => {
+            const text = await inputElem.files[0].text();
+            inputElem.remove();
+            let obj;
+            try {
+              obj = JSON.parse(text);
+              if (!obj.addonId) {
+                // Check if it's a full extension settings file
+                const settings = obj?.addons?.[this.addon._addonId]?.settings;
+                if (settings) {
+                  this.loadPreset({ id: "extracted-settings", values: settings });
+                  return;
+                } else {
+                  throw "Missing addon ID";
+                }
+              }
+              if (obj.addonId !== this.addon._addonId) {
+                console.warn(`Incorrect addon ID: ${obj.addonId}`);
+                alert(this.msg("incorrectAddonImport", this.$root.manifestsById[obj.addonId].name));
+                return;
+              }
+            } catch (e) {
+              console.warn(`Error importing settings file for ${this.addon._addonId}:`, e);
+              alert(chrome.i18n.getMessage("importFailed"));
+              return;
+            }
+            this.loadPreset(obj);
+          },
+          { once: true }
+        );
+        inputElem.addEventListener(
+          "cancel",
+          () => {
+            inputElem.remove();
+          },
+          { once: true }
+        );
+        document.body.appendChild(inputElem);
+        inputElem.click();
+        this.toggleDropdown();
+      },
+      exportPreset() {
+        const preset = {
+          addonId: this.addon._addonId,
+          id: "custom-preset",
+          values: this.addonSettings,
+        };
+        const blob = new Blob([JSON.stringify(preset)], { type: "application/json" });
+        const name = this.addon.name.replaceAll(" ", "-").toLowerCase();
+        downloadBlob(`${name}.json`, blob);
+        this.toggleDropdown();
+      },
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
@@ -72,8 +135,10 @@ export default async function ({ template }) {
           this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
-          this.expanded =
-            isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
+          // Do not collapse when disabling in related addons view
+          this.expanded = this.$root.relatedAddonsOpen
+            ? this.expanded
+            : isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
               : event.shiftKey
                 ? false
@@ -117,6 +182,17 @@ export default async function ({ template }) {
       msg(...params) {
         return this.$root.msg(...params);
       },
+      openRelated(clickedAddon) {
+        this.$root.openRelatedAddons(this.addon);
+        this.$root.blinkAddon(clickedAddon._addonId);
+      },
+      toggleDropdown() {
+        this.isDropdownOpen = !this.isDropdownOpen;
+        this.$root.closePickers({ isTrusted: true }, null, {
+          callCloseDropdowns: false,
+        });
+        this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
+      },
     },
     watch: {
       groupId(newValue) {
@@ -131,7 +207,17 @@ export default async function ({ template }) {
         if (newValue === true) this.everExpanded = true;
       },
     },
+    events: {
+      closeDropdowns(...params) {
+        return this.$root.closeDropdowns(...params);
+      },
+    },
     ready() {
+      this.$root.$on("close-dropdowns", (except) => {
+        if (this.isDropdownOpen && this !== except) {
+          this.isDropdownOpen = false;
+        }
+      });
       const onHashChange = () => {
         if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
           this.expanded = true;

@@ -51,6 +51,72 @@
       }
     },
     {
+      "name": "page-purpleText",
+      "value": {
+        "type": "textColor",
+        "black": "#855cd6",
+        "white": "#ccb3ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-purpleIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "textColor",
+          "black": "#855cd6",
+          "white": "#ccb3ff",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          }
+        }
+      }
+    },
+    {
+      "name": "page-lightBlueText",
+      "value": {
+        "type": "textColor",
+        "black": "#2e8eb8",
+        "white": "#85c4e0",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-pinkText",
+      "value": {
+        "type": "textColor",
+        "black": "#ff3355",
+        "white": "#ff99aa",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-pinkIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "textColor",
+          "black": "#ff3355",
+          "white": "#ff99aa",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          }
+        }
+      }
+    },
+    {
       "name": "page-tabHoverFilter",
       "value": {
         "type": "textColor",
@@ -148,6 +214,28 @@
         "type": "textColor",
         "black": "none",
         "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
+      "name": "primary-filter3",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0) invert(0.4)",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
+      "name": "primary-iconFilter",
+      "value": {
+        "type": "recolorFilter",
         "source": {
           "type": "settingValue",
           "settingId": "primary"
@@ -517,6 +605,18 @@
       }
     },
     {
+      "name": "accent-divider",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "accent-colorScheme",
       "value": {
         "type": "textColor",
@@ -530,14 +630,41 @@
       }
     },
     {
-      "name": "accent-opacity0",
+      "name": "accent-gradient",
       "value": {
         "type": "multiply",
         "source": {
           "type": "settingValue",
           "settingId": "accent"
         },
+        "r": 0.91,
+        "g": 0.93,
+        "b": 0.95
+      }
+    },
+    {
+      "name": "accent-gradient-opacity0",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "r": 0.91,
+        "g": 0.93,
+        "b": 0.95,
         "a": 0
+      }
+    },
+    {
+      "name": "accent-transparent75",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "a": 0.75
       }
     },
     {
@@ -636,6 +763,17 @@
       }
     },
     {
+      "name": "accent-dropHighlight",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#4d97ffa8"
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
@@ -679,6 +817,18 @@
         "source": {
           "type": "settingValue",
           "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-divider",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
         }
       }
     },
@@ -737,18 +887,6 @@
           "settingId": "input"
         },
         "a": 0.25
-      }
-    },
-    {
-      "name": "workspace-codeZoomFilter",
-      "value": {
-        "type": "textColor",
-        "black": "none",
-        "white": "invert(1) hue-rotate(180deg)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "workspace"
-        }
       }
     },
     {
@@ -978,7 +1116,19 @@
       "matches": ["projects"]
     },
     {
+      "url": "zoom_icons.js",
+      "matches": ["projects"]
+    },
+    {
       "url": "paint_icons.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "dial.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "debugger.js",
       "matches": ["projects"]
     }
   ],
@@ -1387,9 +1537,7 @@
       }
     }
   ],
-  "addonPreview": {
-    "type": "editor-dark-mode"
-  },
+  "addonPreview": true,
   "presetPreview": {
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
@@ -1400,5 +1548,7 @@
     "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
-  "enabledByDefault": false
+  "relatedAddons": ["dark-www", "editor-theme3", "stage-monitor"],
+  "enabledByDefault": false,
+  "libraries": ["scratch-render"]
 }

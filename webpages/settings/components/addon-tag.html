@@ -10,10 +10,11 @@
       'darkred': tagInfo.color === 'darkred',
       'green': tagInfo.color === 'green',
       'darkgreen': tagInfo.color === 'darkgreen',
+      'lightblue': tagInfo.color === 'lightblue',
       'purple': tagInfo.color === 'purple'
       }"
   >
     {{ tagName }}
-    <span v-if="tagInfo.tooltipText" class="tooltiptext">{{ tagTooltip }}</span>
+    <span v-if="tagInfo.tooltipText" class="tooltiptext tooltiptexttop">{{ tagTooltip }}</span>
   </div>
 </template>

@@ -23,6 +23,7 @@
   border-color: #334766;
 }
 .parents .title-banner.masthead,
+.guidelines-page header,
 .download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
 .gdxfor .extension-header,
 .blue-background,
@@ -52,6 +53,8 @@
 .initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::after {
   border-color: #473e59;
 }
+.starter-projects-page .page-header,
+.projects-carousel .header,
 .boost .extension-header,
 .ev3 .extension-header,
 .wedo2 .extension-header {
