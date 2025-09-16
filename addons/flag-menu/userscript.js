@@ -1,25 +1,32 @@
 export default async function ({ addon, console, msg }) {
   let greenFlag;
 
+  const contextMenuClass = addon.tab.scratchClass("context-menu_context-menu") ||
+    addon.tab.scratchClass("context-menu_context-menu-content"); // React 16 || React 18
   const contextMenu = Object.assign(document.createElement("nav"), {
     role: "menu",
-    className: addon.tab.scratchClass("context-menu_context-menu", { others: "sa-flag-context-menu" }),
+    className: `${contextMenuClass} sa-flag-context-menu`,
   });
+  const createItem = ({ id, text = "" } = {}) => {
+    const item = Object.assign(document.createElement("div"), {
+      role: "menuitem",
+      className: addon.tab.scratchClass("context-menu_menu-item"),
+      id,
+      textContent: text,
+    });
+    item.addEventListener("mouseenter", () => item.setAttribute("data-highlighted", ""))
+    item.addEventListener("mouseleave", () => item.removeAttribute("data-highlighted"));
+    return item;
+  };
   contextMenu.append(
-    Object.assign(document.createElement("div"), {
-      role: "menuitem",
-      className: addon.tab.scratchClass("context-menu_menu-item"),
+    createItem({
       id: "sa-flag-menu-turbo",
-      textContent: msg("turbo-on"),
+      text: msg("turbo-on"),
     }),
-    Object.assign(document.createElement("div"), {
-      role: "menuitem",
-      className: addon.tab.scratchClass("context-menu_menu-item"),
+    createItem({
       id: "sa-flag-menu-fps",
     }),
-    Object.assign(document.createElement("div"), {
-      role: "menuitem",
-      className: addon.tab.scratchClass("context-menu_menu-item"),
+    createItem({
       id: "sa-flag-menu-mute",
     })
   );

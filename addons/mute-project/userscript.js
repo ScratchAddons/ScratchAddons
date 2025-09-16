@@ -43,7 +43,7 @@ export default async function ({ addon, console, msg }) {
     const menuItem = await addon.tab.waitForElement("#sa-flag-menu-mute", {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    menuItem.style.display = "block";
+    menuItem.style.display = "flex";
     addon.tab.displayNoneWhileDisabled(menuItem);
     updateMuteUnmuteLabel(menuItem);
   })();
