@@ -2,16 +2,9 @@
   filter: hue-rotate(40deg);
 }
 
-.sa-body-editor::after {
-  content: "";
-  display: block;
-  position: absolute;
+.sa-mode {
   z-index: 50;
-  top: 0;
-  left: 0;
-  width: 100%;
   height: 100%;
   background-image: url("assets/shapes.svg");
   opacity: 0.2;
-  pointer-events: none;
 }

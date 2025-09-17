@@ -64,28 +64,26 @@
   }
 }
 
-.sa-body-editor::before,
-.sa-body-editor::after {
+.sa-mode::before,
+.sa-mode::after {
   content: "";
   display: block;
   position: absolute;
-  z-index: 100000; /* in front of .blocklyWidgetDiv */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
-  pointer-events: none;
 }
 
-.sa-body-editor::before {
+.sa-mode::before {
   background-image: url("assets/prehistoric.png");
   background-position: calc(var(--sa-mouse-x, -10000px) - 2000px) calc(var(--sa-mouse-y, -10000px) - 2000px);
   opacity: 0.9;
   animation: jitter 2.5s linear infinite;
 }
 
-.sa-body-editor::after {
+.sa-mode::after {
   background-image: url("assets/torch.gif");
   background-position: calc(var(--sa-mouse-x, -10000px) - 35px) calc(var(--sa-mouse-y, -10000px) - 220px);
   opacity: 0.8;

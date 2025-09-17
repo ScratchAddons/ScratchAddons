@@ -28,6 +28,13 @@ export default async function ({ addon, console }) {
       projectorSound.play();
     } else if (projectorSound) projectorSound.pause();
   }
+
+  document.body.appendChild(
+    Object.assign(document.createElement("div"), {
+      className: "sa-mode",
+    })
+  );
+
   updateProjectorSound();
 
   // start playing when user interacts with the page

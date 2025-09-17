@@ -1,18 +1,13 @@
-html,
-body {
-  height: 100%;
-}
-
-.sa-body-editor {
-  overflow: hidden;
-}
-
-#app {
+.sa-mode {
+  position: fixed;
+  z-index: 100000; /* in front of .blocklyWidgetDiv */
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  pointer-events: none;
 }
 
-.gui {
-  position: static;
+body:not(.sa-body-editor) > .sa-mode {
+  display: none;
 }

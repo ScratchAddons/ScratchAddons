@@ -1,14 +1,5 @@
-.sa-body-editor::after {
-  content: "";
-  display: block;
-  position: absolute;
-  z-index: 100000; /* in front of .blocklyWidgetDiv */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+.sa-mode {
   background-image: url("assets/mystery.png");
   background-position: calc(var(--sa-mouse-x, -10000px) - 2000px) calc(var(--sa-mouse-y, -10000px) - 2000px);
   opacity: 0.9;
-  pointer-events: none;
 }
