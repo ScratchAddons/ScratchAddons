@@ -11,11 +11,12 @@ export default async function ({ addon, console }) {
 
   function updateLogo() {
     if (!logo) return;
-    logo.src = {
-      "90s": addon.self.dir + "/assets/nineties_logo.svg",
-      "oldTimey": addon.self.dir + "/assets/oldtimey-logo.svg",
-      "prehistoric": addon.self.dir + "/assets/prehistoric-logo.svg",
-    }[mode] || initialSrc;
+    logo.src =
+      {
+        "90s": addon.self.dir + "/assets/nineties_logo.svg",
+        oldTimey: addon.self.dir + "/assets/oldtimey-logo.svg",
+        prehistoric: addon.self.dir + "/assets/prehistoric-logo.svg",
+      }[mode] || initialSrc;
   }
   function updateProjectorSound() {
     if (["editor", "fullscreen"].includes(addon.tab.editorMode) && mode === "oldTimey") {
