@@ -225,7 +225,7 @@ function editorClassCheck() {
     document.documentElement.classList.add("sa-editor");
     document.body.classList.add("sa-body-editor");
   } else {
-    document.documentElement.classList.add("sa-editor");
+    document.documentElement.classList.remove("sa-editor");
     document.body.classList.remove("sa-body-editor");
   }
 }
