@@ -1,5 +1,10 @@
 export default async function ({ addon, console }) {
-  let mode = addon.settings.get("mode");
+  function getMode() {
+    if (addon.self.disabled) return null;
+    return addon.settings.get("mode");
+  }
+
+  let mode = getMode();
   let logo;
   let initialSrc;
   let projectorSound;
@@ -40,11 +45,14 @@ export default async function ({ addon, console }) {
     document.documentElement.style.setProperty("--sa-mouse-y", `${e.clientY}px`);
   });
 
-  addon.settings.addEventListener("change", () => {
-    mode = addon.settings.get("mode");
+  const onSettingChange = () => {
+    mode = getMode();
     updateLogo();
     updateProjectorSound();
-  });
+  };
+  addon.self.addEventListener("disabled", onSettingChange);
+  addon.self.addEventListener("reenabled", onSettingChange);
+  addon.settings.addEventListener("change", onSettingChange);
   addon.tab.addEventListener("urlChange", () => {
     updateProjectorSound();
   });
