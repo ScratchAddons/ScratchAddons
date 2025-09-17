@@ -11,28 +11,18 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/users/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyles.css",
-      "matches": [
-        "https://scratch.mit.edu/users/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
   "settings": [],
   "enabledByDefault": false,
-  "targets": [
-    "profiles"
-  ],
+  "targets": ["profiles"],
   "versionAdded": "1.44.0",
-  "tags": [
-    "profiles",
-    "ui",
-    "featured"
-  ]
+  "tags": ["profiles", "ui", "featured"]
 }
