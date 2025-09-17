@@ -224,8 +224,7 @@ function editorClassCheck() {
   if (split.includes("editor") || split.includes("fullscreen")) {
     document.documentElement.classList.add("sa-editor");
     document.body.classList.add("sa-body-editor");
-  }
-  else {
+  } else {
     document.documentElement.classList.add("sa-editor");
     document.body.classList.remove("sa-body-editor");
   }
