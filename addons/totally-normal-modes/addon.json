@@ -1,6 +1,6 @@
 {
   "name": "Editor modes",
-  "description": "Adds the 90s, Old timey and Prehistoric mode from April Fools 2022 and the Mystery Mode from 2020.",
+  "description": "Adds the 90s, Old timey and Prehistoric modes from April Fools 2022 and the Mystery Mode from 2020.",
   "credits": [
     {
       "name": "Maximouse",
@@ -78,5 +78,6 @@
     }
   ],
   "tags": ["editor", "easterEgg"],
+  "relatedAddons": ["cat-blocks"],
   "libraries": ["scratch-gui"]
 }
