@@ -84,9 +84,8 @@
   "tags": ["editor", "codeEditor", "featured"],
   "versionAdded": "1.16.0",
   "latestUpdate": {
-    "version": "1.33.0",
-    "temporaryNotice": "Graph animation is now disabled by default to increase performance. You can re-enable it if you want.",
-    "newSettings": ["fancy_graphs"]
+    "version": "1.44.0",
+    "temporaryNotice": "The debugger window is now resizable."
   },
-  "libraries": ["chartjs"]
+  "libraries": ["chartjs", "scratch-gui", "scratch-vm"]
 }

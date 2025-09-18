@@ -21,11 +21,6 @@ globalTheme().then(({ theme }) => {
 
 document.title = getMessage("permissionsTitle");
 
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
-
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
   const granted = await requestHostPermissions();
   if (granted) {

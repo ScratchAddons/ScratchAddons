@@ -1007,21 +1007,28 @@ export default async function ({ addon, console, msg }) {
               : // If there's no such button, insert at end
                 items.length;
           const text = opcodeData.msg ? opcodeData.msg : opcodeData.opcode ? msg(opcodeData.opcode) : msg(block.type);
-          items.splice(insertBeforeIndex, 0, {
+          const item = {
             enabled: true,
             text,
             callback: menuCallbackFactory(block, opcodeData),
-            separator: i === 0,
-          });
+          };
+          items.splice(insertBeforeIndex, 0, item);
+          if (i === 0) {
+            items.splice(insertBeforeIndex, 0, { separator: true });
+          }
         });
 
         if (block.type === "data_variable" || block.type === "data_listcontents") {
-          // Add top border to first variable (if it exists)
+          // Add separator above first variable (if it exists)
           const delBlockIndex = items.findIndex((item) => item.text === ScratchBlocks.Msg.DELETE_BLOCK);
+          const firstVariableIndex = delBlockIndex + 1;
           // firstVariableItem might be undefined, a variable to switch to,
           // or an item added by editor-devtools (or any addon before this one)
-          const firstVariableItem = items[delBlockIndex + 1];
-          if (firstVariableItem) firstVariableItem.separator = true;
+          const firstVariableItem = items[firstVariableIndex];
+          // Only add a separator if it isn't already there
+          if (firstVariableItem && !firstVariableItem.separator) {
+            items.splice(firstVariableIndex, 0, { separator: true });
+          }
         }
       }
       return items;

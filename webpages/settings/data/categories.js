@@ -24,16 +24,15 @@ export default [
     name: getMessage("costumeEditorFeatures"),
   },
   {
-    id: "projectPlayer",
-    parent: "editor",
-    icon: "player",
-    name: getMessage("projectPlayerFeatures"),
-  },
-  {
     id: "editorOthers",
     parent: "editor",
     icon: "dots",
     name: getMessage("others"),
+  },
+  {
+    id: "player",
+    icon: "player",
+    name: getMessage("playerFeatures"),
   },
   {
     id: "community",
@@ -76,6 +75,12 @@ export default [
     name: getMessage("editorThemes"),
   },
   {
+    id: "themesForPlayer",
+    parent: "theme",
+    icon: "player",
+    name: getMessage("playerThemes"),
+  },
+  {
     id: "themesForWebsite",
     parent: "theme",
     icon: "web",
@@ -86,5 +91,10 @@ export default [
     icon: "popup",
     name: getMessage("popupFeatures"),
     marginBottom: true,
+  },
+  {
+    id: "easterEgg",
+    name: getMessage("easterEggs"),
+    hidden: true,
   },
 ];

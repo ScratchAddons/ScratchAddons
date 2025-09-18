@@ -6,12 +6,18 @@ export default async function ({ addon, console }) {
 
   const blocklyInstance = await addon.tab.traps.getBlockly();
 
+  const createStyle = () => {
+    const style = document.createElement("style");
+    style.className = "sa-custom-block-text-style"; // blocks2image compatibility
+    return style;
+  };
+
   // Handling the CSS from here instead of a userstyle is much more stable, as
   // there's no code outside of this addon dynamically toggling the styles.
   // This way, we can clearly control the execution order of style operations.
   // For example, we always want to call updateAllBlocks() after the styles
   // were updated according to the user's settings, not before.
-  const fontSizeCss = document.createElement("style");
+  const fontSizeCss = createStyle();
   // Be careful with specificity because we're adding this userstyle manually
   // to the <head> without checking if other styles are above or below.
   fontSizeCss.textContent = `
@@ -25,27 +31,46 @@ export default async function ({ addon, console }) {
   fontSizeCss.disabled = true;
   document.head.appendChild(fontSizeCss);
   //
-  const boldCss = document.createElement("style");
+  const boldCss = createStyle();
   boldCss.textContent = `
     .blocklyText,
-    .blocklyHtmlInput {
+    .blocklyHtmlInput,
+    .scratch-renderer.default-theme .blocklyText,
+    .scratch-renderer.default-theme .blocklyHtmlInput,
+    .scratch-renderer.high-contrast-theme .blocklyText,
+    .scratch-renderer.high-contrast-theme .blocklyHtmlInput {
       font-weight: bold;
     }`;
   boldCss.disabled = true;
   document.head.appendChild(boldCss);
   //
-  const textShadowCss = document.createElement("style");
+  const textShadowCss = createStyle();
   textShadowCss.textContent = `
     .blocklyDraggable > .blocklyText,
-    .blocklyDraggable > g > text {
-      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+    .blocklyDraggable > g > text,
+    .scratch-renderer.default-theme .blocklyEditableField > .blocklyDropdownText {
+      text-shadow: 1px 1px 0 var(--editorTheme3-text-shadow, rgba(0, 0, 0, 0.4));
+    }
+    div[theme="high-contrast"] .blocklyDraggable > .blocklyText,
+    div[theme="high-contrast"] .blocklyDraggable > g > text,
+    .high-contrast-theme .blocklyDraggable > .blocklyText,
+    .high-contrast-theme .blocklyDraggable > g > text,
+    .scratch-renderer.high-contrast-theme .blocklyEditableField > .blocklyDropdownText {
+      text-shadow: 1px 1px 0 var(--editorTheme3-text-shadow, rgba(0, 0, 0, 0.15));
+    }
+    .scratch-renderer.default-theme .blocklyEditableField > text,
+    .scratch-renderer.high-contrast-theme .blocklyEditableField > text {
+      text-shadow: none;
     }`;
   textShadowCss.disabled = true;
   document.head.appendChild(textShadowCss);
 
   const updateBlockly = () => {
-    blocklyInstance.Field.cacheWidths_ = {}; // Clear text width cache
-    // If font size has changed, middle click popup needs to clear it's cache too
+    if (!blocklyInstance.registry) {
+      // old Blockly
+      blocklyInstance.Field.cacheWidths_ = {}; // Clear text width cache
+    }
+    // If font size has changed, middle click popup needs to clear its cache too
     clearTextWidthCache();
 
     updateAllBlocks(addon.tab);

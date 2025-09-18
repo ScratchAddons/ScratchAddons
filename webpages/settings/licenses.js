@@ -25,12 +25,13 @@ const libraryParam = new URLSearchParams(location.search).get("libraries");
 if (typeof libraryParam !== "string") throw new Error("Invalid libraries parameter");
 const libraries = libraryParam.split(",");
 
-const libraryLicensesList = await fetch("/libraries/license-info.json").then((res) => res.json());
+const libraryLicenseInfo = await fetch("/libraries/license-info.json").then((res) => res.json());
 
 // Load the license text of each library to be displayed
 let licenses = [];
 for (const library of libraries) {
-  if (libraryLicensesList[library]) licenses.push(libraryLicensesList[library]);
+  const info = libraryLicenseInfo[library];
+  if (info) licenses.push(info.filename ?? info.license);
 }
 licenses = [...new Set(licenses)]; // Remove duplicate values
 const licenseNameToText = {};
@@ -44,13 +45,18 @@ await Promise.all(
 
 // Display the license of each library
 for (const library of libraries) {
-  const licenseName = libraryLicensesList[library];
+  const info = libraryLicenseInfo[library];
+  const licenseName = info.filename ?? info.license;
   if (!licenseName) continue;
+  let licenseText = licenseNameToText[licenseName];
+  licenseText = String(licenseText).replace(" [year]", info.year ? " " + info.year : "");
+  licenseText = String(licenseText).replace(" [fullname]", info.fullname ? " " + info.fullname : "");
+  licenseText = String(licenseText).replace(" ([email])", info.email ? " (" + info.email + ")" : "");
   vue.libraries = [
     ...vue.libraries,
     {
       name: library,
-      license: licenseNameToText[licenseName],
+      license: licenseText,
     },
   ];
 }

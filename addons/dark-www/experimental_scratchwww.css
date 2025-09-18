@@ -18,11 +18,12 @@ body {
   color: var(--darkWww-page-text);
 }
 .subactions .share-date,
+.guidelines-page .navigation .navigation-buttons a,
 .conf2019-description {
   color: var(--darkWww-page-text);
 }
-.tips-getting-started,
-.tips-activity-guides {
+.tips,
+.physical-ideas {
   background-color: var(--darkWww-page-ideas);
   color: var(--darkWww-page-text);
 }
@@ -42,6 +43,17 @@ body {
 .project-loves.loved::before,
 .project-favorites.favorited::before {
   filter: none;
+}
+.about .masthead div li:nth-child(odd) {
+  border-color: var(--darkWww-page-divider5);
+}
+.developers #donate,
+.conf2021-panel,
+.conf2019-panel,
+.conf2017-panel,
+.plan section,
+.extension-landing hr {
+  border-color: var(--darkWww-page-divider15);
 }
 
 /* Navigation bar background */
@@ -125,7 +137,8 @@ body:not(.sa-body-editor) .formik-input,
 .studio-project-tile,
 .studio-member-tile,
 .studio-activity .studio-messages-list,
-.ttt-tile,
+.cards-modal-container,
+.projects-carousel .content .slick-track .thumbnail,
 .about .body,
 .messages-social-list,
 .comment-text,
@@ -143,7 +156,6 @@ body:not(.sa-body-editor) .formik-input,
 body:not(.sa-body-editor) [class*="stage-header_stage-size-row_"] > *,
 body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .studio-adder-section .studio-adder-row input,
-.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .avatar-item img,
 .join-flow-outer-content /* username change */,
 .conf2019-panel-flag,
@@ -157,6 +169,8 @@ body:not(.sa-body-editor) input.formik-radio-input,
 .wedo .project-card,
 .transfer-host-modal .cancel-button,
 .transfer-host-modal .transfer-password-input,
+.share-modal .share-modal-inner,
+.update-thumbnail-info-modal .update-thumbnail-info-modal-inner,
 .comments-container .sa-emoji-picker,
 .studio-compose-container .sa-emoji-picker {
   background-color: var(--darkWww-box);
@@ -171,16 +185,23 @@ body:not(.sa-body-editor) .button.white,
 .feature-banner .feature-learn-more,
 .feature-banner .feature-banner-image,
 .outer .categories li,
-.banner-wrapper .banner-button /* Choose a tutorial */,
 .studio-selector-button,
 .onboarding button.go-back,
 .button.mod-2019-conf-maillist-button,
 .index .title-banner p a button,
 .financials-section .financials-button,
 .donate-section .donate-button,
-.initiatives-section .initiatives-subsection-content .bubble.inverted {
+.initiatives-section .initiatives-subsection-content .bubble.inverted,
+.share-modal .change-thumbnail-button {
   background-color: var(--darkWww-box);
 }
+.ReactModal__Content[style*="background: rgb(255, 255, 255)"] {
+  /* Community Guidelines modal */
+  background-color: var(--darkWww-box) !important;
+  border-color: transparent !important;
+  color: var(--darkWww-box-text);
+}
+body:not(.sa-body-editor) [class*="stage-header_rightSection_"],
 .expect .keynote .card {
   background-color: transparent;
 }
@@ -207,16 +228,21 @@ body:not(.sa-body-editor) .button.white,
 .tabs button:hover,
 .tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.cards-modal-container .cards-modal-section-title,
+.projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .unsupported-browser .faq-link-text,
 a.social-messages-profile-link:visited,
 a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
 .studio-member-tile .studio-member-role,
-body:not(.sa-body-editor) .join-flow-title {
+body:not(.sa-body-editor) .join-flow-title,
+.registration-step .bold-link,
+.checkbox-container {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
+.youtbe-video-button .video-info .video-metadata,
 .comment .comment-body .comment-bottom-row .comment-time,
 .registration-step .help-text {
   color: var(--darkWww-box-transparentText);
@@ -225,6 +251,9 @@ body:not(.sa-body-editor) .formik-input::placeholder,
 body:not(.sa-body-editor) .join-flow-privacy-message,
 .char-count {
   color: var(--darkWww-box-inputPlaceholder);
+}
+.youtbe-video-button .video-info .video-title {
+  color: var(--darkWww-box-blackText);
 }
 .comment .comment-body .comment-bubble.comment-bubble-reported,
 .comment .comment-body .comment-bubble.comment-bubble-reported::before,
@@ -235,7 +264,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-favorites::before,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
-.ttt-item img,
+.playlist .spinner,
 .tabs button:not(.active) .tab-icon,
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img,
@@ -252,6 +281,9 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .os-chooser .button {
   background-color: var(--darkWww-box-tab);
 }
+.navigation .dot {
+  background-color: var(--darkWww-box-tab15);
+}
 .sub-nav button:active {
   background-color: var(--darkWww-box-tabHover);
 }
@@ -263,9 +295,14 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
   border-color: var(--darkWww-box-greenText);
 }
 .donate-banner .donate-container .donate-button,
-.banner-wrapper .banner-button /* Choose a tutorial */,
 .donate-section .donate-button {
   color: var(--darkWww-box-greenText);
+}
+.tou-modal-link {
+  color: var(--darkWww-box-greenText) !important;
+}
+.projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
+  color: var(--darkWww-box-strongBlueText);
 }
 .social-message-icon {
   opacity: var(--darkWww-box-messageIconOpacity);
@@ -299,9 +336,14 @@ body:not(.sa-body-editor) .select .join-flow-select {
 .outer #projectBox,
 .download .installation,
 body:not(.sa-body-editor) .gender-radio-row,
-.wedo .banner {
+.wedo .banner,
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row {
   background-color: var(--darkWww-gray);
   color: var(--darkWww-gray-text);
+}
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected,
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected:hover {
+  background-color: hsla(215, 100%, 65%, 0.25);
 }
 body:not(.sa-body-editor) /* specificity */ .outer .sort-mode .select select {
   background-color: transparent;
@@ -314,6 +356,9 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 }
 .box .box-header {
   border-top-color: var(--darkWww-gray-boxHighlight);
+}
+.outer .sort-controls {
+  border-color: var(--darkWww-gray-tab);
 }
 .toggle-switch .slider {
   background-color: var(--darkWww-gray-darker);
@@ -334,9 +379,11 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 .studio-list-outer-scrollbox,
 .social-form,
 .studio-page,
+.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .user-projects-modal .user-projects-modal-content,
 .congratulations-page .congratulations-image-layout,
 .credits #acknowledgements,
+.guidelines-page .navigation .navigation-buttons a:hover,
 .download .blue,
 p.callout,
 .mission-section,
@@ -378,12 +425,15 @@ body:not(.sa-body-editor) .gender-radio-row:hover,
 .studio-info-box .studio-info-close-button {
   background-color: var(--darkWww-blue-tab);
 }
+.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
+.extension-landing .blue hr {
+  border-color: var(--darkWww-blue-tab);
+}
 .studio-list-inner-scrollbox::-webkit-scrollbar-thumb {
   background-color: var(--darkWww-blue-tabHover);
 }
 .studio-info textarea.studio-title:not(:focus),
-.studio-info textarea.studio-description:not(:focus),
-.extension-landing .blue hr {
+.studio-info textarea.studio-description:not(:focus) {
   border-color: var(--darkWww-blue-studioTextareaBorder);
 }
 .install-scratch .downloads-container .horizontal-divider::before,
@@ -399,6 +449,9 @@ body:not(.sa-body-editor) .gender-radio-row:hover,
   background-color: var(--darkWww-blue-20);
   color-scheme: var(--darKWww-blue-colorScheme);
 }
+.welcome .box-content .welcome-options .welcome-option-button {
+  border-color: var(--darkWww-blue-20);
+}
 .join-flow-footer-message {
   background-color: var(--darkWww-blue-25);
 }
@@ -411,6 +464,14 @@ body:not(.sa-body-editor) .gender-radio-row-selected:hover {
 .replies.collapsed > .comment:last-of-type::after,
 .studio-list-bottom-gradient {
   background-image: linear-gradient(var(--darkWww-blue-opacity0), var(--darkWww-blue));
+}
+.mod-fetching::after,
+.studio-project-tile .studio-project-image {
+  background-color: var(--darkWww-blue-studioPlaceholder);
+}
+.mod-fetching {
+  background-color: var(--darkWww-blue-studioPlaceholder) !important;
+  color: var(--darkWww-blue-studioPlaceholder) !important;
 }
 
 /* Input background */
@@ -458,13 +519,11 @@ body:not(.sa-body-editor) .select select:focus {
 .banner-outer:not(.banner-danger) .banner-button /* Share */ {
   background-color: #ffab1a;
 }
-a.ttt-try-tutorial-button > span {
-  color: var(--darkWww-button-text);
-}
 .row .col-sm-9 input[type="radio"]:checked::after {
   background-color: var(--darkWww-button-text);
 }
 .preview .remix-button,
+.starter-projects-page .surprise .surprise-button,
 .os-chooser .button:not(.active),
 .card .card-button,
 .initiatives-section .video-background.abhi .button,
@@ -488,6 +547,9 @@ body:not(.sa-body-editor) .formik-input:focus,
 .transfer-host-modal .cancel-button {
   box-shadow: 0 0 0 1px var(--darkWww-button);
 }
+body:not(.sa-body-editor) input {
+  outline-color: var(--darkWww-button);
+}
 .button img,
 .preview .see-inside-button::before,
 .subactions .action-buttons .action-button::before,
@@ -498,8 +560,8 @@ body:not(.sa-body-editor) .formik-input:focus,
 #footer .inner .media li img {
   filter: var(--darkWww-button-filter);
 }
-.banner-wrapper .banner-button img /* "Choose a tutorial" icon */,
 .forms-close-button img,
+.starter-projects-page .surprise .surprise-button img,
 .os-chooser .button:not(.active) img {
   filter: none;
 }
@@ -603,8 +665,8 @@ a:hover {
 
 /* Footer background */
 #footer,
-#donor,
 .gray-area,
+.starter-projects-page .getting-started,
 .parents .title-banner.faq-banner,
 .developers .title-banner.faq-banner {
   background-color: var(--darkWww-footer);
@@ -616,10 +678,12 @@ a:hover {
 img.tips-icon {
   filter: var(--darkWww-footer-filter);
 }
+.developers #faq,
+#footer .inner .collaborators /* 2018 conference sponsors */ {
+  border-color: var(--darkWww-footer-divider10);
+}
 
 /* Border color */
-.tips-divider,
-.about .masthead div li:nth-child(odd),
 .about .body,
 .about .body img,
 .about .body iframe,
@@ -637,22 +701,19 @@ body:not(.sa-body-editor) .select select,
 .action-button.close-button,
 .sa-collapse-footer #footer,
 .empty,
-.outer .sort-controls,
 .preview .comments-container .comments-turned-off,
 .comment .comment-body .comment-bubble,
 .comment .comment-body .comment-bubble::before,
 .studio-tab-nav a.nav_link:hover > li,
 .studio-info-box,
-.developers #faq,
 p.callout,
-#footer .inner .collaborators,
 .input,
 .row .col-sm-9 input[type="radio"]:not(:checked),
-.extension-landing .tip-box {
+.extension-landing .tip-box,
+.checkbox-container input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border);
 }
 .grid .thumbnail,
-.ttt-tile,
 .thumbnail-column .thumbnail .thumbnail-image {
   box-shadow: 0 0 0 1px var(--darkWww-border);
 }
@@ -664,7 +725,7 @@ p.callout,
 .news li:nth-child(even),
 .thumbnail .thumbnail-image img,
 .video-player,
-.ttt-content-chunk + .ttt-content-chunk,
+.cards-modal-container .cards-modal-section-content .cards-modal-cards-list .card + .card,
 .messages-social-list,
 .social-message,
 .comment-text,
@@ -674,29 +735,23 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .social-form,
 .studio-info .studio-image,
 .studio-report-modal .studio-report-tile-image,
-.studio-tab-nav a.nav_link > li,
+.studio-tab-nav li,
 .studio-project-tile,
 .studio-adder-section .studio-adder-row input,
-.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .user-projects-modal .user-projects-modal-nav button,
 .studio-member-tile,
 .studio-activity .studio-messages-list,
 .developers #projects h3,
 .developers #principles h3,
-.developers #donate,
+.guidelines-page .navigation .navigation-buttons a,
 .information-page .info-outer nav,
-.conf2021-panel,
-.conf2019-panel,
 .conf2019-panel-flag,
-.conf2017-panel,
 .conf2017-panel-flag,
 .expect .schedule table th,
 .expect .schedule table td,
-.plan section,
 .plan .faq .short,
 .supporters-section .supporters-level hr,
 body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
-.extension-landing hr,
 .extension-landing .screenshot,
 .extension-landing .project-card,
 .extension-landing .hardware-card,
@@ -707,9 +762,6 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .studio-compose-container .sa-emoji-picker,
 .sa-emoji-picker-divider {
   border-color: var(--darkWww-border-15);
-}
-.navigation .dot {
-  background-color: var(--darkWww-border-15);
 }
 .navigation .dot.active {
   background-color: #4d97ff;
@@ -722,7 +774,7 @@ body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
 .row .checkbox input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border-20);
 }
-.studio-tab-nav a.nav_link.active > li,
+.studio-tab-nav .active > li,
 .user-projects-modal .user-projects-modal-nav button.active {
   border-color: rgba(0, 0, 0, 0.15);
 }

@@ -23,10 +23,15 @@
 }
 
 [class*="menu-bar_collapsible-label_"],
+[class*="settings-menu_dropdown-label_"] {
+  margin-left: 0.125rem;
+  margin-right: 0.25rem;
+}
+
 [dir="rtl"] [class*="menu-bar_collapsible-label_"],
-[class*="settings-menu_dropdown-label_"],
 [dir="rtl"] [class*="settings-menu_dropdown-label_"] {
-  margin: 0;
+  margin-right: 0.125rem;
+  margin-left: 0.25rem;
 }
 
 @media (max-width: 1024px) {
@@ -148,7 +153,9 @@
   background-color: var(--editorDarkMode-selector-compactScrollbar, #c1c8d1);
 }
 [class*="sprite-selector_items-wrapper"] {
-  padding: 0.125rem;
+  padding-top: 0.125rem;
+  padding-left: 0.125rem;
+  padding-right: 0.125rem;
 }
 [class*="sprite-selector_sprite-wrapper"] {
   margin: 0.125rem;
@@ -206,6 +213,35 @@ img[class*="sprite-selector-item_sprite-image"] {
 button[class*="action-menu_more-button"] {
   width: 2rem;
   height: 2rem;
+}
+
+.sa-search-sprites-container,
+.sa-search-sprites-icon,
+.sa-search-sprites-reset {
+  width: 2rem;
+  height: 2rem;
+}
+[dir="ltr"] .sa-search-sprites-container {
+  right: 4rem;
+}
+[dir="rtl"] .sa-search-sprites-container {
+  left: 4rem;
+}
+.sa-search-sprites-container:hover,
+.sa-search-sprites-container:focus-within,
+.sa-search-sprites-container:not(.sa-search-sprites-empty) {
+  width: max(12rem, calc(100% - 5rem));
+}
+input.sa-search-sprites-box {
+  padding-inline-start: 2rem;
+}
+.sa-search-sprites-container:hover input.sa-search-sprites-box,
+.sa-search-sprites-container:focus-within input.sa-search-sprites-box,
+.sa-search-sprites-container:not(.sa-search-sprites-empty) input.sa-search-sprites-box {
+  padding-inline-end: 2rem;
+}
+.sa-search-sprites-icon {
+  padding: 0.25rem;
 }
 
 /* Project player */
@@ -274,20 +310,25 @@ button[class*="action-menu_more-button"] {
 }
 
 /* Code tab */
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .scratchCategoryMenuItem {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .scratchCategoryMenuItem,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxCategory {
   padding: 0.25rem 0;
 }
 .scratchCategoryItemBubble,
-.scratchCategoryItemIcon {
+.scratchCategoryItemIcon,
+.categoryBubble,
+.categoryIconBubble {
   width: 1rem;
   height: 1rem;
   background-size: 1rem 1rem;
 }
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolbox {
   height: calc(100% - 2rem) !important;
   scrollbar-width: none;
 }
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webkit-scrollbar {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webkit-scrollbar,
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolbox::-webkit-scrollbar {
   display: none;
 }
 body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-button-container_"] {
@@ -434,6 +475,19 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 .sa-debugger-tabs li + li {
   margin-inline-start: 0.25rem;
 }
+.sa-debugger-footer {
+  padding: 0.25rem 0.5rem;
+}
+.sa-debugger-footer-buttons {
+  gap: 0.25rem;
+}
+.sa-debugger-footer-buttons > div {
+  padding: 0.25rem 0.5rem;
+}
+
+.sa-debugger-unpause-container:not(:last-child) {
+  padding-right: 0.25rem;
+}
 
 [class*="modal_header"],
 [class*="library_filter-bar"] {
@@ -513,6 +567,13 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 .blocklyTextRemoveIcon {
   top: -35px;
 }
+.sa-reorder-inputs-arrow {
+  top: -44px;
+}
 [class*="custom-procedures_body"] [role="button"] {
   padding: 0.5rem;
+}
+.sa-rcb-colorButton {
+  height: 1.5rem;
+  padding: 0 !important;
 }

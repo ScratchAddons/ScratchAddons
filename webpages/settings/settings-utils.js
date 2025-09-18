@@ -9,11 +9,6 @@ import {
   versionName,
 } from "../../libraries/common/settings-page-apis.js";
 
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
-
 let handleConfirmClicked = null;
 
 export const serializeSettings = async () => {
