@@ -54,11 +54,9 @@ export function createPaletteModule(addon, state, redux, msg) {
     }
     state.selectedPaletteIndex = selectedIndex;
     if (state.paletteGrid) {
-      state.paletteGrid
-        .querySelectorAll(".sa-pixel-art-color[data-index]")
-        .forEach((button) => {
-          button.dataset.selected = button.dataset.index === String(selectedIndex) ? "true" : "false";
-        });
+      state.paletteGrid.querySelectorAll(".sa-pixel-art-color[data-index]").forEach((button) => {
+        button.dataset.selected = button.dataset.index === String(selectedIndex) ? "true" : "false";
+      });
     }
   };
 
@@ -70,11 +68,9 @@ export function createPaletteModule(addon, state, redux, msg) {
     }
 
     if (state.paletteGrid) {
-      state.paletteGrid
-        .querySelectorAll(".sa-pixel-art-color[data-index]")
-        .forEach((button) => {
-          button.dataset.editing = button.dataset.index === String(state.editingPaletteIndex) ? "true" : "false";
-        });
+      state.paletteGrid.querySelectorAll(".sa-pixel-art-color[data-index]").forEach((button) => {
+        button.dataset.editing = button.dataset.index === String(state.editingPaletteIndex) ? "true" : "false";
+      });
     }
   };
 
@@ -264,10 +260,8 @@ export function createPaletteModule(addon, state, redux, msg) {
       if (
         payload &&
         typeof payload === "object" &&
-        (
-          (payload.mappings && typeof payload.mappings === "object") ||
-          (typeof payload.costumeKey === "string" && typeof payload.paletteId === "string")
-        )
+        ((payload.mappings && typeof payload.mappings === "object") ||
+          (typeof payload.costumeKey === "string" && typeof payload.paletteId === "string"))
       ) {
         delete target.comments[comment.id];
       }
@@ -302,7 +296,8 @@ export function createPaletteModule(addon, state, redux, msg) {
     colors: [],
   });
 
-  const getActivePalette = () => state.projectPalettes.find((palette) => palette.id === state.selectedPaletteId) || null;
+  const getActivePalette = () =>
+    state.projectPalettes.find((palette) => palette.id === state.selectedPaletteId) || null;
 
   const renderPaletteSelector = () => {
     if (!state.paletteDropdown) return;
@@ -412,7 +407,8 @@ export function createPaletteModule(addon, state, redux, msg) {
   const schedulePaletteSync = () => {
     if (paletteSyncPending) return;
     paletteSyncPending = true;
-    const microtask = typeof queueMicrotask === "function" ? queueMicrotask : (callback) => Promise.resolve().then(callback);
+    const microtask =
+      typeof queueMicrotask === "function" ? queueMicrotask : (callback) => Promise.resolve().then(callback);
     microtask(() => {
       paletteSyncPending = false;
       syncPaletteForCurrentCostume();
@@ -584,13 +580,9 @@ export function createPaletteModule(addon, state, redux, msg) {
     const confirmMessage = `${msg("deletePaletteConfirm")}
 
 ${palette.name}`;
-    const confirmed = await addon.tab.confirm(
-      msg("deletePalette"),
-      confirmMessage,
-      {
-        useEditorClasses: true,
-      }
-    );
+    const confirmed = await addon.tab.confirm(msg("deletePalette"), confirmMessage, {
+      useEditorClasses: true,
+    });
 
     if (!confirmed) return;
 
