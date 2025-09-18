@@ -125,6 +125,9 @@
   "popupFeatures": {
     "message": "Extension Popup Features"
   },
+  "easterEggs": {
+    "message": "Easter Eggs"
+  },
   "theme": {
     "message": "Theme:"
   },
