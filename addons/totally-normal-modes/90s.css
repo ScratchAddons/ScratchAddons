@@ -7,3 +7,7 @@
   background-image: url("assets/shapes.svg");
   opacity: 0.2;
 }
+
+body:has([class*="stage-wrapper_full-screen_"]) > .sa-mode {
+  z-index: 100000;
+}
