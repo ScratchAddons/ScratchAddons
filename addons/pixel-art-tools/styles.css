@@ -50,20 +50,35 @@
   flex-direction: column;
   gap: 0.4rem;
   color: #333;
-  width: 100%;
-  max-width: 180px;
+  width: auto;
+  max-width: 210px;
+  align-self: flex-start;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .sa-pixel-art-palette-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.sa-pixel-art-palette-title {
   font-weight: 600;
   font-size: 0.8rem;
-  margin-bottom: 0.3rem;
+}
+
+.sa-pixel-art-palette-header-buttons {
+  display: flex;
+  gap: 0.2rem;
 }
 
 .sa-pixel-art-palette-actions {
   display: flex;
-  gap: 0.2rem;
-  margin-bottom: 0.3rem;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
 }
 
 .sa-pixel-art-icon-button {
@@ -71,9 +86,12 @@
   background: rgba(0, 0, 0, 0.1);
   color: inherit;
   border-radius: 0.3rem;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 0.35rem;
   cursor: pointer;
   font-size: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sa-pixel-art-icon-button:hover {
@@ -89,8 +107,8 @@
 
 .sa-pixel-art-palette-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(1.2rem, 1fr));
-  gap: 0.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(1.2rem, 1fr));
+  gap: 0.4rem;
 }
 
 .sa-pixel-art-color {
@@ -100,6 +118,9 @@
   border-radius: 0.2rem;
   cursor: pointer;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sa-pixel-art-color[data-selected="true"] {
@@ -112,11 +133,10 @@
   box-shadow:
     0 0 0 2px #fff,
     0 0 0 4px #ff6b47;
-  position: relative;
 }
 
 .sa-pixel-art-color[data-editing="true"]::after {
-  content: "✎";
+  content: "\270E";
   position: absolute;
   top: -2px;
   right: -2px;
@@ -191,4 +211,86 @@ body.sa-pixel-art-mode-active .sa-pixel-art-hide-when-pixel {
 
 body.sa-pixel-art-mode-active .sa-pixel-art-brush[data-visible="true"] {
   display: flex;
+}
+
+.sa-pixel-art-palette-select-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.sa-pixel-art-palette-select {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #fff;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.sa-pixel-art-palette-select:focus {
+  outline: none;
+  border-color: #4d97ff;
+  box-shadow: 0 0 0 2px rgba(77, 151, 255, 0.2);
+}
+
+.sa-pixel-art-color-add {
+  border: 1px dashed rgba(0, 0, 0, 0.3);
+  background: transparent;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sa-pixel-art-color-add::before {
+  content: "+";
+  font-weight: 600;
+}
+
+.sa-pixel-art-color-add:hover {
+  border-color: #4d97ff;
+  color: #4d97ff;
+}
+
+.sa-pixel-art-action-button {
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  color: inherit;
+  border-radius: 0.35rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.sa-pixel-art-action-button:hover {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.sa-pixel-art-action-button--danger {
+  background: #ff6b47;
+  color: #fff;
+}
+
+.sa-pixel-art-action-button--danger:hover {
+  background: #e05535;
+}
+
+.sa-pixel-art-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  pointer-events: none;
+}
+
+.sa-pixel-art-icon--invert {
+  filter: brightness(0) invert(1);
 }
