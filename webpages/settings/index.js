@@ -12,11 +12,11 @@ import { deserializeSettings, serializeSettings } from "./settings-utils.js";
 import {
   checkAndOpenUnsupportedPage,
   getForceEnglish,
-  getInstallType,
   getLanguage,
   getMessage,
   getRunningAddons,
   getSettingsInfo,
+  isDeveloperMode,
   reload,
   sendAddonSettingChanges,
   sendPermissionCheck,
@@ -614,9 +614,7 @@ let fuse;
   window.onresize = resize;
   resize();
 
-  getInstallType().then((installType) => {
-    if (installType === "development") vue.devMode = true;
-  });
+  if (await isDeveloperMode()) vue.devMode = true;
 
   // Konami code easter egg
   let cursor = 0;

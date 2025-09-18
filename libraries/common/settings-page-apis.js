@@ -44,9 +44,9 @@ export const getRunningAddons = () => {
 
 export const getSettingsInfo = (callback) => chrome.runtime.sendMessage("getSettingsInfo", callback);
 
-export const getInstallType = async () => {
+export const isDeveloperMode = async () => {
   const info = await chrome.management.getSelf();
-  return info.installType;
+  return info.installType === "development";
 };
 
 export const sendPermissionCheck = () => chrome.runtime.sendMessage("checkPermissions");

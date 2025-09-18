@@ -7,8 +7,7 @@
   "default_locale": "en",
   "background": {
     "service_worker": "background/background.js",
-    "type": "module",
-    "page": "background/background.html"
+    "type": "module"
   },
   "action": { "default_popup": "webpages/popup/index.html" },
   "icons": {
