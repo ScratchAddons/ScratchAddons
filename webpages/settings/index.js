@@ -199,9 +199,6 @@ let fuse;
       direction() {
         return getDirection(getLanguage());
       },
-      openReview() {
-        window.open(getReviewURL());
-      },
       clearSearch() {
         this.searchInputReal = "";
       },

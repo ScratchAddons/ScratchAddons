@@ -80,14 +80,6 @@ export const setAddonEnabledStates = (addonsEnabled) => {
   chrome.storage.sync.set({ addonsEnabled });
 };
 
-export const getReviewURL = () => {
-  if (typeof browser !== "undefined") {
-    return `https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`;
-  } else {
-    return `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`;
-  }
-};
-
 export const requestHostPermissions = () => {
   const manifest = chrome.runtime.getManifest();
   const origins = manifest.host_permissions.filter((url) => url.startsWith("https://"));
