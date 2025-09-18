@@ -378,9 +378,6 @@
   "searchNotFound": {
     "message": "No results found. Perhaps try different keywords?"
   },
-  "searchNotFoundInCategory": {
-    "message": "No results found in \"$1\". Perhaps try different keywords?"
-  },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: your comment mentions a browser extension. The $1 urges Scratchers not to advertise them, as the Scratch Team have not reviewed them for safety and can't possibly check every single one. Please follow the aforementioned policy by avoiding any references to browser extensions when posting on Scratch.",
     "description": "The placeholder is \"Browser Extension Policy\""
