@@ -197,7 +197,7 @@ h1 {
 }
 
 #search-not-found {
-  margin: 10px;
+  margin: 20px;
 }
 body.iframe #search-not-found {
   margin: unset;
