@@ -94,7 +94,7 @@ export default async function ({ template }) {
               }
             } catch (e) {
               console.warn(`Error importing settings file for ${this.addon._addonId}:`, e);
-              alert(chrome.i18n.getMessage("importFailed"));
+              alert(getMessage("importFailed"));
               return;
             }
             this.loadPreset(obj);
