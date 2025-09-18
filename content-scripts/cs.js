@@ -64,11 +64,6 @@ chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onRes
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
-
 let _page_ = null;
 let globalState = null;
 
@@ -834,12 +829,12 @@ const handleBanner = async () => {
   const currentVersionMajorMinor = `${major}.${minor}`;
   // Making this configurable in the future?
   // Using local because browser extensions may not be updated at the same time across browsers
-  const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
+  const settings = await chrome.storage.local.get(["bannerSettings"]);
   const force = !settings || !settings.bannerSettings;
 
   if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor || location.hash === "#sa-update-notif") {
     console.log("Banner shown.");
-    await promisify(chrome.storage.local.set.bind(chrome.storage.local))({
+    await chrome.storage.local.set({
       bannerSettings: Object.assign({}, settings.bannerSettings, { lastShown: currentVersionMajorMinor }),
     });
     showBanner();
