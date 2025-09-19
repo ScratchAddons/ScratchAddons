@@ -1,7 +1,6 @@
 import { createPaletteModule } from "./modules/palette.js";
 import { createCanvasUtilsModule } from "./modules/canvas-utils.js";
-import { createBrushControlsModule } from "./modules/brush-controls.js";
-import { createPixelModeModule } from "./modules/pixel-mode.js";
+import { createControlsModule } from "./modules/controls.js";
 
 const DEFAULT_SIZE = 64;
 
@@ -38,15 +37,14 @@ export default async function ({ addon, msg, console }) {
   // Initialize modules
   const canvasUtils = createCanvasUtilsModule(paper, state);
   const palette = createPaletteModule(addon, state, redux, msg);
-  const brushControls = createBrushControlsModule(addon, state, redux);
-  const pixelMode = createPixelModeModule(addon, state, redux, msg, canvasUtils, brushControls, palette);
+  const controls = createControlsModule(addon, state, redux, msg, canvasUtils, palette);
 
   // Main Redux event handler for paint events
   redux.addEventListener("statechanged", ({ detail }) => {
     if (!detail || !detail.prev || !detail.next) return;
 
     if (detail.action.type === "scratch-paint/modes/CHANGE_MODE") {
-      brushControls.updateBrushControlVisibility();
+      controls.updateBrushControlVisibility();
     }
 
     const prevColor = detail.prev.scratchPaint?.color?.fillColor?.primary;
@@ -64,7 +62,7 @@ export default async function ({ addon, msg, console }) {
     const prevSize = detail.prev.scratchPaint?.bitBrushSize;
     const nextSize = detail.next.scratchPaint?.bitBrushSize;
     if (prevSize !== nextSize) {
-      brushControls.updateBrushSelection(nextSize);
+      controls.updateBrushSelection(nextSize);
     }
 
     if (detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
@@ -75,12 +73,11 @@ export default async function ({ addon, msg, console }) {
   });
 
   // Addon lifecycle events
-  addon.self.addEventListener("disabled", pixelMode.handleDisabled);
-  addon.self.addEventListener("reenabled", pixelMode.handleReenabled);
+  addon.self.addEventListener("disabled", controls.handleDisabled);
+  addon.self.addEventListener("reenabled", controls.handleReenabled);
 
   // Initialize all components
-  pixelMode.setupZoomControls();
+  controls.setupControls();
   palette.setupPalettePanel();
-  brushControls.setupBrushControls();
   palette.updatePaletteSelection();
 }
