@@ -11,8 +11,5 @@
   "credits": [{ "name": "LuYifei2011", "link": "https://github.com/LuYifei2011" }],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.44.0",
-  "enabledByDefault": false,
-  "permissions": ["clipboardWrite"],
-  "libraries": ["scratch-gui"]
+  "versionAdded": "1.44.0"
 }
