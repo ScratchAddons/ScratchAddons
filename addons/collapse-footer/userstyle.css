@@ -15,7 +15,7 @@
   z-index: 20;
 }
 .sa-collapse-footer #footer.transition {
-  transition-duration: var(--collapseFooter-expandSpeed);
+  transition: height var(--collapseFooter-expandSpeed);
 }
 .sa-collapse-footer #footer .lists dl {
   margin-top: 0;
@@ -38,6 +38,7 @@
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 4px;
+  object-fit: contain;
 }
 
 .sa-collapse-footer #footer.expanded .sa-footer-arrow {
@@ -45,7 +46,13 @@
 }
 
 :root {
-  --footer-hover-height: 328px; /* How high the hovered footer is (for donor text fix) */
+  --footer-hover-height: 300px; /* Can be modified by the userscript and by other addons */
+}
+
+@media (max-width: 639px) {
+  :root {
+    --footer-hover-height: 200px;
+  }
 }
 
 /* old-studio-layout compatibility */

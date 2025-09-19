@@ -2,6 +2,7 @@
   "name": "Scratch 3.0 \u2192 2.0",
   "description": "Makes Scratch 3.0-styled pages look like Scratch 2.0.",
   "tags": ["community", "theme", "featured"],
+  "relatedAddons": ["scratchr2", "editor-stage-left", "editor-buttons-reverse-order", "old-studio-layout"],
   "credits": [
     {
       "name": "Maximouse",
@@ -10,8 +11,22 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.41.0",
+  "latestUpdate": {
+    "version": "1.43.0",
+    "newSettings": ["navbarSeparators"],
+    "isMajor": true
+  },
+  "settings": [
+    {
+      "id": "navbarSeparators",
+      "type": "boolean",
+      "name": "Separator lines in navigation bar",
+      "default": false
+    }
+  ],
   "userstyles": [
     {
       "url": "main.css",
@@ -71,6 +86,13 @@
     {
       "url": "download.css",
       "matches": ["https://scratch.mit.edu/download"]
+    },
+    {
+      "url": "navbar_separators.css",
+      "matches": "*",
+      "if": {
+        "settings": { "navbarSeparators": true }
+      }
     }
   ],
   "libraries": ["scratch-flash"]

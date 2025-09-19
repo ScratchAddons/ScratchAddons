@@ -1,11 +1,11 @@
-import { enableContextMenuSeparators, addSeparator } from "../../libraries/common/cs/blockly-context-menu.js";
-
 export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   function makeStyle() {
     let style = document.createElement("style");
-    style.textContent = `
+    style.textContent = Blockly.registry
+      ? ""
+      : `
     .blocklyText {
         fill: ${Blockly.Colours.text};
         font-family: "Helvetica Neue", Helvetica, sans-serif;
@@ -19,19 +19,25 @@ export default async function ({ addon, console, msg }) {
         fill: ${Blockly.Colours.text} !important;
     }
     `;
-    for (let userstyle of document.querySelectorAll(`
+    for (let scratchStyle of document.querySelectorAll(`
+      style[id^='blockly-'],
       .scratch-addons-style[data-addon-id="editor-theme3"],
       .sa-custom-block-text-style
     `)) {
-      if (userstyle.disabled) continue;
-      style.textContent += userstyle.textContent;
+      if (scratchStyle.disabled) continue;
+      style.textContent += scratchStyle.textContent;
     }
     return style;
   }
 
   function setCSSVars(element) {
+    element.setAttribute("class", document.querySelector(".injectionDiv").className);
     for (let property of document.documentElement.style) {
-      if (property.startsWith("--editorTheme3-") || property.startsWith("--customBlockText-"))
+      if (
+        property.startsWith("--colour-") ||
+        property.startsWith("--editorTheme3-") ||
+        property.startsWith("--customBlockText-")
+      )
         element.style.setProperty(property, document.documentElement.style.getPropertyValue(property));
     }
   }
@@ -41,26 +47,37 @@ export default async function ({ addon, console, msg }) {
   exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
   exSVG.setAttribute("version", "1.1");
 
-  enableContextMenuSeparators(addon.tab);
-
   if (Blockly.registry) {
     // new Blockly
-    Blockly.ContextMenuRegistry.registry.register(
-      addSeparator({
-        displayText: msg("saveAll"),
-        preconditionFn: () => {
-          if (addon.self.disabled) return "hidden";
-          if (document.querySelector("svg.blocklySvg g.blocklyBlockCanvas > g.blocklyBlock")) return "enabled";
-          return "disabled";
-        },
-        callback: () => {
-          exportPopup();
-        },
+    const registerSeparator = () => {
+      Blockly.ContextMenuRegistry.registry.register({
+        separator: true,
         scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
-        id: "saSaveAllAsImage",
+        id: "saSaveAllAsImageSeparator",
         weight: 9, // after Add Comment
-      })
-    );
+      });
+    };
+    const unregisterSeparator = () => {
+      Blockly.ContextMenuRegistry.registry.unregister("saSaveAllAsImageSeparator");
+    };
+    registerSeparator();
+    addon.self.addEventListener("disabled", unregisterSeparator);
+    addon.self.addEventListener("reenabled", registerSeparator);
+
+    Blockly.ContextMenuRegistry.registry.register({
+      displayText: msg("saveAll"),
+      preconditionFn: () => {
+        if (addon.self.disabled) return "hidden";
+        if (document.querySelector("svg.blocklySvg g.blocklyBlockCanvas > g.blocklyBlock")) return "enabled";
+        return "disabled";
+      },
+      callback: () => {
+        exportPopup();
+      },
+      scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+      id: "saSaveAllAsImage",
+      weight: 10, // after separator
+    });
   } else {
     addon.tab.createBlockContextMenu(
       (items) => {
@@ -81,8 +98,8 @@ export default async function ({ addon, console, msg }) {
           callback: () => {
             exportPopup();
           },
-          separator: true,
         });
+        items.splice(insertBeforeIndex, 0, { separator: true });
 
         return items;
       },
@@ -101,18 +118,14 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        addSeparator({
-          enabled: true,
-          text: msg("save"),
-          callback: () => {
-            exportPopup(block);
-          },
-          separator: true,
-        })
-      );
+      items.splice(insertBeforeIndex, 0, {
+        enabled: true,
+        text: msg("save"),
+        callback: () => {
+          exportPopup(block);
+        },
+      });
+      items.splice(insertBeforeIndex, 0, { separator: true });
 
       return items;
     },
@@ -253,12 +266,14 @@ export default async function ({ addon, console, msg }) {
       }, {});
     };
 
-    const externalImages = /*Object.*/ groupBy(Array.from(svg.querySelectorAll("image")), (item) => {
-      const iconUrl = item.getAttribute("xlink:href");
-      if (iconUrl.startsWith("data:")) return "data:";
-      else return iconUrl;
-    });
-    delete externalImages["data:"];
+    const getHref = (item) => item.getAttribute("xlink:href") || item.getAttribute("href");
+    const externalImages = /*Object.*/ groupBy(
+      Array.from(svg.querySelectorAll("image")).filter((item) => {
+        const iconUrl = getHref(item);
+        return iconUrl && !iconUrl.startsWith("data:");
+      }),
+      (item) => getHref(item)
+    );
 
     // replace external images with data URIs
     await Promise.all(
@@ -269,7 +284,10 @@ export default async function ({ addon, console, msg }) {
           reader.addEventListener("load", () => resolve(reader.result));
           reader.readAsDataURL(blob);
         });
-        externalImages[iconUrl].forEach((item) => item.setAttribute("xlink:href", dataUri));
+        externalImages[iconUrl].forEach((item) => {
+          item.removeAttribute("href");
+          item.setAttribute("xlink:href", dataUri);
+        });
       })
     );
     if (isExportPNG) {
@@ -282,7 +300,7 @@ export default async function ({ addon, console, msg }) {
   function selectedBlocks(scale, block) {
     let svg = exSVG.cloneNode();
 
-    let svgchild = block.svgGroup_;
+    let svgchild = block.getSvgRoot();
     const translateY = Math.abs(svgchild.getBBox().y) * scale + scale;
     svgchild = svgchild.cloneNode(true);
     svgchild.setAttribute("transform", `translate(${scale},${translateY}) scale(${scale})`);
@@ -301,6 +319,7 @@ export default async function ({ addon, console, msg }) {
 
     // Loop before cloneNode so getBBox() works.
     svgchild.childNodes.forEach((g) => {
+      if (!g.getAttribute("transform")) return;
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
       xArr.push(x * scale);
@@ -314,6 +333,12 @@ export default async function ({ addon, console, msg }) {
 
     svgchild = svgchild.cloneNode(true);
     svgchild.setAttribute("transform", `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`);
+
+    // Include comment text in the exported SVG
+    for (const textarea of svgchild.querySelectorAll(".blocklyTextarea")) {
+      textarea.innerText = textarea.value;
+    }
+
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);

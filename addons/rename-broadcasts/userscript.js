@@ -102,11 +102,12 @@ export default async function ({ addon, msg, console }) {
     Blockly.Events.setGroup(true);
 
     // Rename in editor. Undo/redo will work automatically.
-    // Old Blockly's renameVariableById() creates a new group, so we need
+    // Old Blockly's renameVariable() creates a new group, so we need
     // to replace setGroup() with a no-op to prevent that.
     const _setGroup = Blockly.Events.setGroup;
     if (!Blockly.registry) Blockly.Events.setGroup = () => {};
-    workspace.getVariableMap().renameVariableById(id, newName);
+    const blocklyVariable = workspace.getVariableMap().getVariableById(id);
+    workspace.getVariableMap().renameVariable(blocklyVariable, newName);
     if (!Blockly.registry) Blockly.Events.setGroup = _setGroup;
 
     // Rename in VM. Need to manually implement undo/redo.
@@ -141,7 +142,8 @@ export default async function ({ addon, msg, console }) {
     }
     // Remove the broadcast from the editor so it doesn't appear in dropdowns.
     // Undo/redo will work automatically for this.
-    workspace.getVariableMap().deleteVariableById(oldId);
+    const oldBlocklyVariable = workspace.getVariableMap().getVariableById(oldId);
+    workspace.getVariableMap().deleteVariable(oldBlocklyVariable);
 
     // Merge in VM to update sprites that aren't open. Need to manually implement undo/redo.
     // To figure out how to undo this operation, we first figure out which blocks we're
@@ -198,7 +200,7 @@ export default async function ({ addon, msg, console }) {
           return;
         }
 
-        const variableAlreadyExists = !!workspace.getVariable(newName, BROADCAST_MESSAGE_TYPE);
+        const variableAlreadyExists = !!workspace.getVariableMap().getVariable(newName, BROADCAST_MESSAGE_TYPE);
         if (variableAlreadyExists) {
           mergeBroadcast(workspace, id, oldName, newName);
         } else {

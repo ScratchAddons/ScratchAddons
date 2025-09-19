@@ -16,6 +16,7 @@
   position: absolute;
   z-index: 200;
   height: calc(100vh - 60px);
+  height: calc(100svh - 60px);
   padding-bottom: 0;
   transition: 0.25s;
 }

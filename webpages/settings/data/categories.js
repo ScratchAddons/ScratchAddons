@@ -90,4 +90,9 @@ export default [
     name: chrome.i18n.getMessage("popupFeatures"),
     marginBottom: true,
   },
+  {
+    id: "easterEgg",
+    name: chrome.i18n.getMessage("easterEggs"),
+    hidden: true,
+  },
 ];

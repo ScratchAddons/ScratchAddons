@@ -7,6 +7,7 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   height: 100vh;
+  height: 100svh;
   overflow: hidden;
   color: var(--content-text);
   font-size: 14px;
@@ -26,15 +27,6 @@ body {
   user-select: none;
   position: relative;
   z-index: 10;
-  background-image: var(--dirt-background, none);
-}
-
-.navbar-start {
-  display: flex;
-  align-items: center;
-}
-.navbar-start.wide {
-  min-width: 300px;
 }
 
 h1 {
@@ -75,15 +67,16 @@ h1 {
 .addons-container {
   overflow-y: auto;
   padding: 20px;
+  padding-top: 10px;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
   height: 100vh;
 }
 
-.addons-container.placeholder {
+.addons-container .placeholder {
   pointer-events: none;
 }
-.addons-container.placeholder .addon-body:first-child {
+.addons-container .placeholder .addon-body:first-child {
   /* Doing this instead of padding in .addons-container itself to avoid
   problems with other CSS that would also set padding on the same element,
   like the "body.iframe .addons-container" selector below */
@@ -118,6 +111,42 @@ h1 {
 .inline-icon {
   height: 16px;
   vertical-align: bottom;
+}
+
+.addons-block-header {
+  background: var(--search-toolbar-background);
+  border-bottom: 1px solid var(--control-border);
+  display: flex;
+  align-items: center;
+  padding: 10px 40px;
+  user-select: none;
+}
+
+.category-header-title {
+  flex-grow: 1;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.related-addons-header {
+  display: flex;
+  align-items: center;
+}
+
+.back-button {
+  width: 24px;
+  height: 24px;
+  vertical-align: bottom;
+  padding: 4px;
+  margin-inline-end: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  filter: var(--content-icon-filter);
+}
+
+.back-button:hover {
+  background-color: var(--hover-highlight);
 }
 
 .clear-button {
@@ -168,7 +197,7 @@ h1 {
 }
 
 #search-not-found {
-  margin: 10px;
+  margin: 20px;
 }
 body.iframe #search-not-found {
   margin: unset;
@@ -195,93 +224,35 @@ body.iframe #search-not-found {
   border-radius: 4px;
 }
 
-body.iframe .tooltiptext:not(.tooltiptexttop) {
-  display: none;
+/* Small screens & popup */
+@media (max-width: 700px) {
+  .addons-block-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 4px;
+  }
+  .category-header-title {
+    padding: 4px;
+  }
+
+  .addons-container {
+    padding: 10px 0;
+  }
 }
-body.iframe .addon-description {
-  display: none;
-}
+
+/* Popup */
 body.iframe .search-box {
-  padding: 10px;
+  width: 100%;
+}
+body.iframe .navbar {
+  display: none;
 }
 body.iframe .main {
   /* No calc -60px because there's no navbar */
   height: 100%;
 }
-body.iframe .addon-group {
-  padding-inline: 6px;
-}
-body.iframe .addon-group > img {
-  margin-inline-end: 5px;
-}
-body.iframe .addon-topbar {
-  height: 44px;
-  padding-inline-end: 6px;
-}
-body.iframe .clickable-area {
-  padding-inline-start: 6px;
-}
-body.iframe .addon-name {
-  margin-inline-start: 6px;
-}
-body.iframe .addon-name .icon-type {
-  margin-inline-end: 6px;
-}
-body.iframe .badge {
-  margin-inline-start: 8px;
-}
 
-body.iframe .addon-settings {
-  padding-inline: 16px;
-}
-body.iframe .settings-column {
-  flex-direction: column;
-}
-body.iframe .settings-column > .addon-setting {
-  margin: 10px 0;
-  min-height: 0;
-  flex-direction: column;
-  align-items: flex-start;
-}
-body.iframe .setting-label {
-  width: auto;
-  margin-bottom: 5px;
-}
-body.iframe .setting-input {
-  flex-shrink: 0;
-}
-body.iframe .addon-setting.boolean-setting {
-  margin: 5px 0;
-  flex-direction: row;
-  align-items: center;
-}
-body.iframe .addon-setting.boolean-setting .setting-label {
-  margin-bottom: 0;
-}
-body.iframe .presets-column > .setting-label {
-  margin-inline-start: 0;
-  margin-top: 10px;
-  margin-bottom: 0;
-  width: 100%;
-}
-body.iframe .presets-column > .addon-setting {
-  margin: 5px 0;
-  margin-inline-end: 10px;
-}
-body.iframe .presets-column > .addon-setting:last-child {
-  margin-inline-end: 0;
-}
-
-body.iframe .addons-container {
-  padding: 10px 0;
-}
-body.iframe .filter-options {
-  flex-wrap: wrap;
-}
-body.iframe .filter-option {
-  flex-grow: 1;
-  text-align: center;
-}
 body.iframe .search-box input {
   flex-grow: 1;
   flex-basis: 0;
@@ -358,6 +329,10 @@ body.iframe .search-box input {
 }
 
 @media (max-width: 1000px) {
+  .permissions-block h2 {
+    font-size: 2rem;
+  }
+
   .permissions-steps {
     flex-direction: column;
     align-items: center;

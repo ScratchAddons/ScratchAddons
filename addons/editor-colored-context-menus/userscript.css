@@ -12,6 +12,9 @@
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem[style*="border-top"] {
   border-top-color: var(--sa-contextmenu-border) !important;
 }
+.sa-contextmenu-colored .blocklyContextMenu > .blocklyMenuSeparator {
+  border-top-color: var(--sa-contextmenu-border);
+}
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
   color: var(--sa-contextmenu-text);
 }

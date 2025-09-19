@@ -585,6 +585,7 @@ export default async function ({ addon, console, msg }) {
   const settingButton = createButton();
   settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
   settingButton.title = msg("settings");
+  settingButton.classList.add("sa-onion-arrow");
   settingButton.appendChild(createButtonImage("settings"));
 
   document.body.addEventListener("click", (e) => {

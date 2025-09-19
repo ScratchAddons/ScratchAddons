@@ -54,11 +54,7 @@ export default [
   },
   {
     id: "recommended",
-    name: (() => {
-      const now = Date.now() / 1000;
-      if (now < 1743595200 && now > 1743422400) return "Potato Board 🥔";
-      return chrome.i18n.getMessage("recommended");
-    })(),
+    name: chrome.i18n.getMessage("recommended"),
     addonIds: [],
     expanded: true,
     iframeShow: false,

@@ -49,7 +49,7 @@ export default async function ({ addon, console, msg, safeMsg }) {
       for (const blockXML of xml) {
         if (blockXML.hasAttribute("id")) {
           const id = blockXML.getAttribute("id");
-          const variable = workspace.getVariableById(id);
+          const variable = workspace.getVariableMap().getVariableById(id);
           if (!variable || !variable.isLocal) {
             global.push(blockXML);
           } else {

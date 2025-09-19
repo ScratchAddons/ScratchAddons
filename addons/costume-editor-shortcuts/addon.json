@@ -1,10 +1,16 @@
 {
   "name": "Costume editor keyboard shortcuts",
-  "description": "Adds keyboard shortcuts to costume editor tools (similar to TurboWarp). Hover over a tool to view its shortcut.",
+  "description": "Allows switching costumes with Ctrl+Left/Right and selecting tools in the costume editor using keyboard shortcuts (similar to TurboWarp). Hover over a tool to view its shortcut.",
   "credits": [
     {
       "name": "Hollow_Song's Dad",
       "link": "https://scratch.mit.edu/users/Hollow_Song/"
+    }
+  ],
+  "info": [
+    {
+      "id": "cmdKey",
+      "text": "On macOS, use the Cmd key instead of the Ctrl key."
     }
   ],
   "userscripts": [
@@ -15,5 +21,9 @@
   ],
   "versionAdded": "1.41.0",
   "tags": ["editor", "costumeEditor", "recommended"],
+  "latestUpdate": {
+    "version": "1.43.0",
+    "temporaryNotice": "Costumes can now be switched with Ctrl+Left/Right. This was previously a hidden feature of the \"developer tools\" addon."
+  },
   "enabledByDefault": false
 }

@@ -109,3 +109,8 @@
   margin-right: auto;
   transform: rotate(-90deg);
 }
+
+.blocklyCommentTopbar > image,
+.scratchCommentTopBar ~ image {
+  filter: var(--editorTheme3-commentFilter);
+}

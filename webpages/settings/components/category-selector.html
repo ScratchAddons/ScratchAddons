@@ -2,9 +2,10 @@
   <div
     class="category"
     :class="{
-        sel: category.id === selectedCategory,
+        sel: category.id === selectedCategory && !this.$root.relatedAddonsOpen,
         hasParent: category.parent,
       }"
+    v-if="!category.hidden"
     v-show="shouldShow"
     transition="expand"
     :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"

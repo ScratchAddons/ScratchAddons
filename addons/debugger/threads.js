@@ -197,7 +197,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     }
   });
 
-  const stepButton = debug.createHeaderButton({
+  const stepButton = debug.createIconButton({
     text: msg("step"),
     icon: addon.self.dir + "/icons/step.svg",
     description: msg("step-desc"),

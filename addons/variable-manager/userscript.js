@@ -185,14 +185,15 @@ export default async function ({ addon, console, msg }) {
           nameAlreadyUsed = existingNames.includes(newName);
         } else {
           // Local variables must not conflict with any global variables or local variables in this sprite.
-          nameAlreadyUsed = !!workspace.getVariable(newName, this.scratchVariable.type);
+          nameAlreadyUsed = !!workspace.getVariableMap().getVariable(newName, this.scratchVariable.type);
         }
 
         const isEmpty = !newName.trim();
         if (isEmpty || nameAlreadyUsed) {
           label.value = this.scratchVariable.name;
         } else {
-          workspace.renameVariableById(this.scratchVariable.id, newName);
+          const blocklyVariable = workspace.getVariableMap().getVariableById(this.scratchVariable.id);
+          workspace.getVariableMap().renameVariable(blocklyVariable, newName);
           // Only update the input's value when we need to to avoid resetting undo history.
           if (label.value !== newName) {
             label.value = newName;
