@@ -154,7 +154,7 @@ const procedure = (block, context) => {
       "\u200B\u200Berror\u200B\u200B %s",
     ].includes(procCode);
 
-  const sanitizations = [
+  const procSanitizations = [
     { searchValue: "\\%", replacer: "%" },
     ...sanitizations.block,
     { searchValue: /^ {2,}| {2,}$/g, replacer: " " },
@@ -167,7 +167,7 @@ const procedure = (block, context) => {
 
   for (const component of block.getProcCode().split(/(?<!\\)(%[nbs])/)) {
     if (isLabel) {
-      const labelText = sanitize(component, sanitizations);
+      const labelText = sanitize(component, procSanitizations);
       labels.push(labelText);
       output += labelText;
     } else {
