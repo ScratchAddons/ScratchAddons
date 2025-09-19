@@ -17,8 +17,11 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     if (state.enabled === enabled) return;
     state.pixelModeDesired = enabled;
     updatePixelModeState(enabled);
-    if (enabled) canvasAdjuster.setPixelModeBackground(state.pendingSize.width, state.pendingSize.height);
-    else palette.updatePaletteSelection();
+    if (enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+    else {
+      canvasAdjuster.disable();
+      palette.updatePaletteSelection();
+    }
     updateBrushControlVisibility();
   };
 
@@ -53,7 +56,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       const value = Math.max(1, Math.min(1024, +input.value || 1));
       state.pendingSize[dimension] = value;
       input.value = value;
-      if (state.enabled) canvasAdjuster.setPixelModeBackground(state.pendingSize.width, state.pendingSize.height);
+      if (state.enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
     };
     return input;
   };
@@ -128,7 +131,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
   const handleReenabled = () => {
     if (!state.enabled) return;
     updatePixelModeState(true);
-    canvasAdjuster.setPixelModeBackground(state.pendingSize.width, state.pendingSize.height);
+    canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
     updateBrushControlVisibility();
   };
 
