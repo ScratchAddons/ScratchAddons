@@ -113,7 +113,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
         updateBrushSelection(size);
       };
       const preview = Object.assign(document.createElement("span"), { className: "sa-pixel-art-brush-preview" });
-      Object.assign(preview.style, { width: `${size * 6}px`, height: `${size * 6}px` });
+      Object.assign(preview.style, { width: `${size * 3}px`, height: `${size * 3}px` });
       button.appendChild(preview);
       brushContainer.appendChild(button);
     });
