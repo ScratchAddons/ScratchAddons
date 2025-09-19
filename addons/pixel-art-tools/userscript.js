@@ -26,8 +26,9 @@ export default async function ({ addon, msg, console }) {
     paletteGrid: null,
     widthInput: null,
     heightInput: null,
-    backgroundScaling: null,
-    backgroundPosition: null,
+    pixelGridOriginal: null,
+    pixelGridOverlay: null,
+    pixelCheckerboardSize: 1,
     paletteNotice: null,
     toggleButton: null,
   };
@@ -64,6 +65,12 @@ export default async function ({ addon, msg, console }) {
     const nextSize = detail.next.scratchPaint?.bitBrushSize;
     if (prevSize !== nextSize) {
       brushControls.updateBrushSelection(nextSize);
+    }
+
+    if (detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
+      if (typeof canvasUtils.handleFormatChange === "function") {
+        canvasUtils.handleFormatChange(detail.next.scratchPaint?.format);
+      }
     }
   });
 

@@ -15,6 +15,9 @@ export function createPixelModeModule(addon, state, redux, msg, canvasUtils, bru
       state.palettePanel.style.display = enabled ? "block" : "none";
     }
     canvasUtils.applyPixelGrid(enabled);
+    if (typeof canvasUtils.handleFormatChange === "function") {
+      canvasUtils.handleFormatChange(redux.state?.scratchPaint?.format);
+    }
     if (enabled && !options.skipCanvasUpdate) {
       canvasUtils.resizeBitmapCanvas(state.pendingSize.width, state.pendingSize.height);
     }
