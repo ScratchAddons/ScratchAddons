@@ -114,9 +114,8 @@ export default async function ({ addon, console, msg }) {
       console.warn("serializeWorkspaceStacks: getTopBlocks failed", e);
       return "";
     }
-    const stackBlocks = topBlocks.filter((b) => !b.outputConnection && !b.isShadow?.());
     const parts = [];
-    for (const block of stackBlocks) {
+    for (const block of topBlocks) {
       try {
         const serialized = serializeBlock(block).trimEnd();
         if (serialized) parts.push(serialized);
