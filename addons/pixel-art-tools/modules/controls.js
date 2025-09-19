@@ -141,6 +141,9 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
         container.appendChild(brushContainer);
         updateBrushControlVisibility();
       }
+      
+      // Check if we should auto-enable pixel mode
+      updatePixelModeVisibility();
     }
   };
 

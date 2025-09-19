@@ -19,5 +19,29 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false,
-  "libraries": ["scratch-gui", "scratch-paint"]
+  "libraries": ["scratch-gui", "scratch-paint"],
+  "settings": [
+    {
+      "name": "Default width",
+      "id": "defaultWidth",
+      "type": "integer",
+      "default": 64,
+      "min": 1,
+      "max": 1024
+    },
+    {
+      "name": "Default height", 
+      "id": "defaultHeight",
+      "type": "integer",
+      "default": 64,
+      "min": 1,
+      "max": 1024
+    },
+    {
+      "name": "Enable pixel mode by default",
+      "id": "enableByDefault",
+      "type": "boolean",
+      "default": false
+    }
+  ]
 }

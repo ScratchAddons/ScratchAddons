@@ -2,7 +2,6 @@ import { createPaletteModule } from "./modules/palette/index.js";
 import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
 
-const DEFAULT_SIZE = 64;
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function ({ addon, msg, console }) {
@@ -15,11 +14,11 @@ export default async function ({ addon, msg, console }) {
 
   const state = {
     enabled: false,
-    pixelModeDesired: false,
+    pixelModeDesired: addon.settings.get("enableByDefault"),
     palette: [],
     selectedPaletteIndex: -1,
     editingPaletteIndex: -1,
-    pendingSize: { width: DEFAULT_SIZE, height: DEFAULT_SIZE },
+    pendingSize: { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") },
     brushButtons: null,
     controlsGroup: null,
     palettePanel: null,
