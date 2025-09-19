@@ -30,7 +30,7 @@
       "max": 1024
     },
     {
-      "name": "Default height", 
+      "name": "Default height",
       "id": "defaultHeight",
       "type": "integer",
       "default": 64,
