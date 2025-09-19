@@ -1,208 +1,159 @@
 const MAX_CANVAS_SIZE = 1024;
 const MIN_CANVAS_SIZE = 1;
 
+// --- helpers ---
+const clamp = v => Math.max(MIN_CANVAS_SIZE, Math.min(MAX_CANVAS_SIZE, Math.round(v)));
+
+const createCanvas = (w, h) => {
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const g = c.getContext("2d");
+  g.imageSmoothingEnabled = false;
+  return c;
+};
+
+const findLayer = (paper, key) => paper.project.layers.find(l => l?.data?.[key]) || null;
+
+const getRaster = paper => {
+  const layer = findLayer(paper, "isRasterLayer");
+  return layer && layer.children.length ? layer.children[0] : null;
+};
+
+const insertAt = (layer, item, idx) => {
+  const n = layer.children.length;
+  if (Number.isInteger(idx) && idx >= 0 && idx <= n) layer.insertChild(idx, item);
+  else layer.addChild(item);
+};
+
+const buildCheckerboardOverlay = (paper, raster) => {
+  const { width, height } = raster.canvas;
+  if (!width || !height) return null;
+
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.fillStyle = "rgba(217,227,242,0.55)";
+  for (let y = 0; y < height; y++) {
+    const start = (y & 1) ^ 1;
+    for (let x = start; x < width; x += 2) ctx.fillRect(x, y, 1, 1);
+  }
+
+  const overlay = new paper.Raster(canvas);
+  Object.assign(overlay, {
+    smoothing: false,
+    locked: true,
+    guide: true,
+    applyMatrix: false,
+    position: paper.view.center.clone(),
+    data: { isPixelGridOverlay: true }
+  });
+  return overlay;
+};
+
+// --- main module ---
 export function createCanvasUtilsModule(paper, state) {
-  const clampSize = (value) => Math.max(MIN_CANVAS_SIZE, Math.min(MAX_CANVAS_SIZE, Math.round(value)));
-
-  const createCanvasElement = (width, height) => {
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    ctx.imageSmoothingEnabled = false;
-    return canvas;
-  };
-
-  const getBackgroundLayer = () => {
-    for (const layer of paper.project.layers) {
-      if (layer?.data?.isBackgroundGuideLayer) {
-        return layer;
-      }
-    }
-    return null;
-  };
-
-  const getRaster = () => {
-    for (const layer of paper.project.layers) {
-      if (layer?.data?.isRasterLayer) {
-        if (layer.children.length === 0) return null;
-        return layer.children[0];
-      }
-    }
-    return null;
-  };
+  const backgroundLayer = () => findLayer(paper, "isBackgroundGuideLayer");
 
   const detachOriginalBackground = () => {
-    const backgroundLayer = getBackgroundLayer();
-    const original = backgroundLayer?.bitmapBackground;
-    if (!backgroundLayer || !original) {
-      return false;
-    }
+    const layer = backgroundLayer();
+    const original = layer?.bitmapBackground;
+    if (!layer || !original) return false;
 
     if (!state.pixelGridOriginal) {
       state.pixelGridOriginal = {
         background: original,
-        index: backgroundLayer.children.indexOf(original),
-        visible: original.visible !== false,
+        index: layer.children.indexOf(original),
+        visible: original.visible !== false
       };
     }
-
     original.visible = false;
-    if (original.parent === backgroundLayer) {
-      original.remove();
-    }
+    if (original.parent === layer) original.remove();
     return true;
   };
 
   const restoreOriginalBackground = () => {
-    const backgroundLayer = getBackgroundLayer();
-    if (!backgroundLayer) return;
+    const layer = backgroundLayer();
+    if (!layer) return;
 
-    if (state.pixelGridOverlay) {
-      state.pixelGridOverlay.remove();
-      state.pixelGridOverlay = null;
-    }
+    state.pixelGridOverlay?.remove();
+    state.pixelGridOverlay = null;
 
-    const originalInfo = state.pixelGridOriginal;
-    if (originalInfo && originalInfo.background) {
-      const { background, index, visible } = originalInfo;
-      if (background.parent !== backgroundLayer) {
-        if (typeof index === "number" && index >= 0 && index <= backgroundLayer.children.length) {
-          backgroundLayer.insertChild(index, background);
-        } else {
-          backgroundLayer.addChild(background);
-        }
-      }
+    const info = state.pixelGridOriginal;
+    if (info?.background) {
+      const { background, index, visible } = info;
+      if (background.parent !== layer) insertAt(layer, background, index);
       background.visible = visible;
-      backgroundLayer.bitmapBackground = background;
+      layer.bitmapBackground = background;
     }
-
     state.pixelGridOriginal = null;
   };
 
-  const buildCheckerboardOverlay = () => {
-    const raster = getRaster();
-    const backgroundLayer = getBackgroundLayer();
-    if (!raster || !backgroundLayer) return null;
-
-    const width = raster.canvas.width;
-    const height = raster.canvas.height;
-    if (!width || !height) return null;
-
-    const canvas = createCanvasElement(width, height);
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, width, height);
-    ctx.fillStyle = "rgba(217, 227, 242, 0.55)";
-    for (let y = 0; y < height; y++) {
-      const start = (y & 1) === 0 ? 1 : 0;
-      for (let x = start; x < width; x += 2) {
-        ctx.fillRect(x, y, 1, 1);
-      }
-    }
-
-    const overlay = new paper.Raster(canvas);
-    overlay.smoothing = false;
-    overlay.locked = true;
-    overlay.guide = true;
-    overlay.applyMatrix = false;
-    overlay.data.isPixelGridOverlay = true;
-    overlay.position = paper.view.center.clone();
-    return overlay;
-  };
-
   const ensureOverlay = () => {
-    const backgroundLayer = getBackgroundLayer();
-    const raster = getRaster();
-    if (!backgroundLayer || !raster) return null;
+    const layer = backgroundLayer();
+    const ras = getRaster(paper);
+    if (!layer || !ras || !detachOriginalBackground()) return null;
 
-    if (!detachOriginalBackground()) {
-      return null;
-    }
-
-    const neededWidth = raster.canvas.width;
-    const neededHeight = raster.canvas.height;
-
+    const { width, height } = ras.canvas;
     let overlay = state.pixelGridOverlay;
-    if (overlay) {
-      if (overlay.canvas.width !== neededWidth || overlay.canvas.height !== neededHeight) {
-        overlay.remove();
-        overlay = null;
-        state.pixelGridOverlay = null;
-      }
+    if (overlay && (overlay.canvas.width !== width || overlay.canvas.height !== height)) {
+      overlay.remove();
+      overlay = state.pixelGridOverlay = null;
     }
 
     if (!overlay) {
-      overlay = buildCheckerboardOverlay();
+      overlay = buildCheckerboardOverlay(paper, ras);
       if (!overlay) return null;
-      const insertIndex = state.pixelGridOriginal?.index ?? backgroundLayer.children.length;
-      if (typeof insertIndex === "number" && insertIndex >= 0 && insertIndex <= backgroundLayer.children.length) {
-        backgroundLayer.insertChild(insertIndex, overlay);
-      } else {
-        backgroundLayer.addChild(overlay);
-      }
+      const idx = state.pixelGridOriginal?.index ?? layer.children.length;
+      insertAt(layer, overlay, idx);
       state.pixelGridOverlay = overlay;
-    } else if (overlay.parent !== backgroundLayer) {
-      backgroundLayer.addChild(overlay);
+    } else if (overlay.parent !== layer) {
+      layer.addChild(overlay);
     }
 
     overlay.visible = true;
     overlay.position = paper.view.center.clone();
-    backgroundLayer.bitmapBackground = overlay;
+    layer.bitmapBackground = overlay;
     return overlay;
   };
 
-  const applyPixelGrid = (enabled) => {
-    if (enabled) {
-      ensureOverlay();
-    } else {
-      restoreOriginalBackground();
-    }
+  const applyPixelGrid = enabled => {
+    if (enabled) ensureOverlay();
+    else restoreOriginalBackground();
   };
 
   const resizeBitmapCanvas = (width, height) => {
-    const raster = getRaster();
-    if (!raster) return;
+    const ras = getRaster(paper);
+    if (!ras) return;
 
-    const newWidth = clampSize(width);
-    const newHeight = clampSize(height);
+    const newW = clamp(width);
+    const newH = clamp(height);
 
-    const newCanvas = createCanvasElement(newWidth, newHeight);
+    const newCanvas = createCanvas(newW, newH);
     const ctx = newCanvas.getContext("2d");
-    const oldCanvas = raster.canvas;
-    if (oldCanvas) {
-      const copyW = Math.min(newWidth, oldCanvas.width);
-      const copyH = Math.min(newHeight, oldCanvas.height);
-      ctx.drawImage(oldCanvas, 0, 0, copyW, copyH, 0, 0, copyW, copyH);
+    const old = ras.canvas;
+
+    if (old) {
+      const w = Math.min(newW, old.width);
+      const h = Math.min(newH, old.height);
+      ctx.drawImage(old, 0, 0, w, h, 0, 0, w, h);
     }
 
-    raster.image = newCanvas;
-    raster.position = paper.view.center.clone();
+    ras.image = newCanvas;
+    ras.position = paper.view.center.clone();
 
-    if (state.enabled) {
-      ensureOverlay();
-    }
+    if (state.enabled) ensureOverlay();
   };
 
-  const handleFormatChange = (format) => {
-    const formatValue = typeof format === "string" ? format : format?.format || format?.name || "";
-    const isBitmapFormat = typeof formatValue === "string" && formatValue.toUpperCase().startsWith("BITMAP");
-
-    if (!state.enabled) {
-      restoreOriginalBackground();
-      return;
-    }
-
-    if (isBitmapFormat) {
-      ensureOverlay();
-    } else {
-      restoreOriginalBackground();
-    }
+  const handleFormatChange = format => {
+    const val = typeof format === "string" ? format : format?.format || format?.name || "";
+    const isBitmap = typeof val === "string" && val.toUpperCase().startsWith("BITMAP");
+    if (!state.enabled) { restoreOriginalBackground(); return; }
+    if (isBitmap) ensureOverlay();
+    else restoreOriginalBackground();
   };
 
-  return {
-    applyPixelGrid,
-    resizeBitmapCanvas,
-    handleFormatChange,
-  };
+  return { applyPixelGrid, resizeBitmapCanvas, handleFormatChange };
 }
