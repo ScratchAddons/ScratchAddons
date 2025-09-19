@@ -5,12 +5,12 @@ import { createImportExportModule } from "./import-export.js";
 export function createPaletteModule(addon, state, redux, msg) {
   const vm = addon.tab.traps.vm;
   const runtime = vm.runtime;
-  
+
   Object.assign(state, {
     projectPalettes: state.projectPalettes || [],
     selectedPaletteId: state.selectedPaletteId || null,
     paletteDropdown: null,
-    teardownVmTargetsListener: null
+    teardownVmTargetsListener: null,
   });
 
   const ui = createUIModule(addon, state, redux, msg, null, null);
@@ -21,7 +21,7 @@ export function createPaletteModule(addon, state, redux, msg) {
   const createPalette = (name) => ({
     id: `pal-${storage.randomId()}`,
     name: name || `${msg("paletteTitle") || "Palette"} ${state.projectPalettes.length + 1}`,
-    colors: []
+    colors: [],
   });
 
   const ensureActivePalette = () => {
@@ -39,13 +39,13 @@ export function createPaletteModule(addon, state, redux, msg) {
   };
 
   const setActivePalette = (paletteId, persistCostume = true) => {
-    const palette = state.projectPalettes.find(p => p.id === paletteId);
+    const palette = state.projectPalettes.find((p) => p.id === paletteId);
     if (!palette) return;
     Object.assign(state, {
       selectedPaletteId: paletteId,
       palette: palette.colors,
       editingPaletteIndex: -1,
-      selectedPaletteIndex: -1
+      selectedPaletteIndex: -1,
     });
     ui.renderSelector();
     ui.renderPalette();
@@ -59,7 +59,7 @@ export function createPaletteModule(addon, state, redux, msg) {
     ensureActivePalette();
 
     const paletteId = storage.readCostumePaletteId();
-    if (paletteId && state.projectPalettes.some(p => p.id === paletteId)) {
+    if (paletteId && state.projectPalettes.some((p) => p.id === paletteId)) {
       setActivePalette(paletteId, false);
     } else {
       setActivePalette(state.projectPalettes[0].id);
@@ -81,7 +81,8 @@ export function createPaletteModule(addon, state, redux, msg) {
     panel.style.display = "none";
 
     const header = Object.assign(document.createElement("header"), {
-      className: "sa-pixel-art-palette-header", textContent: msg("paletteTitle")
+      className: "sa-pixel-art-palette-header",
+      textContent: msg("paletteTitle"),
     });
     panel.appendChild(header);
 
@@ -97,13 +98,14 @@ export function createPaletteModule(addon, state, redux, msg) {
         setActivePalette(e.target.value);
       }
     };
-    
+
     selectorRow.appendChild(dropdown);
     panel.appendChild(selectorRow);
     state.paletteDropdown = dropdown;
 
     const notice = Object.assign(document.createElement("p"), {
-      className: "sa-pixel-art-palette-empty", textContent: msg("emptyPalette")
+      className: "sa-pixel-art-palette-empty",
+      textContent: msg("emptyPalette"),
     });
     panel.appendChild(notice);
     state.paletteNotice = notice;
@@ -120,7 +122,7 @@ export function createPaletteModule(addon, state, redux, msg) {
     // Add import/export actions
     const { importInput, importBtn, exportBtn, deleteBtn } = ui.createActionButtons(storage.handleDeletePalette);
     panel.appendChild(importInput);
-    
+
     const actionsRow = Object.assign(document.createElement("div"), { className: "sa-pixel-art-palette-actions" });
     actionsRow.append(importBtn, exportBtn, deleteBtn);
     panel.appendChild(actionsRow);
@@ -130,8 +132,13 @@ export function createPaletteModule(addon, state, redux, msg) {
     while (true) {
       await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
         markAsSeen: true,
-        reduxEvents: ["scratch-gui/navigation/ACTIVATE_TAB", "scratch-gui/targets/UPDATE_TARGET_LIST", "scratch-paint/formats/CHANGE_FORMAT"],
-        reduxCondition: (store) => store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
+        reduxEvents: [
+          "scratch-gui/navigation/ACTIVATE_TAB",
+          "scratch-gui/targets/UPDATE_TARGET_LIST",
+          "scratch-paint/formats/CHANGE_FORMAT",
+        ],
+        reduxCondition: (store) =>
+          store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
       });
 
       addon.tab.appendToSharedSpace({ space: "paintEditorModeSelector", element: panel, order: 1 });
@@ -152,16 +159,19 @@ export function createPaletteModule(addon, state, redux, msg) {
   };
 
   addon.self.addEventListener("disabled", () => state.teardownVmTargetsListener?.());
-  addon.self.addEventListener("reenabled", () => { attachVmListener(); scheduleSync(); });
+  addon.self.addEventListener("reenabled", () => {
+    attachVmListener();
+    scheduleSync();
+  });
 
   attachVmListener();
   scheduleSync();
 
-  return { 
-    updatePaletteSelection: ui.updatePaletteSelection, 
-    renderPalette: ui.renderPalette, 
-    addPaletteColor: ui.addPaletteColor, 
-    setupPalettePanel, 
-    updatePaletteColorFromFill: ui.updatePaletteColorFromFill 
+  return {
+    updatePaletteSelection: ui.updatePaletteSelection,
+    renderPalette: ui.renderPalette,
+    addPaletteColor: ui.addPaletteColor,
+    setupPalettePanel,
+    updatePaletteColorFromFill: ui.updatePaletteColorFromFill,
   };
 }

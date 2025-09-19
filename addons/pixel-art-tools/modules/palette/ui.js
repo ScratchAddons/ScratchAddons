@@ -21,9 +21,9 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
 
   const updatePaletteSelection = (hex) => {
     const target = sanitizeHex(hex || getFillHex());
-    const selectedIndex = target ? state.palette.findIndex(c => c === target) : -1;
+    const selectedIndex = target ? state.palette.findIndex((c) => c === target) : -1;
     state.selectedPaletteIndex = selectedIndex;
-    state.paletteGrid?.querySelectorAll(".sa-pixel-art-color[data-index]").forEach(button => {
+    state.paletteGrid?.querySelectorAll(".sa-pixel-art-color[data-index]").forEach((button) => {
       button.dataset.selected = String(button.dataset.index === String(selectedIndex));
     });
   };
@@ -35,28 +35,34 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
       className: `sa-pixel-art-palette-message sa-pixel-art-palette-message-${type}`,
     });
     state.paletteMessage.style.display = "block";
-    setTimeout(() => state.paletteMessage.style.display = "none", 3000);
+    setTimeout(() => (state.paletteMessage.style.display = "none"), 3000);
   };
 
   const renderSelector = () => {
     if (!state.paletteDropdown) return;
     state.paletteDropdown.innerHTML = "";
-    
+
     const placeholder = Object.assign(document.createElement("option"), {
-      value: "", disabled: true, hidden: !!state.selectedPaletteId, selected: !state.selectedPaletteId,
-      textContent: msg("paletteSelectPlaceholder") || "Select a palette"
+      value: "",
+      disabled: true,
+      hidden: !!state.selectedPaletteId,
+      selected: !state.selectedPaletteId,
+      textContent: msg("paletteSelectPlaceholder") || "Select a palette",
     });
     state.paletteDropdown.appendChild(placeholder);
 
-    state.projectPalettes.forEach(palette => {
+    state.projectPalettes.forEach((palette) => {
       const option = Object.assign(document.createElement("option"), {
-        value: palette.id, textContent: palette.name, selected: palette.id === state.selectedPaletteId
+        value: palette.id,
+        textContent: palette.name,
+        selected: palette.id === state.selectedPaletteId,
       });
       state.paletteDropdown.appendChild(option);
     });
 
     const createOption = Object.assign(document.createElement("option"), {
-      value: "__create__", textContent: msg("paletteCreateNew") || "Create new palette"
+      value: "__create__",
+      textContent: msg("paletteCreateNew") || "Create new palette",
     });
     state.paletteDropdown.appendChild(createOption);
   };
@@ -64,30 +70,34 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
   const renderPalette = () => {
     if (!state.paletteGrid) return;
     state.paletteGrid.innerHTML = "";
-    const palette = state.projectPalettes.find(p => p.id === state.selectedPaletteId);
+    const palette = state.projectPalettes.find((p) => p.id === state.selectedPaletteId);
     const colors = palette?.colors || [];
 
     colors.forEach((color, index) => {
       const button = Object.assign(document.createElement("button"), {
-        type: "button", className: "sa-pixel-art-color", title: color
+        type: "button",
+        className: "sa-pixel-art-color",
+        title: color,
       });
       Object.assign(button.style, { backgroundColor: color });
       Object.assign(button.dataset, {
-        index, color,
+        index,
+        color,
         selected: index === state.selectedPaletteIndex,
-        editing: index === state.editingPaletteIndex
+        editing: index === state.editingPaletteIndex,
       });
-      
+
       button.onclick = (e) => {
         if (e.shiftKey) {
           state.editingPaletteIndex = state.editingPaletteIndex === index ? -1 : index;
-          state.paletteGrid.querySelectorAll(".sa-pixel-art-color[data-index]").forEach(btn => 
-            btn.dataset.editing = btn.dataset.index === String(state.editingPaletteIndex));
+          state.paletteGrid
+            .querySelectorAll(".sa-pixel-art-color[data-index]")
+            .forEach((btn) => (btn.dataset.editing = btn.dataset.index === String(state.editingPaletteIndex)));
         }
         setFillHex(color);
         updatePaletteSelection(color);
       };
-      
+
       button.oncontextmenu = (e) => {
         e.preventDefault();
         if (!palette) return;
@@ -98,12 +108,13 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
         storage.writeProjectComment(state.projectPalettes);
         storage.writeCostumePaletteId(state.selectedPaletteId);
       };
-      
+
       state.paletteGrid.appendChild(button);
     });
 
     const addButton = Object.assign(document.createElement("button"), {
-      type: "button", className: "sa-pixel-art-color sa-pixel-art-color-add"
+      type: "button",
+      className: "sa-pixel-art-color sa-pixel-art-color-add",
     });
     addButton.setAttribute("aria-label", msg("addColor"));
     addButton.onclick = () => addPaletteColor();
@@ -113,7 +124,7 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
   };
 
   const addPaletteColor = (hex) => {
-    const palette = state.projectPalettes.find(p => p.id === state.selectedPaletteId);
+    const palette = state.projectPalettes.find((p) => p.id === state.selectedPaletteId);
     const normalized = sanitizeHex(hex || getFillHex());
     if (!palette || !normalized) return;
 
@@ -137,15 +148,15 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
   };
 
   const updatePaletteColorFromFill = (newHex) => {
-    const palette = state.projectPalettes.find(p => p.id === state.selectedPaletteId);
+    const palette = state.projectPalettes.find((p) => p.id === state.selectedPaletteId);
     const normalized = sanitizeHex(newHex);
     if (!palette || state.editingPaletteIndex < 0 || !normalized) return;
-    
+
     if (palette.colors.includes(normalized)) {
       showPaletteMessage(msg("colorAlreadyExists") || "Color already exists", "info");
       return;
     }
-    
+
     palette.colors[state.editingPaletteIndex] = normalized;
     renderPalette();
     updatePaletteSelection(normalized);
@@ -155,15 +166,17 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
 
   const createImportInput = () => {
     const importInput = Object.assign(document.createElement("input"), {
-      type: "file", accept: ".gpl,.txt,.png,.jpg,.jpeg,.gif,.bmp", className: "sa-pixel-art-hidden"
+      type: "file",
+      accept: ".gpl,.txt,.png,.jpg,.jpeg,.gif,.bmp",
+      className: "sa-pixel-art-hidden",
     });
     importInput.onchange = async (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
-      
+
       try {
         let parsed = [];
-        
+
         if (file.type.startsWith("image/")) {
           parsed = await importExport.parseImage(file);
         } else {
@@ -173,20 +186,20 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
             reader.onerror = reject;
             reader.readAsText(file);
           });
-          
+
           if (file.name.toLowerCase().endsWith(".gpl")) {
             parsed = importExport.parseGPL(text);
           } else if (file.name.toLowerCase().endsWith(".txt")) {
             parsed = importExport.parseTXT(text);
           }
         }
-        
+
         if (parsed.length) {
           const baseName = file.name.replace(/\.[^.]+$/, "");
           const newPalette = {
             id: `pal-${storage.randomId()}`,
             name: baseName || `${msg("paletteTitle") || "Palette"} ${state.projectPalettes.length + 1}`,
-            colors: parsed.slice(0, PALETTE_LIMIT)
+            colors: parsed.slice(0, PALETTE_LIMIT),
           };
           state.projectPalettes.push(newPalette);
           state.selectedPaletteId = newPalette.id;
@@ -203,7 +216,7 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
         console.error("pixel-art-tools: import failed", err);
         showPaletteMessage("Import failed", "warning");
       }
-      
+
       importInput.value = "";
     };
     return importInput;
@@ -214,13 +227,13 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
       const btn = Object.assign(document.createElement("button"), {
         type: "button",
         className: `sa-pixel-art-action-button${extraClass ? " " + extraClass : ""}`,
-        title: label
+        title: label,
       });
       btn.setAttribute("aria-label", label);
       const img = Object.assign(document.createElement("img"), {
         src: `${addon.self.dir}/icons/${icon}`,
         alt: "",
-        className: "sa-pixel-art-icon" + (icon === "export.svg" ? " sa-pixel-art-icon--invert" : "")
+        className: "sa-pixel-art-icon" + (icon === "export.svg" ? " sa-pixel-art-icon--invert" : ""),
       });
       btn.appendChild(img);
       return btn;
@@ -229,10 +242,10 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
     const importInput = createImportInput();
     const importBtn = makeActionBtn("import.svg", msg("importPalette"));
     importBtn.onclick = () => importInput.click();
-    
+
     const exportBtn = makeActionBtn("export.svg", msg("exportPalette"));
     exportBtn.onclick = importExport.exportTXT;
-    
+
     const deleteBtn = makeActionBtn("delete.svg", msg("deletePalette"), "sa-pixel-art-action-button--danger");
     deleteBtn.onclick = handleDeletePalette;
 
@@ -248,6 +261,6 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
     updatePaletteColorFromFill,
     showPaletteMessage,
     createImportInput,
-    createActionButtons
+    createActionButtons,
   };
 }
