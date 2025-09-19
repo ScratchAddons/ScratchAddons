@@ -1,0 +1,5 @@
+.sa-mode {
+  background-image: url("assets/mystery.png");
+  background-position: calc(var(--sa-mouse-x, -10000px) - 2000px) calc(var(--sa-mouse-y, -10000px) - 2000px);
+  opacity: 0.9;
+}
