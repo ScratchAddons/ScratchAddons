@@ -1,4 +1,4 @@
-const PALETTE_LIMIT = 64;
+﻿const PALETTE_LIMIT = 64;
 const PROJECT_COMMENT_MAGIC = " // _pixel_art_palette_project";
 const COSTUME_COMMENT_MAGIC = " // _pixel_art_palette_costume";
 
@@ -29,10 +29,10 @@ export function createPaletteModule(addon, state, redux, msg) {
 
   const updatePaletteSelection = (hex) => {
     const target = sanitizeHex(hex || getFillHex());
-    const selectedIndex = target ? state.palette.findIndex((entry) => entry === target) : -1;
+    const selectedIndex = target ? state.palette.findIndex((c) => c === target) : -1;
     state.selectedPaletteIndex = selectedIndex;
     state.paletteGrid?.querySelectorAll(".sa-pixel-art-color[data-index]").forEach((button) => {
-      button.dataset.selected = button.dataset.index === String(selectedIndex);
+      button.dataset.selected = String(button.dataset.index === String(selectedIndex));
     });
   };
 
@@ -123,7 +123,7 @@ export function createPaletteModule(addon, state, redux, msg) {
     runtime.emitProjectChanged();
   };
 
-  const getCostumeKey = (costume) => costume?.md5Ext || costume?.md5 || costume?.assetId || costume?.name;
+  const getCostumeKey = (c) => c?.md5Ext || c?.md5 || c?.assetId || c?.name;
 
   const readCostumePaletteId = () => {
     const t = vm.editingTarget || runtime.getEditingTarget();
@@ -157,7 +157,7 @@ export function createPaletteModule(addon, state, redux, msg) {
     const placeholder = Object.assign(document.createElement("option"), {
       value: "",
       disabled: true,
-      hidden: !state.selectedPaletteId,
+      hidden: !!state.selectedPaletteId,
       selected: !state.selectedPaletteId,
       textContent: msg("paletteSelectPlaceholder") || "Select a palette",
     });
@@ -226,7 +226,7 @@ export function createPaletteModule(addon, state, redux, msg) {
   const scheduleSync = () => {
     if (syncPending) return;
     syncPending = true;
-    queueMicrotask(() => {
+    (typeof queueMicrotask === "function" ? queueMicrotask : (cb) => Promise.resolve().then(cb))(() => {
       syncPending = false;
       syncPalette();
     });
@@ -330,10 +330,91 @@ export function createPaletteModule(addon, state, redux, msg) {
     writeCostumePaletteId(state.selectedPaletteId);
   };
 
+  // ------- import, export, delete helpers -------
+  const parseGPL = (text) => {
+    const lines = text.split(/\r?\n/);
+    const colors = [];
+    for (const line of lines) {
+      if (!line || line.startsWith("#") || !/\d/.test(line)) continue;
+      const parts = line.trim().split(/\s+/);
+      if (parts.length < 3) continue;
+      const [r, g, b] = parts.slice(0, 3).map((v) => parseInt(v, 10));
+      if ([r, g, b].some((x) => Number.isNaN(x))) continue;
+      const hex = `#${[r, g, b].map((v) => Math.max(0, Math.min(255, v)).toString(16).toUpperCase().padStart(2, "0")).join("")}`;
+      if (!colors.includes(hex)) colors.push(hex);
+      if (colors.length >= PALETTE_LIMIT) break;
+    }
+    return colors;
+  };
+
+  const exportGPL = () => {
+    const p = getActivePalette();
+    if (!p || !p.colors.length) return;
+    const header = [
+      "GIMP Palette",
+      `# ${msg("paletteExportLabel") || ""}`.trim(),
+      "Name: Scratch Addons Pixel Palette",
+      "Columns: 0",
+      "#",
+    ].join("\n");
+    const body = p.colors
+      .map((hex) => {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `${r}\t${g}\t${b}\t${hex}`;
+      })
+      .join("\n");
+    const blob = new Blob([`${header}\n${body}\n`], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "pixel-palette.gpl";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+  };
+
+  const handleDeletePalette = async () => {
+    const p = getActivePalette();
+    if (!p) return;
+    const confirmed = await addon.tab.confirm(
+      msg("deletePalette"),
+      `${msg("deletePaletteConfirm")}\n\n${p.name}`,
+      { useEditorClasses: true }
+    );
+    if (!confirmed) return;
+
+    const removedId = p.id;
+    state.projectPalettes = state.projectPalettes.filter((e) => e.id !== removedId);
+    if (!state.projectPalettes.length) state.projectPalettes.push(createPalette());
+
+    const fallbackId = state.projectPalettes[0].id;
+
+    // remap costume mappings
+    for (const t of runtime.targets || []) {
+      const mappings = loadMappings(t);
+      let dirty = false;
+      for (const k of Object.keys(mappings)) {
+        if (mappings[k] === removedId) {
+          mappings[k] = fallbackId;
+          dirty = true;
+        }
+      }
+      if (dirty) writeMappings(t, mappings);
+    }
+
+    setActivePalette(fallbackId, false);
+    writeProjectComment();
+    writeCostumePaletteId(fallbackId);
+  };
+  // ------- end helpers -------
+
   const setupPalettePanel = async () => {
-    const panel = Object.assign(document.createElement("section"), {
-      className: "sa-pixel-art-palette",
-    });
+    const panel = Object.assign(document.createElement("section"), { className: "sa-pixel-art-palette" });
     panel.style.display = "none";
 
     const header = Object.assign(document.createElement("header"), {
@@ -342,13 +423,9 @@ export function createPaletteModule(addon, state, redux, msg) {
     });
     panel.appendChild(header);
 
-    const selectorRow = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-palette-select-row",
-    });
+    const selectorRow = Object.assign(document.createElement("div"), { className: "sa-pixel-art-palette-select-row" });
 
-    const dropdown = Object.assign(document.createElement("select"), {
-      className: "sa-pixel-art-palette-select",
-    });
+    const dropdown = Object.assign(document.createElement("select"), { className: "sa-pixel-art-palette-select" });
     dropdown.onchange = (e) => {
       if (e.target.value === "__create__") {
         const newPalette = createPalette();
@@ -359,10 +436,41 @@ export function createPaletteModule(addon, state, redux, msg) {
         setActivePalette(e.target.value);
       }
     };
-
     selectorRow.appendChild(dropdown);
     panel.appendChild(selectorRow);
     state.paletteDropdown = dropdown;
+
+    // hidden input for import
+    const importInput = Object.assign(document.createElement("input"), {
+      type: "file",
+      accept: ".gpl",
+      className: "sa-pixel-art-hidden",
+    });
+    importInput.onchange = (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const p = getActivePalette();
+        if (!p) return;
+        try {
+          const parsed = parseGPL(String(reader.result));
+          if (parsed.length) {
+            p.colors.length = 0;
+            p.colors.push(...parsed.slice(0, PALETTE_LIMIT));
+            renderPalette();
+            updatePaletteSelection();
+            writeProjectComment();
+            writeCostumePaletteId(state.selectedPaletteId);
+          }
+        } catch (err) {
+          console.error("pixel-art-tools: import failed", err);
+        }
+      };
+      reader.readAsText(file);
+      importInput.value = "";
+    };
+    panel.appendChild(importInput);
 
     const notice = Object.assign(document.createElement("p"), {
       className: "sa-pixel-art-palette-empty",
@@ -371,18 +479,46 @@ export function createPaletteModule(addon, state, redux, msg) {
     panel.appendChild(notice);
     state.paletteNotice = notice;
 
-    const grid = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-palette-grid",
-    });
+    const grid = Object.assign(document.createElement("div"), { className: "sa-pixel-art-palette-grid" });
     panel.appendChild(grid);
     state.paletteGrid = grid;
 
-    const messageArea = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-palette-message",
-    });
+    const messageArea = Object.assign(document.createElement("div"), { className: "sa-pixel-art-palette-message" });
     messageArea.style.display = "none";
     panel.appendChild(messageArea);
     state.paletteMessage = messageArea;
+
+    // actions row: import, export, delete
+    const actionsRow = Object.assign(document.createElement("div"), { className: "sa-pixel-art-palette-actions" });
+    const makeActionBtn = (icon, label, extraClass) => {
+      const btn = Object.assign(document.createElement("button"), {
+        type: "button",
+        className: `sa-pixel-art-action-button${extraClass ? " " + extraClass : ""}`,
+        title: label,
+      });
+      btn.setAttribute("aria-label", label);
+      const img = Object.assign(document.createElement("img"), {
+        src: `${addon.self.dir}/icons/${icon}`,
+        alt: "",
+        className: "sa-pixel-art-icon" + (icon === "export.svg" ? " sa-pixel-art-icon--invert" : ""),
+      });
+      btn.appendChild(img);
+      return btn;
+    };
+
+    const importBtn = makeActionBtn("import.svg", msg("importPalette"));
+    importBtn.onclick = () => importInput.click();
+    actionsRow.appendChild(importBtn);
+
+    const exportBtn = makeActionBtn("export.svg", msg("exportPalette"), "");
+    exportBtn.onclick = exportGPL;
+    actionsRow.appendChild(exportBtn);
+
+    const deleteBtn = makeActionBtn("delete.svg", msg("deletePalette"), "sa-pixel-art-action-button--danger");
+    deleteBtn.onclick = handleDeletePalette;
+    actionsRow.appendChild(deleteBtn);
+
+    panel.appendChild(actionsRow);
 
     state.palettePanel = panel;
 
