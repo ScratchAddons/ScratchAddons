@@ -2,7 +2,7 @@ const PALETTE_LIMIT = 64;
 const PROJECT_COMMENT_MAGIC = " // _pixel_art_palette_project";
 const COSTUME_COMMENT_MAGIC = " // _pixel_art_palette_costume";
 
-export function createStorageModule(addon, vm, runtime, msg, state) {
+export function createStorageModule(addon, vm, runtime, msg, state, ui) {
   const randomId = () => Math.random().toString(36).slice(2, 10);
 
   const parseComment = (text, magic) => {
@@ -128,6 +128,9 @@ export function createStorageModule(addon, vm, runtime, msg, state) {
     });
     writeProjectComment(state.projectPalettes);
     writeCostumePaletteId(fallbackId);
+    ui.renderSelector();
+    ui.renderPalette();
+    ui.updatePaletteSelection();
   };
 
   return {

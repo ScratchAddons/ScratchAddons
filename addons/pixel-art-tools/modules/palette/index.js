@@ -13,9 +13,10 @@ export function createPaletteModule(addon, state, redux, msg) {
     teardownVmTargetsListener: null
   });
 
-  const storage = createStorageModule(addon, vm, runtime, msg, state);
+  const ui = createUIModule(addon, state, redux, msg, null, null);
+  const storage = createStorageModule(addon, vm, runtime, msg, state, ui);
   const importExport = createImportExportModule(state, storage);
-  const ui = createUIModule(addon, state, redux, msg, storage, importExport);
+  ui.setDependencies(storage, importExport);
 
   const createPalette = (name) => ({
     id: `pal-${storage.randomId()}`,

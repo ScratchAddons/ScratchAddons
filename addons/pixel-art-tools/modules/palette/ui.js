@@ -1,6 +1,10 @@
 const PALETTE_LIMIT = 64;
 
 export function createUIModule(addon, state, redux, msg, storage, importExport) {
+  const setDependencies = (storageModule, importExportModule) => {
+    storage = storageModule;
+    importExport = importExportModule;
+  };
   const sanitizeHex = (value) => {
     const trimmed = value?.toString().trim().replace(/^#/, "");
     return /^[0-9a-f]{6}$/i.test(trimmed) ? `#${trimmed.toUpperCase()}` : null;
@@ -157,17 +161,12 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
       const file = e.target.files?.[0];
       if (!file) return;
       
-      const p = state.projectPalettes.find(p => p.id === state.selectedPaletteId);
-      if (!p) return;
-      
       try {
         let parsed = [];
         
         if (file.type.startsWith("image/")) {
-          // Handle image files
           parsed = await importExport.parseImage(file);
         } else {
-          // Handle text files (.gpl, .txt)
           const reader = new FileReader();
           const text = await new Promise((resolve, reject) => {
             reader.onload = () => resolve(String(reader.result));
@@ -183,8 +182,18 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
         }
         
         if (parsed.length) {
-          p.colors.length = 0;
-          p.colors.push(...parsed.slice(0, PALETTE_LIMIT));
+          const baseName = file.name.replace(/\.[^.]+$/, "");
+          const newPalette = {
+            id: `pal-${storage.randomId()}`,
+            name: baseName || `${msg("paletteTitle") || "Palette"} ${state.projectPalettes.length + 1}`,
+            colors: parsed.slice(0, PALETTE_LIMIT)
+          };
+          state.projectPalettes.push(newPalette);
+          state.selectedPaletteId = newPalette.id;
+          state.palette = newPalette.colors;
+          state.editingPaletteIndex = -1;
+          state.selectedPaletteIndex = -1;
+          renderSelector();
           renderPalette();
           updatePaletteSelection();
           storage.writeProjectComment(state.projectPalettes);
@@ -231,6 +240,7 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
   };
 
   return {
+    setDependencies,
     updatePaletteSelection,
     renderPalette,
     renderSelector,
