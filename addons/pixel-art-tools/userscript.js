@@ -15,6 +15,7 @@ export default async function ({ addon, msg, console }) {
 
   const state = {
     enabled: false,
+    pixelModeDesired: false,
     palette: [],
     selectedPaletteIndex: -1,
     editingPaletteIndex: -1,
@@ -45,6 +46,10 @@ export default async function ({ addon, msg, console }) {
 
     if (detail.action.type === "scratch-paint/modes/CHANGE_MODE") {
       controls.updateBrushControlVisibility();
+    }
+
+    if (detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
+      controls.updatePixelModeVisibility();
     }
 
     const prevColor = detail.prev.scratchPaint?.color?.fillColor?.primary;
