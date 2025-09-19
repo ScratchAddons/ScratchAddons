@@ -76,6 +76,8 @@ export default async function ({ addon, console, msg }) {
     text = text.trim();
     if (block.type.startsWith("argument_reporter_")) {
       text += " :: custom-arg";
+    } else if (block.type === "procedures_call") {
+      text += " :: custom";
     }
     switch (block.getOutputShape()) {
       case Blockly.OUTPUT_SHAPE_HEXAGONAL:
