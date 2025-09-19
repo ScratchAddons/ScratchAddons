@@ -185,8 +185,8 @@ export default async function ({ addon, console, msg }) {
         const insertBeforeIndex = pasteItemIndex !== -1 ? pasteItemIndex : items.length;
         items.splice(insertBeforeIndex, 0, {
           enabled: !!svgchild?.childNodes?.length,
-            text: msg("copyAll"),
-            callback: () => handleCopyWorkspace(),
+          text: msg("copyAll"),
+          callback: () => handleCopyWorkspace(),
         });
         items.splice(insertBeforeIndex, 0, { separator: true });
         return items;
