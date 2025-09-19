@@ -1,6 +1,6 @@
 const BRUSH_SIZES = [1, 2, 3, 4];
 
-export function createControlsModule(addon, state, redux, msg, canvasUtils, palette) {
+export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette) {
   const setPixelMode = (enabled) => {
     if (state.enabled === enabled) return;
     state.enabled = enabled;
@@ -9,9 +9,7 @@ export function createControlsModule(addon, state, redux, msg, canvasUtils, pale
     Object.assign(state.toggleButton.dataset, { active: enabled });
     state.toggleButton.setAttribute("aria-pressed", enabled);
     state.palettePanel.style.display = enabled ? "block" : "none";
-    canvasUtils.applyPixelGrid(enabled);
-    canvasUtils.handleFormatChange?.(redux.state.scratchPaint?.format);
-    if (enabled) canvasUtils.resizeBitmapCanvas(state.pendingSize.width, state.pendingSize.height);
+    if (enabled) canvasAdjuster.setPixelModeBackground(state.pendingSize.width, state.pendingSize.height);
     else palette.updatePaletteSelection();
     updateBrushControlVisibility();
   };
@@ -38,7 +36,7 @@ export function createControlsModule(addon, state, redux, msg, canvasUtils, pale
       const value = Math.max(1, Math.min(1024, +input.value || 1));
       state.pendingSize[dimension] = value;
       input.value = value;
-      if (state.enabled) canvasUtils.resizeBitmapCanvas(state.pendingSize.width, state.pendingSize.height);
+      if (state.enabled) canvasAdjuster.setPixelModeBackground(state.pendingSize.width, state.pendingSize.height);
     });
     return input;
   };
@@ -133,7 +131,6 @@ export function createControlsModule(addon, state, redux, msg, canvasUtils, pale
     state.toggleButton.setAttribute("aria-pressed", false);
     Object.assign(state.brushButtons.dataset, { visible: false });
     state.palettePanel.style.display = "none";
-    canvasUtils.applyPixelGrid(false);
     document.body.classList.remove("sa-pixel-art-mode-active");
     state.enabled = false;
   };
@@ -143,8 +140,7 @@ export function createControlsModule(addon, state, redux, msg, canvasUtils, pale
     Object.assign(state.toggleButton.dataset, { active: true });
     state.toggleButton.setAttribute("aria-pressed", true);
     state.palettePanel.style.display = "block";
-    canvasUtils.applyPixelGrid(true);
-    canvasUtils.resizeBitmapCanvas(state.pendingSize.width, state.pendingSize.height);
+    canvasAdjuster.setPixelModeBackground(state.pendingSize.width, state.pendingSize.height);
     updateBrushControlVisibility();
   };
 

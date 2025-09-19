@@ -1,5 +1,5 @@
 import { createPaletteModule } from "./modules/palette.js";
-import { createCanvasUtilsModule } from "./modules/canvas-utils.js";
+import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
 
 const DEFAULT_SIZE = 64;
@@ -35,9 +35,9 @@ export default async function ({ addon, msg, console }) {
   const redux = addon.tab.redux;
 
   // Initialize modules
-  const canvasUtils = createCanvasUtilsModule(paper, state);
+  const canvasAdjuster = createCanvasAdjuster(paper);
   const palette = createPaletteModule(addon, state, redux, msg);
-  const controls = createControlsModule(addon, state, redux, msg, canvasUtils, palette);
+  const controls = createControlsModule(addon, state, redux, msg, canvasAdjuster, palette);
 
   // Main Redux event handler for paint events
   redux.addEventListener("statechanged", ({ detail }) => {
@@ -65,11 +65,6 @@ export default async function ({ addon, msg, console }) {
       controls.updateBrushSelection(nextSize);
     }
 
-    if (detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
-      if (typeof canvasUtils.handleFormatChange === "function") {
-        canvasUtils.handleFormatChange(detail.next.scratchPaint?.format);
-      }
-    }
   });
 
   // Addon lifecycle events
