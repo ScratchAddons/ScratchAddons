@@ -9,7 +9,7 @@ export default async function ({ addon, console, msg }) {
 
   function escapeText(text) {
     // Add backslash escape before parentheses
-    return text.replace(/([()[\]{}])/g, "\\$1");
+    return text.replace(/([()[\]{}<>])/g, "\\$1");
   }
 
   function serializeBlock(block) {
