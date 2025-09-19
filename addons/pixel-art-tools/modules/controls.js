@@ -9,6 +9,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     Object.assign(state.toggleButton.dataset, { active: enabled });
     state.toggleButton.setAttribute("aria-pressed", enabled);
     state.palettePanel.style.display = enabled ? "block" : "none";
+    state.sizeControls.style.display = enabled ? "flex" : "none";
     if (enabled) canvasAdjuster.setPixelModeBackground(state.pendingSize.width, state.pendingSize.height);
     else palette.updatePaletteSelection();
     updateBrushControlVisibility();
@@ -60,6 +61,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     const sizeDiv = Object.assign(document.createElement("div"), {
       className: "sa-pixel-art-size"
     });
+    sizeDiv.style.display = "none";
     const widthInput = createInput("width");
     const heightInput = createInput("height");
     const separator = Object.assign(document.createElement("span"), {
@@ -71,7 +73,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     
     Object.assign(state, { 
       toggleButton: toggle, controlsGroup: wrapper, 
-      widthInput, heightInput 
+      sizeControls: sizeDiv, widthInput, heightInput 
     });
 
     // Create brush controls
@@ -140,6 +142,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     Object.assign(state.toggleButton.dataset, { active: true });
     state.toggleButton.setAttribute("aria-pressed", true);
     state.palettePanel.style.display = "block";
+    state.sizeControls.style.display = "flex";
     canvasAdjuster.setPixelModeBackground(state.pendingSize.width, state.pendingSize.height);
     updateBrushControlVisibility();
   };
