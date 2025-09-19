@@ -84,26 +84,16 @@ export function createImportExportModule(state, storage) {
   };
 
   // export and delete
-  const exportGPL = () => {
+  const exportTXT = () => {
     const p = state.projectPalettes.find(p => p.id === state.selectedPaletteId);
     if (!p || !p.colors.length) return;
-    const header = [
-      "GIMP Palette",
-      `# ${msg("paletteExportLabel") || ""}`.trim(),
-      "Name: Scratch Addons Pixel Palette",
-      "Columns: 0",
-      "#"
-    ].join("\n");
-    const body = p.colors.map(h => {
-      const r = parseInt(h.slice(1,3),16), g = parseInt(h.slice(3,5),16), b = parseInt(h.slice(5,7),16);
-      return `${r}\t${g}\t${b}\t${h}`;
-    }).join("\n");
-    const blob = new Blob([`${header}\n${body}\n`], {type:"text/plain"});
+    const text = p.colors.map(h => h.slice(1)).join(",");
+    const blob = new Blob([text], {type:"text/plain"});
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a"); a.href = url; a.download = "pixel-palette.gpl";
+    const a = document.createElement("a"); a.href = url; a.download = "pixel-palette.txt";
     document.body.appendChild(a); a.click();
     setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
   };
 
-  return { parseGPL, parseTXT, parseImage, exportGPL };
+  return { parseGPL, parseTXT, parseImage, exportTXT };
 }

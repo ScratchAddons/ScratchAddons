@@ -231,7 +231,7 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
     importBtn.onclick = () => importInput.click();
     
     const exportBtn = makeActionBtn("export.svg", msg("exportPalette"));
-    exportBtn.onclick = importExport.exportGPL;
+    exportBtn.onclick = importExport.exportTXT;
     
     const deleteBtn = makeActionBtn("delete.svg", msg("deletePalette"), "sa-pixel-art-action-button--danger");
     deleteBtn.onclick = handleDeletePalette;
