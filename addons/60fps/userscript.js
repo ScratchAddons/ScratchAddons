@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   // TODO: test whether e.altKey is true in chromebooks when alt+clicking.
   // If so, no timeout needed, similar to mute-project addon.
 
@@ -9,6 +9,21 @@ export default async function ({ addon, console }) {
 
   const fastFlag = addon.self.dir + "/svg/fast-flag.svg";
   let vanillaFlag = null;
+
+  // flag-menu addon
+  function updateToggleFramerateLabel(menuItem) {
+    if (!menuItem) return;
+    const fps = mode ? 30 : addon.settings.get("framerate");
+    menuItem.textContent = msg("/flag-menu/set-fps", { fps });
+  }
+  (async () => {
+    const menuItem = await addon.tab.waitForElement("#sa-flag-menu-fps", {
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
+    menuItem.style.display = "flex";
+    addon.tab.displayNoneWhileDisabled(menuItem);
+    updateToggleFramerateLabel(menuItem);
+  })();
 
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
@@ -43,6 +58,7 @@ export default async function ({ addon, console }) {
         }
       } else setFPS(30);
       updateFlag();
+      updateToggleFramerateLabel(document.getElementById("sa-flag-menu-fps"));
     };
     const flagListener = (e) => {
       if (addon.self.disabled) return;
@@ -68,6 +84,7 @@ export default async function ({ addon, console }) {
       if (vm.runtime._steppingInterval) {
         setFPS(addon.settings.get("framerate"));
       }
+      updateToggleFramerateLabel(document.getElementById("sa-flag-menu-fps"));
     });
     addon.self.addEventListener("disabled", () => changeMode(false));
     vm.runtime.start = function () {
