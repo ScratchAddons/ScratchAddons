@@ -1,4 +1,4 @@
-const BRUSH_SIZES = [1, 2, 3, 4];
+const BRUSH_SIZES = [2, 4, 6, 8];
 
 export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette) {
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
@@ -17,7 +17,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     if (state.enabled === enabled) return;
     state.pixelModeDesired = enabled;
     updatePixelModeState(enabled);
-    if (enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+    if (enabled) canvasAdjuster.enable(state.pendingSize.width * 2, state.pendingSize.height * 2, 16);
     else {
       canvasAdjuster.disable();
       palette.updatePaletteSelection();
@@ -61,7 +61,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       const value = Math.max(1, Math.min(1024, +input.value || 1));
       state.pendingSize[dimension] = value;
       input.value = value;
-      if (state.enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+      if (state.enabled) canvasAdjuster.enable(state.pendingSize.width * 2, state.pendingSize.height * 2, 16);
     };
     return input;
   };
@@ -153,7 +153,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
   const handleReenabled = () => {
     if (!state.enabled) return;
     updatePixelModeState(true);
-    canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+    canvasAdjuster.enable(state.pendingSize.width * 2, state.pendingSize.height * 2, 16);
     updateBrushControlVisibility();
   };
 

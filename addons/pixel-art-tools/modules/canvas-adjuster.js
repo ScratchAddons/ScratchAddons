@@ -36,7 +36,7 @@ export function createCanvasAdjuster(paper) {
     return [white, blue];
   };
 
-  const enable = (w, h, size = 1) => {
+  const enable = (w, h, size = 16) => {
     // bitmap background
     const bg = getBgLayer();
     if (!bg?.bitmapBackground) return;
