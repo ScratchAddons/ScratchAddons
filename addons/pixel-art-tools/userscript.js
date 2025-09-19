@@ -1,4 +1,4 @@
-import { createPaletteModule } from "./modules/palette.js";
+import { createPaletteModule } from "./modules/palette/index.js";
 import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
 
