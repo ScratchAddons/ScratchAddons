@@ -82,27 +82,21 @@ export function createImportExportModule(state, storage) {
   };
 
   const parseImage = (file) => {
-    const MAX_DIM = 256,
-      opts = { threshold: 20, stride: 4, quantBits: 5, alphaMin: 128, limit: PALETTE_LIMIT };
+    const opts = { threshold: 20, stride: 1, quantBits: 5, alphaMin: 128, limit: PALETTE_LIMIT };
     const draw = (bm) => {
-      const sw = bm.width,
-        sh = bm.height,
-        s = Math.min(1, MAX_DIM / Math.max(sw, sh));
-      const dw = Math.max(1, Math.round(sw * s)),
-        dh = Math.max(1, Math.round(sh * s));
       const useOff = typeof OffscreenCanvas !== "undefined";
       if (useOff) {
-        const c = new OffscreenCanvas(dw, dh);
+        const c = new OffscreenCanvas(bm.width, bm.height);
         const x = c.getContext("2d", { willReadFrequently: true });
-        x.drawImage(bm, 0, 0, dw, dh);
-        return extractImageColors(x.getImageData(0, 0, dw, dh), opts);
+        x.drawImage(bm, 0, 0);
+        return extractImageColors(x.getImageData(0, 0, bm.width, bm.height), opts);
       } else {
         const c = document.createElement("canvas");
-        c.width = dw;
-        c.height = dh;
+        c.width = bm.width;
+        c.height = bm.height;
         const x = c.getContext("2d", { willReadFrequently: true });
-        x.drawImage(bm, 0, 0, dw, dh);
-        return extractImageColors(x.getImageData(0, 0, dw, dh), opts);
+        x.drawImage(bm, 0, 0);
+        return extractImageColors(x.getImageData(0, 0, bm.width, bm.height), opts);
       }
     };
     if ("createImageBitmap" in window) {
