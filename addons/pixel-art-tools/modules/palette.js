@@ -5,14 +5,13 @@ const COSTUME_COMMENT_MAGIC = " // _pixel_art_palette_costume";
 export function createPaletteModule(addon, state, redux, msg) {
   const vm = addon.tab.traps.vm;
   const runtime = vm.runtime;
-  
+
   Object.assign(state, {
     projectPalettes: state.projectPalettes || [],
     selectedPaletteId: state.selectedPaletteId || null,
     paletteDropdown: null,
-    teardownVmTargetsListener: null
+    teardownVmTargetsListener: null,
   });
-
 
   const sanitizeHex = (value) => {
     const trimmed = value?.toString().trim().replace(/^#/, "");
@@ -30,9 +29,9 @@ export function createPaletteModule(addon, state, redux, msg) {
 
   const updatePaletteSelection = (hex) => {
     const target = sanitizeHex(hex || getFillHex());
-    const selectedIndex = target ? state.palette.findIndex(entry => entry === target) : -1;
+    const selectedIndex = target ? state.palette.findIndex((entry) => entry === target) : -1;
     state.selectedPaletteIndex = selectedIndex;
-    state.paletteGrid?.querySelectorAll(".sa-pixel-art-color[data-index]").forEach(button => {
+    state.paletteGrid?.querySelectorAll(".sa-pixel-art-color[data-index]").forEach((button) => {
       button.dataset.selected = button.dataset.index === String(selectedIndex);
     });
   };
@@ -44,7 +43,7 @@ export function createPaletteModule(addon, state, redux, msg) {
       className: `sa-pixel-art-palette-message sa-pixel-art-palette-message-${type}`,
     });
     state.paletteMessage.style.display = "block";
-    setTimeout(() => state.paletteMessage.style.display = "none", 3000);
+    setTimeout(() => (state.paletteMessage.style.display = "none"), 3000);
   };
 
   const randomId = () => Math.random().toString(36).slice(2, 10);
@@ -55,17 +54,19 @@ export function createPaletteModule(addon, state, redux, msg) {
       if (trimmed.endsWith(magic)) {
         try {
           return JSON.parse(trimmed.slice(0, -magic.length));
-        } catch { return null; }
+        } catch {
+          return null;
+        }
       }
     }
     return null;
   };
 
-  const serializeComment = (payload, magic, header) => 
+  const serializeComment = (payload, magic, header) =>
     `${header ? header + "\n" : ""}${JSON.stringify(payload)}${magic}`;
 
-  const findProjectComment = () => 
-    Object.values(runtime.getTargetForStage()?.comments || {}).find(c => c.text?.includes(PROJECT_COMMENT_MAGIC));
+  const findProjectComment = () =>
+    Object.values(runtime.getTargetForStage()?.comments || {}).find((c) => c.text?.includes(PROJECT_COMMENT_MAGIC));
 
   const sanitizePalettes = (palettes) => {
     if (!Array.isArray(palettes)) return [];
@@ -75,7 +76,7 @@ export function createPaletteModule(addon, state, redux, msg) {
       if (!id || seenIds.has(id)) id = `pal-${randomId()}`;
       seenIds.add(id);
       if (!name?.trim()) name = `${msg("paletteTitle") || "Palette"} ${index + 1}`;
-      const sanitizedColors = Array.isArray(colors) 
+      const sanitizedColors = Array.isArray(colors)
         ? [...new Set(colors.map(sanitizeHex).filter(Boolean))].slice(0, PALETTE_LIMIT)
         : [];
       return { id, name, colors: sanitizedColors };
@@ -92,7 +93,7 @@ export function createPaletteModule(addon, state, redux, msg) {
   const writeProjectComment = () => {
     const s = runtime.getTargetForStage();
     if (!s) return;
-    const snapshot = state.projectPalettes.map(p => ({ ...p, colors: p.colors.slice(0, PALETTE_LIMIT) }));
+    const snapshot = state.projectPalettes.map((p) => ({ ...p, colors: p.colors.slice(0, PALETTE_LIMIT) }));
     const text = serializeComment({ palettes: snapshot }, PROJECT_COMMENT_MAGIC, "Scratch Addons Pixel Palette");
     const existing = findProjectComment();
     if (existing) existing.text = text;
@@ -102,7 +103,7 @@ export function createPaletteModule(addon, state, redux, msg) {
 
   const loadMappings = (target) => {
     const mappings = {};
-    Object.values(target?.comments || {}).forEach(comment => {
+    Object.values(target?.comments || {}).forEach((comment) => {
       if (!comment.text?.includes(COSTUME_COMMENT_MAGIC)) return;
       const payload = parseComment(comment.text, COSTUME_COMMENT_MAGIC);
       if (payload?.mappings) Object.assign(mappings, payload.mappings);
@@ -114,8 +115,9 @@ export function createPaletteModule(addon, state, redux, msg) {
   const writeMappings = (target, mappings) => {
     if (!target) return;
     const text = serializeComment({ mappings }, COSTUME_COMMENT_MAGIC, "Scratch Addons Palette Mapping");
-    const existing = Object.values(target.comments || {}).find(c => 
-      c.text?.includes(COSTUME_COMMENT_MAGIC) && parseComment(c.text, COSTUME_COMMENT_MAGIC)?.mappings);
+    const existing = Object.values(target.comments || {}).find(
+      (c) => c.text?.includes(COSTUME_COMMENT_MAGIC) && parseComment(c.text, COSTUME_COMMENT_MAGIC)?.mappings
+    );
     if (existing) existing.text = text;
     else target.createComment(randomId(), null, text, 80, 80, 320, 100, true);
     runtime.emitProjectChanged();
@@ -143,30 +145,36 @@ export function createPaletteModule(addon, state, redux, msg) {
   const createPalette = (name) => ({
     id: `pal-${randomId()}`,
     name: name || `${msg("paletteTitle") || "Palette"} ${state.projectPalettes.length + 1}`,
-    colors: []
+    colors: [],
   });
 
-  const getActivePalette = () => state.projectPalettes.find(p => p.id === state.selectedPaletteId);
+  const getActivePalette = () => state.projectPalettes.find((p) => p.id === state.selectedPaletteId);
 
   const renderSelector = () => {
     if (!state.paletteDropdown) return;
     state.paletteDropdown.innerHTML = "";
-    
+
     const placeholder = Object.assign(document.createElement("option"), {
-      value: "", disabled: true, hidden: !state.selectedPaletteId, selected: !state.selectedPaletteId,
-      textContent: msg("paletteSelectPlaceholder") || "Select a palette"
+      value: "",
+      disabled: true,
+      hidden: !state.selectedPaletteId,
+      selected: !state.selectedPaletteId,
+      textContent: msg("paletteSelectPlaceholder") || "Select a palette",
     });
     state.paletteDropdown.appendChild(placeholder);
 
-    state.projectPalettes.forEach(palette => {
+    state.projectPalettes.forEach((palette) => {
       const option = Object.assign(document.createElement("option"), {
-        value: palette.id, textContent: palette.name, selected: palette.id === state.selectedPaletteId
+        value: palette.id,
+        textContent: palette.name,
+        selected: palette.id === state.selectedPaletteId,
       });
       state.paletteDropdown.appendChild(option);
     });
 
     const createOption = Object.assign(document.createElement("option"), {
-      value: "__create__", textContent: msg("paletteCreateNew") || "Create new palette"
+      value: "__create__",
+      textContent: msg("paletteCreateNew") || "Create new palette",
     });
     state.paletteDropdown.appendChild(createOption);
   };
@@ -186,13 +194,13 @@ export function createPaletteModule(addon, state, redux, msg) {
   };
 
   const setActivePalette = (paletteId, persistCostume = true) => {
-    const palette = state.projectPalettes.find(p => p.id === paletteId);
+    const palette = state.projectPalettes.find((p) => p.id === paletteId);
     if (!palette) return;
     Object.assign(state, {
       selectedPaletteId: paletteId,
       palette: palette.colors,
       editingPaletteIndex: -1,
-      selectedPaletteIndex: -1
+      selectedPaletteIndex: -1,
     });
     renderSelector();
     renderPalette();
@@ -206,7 +214,7 @@ export function createPaletteModule(addon, state, redux, msg) {
     ensureActivePalette();
 
     const paletteId = readCostumePaletteId();
-    if (paletteId && state.projectPalettes.some(p => p.id === paletteId)) {
+    if (paletteId && state.projectPalettes.some((p) => p.id === paletteId)) {
       setActivePalette(paletteId, false);
     } else {
       const palette = state.projectPalettes[0];
@@ -232,25 +240,29 @@ export function createPaletteModule(addon, state, redux, msg) {
 
     colors.forEach((color, index) => {
       const button = Object.assign(document.createElement("button"), {
-        type: "button", className: "sa-pixel-art-color", title: color
+        type: "button",
+        className: "sa-pixel-art-color",
+        title: color,
       });
       Object.assign(button.style, { backgroundColor: color });
       Object.assign(button.dataset, {
-        index, color,
+        index,
+        color,
         selected: index === state.selectedPaletteIndex,
-        editing: index === state.editingPaletteIndex
+        editing: index === state.editingPaletteIndex,
       });
-      
+
       button.onclick = (e) => {
         if (e.shiftKey) {
           state.editingPaletteIndex = state.editingPaletteIndex === index ? -1 : index;
-          state.paletteGrid.querySelectorAll(".sa-pixel-art-color[data-index]").forEach(btn => 
-            btn.dataset.editing = btn.dataset.index === String(state.editingPaletteIndex));
+          state.paletteGrid
+            .querySelectorAll(".sa-pixel-art-color[data-index]")
+            .forEach((btn) => (btn.dataset.editing = btn.dataset.index === String(state.editingPaletteIndex)));
         }
         setFillHex(color);
         updatePaletteSelection(color);
       };
-      
+
       button.oncontextmenu = (e) => {
         e.preventDefault();
         if (!palette) return;
@@ -261,12 +273,13 @@ export function createPaletteModule(addon, state, redux, msg) {
         writeProjectComment();
         writeCostumePaletteId(state.selectedPaletteId);
       };
-      
+
       state.paletteGrid.appendChild(button);
     });
 
     const addButton = Object.assign(document.createElement("button"), {
-      type: "button", className: "sa-pixel-art-color sa-pixel-art-color-add"
+      type: "button",
+      className: "sa-pixel-art-color sa-pixel-art-color-add",
     });
     addButton.setAttribute("aria-label", msg("addColor"));
     addButton.onclick = () => addPaletteColor();
@@ -304,12 +317,12 @@ export function createPaletteModule(addon, state, redux, msg) {
     const palette = getActivePalette();
     const normalized = sanitizeHex(newHex);
     if (!palette || state.editingPaletteIndex < 0 || !normalized) return;
-    
+
     if (palette.colors.includes(normalized)) {
       showPaletteMessage(msg("colorAlreadyExists") || "Color already exists", "info");
       return;
     }
-    
+
     palette.colors[state.editingPaletteIndex] = normalized;
     renderPalette();
     updatePaletteSelection(normalized);
@@ -319,21 +332,22 @@ export function createPaletteModule(addon, state, redux, msg) {
 
   const setupPalettePanel = async () => {
     const panel = Object.assign(document.createElement("section"), {
-      className: "sa-pixel-art-palette"
+      className: "sa-pixel-art-palette",
     });
     panel.style.display = "none";
 
     const header = Object.assign(document.createElement("header"), {
-      className: "sa-pixel-art-palette-header", textContent: msg("paletteTitle")
+      className: "sa-pixel-art-palette-header",
+      textContent: msg("paletteTitle"),
     });
     panel.appendChild(header);
 
     const selectorRow = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-palette-select-row"
+      className: "sa-pixel-art-palette-select-row",
     });
 
     const dropdown = Object.assign(document.createElement("select"), {
-      className: "sa-pixel-art-palette-select"
+      className: "sa-pixel-art-palette-select",
     });
     dropdown.onchange = (e) => {
       if (e.target.value === "__create__") {
@@ -345,25 +359,26 @@ export function createPaletteModule(addon, state, redux, msg) {
         setActivePalette(e.target.value);
       }
     };
-    
+
     selectorRow.appendChild(dropdown);
     panel.appendChild(selectorRow);
     state.paletteDropdown = dropdown;
 
     const notice = Object.assign(document.createElement("p"), {
-      className: "sa-pixel-art-palette-empty", textContent: msg("emptyPalette")
+      className: "sa-pixel-art-palette-empty",
+      textContent: msg("emptyPalette"),
     });
     panel.appendChild(notice);
     state.paletteNotice = notice;
 
     const grid = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-palette-grid"
+      className: "sa-pixel-art-palette-grid",
     });
     panel.appendChild(grid);
     state.paletteGrid = grid;
 
     const messageArea = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-palette-message"
+      className: "sa-pixel-art-palette-message",
     });
     messageArea.style.display = "none";
     panel.appendChild(messageArea);
@@ -374,8 +389,13 @@ export function createPaletteModule(addon, state, redux, msg) {
     while (true) {
       await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
         markAsSeen: true,
-        reduxEvents: ["scratch-gui/navigation/ACTIVATE_TAB", "scratch-gui/targets/UPDATE_TARGET_LIST", "scratch-paint/formats/CHANGE_FORMAT"],
-        reduxCondition: (store) => store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
+        reduxEvents: [
+          "scratch-gui/navigation/ACTIVATE_TAB",
+          "scratch-gui/targets/UPDATE_TARGET_LIST",
+          "scratch-paint/formats/CHANGE_FORMAT",
+        ],
+        reduxCondition: (store) =>
+          store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
       });
 
       addon.tab.appendToSharedSpace({ space: "paintEditorModeSelector", element: panel, order: 1 });
@@ -396,7 +416,10 @@ export function createPaletteModule(addon, state, redux, msg) {
   };
 
   addon.self.addEventListener("disabled", () => state.teardownVmTargetsListener?.());
-  addon.self.addEventListener("reenabled", () => { attachVmListener(); scheduleSync(); });
+  addon.self.addEventListener("reenabled", () => {
+    attachVmListener();
+    scheduleSync();
+  });
 
   attachVmListener();
   scheduleSync();

@@ -69,7 +69,6 @@ export default async function ({ addon, msg, console }) {
     if (prevSize !== nextSize) {
       controls.updateBrushSelection(nextSize);
     }
-
   });
 
   // Addon lifecycle events
