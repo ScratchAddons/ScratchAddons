@@ -175,21 +175,21 @@
   </head>
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
-      <img
-        src="../../images/icons/menu.svg"
+      <button
         id="sidebar-toggle"
         class="header-button"
         :class="{sidebarToggleOpen: categoryOpen === true}"
         @click="sidebarToggle()"
         v-cloak
         v-show="smallMode"
-        draggable="false"
-      />
+      >
+        <img src="../../images/icons/menu.svg" draggable="false" />
+      </button>
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <div @click="setTheme(!theme)" class="header-button header-end">
+      <button @click="setTheme(!theme)" class="header-button header-end">
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
-      </div>
+      </button>
     </div>
     <div class="main">
       <div
@@ -225,10 +225,10 @@
           <img src="../../images/icons/comment.svg" draggable="false" />
           <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
-        <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
+        <button v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
           <img src="../../images/icons/wrench.svg" draggable="false" />
           <span>{{ msg("moreSettings") }}</span>
-        </div>
+        </button>
       </div>
       <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
         <img
@@ -255,7 +255,7 @@
           </div>
           <div v-cloak class="search-box" v-if="!relatedAddonsOpen" :class="{smallMode: smallMode === true}">
             <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
-            <button v-show="searchInput === ''"><img src="../../images/icons/search.svg" class="search-icon" /></button>
+            <button disabled v-show="searchInput === ''"><img src="../../images/icons/search.svg" class="search-icon" /></button>
             <button v-else @click="clearAndFocusSearch()">
               <img src="../../images/icons/x.svg" class="search-icon" />
             </button>

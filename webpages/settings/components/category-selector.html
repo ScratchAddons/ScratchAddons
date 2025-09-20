@@ -1,5 +1,5 @@
 <template>
-  <div
+  <button
     class="category"
     :class="{
         sel: category.id === selectedCategory && !this.$root.relatedAddonsOpen,
@@ -13,7 +13,7 @@
   >
     <img :src="'../../images/icons/' + category.icon + '.svg'" draggable="false" />
     <span>{{ category.name }}</span>
-  </div>
+  </button>
 </template>
 
 <style>
@@ -39,6 +39,10 @@
   a.category > span > img /* popout icon */ {
     height: 12px;
     vertical-align: -1px;
+  }
+  button.category {
+    background-color: transparent;
+    border: none;
   }
 
   .category.sel {

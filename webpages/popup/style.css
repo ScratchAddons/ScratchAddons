@@ -12,6 +12,11 @@ body {
   color: var(--white-text);
 }
 
+button {
+  background-color: transparent;
+  border: none;
+}
+
 [v-cloak] {
   display: none !important;
 }

@@ -171,6 +171,8 @@ h1 {
   transform: scaleY(-1);
 }
 .header-button {
+  background-color: transparent;
+  border: none;
   cursor: pointer;
   padding: 17.5px;
   line-height: 0;

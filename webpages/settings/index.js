@@ -352,7 +352,7 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target.id === "sidebar-toggle") return;
+        if (event?.target?.closest("#sidebar-toggle")) return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
@@ -668,9 +668,13 @@ let fuse;
     if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
       document.querySelector("#searchBox").focus();
-    } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
-      e.preventDefault();
-      vue.searchInputReal = "";
+    } else if (e.key === "Escape") {
+      if (document.activeElement === document.querySelector("#searchBox")) {
+        e.preventDefault();
+        vue.searchInputReal = "";
+      } else if (vue.categoryOpen && vue.smallMode) {
+        vue.categoryOpen = false;
+      }
     }
   });
 
