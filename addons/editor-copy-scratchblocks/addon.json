@@ -23,6 +23,5 @@
     }
   ],
   "dynamicDisable": true,
-  "dynamicEnable": true,
-  "permissions": ["clipboardWrite"]
+  "dynamicEnable": true
 }
