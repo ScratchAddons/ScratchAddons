@@ -1,4 +1,4 @@
-const BRUSH_SIZES = [2, 4, 6, 8];
+const BRUSH_SIZES = [1, 2, 3, 4];
 
 export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette) {
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
@@ -29,7 +29,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     if (state.enabled === enabled) return;
     state.pixelModeDesired = enabled;
     updatePixelModeState(enabled);
-    if (enabled) canvasAdjuster.enable(state.pendingSize.width * 2, state.pendingSize.height * 2, 16);
+    if (enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
     else {
       canvasAdjuster.disable();
       palette.updatePaletteSelection();
@@ -65,7 +65,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
         Object.assign(state.pendingSize, costumeSize);
         state.widthInput.value = costumeSize.width;
         state.heightInput.value = costumeSize.height;
-        if (state.enabled) canvasAdjuster.enable(costumeSize.width * 2, costumeSize.height * 2, 16);
+        if (state.enabled) canvasAdjuster.enable(costumeSize.width, costumeSize.height);
       }
     }
   };
@@ -81,7 +81,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       const value = Math.max(1, Math.min(1024, +input.value || 1));
       state.pendingSize[dimension] = value;
       input.value = value;
-      if (state.enabled) canvasAdjuster.enable(state.pendingSize.width * 2, state.pendingSize.height * 2, 16);
+      if (state.enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
     };
     return input;
   };
@@ -133,7 +133,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
         updateBrushSelection(size);
       };
       const preview = Object.assign(document.createElement("span"), { className: "sa-pixel-art-brush-preview" });
-      Object.assign(preview.style, { width: `${size * 3}px`, height: `${size * 3}px` });
+      Object.assign(preview.style, { width: `${size * 6}px`, height: `${size * 6}px` });
       button.appendChild(preview);
       brushContainer.appendChild(button);
     });
@@ -175,7 +175,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
   const handleReenabled = () => {
     if (!state.enabled) return;
     updatePixelModeState(true);
-    canvasAdjuster.enable(state.pendingSize.width * 2, state.pendingSize.height * 2);
+    canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
     updateBrushControlVisibility();
   };
 

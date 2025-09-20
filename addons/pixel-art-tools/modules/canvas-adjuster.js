@@ -110,7 +110,7 @@ export function createCanvasAdjuster(paper) {
   const enable = (w, h) => {
     const bg = getBgLayer(); if (!bg?.bitmapBackground) return;
     originalBg ||= bg.bitmapBackground; bgCenter ||= originalBg.position.clone();
-    bg.bitmapBackground.remove(); const g = makeChecker(w, h, 2); g.position = bgCenter; bg.addChild(g);
+    bg.bitmapBackground.remove(); const g = makeChecker(w, h, 1); g.position = bgCenter; bg.addChild(g);
     bg.bitmapBackground = g; if (bg.vectorBackground) bg.vectorBackground.visible = false;
 
     const ol = getOutlineLayer();
