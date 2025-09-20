@@ -7,6 +7,7 @@ export function createCanvasAdjuster(paper) {
   let originalBg = null, originalOutline = null;
   let bgCenter = null, outlineCenter = null;
   let clickHiderAttached = false;
+  let gateInstalled = false;
 
   const makeChecker = (w, h, size) => {
     const g = new paper.Group();
@@ -24,14 +25,18 @@ export function createCanvasAdjuster(paper) {
 
   const getAllowedRect = () => getOutlineLayer()?.data?.artboardRect || null;
 
-  // Hack: do not touch canvas or tools internally, wrap handlers and synthesize end/start at boundary
-  const wrapToolOnce = (tool) => {
-    if (!tool || tool.__gated) return; tool.__gated = true;
-    const down = tool.onMouseDown, drag = tool.onMouseDrag, up = tool.onMouseUp;
+  // Gate a tool's handlers to the artboard rect
+  function wrapToolOnce(tool) {
+    if (!tool || tool.__gated || !tool.onMouseDown) return; tool.__gated = true;
+
+    const down = tool.onMouseDown;
+    const drag = tool.onMouseDrag;
+    const up   = tool.onMouseUp;
 
     tool.onMouseDown = function(evt) {
       const rect = getAllowedRect(); if (!rect || !down) return down?.call(this, evt);
-      this.__strokeBlocked = !rect.contains(evt.point); this.__paused = false;
+      this.__strokeBlocked = !rect.contains(evt.point);
+      this.__paused = false;
       this.__lastInsidePoint = rect.contains(evt.point) ? evt.point.clone() : null;
       if (this.__strokeBlocked) return;
       return down.call(this, evt);
@@ -40,13 +45,16 @@ export function createCanvasAdjuster(paper) {
     tool.onMouseDrag = function(evt) {
       const rect = getAllowedRect(); if (!rect) return drag?.call(this, evt);
       if (this.__strokeBlocked) return;
+
       const inside = rect.contains(evt.point);
       if (inside) {
         if (this.__paused && down) { this.__paused = false; down.call(this, evt); }
         this.__lastInsidePoint = evt.point.clone();
         return drag?.call(this, evt);
       } else {
-        if (!this.__paused && up && this.__lastInsidePoint) up.call(this, Object.assign({}, evt, {point:this.__lastInsidePoint}));
+        if (!this.__paused && up && this.__lastInsidePoint) {
+          up.call(this, Object.assign({}, evt, {point: this.__lastInsidePoint}));
+        }
         this.__paused = true; return;
       }
     };
@@ -57,11 +65,25 @@ export function createCanvasAdjuster(paper) {
       if (rect.contains(evt.point)) { const res = up?.call(this, evt); this.__paused = false; this.__lastInsidePoint = null; return res; }
       this.__paused = false; this.__lastInsidePoint = null; return;
     };
-  };
+  }
 
-  const gateExistingTools = () => { (paper.tools || []).forEach(wrapToolOnce); if (paper.tool) wrapToolOnce(paper.tool); };
+  // Patch activation so tools created on click are gated
+  function installToolGate() {
+    if (gateInstalled) return;
+    gateInstalled = true;
 
-  // Hack: BrushTool cursorPreview lives on guide layer with data.isHelperItem. Hide on outside click, show and reposition on mouseup.
+    const origActivate = paper.Tool.prototype.activate;
+    paper.Tool.prototype.activate = function(...args) {
+      const res = origActivate.apply(this, args);
+      wrapToolOnce(this);
+      return res;
+    };
+
+    // Gate current active tool if any
+    if (paper.tool) wrapToolOnce(paper.tool);
+  }
+
+  // Hide helper cursor outside artboard. Show and reposition on mouseup.
   const installClickHider = () => {
     if (clickHiderAttached) return; clickHiderAttached = true;
 
@@ -89,18 +111,28 @@ export function createCanvasAdjuster(paper) {
     if (ol) {
       if (!originalOutline) { outlineCenter = ol.bounds.center.clone(); originalOutline = ol.removeChildren(); } else ol.removeChildren();
       const [white, blue] = makeOutline(w, h); white.position = outlineCenter; blue.position = outlineCenter; ol.addChildren([white, blue]);
-      ol.data.artboardRect = new paper.Rectangle(outlineCenter.subtract(new paper.Point(w/2, h/2)), new paper.Size(w, h));
+      ol.data.artboardRect = new paper.Rectangle(
+        outlineCenter.subtract(new paper.Point(w/2, h/2)),
+        new paper.Size(w, h)
+      );
     }
 
-    gateExistingTools(); installClickHider();
+    installToolGate();
+    installClickHider();
   };
 
   const disable = () => {
     const bg = getBgLayer();
-    if (bg && originalBg) { if (bg.bitmapBackground !== originalBg) bg.bitmapBackground.remove(); if (!originalBg.parent) bg.addChild(originalBg);
-      bg.bitmapBackground = originalBg; if (bg.vectorBackground) bg.vectorBackground.visible = true; }
+    if (bg && originalBg) {
+      if (bg.bitmapBackground !== originalBg) bg.bitmapBackground.remove();
+      if (!originalBg.parent) bg.addChild(originalBg);
+      bg.bitmapBackground = originalBg;
+      if (bg.vectorBackground) bg.vectorBackground.visible = true;
+    }
     const ol = getOutlineLayer();
-    if (ol && originalOutline) { ol.removeChildren(); ol.addChildren(originalOutline); delete ol.data.artboardRect; }
+    if (ol && originalOutline) {
+      ol.removeChildren(); ol.addChildren(originalOutline); delete ol.data.artboardRect;
+    }
   };
 
   return { enable, disable };
