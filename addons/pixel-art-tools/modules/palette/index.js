@@ -54,6 +54,7 @@ export function createPaletteModule(addon, state, redux, msg) {
   };
 
   const syncPalette = () => {
+    const currentPaletteId = state.selectedPaletteId;
     const loaded = storage.loadProjectPalettes();
     if (loaded.length) state.projectPalettes = loaded;
     ensureActivePalette();
@@ -61,6 +62,8 @@ export function createPaletteModule(addon, state, redux, msg) {
     const paletteId = storage.readCostumePaletteId();
     if (paletteId && state.projectPalettes.some((p) => p.id === paletteId)) {
       setActivePalette(paletteId, false);
+    } else if (currentPaletteId && state.projectPalettes.some((p) => p.id === currentPaletteId)) {
+      setActivePalette(currentPaletteId, false);
     } else {
       setActivePalette(state.projectPalettes[0].id);
     }
