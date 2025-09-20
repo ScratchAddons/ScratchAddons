@@ -1,31 +1,57 @@
 // canvas-adjuster.js
 export function createCanvasAdjuster(paper) {
-  const getBgLayer      = () => paper.project.layers.find(l => l?.data?.isBackgroundGuideLayer);
-  const getOutlineLayer = () => paper.project.layers.find(l => l?.data?.isOutlineLayer);
-  const getGuideLayer   = () => paper.project.layers.find(l => l?.data?.isGuideLayer);
+  const getBgLayer = () => paper.project.layers.find((l) => l?.data?.isBackgroundGuideLayer);
+  const getOutlineLayer = () => paper.project.layers.find((l) => l?.data?.isOutlineLayer);
+  const getGuideLayer = () => paper.project.layers.find((l) => l?.data?.isGuideLayer);
 
-  let originalBg = null, originalOutline = null;
-  let bgCenter = null, outlineCenter = null;
+  let originalBg = null,
+    originalOutline = null;
+  let bgCenter = null,
+    outlineCenter = null;
   let clickHiderAttached = false;
   let gateInstalled = false;
 
   const makeChecker = (w, h, size) => {
-    const cols = Math.ceil(w / size), rows = Math.ceil(h / size);
-    const base = new paper.Shape.Rectangle([0,0],[cols,rows]); base.fillColor="#fff";
-    const pts=[]; let x=0,y=0;
-    while(x<cols){pts.push([x,y]);x++;pts.push([x,y]);y=y?0:rows;}
-    y=rows-1;x=cols;
-    while(y>0){pts.push([x,y]);x=x?0:cols;pts.push([x,y]);y--;}
-    const path=new paper.Path(pts); path.fillRule="evenodd"; path.fillColor="#D9E3F2";
-    const mask=new paper.Shape.Rectangle(new paper.Rectangle(0,0,w/size,h/size)); mask.clipMask=true;
-    const g=new paper.Group([base,path,mask]); g.scale(size);
+    const cols = Math.ceil(w / size),
+      rows = Math.ceil(h / size);
+    const base = new paper.Shape.Rectangle([0, 0], [cols, rows]);
+    base.fillColor = "#fff";
+    const pts = [];
+    let x = 0,
+      y = 0;
+    while (x < cols) {
+      pts.push([x, y]);
+      x++;
+      pts.push([x, y]);
+      y = y ? 0 : rows;
+    }
+    y = rows - 1;
+    x = cols;
+    while (y > 0) {
+      pts.push([x, y]);
+      x = x ? 0 : cols;
+      pts.push([x, y]);
+      y--;
+    }
+    const path = new paper.Path(pts);
+    path.fillRule = "evenodd";
+    path.fillColor = "#D9E3F2";
+    const mask = new paper.Shape.Rectangle(new paper.Rectangle(0, 0, w / size, h / size));
+    mask.clipMask = true;
+    const g = new paper.Group([base, path, mask]);
+    g.scale(size);
     return g;
   };
 
   const makeOutline = (w, h) => {
     const r = new paper.Rectangle(0, 0, w, h);
-    const white = new paper.Shape.Rectangle(r.expand(1)); white.strokeWidth = 2; white.strokeColor = "white";
-    const blue  = new paper.Shape.Rectangle(r.expand(5)); blue.strokeWidth  = 2; blue.strokeColor  = "#4280D7"; blue.opacity = 0.25;
+    const white = new paper.Shape.Rectangle(r.expand(1));
+    white.strokeWidth = 2;
+    white.strokeColor = "white";
+    const blue = new paper.Shape.Rectangle(r.expand(5));
+    blue.strokeWidth = 2;
+    blue.strokeColor = "#4280D7";
+    blue.opacity = 0.25;
     return [white, blue];
   };
 
@@ -33,14 +59,16 @@ export function createCanvasAdjuster(paper) {
 
   // Gate a tool's handlers to the artboard rect
   function wrapToolOnce(tool) {
-    if (!tool || tool.__gated || !tool.onMouseDown) return; tool.__gated = true;
+    if (!tool || tool.__gated || !tool.onMouseDown) return;
+    tool.__gated = true;
 
     const down = tool.onMouseDown;
     const drag = tool.onMouseDrag;
-    const up   = tool.onMouseUp;
+    const up = tool.onMouseUp;
 
-    tool.onMouseDown = function(evt) {
-      const rect = getAllowedRect(); if (!rect || !down) return down?.call(this, evt);
+    tool.onMouseDown = function (evt) {
+      const rect = getAllowedRect();
+      if (!rect || !down) return down?.call(this, evt);
       this.__strokeBlocked = !rect.contains(evt.point);
       this.__paused = false;
       this.__lastInsidePoint = rect.contains(evt.point) ? evt.point.clone() : null;
@@ -48,28 +76,46 @@ export function createCanvasAdjuster(paper) {
       return down.call(this, evt);
     };
 
-    tool.onMouseDrag = function(evt) {
-      const rect = getAllowedRect(); if (!rect) return drag?.call(this, evt);
+    tool.onMouseDrag = function (evt) {
+      const rect = getAllowedRect();
+      if (!rect) return drag?.call(this, evt);
       if (this.__strokeBlocked) return;
 
       const inside = rect.contains(evt.point);
       if (inside) {
-        if (this.__paused && down) { this.__paused = false; down.call(this, evt); }
+        if (this.__paused && down) {
+          this.__paused = false;
+          down.call(this, evt);
+        }
         this.__lastInsidePoint = evt.point.clone();
         return drag?.call(this, evt);
       } else {
         if (!this.__paused && up && this.__lastInsidePoint) {
-          up.call(this, Object.assign({}, evt, {point: this.__lastInsidePoint}));
+          up.call(this, Object.assign({}, evt, { point: this.__lastInsidePoint }));
         }
-        this.__paused = true; return;
+        this.__paused = true;
+        return;
       }
     };
 
-    tool.onMouseUp = function(evt) {
-      const rect = getAllowedRect(); if (!rect) return up?.call(this, evt);
-      if (this.__strokeBlocked) { this.__strokeBlocked = false; this.__paused = false; this.__lastInsidePoint = null; return; }
-      if (rect.contains(evt.point)) { const res = up?.call(this, evt); this.__paused = false; this.__lastInsidePoint = null; return res; }
-      this.__paused = false; this.__lastInsidePoint = null; return;
+    tool.onMouseUp = function (evt) {
+      const rect = getAllowedRect();
+      if (!rect) return up?.call(this, evt);
+      if (this.__strokeBlocked) {
+        this.__strokeBlocked = false;
+        this.__paused = false;
+        this.__lastInsidePoint = null;
+        return;
+      }
+      if (rect.contains(evt.point)) {
+        const res = up?.call(this, evt);
+        this.__paused = false;
+        this.__lastInsidePoint = null;
+        return res;
+      }
+      this.__paused = false;
+      this.__lastInsidePoint = null;
+      return;
     };
   }
 
@@ -79,7 +125,7 @@ export function createCanvasAdjuster(paper) {
     gateInstalled = true;
 
     const origActivate = paper.Tool.prototype.activate;
-    paper.Tool.prototype.activate = function(...args) {
+    paper.Tool.prototype.activate = function (...args) {
       const res = origActivate.apply(this, args);
       wrapToolOnce(this);
       return res;
@@ -91,34 +137,56 @@ export function createCanvasAdjuster(paper) {
 
   // Hide helper cursor outside artboard. Show and reposition on mouseup.
   const installClickHider = () => {
-    if (clickHiderAttached) return; clickHiderAttached = true;
+    if (clickHiderAttached) return;
+    clickHiderAttached = true;
 
     paper.view.on("mousedown", (e) => {
-      const rect = getAllowedRect(); const inside = rect ? rect.contains(e.point) : true; if (inside) return;
-      const gl = getGuideLayer(); if (!gl) return;
-      gl.children.forEach(ch => { if (ch?.data?.isHelperItem) ch.visible = false; });
+      const rect = getAllowedRect();
+      const inside = rect ? rect.contains(e.point) : true;
+      if (inside) return;
+      const gl = getGuideLayer();
+      if (!gl) return;
+      gl.children.forEach((ch) => {
+        if (ch?.data?.isHelperItem) ch.visible = false;
+      });
     });
 
     paper.view.on("mouseup", (e) => {
-      const gl = getGuideLayer(); if (!gl) return;
-      gl.children.forEach(ch => {
-        if (ch?.data?.isHelperItem) { ch.visible = true; if (e?.point) ch.position = new paper.Point(~~e.point.x, ~~e.point.y); }
+      const gl = getGuideLayer();
+      if (!gl) return;
+      gl.children.forEach((ch) => {
+        if (ch?.data?.isHelperItem) {
+          ch.visible = true;
+          if (e?.point) ch.position = new paper.Point(~~e.point.x, ~~e.point.y);
+        }
       });
     });
   };
 
   const enable = (w, h) => {
-    const bg = getBgLayer(); if (!bg?.bitmapBackground) return;
-    originalBg ||= bg.bitmapBackground; bgCenter ||= originalBg.position.clone();
-    bg.bitmapBackground.remove(); const g = makeChecker(w, h, 1); g.position = bgCenter; bg.addChild(g);
-    bg.bitmapBackground = g; if (bg.vectorBackground) bg.vectorBackground.visible = false;
+    const bg = getBgLayer();
+    if (!bg?.bitmapBackground) return;
+    originalBg ||= bg.bitmapBackground;
+    bgCenter ||= originalBg.position.clone();
+    bg.bitmapBackground.remove();
+    const g = makeChecker(w, h, 1);
+    g.position = bgCenter;
+    bg.addChild(g);
+    bg.bitmapBackground = g;
+    if (bg.vectorBackground) bg.vectorBackground.visible = false;
 
     const ol = getOutlineLayer();
     if (ol) {
-      if (!originalOutline) { outlineCenter = ol.bounds.center.clone(); originalOutline = ol.removeChildren(); } else ol.removeChildren();
-      const [white, blue] = makeOutline(w, h); white.position = outlineCenter; blue.position = outlineCenter; ol.addChildren([white, blue]);
+      if (!originalOutline) {
+        outlineCenter = ol.bounds.center.clone();
+        originalOutline = ol.removeChildren();
+      } else ol.removeChildren();
+      const [white, blue] = makeOutline(w, h);
+      white.position = outlineCenter;
+      blue.position = outlineCenter;
+      ol.addChildren([white, blue]);
       ol.data.artboardRect = new paper.Rectangle(
-        outlineCenter.subtract(new paper.Point(w/2, h/2)),
+        outlineCenter.subtract(new paper.Point(w / 2, h / 2)),
         new paper.Size(w, h)
       );
     }
@@ -137,7 +205,9 @@ export function createCanvasAdjuster(paper) {
     }
     const ol = getOutlineLayer();
     if (ol && originalOutline) {
-      ol.removeChildren(); ol.addChildren(originalOutline); delete ol.data.artboardRect;
+      ol.removeChildren();
+      ol.addChildren(originalOutline);
+      delete ol.data.artboardRect;
     }
   };
 

@@ -1,7 +1,13 @@
 import { createPaletteModule } from "./modules/palette/index.js";
 import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
-import { wrapGetCostume, wrapAddCostumeWait, wrapCreateBitmapSkin, wrapGetSkinSize, wrapUpdateBitmap } from "./modules/bitmap-loader.js";
+import {
+  wrapGetCostume,
+  wrapAddCostumeWait,
+  wrapCreateBitmapSkin,
+  wrapGetSkinSize,
+  wrapUpdateBitmap,
+} from "./modules/bitmap-loader.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function ({ addon, msg, console }) {
@@ -48,7 +54,10 @@ export default async function ({ addon, msg, console }) {
       controls.updateBrushControlVisibility();
     }
 
-    if (detail.action.type === "scratch-paint/view/UPDATE_VIEW_BOUNDS" && detail.next.scratchGui.editorTab.activeTabIndex === 1) {
+    if (
+      detail.action.type === "scratch-paint/view/UPDATE_VIEW_BOUNDS" &&
+      detail.next.scratchGui.editorTab.activeTabIndex === 1
+    ) {
       controls.updatePixelModeVisibility();
     }
 
@@ -84,11 +93,10 @@ export default async function ({ addon, msg, console }) {
   palette.setupPalettePanel();
   palette.updatePaletteSelection();
 
-  setTimeout(()=>{
-    vm.renderer.createBitmapSkin= wrapCreateBitmapSkin(vm.runtime, vm.renderer.createBitmapSkin);
+  setTimeout(() => {
+    vm.renderer.createBitmapSkin = wrapCreateBitmapSkin(vm.runtime, vm.renderer.createBitmapSkin);
     // vm.renderer.getSkinSize = wrapGetSkinSize(vm.renderer.getSkinSize)
-    vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume)
+    vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume);
     vm.updateBitmap = wrapUpdateBitmap(vm.updateBitmap);
-  },100)
-
+  }, 100);
 }

@@ -11,7 +11,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     const resolution = costume.bitmapResolution || 1;
     return {
       width: Math.round(costume.size[0] / resolution),
-      height: Math.round(costume.size[1] / resolution)
+      height: Math.round(costume.size[1] / resolution),
     };
   };
 
