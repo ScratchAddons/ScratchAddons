@@ -39,7 +39,7 @@
             </ul>
           </div>
         </div>
-        <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
+        <input type="checkbox" class="switch" v-model="addon._enabled" @click="toggleAddonRequest" />
       </div>
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
@@ -470,47 +470,6 @@
     gap: 8px;
     display: flex;
     align-items: center;
-  }
-
-  .switch {
-    display: block;
-    background: var(--button-background);
-    width: 40px;
-    height: 20px;
-    border-radius: 10px;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    border: 1px solid var(--switch-border);
-    box-sizing: border-box;
-  }
-  .switch::before {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 10px;
-    height: 10px;
-    background: var(--switch-inner-background);
-    border-radius: 5px;
-    top: 4px;
-    left: 4px;
-    transition: all 0.25s ease;
-  }
-
-  .switch[state="on"] {
-    background: var(--brand-orange);
-    border-color: var(--brand-orange);
-  }
-  .switch[state="on"]::before {
-    background: var(--white-text);
-    left: 24px;
-  }
-
-  [dir="rtl"] .switch::before {
-    left: 24px;
-  }
-  [dir="rtl"] .switch[state="on"]::before {
-    left: 4px;
   }
 
   @media (max-width: 700px) {

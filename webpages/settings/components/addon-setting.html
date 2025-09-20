@@ -59,7 +59,7 @@
       <input
         v-if="setting.type === 'boolean'"
         type="checkbox"
-        class="setting-input check"
+        class="switch blue"
         v-model="addonSettings[setting.id]"
         @change="updateSettings()"
         :disabled="!addon._enabled"
@@ -193,48 +193,6 @@
     outline: none;
     border-color: var(--orange);
     box-shadow: var(--input-focus-shadow);
-  }
-
-  .setting-input.check {
-    appearance: none;
-    display: block;
-    background: var(--button-background);
-    width: 40px;
-    height: 20px;
-    border-radius: 10px;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    border: 1px solid var(--switch-border);
-  }
-
-  .setting-input.check::before {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 10px;
-    height: 10px;
-    background-color: var(--switch-inner-background);
-    border-radius: 5px;
-    top: 4px;
-    left: 4px;
-    transition: all 0.25s ease;
-  }
-  [dir="rtl"] .setting-input.check::before {
-    left: 24px;
-  }
-
-  .setting-input.check:checked {
-    background-color: var(--blue);
-    border-color: var(--blue);
-  }
-
-  .setting-input.check:checked::before {
-    background-color: var(--white-text);
-    left: 24px;
-  }
-  [dir="rtl"] .setting-input.check:checked::before {
-    left: 4px;
   }
 
   .setting-input.number {
