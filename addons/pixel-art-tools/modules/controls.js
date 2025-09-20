@@ -2,6 +2,18 @@ const BRUSH_SIZES = [2, 4, 6, 8];
 
 export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette) {
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
+  
+  const getCostumeSize = () => {
+    const vm = addon.tab.traps.vm;
+    const target = vm.editingTarget || vm.runtime.getEditingTarget();
+    const costume = target?.sprite?.costumes?.[target.currentCostume];
+    if (!costume) return null;
+    const resolution = costume.bitmapResolution || 1;
+    return { 
+      width: Math.round(costume.size[0] / resolution), 
+      height: Math.round(costume.size[1] / resolution) 
+    };
+  };
 
   const updatePixelModeState = (enabled) => {
     state.enabled = enabled;
@@ -47,6 +59,14 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       updateBrushControlVisibility();
     } else if (isCurrentlyBitmap && state.pixelModeDesired && !state.enabled) {
       setPixelMode(true);
+    } else if (isCurrentlyBitmap) {
+      const costumeSize = getCostumeSize();
+      if (costumeSize && (costumeSize.width > 64 || costumeSize.height > 64)) {
+        Object.assign(state.pendingSize, costumeSize);
+        state.widthInput.value = costumeSize.width;
+        state.heightInput.value = costumeSize.height;
+        if (state.enabled) canvasAdjuster.enable(costumeSize.width * 2, costumeSize.height * 2, 16);
+      }
     }
   };
 
@@ -142,7 +162,6 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
         updateBrushControlVisibility();
       }
 
-      // Check if we should auto-enable pixel mode
       updatePixelModeVisibility();
     }
   };
