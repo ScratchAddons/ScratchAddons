@@ -1,0 +1,16 @@
+.sa-compact-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 2%;
+}
+
+.sa-compact-row .box.slider-carousel-container {
+  width: 48%;
+  display: block;
+}
+
+.sa-compact-row .box.slider-carousel-container .slider-carousel {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
