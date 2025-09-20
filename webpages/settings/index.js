@@ -184,7 +184,7 @@ let fuse;
     methods: {
       openMoreSettings: function () {
         this.closePickers();
-        this.moreSettingsOpen = true;
+        this.$els.moresettings.showModal()
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
