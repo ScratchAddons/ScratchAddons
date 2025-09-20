@@ -65,14 +65,14 @@
         :disabled="!addon._enabled"
       />
       <div v-if="setting.type === 'select'" class="filter-options">
-        <div
+        <button
           class="filter-option"
           v-for="option of setting.potentialValues"
           :class="{'sel' : addonSettings[setting.id] === option.id, 'disabled': !addon._enabled}"
           @click="updateOption(option.id);"
         >
           {{ option.name }}
-        </div>
+        </button>
       </div>
     </template>
     <div v-else class="setting-input-container" :class="{ 'full-radius': tableChild }">

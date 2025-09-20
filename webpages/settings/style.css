@@ -134,19 +134,24 @@ h1 {
 }
 
 .back-button {
-  width: 24px;
-  height: 24px;
-  vertical-align: bottom;
+  display: flex;
   padding: 4px;
   margin-inline-end: 8px;
   border-radius: 4px;
+  background: transparent;
+  border: none;
   cursor: pointer;
   transition: 0.2s ease;
-  filter: var(--content-icon-filter);
 }
 
 .back-button:hover {
   background-color: var(--hover-highlight);
+}
+
+.back-button> img {
+  width: 24px;
+  height: 24px;
+  filter: var(--content-icon-filter);
 }
 
 .clear-button {

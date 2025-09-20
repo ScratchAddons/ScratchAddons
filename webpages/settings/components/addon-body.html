@@ -2,14 +2,14 @@
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
-        <div class="btn-dropdown">
+        <button class="btn-dropdown">
           <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" draggable="false" />
-        </div>
+        </button>
         <img :src="addonIconSrc" class="icon-type addon-icon" draggable="false" />
         <!-- prettier-ignore -->
         <div class="addon-name-and-tags">
           <div class="addon-name tooltip">
-            <span>{{ addon.name}}</span>
+            <span>{{ addon.name }}</span>
             <span v-if="devMode" class="tooltiptext tooltiptexttop">{{ addon._addonId }}</span>
           </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
@@ -126,7 +126,7 @@
         <div class="addon-message">
           <span class="related-addons-text">{{msg('relatedAddons')}}</span>
           <span v-for="addonManifest of addon._relatedAddons">
-            <a @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
+            <a href="#" @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
           </span>
         </div>
       </div>
@@ -338,6 +338,8 @@
     display: flex;
     align-items: center;
     padding: 4px;
+    background-color: transparent;
+    border: none;
     border-radius: 4px;
     transition: 0.2s ease;
     user-select: none;

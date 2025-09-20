@@ -15,7 +15,6 @@
   box-sizing: border-box;
   border-radius: 4px;
   overflow: hidden;
-  background: var(--button-background);
   border: 1px solid var(--control-border);
   user-select: none;
 }
@@ -23,6 +22,8 @@
 .filter-option {
   padding: 0 12px;
   line-height: 30px;
+  background: var(--button-background);
+  border: none;
   border-inline-end: 1px solid var(--control-border);
   transition: background 0.2s ease;
 }
