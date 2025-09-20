@@ -10,9 +10,15 @@ export function createCanvasAdjuster(paper) {
   let gateInstalled = false;
 
   const makeChecker = (w, h, size) => {
-    const g = new paper.Group();
-    for (let y = 0; y < h; y += size) for (let x = 0; x < w; x += size)
-      g.addChild(new paper.Path.Rectangle({point:[x,y], size, fillColor:(x/size+y/size)%2?"#D9E3F2":"#fff"}));
+    const cols = Math.ceil(w / size), rows = Math.ceil(h / size);
+    const base = new paper.Shape.Rectangle([0,0],[cols,rows]); base.fillColor="#fff";
+    const pts=[]; let x=0,y=0;
+    while(x<cols){pts.push([x,y]);x++;pts.push([x,y]);y=y?0:rows;}
+    y=rows-1;x=cols;
+    while(y>0){pts.push([x,y]);x=x?0:cols;pts.push([x,y]);y--;}
+    const path=new paper.Path(pts); path.fillRule="evenodd"; path.fillColor="#D9E3F2";
+    const mask=new paper.Shape.Rectangle(new paper.Rectangle(0,0,w/size,h/size)); mask.clipMask=true;
+    const g=new paper.Group([base,path,mask]); g.scale(size);
     return g;
   };
 
@@ -101,10 +107,10 @@ export function createCanvasAdjuster(paper) {
     });
   };
 
-  const enable = (w, h, size = 16) => {
+  const enable = (w, h) => {
     const bg = getBgLayer(); if (!bg?.bitmapBackground) return;
     originalBg ||= bg.bitmapBackground; bgCenter ||= originalBg.position.clone();
-    bg.bitmapBackground.remove(); const g = makeChecker(w, h, size); g.position = bgCenter; bg.addChild(g);
+    bg.bitmapBackground.remove(); const g = makeChecker(w, h, 2); g.position = bgCenter; bg.addChild(g);
     bg.bitmapBackground = g; if (bg.vectorBackground) bg.vectorBackground.visible = false;
 
     const ol = getOutlineLayer();

@@ -2,16 +2,16 @@ const BRUSH_SIZES = [2, 4, 6, 8];
 
 export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette) {
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
-  
+
   const getCostumeSize = () => {
     const vm = addon.tab.traps.vm;
     const target = vm.editingTarget || vm.runtime.getEditingTarget();
     const costume = target?.sprite?.costumes?.[target.currentCostume];
     if (!costume) return null;
     const resolution = costume.bitmapResolution || 1;
-    return { 
-      width: Math.round(costume.size[0] / resolution), 
-      height: Math.round(costume.size[1] / resolution) 
+    return {
+      width: Math.round(costume.size[0] / resolution),
+      height: Math.round(costume.size[1] / resolution)
     };
   };
 
@@ -175,7 +175,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
   const handleReenabled = () => {
     if (!state.enabled) return;
     updatePixelModeState(true);
-    canvasAdjuster.enable(state.pendingSize.width * 2, state.pendingSize.height * 2, 16);
+    canvasAdjuster.enable(state.pendingSize.width * 2, state.pendingSize.height * 2);
     updateBrushControlVisibility();
   };
 
