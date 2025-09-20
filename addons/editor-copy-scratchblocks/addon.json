@@ -1,0 +1,27 @@
+{
+  "versionAdded": "1.43.0",
+  "name": "Copy scratchblocks code from editor",
+  "description": "Adds an option to block context menus to copy the block's scratchblocks code to the clipboard for use in the forums.",
+  "info": [
+    {
+      "type": "info",
+      "text": "This addon can only output English scratchblocks code.",
+      "id": "lang-support"
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "just-a-hriday",
+      "link": "https://scratch.mit.edu/users/just-a-hriday/"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
