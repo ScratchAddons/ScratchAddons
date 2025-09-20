@@ -1,0 +1,15 @@
+{
+  "name": "Copy blocks as text",
+  "description": "Right click on the code area or a stack of blocks to copy it to the clipboard as scratchblocks text.",
+  "tags": ["editor", "codeEditor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "credits": [{ "name": "LuYifei2011", "link": "https://github.com/LuYifei2011" }],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.44.0"
+}
