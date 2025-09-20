@@ -46,7 +46,7 @@ export default async function ({ addon, msg, console }) {
       controls.updateBrushControlVisibility();
     }
 
-    if (detail.action.type === "scratch-paint/formats/CHANGE_FORMAT") {
+    if (detail.action.type === "scratch-paint/view/UPDATE_VIEW_BOUNDS" && detail.next.scratchGui.editorTab.activeTabIndex === 1) {
       controls.updatePixelModeVisibility();
     }
 
