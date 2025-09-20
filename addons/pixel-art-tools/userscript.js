@@ -1,10 +1,12 @@
 import { createPaletteModule } from "./modules/palette/index.js";
 import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
+import { wrapGetCostume, wrapAddCostumeWait, wrapCreateBitmapSkin, wrapGetSkinSize, wrapUpdateBitmap } from "./modules/bitmap-loader.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function ({ addon, msg, console }) {
   const paper = await addon.tab.traps.getPaper();
+  const vm = addon.tab.traps.vm;
   if (!addon.tab?.redux) {
     console.warn("pixel-art-tools: redux unavailable");
     return;
@@ -70,11 +72,23 @@ export default async function ({ addon, msg, console }) {
   });
 
   // Addon lifecycle events
-  addon.self.addEventListener("disabled", controls.handleDisabled);
-  addon.self.addEventListener("reenabled", controls.handleReenabled);
+  addon.self.addEventListener("disabled", () => {
+    controls.handleDisabled();
+  });
+  addon.self.addEventListener("reenabled", () => {
+    controls.handleReenabled();
+  });
 
   // Initialize all components
   controls.setupControls();
   palette.setupPalettePanel();
   palette.updatePaletteSelection();
+
+  setTimeout(()=>{
+    vm.renderer.createBitmapSkin= wrapCreateBitmapSkin(vm.runtime, vm.renderer.createBitmapSkin);
+    // vm.renderer.getSkinSize = wrapGetSkinSize(vm.renderer.getSkinSize)
+    vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume)
+    vm.updateBitmap = wrapUpdateBitmap(vm.updateBitmap);
+  },100)
+
 }
