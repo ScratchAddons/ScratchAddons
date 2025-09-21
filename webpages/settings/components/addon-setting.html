@@ -51,7 +51,9 @@
               <img class="icon-type" src="../../images/icons/expand.svg" draggable="false" />
             </button>
             <ul class="dropdown-list align-start">
-              <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
+              <li tabindex="0" v-for="preset of setting.presets" @click="addTableRow(preset.values)">
+                {{ preset.name }}
+              </li>
             </ul>
           </div>
         </div>
