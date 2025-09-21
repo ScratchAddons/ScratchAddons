@@ -14,7 +14,7 @@ function recursiveFillBlock(block, fill = null) {
   const textElements = block.svgGroup_.querySelectorAll(
     ":scope > :not(.blocklyDraggable) text, :scope > text:not(.blocklyDraggable)"
   );
-  
+
   if (fill !== null) {
     // Heatmap is being applied - force white text
     textElements.forEach((textEl) => {
