@@ -11,9 +11,9 @@ function recursiveFillBlock(block, fill = null) {
   block.svgPath_.style.fill = fillColor;
 
   // Set text color for blocks with heatmap applied
-  const textElements = Array.from(block.svgGroup_.children)
-    .filter((el) => !el.classList.contains("blocklyDraggable"))
-    .flatMap((el) => Array.from(el.querySelectorAll("text")));
+  const textElements = block.svgGroup_.querySelectorAll(
+    ":scope > :not(.blocklyDraggable):not([data-shapes='stack']) > text, :scope > text"
+  );
 
   if (fill !== null) {
     // Heatmap is being applied - force white text
@@ -113,7 +113,7 @@ class HeatmapManager {
   startRealtimeUpdates(heatmapMax) {
     this.stopRealtimeUpdates(); // Clear any existing interval
     this.realtimeUpdateInterval = setInterval(() => {
-      if (this.config.showHeatmap && this.isProjectRunning() && this.modifiedTimers.size > 0) {
+      if (this.config.showHeatmap && this.modifiedTimers.size > 0) {
         this.updateHeatmapColors(this.currentHeatmapMax, true); // true = only modified timers
       }
     }, 100); // Update every 100ms
