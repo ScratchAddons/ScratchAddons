@@ -113,7 +113,7 @@ class HeatmapManager {
   startRealtimeUpdates(heatmapMax) {
     this.stopRealtimeUpdates(); // Clear any existing interval
     this.realtimeUpdateInterval = setInterval(() => {
-      if (this.config.showHeatmap && this.isProjectRunning() && this.modifiedTimers.size > 0) {
+      if (this.config.showHeatmap && this.modifiedTimers.size > 0) {
         this.updateHeatmapColors(this.currentHeatmapMax, true); // true = only modified timers
       }
     }, 100); // Update every 100ms
