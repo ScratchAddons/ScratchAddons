@@ -148,7 +148,7 @@ h1 {
   background-color: var(--hover-highlight);
 }
 
-.back-button> img {
+.back-button > img {
   width: 24px;
   height: 24px;
   filter: var(--content-icon-filter);
