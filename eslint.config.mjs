@@ -45,7 +45,7 @@ export default [
     },
 
     rules: {
-      "no-prototype-builtins": 1,
+      "no-prototype-builtins": 2,
       "no-template-curly-in-string": 2,
       "array-callback-return": 2,
       "default-case-last": 2,

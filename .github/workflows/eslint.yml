@@ -30,4 +30,4 @@ jobs:
         run: |
           npm i globals @eslint/js @eslint/eslintrc
           npx eslint . --config eslint.config.mjs
-        continue-on-error: true
+
