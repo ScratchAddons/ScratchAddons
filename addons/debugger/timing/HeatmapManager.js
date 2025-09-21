@@ -12,7 +12,7 @@ function recursiveFillBlock(block, fill = null) {
 
   // Set text color for blocks with heatmap applied
   const textElements = block.svgGroup_.querySelectorAll(
-    ":scope > :not(.blocklyDraggable) text, :scope > text:not(.blocklyDraggable)"
+    ":scope > :not(.blocklyDraggable):not([data-shapes='stack']) text, :scope > text"
   );
 
   if (fill !== null) {
