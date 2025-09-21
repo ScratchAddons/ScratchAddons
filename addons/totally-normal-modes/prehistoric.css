@@ -73,7 +73,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-repeat: no-repeat;
 }
 
 .sa-mode::before {
@@ -86,5 +85,6 @@
 .sa-mode::after {
   background-image: url("assets/torch.gif");
   background-position: calc(var(--sa-mouse-x, -10000px) - 35px) calc(var(--sa-mouse-y, -10000px) - 220px);
+  background-repeat: no-repeat;
   opacity: 0.8;
 }
