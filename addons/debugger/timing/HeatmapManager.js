@@ -11,10 +11,10 @@ function recursiveFillBlock(block, fill = null) {
   block.svgPath_.style.fill = fillColor;
 
   // Set text color for blocks with heatmap applied
-  const textElements = Array.from(block.svgGroup_.children)
-    .filter((el) => !el.classList.contains("blocklyDraggable"))
-    .flatMap((el) => Array.from(el.querySelectorAll("text")));
-
+  const textElements = block.svgGroup_.querySelectorAll(
+    ":scope > :not(.blocklyDraggable) text, :scope > text:not(.blocklyDraggable)"
+  );
+  
   if (fill !== null) {
     // Heatmap is being applied - force white text
     textElements.forEach((textEl) => {
