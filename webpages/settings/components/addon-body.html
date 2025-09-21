@@ -2,8 +2,8 @@
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
-        <button class="btn-dropdown">
-          <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" draggable="false" />
+        <button class="arrow-button" :title="msg(expanded ? 'collapse' : 'expand')">
+          <img src="../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
         </button>
         <img :src="addonIconSrc" class="icon-type addon-icon" draggable="false" />
         <!-- prettier-ignore -->
@@ -184,7 +184,7 @@
   }
 
   .addon-icon {
-    margin-inline-start: 10px;
+    margin-inline-start: 2px;
     padding-bottom: 1px; /* align with addon name */
     user-select: none;
   }
@@ -332,26 +332,6 @@
     right: 0;
     border-top-left-radius: 4px;
     border-top-right-radius: 0;
-  }
-
-  .btn-dropdown {
-    display: flex;
-    align-items: center;
-    padding: 4px;
-    background-color: transparent;
-    border: none;
-    border-radius: 4px;
-    transition: 0.2s ease;
-    user-select: none;
-  }
-  .clickable-area:hover .btn-dropdown {
-    background: var(--hover-highlight);
-  }
-
-  .btn-dropdown img {
-    height: 24px;
-    width: 24px;
-    filter: var(--content-icon-filter);
   }
 
   .clickable-area {

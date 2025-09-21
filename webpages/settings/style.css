@@ -133,22 +133,23 @@ h1 {
   align-items: center;
 }
 
-.back-button {
+.arrow-button {
   display: flex;
+  align-items: center;
   padding: 4px;
   margin-inline-end: 8px;
   border-radius: 4px;
-  background: transparent;
+  background-color: transparent;
   border: none;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
-.back-button:hover {
+.arrow-button:hover {
   background-color: var(--hover-highlight);
 }
 
-.back-button > img {
+.arrow-button > img {
   width: 24px;
   height: 24px;
   filter: var(--content-icon-filter);

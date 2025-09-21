@@ -164,6 +164,15 @@
   "viewLicenses": {
     "message": "View library licenses"
   },
+  "back": {
+    "message": "Go back"
+  },
+  "collapse": {
+    "message": "Collapse"
+  },
+  "expand": {
+    "message": "Expand"
+  },
   "reset": {
     "message": "Reset"
   },

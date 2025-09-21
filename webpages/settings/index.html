@@ -243,7 +243,7 @@
         <div class="addons-block-header">
           <div v-if="!isIframe" class="category-header-title" v-cloak>
             <div v-if="relatedAddonsOpen" class="related-addons-header">
-              <button class="back-button" @click="backRelatedAddon()">
+              <button class="arrow-button" :title="msg('back')" @click="backRelatedAddon()">
                 <img src="../../images/icons/left-arrow.svg" draggable="false" />
               </button>
               <span>{{ msg("relatedTo", relatedToAddonName) }}</span>
