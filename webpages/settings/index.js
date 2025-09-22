@@ -674,6 +674,9 @@ let fuse;
         vue.searchInputReal = "";
       } else if (vue.categoryOpen && vue.smallMode) {
         vue.categoryOpen = false;
+      } else {
+        vue.closeDropdowns();
+        vue.closePickers();
       }
     }
   });

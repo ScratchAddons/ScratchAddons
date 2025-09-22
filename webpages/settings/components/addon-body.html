@@ -34,8 +34,9 @@
               <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
             </button>
             <ul class="dropdown-list">
-              <li tabindex="0" @click="exportPreset">{{ msg('export') }}</li>
-              <li tabindex="0" @click="importPreset">{{ msg('import') }}</li>
+              <!-- TODO: arrow key navigation -->
+              <li tabindex="0" @click="exportPreset" @keydown.enter="exportPreset">{{ msg('export') }}</li>
+              <li tabindex="0" @click="importPreset" @keydown.enter="importPreset">{{ msg('import') }}</li>
             </ul>
           </div>
         </div>
