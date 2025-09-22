@@ -72,6 +72,7 @@
           class="filter-option"
           v-for="option of setting.potentialValues"
           :class="{'sel' : addonSettings[setting.id] === option.id, 'disabled': !addon._enabled}"
+          :disabled="!addon._enabled"
           @click="updateOption(option.id);"
         >
           {{ option.name }}
@@ -134,6 +135,7 @@
           :setting="setting"
           :addon="addon"
           :no_alpha="!setting.allowTransparency"
+          :disabled="!addon._enabled"
           v-click-outside="closePickers"
         ></picker
       ></template>
