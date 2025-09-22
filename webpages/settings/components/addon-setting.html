@@ -52,7 +52,12 @@
             </button>
             <ul class="dropdown-list align-start">
               <!-- TODO: arrow key navigation -->
-              <li tabindex="0" v-for="preset of setting.presets" @click="addTableRow(preset.values)" @keydown.enter="addTableRow(preset.values)">
+              <li
+                tabindex="0"
+                v-for="preset of setting.presets"
+                @click="addTableRow(preset.values)"
+                @keydown.enter="addTableRow(preset.values)"
+              >
                 {{ preset.name }}
               </li>
             </ul>
