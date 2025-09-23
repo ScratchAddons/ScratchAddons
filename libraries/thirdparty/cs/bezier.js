@@ -1,1 +1,1948 @@
-const{abs:abs,cos:cos,sin:sin,acos:acos,atan2:atan2,sqrt:sqrt,pow:pow}=Math;function crt(t){return t<0?-pow(-t,1/3):pow(t,1/3)}const pi=Math.PI,tau=2*pi,quart=pi/2,epsilon=1e-6,nMax=Number.MAX_SAFE_INTEGER||9007199254740991,nMin=Number.MIN_SAFE_INTEGER||-9007199254740991,ZERO={x:0,y:0,z:0},utils={Tvalues:[-.06405689286260563,.06405689286260563,-.1911188674736163,.1911188674736163,-.3150426796961634,.3150426796961634,-.4337935076260451,.4337935076260451,-.5454214713888396,.5454214713888396,-.6480936519369755,.6480936519369755,-.7401241915785544,.7401241915785544,-.820001985973903,.820001985973903,-.8864155270044011,.8864155270044011,-.9382745520027328,.9382745520027328,-.9747285559713095,.9747285559713095,-.9951872199970213,.9951872199970213],Cvalues:[.12793819534675216,.12793819534675216,.1258374563468283,.1258374563468283,.12167047292780339,.12167047292780339,.1155056680537256,.1155056680537256,.10744427011596563,.10744427011596563,.09761865210411388,.09761865210411388,.08619016153195327,.08619016153195327,.0733464814110803,.0733464814110803,.05929858491543678,.05929858491543678,.04427743881741981,.04427743881741981,.028531388628933663,.028531388628933663,.0123412297999872,.0123412297999872],arcfn:function(t,i){const n=i(t);let e=n.x*n.x+n.y*n.y;return void 0!==n.z&&(e+=n.z*n.z),sqrt(e)},compute:function(t,i,n){if(0===t)return i[0].t=0,i[0];const e=i.length-1;if(1===t)return i[e].t=1,i[e];const r=1-t;let s=i;if(0===e)return i[0].t=t,i[0];if(1===e){const i={x:r*s[0].x+t*s[1].x,y:r*s[0].y+t*s[1].y,t:t};return n&&(i.z=r*s[0].z+t*s[1].z),i}if(e<4){let i,o,u,l=r*r,c=t*t,a=0;2===e?(s=[s[0],s[1],s[2],ZERO],i=l,o=r*t*2,u=c):3===e&&(i=l*r,o=l*t*3,u=r*c*3,a=t*c);const h={x:i*s[0].x+o*s[1].x+u*s[2].x+a*s[3].x,y:i*s[0].y+o*s[1].y+u*s[2].y+a*s[3].y,t:t};return n&&(h.z=i*s[0].z+o*s[1].z+u*s[2].z+a*s[3].z),h}const o=JSON.parse(JSON.stringify(i));for(;o.length>1;){for(let i=0;i<o.length-1;i++)o[i]={x:o[i].x+(o[i+1].x-o[i].x)*t,y:o[i].y+(o[i+1].y-o[i].y)*t},void 0!==o[i].z&&(o[i]=o[i].z+(o[i+1].z-o[i].z)*t);o.splice(o.length-1,1)}return o[0].t=t,o[0]},computeWithRatios:function(t,i,n,e){const r=1-t,s=n,o=i;let u,l=s[0],c=s[1],a=s[2],h=s[3];return l*=r,c*=t,2===o.length?(u=l+c,{x:(l*o[0].x+c*o[1].x)/u,y:(l*o[0].y+c*o[1].y)/u,z:!!e&&(l*o[0].z+c*o[1].z)/u,t:t}):(l*=r,c*=2*r,a*=t*t,3===o.length?(u=l+c+a,{x:(l*o[0].x+c*o[1].x+a*o[2].x)/u,y:(l*o[0].y+c*o[1].y+a*o[2].y)/u,z:!!e&&(l*o[0].z+c*o[1].z+a*o[2].z)/u,t:t}):(l*=r,c*=1.5*r,a*=3*r,h*=t*t*t,4===o.length?(u=l+c+a+h,{x:(l*o[0].x+c*o[1].x+a*o[2].x+h*o[3].x)/u,y:(l*o[0].y+c*o[1].y+a*o[2].y+h*o[3].y)/u,z:!!e&&(l*o[0].z+c*o[1].z+a*o[2].z+h*o[3].z)/u,t:t}):void 0))},derive:function(t,i){const n=[];for(let e=t,r=e.length,s=r-1;r>1;r--,s--){const t=[];for(let n,r=0;r<s;r++)n={x:s*(e[r+1].x-e[r].x),y:s*(e[r+1].y-e[r].y)},i&&(n.z=s*(e[r+1].z-e[r].z)),t.push(n);n.push(t),e=t}return n},between:function(t,i,n){return i<=t&&t<=n||utils.approximately(t,i)||utils.approximately(t,n)},approximately:function(t,i,n){return abs(t-i)<=(n||epsilon)},length:function(t){const i=utils.Tvalues.length;let n=0;for(let e,r=0;r<i;r++)e=.5*utils.Tvalues[r]+.5,n+=utils.Cvalues[r]*utils.arcfn(e,t);return.5*n},map:function(t,i,n,e,r){return e+(r-e)*((t-i)/(n-i))},lerp:function(t,i,n){const e={x:i.x+t*(n.x-i.x),y:i.y+t*(n.y-i.y)};return void 0!==i.z&&void 0!==n.z&&(e.z=i.z+t*(n.z-i.z)),e},pointToString:function(t){let i=t.x+"/"+t.y;return void 0!==t.z&&(i+="/"+t.z),i},pointsToString:function(t){return"["+t.map(utils.pointToString).join(", ")+"]"},copy:function(t){return JSON.parse(JSON.stringify(t))},angle:function(t,i,n){const e=i.x-t.x,r=i.y-t.y,s=n.x-t.x,o=n.y-t.y;return atan2(e*o-r*s,e*s+r*o)},round:function(t,i){const n=""+t,e=n.indexOf(".");return parseFloat(n.substring(0,e+1+i))},dist:function(t,i){const n=t.x-i.x,e=t.y-i.y;return sqrt(n*n+e*e)},closest:function(t,i){let n,e,r=pow(2,63);return t.forEach((function(t,s){e=utils.dist(i,t),e<r&&(r=e,n=s)})),{mdist:r,mpos:n}},abcratio:function(t,i){if(2!==i&&3!==i)return!1;if(void 0===t)t=.5;else if(0===t||1===t)return t;const n=pow(t,i)+pow(1-t,i);return abs((n-1)/n)},projectionratio:function(t,i){if(2!==i&&3!==i)return!1;if(void 0===t)t=.5;else if(0===t||1===t)return t;const n=pow(1-t,i);return n/(pow(t,i)+n)},lli8:function(t,i,n,e,r,s,o,u){const l=(t-n)*(s-u)-(i-e)*(r-o);return 0!=l&&{x:((t*e-i*n)*(r-o)-(t-n)*(r*u-s*o))/l,y:((t*e-i*n)*(s-u)-(i-e)*(r*u-s*o))/l}},lli4:function(t,i,n,e){const r=t.x,s=t.y,o=i.x,u=i.y,l=n.x,c=n.y,a=e.x,h=e.y;return utils.lli8(r,s,o,u,l,c,a,h)},lli:function(t,i){return utils.lli4(t,t.c,i,i.c)},makeline:function(t,i){return new Bezier(t.x,t.y,(t.x+i.x)/2,(t.y+i.y)/2,i.x,i.y)},findbbox:function(t){let i=nMax,n=nMax,e=nMin,r=nMin;return t.forEach((function(t){const s=t.bbox();i>s.x.min&&(i=s.x.min),n>s.y.min&&(n=s.y.min),e<s.x.max&&(e=s.x.max),r<s.y.max&&(r=s.y.max)})),{x:{min:i,mid:(i+e)/2,max:e,size:e-i},y:{min:n,mid:(n+r)/2,max:r,size:r-n}}},shapeintersections:function(t,i,n,e,r){if(!utils.bboxoverlap(i,e))return[];const s=[],o=[t.startcap,t.forward,t.back,t.endcap],u=[n.startcap,n.forward,n.back,n.endcap];return o.forEach((function(i){i.virtual||u.forEach((function(e){if(e.virtual)return;const o=i.intersects(e,r);o.length>0&&(o.c1=i,o.c2=e,o.s1=t,o.s2=n,s.push(o))}))})),s},makeshape:function(t,i,n){const e=i.points.length,r=t.points.length,s=utils.makeline(i.points[e-1],t.points[0]),o=utils.makeline(t.points[r-1],i.points[0]),u={startcap:s,forward:t,back:i,endcap:o,bbox:utils.findbbox([s,t,i,o]),intersections:function(t){return utils.shapeintersections(u,u.bbox,t,t.bbox,n)}};return u},getminmax:function(t,i,n){if(!n)return{min:0,max:0};let e,r,s=nMax,o=nMin;-1===n.indexOf(0)&&(n=[0].concat(n)),-1===n.indexOf(1)&&n.push(1);for(let u=0,l=n.length;u<l;u++)e=n[u],r=t.get(e),r[i]<s&&(s=r[i]),r[i]>o&&(o=r[i]);return{min:s,mid:(s+o)/2,max:o,size:o-s}},align:function(t,i){const n=i.p1.x,e=i.p1.y,r=-atan2(i.p2.y-e,i.p2.x-n);return t.map((function(t){return{x:(t.x-n)*cos(r)-(t.y-e)*sin(r),y:(t.x-n)*sin(r)+(t.y-e)*cos(r)}}))},roots:function(t,i){i=i||{p1:{x:0,y:0},p2:{x:1,y:0}};const n=t.length-1,e=utils.align(t,i),r=function(t){return 0<=t&&t<=1};if(2===n){const t=e[0].y,i=e[1].y,n=e[2].y,s=t-2*i+n;if(0!==s){const e=-sqrt(i*i-t*n),o=-t+i;return[-(e+o)/s,-(-e+o)/s].filter(r)}return i!==n&&0===s?[(2*i-n)/(2*i-2*n)].filter(r):[]}const s=e[0].y,o=e[1].y,u=e[2].y;let l=3*o-s-3*u+e[3].y,c=3*s-6*o+3*u,a=-3*s+3*o,h=s;if(utils.approximately(l,0)){if(utils.approximately(c,0))return utils.approximately(a,0)?[]:[-h/a].filter(r);const t=sqrt(a*a-4*c*h),i=2*c;return[(t-a)/i,(-a-t)/i].filter(r)}c/=l,a/=l,h/=l;const x=(3*a-c*c)/3,y=x/3,f=(2*c*c*c-9*c*a+27*h)/27,p=f/2,m=p*p+y*y*y;let z,d,g,v,b;if(m<0){const t=-x/3,i=sqrt(t*t*t),n=-f/(2*i),e=acos(n<-1?-1:n>1?1:n),s=2*crt(i);return g=s*cos(e/3)-c/3,v=s*cos((e+tau)/3)-c/3,b=s*cos((e+2*tau)/3)-c/3,[g,v,b].filter(r)}if(0===m)return z=p<0?crt(-p):-crt(p),g=2*z-c/3,v=-z-c/3,[g,v].filter(r);{const t=sqrt(m);return z=crt(-p+t),d=crt(p+t),[z-d-c/3].filter(r)}},droots:function(t){if(3===t.length){const i=t[0],n=t[1],e=t[2],r=i-2*n+e;if(0!==r){const t=-sqrt(n*n-i*e),s=-i+n;return[-(t+s)/r,-(-t+s)/r]}return n!==e&&0===r?[(2*n-e)/(2*(n-e))]:[]}if(2===t.length){const i=t[0],n=t[1];return i!==n?[i/(i-n)]:[]}return[]},curvature:function(t,i,n,e,r){let s,o,u,l,c=0,a=0;const h=utils.compute(t,i),x=utils.compute(t,n),y=h.x*h.x+h.y*h.y;if(e?(s=sqrt(pow(h.y*x.z-x.y*h.z,2)+pow(h.z*x.x-x.z*h.x,2)+pow(h.x*x.y-x.x*h.y,2)),o=pow(y+h.z*h.z,1.5)):(s=h.x*x.y-h.y*x.x,o=pow(y,1.5)),0===s||0===o)return{k:0,r:0};if(c=s/o,a=o/s,!r){const r=utils.curvature(t-.001,i,n,e,!0).k,s=utils.curvature(t+.001,i,n,e,!0).k;l=(s-c+(c-r))/2,u=(abs(s-c)+abs(c-r))/2}return{k:c,r:a,dk:l,adk:u}},inflections:function(t){if(t.length<4)return[];const i=utils.align(t,{p1:t[0],p2:t.slice(-1)[0]}),n=i[2].x*i[1].y,e=i[3].x*i[1].y,r=i[1].x*i[2].y,s=18*(-3*n+2*e+3*r-i[3].x*i[2].y),o=18*(3*n-e-3*r),u=18*(r-n);if(utils.approximately(s,0)){if(!utils.approximately(o,0)){let t=-u/o;if(0<=t&&t<=1)return[t]}return[]}const l=o*o-4*s*u,c=Math.sqrt(l),a=2*s;return utils.approximately(a,0)?[]:[(c-o)/a,-(o+c)/a].filter((function(t){return 0<=t&&t<=1}))},bboxoverlap:function(t,i){const n=["x","y"],e=n.length;for(let r,s,o,u,l=0;l<e;l++)if(r=n[l],s=t[r].mid,o=i[r].mid,u=(t[r].size+i[r].size)/2,abs(s-o)>=u)return!1;return!0},expandbox:function(t,i){i.x.min<t.x.min&&(t.x.min=i.x.min),i.y.min<t.y.min&&(t.y.min=i.y.min),i.z&&i.z.min<t.z.min&&(t.z.min=i.z.min),i.x.max>t.x.max&&(t.x.max=i.x.max),i.y.max>t.y.max&&(t.y.max=i.y.max),i.z&&i.z.max>t.z.max&&(t.z.max=i.z.max),t.x.mid=(t.x.min+t.x.max)/2,t.y.mid=(t.y.min+t.y.max)/2,t.z&&(t.z.mid=(t.z.min+t.z.max)/2),t.x.size=t.x.max-t.x.min,t.y.size=t.y.max-t.y.min,t.z&&(t.z.size=t.z.max-t.z.min)},pairiteration:function(t,i,n){const e=t.bbox(),r=i.bbox(),s=1e5,o=n||.5;if(e.x.size+e.y.size<o&&r.x.size+r.y.size<o)return[(s*(t._t1+t._t2)/2|0)/s+"/"+(s*(i._t1+i._t2)/2|0)/s];let u=t.split(.5),l=i.split(.5),c=[{left:u.left,right:l.left},{left:u.left,right:l.right},{left:u.right,right:l.right},{left:u.right,right:l.left}];c=c.filter((function(t){return utils.bboxoverlap(t.left.bbox(),t.right.bbox())}));let a=[];return 0===c.length||(c.forEach((function(t){a=a.concat(utils.pairiteration(t.left,t.right,o))})),a=a.filter((function(t,i){return a.indexOf(t)===i}))),a},getccenter:function(t,i,n){const e=i.x-t.x,r=i.y-t.y,s=n.x-i.x,o=n.y-i.y,u=e*cos(quart)-r*sin(quart),l=e*sin(quart)+r*cos(quart),c=s*cos(quart)-o*sin(quart),a=s*sin(quart)+o*cos(quart),h=(t.x+i.x)/2,x=(t.y+i.y)/2,y=(i.x+n.x)/2,f=(i.y+n.y)/2,p=h+u,m=x+l,z=y+c,d=f+a,g=utils.lli8(h,x,p,m,y,f,z,d),v=utils.dist(g,t);let b,_=atan2(t.y-g.y,t.x-g.x),w=atan2(i.y-g.y,i.x-g.x),B=atan2(n.y-g.y,n.x-g.x);return _<B?((_>w||w>B)&&(_+=tau),_>B&&(b=B,B=_,_=b)):B<w&&w<_?(b=B,B=_,_=b):B+=tau,g.s=_,g.e=B,g.r=v,g},numberSort:function(t,i){return t-i}};class PolyBezier{constructor(t){this.curves=[],this._3d=!1,t&&(this.curves=t,this._3d=this.curves[0]._3d)}valueOf(){return this.toString()}toString(){return"["+this.curves.map((function(t){return utils.pointsToString(t.points)})).join(", ")+"]"}addCurve(t){this.curves.push(t),this._3d=this._3d||t._3d}length(){return this.curves.map((function(t){return t.length()})).reduce((function(t,i){return t+i}))}curve(t){return this.curves[t]}bbox(){const t=this.curves;for(var i=t[0].bbox(),n=1;n<t.length;n++)utils.expandbox(i,t[n].bbox());return i}offset(t){const i=[];return this.curves.forEach((function(n){i.push(...n.offset(t))})),new PolyBezier(i)}}const{abs:abs$1,min:min,max:max,cos:cos$1,sin:sin$1,acos:acos$1,sqrt:sqrt$1}=Math,pi$1=Math.PI;class Bezier{constructor(t){let i=t&&t.forEach?t:Array.from(arguments).slice(),n=!1;if("object"==typeof i[0]){n=i.length;const t=[];i.forEach((function(i){["x","y","z"].forEach((function(n){void 0!==i[n]&&t.push(i[n])}))})),i=t}let e=!1;const r=i.length;if(n){if(n>4){if(1!==arguments.length)throw new Error("Only new Bezier(point[]) is accepted for 4th and higher order curves");e=!0}}else if(6!==r&&8!==r&&9!==r&&12!==r&&1!==arguments.length)throw new Error("Only new Bezier(point[]) is accepted for 4th and higher order curves");const s=this._3d=!e&&(9===r||12===r)||t&&t[0]&&void 0!==t[0].z,o=this.points=[];for(let t=0,n=s?3:2;t<r;t+=n){var u={x:i[t],y:i[t+1]};s&&(u.z=i[t+2]),o.push(u)}const l=this.order=o.length-1,c=this.dims=["x","y"];s&&c.push("z"),this.dimlen=c.length;const a=utils.align(o,{p1:o[0],p2:o[l]}),h=utils.dist(o[0],o[l]);this._linear=a.reduce(((t,i)=>t+abs$1(i.y)),0)<h/50,this._lut=[],this._t1=0,this._t2=1,this.update()}static quadraticFromPoints(t,i,n,e){if(void 0===e&&(e=.5),0===e)return new Bezier(i,i,n);if(1===e)return new Bezier(t,i,i);const r=Bezier.getABC(2,t,i,n,e);return new Bezier(t,r.A,n)}static cubicFromPoints(t,i,n,e,r){void 0===e&&(e=.5);const s=Bezier.getABC(3,t,i,n,e);void 0===r&&(r=utils.dist(i,s.C));const o=r*(1-e)/e,u=utils.dist(t,n),l=(n.x-t.x)/u,c=(n.y-t.y)/u,a=r*l,h=r*c,x=o*l,y=o*c,f=i.x-a,p=i.y-h,m=i.x+x,z=i.y+y,d=s.A,g=d.x+(f-d.x)/(1-e),v=d.y+(p-d.y)/(1-e),b=d.x+(m-d.x)/e,_=d.y+(z-d.y)/e,w={x:t.x+(g-t.x)/e,y:t.y+(v-t.y)/e},B={x:n.x+(b-n.x)/(1-e),y:n.y+(_-n.y)/(1-e)};return new Bezier(t,w,B,n)}static getUtils(){return utils}getUtils(){return Bezier.getUtils()}static get PolyBezier(){return PolyBezier}valueOf(){return this.toString()}toString(){return utils.pointsToString(this.points)}toSVG(){if(this._3d)return!1;const t=this.points,i=["M",t[0].x,t[0].y,2===this.order?"Q":"C"];for(let n=1,e=t.length;n<e;n++)i.push(t[n].x),i.push(t[n].y);return i.join(" ")}setRatios(t){if(t.length!==this.points.length)throw new Error("incorrect number of ratio values");this.ratios=t,this._lut=[]}verify(){const t=this.coordDigest();t!==this._print&&(this._print=t,this.update())}coordDigest(){return this.points.map((function(t,i){return""+i+t.x+t.y+(t.z?t.z:0)})).join("")}update(){this._lut=[],this.dpoints=utils.derive(this.points,this._3d),this.computedirection()}computedirection(){const t=this.points,i=utils.angle(t[0],t[this.order],t[1]);this.clockwise=i>0}length(){return utils.length(this.derivative.bind(this))}static getABC(t=2,i,n,e,r=.5){const s=utils.projectionratio(r,t),o=1-s,u={x:s*i.x+o*e.x,y:s*i.y+o*e.y},l=utils.abcratio(r,t);return{A:{x:n.x+(n.x-u.x)/l,y:n.y+(n.y-u.y)/l},B:n,C:u,S:i,E:e}}getABC(t,i){i=i||this.get(t);let n=this.points[0],e=this.points[this.order];return Bezier.getABC(this.order,n,i,e,t)}getLUT(t){if(this.verify(),t=t||100,this._lut.length===t)return this._lut;this._lut=[],t++,this._lut=[];for(let i,n,e=0;e<t;e++)n=e/(t-1),i=this.compute(n),i.t=n,this._lut.push(i);return this._lut}on(i,n){n=n||5;const e=this.getLUT(),r=[];for(let t,s=0,o=0;s<e.length;s++)t=e[s],utils.dist(t,i)<n&&(r.push(t),o+=s/e.length);return!!r.length&&(t/=r.length)}project(t){const i=this.getLUT(),n=i.length-1,e=utils.closest(i,t),r=e.mpos,s=(r-1)/n,o=(r+1)/n,u=.1/n;let l,c=e.mdist,a=s,h=a;c+=1;for(let i;a<o+u;a+=u)l=this.compute(a),i=utils.dist(t,l),i<c&&(c=i,h=a);return h=h<0?0:h>1?1:h,l=this.compute(h),l.t=h,l.d=c,l}get(t){return this.compute(t)}point(t){return this.points[t]}compute(t){return this.ratios?utils.computeWithRatios(t,this.points,this.ratios,this._3d):utils.compute(t,this.points,this._3d,this.ratios)}raise(){const t=this.points,i=[t[0]],n=t.length;for(let e,r,s=1;s<n;s++)e=t[s],r=t[s-1],i[s]={x:(n-s)/n*e.x+s/n*r.x,y:(n-s)/n*e.y+s/n*r.y};return i[n]=t[n-1],new Bezier(i)}derivative(t){return utils.compute(t,this.dpoints[0],this._3d)}dderivative(t){return utils.compute(t,this.dpoints[1],this._3d)}align(){let t=this.points;return new Bezier(utils.align(t,{p1:t[0],p2:t[t.length-1]}))}curvature(t){return utils.curvature(t,this.dpoints[0],this.dpoints[1],this._3d)}inflections(){return utils.inflections(this.points)}normal(t){return this._3d?this.__normal3(t):this.__normal2(t)}__normal2(t){const i=this.derivative(t),n=sqrt$1(i.x*i.x+i.y*i.y);return{x:-i.y/n,y:i.x/n}}__normal3(t){const i=this.derivative(t),n=this.derivative(t+.01),e=sqrt$1(i.x*i.x+i.y*i.y+i.z*i.z),r=sqrt$1(n.x*n.x+n.y*n.y+n.z*n.z);i.x/=e,i.y/=e,i.z/=e,n.x/=r,n.y/=r,n.z/=r;const s={x:n.y*i.z-n.z*i.y,y:n.z*i.x-n.x*i.z,z:n.x*i.y-n.y*i.x},o=sqrt$1(s.x*s.x+s.y*s.y+s.z*s.z);s.x/=o,s.y/=o,s.z/=o;const u=[s.x*s.x,s.x*s.y-s.z,s.x*s.z+s.y,s.x*s.y+s.z,s.y*s.y,s.y*s.z-s.x,s.x*s.z-s.y,s.y*s.z+s.x,s.z*s.z];return{x:u[0]*i.x+u[1]*i.y+u[2]*i.z,y:u[3]*i.x+u[4]*i.y+u[5]*i.z,z:u[6]*i.x+u[7]*i.y+u[8]*i.z}}hull(t){let i=this.points,n=[],e=[],r=0;for(e[r++]=i[0],e[r++]=i[1],e[r++]=i[2],3===this.order&&(e[r++]=i[3]);i.length>1;){n=[];for(let s,o=0,u=i.length-1;o<u;o++)s=utils.lerp(t,i[o],i[o+1]),e[r++]=s,n.push(s);i=n}return e}split(t,i){if(0===t&&i)return this.split(i).left;if(1===i)return this.split(t).right;const n=this.hull(t),e={left:2===this.order?new Bezier([n[0],n[3],n[5]]):new Bezier([n[0],n[4],n[7],n[9]]),right:2===this.order?new Bezier([n[5],n[4],n[2]]):new Bezier([n[9],n[8],n[6],n[3]]),span:n};return e.left._t1=utils.map(0,0,1,this._t1,this._t2),e.left._t2=utils.map(t,0,1,this._t1,this._t2),e.right._t1=utils.map(t,0,1,this._t1,this._t2),e.right._t2=utils.map(1,0,1,this._t1,this._t2),i?(i=utils.map(i,t,1,0,1),e.right.split(i).left):e}extrema(){const t={};let i=[];return this.dims.forEach(function(n){let e=function(t){return t[n]},r=this.dpoints[0].map(e);t[n]=utils.droots(r),3===this.order&&(r=this.dpoints[1].map(e),t[n]=t[n].concat(utils.droots(r))),t[n]=t[n].filter((function(t){return t>=0&&t<=1})),i=i.concat(t[n].sort(utils.numberSort))}.bind(this)),t.values=i.sort(utils.numberSort).filter((function(t,n){return i.indexOf(t)===n})),t}bbox(){const t=this.extrema(),i={};return this.dims.forEach(function(n){i[n]=utils.getminmax(this,n,t[n])}.bind(this)),i}overlaps(t){const i=this.bbox(),n=t.bbox();return utils.bboxoverlap(i,n)}offset(t,i){if(void 0!==i){const n=this.get(t),e=this.normal(t),r={c:n,n:e,x:n.x+e.x*i,y:n.y+e.y*i};return this._3d&&(r.z=n.z+e.z*i),r}if(this._linear){const i=this.normal(0),n=this.points.map((function(n){const e={x:n.x+t*i.x,y:n.y+t*i.y};return n.z&&i.z&&(e.z=n.z+t*i.z),e}));return[new Bezier(n)]}return this.reduce().map((function(i){return i._linear?i.offset(t)[0]:i.scale(t)}))}simple(){if(3===this.order){const t=utils.angle(this.points[0],this.points[3],this.points[1]),i=utils.angle(this.points[0],this.points[3],this.points[2]);if(t>0&&i<0||t<0&&i>0)return!1}const t=this.normal(0),i=this.normal(1);let n=t.x*i.x+t.y*i.y;return this._3d&&(n+=t.z*i.z),abs$1(acos$1(n))<pi$1/3}reduce(){let t,i,n=0,e=0,r=.01,s=[],o=[],u=this.extrema().values;for(-1===u.indexOf(0)&&(u=[0].concat(u)),-1===u.indexOf(1)&&u.push(1),n=u[0],t=1;t<u.length;t++)e=u[t],i=this.split(n,e),i._t1=n,i._t2=e,s.push(i),n=e;return s.forEach((function(t){for(n=0,e=0;e<=1;)for(e=n+r;e<=1.01;e+=r)if(i=t.split(n,e),!i.simple()){if(e-=r,abs$1(n-e)<r)return[];i=t.split(n,e),i._t1=utils.map(n,0,1,t._t1,t._t2),i._t2=utils.map(e,0,1,t._t1,t._t2),o.push(i),n=e;break}n<1&&(i=t.split(n,1),i._t1=utils.map(n,0,1,t._t1,t._t2),i._t2=t._t2,o.push(i))})),o}translate(t,i,n){n="number"==typeof n?n:i;const e=this.order;let r=this.points.map(((t,r)=>(1-r/e)*i+r/e*n));return new Bezier(this.points.map(((i,n)=>({x:i.x+t.x*r[n],y:i.y+t.y*r[n]}))))}scale(t){const i=this.order;let n=!1;if("function"==typeof t&&(n=t),n&&2===i)return this.raise().scale(n);const e=this.clockwise,r=this.points;if(this._linear)return this.translate(this.normal(0),n?n(0):t,n?n(1):t);const s=n?n(0):t,o=n?n(1):t,u=[this.offset(0,10),this.offset(1,10)],l=[],c=utils.lli4(u[0],u[0].c,u[1],u[1].c);if(!c)throw new Error("cannot scale this curve. Try reducing it first.");return[0,1].forEach((function(t){const n=l[t*i]=utils.copy(r[t*i]);n.x+=(t?o:s)*u[t].n.x,n.y+=(t?o:s)*u[t].n.y})),n?([0,1].forEach((function(s){if(2!==i||!s){var o=r[s+1],u={x:o.x-c.x,y:o.y-c.y},a=n?n((s+1)/i):t;n&&!e&&(a=-a);var h=sqrt$1(u.x*u.x+u.y*u.y);u.x/=h,u.y/=h,l[s+1]={x:o.x+a*u.x,y:o.y+a*u.y}}})),new Bezier(l)):([0,1].forEach((t=>{if(2===i&&t)return;const n=l[t*i],e=this.derivative(t),s={x:n.x+e.x,y:n.y+e.y};l[t+1]=utils.lli4(n,s,c,r[t+1])})),new Bezier(l))}outline(t,i,n,e){if(i=void 0===i?t:i,this._linear){const r=this.normal(0),s=this.points[0],o=this.points[this.points.length-1];let u,l,c;void 0===n&&(n=t,e=i),u={x:s.x+r.x*t,y:s.y+r.y*t},c={x:o.x+r.x*n,y:o.y+r.y*n},l={x:(u.x+c.x)/2,y:(u.y+c.y)/2};const a=[u,l,c];u={x:s.x-r.x*i,y:s.y-r.y*i},c={x:o.x-r.x*e,y:o.y-r.y*e},l={x:(u.x+c.x)/2,y:(u.y+c.y)/2};const h=[c,l,u],x=utils.makeline(h[2],a[0]),y=utils.makeline(a[2],h[0]),f=[x,new Bezier(a),y,new Bezier(h)];return new PolyBezier(f)}const r=this.reduce(),s=r.length,o=[];let u,l=[],c=0,a=this.length();const h=void 0!==n&&void 0!==e;function x(t,i,n,e,r){return function(s){const o=e/n,u=(e+r)/n,l=i-t;return utils.map(s,0,1,t+o*l,t+u*l)}}r.forEach((function(r){const s=r.length();h?(o.push(r.scale(x(t,n,a,c,s))),l.push(r.scale(x(-i,-e,a,c,s)))):(o.push(r.scale(t)),l.push(r.scale(-i))),c+=s})),l=l.map((function(t){return u=t.points,u[3]?t.points=[u[3],u[2],u[1],u[0]]:t.points=[u[2],u[1],u[0]],t})).reverse();const y=o[0].points[0],f=o[s-1].points[o[s-1].points.length-1],p=l[s-1].points[l[s-1].points.length-1],m=l[0].points[0],z=utils.makeline(p,y),d=utils.makeline(f,m),g=[z].concat(o).concat([d]).concat(l);return new PolyBezier(g)}outlineshapes(t,i,n){i=i||t;const e=this.outline(t,i).curves,r=[];for(let t=1,i=e.length;t<i/2;t++){const s=utils.makeshape(e[t],e[i-t],n);s.startcap.virtual=t>1,s.endcap.virtual=t<i/2-1,r.push(s)}return r}intersects(t,i){return t?t.p1&&t.p2?this.lineIntersects(t):(t instanceof Bezier&&(t=t.reduce()),this.curveintersects(this.reduce(),t,i)):this.selfintersects(i)}lineIntersects(t){const i=min(t.p1.x,t.p2.x),n=min(t.p1.y,t.p2.y),e=max(t.p1.x,t.p2.x),r=max(t.p1.y,t.p2.y);return utils.roots(this.points,t).filter((t=>{var s=this.get(t);return utils.between(s.x,i,e)&&utils.between(s.y,n,r)}))}selfintersects(t){const i=this.reduce(),n=i.length-2,e=[];for(let r,s,o,u=0;u<n;u++)s=i.slice(u,u+1),o=i.slice(u+2),r=this.curveintersects(s,o,t),e.push(...r);return e}curveintersects(t,i,n){const e=[];t.forEach((function(t){i.forEach((function(i){t.overlaps(i)&&e.push({left:t,right:i})}))}));let r=[];return e.forEach((function(t){const i=utils.pairiteration(t.left,t.right,n);i.length>0&&(r=r.concat(i))})),r}arcs(t){return t=t||.5,this._iterate(t,[])}_error(t,i,n,e){const r=(e-n)/4,s=this.get(n+r),o=this.get(e-r),u=utils.dist(t,i),l=utils.dist(t,s),c=utils.dist(t,o);return abs$1(l-u)+abs$1(c-u)}_iterate(t,i){let n,e=0,r=1;do{n=0,r=1;let s,o,u,l,c,a=this.get(e),h=!1,x=!1,y=r,f=1;do{if(x=h,l=u,y=(e+r)/2,s=this.get(y),o=this.get(r),u=utils.getccenter(a,s,o),u.interval={start:e,end:r},h=this._error(u,a,e,r)<=t,c=x&&!h,c||(f=r),h){if(r>=1){if(u.interval.end=f=1,l=u,r>1){let t={x:u.x+u.r*cos$1(u.e),y:u.y+u.r*sin$1(u.e)};u.e+=utils.angle({x:u.x,y:u.y},t,this.get(1))}break}r+=(r-e)/2}else r=y}while(!c&&n++<100);if(n>=100)break;l=l||u,i.push(l),e=f}while(r<1);return i}}
+const { abs, cos, sin, acos, atan2, sqrt, pow } = Math;
+function crt(v) {
+  return v < 0 ? -pow(-v, 1 / 3) : pow(v, 1 / 3);
+}
+const pi = Math.PI,
+  tau = 2 * pi,
+  quart = pi / 2,
+  epsilon = 0.000001,
+  nMax = Number.MAX_SAFE_INTEGER || 9007199254740991,
+  nMin = Number.MIN_SAFE_INTEGER || -9007199254740991,
+  ZERO = { x: 0, y: 0, z: 0 };
+const utils = {
+  Tvalues: [
+    -0.0640568928626056260850430826247450385909,
+    0.0640568928626056260850430826247450385909,
+    -0.1911188674736163091586398207570696318404,
+    0.1911188674736163091586398207570696318404,
+    -0.3150426796961633743867932913198102407864,
+    0.3150426796961633743867932913198102407864,
+    -0.4337935076260451384870842319133497124524,
+    0.4337935076260451384870842319133497124524,
+    -0.5454214713888395356583756172183723700107,
+    0.5454214713888395356583756172183723700107,
+    -0.6480936519369755692524957869107476266696,
+    0.6480936519369755692524957869107476266696,
+    -0.7401241915785543642438281030999784255232,
+    0.7401241915785543642438281030999784255232,
+    -0.8200019859739029219539498726697452080761,
+    0.8200019859739029219539498726697452080761,
+    -0.8864155270044010342131543419821967550873,
+    0.8864155270044010342131543419821967550873,
+    -0.9382745520027327585236490017087214496548,
+    0.9382745520027327585236490017087214496548,
+    -0.9747285559713094981983919930081690617411,
+    0.9747285559713094981983919930081690617411,
+    -0.9951872199970213601799974097007368118745,
+    0.9951872199970213601799974097007368118745,
+  ],
+  Cvalues: [
+    0.1279381953467521569740561652246953718517,
+    0.1279381953467521569740561652246953718517,
+    0.1258374563468282961213753825111836887264,
+    0.1258374563468282961213753825111836887264,
+    0.121670472927803391204463153476262425607,
+    0.121670472927803391204463153476262425607,
+    0.1155056680537256013533444839067835598622,
+    0.1155056680537256013533444839067835598622,
+    0.1074442701159656347825773424466062227946,
+    0.1074442701159656347825773424466062227946,
+    0.0976186521041138882698806644642471544279,
+    0.0976186521041138882698806644642471544279,
+    0.086190161531953275917185202983742667185,
+    0.086190161531953275917185202983742667185,
+    0.0733464814110803057340336152531165181193,
+    0.0733464814110803057340336152531165181193,
+    0.0592985849154367807463677585001085845412,
+    0.0592985849154367807463677585001085845412,
+    0.0442774388174198061686027482113382288593,
+    0.0442774388174198061686027482113382288593,
+    0.0285313886289336631813078159518782864491,
+    0.0285313886289336631813078159518782864491,
+    0.0123412297999871995468056670700372915759,
+    0.0123412297999871995468056670700372915759,
+  ],
+
+  arcfn: function (t, derivativeFn) {
+    const d = derivativeFn(t);
+    let l = d.x * d.x + d.y * d.y;
+    if (typeof d.z !== "undefined") {
+      l += d.z * d.z;
+    }
+    return sqrt(l);
+  },
+
+  compute: function (t, points, _3d) {
+    if (t === 0) {
+      points[0].t = 0;
+      return points[0];
+    }
+
+    const order = points.length - 1;
+
+    if (t === 1) {
+      points[order].t = 1;
+      return points[order];
+    }
+
+    const mt = 1 - t;
+    let p = points;
+    if (order === 0) {
+      points[0].t = t;
+      return points[0];
+    }
+    if (order === 1) {
+      const ret = {
+        x: mt * p[0].x + t * p[1].x,
+        y: mt * p[0].y + t * p[1].y,
+        t: t,
+      };
+      if (_3d) {
+        ret.z = mt * p[0].z + t * p[1].z;
+      }
+      return ret;
+    }
+    if (order < 4) {
+      let mt2 = mt * mt,
+        t2 = t * t,
+        a,
+        b,
+        c,
+        d = 0;
+      if (order === 2) {
+        p = [p[0], p[1], p[2], ZERO];
+        a = mt2;
+        b = mt * t * 2;
+        c = t2;
+      } else if (order === 3) {
+        a = mt2 * mt;
+        b = mt2 * t * 3;
+        c = mt * t2 * 3;
+        d = t * t2;
+      }
+      const ret = {
+        x: a * p[0].x + b * p[1].x + c * p[2].x + d * p[3].x,
+        y: a * p[0].y + b * p[1].y + c * p[2].y + d * p[3].y,
+        t: t,
+      };
+      if (_3d) {
+        ret.z = a * p[0].z + b * p[1].z + c * p[2].z + d * p[3].z;
+      }
+      return ret;
+    }
+
+    // higher order curves: use de Casteljau's computation
+    const dCpts = JSON.parse(JSON.stringify(points));
+    while (dCpts.length > 1) {
+      for (let i = 0; i < dCpts.length - 1; i++) {
+        dCpts[i] = {
+          x: dCpts[i].x + (dCpts[i + 1].x - dCpts[i].x) * t,
+          y: dCpts[i].y + (dCpts[i + 1].y - dCpts[i].y) * t,
+        };
+        if (typeof dCpts[i].z !== "undefined") {
+          dCpts[i] = dCpts[i].z + (dCpts[i + 1].z - dCpts[i].z) * t;
+        }
+      }
+      dCpts.splice(dCpts.length - 1, 1);
+    }
+    dCpts[0].t = t;
+    return dCpts[0];
+  },
+
+  computeWithRatios: function (t, points, ratios, _3d) {
+    const mt = 1 - t,
+      r = ratios,
+      p = points;
+
+    let f1 = r[0],
+      f2 = r[1],
+      f3 = r[2],
+      f4 = r[3],
+      d;
+
+    // spec for linear
+    f1 *= mt;
+    f2 *= t;
+
+    if (p.length === 2) {
+      d = f1 + f2;
+      return {
+        x: (f1 * p[0].x + f2 * p[1].x) / d,
+        y: (f1 * p[0].y + f2 * p[1].y) / d,
+        z: !_3d ? false : (f1 * p[0].z + f2 * p[1].z) / d,
+        t: t,
+      };
+    }
+
+    // upgrade to quadratic
+    f1 *= mt;
+    f2 *= 2 * mt;
+    f3 *= t * t;
+
+    if (p.length === 3) {
+      d = f1 + f2 + f3;
+      return {
+        x: (f1 * p[0].x + f2 * p[1].x + f3 * p[2].x) / d,
+        y: (f1 * p[0].y + f2 * p[1].y + f3 * p[2].y) / d,
+        z: !_3d ? false : (f1 * p[0].z + f2 * p[1].z + f3 * p[2].z) / d,
+        t: t,
+      };
+    }
+
+    // upgrade to cubic
+    f1 *= mt;
+    f2 *= 1.5 * mt;
+    f3 *= 3 * mt;
+    f4 *= t * t * t;
+
+    if (p.length === 4) {
+      d = f1 + f2 + f3 + f4;
+      return {
+        x: (f1 * p[0].x + f2 * p[1].x + f3 * p[2].x + f4 * p[3].x) / d,
+        y: (f1 * p[0].y + f2 * p[1].y + f3 * p[2].y + f4 * p[3].y) / d,
+        z: !_3d
+          ? false
+          : (f1 * p[0].z + f2 * p[1].z + f3 * p[2].z + f4 * p[3].z) / d,
+        t: t,
+      };
+    }
+  },
+
+  derive: function (points, _3d) {
+    const dpoints = [];
+    for (let p = points, d = p.length, c = d - 1; d > 1; d--, c--) {
+      const list = [];
+      for (let j = 0, dpt; j < c; j++) {
+        dpt = {
+          x: c * (p[j + 1].x - p[j].x),
+          y: c * (p[j + 1].y - p[j].y),
+        };
+        if (_3d) {
+          dpt.z = c * (p[j + 1].z - p[j].z);
+        }
+        list.push(dpt);
+      }
+      dpoints.push(list);
+      p = list;
+    }
+    return dpoints;
+  },
+
+  between: function (v, m, M) {
+    return (
+      (m <= v && v <= M) ||
+      utils.approximately(v, m) ||
+      utils.approximately(v, M)
+    );
+  },
+
+  approximately: function (a, b, precision) {
+    return abs(a - b) <= (precision || epsilon);
+  },
+
+  length: function (derivativeFn) {
+    const z = 0.5,
+      len = utils.Tvalues.length;
+
+    let sum = 0;
+
+    for (let i = 0, t; i < len; i++) {
+      t = z * utils.Tvalues[i] + z;
+      sum += utils.Cvalues[i] * utils.arcfn(t, derivativeFn);
+    }
+    return z * sum;
+  },
+
+  map: function (v, ds, de, ts, te) {
+    const d1 = de - ds,
+      d2 = te - ts,
+      v2 = v - ds,
+      r = v2 / d1;
+    return ts + d2 * r;
+  },
+
+  lerp: function (r, v1, v2) {
+    const ret = {
+      x: v1.x + r * (v2.x - v1.x),
+      y: v1.y + r * (v2.y - v1.y),
+    };
+    if (v1.z !== undefined && v2.z !== undefined) {
+      ret.z = v1.z + r * (v2.z - v1.z);
+    }
+    return ret;
+  },
+
+  pointToString: function (p) {
+    let s = p.x + "/" + p.y;
+    if (typeof p.z !== "undefined") {
+      s += "/" + p.z;
+    }
+    return s;
+  },
+
+  pointsToString: function (points) {
+    return "[" + points.map(utils.pointToString).join(", ") + "]";
+  },
+
+  copy: function (obj) {
+    return JSON.parse(JSON.stringify(obj));
+  },
+
+  angle: function (o, v1, v2) {
+    const dx1 = v1.x - o.x,
+      dy1 = v1.y - o.y,
+      dx2 = v2.x - o.x,
+      dy2 = v2.y - o.y,
+      cross = dx1 * dy2 - dy1 * dx2,
+      dot = dx1 * dx2 + dy1 * dy2;
+    return atan2(cross, dot);
+  },
+
+  // round as string, to avoid rounding errors
+  round: function (v, d) {
+    const s = "" + v;
+    const pos = s.indexOf(".");
+    return parseFloat(s.substring(0, pos + 1 + d));
+  },
+
+  dist: function (p1, p2) {
+    const dx = p1.x - p2.x,
+      dy = p1.y - p2.y;
+    return sqrt(dx * dx + dy * dy);
+  },
+
+  closest: function (LUT, point) {
+    let mdist = pow(2, 63),
+      mpos,
+      d;
+    LUT.forEach(function (p, idx) {
+      d = utils.dist(point, p);
+      if (d < mdist) {
+        mdist = d;
+        mpos = idx;
+      }
+    });
+    return { mdist: mdist, mpos: mpos };
+  },
+
+  abcratio: function (t, n) {
+    // see ratio(t) note on http://pomax.github.io/bezierinfo/#abc
+    if (n !== 2 && n !== 3) {
+      return false;
+    }
+    if (typeof t === "undefined") {
+      t = 0.5;
+    } else if (t === 0 || t === 1) {
+      return t;
+    }
+    const bottom = pow(t, n) + pow(1 - t, n),
+      top = bottom - 1;
+    return abs(top / bottom);
+  },
+
+  projectionratio: function (t, n) {
+    // see u(t) note on http://pomax.github.io/bezierinfo/#abc
+    if (n !== 2 && n !== 3) {
+      return false;
+    }
+    if (typeof t === "undefined") {
+      t = 0.5;
+    } else if (t === 0 || t === 1) {
+      return t;
+    }
+    const top = pow(1 - t, n),
+      bottom = pow(t, n) + top;
+    return top / bottom;
+  },
+
+  lli8: function (x1, y1, x2, y2, x3, y3, x4, y4) {
+    const nx =
+        (x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4),
+      ny = (x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4),
+      d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    if (d == 0) {
+      return false;
+    }
+    return { x: nx / d, y: ny / d };
+  },
+
+  lli4: function (p1, p2, p3, p4) {
+    const x1 = p1.x,
+      y1 = p1.y,
+      x2 = p2.x,
+      y2 = p2.y,
+      x3 = p3.x,
+      y3 = p3.y,
+      x4 = p4.x,
+      y4 = p4.y;
+    return utils.lli8(x1, y1, x2, y2, x3, y3, x4, y4);
+  },
+
+  lli: function (v1, v2) {
+    return utils.lli4(v1, v1.c, v2, v2.c);
+  },
+
+  makeline: function (p1, p2) {
+    return new Bezier(
+      p1.x,
+      p1.y,
+      (p1.x + p2.x) / 2,
+      (p1.y + p2.y) / 2,
+      p2.x,
+      p2.y
+    );
+  },
+
+  findbbox: function (sections) {
+    let mx = nMax,
+      my = nMax,
+      MX = nMin,
+      MY = nMin;
+    sections.forEach(function (s) {
+      const bbox = s.bbox();
+      if (mx > bbox.x.min) mx = bbox.x.min;
+      if (my > bbox.y.min) my = bbox.y.min;
+      if (MX < bbox.x.max) MX = bbox.x.max;
+      if (MY < bbox.y.max) MY = bbox.y.max;
+    });
+    return {
+      x: { min: mx, mid: (mx + MX) / 2, max: MX, size: MX - mx },
+      y: { min: my, mid: (my + MY) / 2, max: MY, size: MY - my },
+    };
+  },
+
+  shapeintersections: function (
+    s1,
+    bbox1,
+    s2,
+    bbox2,
+    curveIntersectionThreshold
+  ) {
+    if (!utils.bboxoverlap(bbox1, bbox2)) return [];
+    const intersections = [];
+    const a1 = [s1.startcap, s1.forward, s1.back, s1.endcap];
+    const a2 = [s2.startcap, s2.forward, s2.back, s2.endcap];
+    a1.forEach(function (l1) {
+      if (l1.virtual) return;
+      a2.forEach(function (l2) {
+        if (l2.virtual) return;
+        const iss = l1.intersects(l2, curveIntersectionThreshold);
+        if (iss.length > 0) {
+          iss.c1 = l1;
+          iss.c2 = l2;
+          iss.s1 = s1;
+          iss.s2 = s2;
+          intersections.push(iss);
+        }
+      });
+    });
+    return intersections;
+  },
+
+  makeshape: function (forward, back, curveIntersectionThreshold) {
+    const bpl = back.points.length;
+    const fpl = forward.points.length;
+    const start = utils.makeline(back.points[bpl - 1], forward.points[0]);
+    const end = utils.makeline(forward.points[fpl - 1], back.points[0]);
+    const shape = {
+      startcap: start,
+      forward: forward,
+      back: back,
+      endcap: end,
+      bbox: utils.findbbox([start, forward, back, end]),
+    };
+    shape.intersections = function (s2) {
+      return utils.shapeintersections(
+        shape,
+        shape.bbox,
+        s2,
+        s2.bbox,
+        curveIntersectionThreshold
+      );
+    };
+    return shape;
+  },
+
+  getminmax: function (curve, d, list) {
+    if (!list) return { min: 0, max: 0 };
+    let min = nMax,
+      max = nMin,
+      t,
+      c;
+    if (list.indexOf(0) === -1) {
+      list = [0].concat(list);
+    }
+    if (list.indexOf(1) === -1) {
+      list.push(1);
+    }
+    for (let i = 0, len = list.length; i < len; i++) {
+      t = list[i];
+      c = curve.get(t);
+      if (c[d] < min) {
+        min = c[d];
+      }
+      if (c[d] > max) {
+        max = c[d];
+      }
+    }
+    return { min: min, mid: (min + max) / 2, max: max, size: max - min };
+  },
+
+  align: function (points, line) {
+    const tx = line.p1.x,
+      ty = line.p1.y,
+      a = -atan2(line.p2.y - ty, line.p2.x - tx),
+      d = function (v) {
+        return {
+          x: (v.x - tx) * cos(a) - (v.y - ty) * sin(a),
+          y: (v.x - tx) * sin(a) + (v.y - ty) * cos(a),
+        };
+      };
+    return points.map(d);
+  },
+
+  roots: function (points, line) {
+    line = line || { p1: { x: 0, y: 0 }, p2: { x: 1, y: 0 } };
+
+    const order = points.length - 1;
+    const aligned = utils.align(points, line);
+    const reduce = function (t) {
+      return 0 <= t && t <= 1;
+    };
+
+    if (order === 2) {
+      const a = aligned[0].y,
+        b = aligned[1].y,
+        c = aligned[2].y,
+        d = a - 2 * b + c;
+      if (d !== 0) {
+        const m1 = -sqrt(b * b - a * c),
+          m2 = -a + b,
+          v1 = -(m1 + m2) / d,
+          v2 = -(-m1 + m2) / d;
+        return [v1, v2].filter(reduce);
+      } else if (b !== c && d === 0) {
+        return [(2 * b - c) / (2 * b - 2 * c)].filter(reduce);
+      }
+      return [];
+    }
+
+    // see http://www.trans4mind.com/personal_development/mathematics/polynomials/cubicAlgebra.htm
+    const pa = aligned[0].y,
+      pb = aligned[1].y,
+      pc = aligned[2].y,
+      pd = aligned[3].y;
+
+    let d = -pa + 3 * pb - 3 * pc + pd,
+      a = 3 * pa - 6 * pb + 3 * pc,
+      b = -3 * pa + 3 * pb,
+      c = pa;
+
+    if (utils.approximately(d, 0)) {
+      // this is not a cubic curve.
+      if (utils.approximately(a, 0)) {
+        // in fact, this is not a quadratic curve either.
+        if (utils.approximately(b, 0)) {
+          // in fact in fact, there are no solutions.
+          return [];
+        }
+        // linear solution:
+        return [-c / b].filter(reduce);
+      }
+      // quadratic solution:
+      const q = sqrt(b * b - 4 * a * c),
+        a2 = 2 * a;
+      return [(q - b) / a2, (-b - q) / a2].filter(reduce);
+    }
+
+    // at this point, we know we need a cubic solution:
+
+    a /= d;
+    b /= d;
+    c /= d;
+
+    const p = (3 * b - a * a) / 3,
+      p3 = p / 3,
+      q = (2 * a * a * a - 9 * a * b + 27 * c) / 27,
+      q2 = q / 2,
+      discriminant = q2 * q2 + p3 * p3 * p3;
+
+    let u1, v1, x1, x2, x3;
+    if (discriminant < 0) {
+      const mp3 = -p / 3,
+        mp33 = mp3 * mp3 * mp3,
+        r = sqrt(mp33),
+        t = -q / (2 * r),
+        cosphi = t < -1 ? -1 : t > 1 ? 1 : t,
+        phi = acos(cosphi),
+        crtr = crt(r),
+        t1 = 2 * crtr;
+      x1 = t1 * cos(phi / 3) - a / 3;
+      x2 = t1 * cos((phi + tau) / 3) - a / 3;
+      x3 = t1 * cos((phi + 2 * tau) / 3) - a / 3;
+      return [x1, x2, x3].filter(reduce);
+    } else if (discriminant === 0) {
+      u1 = q2 < 0 ? crt(-q2) : -crt(q2);
+      x1 = 2 * u1 - a / 3;
+      x2 = -u1 - a / 3;
+      return [x1, x2].filter(reduce);
+    } else {
+      const sd = sqrt(discriminant);
+      u1 = crt(-q2 + sd);
+      v1 = crt(q2 + sd);
+      return [u1 - v1 - a / 3].filter(reduce);
+    }
+  },
+
+  droots: function (p) {
+    // quadratic roots are easy
+    if (p.length === 3) {
+      const a = p[0],
+        b = p[1],
+        c = p[2],
+        d = a - 2 * b + c;
+      if (d !== 0) {
+        const m1 = -sqrt(b * b - a * c),
+          m2 = -a + b,
+          v1 = -(m1 + m2) / d,
+          v2 = -(-m1 + m2) / d;
+        return [v1, v2];
+      } else if (b !== c && d === 0) {
+        return [(2 * b - c) / (2 * (b - c))];
+      }
+      return [];
+    }
+
+    // linear roots are even easier
+    if (p.length === 2) {
+      const a = p[0],
+        b = p[1];
+      if (a !== b) {
+        return [a / (a - b)];
+      }
+      return [];
+    }
+
+    return [];
+  },
+
+  curvature: function (t, d1, d2, _3d, kOnly) {
+    let num,
+      dnm,
+      adk,
+      dk,
+      k = 0,
+      r = 0;
+
+    //
+    // We're using the following formula for curvature:
+    //
+    //              x'y" - y'x"
+    //   k(t) = ------------------
+    //           (x'² + y'²)^(3/2)
+    //
+    // from https://en.wikipedia.org/wiki/Radius_of_curvature#Definition
+    //
+    // With it corresponding 3D counterpart:
+    //
+    //          sqrt( (y'z" - y"z')² + (z'x" - z"x')² + (x'y" - x"y')²)
+    //   k(t) = -------------------------------------------------------
+    //                     (x'² + y'² + z'²)^(3/2)
+    //
+
+    const d = utils.compute(t, d1);
+    const dd = utils.compute(t, d2);
+    const qdsum = d.x * d.x + d.y * d.y;
+
+    if (_3d) {
+      num = sqrt(
+        pow(d.y * dd.z - dd.y * d.z, 2) +
+          pow(d.z * dd.x - dd.z * d.x, 2) +
+          pow(d.x * dd.y - dd.x * d.y, 2)
+      );
+      dnm = pow(qdsum + d.z * d.z, 3 / 2);
+    } else {
+      num = d.x * dd.y - d.y * dd.x;
+      dnm = pow(qdsum, 3 / 2);
+    }
+
+    if (num === 0 || dnm === 0) {
+      return { k: 0, r: 0 };
+    }
+
+    k = num / dnm;
+    r = dnm / num;
+
+    // We're also computing the derivative of kappa, because
+    // there is value in knowing the rate of change for the
+    // curvature along the curve. And we're just going to
+    // ballpark it based on an epsilon.
+    if (!kOnly) {
+      // compute k'(t) based on the interval before, and after it,
+      // to at least try to not introduce forward/backward pass bias.
+      const pk = utils.curvature(t - 0.001, d1, d2, _3d, true).k;
+      const nk = utils.curvature(t + 0.001, d1, d2, _3d, true).k;
+      dk = (nk - k + (k - pk)) / 2;
+      adk = (abs(nk - k) + abs(k - pk)) / 2;
+    }
+
+    return { k: k, r: r, dk: dk, adk: adk };
+  },
+
+  inflections: function (points) {
+    if (points.length < 4) return [];
+
+    // FIXME: TODO: add in inflection abstraction for quartic+ curves?
+
+    const p = utils.align(points, { p1: points[0], p2: points.slice(-1)[0] }),
+      a = p[2].x * p[1].y,
+      b = p[3].x * p[1].y,
+      c = p[1].x * p[2].y,
+      d = p[3].x * p[2].y,
+      v1 = 18 * (-3 * a + 2 * b + 3 * c - d),
+      v2 = 18 * (3 * a - b - 3 * c),
+      v3 = 18 * (c - a);
+
+    if (utils.approximately(v1, 0)) {
+      if (!utils.approximately(v2, 0)) {
+        let t = -v3 / v2;
+        if (0 <= t && t <= 1) return [t];
+      }
+      return [];
+    }
+
+    const trm = v2 * v2 - 4 * v1 * v3,
+      sq = Math.sqrt(trm),
+      d2 = 2 * v1;
+
+    if (utils.approximately(d2, 0)) return [];
+
+    return [(sq - v2) / d2, -(v2 + sq) / d2].filter(function (r) {
+      return 0 <= r && r <= 1;
+    });
+  },
+
+  bboxoverlap: function (b1, b2) {
+    const dims = ["x", "y"],
+      len = dims.length;
+
+    for (let i = 0, dim, l, t, d; i < len; i++) {
+      dim = dims[i];
+      l = b1[dim].mid;
+      t = b2[dim].mid;
+      d = (b1[dim].size + b2[dim].size) / 2;
+      if (abs(l - t) >= d) return false;
+    }
+    return true;
+  },
+
+  expandbox: function (bbox, _bbox) {
+    if (_bbox.x.min < bbox.x.min) {
+      bbox.x.min = _bbox.x.min;
+    }
+    if (_bbox.y.min < bbox.y.min) {
+      bbox.y.min = _bbox.y.min;
+    }
+    if (_bbox.z && _bbox.z.min < bbox.z.min) {
+      bbox.z.min = _bbox.z.min;
+    }
+    if (_bbox.x.max > bbox.x.max) {
+      bbox.x.max = _bbox.x.max;
+    }
+    if (_bbox.y.max > bbox.y.max) {
+      bbox.y.max = _bbox.y.max;
+    }
+    if (_bbox.z && _bbox.z.max > bbox.z.max) {
+      bbox.z.max = _bbox.z.max;
+    }
+    bbox.x.mid = (bbox.x.min + bbox.x.max) / 2;
+    bbox.y.mid = (bbox.y.min + bbox.y.max) / 2;
+    if (bbox.z) {
+      bbox.z.mid = (bbox.z.min + bbox.z.max) / 2;
+    }
+    bbox.x.size = bbox.x.max - bbox.x.min;
+    bbox.y.size = bbox.y.max - bbox.y.min;
+    if (bbox.z) {
+      bbox.z.size = bbox.z.max - bbox.z.min;
+    }
+  },
+
+  pairiteration: function (c1, c2, curveIntersectionThreshold) {
+    const c1b = c1.bbox(),
+      c2b = c2.bbox(),
+      r = 100000,
+      threshold = curveIntersectionThreshold || 0.5;
+
+    if (
+      c1b.x.size + c1b.y.size < threshold &&
+      c2b.x.size + c2b.y.size < threshold
+    ) {
+      return [
+        (((r * (c1._t1 + c1._t2)) / 2) | 0) / r +
+          "/" +
+          (((r * (c2._t1 + c2._t2)) / 2) | 0) / r,
+      ];
+    }
+
+    let cc1 = c1.split(0.5),
+      cc2 = c2.split(0.5),
+      pairs = [
+        { left: cc1.left, right: cc2.left },
+        { left: cc1.left, right: cc2.right },
+        { left: cc1.right, right: cc2.right },
+        { left: cc1.right, right: cc2.left },
+      ];
+
+    pairs = pairs.filter(function (pair) {
+      return utils.bboxoverlap(pair.left.bbox(), pair.right.bbox());
+    });
+
+    let results = [];
+
+    if (pairs.length === 0) return results;
+
+    pairs.forEach(function (pair) {
+      results = results.concat(
+        utils.pairiteration(pair.left, pair.right, threshold)
+      );
+    });
+
+    results = results.filter(function (v, i) {
+      return results.indexOf(v) === i;
+    });
+
+    return results;
+  },
+
+  getccenter: function (p1, p2, p3) {
+    const dx1 = p2.x - p1.x,
+      dy1 = p2.y - p1.y,
+      dx2 = p3.x - p2.x,
+      dy2 = p3.y - p2.y,
+      dx1p = dx1 * cos(quart) - dy1 * sin(quart),
+      dy1p = dx1 * sin(quart) + dy1 * cos(quart),
+      dx2p = dx2 * cos(quart) - dy2 * sin(quart),
+      dy2p = dx2 * sin(quart) + dy2 * cos(quart),
+      // chord midpoints
+      mx1 = (p1.x + p2.x) / 2,
+      my1 = (p1.y + p2.y) / 2,
+      mx2 = (p2.x + p3.x) / 2,
+      my2 = (p2.y + p3.y) / 2,
+      // midpoint offsets
+      mx1n = mx1 + dx1p,
+      my1n = my1 + dy1p,
+      mx2n = mx2 + dx2p,
+      my2n = my2 + dy2p,
+      // intersection of these lines:
+      arc = utils.lli8(mx1, my1, mx1n, my1n, mx2, my2, mx2n, my2n),
+      r = utils.dist(arc, p1);
+
+    // arc start/end values, over mid point:
+    let s = atan2(p1.y - arc.y, p1.x - arc.x),
+      m = atan2(p2.y - arc.y, p2.x - arc.x),
+      e = atan2(p3.y - arc.y, p3.x - arc.x),
+      _;
+
+    // determine arc direction (cw/ccw correction)
+    if (s < e) {
+      // if s<m<e, arc(s, e)
+      // if m<s<e, arc(e, s + tau)
+      // if s<e<m, arc(e, s + tau)
+      if (s > m || m > e) {
+        s += tau;
+      }
+      if (s > e) {
+        _ = e;
+        e = s;
+        s = _;
+      }
+    } else {
+      // if e<m<s, arc(e, s)
+      // if m<e<s, arc(s, e + tau)
+      // if e<s<m, arc(s, e + tau)
+      if (e < m && m < s) {
+        _ = e;
+        e = s;
+        s = _;
+      } else {
+        e += tau;
+      }
+    }
+    // assign and done.
+    arc.s = s;
+    arc.e = e;
+    arc.r = r;
+    return arc;
+  },
+
+  numberSort: function (a, b) {
+    return a - b;
+  },
+};
+
+/**
+ * Poly Bezier
+ * @param {[type]} curves [description]
+ */
+class PolyBezier {
+  constructor(curves) {
+    this.curves = [];
+    this._3d = false;
+    if (!!curves) {
+      this.curves = curves;
+      this._3d = this.curves[0]._3d;
+    }
+  }
+
+  valueOf() {
+    return this.toString();
+  }
+
+  toString() {
+    return (
+      "[" +
+      this.curves
+        .map(function (curve) {
+          return utils.pointsToString(curve.points);
+        })
+        .join(", ") +
+      "]"
+    );
+  }
+
+  addCurve(curve) {
+    this.curves.push(curve);
+    this._3d = this._3d || curve._3d;
+  }
+
+  length() {
+    return this.curves
+      .map(function (v) {
+        return v.length();
+      })
+      .reduce(function (a, b) {
+        return a + b;
+      });
+  }
+
+  curve(idx) {
+    return this.curves[idx];
+  }
+
+  bbox() {
+    const c = this.curves;
+    var bbox = c[0].bbox();
+    for (var i = 1; i < c.length; i++) {
+      utils.expandbox(bbox, c[i].bbox());
+    }
+    return bbox;
+  }
+
+  offset(d) {
+    const offset = [];
+    this.curves.forEach(function (v) {
+      offset.push(...v.offset(d));
+    });
+    return new PolyBezier(offset);
+  }
+}
+
+/**
+  A javascript Bezier curve library by Pomax.
+
+  Based on http://pomax.github.io/bezierinfo
+
+  This code is MIT licensed.
+**/
+
+// math-inlining.
+const { abs: abs$1, min, max, cos: cos$1, sin: sin$1, acos: acos$1, sqrt: sqrt$1 } = Math;
+const pi$1 = Math.PI;
+
+/**
+ * Bezier curve constructor.
+ *
+ * ...docs pending...
+ */
+class Bezier {
+  constructor(coords) {
+    let args =
+      coords && coords.forEach ? coords : Array.from(arguments).slice();
+    let coordlen = false;
+
+    if (typeof args[0] === "object") {
+      coordlen = args.length;
+      const newargs = [];
+      args.forEach(function (point) {
+        ["x", "y", "z"].forEach(function (d) {
+          if (typeof point[d] !== "undefined") {
+            newargs.push(point[d]);
+          }
+        });
+      });
+      args = newargs;
+    }
+
+    let higher = false;
+    const len = args.length;
+
+    if (coordlen) {
+      if (coordlen > 4) {
+        if (arguments.length !== 1) {
+          throw new Error(
+            "Only new Bezier(point[]) is accepted for 4th and higher order curves"
+          );
+        }
+        higher = true;
+      }
+    } else {
+      if (len !== 6 && len !== 8 && len !== 9 && len !== 12) {
+        if (arguments.length !== 1) {
+          throw new Error(
+            "Only new Bezier(point[]) is accepted for 4th and higher order curves"
+          );
+        }
+      }
+    }
+
+    const _3d = (this._3d =
+      (!higher && (len === 9 || len === 12)) ||
+      (coords && coords[0] && typeof coords[0].z !== "undefined"));
+
+    const points = (this.points = []);
+    for (let idx = 0, step = _3d ? 3 : 2; idx < len; idx += step) {
+      var point = {
+        x: args[idx],
+        y: args[idx + 1],
+      };
+      if (_3d) {
+        point.z = args[idx + 2];
+      }
+      points.push(point);
+    }
+    const order = (this.order = points.length - 1);
+
+    const dims = (this.dims = ["x", "y"]);
+    if (_3d) dims.push("z");
+    this.dimlen = dims.length;
+
+    // is this curve, practically speaking, a straight line?
+    const aligned = utils.align(points, { p1: points[0], p2: points[order] });
+    const baselength = utils.dist(points[0], points[order]);
+    this._linear = aligned.reduce((t, p) => t + abs$1(p.y), 0) < baselength / 50;
+
+    this._lut = [];
+
+    this._t1 = 0;
+    this._t2 = 1;
+    this.update();
+  }
+
+  static quadraticFromPoints(p1, p2, p3, t) {
+    if (typeof t === "undefined") {
+      t = 0.5;
+    }
+    // shortcuts, although they're really dumb
+    if (t === 0) {
+      return new Bezier(p2, p2, p3);
+    }
+    if (t === 1) {
+      return new Bezier(p1, p2, p2);
+    }
+    // real fitting.
+    const abc = Bezier.getABC(2, p1, p2, p3, t);
+    return new Bezier(p1, abc.A, p3);
+  }
+
+  static cubicFromPoints(S, B, E, t, d1) {
+    if (typeof t === "undefined") {
+      t = 0.5;
+    }
+    const abc = Bezier.getABC(3, S, B, E, t);
+    if (typeof d1 === "undefined") {
+      d1 = utils.dist(B, abc.C);
+    }
+    const d2 = (d1 * (1 - t)) / t;
+
+    const selen = utils.dist(S, E),
+      lx = (E.x - S.x) / selen,
+      ly = (E.y - S.y) / selen,
+      bx1 = d1 * lx,
+      by1 = d1 * ly,
+      bx2 = d2 * lx,
+      by2 = d2 * ly;
+    // derivation of new hull coordinates
+    const e1 = { x: B.x - bx1, y: B.y - by1 },
+      e2 = { x: B.x + bx2, y: B.y + by2 },
+      A = abc.A,
+      v1 = { x: A.x + (e1.x - A.x) / (1 - t), y: A.y + (e1.y - A.y) / (1 - t) },
+      v2 = { x: A.x + (e2.x - A.x) / t, y: A.y + (e2.y - A.y) / t },
+      nc1 = { x: S.x + (v1.x - S.x) / t, y: S.y + (v1.y - S.y) / t },
+      nc2 = {
+        x: E.x + (v2.x - E.x) / (1 - t),
+        y: E.y + (v2.y - E.y) / (1 - t),
+      };
+    // ...done
+    return new Bezier(S, nc1, nc2, E);
+  }
+
+  static getUtils() {
+    return utils;
+  }
+
+  getUtils() {
+    return Bezier.getUtils();
+  }
+
+  static get PolyBezier() {
+    return PolyBezier;
+  }
+
+  valueOf() {
+    return this.toString();
+  }
+
+  toString() {
+    return utils.pointsToString(this.points);
+  }
+
+  toSVG() {
+    if (this._3d) return false;
+    const p = this.points,
+      x = p[0].x,
+      y = p[0].y,
+      s = ["M", x, y, this.order === 2 ? "Q" : "C"];
+    for (let i = 1, last = p.length; i < last; i++) {
+      s.push(p[i].x);
+      s.push(p[i].y);
+    }
+    return s.join(" ");
+  }
+
+  setRatios(ratios) {
+    if (ratios.length !== this.points.length) {
+      throw new Error("incorrect number of ratio values");
+    }
+    this.ratios = ratios;
+    this._lut = []; //  invalidate any precomputed LUT
+  }
+
+  verify() {
+    const print = this.coordDigest();
+    if (print !== this._print) {
+      this._print = print;
+      this.update();
+    }
+  }
+
+  coordDigest() {
+    return this.points
+      .map(function (c, pos) {
+        return "" + pos + c.x + c.y + (c.z ? c.z : 0);
+      })
+      .join("");
+  }
+
+  update() {
+    // invalidate any precomputed LUT
+    this._lut = [];
+    this.dpoints = utils.derive(this.points, this._3d);
+    this.computedirection();
+  }
+
+  computedirection() {
+    const points = this.points;
+    const angle = utils.angle(points[0], points[this.order], points[1]);
+    this.clockwise = angle > 0;
+  }
+
+  length() {
+    return utils.length(this.derivative.bind(this));
+  }
+
+  static getABC(order = 2, S, B, E, t = 0.5) {
+    const u = utils.projectionratio(t, order),
+      um = 1 - u,
+      C = {
+        x: u * S.x + um * E.x,
+        y: u * S.y + um * E.y,
+      },
+      s = utils.abcratio(t, order),
+      A = {
+        x: B.x + (B.x - C.x) / s,
+        y: B.y + (B.y - C.y) / s,
+      };
+    return { A, B, C, S, E };
+  }
+
+  getABC(t, B) {
+    B = B || this.get(t);
+    let S = this.points[0];
+    let E = this.points[this.order];
+    return Bezier.getABC(this.order, S, B, E, t);
+  }
+
+  getLUT(steps) {
+    this.verify();
+    steps = steps || 100;
+    if (this._lut.length === steps) {
+      return this._lut;
+    }
+    this._lut = [];
+    // n steps means n+1 points
+    steps++;
+    this._lut = [];
+    for (let i = 0, p, t; i < steps; i++) {
+      t = i / (steps - 1);
+      p = this.compute(t);
+      p.t = t;
+      this._lut.push(p);
+    }
+    return this._lut;
+  }
+
+  on(point, error) {
+    error = error || 5;
+    const lut = this.getLUT(),
+      hits = [];
+    for (let i = 0, c, t = 0; i < lut.length; i++) {
+      c = lut[i];
+      if (utils.dist(c, point) < error) {
+        hits.push(c);
+        t += i / lut.length;
+      }
+    }
+    if (!hits.length) return false;
+    return (t /= hits.length);
+  }
+
+  project(point) {
+    // step 1: coarse check
+    const LUT = this.getLUT(),
+      l = LUT.length - 1,
+      closest = utils.closest(LUT, point),
+      mpos = closest.mpos,
+      t1 = (mpos - 1) / l,
+      t2 = (mpos + 1) / l,
+      step = 0.1 / l;
+
+    // step 2: fine check
+    let mdist = closest.mdist,
+      t = t1,
+      ft = t,
+      p;
+    mdist += 1;
+    for (let d; t < t2 + step; t += step) {
+      p = this.compute(t);
+      d = utils.dist(point, p);
+      if (d < mdist) {
+        mdist = d;
+        ft = t;
+      }
+    }
+    ft = ft < 0 ? 0 : ft > 1 ? 1 : ft;
+    p = this.compute(ft);
+    p.t = ft;
+    p.d = mdist;
+    return p;
+  }
+
+  get(t) {
+    return this.compute(t);
+  }
+
+  point(idx) {
+    return this.points[idx];
+  }
+
+  compute(t) {
+    if (this.ratios) {
+      return utils.computeWithRatios(t, this.points, this.ratios, this._3d);
+    }
+    return utils.compute(t, this.points, this._3d, this.ratios);
+  }
+
+  raise() {
+    const p = this.points,
+      np = [p[0]],
+      k = p.length;
+    for (let i = 1, pi, pim; i < k; i++) {
+      pi = p[i];
+      pim = p[i - 1];
+      np[i] = {
+        x: ((k - i) / k) * pi.x + (i / k) * pim.x,
+        y: ((k - i) / k) * pi.y + (i / k) * pim.y,
+      };
+    }
+    np[k] = p[k - 1];
+    return new Bezier(np);
+  }
+
+  derivative(t) {
+    return utils.compute(t, this.dpoints[0], this._3d);
+  }
+
+  dderivative(t) {
+    return utils.compute(t, this.dpoints[1], this._3d);
+  }
+
+  align() {
+    let p = this.points;
+    return new Bezier(utils.align(p, { p1: p[0], p2: p[p.length - 1] }));
+  }
+
+  curvature(t) {
+    return utils.curvature(t, this.dpoints[0], this.dpoints[1], this._3d);
+  }
+
+  inflections() {
+    return utils.inflections(this.points);
+  }
+
+  normal(t) {
+    return this._3d ? this.__normal3(t) : this.__normal2(t);
+  }
+
+  __normal2(t) {
+    const d = this.derivative(t);
+    const q = sqrt$1(d.x * d.x + d.y * d.y);
+    return { x: -d.y / q, y: d.x / q };
+  }
+
+  __normal3(t) {
+    // see http://stackoverflow.com/questions/25453159
+    const r1 = this.derivative(t),
+      r2 = this.derivative(t + 0.01),
+      q1 = sqrt$1(r1.x * r1.x + r1.y * r1.y + r1.z * r1.z),
+      q2 = sqrt$1(r2.x * r2.x + r2.y * r2.y + r2.z * r2.z);
+    r1.x /= q1;
+    r1.y /= q1;
+    r1.z /= q1;
+    r2.x /= q2;
+    r2.y /= q2;
+    r2.z /= q2;
+    // cross product
+    const c = {
+      x: r2.y * r1.z - r2.z * r1.y,
+      y: r2.z * r1.x - r2.x * r1.z,
+      z: r2.x * r1.y - r2.y * r1.x,
+    };
+    const m = sqrt$1(c.x * c.x + c.y * c.y + c.z * c.z);
+    c.x /= m;
+    c.y /= m;
+    c.z /= m;
+    // rotation matrix
+    const R = [
+      c.x * c.x,
+      c.x * c.y - c.z,
+      c.x * c.z + c.y,
+      c.x * c.y + c.z,
+      c.y * c.y,
+      c.y * c.z - c.x,
+      c.x * c.z - c.y,
+      c.y * c.z + c.x,
+      c.z * c.z,
+    ];
+    // normal vector:
+    const n = {
+      x: R[0] * r1.x + R[1] * r1.y + R[2] * r1.z,
+      y: R[3] * r1.x + R[4] * r1.y + R[5] * r1.z,
+      z: R[6] * r1.x + R[7] * r1.y + R[8] * r1.z,
+    };
+    return n;
+  }
+
+  hull(t) {
+    let p = this.points,
+      _p = [],
+      q = [],
+      idx = 0;
+    q[idx++] = p[0];
+    q[idx++] = p[1];
+    q[idx++] = p[2];
+    if (this.order === 3) {
+      q[idx++] = p[3];
+    }
+    // we lerp between all points at each iteration, until we have 1 point left.
+    while (p.length > 1) {
+      _p = [];
+      for (let i = 0, pt, l = p.length - 1; i < l; i++) {
+        pt = utils.lerp(t, p[i], p[i + 1]);
+        q[idx++] = pt;
+        _p.push(pt);
+      }
+      p = _p;
+    }
+    return q;
+  }
+
+  split(t1, t2) {
+    // shortcuts
+    if (t1 === 0 && !!t2) {
+      return this.split(t2).left;
+    }
+    if (t2 === 1) {
+      return this.split(t1).right;
+    }
+
+    // no shortcut: use "de Casteljau" iteration.
+    const q = this.hull(t1);
+    const result = {
+      left:
+        this.order === 2
+          ? new Bezier([q[0], q[3], q[5]])
+          : new Bezier([q[0], q[4], q[7], q[9]]),
+      right:
+        this.order === 2
+          ? new Bezier([q[5], q[4], q[2]])
+          : new Bezier([q[9], q[8], q[6], q[3]]),
+      span: q,
+    };
+
+    // make sure we bind _t1/_t2 information!
+    result.left._t1 = utils.map(0, 0, 1, this._t1, this._t2);
+    result.left._t2 = utils.map(t1, 0, 1, this._t1, this._t2);
+    result.right._t1 = utils.map(t1, 0, 1, this._t1, this._t2);
+    result.right._t2 = utils.map(1, 0, 1, this._t1, this._t2);
+
+    // if we have no t2, we're done
+    if (!t2) {
+      return result;
+    }
+
+    // if we have a t2, split again:
+    t2 = utils.map(t2, t1, 1, 0, 1);
+    return result.right.split(t2).left;
+  }
+
+  extrema() {
+    const result = {};
+    let roots = [];
+
+    this.dims.forEach(
+      function (dim) {
+        let mfn = function (v) {
+          return v[dim];
+        };
+        let p = this.dpoints[0].map(mfn);
+        result[dim] = utils.droots(p);
+        if (this.order === 3) {
+          p = this.dpoints[1].map(mfn);
+          result[dim] = result[dim].concat(utils.droots(p));
+        }
+        result[dim] = result[dim].filter(function (t) {
+          return t >= 0 && t <= 1;
+        });
+        roots = roots.concat(result[dim].sort(utils.numberSort));
+      }.bind(this)
+    );
+
+    result.values = roots.sort(utils.numberSort).filter(function (v, idx) {
+      return roots.indexOf(v) === idx;
+    });
+
+    return result;
+  }
+
+  bbox() {
+    const extrema = this.extrema(),
+      result = {};
+    this.dims.forEach(
+      function (d) {
+        result[d] = utils.getminmax(this, d, extrema[d]);
+      }.bind(this)
+    );
+    return result;
+  }
+
+  overlaps(curve) {
+    const lbbox = this.bbox(),
+      tbbox = curve.bbox();
+    return utils.bboxoverlap(lbbox, tbbox);
+  }
+
+  offset(t, d) {
+    if (typeof d !== "undefined") {
+      const c = this.get(t),
+        n = this.normal(t);
+      const ret = {
+        c: c,
+        n: n,
+        x: c.x + n.x * d,
+        y: c.y + n.y * d,
+      };
+      if (this._3d) {
+        ret.z = c.z + n.z * d;
+      }
+      return ret;
+    }
+    if (this._linear) {
+      const nv = this.normal(0),
+        coords = this.points.map(function (p) {
+          const ret = {
+            x: p.x + t * nv.x,
+            y: p.y + t * nv.y,
+          };
+          if (p.z && nv.z) {
+            ret.z = p.z + t * nv.z;
+          }
+          return ret;
+        });
+      return [new Bezier(coords)];
+    }
+    return this.reduce().map(function (s) {
+      if (s._linear) {
+        return s.offset(t)[0];
+      }
+      return s.scale(t);
+    });
+  }
+
+  simple() {
+    if (this.order === 3) {
+      const a1 = utils.angle(this.points[0], this.points[3], this.points[1]);
+      const a2 = utils.angle(this.points[0], this.points[3], this.points[2]);
+      if ((a1 > 0 && a2 < 0) || (a1 < 0 && a2 > 0)) return false;
+    }
+    const n1 = this.normal(0);
+    const n2 = this.normal(1);
+    let s = n1.x * n2.x + n1.y * n2.y;
+    if (this._3d) {
+      s += n1.z * n2.z;
+    }
+    return abs$1(acos$1(s)) < pi$1 / 3;
+  }
+
+  reduce() {
+    // TODO: examine these var types in more detail...
+    let i,
+      t1 = 0,
+      t2 = 0,
+      step = 0.01,
+      segment,
+      pass1 = [],
+      pass2 = [];
+    // first pass: split on extrema
+    let extrema = this.extrema().values;
+    if (extrema.indexOf(0) === -1) {
+      extrema = [0].concat(extrema);
+    }
+    if (extrema.indexOf(1) === -1) {
+      extrema.push(1);
+    }
+
+    for (t1 = extrema[0], i = 1; i < extrema.length; i++) {
+      t2 = extrema[i];
+      segment = this.split(t1, t2);
+      segment._t1 = t1;
+      segment._t2 = t2;
+      pass1.push(segment);
+      t1 = t2;
+    }
+
+    // second pass: further reduce these segments to simple segments
+    pass1.forEach(function (p1) {
+      t1 = 0;
+      t2 = 0;
+      while (t2 <= 1) {
+        for (t2 = t1 + step; t2 <= 1 + step; t2 += step) {
+          segment = p1.split(t1, t2);
+          if (!segment.simple()) {
+            t2 -= step;
+            if (abs$1(t1 - t2) < step) {
+              // we can never form a reduction
+              return [];
+            }
+            segment = p1.split(t1, t2);
+            segment._t1 = utils.map(t1, 0, 1, p1._t1, p1._t2);
+            segment._t2 = utils.map(t2, 0, 1, p1._t1, p1._t2);
+            pass2.push(segment);
+            t1 = t2;
+            break;
+          }
+        }
+      }
+      if (t1 < 1) {
+        segment = p1.split(t1, 1);
+        segment._t1 = utils.map(t1, 0, 1, p1._t1, p1._t2);
+        segment._t2 = p1._t2;
+        pass2.push(segment);
+      }
+    });
+    return pass2;
+  }
+
+  translate(v, d1, d2) {
+    d2 = typeof d2 === "number" ? d2 : d1;
+
+    // TODO: make this take curves with control points outside
+    //       of the start-end interval into account
+
+    const o = this.order;
+    let d = this.points.map((_, i) => (1 - i / o) * d1 + (i / o) * d2);
+    return new Bezier(
+      this.points.map((p, i) => ({
+        x: p.x + v.x * d[i],
+        y: p.y + v.y * d[i],
+      }))
+    );
+  }
+
+  scale(d) {
+    const order = this.order;
+    let distanceFn = false;
+    if (typeof d === "function") {
+      distanceFn = d;
+    }
+    if (distanceFn && order === 2) {
+      return this.raise().scale(distanceFn);
+    }
+
+    // TODO: add special handling for non-linear degenerate curves.
+
+    const clockwise = this.clockwise;
+    const points = this.points;
+
+    if (this._linear) {
+      return this.translate(
+        this.normal(0),
+        distanceFn ? distanceFn(0) : d,
+        distanceFn ? distanceFn(1) : d
+      );
+    }
+
+    const r1 = distanceFn ? distanceFn(0) : d;
+    const r2 = distanceFn ? distanceFn(1) : d;
+    const v = [this.offset(0, 10), this.offset(1, 10)];
+    const np = [];
+    const o = utils.lli4(v[0], v[0].c, v[1], v[1].c);
+
+    if (!o) {
+      throw new Error("cannot scale this curve. Try reducing it first.");
+    }
+
+    // move all points by distance 'd' wrt the origin 'o',
+    // and move end points by fixed distance along normal.
+    [0, 1].forEach(function (t) {
+      const p = (np[t * order] = utils.copy(points[t * order]));
+      p.x += (t ? r2 : r1) * v[t].n.x;
+      p.y += (t ? r2 : r1) * v[t].n.y;
+    });
+
+    if (!distanceFn) {
+      // move control points to lie on the intersection of the offset
+      // derivative vector, and the origin-through-control vector
+      [0, 1].forEach((t) => {
+        if (order === 2 && !!t) return;
+        const p = np[t * order];
+        const d = this.derivative(t);
+        const p2 = { x: p.x + d.x, y: p.y + d.y };
+        np[t + 1] = utils.lli4(p, p2, o, points[t + 1]);
+      });
+      return new Bezier(np);
+    }
+
+    // move control points by "however much necessary to
+    // ensure the correct tangent to endpoint".
+    [0, 1].forEach(function (t) {
+      if (order === 2 && !!t) return;
+      var p = points[t + 1];
+      var ov = {
+        x: p.x - o.x,
+        y: p.y - o.y,
+      };
+      var rc = distanceFn ? distanceFn((t + 1) / order) : d;
+      if (distanceFn && !clockwise) rc = -rc;
+      var m = sqrt$1(ov.x * ov.x + ov.y * ov.y);
+      ov.x /= m;
+      ov.y /= m;
+      np[t + 1] = {
+        x: p.x + rc * ov.x,
+        y: p.y + rc * ov.y,
+      };
+    });
+    return new Bezier(np);
+  }
+
+  outline(d1, d2, d3, d4) {
+    d2 = d2 === undefined ? d1 : d2;
+
+    if (this._linear) {
+      // TODO: find the actual extrema, because they might
+      //       be before the start, or past the end.
+
+      const n = this.normal(0);
+      const start = this.points[0];
+      const end = this.points[this.points.length - 1];
+      let s, mid, e;
+
+      if (d3 === undefined) {
+        d3 = d1;
+        d4 = d2;
+      }
+
+      s = { x: start.x + n.x * d1, y: start.y + n.y * d1 };
+      e = { x: end.x + n.x * d3, y: end.y + n.y * d3 };
+      mid = { x: (s.x + e.x) / 2, y: (s.y + e.y) / 2 };
+      const fline = [s, mid, e];
+
+      s = { x: start.x - n.x * d2, y: start.y - n.y * d2 };
+      e = { x: end.x - n.x * d4, y: end.y - n.y * d4 };
+      mid = { x: (s.x + e.x) / 2, y: (s.y + e.y) / 2 };
+      const bline = [e, mid, s];
+
+      const ls = utils.makeline(bline[2], fline[0]);
+      const le = utils.makeline(fline[2], bline[0]);
+      const segments = [ls, new Bezier(fline), le, new Bezier(bline)];
+      return new PolyBezier(segments);
+    }
+
+    const reduced = this.reduce(),
+      len = reduced.length,
+      fcurves = [];
+
+    let bcurves = [],
+      p,
+      alen = 0,
+      tlen = this.length();
+
+    const graduated = typeof d3 !== "undefined" && typeof d4 !== "undefined";
+
+    function linearDistanceFunction(s, e, tlen, alen, slen) {
+      return function (v) {
+        const f1 = alen / tlen,
+          f2 = (alen + slen) / tlen,
+          d = e - s;
+        return utils.map(v, 0, 1, s + f1 * d, s + f2 * d);
+      };
+    }
+
+    // form curve oulines
+    reduced.forEach(function (segment) {
+      const slen = segment.length();
+      if (graduated) {
+        fcurves.push(
+          segment.scale(linearDistanceFunction(d1, d3, tlen, alen, slen))
+        );
+        bcurves.push(
+          segment.scale(linearDistanceFunction(-d2, -d4, tlen, alen, slen))
+        );
+      } else {
+        fcurves.push(segment.scale(d1));
+        bcurves.push(segment.scale(-d2));
+      }
+      alen += slen;
+    });
+
+    // reverse the "return" outline
+    bcurves = bcurves
+      .map(function (s) {
+        p = s.points;
+        if (p[3]) {
+          s.points = [p[3], p[2], p[1], p[0]];
+        } else {
+          s.points = [p[2], p[1], p[0]];
+        }
+        return s;
+      })
+      .reverse();
+
+    // form the endcaps as lines
+    const fs = fcurves[0].points[0],
+      fe = fcurves[len - 1].points[fcurves[len - 1].points.length - 1],
+      bs = bcurves[len - 1].points[bcurves[len - 1].points.length - 1],
+      be = bcurves[0].points[0],
+      ls = utils.makeline(bs, fs),
+      le = utils.makeline(fe, be),
+      segments = [ls].concat(fcurves).concat([le]).concat(bcurves);
+
+    return new PolyBezier(segments);
+  }
+
+  outlineshapes(d1, d2, curveIntersectionThreshold) {
+    d2 = d2 || d1;
+    const outline = this.outline(d1, d2).curves;
+    const shapes = [];
+    for (let i = 1, len = outline.length; i < len / 2; i++) {
+      const shape = utils.makeshape(
+        outline[i],
+        outline[len - i],
+        curveIntersectionThreshold
+      );
+      shape.startcap.virtual = i > 1;
+      shape.endcap.virtual = i < len / 2 - 1;
+      shapes.push(shape);
+    }
+    return shapes;
+  }
+
+  intersects(curve, curveIntersectionThreshold) {
+    if (!curve) return this.selfintersects(curveIntersectionThreshold);
+    if (curve.p1 && curve.p2) {
+      return this.lineIntersects(curve);
+    }
+    if (curve instanceof Bezier) {
+      curve = curve.reduce();
+    }
+    return this.curveintersects(
+      this.reduce(),
+      curve,
+      curveIntersectionThreshold
+    );
+  }
+
+  lineIntersects(line) {
+    const mx = min(line.p1.x, line.p2.x),
+      my = min(line.p1.y, line.p2.y),
+      MX = max(line.p1.x, line.p2.x),
+      MY = max(line.p1.y, line.p2.y);
+    return utils.roots(this.points, line).filter((t) => {
+      var p = this.get(t);
+      return utils.between(p.x, mx, MX) && utils.between(p.y, my, MY);
+    });
+  }
+
+  selfintersects(curveIntersectionThreshold) {
+    // "simple" curves cannot intersect with their direct
+    // neighbour, so for each segment X we check whether
+    // it intersects [0:x-2][x+2:last].
+
+    const reduced = this.reduce(),
+      len = reduced.length - 2,
+      results = [];
+
+    for (let i = 0, result, left, right; i < len; i++) {
+      left = reduced.slice(i, i + 1);
+      right = reduced.slice(i + 2);
+      result = this.curveintersects(left, right, curveIntersectionThreshold);
+      results.push(...result);
+    }
+    return results;
+  }
+
+  curveintersects(c1, c2, curveIntersectionThreshold) {
+    const pairs = [];
+    // step 1: pair off any overlapping segments
+    c1.forEach(function (l) {
+      c2.forEach(function (r) {
+        if (l.overlaps(r)) {
+          pairs.push({ left: l, right: r });
+        }
+      });
+    });
+    // step 2: for each pairing, run through the convergence algorithm.
+    let intersections = [];
+    pairs.forEach(function (pair) {
+      const result = utils.pairiteration(
+        pair.left,
+        pair.right,
+        curveIntersectionThreshold
+      );
+      if (result.length > 0) {
+        intersections = intersections.concat(result);
+      }
+    });
+    return intersections;
+  }
+
+  arcs(errorThreshold) {
+    errorThreshold = errorThreshold || 0.5;
+    return this._iterate(errorThreshold, []);
+  }
+
+  _error(pc, np1, s, e) {
+    const q = (e - s) / 4,
+      c1 = this.get(s + q),
+      c2 = this.get(e - q),
+      ref = utils.dist(pc, np1),
+      d1 = utils.dist(pc, c1),
+      d2 = utils.dist(pc, c2);
+    return abs$1(d1 - ref) + abs$1(d2 - ref);
+  }
+
+  _iterate(errorThreshold, circles) {
+    let t_s = 0,
+      t_e = 1,
+      safety;
+    // we do a binary search to find the "good `t` closest to no-longer-good"
+    do {
+      safety = 0;
+
+      // step 1: start with the maximum possible arc
+      t_e = 1;
+
+      // points:
+      let np1 = this.get(t_s),
+        np2,
+        np3,
+        arc,
+        prev_arc;
+
+      // booleans:
+      let curr_good = false,
+        prev_good = false,
+        done;
+
+      // numbers:
+      let t_m = t_e,
+        prev_e = 1;
+
+      // step 2: find the best possible arc
+      do {
+        prev_good = curr_good;
+        prev_arc = arc;
+        t_m = (t_s + t_e) / 2;
+
+        np2 = this.get(t_m);
+        np3 = this.get(t_e);
+
+        arc = utils.getccenter(np1, np2, np3);
+
+        //also save the t values
+        arc.interval = {
+          start: t_s,
+          end: t_e,
+        };
+
+        let error = this._error(arc, np1, t_s, t_e);
+        curr_good = error <= errorThreshold;
+
+        done = prev_good && !curr_good;
+        if (!done) prev_e = t_e;
+
+        // this arc is fine: we can move 'e' up to see if we can find a wider arc
+        if (curr_good) {
+          // if e is already at max, then we're done for this arc.
+          if (t_e >= 1) {
+            // make sure we cap at t=1
+            arc.interval.end = prev_e = 1;
+            prev_arc = arc;
+            // if we capped the arc segment to t=1 we also need to make sure that
+            // the arc's end angle is correct with respect to the bezier end point.
+            if (t_e > 1) {
+              let d = {
+                x: arc.x + arc.r * cos$1(arc.e),
+                y: arc.y + arc.r * sin$1(arc.e),
+              };
+              arc.e += utils.angle({ x: arc.x, y: arc.y }, d, this.get(1));
+            }
+            break;
+          }
+          // if not, move it up by half the iteration distance
+          t_e = t_e + (t_e - t_s) / 2;
+        } else {
+          // this is a bad arc: we need to move 'e' down to find a good arc
+          t_e = t_m;
+        }
+      } while (!done && safety++ < 100);
+
+      if (safety >= 100) {
+        break;
+      }
+      prev_arc = prev_arc ? prev_arc : arc;
+      circles.push(prev_arc);
+      t_s = prev_e;
+    } while (t_e < 1);
+    return circles;
+  }
+}
