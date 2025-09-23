@@ -90,6 +90,7 @@
   background-position: calc(var(--sa-mouse-x, -10000px) - 550px) calc(var(--sa-mouse-y, -10000px) - 550px);
   opacity: 0.9;
   animation: jitter 2.5s linear infinite;
+  transform-origin: var(--sa-mouse-x, center) var(--sa-mouse-y, center);
 }
 
 .sa-mode::after {
