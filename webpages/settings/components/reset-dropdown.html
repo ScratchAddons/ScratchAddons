@@ -1,9 +1,6 @@
 <template>
-  <div class="setting-dropdown dropdown-parent" :class="{open: isOpen}">
-    <button type="button" class="large-button clear-button" :disabled="!enabled" @click="toggle" :title="msg('reset')">
-      <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
-    </button>
-    <ul class="dropdown-list">
+  <div class="setting-dropdown dropdown-parent">
+    <dropdown button-class="large-button clear-button" :is-disabled="!enabled" :button-title="msg('reset')">
       <li tabindex="0" @click="resetToDefault">
         <span v-if="setting.type === 'color'" class="color-preview"
           ><span :style="{backgroundColor: setting.default}"></span
@@ -12,7 +9,6 @@
         <span v-if="setting.type !== 'color'" class="text-preview">{{ setting.default }}</span>
       </li>
       <template v-for="preset in presets">
-        <!-- TODO: arrow key navigation -->
         <li
           tabindex="0"
           v-if="preset.values.hasOwnProperty(setting.id) && setting.type === 'color'
@@ -28,6 +24,6 @@
           <span v-if="setting.type !== 'color'" class="text-preview">{{ preset.values[setting.id] }}</span>
         </li>
       </template>
-    </ul>
+    </dropdown>
   </div>
 </template>

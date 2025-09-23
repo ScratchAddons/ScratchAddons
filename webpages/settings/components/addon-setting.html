@@ -38,20 +38,15 @@
             </div>
           </div>
         </div>
-        <div class="addon-split-button setting-table-dropdown dropdown-parent" :class="{open: rowDropdownOpen}">
+        <div class="addon-split-button setting-table-dropdown dropdown-parent">
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
-          <div v-click-outside="closeDropdowns">
-            <button
-              :disabled="!addon._enabled"
-              class="addon-buttons addon-split-button-dropdown"
-              @click="toggleRowDropdown"
-            >
-              <img class="icon-type" src="../../images/icons/expand.svg" draggable="false" />
-            </button>
-            <ul class="dropdown-list align-start">
-              <!-- TODO: arrow key navigation -->
+          <dropdown
+            button-class="addon-buttons addon-split-button-dropdown"
+            :is-disabled="!addon._enabled"
+            align-start="true"
+          >
               <li
                 tabindex="0"
                 v-for="preset of setting.presets"
@@ -60,8 +55,7 @@
               >
                 {{ preset.name }}
               </li>
-            </ul>
-          </div>
+          </dropdown>
         </div>
       </div>
       <input
@@ -149,7 +143,6 @@
           :setting="setting"
           :enabled="addon._enabled"
           :presets="addon.presets"
-          v-click-outside="closeDropdowns"
         ></reset-dropdown
       ></template>
       <template v-if="!tableChild && !showResetDropdown"
@@ -235,17 +228,17 @@
     min-width: 70px;
   }
 
-  .setting-dropdown.open .clear-button {
+  .setting-dropdown .clear-button.open {
     border-bottom-right-radius: 0;
     background: var(--button-hover-background);
   }
-  [dir="rtl"] .setting-dropdown.open .clear-button {
+  [dir="rtl"] .setting-dropdown .clear-button.open {
     border-bottom-left-radius: 0;
   }
-  .iframe .setting-dropdown.open .clear-button {
+  .iframe .setting-dropdown .clear-button.open {
     border-bottom-right-radius: 4px;
   }
-  .iframe[dir="rtl"] .setting-dropdown.open .clear-button {
+  .iframe[dir="rtl"] .setting-dropdown .clear-button.open {
     border-bottom-left-radius: 4px;
   }
   .iframe .setting-dropdown ul {

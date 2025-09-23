@@ -25,6 +25,7 @@ let fuse;
 
   await loadVueComponent([
     "webpages/settings/components/picker-component",
+    "webpages/settings/components/dropdown",
     "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-setting",
     "webpages/settings/components/addon-tag",
