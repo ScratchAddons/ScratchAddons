@@ -310,7 +310,7 @@ export default async function ({ addon, console, msg }) {
 
     const outputTextarea = createElement('textarea', { id: 'sa-svg-maker-output-svg', className: 'sa-svg-maker-hidden', readonly: '' });
 
-    const copyToClipboardBtn = createElement('button', { id: 'sa-svg-maker-copy-to-clipboard-btn', className: 'sa-svg-maker-btn sa-svg-maker', innerHTML: 'Copy to Clipboard' });
+    const copyToClipboardBtn = createElement('button', { id: 'sa-svg-maker-copy-to-clipboard-btn', className: 'sa-svg-maker-btn sa-svg-maker sa-svg-maker-hidden', innerHTML: 'Copy to Clipboard' });
     const downloadBtn = createElement('a', { id: 'sa-svg-maker-download-btn', className: 'sa-svg-maker-btn', innerHTML: `${msg('save')}` });
     const createLinkBtn = createElement('a', { id: 'sa-svg-maker-create-link', className: 'sa-svg-maker-btn sa-svg-maker-hidden', innerHTML: 'Create Link' });
     const dxfBtn = createElement('a', { id: 'sa-svg-maker-dxf-btn', className: 'sa-svg-maker-btn sa-svg-maker-hidden', innerHTML: 'Download Dxf' });
