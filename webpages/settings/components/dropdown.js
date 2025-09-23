@@ -12,8 +12,8 @@ export default async function ({ template }) {
           ArrowLeft: -1,
           ArrowRight: 1,
           Home: -1000,
-          End: 1000
-        }
+          End: 1000,
+        },
       };
     },
     computed: {
@@ -68,7 +68,7 @@ export default async function ({ template }) {
           this.isOpen = false;
         }
       });
-    }
+    },
   });
   Vue.component("dropdown", Dropdown);
 }
