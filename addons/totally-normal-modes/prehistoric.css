@@ -76,8 +76,18 @@
 }
 
 .sa-mode::before {
-  background-image: url("assets/prehistoric.png");
-  background-position: calc(var(--sa-mouse-x, -10000px) - 2000px) calc(var(--sa-mouse-y, -10000px) - 2000px);
+  background-image: radial-gradient(
+    circle at 550px 550px,
+    #f68002 0px,
+    #bd6818d3 120px,
+    #895521cf 200px,
+    #734c24de 280px,
+    #4c3419e8 360px,
+    #211407f5 440px,
+    black 520px
+  );
+  background-size: calc(100% + 550px) calc(100% + 550px);
+  background-position: calc(var(--sa-mouse-x, -10000px) - 550px) calc(var(--sa-mouse-y, -10000px) - 550px);
   opacity: 0.9;
   animation: jitter 2.5s linear infinite;
 }
