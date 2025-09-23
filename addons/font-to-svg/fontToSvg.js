@@ -1,6 +1,6 @@
 // Variable Manager's code from Jeffalo and GarboMuffin helped so much with the tabs on this ext! Big thanks to them.
-import "../../libraries/thirdparty/f2svg/maker.js";
-import "../../libraries/thirdparty/f2svg/opentype.min.mjs";
+import "../../libraries/thirdparty/cs/maker.min.js";
+import "../../libraries/thirdparty/cs/opentype.min.mjs";
 const MakerJs = window.MakerJs;
 
 var App = /** @class */ (function () {
