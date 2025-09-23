@@ -49,9 +49,9 @@
           >
               <li
                 tabindex="0"
+                role="menuitem"
                 v-for="preset of setting.presets"
                 @click="addTableRow(preset.values)"
-                @keydown.enter="addTableRow(preset.values)"
               >
                 {{ preset.name }}
               </li>

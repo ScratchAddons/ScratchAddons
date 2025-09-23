@@ -1,7 +1,7 @@
 <template>
   <div class="setting-dropdown dropdown-parent">
     <dropdown button-class="large-button clear-button" :is-disabled="!enabled" :button-title="msg('reset')">
-      <li tabindex="0" @click="resetToDefault">
+      <li tabindex="0" role="menuitem" @click="resetToDefault">
         <span v-if="setting.type === 'color'" class="color-preview"
           ><span :style="{backgroundColor: setting.default}"></span
         ></span>
@@ -11,11 +11,11 @@
       <template v-for="preset in presets">
         <li
           tabindex="0"
+          role="menuitem"
           v-if="preset.values.hasOwnProperty(setting.id) && setting.type === 'color'
             ? preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()
             : preset.values[setting.id] !== setting.default"
           @click="resetToPreset(preset)"
-          @keydown.enter="resetToPreset(preset)"
         >
           <span v-if="setting.type === 'color'" class="color-preview"
             ><span :style="{backgroundColor: preset.values[setting.id]}"></span

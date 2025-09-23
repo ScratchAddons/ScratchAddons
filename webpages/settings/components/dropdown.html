@@ -1,5 +1,5 @@
 <template>
-  <div v-click-outside="closeDropdows">
+  <div v-click-outside="closeDropdows" @keydown="handleKeys">
     <button
       aria-haspopup="true"
       :aria-expanded="(isOpen) ? 'true' : 'false'"
@@ -10,7 +10,7 @@
     >
       <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
     </button>
-    <ul class="dropdown-list" :class="{'align-start': alignStart}" @click="listClick" role="menu">
+    <ul class="dropdown-list" :class="{'align-start': alignStart}" @click="listClick" role="menu" v-el:list>
       <slot></slot>
     </ul>
   </div>
