@@ -4,6 +4,9 @@
 [dir="rtl"] .sa-gamepad-container {
   margin-left: 0.2rem;
 }
+[class*="stage-header_rightSection_"] > .sa-gamepad-container {
+  margin: 0;
+}
 
 .sa-gamepad-popup-outer {
   /* above fullscreen */

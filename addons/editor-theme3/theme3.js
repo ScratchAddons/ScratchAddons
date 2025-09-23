@@ -1,5 +1,7 @@
 import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+// Module for sharing addon values and methods with recolor-custom-blocks
+import { registerAddon, shareMethod } from "./module.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const uriHeader = "data:image/svg+xml;base64,";
@@ -68,7 +70,7 @@ const categories = [
   saCategory,
 ];
 
-// From scratch-gui/src/lib/themes/default/index.js
+// From https://github.com/scratchfoundation/scratch-gui/blob/782fa44/src/lib/themes/default/index.js
 const defaultColors = {
   motion: {
     primary: "#4C97FF",
@@ -139,7 +141,7 @@ const defaultColors = {
   text: "#FFFFFF",
 };
 
-// From scratch-blocks/media/dropdown-arrow.svg
+// From https://github.com/scratchfoundation/scratch-blocks/blob/2e3a31e/media/dropdown-arrow.svg
 const arrowPath =
   "M6.36,7.79a1.43,1.43,0,0,1-1-.42L1.42,3.45a1.44,1.44,0,0,1,0-2c0.56-.56,9.31-0.56,9.87,0a1.44,1.44,0,0,1,0,2L7.37,7.37A1.43,1.43,0,0,1,6.36,7.79Z";
 const arrowShadowPath =
@@ -147,6 +149,9 @@ const arrowShadowPath =
 const arrowShadowColor = "#231f20";
 
 export default async function ({ addon, console, msg }) {
+  // Register the addon to share information through the module
+  registerAddon(addon, "editor-theme3");
+
   // Will be replaced with the current Scratch theme's colors when entering the editor
   let originalColors = defaultColors;
   let originalConstants = {};
@@ -157,7 +162,12 @@ export default async function ({ addon, console, msg }) {
     }
     return addon.settings.get("text");
   };
+  // textMode() used by recolor-custom-blocks to determine the styling of non-category colored blocks
+  shareMethod("editor-theme3", textMode, "textMode");
+
   const isColoredTextMode = () => textMode() === "colorOnWhite" || textMode() === "colorOnBlack";
+  // isColoredTextMode() Used by recolor-custom blocks to determine the styling of recolored custom block modal buttons
+  shareMethod("editor-theme3", isColoredTextMode, "isColoredTextMode");
 
   const primaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].primary;
@@ -291,9 +301,14 @@ export default async function ({ addon, console, msg }) {
       if (block.isShadow() && block.getParent()) block = block.getParent();
       if (isColoredTextMode() || textMode() === "black") {
         let primary;
-        if (block.isShadow() && block.getParent()) primary = block.getParent().getColour();
+        let tertiary = block.getColourTertiary();
+        // If a color is specified by recolor-custom-blocks, use that instead
+        if (block.recolorCustomBlock?.isEdited) {
+          primary = block.recolorCustomBlock.colourPrimary;
+          tertiary = block.recolorCustomBlock.colourTertiary;
+        } else if (block.isShadow() && block.getParent()) primary = block.getParent().getColour();
         else primary = block.getColour();
-        if (isColoredTextMode()) return alphaBlend(primary, multiply(block.getColourTertiary(), { a: 0.25 }));
+        if (isColoredTextMode()) return alphaBlend(primary, multiply(tertiary, { a: 0.25 }));
         else return brighten(primary, { r: 0.4, g: 0.4, b: 0.4 });
       }
       return block.getColourTertiary();
@@ -309,6 +324,10 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return "#000000";
     if (field) {
       let block = field.sourceBlock_;
+      if (block.recolorCustomBlock?.isEdited) {
+        // If custom-recolor-blocks sets the color, use it's tertiary color instead
+        return block.recolorCustomBlock.colourTertiary;
+      }
       if (block.isShadow() && block.getParent()) block = block.getParent();
       return block.getColourTertiary();
     }
@@ -545,9 +564,15 @@ export default async function ({ addon, console, msg }) {
     };
   }
 
-  if (!Blockly.registry) {
-    // editor-colored-context menus compatibility
-    // doesn't support new Blockly yet
+  if (Blockly.registry) {
+    // New Blockly
+    const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu;
+    Blockly.BlockSvg.prototype.showContextMenu = function (e) {
+      const widgetDiv = Blockly.WidgetDiv.getDiv();
+      widgetDiv.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
+      return oldBlockShowContextMenu.call(this, e);
+    };
+  } else {
     const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
     Blockly.BlockSvg.prototype.showContextMenu_ = function (e) {
       Blockly.WidgetDiv.DIV.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
@@ -583,12 +608,23 @@ export default async function ({ addon, console, msg }) {
     Blockly.FieldTextInput.prototype.init = function () {
       // Text inputs
       oldFieldTextInputInit.call(this);
-      if (this.sourceBlock_.isShadow()) return;
-      // Labels in custom block editor
-      this.box_.setAttribute(
-        "fill",
-        isColoredTextMode() ? fieldBackground(this) : this.sourceBlock_.getColourTertiary()
-      );
+
+      // The background if editable fields in procedure_declaration are not changed by changing the block's color
+      // Manually setting the color here is not easily detectable by other addons, so we share this method
+      // so other addons (recolor-custom-blocks) can pass their own colors / fields in for compatibility
+      const updateBox_ = () => {
+        if (this.sourceBlock_.isShadow()) return;
+        // Labels in custom block editor
+        const recolorCustomBlock = this?.sourceBlock_?.recolorCustomBlock;
+        const colorTertiary = recolorCustomBlock?.isEdited // Use recolor-custom-block's colors if needed
+          ? recolorCustomBlock.colourTertiary
+          : this.sourceBlock_.getColourTertiary();
+        this.box_.setAttribute("fill", isColoredTextMode() ? fieldBackground(this) : colorTertiary);
+      };
+      shareMethod("editor-theme3", updateBox_, "updateBox_");
+      if (this.box_) {
+        updateBox_(this);
+      }
     };
 
     const oldFieldTextInputRemovableShowEditor = Blockly.FieldTextInputRemovable.prototype.showEditor_;
@@ -612,10 +648,10 @@ export default async function ({ addon, console, msg }) {
 
   if (Blockly.registry) {
     // new Blockly
-    const oldFieldNUmberShowNumPad = FieldNumber.prototype.showNumPad_;
+    const oldFieldNumberShowNumPad = FieldNumber.prototype.showNumPad_;
     FieldNumber.prototype.showNumPad_ = function () {
       // Number pad
-      oldFieldNUmberShowNumPad.call(this);
+      oldFieldNumberShowNumPad.call(this);
       Blockly.DropDownDiv.setColour(
         this.sourceBlock_.getParent().getColour(),
         this.sourceBlock_.getParent().getColourTertiary()
@@ -802,23 +838,23 @@ export default async function ({ addon, console, msg }) {
       else primaryColor = this.sourceBlock_.getColour();
       Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
     };
-  }
-  const oldFieldMatrixUpdateMatrix = FieldMatrix.prototype.updateMatrix_;
-  FieldMatrix.prototype.updateMatrix_ = function () {
-    oldFieldMatrixUpdateMatrix.call(this);
-    const matrix = this.getValue();
-    for (let i = 0; i < matrix.length; i++) {
-      if (matrix[i] !== "0") {
-        this.fillMatrixNode_(this.ledButtons_, i, uncoloredTextColor());
-        this.fillMatrixNode_(this.ledThumbNodes_, i, uncoloredTextColor());
+    const oldFieldMatrixUpdateMatrix = FieldMatrix.prototype.updateMatrix_;
+    FieldMatrix.prototype.updateMatrix_ = function () {
+      oldFieldMatrixUpdateMatrix.call(this);
+      const matrix = this.getValue();
+      for (let i = 0; i < matrix.length; i++) {
+        if (matrix[i] !== "0") {
+          this.fillMatrixNode_(this.ledButtons_, i, uncoloredTextColor());
+          this.fillMatrixNode_(this.ledThumbNodes_, i, uncoloredTextColor());
+        }
       }
-    }
-  };
-  const oldFieldMatrixCreateButton = FieldMatrix.prototype.createButton_;
-  FieldMatrix.prototype.createButton_ = function (fill) {
-    if (fill === "#FFFFFF") fill = uncoloredTextColor();
-    return oldFieldMatrixCreateButton.call(this, fill);
-  };
+    };
+    const oldFieldMatrixCreateButton = FieldMatrix.prototype.createButton_;
+    FieldMatrix.prototype.createButton_ = function (fill) {
+      if (fill === "#FFFFFF") fill = uncoloredTextColor();
+      return oldFieldMatrixCreateButton.call(this, fill);
+    };
+  }
 
   let FieldVerticalSeparator;
   if (Blockly.registry)
@@ -828,10 +864,11 @@ export default async function ({ addon, console, msg }) {
   FieldVerticalSeparator.prototype[fieldMethodName] = function () {
     // Vertical line between extension icon and block label
     oldFieldVerticalSeparatorInit.call(this);
-    if (this.lineElement_) {
+    const lineElement = this.lineElement || this.lineElement_; // new Blockly || old Blockly
+    if (lineElement) {
       if (isColoredTextMode() || textMode() === "black")
-        this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
-      else this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourSecondary());
+        lineElement.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
+      else lineElement.setAttribute("stroke", this.sourceBlock_.getColourSecondary());
     }
   };
 
@@ -874,11 +911,12 @@ export default async function ({ addon, console, msg }) {
                 },
               ])
             ),
-            startHats: true,
           }
         )
       );
       workspace.refreshTheme();
+      // used by Blockly and editor-colored-context-menus
+      document.body.style.setProperty("--colour-text", uncoloredTextColor());
     }
     addon.tab.setCustomBlockColor({
       color: primaryColor(saCategory),
@@ -891,6 +929,14 @@ export default async function ({ addon, console, msg }) {
       if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
       else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
       Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
+      // If the custom block editing modal is open, we need to apply our color changes
+      if (addon.tab.redux.state.scratchGui.customProcedures.active) {
+        // This should always be procedures_declaration, but it can crash if its not
+        const declarationBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
+        if (declarationBlock?.type === "procedures_declaration") {
+          declarationBlock.updateDisplay_();
+        }
+      }
     }
 
     const safeTextColor = encodeURIComponent(uncoloredTextColor());

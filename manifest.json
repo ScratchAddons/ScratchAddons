@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.41.0",
-  "version_name": "1.41.0-prerelease",
+  "version": "1.44.0",
+  "version_name": "1.44.0-prerelease",
   "default_locale": "en",
   "background": {
     "service_worker": "background/background.js",
@@ -20,10 +20,9 @@
     {
       "matches": [
         "https://scratch.mit.edu/*",
-        "https://scratchfoundation.github.io/scratch-gui/*",
+        "https://scratchfoundation.github.io/scratch-editor/*",
         "http://localhost:8333/*",
-        "http://localhost:8601/*",
-        "http://localhost:8602/*"
+        "http://localhost:8601/*"
       ],
       "run_at": "document_start",
       "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
@@ -32,10 +31,9 @@
     {
       "matches": [
         "https://scratch.mit.edu/*",
-        "https://scratchfoundation.github.io/scratch-gui/*",
+        "https://scratchfoundation.github.io/scratch-editor/*",
         "http://localhost:8333/*",
-        "http://localhost:8601/*",
-        "http://localhost:8602/*"
+        "http://localhost:8601/*"
       ],
       "run_at": "document_start",
       "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"],
@@ -52,7 +50,7 @@
     "https://scratch.mit.edu/*",
     "https://api.scratch.mit.edu/*",
     "https://clouddata.scratch.mit.edu/*",
-    "https://scratchfoundation.github.io/scratch-gui/*",
+    "https://scratchfoundation.github.io/scratch-editor/*",
     "http://localhost/*"
   ],
   "permissions": [

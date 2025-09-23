@@ -52,7 +52,7 @@ export default async function ({ template }) {
           this.$root.closePickers({ isTrusted: true }, this, {
             callCloseDropdowns: false,
           });
-        if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
+        if (callCloseDropdowns) this.$root.closeDropdowns({ isTrusted: true }); // close other dropdowns
         this.opening = false;
         this.$els.pickr._valueChanged();
         this.color = "#" + this.$els.pickr.hex8;

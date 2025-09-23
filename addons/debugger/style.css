@@ -33,8 +33,11 @@
   position: absolute;
   z-index: 492;
   background-color: white;
-  width: 565px;
+  width: 540px;
   height: 25rem;
+  resize: auto;
+  min-width: 300px;
+  min-height: 200px;
 }
 
 .sa-debugger-interface [class*="card_header-buttons_"] {
@@ -53,9 +56,14 @@
   margin: 0;
   display: flex;
   align-items: center;
-  padding: 0 15px;
+  align-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 15px;
+  padding-right: 0px;
   font-size: 0.75rem;
 }
+
 .sa-debugger-tabs li {
   margin: 0;
   display: flex;
@@ -66,9 +74,7 @@
   border-radius: 1rem;
   color: white;
   cursor: pointer;
-}
-.sa-debugger-tabs li + li {
-  margin-inline-start: 10px;
+  font-weight: bold;
 }
 .sa-debugger-tabs li:hover {
   background-color: rgba(0, 0, 0, 0.15);
@@ -83,27 +89,79 @@
   margin: 0;
   margin-right: 0.25rem;
   width: 1rem;
+  height: 1rem;
   filter: brightness(0) invert(1);
 }
 .sa-debugger-tabs li.sa-debugger-tab-selected img {
   filter: none;
 }
 
-.sa-debugger-header-buttons img {
-  width: 20px;
-  height: 20px;
+.sa-debugger-header-buttons [class*="modal_header-item-close"] {
+  padding: 0 13px 0 0;
+}
+
+.sa-debugger-footer {
+  border-top: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  display: flex;
+  justify-content: center;
+  padding: 8px 15px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: auto;
+}
+
+.sa-debugger-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sa-debugger-footer-buttons [class*="card_shrink-expand-button"] {
+  background-color: #29beb8;
+  font-weight: bold;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  color: white;
+  cursor: pointer;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.sa-debugger-footer-buttons [class*="card_shrink-expand-button"]:hover {
+  background-color: #3aa8a4;
+}
+
+.sa-debugger-footer-buttons img {
+  width: 16px;
+  height: 16px;
+}
+
+.sa-debugger-unpause-container {
+  display: flex;
+  align-items: center;
+}
+
+.sa-debugger-unpause-container:not(:last-child) {
+  border-right: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  padding-right: 10px;
 }
 
 .sa-debugger-unpause {
-  animation: saDebuggerUnpause 2s infinite alternate;
+  animation: saBorderPulse 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes saDebuggerUnpause {
+@keyframes saBorderPulse {
   0% {
-    background-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px rgb(41 190 184 / 0%);
   }
   100% {
-    background-color: rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 4px rgb(41 190 184 / 35%);
   }
 }
 
@@ -259,6 +317,232 @@
 .sa-debugger-block-preview[data-shape="round"] {
   border-radius: 100px;
 }
-.sa-debugger-block-preview[data-shape="stacked"] {
+.sa-debugger-block-preview[data-shape="stacked"],
+.sa-debugger-block-preview[data-shape="undefined"] {
   border-radius: 3px;
+}
+
+.sa-timing-timer {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-left: 4px;
+  font-family: monospace;
+  justify-content: space-around;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.sa-timing-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure the parent has a specific height */
+}
+
+.sa-timing-content .sa-debugger-log-outer {
+  height: auto;
+  flex-grow: 1;
+}
+
+.sa-timing-timer > span {
+  width: 95px;
+  text-align: center;
+}
+
+.sa-timing-timer > :first-child {
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sa-timing-header {
+  position: relative;
+  font-weight: bold;
+}
+
+.sa-timing-header span {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sa-timing-header span.active-header {
+  font-weight: bold;
+  color: #855cd6;
+}
+
+.sa-timing-disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.sa-timing-content .sa-debugger-block-preview,
+.sa-timing-content .sa-debugger-log-link {
+  width: 115px;
+  text-wrap: nowrap;
+  text-align: center;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+/* Tooltip container (the second item) */
+.sa-timing-tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* invisible container to use as a hit box */
+.sa-timing-tooltip-outer {
+  visibility: hidden;
+  position: absolute;
+  transform: translate(-25%, 96px);
+  padding-top: 22px;
+  cursor: default;
+}
+
+/* Tooltip content (hidden by default, positioned above the container) */
+.sa-timing-tooltip-content {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
+  width: 240px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+}
+
+/* Tooltip content text */
+.sa-timing-tooltip-content p {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+
+/* Tooltip image placeholder */
+.sa-timing-tooltip-image {
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+  height: auto;
+}
+
+/* Tooltip arrow */
+.sa-timing-tooltip-content::before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 20px;
+  height: 20px;
+  background: inherit;
+  border-left: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  z-index: -1;
+}
+
+/* Show tooltip when hovering over the container */
+.sa-timing-tooltip-container:hover .sa-timing-tooltip-outer,
+.sa-timing-tooltip-outer:hover {
+  visibility: visible;
+}
+
+.sa-timing-tooltip-content a {
+  pointer-events: auto;
+}
+
+/* Shared checkbox styles for timing controls */
+
+.sa-timing-checkbox {
+  margin-right: 4px;
+  cursor: pointer;
+  transform: scale(1.2);
+  appearance: none;
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  border: none;
+  border-radius: 2px;
+}
+
+/* Make checkbox buttons same height as icon buttons */
+.sa-timing-profiling-toggle {
+  height: 16px;
+}
+
+.sa-timing-heatmap-content-wrapper {
+  height: 16px;
+}
+
+.sa-timing-checkbox:checked {
+  background-color: white;
+  position: relative;
+}
+
+.sa-timing-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 3.75px;
+  top: 1px;
+  width: 3px;
+  height: 6px;
+  border: solid #29beb8;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Heatmap button layout modifications */
+.sa-timing-heatmap-toggle {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  margin-top: -8px;
+  margin-bottom: -8px;
+}
+
+.sa-timing-heatmap-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Heatmap slider styles */
+.sa-timing-heatmap-slider-container {
+  width: 100%;
+  margin-top: 4px;
+  padding: 0 8px 4px 8px;
+  box-sizing: border-box;
+}
+
+.sa-timing-heatmap-slider-track {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+.sa-timing-heatmap-slider-thumb {
+  position: absolute;
+  top: -4px;
+  left: 100%;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+  cursor: grab;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.sa-timing-heatmap-slider-thumb:active {
+  cursor: grabbing;
 }

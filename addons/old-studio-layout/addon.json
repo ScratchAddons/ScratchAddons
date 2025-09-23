@@ -1,18 +1,8 @@
 {
   "name": "Old studio layout",
-  "description": "Reverts the layout of the studio page back to the one used before the studio update or the one previously available as part of the Scratch 2.0 \u2192 3.0 addon.",
-  "info": [
-    {
-      "type": "notice",
-      "text": "This addon doesn't work well on mobile devices and in small windows.",
-      "id": "mobile"
-    },
-    {
-      "text": "The size of most elements is not changed. If you want to see more projects and curators at once, use the \"more items per row\" addon.",
-      "id": "itemsPerRow"
-    }
-  ],
+  "description": "Reverts the layout of the studio page back to the one used before the studio update.",
   "tags": ["community", "theme", "studios", "featured"],
+  "relatedAddons": ["scratch3to2", "items-per-row", "studio-followers"],
   "credits": [
     {
       "name": "Maximouse",
@@ -40,6 +30,10 @@
   "injectAsStyleElt": true,
   "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.17.0",
+  "latestUpdate": {
+    "version": "1.44.0",
+    "temporaryNotice": "Now supports mobile devices."
+  },
   "userscripts": [
     {
       "url": "classes.js",
@@ -53,36 +47,11 @@
       "matches": ["https://scratch.mit.edu/studios/*"]
     },
     {
-      "url": "default.css",
+      "url": "scratch3to2.css",
       "matches": ["https://scratch.mit.edu/studios/*"],
       "if": {
-        "settings": { "version": "default" }
+        "addonEnabled": ["scratch3to2"]
       }
-    },
-    {
-      "url": "scratchr2.css",
-      "matches": ["https://scratch.mit.edu/studios/*"],
-      "if": {
-        "settings": { "version": "scratchr2" }
-      }
-    }
-  ],
-  "settings": [
-    {
-      "id": "version",
-      "type": "select",
-      "name": "Version",
-      "potentialValues": [
-        {
-          "id": "default",
-          "name": "Default"
-        },
-        {
-          "id": "scratchr2",
-          "name": "Scratch 2.0 \u2192 3.0"
-        }
-      ],
-      "default": "default"
     }
   ]
 }

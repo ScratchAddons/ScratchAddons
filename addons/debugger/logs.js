@@ -84,7 +84,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     }
   };
 
-  const exportButton = debug.createHeaderButton({
+  const exportButton = debug.createIconButton({
     text: msg("export"),
     icon: addon.self.dir + "/icons/download-white.svg",
     description: msg("export-desc"),
@@ -116,7 +116,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     downloadText("logs.txt", file);
   });
 
-  const trashButton = debug.createHeaderButton({
+  const trashButton = debug.createIconButton({
     text: msg("clear"),
     icon: addon.self.dir + "/icons/delete.svg",
   });

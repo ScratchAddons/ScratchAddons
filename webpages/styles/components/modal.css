@@ -10,10 +10,6 @@
   margin-top: 20px;
   overflow-y: auto;
 }
-.more-settings .large-button {
-  display: block;
-  margin-inline-end: 10px;
-}
 .more-settings .filter-selector {
   margin: 0;
 }
@@ -28,7 +24,7 @@
   margin-bottom: 0;
 }
 .more-settings .addon-topbar {
-  height: 36px;
+  min-height: 36px;
   border-bottom: 1px solid var(--content-border);
 }
 .more-settings .addon-name {
@@ -37,4 +33,13 @@
 .more-settings .addon-settings {
   padding: 10px;
   padding-bottom: 0;
+}
+.export-actions {
+  flex-wrap: wrap;
+  gap: 10px 25px;
+}
+.export-actions-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }

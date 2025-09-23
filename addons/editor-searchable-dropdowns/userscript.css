@@ -23,3 +23,15 @@
 .blocklyDropDownDiv .goog-menu {
   overflow-x: hidden;
 }
+
+.u-dropdown-no-results {
+  opacity: 0.5;
+  cursor: default;
+}
+.blocklyDropDownDiv .blocklyMenu .blocklyMenuItem.u-dropdown-no-results:hover {
+  background-color: transparent;
+}
+
+.u-dropdown-selected-item {
+  background-color: var(--colour-menuHover);
+}

@@ -21,16 +21,13 @@
   ],
   "info": [
     {
-      "id": "tutorials-button-update",
-      "text": "The \"Hide Tutorials button\" addon has been moved here as a setting."
-    },
-    {
       "type": "notice",
       "id": "small-screens",
       "text": "The text labels may be automatically replaced by icons on smaller windows."
     }
   ],
   "tags": ["editor", "editorMenuBar", "featured"],
+  "relatedAddons": ["discuss-button", "editor-compact"],
   "settings": [
     {
       "name": "Show menu...",

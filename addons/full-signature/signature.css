@@ -1,4 +1,5 @@
 .postsignature {
   overflow-y: auto !important;
   max-height: 168px;
+  scrollbar-width: thin;
 }

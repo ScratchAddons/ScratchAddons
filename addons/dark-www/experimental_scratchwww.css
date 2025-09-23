@@ -138,6 +138,7 @@ body:not(.sa-body-editor) .formik-input,
 .studio-member-tile,
 .studio-activity .studio-messages-list,
 .cards-modal-container,
+.projects-carousel .content .slick-track .thumbnail,
 .about .body,
 .messages-social-list,
 .comment-text,
@@ -168,6 +169,8 @@ body:not(.sa-body-editor) input.formik-radio-input,
 .wedo .project-card,
 .transfer-host-modal .cancel-button,
 .transfer-host-modal .transfer-password-input,
+.share-modal .share-modal-inner,
+.update-thumbnail-info-modal .update-thumbnail-info-modal-inner,
 .comments-container .sa-emoji-picker,
 .studio-compose-container .sa-emoji-picker {
   background-color: var(--darkWww-box);
@@ -188,7 +191,8 @@ body:not(.sa-body-editor) .button.white,
 .index .title-banner p a button,
 .financials-section .financials-button,
 .donate-section .donate-button,
-.initiatives-section .initiatives-subsection-content .bubble.inverted {
+.initiatives-section .initiatives-subsection-content .bubble.inverted,
+.share-modal .change-thumbnail-button {
   background-color: var(--darkWww-box);
 }
 .ReactModal__Content[style*="background: rgb(255, 255, 255)"] {
@@ -197,6 +201,7 @@ body:not(.sa-body-editor) .button.white,
   border-color: transparent !important;
   color: var(--darkWww-box-text);
 }
+body:not(.sa-body-editor) [class*="stage-header_rightSection_"],
 .expect .keynote .card {
   background-color: transparent;
 }
@@ -224,13 +229,16 @@ body:not(.sa-body-editor) .button.white,
 .tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .cards-modal-container .cards-modal-section-title,
+.projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .unsupported-browser .faq-link-text,
 a.social-messages-profile-link:visited,
 a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
 .studio-member-tile .studio-member-role,
-body:not(.sa-body-editor) .join-flow-title {
+body:not(.sa-body-editor) .join-flow-title,
+.registration-step .bold-link,
+.checkbox-container {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
@@ -290,6 +298,12 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .donate-section .donate-button {
   color: var(--darkWww-box-greenText);
 }
+.tou-modal-link {
+  color: var(--darkWww-box-greenText) !important;
+}
+.projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
+  color: var(--darkWww-box-strongBlueText);
+}
 .social-message-icon {
   opacity: var(--darkWww-box-messageIconOpacity);
 }
@@ -322,9 +336,14 @@ body:not(.sa-body-editor) .select .join-flow-select {
 .outer #projectBox,
 .download .installation,
 body:not(.sa-body-editor) .gender-radio-row,
-.wedo .banner {
+.wedo .banner,
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row {
   background-color: var(--darkWww-gray);
   color: var(--darkWww-gray-text);
+}
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected,
+.mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected:hover {
+  background-color: hsla(215, 100%, 65%, 0.25);
 }
 body:not(.sa-body-editor) /* specificity */ .outer .sort-mode .select select {
   background-color: transparent;
@@ -446,6 +465,14 @@ body:not(.sa-body-editor) .gender-radio-row-selected:hover {
 .studio-list-bottom-gradient {
   background-image: linear-gradient(var(--darkWww-blue-opacity0), var(--darkWww-blue));
 }
+.mod-fetching::after,
+.studio-project-tile .studio-project-image {
+  background-color: var(--darkWww-blue-studioPlaceholder);
+}
+.mod-fetching {
+  background-color: var(--darkWww-blue-studioPlaceholder) !important;
+  color: var(--darkWww-blue-studioPlaceholder) !important;
+}
 
 /* Input background */
 body:not(.sa-body-editor) .select select,
@@ -496,6 +523,7 @@ body:not(.sa-body-editor) .select select:focus {
   background-color: var(--darkWww-button-text);
 }
 .preview .remix-button,
+.starter-projects-page .surprise .surprise-button,
 .os-chooser .button:not(.active),
 .card .card-button,
 .initiatives-section .video-background.abhi .button,
@@ -533,6 +561,7 @@ body:not(.sa-body-editor) input {
   filter: var(--darkWww-button-filter);
 }
 .forms-close-button img,
+.starter-projects-page .surprise .surprise-button img,
 .os-chooser .button:not(.active) img {
   filter: none;
 }
@@ -636,8 +665,8 @@ a:hover {
 
 /* Footer background */
 #footer,
-#donor,
 .gray-area,
+.starter-projects-page .getting-started,
 .parents .title-banner.faq-banner,
 .developers .title-banner.faq-banner {
   background-color: var(--darkWww-footer);
@@ -680,7 +709,8 @@ body:not(.sa-body-editor) .select select,
 p.callout,
 .input,
 .row .col-sm-9 input[type="radio"]:not(:checked),
-.extension-landing .tip-box {
+.extension-landing .tip-box,
+.checkbox-container input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border);
 }
 .grid .thumbnail,
@@ -705,7 +735,7 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .social-form,
 .studio-info .studio-image,
 .studio-report-modal .studio-report-tile-image,
-.studio-tab-nav a.nav_link > li,
+.studio-tab-nav li,
 .studio-project-tile,
 .studio-adder-section .studio-adder-row input,
 .user-projects-modal .user-projects-modal-nav button,
@@ -744,7 +774,7 @@ body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
 .row .checkbox input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border-20);
 }
-.studio-tab-nav a.nav_link.active > li,
+.studio-tab-nav .active > li,
 .user-projects-modal .user-projects-modal-nav button.active {
   border-color: rgba(0, 0, 0, 0.15);
 }

@@ -58,7 +58,7 @@ export default async function ({ addon, console, msg }) {
         usp.set("settings-button", "1");
         if (username) usp.set("username", username);
         if (addon.settings.get("addons")) {
-          const enabledAddons = await addon.self.getEnabledAddons("editor");
+          const enabledAddons = await addon.self.getEnabledAddons("player");
           usp.set("addons", enabledAddons.join(","));
         }
         // Apply the same fullscreen background color, consistently with the vanilla Scratch fullscreen behavior.

@@ -22,16 +22,15 @@ export default [
     name: chrome.i18n.getMessage("costumeEditorFeatures"),
   },
   {
-    id: "projectPlayer",
-    parent: "editor",
-    icon: "player",
-    name: chrome.i18n.getMessage("projectPlayerFeatures"),
-  },
-  {
     id: "editorOthers",
     parent: "editor",
     icon: "dots",
     name: chrome.i18n.getMessage("others"),
+  },
+  {
+    id: "player",
+    icon: "player",
+    name: chrome.i18n.getMessage("playerFeatures"),
   },
   {
     id: "community",
@@ -74,6 +73,12 @@ export default [
     name: chrome.i18n.getMessage("editorThemes"),
   },
   {
+    id: "themesForPlayer",
+    parent: "theme",
+    icon: "player",
+    name: chrome.i18n.getMessage("playerThemes"),
+  },
+  {
     id: "themesForWebsite",
     parent: "theme",
     icon: "web",
@@ -84,5 +89,10 @@ export default [
     icon: "popup",
     name: chrome.i18n.getMessage("popupFeatures"),
     marginBottom: true,
+  },
+  {
+    id: "easterEgg",
+    name: chrome.i18n.getMessage("easterEggs"),
+    hidden: true,
   },
 ];

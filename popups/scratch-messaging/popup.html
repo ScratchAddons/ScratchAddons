@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="../../libraries/thirdparty/idb.js" defer></script>
@@ -275,7 +276,10 @@
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
-            <div class="thread-list" v-for="studio of studioActivity">{{{ studioActivityHTML(studio) }}}</div>
+            <div class="thread-list" v-for="studio of studioActivity">
+              {{{ studioActivityHTML(studio) }}}
+              <span v-if="studio.amount > 1">({{ studio.amount }})</span>
+            </div>
           </div>
         </div>
 
@@ -525,7 +529,7 @@
         ><img class="small-icon" src="../../images/icons/read.svg" draggable="false" /> {{ uiMessages.markedAsReadMsg
         }}</span
       >
-      <span v-cloak class="separator">|</span>
+      <span v-cloak class="separator"></span>
       <a v-cloak href="https://scratch.mit.edu/messages" class="nolink open-messages"
         >{{ uiMessages.openMessagesMsg }}<img src="../../images/icons/popout.svg" class="popout" draggable="false"
       /></a>

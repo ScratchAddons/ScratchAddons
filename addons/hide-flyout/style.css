@@ -104,7 +104,7 @@
   /* .blocklyFlyout (z-index: 20) */
   /* .blocklyFlyoutScrollbar (z-index: 30) */
   /* and above these so that dragged sprites aren't obscured: */
-  /* .blocklyToolboxDiv (z-index: 40) */
+  /* .blocklyToolbox (z-index: 40) */
   /* .gui_extension-button-container_b4rCs (z-index: 42) */
   z-index: 43;
   padding-inline: 0.5rem;

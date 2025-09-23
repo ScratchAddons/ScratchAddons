@@ -95,10 +95,11 @@
     <link rel="modulepreload" href="data/fuse-options.js" />
 
     <!-- Preload images -->
-    <link rel="preload" href="../../images/icons/switch.svg" as="image" />
+    <link rel="preload" href="../../images/icons/menu.svg" as="image" />
     <link rel="preload" href="../../images/icon-transparent.svg" as="image" />
     <link rel="preload" href="../../images/icons/list.svg" as="image" />
     <link rel="preload" href="../../images/icons/puzzle.svg" as="image" />
+    <link rel="preload" href="../../images/icons/player.svg" as="image" />
     <link rel="preload" href="../../images/icons/web.svg" as="image" />
     <link rel="preload" href="../../images/icons/brush.svg" as="image" />
     <link rel="preload" href="../../images/icons/popup.svg" as="image" />
@@ -126,10 +127,20 @@
     <link rel="modulepreload" href="components/category-selector.js" />
     <link rel="preload" href="components/modal.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/modal.js" />
+    <link rel="preload" href="components/previews/compact-messages.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/compact-messages.js" />
+    <link rel="preload" href="components/previews/dark-www.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/dark-www.js" />
     <link rel="preload" href="components/previews/editor-dark-mode.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/previews/editor-dark-mode.js" />
     <link rel="preload" href="components/previews/palette.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/previews/palette.js" />
+    <link rel="preload" href="components/previews/stage-monitor.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/stage-monitor.js" />
+    <link rel="preload" href="components/previews/stage-monitor-preset.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/stage-monitor-preset.js" />
+    <link rel="preload" href="components/previews/workspace-dots.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/workspace-dots.js" />
 
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
@@ -146,7 +157,6 @@
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
       @import url("../styles/components/tooltips.css");
-      @import url("../styles/components/smallmode.css");
       /* Modals and popups are needed last */
       @import url("../styles/components/modal.css");
       @import url("../styles/components/enablepopup.css");
@@ -165,9 +175,10 @@
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
       <img
-        :src="switchPath"
+        src="../../images/icons/menu.svg"
         id="sidebar-toggle"
         class="header-button"
+        :class="{sidebarToggleOpen: categoryOpen === true}"
         @click="sidebarToggle()"
         v-cloak
         v-show="smallMode"
@@ -183,14 +194,14 @@
       <div
         class="categories-block"
         v-click-outside="closesidebar"
-        v-show="categoryOpen && !isIframe"
-        :class="{smallMode: smallMode === true}"
+        v-show="!isIframe"
+        :class="{closed: categoryOpen === false, smallMode: smallMode === true}"
       >
         <category-selector v-for="category of categories" :category="category"></category-selector>
 
         <a
           v-cloak
-          class="category category-small"
+          class="category"
           style="margin-top: auto"
           href="https://scratchaddons.com/credits/"
           :href="sidebarUrls.contributors"
@@ -199,19 +210,13 @@
           <img src="../../images/icons/users.svg" draggable="false" />
           <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
-        <!--
-        <div class="category category-small" @click="openReview()">
-          <img src="../../images/icons/star.svg" />
-          <span v-cloak>{{ msg("review") }}</span>
-        </div>
-        -->
-        <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
+        <a v-cloak class="category" href="https://scratchaddons.com/translate" target="_blank">
           <img src="../../images/icons/translate.svg" draggable="false" />
           <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <a
           v-cloak
-          class="category category-small"
+          class="category"
           href="https://scratchaddons.com/feedback/"
           :href="sidebarUrls.feedback"
           target="_blank"
@@ -234,40 +239,62 @@
 
       <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
-        <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
-          <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-else class="search-clear-button" @click="clearSearch()"></button>
+        <div class="addons-block-header">
+          <div v-if="!isIframe" class="category-header-title" v-cloak>
+            <div v-if="relatedAddonsOpen" class="related-addons-header">
+              <img
+                src="../../images/icons/left-arrow.svg"
+                class="back-button"
+                draggable="false"
+                @click="backRelatedAddon()"
+              />
+              <span>{{ msg("relatedTo", relatedToAddonName) }}</span>
+            </div>
+            <span v-else>{{ selectedCategoryName }}</span>
+          </div>
+          <div v-cloak class="search-box" v-if="!relatedAddonsOpen" :class="{smallMode: smallMode === true}">
+            <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
+            <button v-show="searchInput === ''"><img src="../../images/icons/search.svg" class="search-icon" /></button>
+            <button v-else @click="clearAndFocusSearch()">
+              <img src="../../images/icons/x.svg" class="search-icon" />
+            </button>
+          </div>
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
-          <template v-if="searchInput && hasNoResults">
-            <p id="search-not-found" v-if="selectedCategory === 'all' || !selectedCategoryName">
-              {{ msg("searchNotFound") }}
-            </p>
-            <p id="search-not-found" v-else>{{ msg("searchNotFoundInCategory", selectedCategoryName) }}</p>
-          </template>
-          <template v-for="addon of addonList">
-            <div
-              id="iframe-fullscreen-suggestion"
-              v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
-              v-show="searchInput === ''"
-            >
-              <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
-              <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
-            </div>
-            <addon-group-header
-              v-if="addon.headerAbove"
-              :group="addon.group"
-              :shown-count="groupShownCount(addon.group)"
-              :margin-above="groupMarginAbove(addon.group)"
-            ></addon-group-header>
+          <p v-if="searchInput && hasNoResults" id="search-not-found">{{ msg("searchNotFound") }}</p>
+          <template v-if="relatedAddonsOpen">
             <addon-body
-              :visible="addon.matchesSearch && addon.matchesCategory"
-              :addon="addon.manifest"
-              :group-id="addon.group.id"
-              :group-expanded="addon.group.expanded"
+              v-for="addonManifest of relatedAddons"
+              :visible="true"
+              :addon="addonManifest"
+              group-id="enabled"
+              :group-expanded="true"
             ></addon-body>
+          </template>
+          <template v-else>
+            <div v-for="addon of addonList">
+              <div
+                id="iframe-fullscreen-suggestion"
+                v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
+                v-show="searchInput === ''"
+              >
+                <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
+                <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
+              </div>
+              <addon-group-header
+                v-if="addon.headerAbove"
+                :group="addon.group"
+                :shown-count="groupShownCount(addon.group)"
+                :margin-above="groupMarginAbove(addon.group)"
+              ></addon-group-header>
+              <addon-body
+                :visible="addon.matchesSearch && addon.matchesCategory"
+                :addon="addon.manifest"
+                :group-id="addon.group.id"
+                :group-expanded="addon.group.expanded"
+              ></addon-body>
+            </div>
           </template>
         </div>
       </div>
@@ -276,10 +303,8 @@
       <div class="addon-block settings-block">
         <div class="addon-body">
           <div class="addon-topbar">
-            <span class="addon-name"
-              ><img src="../../images/icons/theme.svg" class="icon-type" draggable="false" /> {{
-              msg("scratchAddonsTheme") }}
-            </span>
+            <img src="../../images/icons/theme.svg" class="icon-type addon-icon" draggable="false" />
+            <span class="addon-name-and-tags">{{ msg("scratchAddonsTheme") }}</span>
           </div>
           <div class="addon-settings">
             <span class="addon-description-full">{{ msg("scratchAddonsThemeDescription") }}</span>
@@ -300,28 +325,24 @@
         </div>
         <div class="addon-body">
           <div class="addon-topbar">
-            <span class="addon-name"
-              ><img
-                src="../../images/icons/import-export.svg"
-                class="icon-type"
-                :class="{'dark': theme === false}"
-                draggable="false"
-              />
-              {{ msg("exportAndImportSettings") }}
-            </span>
+            <img
+              src="../../images/icons/import-export.svg"
+              class="icon-type addon-icon"
+              :class="{'dark': theme === false}"
+              draggable="false"
+            />
+            <span class="addon-name-and-tags">{{ msg("exportAndImportSettings") }}</span>
           </div>
           <div class="addon-settings">
             <span class="addon-description-full">{{ msg("exportAndImportSettingsDescription") }}</span>
             <span class="addon-description-full">{{ msg("useBrowserSync") }}</span>
-            <div class="addon-setting">
-              <div class="filter-selector">
+            <div class="addon-setting export-actions">
+              <div class="export-actions-group">
                 <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
-              </div>
-              <div class="filter-selector">
                 <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
                 <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
               </div>
-              <div class="filter-selector" style="margin-left: 16px">
+              <div class="export-actions-group">
                 <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
               </div>
             </div>
@@ -329,9 +350,8 @@
         </div>
         <div class="addon-body">
           <div class="addon-topbar">
-            <span class="addon-name"
-              ><img src="../../images/icons/translate.svg" class="icon-type" draggable="false" />{{ msg("language") }}
-            </span>
+            <img src="../../images/icons/translate.svg" class="icon-type addon-icon" draggable="false" />
+            <span class="addon-name-and-tags">{{ msg("language") }}</span>
           </div>
           <div class="addon-settings">
             <div class="addon-setting" style="margin-top: 0">

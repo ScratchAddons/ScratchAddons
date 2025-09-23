@@ -9,6 +9,14 @@ export default async function ({ addon, console }) {
     window.dispatchEvent(new Event("resize"));
   });
 
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/theme/SET_THEME" && !addon.self.disabled) {
+      // queueMicrotask isn't enough on new Blockly
+      setTimeout(changeBackpackVisibility, 0);
+    }
+  });
+
   while (true) {
     originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
       markAsSeen: true,
@@ -50,6 +58,7 @@ function createBackpackButton(addon) {
     Object.assign(document.createElement("img"), {
       src: `${addon.self.dir}/backpack.svg`,
       alt: "",
+      draggable: false,
     })
   );
   moveResizeButtons(addon, 36);

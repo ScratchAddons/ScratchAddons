@@ -4,38 +4,19 @@ import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 export default async ({ addon, console, msg }) => {
   // 250-ms rate limit
   const rateLimiter = new RateLimiter(250);
-  const setColor = (hex, element) => {
+  const setColor = (hex, field) => {
     hex = normalizeHex(hex);
-    if (!addon.tab.redux.state || !addon.tab.redux.state.scratchGui) return;
-    // The only way to reliably set color is to invoke eye dropper via click()
-    // then faking that the eye dropper reported the value.
-    const onEyeDropperClosed = ({ detail }) => {
-      if (detail.action.type !== "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER") return;
-      addon.tab.redux.removeEventListener("statechanged", onEyeDropperClosed);
-      setTimeout(() => {
-        document.body.classList.remove("sa-hide-eye-dropper-background");
-      }, 50);
-    };
-    const onEyeDropperOpened = ({ detail }) => {
-      if (detail.action.type !== "scratch-gui/color-picker/ACTIVATE_COLOR_PICKER") return;
-      addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
-      addon.tab.redux.addEventListener("statechanged", onEyeDropperClosed);
-      setTimeout(() => {
-        addon.tab.redux.dispatch({
-          type: "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER",
-          color: hex,
-        });
-      }, 50);
-    };
-    addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
-    document.body.classList.add("sa-hide-eye-dropper-background");
-    element.click();
+    // Pretend that the color was selected using the eyedropper
+    // so that Scratch updates the sliders
+    const oldActivateEyedropper = ScratchBlocks.FieldColourSlider.activateEyedropper_;
+    ScratchBlocks.FieldColourSlider.activateEyedropper_ = (callback) => callback(hex);
+    field.activateEyedropperInternal_();
+    ScratchBlocks.FieldColourSlider.activateEyedropper_ = oldActivateEyedropper;
   };
-  const addColorPicker = (editor) => {
+  const addColorPicker = (field) => {
     const element = document.querySelector("button.scratchEyedropper");
     rateLimiter.abort(false);
-    addon.tab.redux.initialize();
-    const defaultColor = editor.getValue();
+    const defaultColor = field.getValue();
     const saColorPicker = Object.assign(document.createElement("div"), {
       className: "sa-color-picker sa-color-picker-code",
     });
@@ -55,12 +36,12 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "",
     });
     saColorPickerColor.addEventListener("input", () =>
-      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), element))
+      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), field))
     );
     saColorPickerText.addEventListener("change", () => {
       const { value } = saColorPickerText;
       if (!getHexRegex().test(value)) return;
-      setColor((saColorPickerColor.value = normalizeHex(value)), element);
+      setColor((saColorPickerColor.value = normalizeHex(value)), field);
     });
     saColorPicker.appendChild(saColorPickerColor);
     saColorPicker.appendChild(saColorPickerText);
@@ -69,25 +50,26 @@ export default async ({ addon, console, msg }) => {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalShowEditor = ScratchBlocks.FieldColourSlider.prototype.showEditor_;
   ScratchBlocks.FieldColourSlider.prototype.showEditor_ = function (...args) {
+    // Don't show the dropdown until the color picker has been added
+    const oldShowPositionedByBlock = ScratchBlocks.DropDownDiv.showPositionedByBlock;
+    ScratchBlocks.DropDownDiv.showPositionedByBlock = () => {};
     const r = originalShowEditor.call(this, ...args);
     addColorPicker(this);
+    ScratchBlocks.DropDownDiv.showPositionedByBlock = oldShowPositionedByBlock;
+    ScratchBlocks.DropDownDiv.showPositionedByBlock(this, this.sourceBlock_);
     return r;
   };
-  const originalCallbackFactory = ScratchBlocks.FieldColourSlider.prototype.sliderCallbackFactory_;
-  ScratchBlocks.FieldColourSlider.prototype.sliderCallbackFactory_ = function (...args) {
-    const f = originalCallbackFactory.call(this, ...args);
-    return (event) => {
-      const r = f(event);
-      const div = ScratchBlocks.DropDownDiv.getContentDiv();
-      if (div) {
-        const saColorPickerColor = div.querySelector(".sa-color-picker-color.sa-color-picker-code-color");
-        const saColorPickerText = div.querySelector(".sa-color-picker-text.sa-color-picker-code-text");
-        if (!saColorPickerColor || !saColorPickerText) return r;
-        const color = this.getValue();
-        saColorPickerColor.value = color || "#000000";
-        saColorPickerText.value = color || "";
-      }
-      return r;
-    };
+  const originalUpdateDom = ScratchBlocks.FieldColourSlider.prototype.updateDom_;
+  ScratchBlocks.FieldColourSlider.prototype.updateDom_ = function (...args) {
+    originalUpdateDom.call(this, ...args);
+    const div = ScratchBlocks.DropDownDiv.getContentDiv();
+    if (div) {
+      const saColorPickerColor = div.querySelector(".sa-color-picker-color.sa-color-picker-code-color");
+      const saColorPickerText = div.querySelector(".sa-color-picker-text.sa-color-picker-code-text");
+      if (!saColorPickerColor || !saColorPickerText) return;
+      const color = this.getValue();
+      saColorPickerColor.value = color || "#000000";
+      saColorPickerText.value = color || "";
+    }
   };
 };

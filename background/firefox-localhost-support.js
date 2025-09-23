@@ -1,7 +1,7 @@
 if (typeof browser === "object" && chrome.scripting) {
   const manifest = chrome.runtime.getManifest();
   const manifestScripts = manifest.content_scripts.filter((script) =>
-    script.matches.includes("http://localhost:8602/*")
+    script.matches.includes("http://localhost:8601/*")
   );
   const scripts = manifestScripts.map((scriptObj, i) => ({
     id: `ff_${i}`,
