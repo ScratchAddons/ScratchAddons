@@ -1,4 +1,5 @@
 import globalTheme from "../../libraries/common/global-theme.js";
+import { getMessage, reload, requestHostPermissions } from "../../libraries/common/settings-page-apis.js";
 
 const vue = new Vue({
   el: "body",
@@ -7,7 +8,7 @@ const vue = new Vue({
   },
   methods: {
     msg(message, ...param) {
-      return chrome.i18n.getMessage(message, ...param);
+      return getMessage(message, ...param);
     },
   },
 });
@@ -18,15 +19,12 @@ globalTheme().then(({ theme }) => {
   }
 });
 
-document.title = chrome.i18n.getMessage("permissionsTitle");
+document.title = getMessage("permissionsTitle");
 
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
-  const manifest = chrome.runtime.getManifest();
-  const origins = manifest.host_permissions.filter((url) => url.startsWith("https://"));
-
-  const granted = await chrome.permissions.request({ origins });
+  const granted = await requestHostPermissions();
   if (granted) {
-    return chrome.runtime.reload();
+    return reload();
   }
-  alert(chrome.i18n.getMessage("permissionsDenied"));
+  alert(getMessage("permissionsDenied"));
 });
