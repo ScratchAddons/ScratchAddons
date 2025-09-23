@@ -30,32 +30,36 @@
 	flex-direction: column;
 	gap: 2px;
 }
+.sa-svg-maker label {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.sa-svg-maker label input,
+.sa-svg-maker label select {
+    padding: 5px 10px;
+    border: 1px solid #ffffff30;
+    border-radius: 6px;
+    background: #ffffff10;
+}
 
 .sa-svg-maker-svg {
     margin: 30px 0;
     overflow: hidden;
 }
 .sa-svg-maker-btn {
-    display: inline-block;
-    padding: 0.6rem 1rem;
-    margin-right: 1rem;
-    margin-top: 1rem;
-    background-color: #509cff;
-    color: #000;
-    border: 0px;
-    border-radius: 0.25rem;
-    font-weight: 400;
-    font-size: 0.8rem;
-    text-transform: capitalize;
-    cursor: pointer;
-    border: 2px solid transparent;
-    outline: none;
-    transition: 0.3s ease-out;
+    display: inline-flex;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .sa-svg-maker-btn:hover,
 .sa-svg-maker-btn:focus {
-    background-color: #4c8fe7;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
 .sa-svg-maker-error-display {

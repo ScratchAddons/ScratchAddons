@@ -87,5 +87,15 @@
   },
   "scratch-flash": {
     "license": "GPL-2.0"
+  },
+  "bezierjs": {
+    "license": "MIT",
+    "year": "2022",
+    "fullname": "Pomax"
+  },
+  "makerjs": {
+    "license": "Apache-2.0",
+    "year": "2016",
+    "fullname": "Microsoft"
   }
 }
