@@ -201,21 +201,22 @@ export default async function ({ addon, console, msg }) {
 
   let preventUpdate = false;
   function addTabContent(holder) {
-	  const scripts = [
-        { src: "https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js", type: "text/javascript" }
-    ];
+    // coloris not needed
+	// const scripts = [
+        // { src: "https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js", type: "text/javascript" }
+    // ];
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css";
-    holder.appendChild(link);
+    // const link = document.createElement("link");
+    // link.rel = "stylesheet";
+    // link.href = "https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css";
+    // holder.appendChild(link);
 
-    scripts.forEach(({ src, type }) => {
-        const script = document.createElement("script");
-        script.src = src;
-        script.type = type;
-        holder.appendChild(script);
-    });
+    // scripts.forEach(({ src, type }) => {
+    //     const script = document.createElement("script");
+    //     script.src = src;
+    //     script.type = type;
+    //     holder.appendChild(script);
+    // });
     const createElement = (tag, options = {}) => {
         const element = document.createElement(tag);
         Object.entries(options).forEach(([key, value]) => {
