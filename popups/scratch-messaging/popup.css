@@ -235,7 +235,7 @@ a.message-type-title-text {
 }
 .comment:is(:hover, :focus-within) .reply-button-comment:not(.replying),
 .comment:is(:hover, :focus-within) .delete-btn,
-.message-type-admin:focus-within .delete-btn {
+.message-type-admin .delete-btn {
   visibility: visible;
 }
 .reply-textarea {
