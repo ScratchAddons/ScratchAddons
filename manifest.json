@@ -71,7 +71,6 @@
         "addon-api/*",
         "addons/*",
         "libraries/*/cs/*",
-        "libraries/*/f2svg/*",
         "addons-l10n/*/*.json",
         "images/cs/*"
       ],

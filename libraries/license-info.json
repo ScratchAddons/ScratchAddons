@@ -97,5 +97,10 @@
     "license": "Apache-2.0",
     "year": "2016",
     "fullname": "Microsoft"
+  },
+  "opentype.js": {
+    "license": "MIT",
+    "year": "2024",
+    "fullname": "Frederik De Bleser <frederik@debleser.be>"
   }
 }
