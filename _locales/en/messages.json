@@ -201,7 +201,7 @@
     "message": "Add preset row"
   },
   "deleteRow": {
-    "message": "Delete table row"
+    "message": "Delete row"
   },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
