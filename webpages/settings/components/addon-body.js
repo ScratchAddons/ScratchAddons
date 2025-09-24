@@ -123,7 +123,7 @@ export default async function ({ template }) {
           console.log(`Loaded default values for ${this.addon._addonId}`);
         }
       },
-      toggleAddonRequest() {
+      toggleAddonRequest(e) {
         const toggle = () => {
           const newState = !this.addon._enabled;
           this.addon._wasEverEnabled = this.addon._enabled || newState;
@@ -144,11 +144,15 @@ export default async function ({ template }) {
         );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
           const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
-          if (!confirmation) return;
+          if (!confirmation) {
+            e.preventDefault();
+            return;
+          }
         }
         if (!this.addon._enabled && requiredPermissions.length) {
           const result = requiredPermissions.every((p) => this.$root.grantedOptionalPermissions.includes(p));
           if (result === false) {
+            e.preventDefault();
             if (isIframe) {
               this.$root.addonToEnable = this.addon;
               document.querySelector(".popup").style.animation = "dropDown 0.35s 1";
