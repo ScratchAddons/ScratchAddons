@@ -213,21 +213,25 @@ function onDataReady() {
 }
 
 function editorClassCheck() {
-  if (isScratchGui) {
-    document.documentElement.classList.add("sa-editor");
-    document.body.classList.add("sa-body-editor");
-    return;
-  }
-  const pathname = location.pathname.toLowerCase();
-  const split = pathname.split("/").filter(Boolean);
-  if (!split[0] || split[0] !== "projects") return;
-  if (split.includes("editor") || split.includes("fullscreen")) {
-    document.documentElement.classList.add("sa-editor");
-    document.body.classList.add("sa-body-editor");
+  let isInEditor = false;
+  let isFullScreen = false;
+  const state = __scratchAddonsRedux.state;
+  if (state) {
+    isInEditor = !state.scratchGui.mode.isPlayerOnly;
+    isFullScreen = state.scratchGui.mode.isFullScreen;
+  } else if (isScratchGui) {
+    isInEditor = true;
   } else {
-    document.documentElement.classList.remove("sa-editor");
-    document.body.classList.remove("sa-body-editor");
+    const pathname = location.pathname.toLowerCase();
+    const split = pathname.split("/").filter(Boolean);
+    if (split[0] && split[0] === "projects") {
+      isInEditor = split.includes("editor");
+      isFullScreen = split.includes("fullscreen");
+    }
   }
+  document.documentElement.classList.toggle("sa-editor", isInEditor || isFullScreen);
+  document.documentElement.classList.toggle("sa-fullscreen", isFullScreen);
+  document.body.classList.toggle("sa-body-editor", isInEditor || isFullScreen);
 }
 if (!document.body) document.addEventListener("DOMContentLoaded", editorClassCheck);
 else editorClassCheck();
@@ -266,6 +270,20 @@ window.addEventListener("popstate", () => {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl: "", newUrl } }));
   }
   editorClassCheck();
+});
+
+// In scratch-gui and /projects/editor, the URL doesn't change when toggling full screen,
+// so we use Redux to detect it.
+window.addEventListener("load", () => {
+  if (!__scratchAddonsRedux.target) return;
+  __scratchAddonsRedux.target.addEventListener("statechanged", (e) => {
+    if (
+      e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN" ||
+      e.detail.action.type === "scratch-gui/mode/SET_PLAYER"
+    ) {
+      editorClassCheck();
+    }
+  });
 });
 
 function getAllRules(e) {
