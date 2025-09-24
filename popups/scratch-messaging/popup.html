@@ -49,6 +49,8 @@
         </span>
         <a
           @click="deleteComment()"
+          @keydown.enter="deleteComment()"
+          tabindex="0"
           class="delete-btn"
           :class="{'delete-confirm': deleteStep === 1}"
           v-show="!deleted"
@@ -65,9 +67,10 @@
             </div>
             <a
               class="reply-button-comment"
+              tabindex="0"
               @click="replying = true"
+              @keydown.enter="replying = true"
               :class="{'replying': replying}"
-              :style="{'visibility': replying ? 'hidden' : 'visible'}"
               v-show="!deleted"
               >{{ messages.replyMsg }}</a
             >
@@ -119,7 +122,7 @@
           <div class="message-type-details" v-show="messageTypeExtended.stMessages">
             <div class="comment" v-for="alert of stMessages">
               <span class="comment-time">{{ alert.datetime_created }}</span>
-              <a class="delete-btn" @click="dismissAlert(alert.id)">{{ uiMessages.dismissMsg }}</a>
+              <a class="delete-btn" tabindex="0" @click="dismissAlert(alert.id)" @keydown.enter="dismissAlert(alert.id)">{{ uiMessages.dismissMsg }}</a>
               <dom-element-renderer :element="alert.element"></dom-element-renderer>
             </div>
           </div>
