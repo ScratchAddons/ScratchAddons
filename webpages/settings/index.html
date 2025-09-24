@@ -190,7 +190,11 @@
       </button>
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <button @click="setTheme(!theme)" class="header-button header-end" :title="msg(theme ? 'switchDark' : 'switchLight')">
+      <button
+        @click="setTheme(!theme)"
+        class="header-button header-end"
+        :title="msg(theme ? 'switchDark' : 'switchLight')"
+      >
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
       </button>
     </div>
