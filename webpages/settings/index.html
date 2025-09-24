@@ -181,6 +181,7 @@
         id="sidebar-toggle"
         class="header-button"
         :class="{sidebarToggleOpen: categoryOpen === true}"
+        :title="msg('toggleSidebar')"
         @click="sidebarToggle()"
         v-cloak
         v-show="smallMode"
@@ -189,7 +190,7 @@
       </button>
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <button @click="setTheme(!theme)" class="header-button header-end">
+      <button @click="setTheme(!theme)" class="header-button header-end" :title="msg('toggleTheme')">
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
       </button>
     </div>

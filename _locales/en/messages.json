@@ -143,6 +143,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "toggleSidebar": {
+    "message": "Toggle sidebar"
+  },
   "close": {
     "message": "Close"
   },
@@ -151,6 +154,9 @@
   },
   "resetToDefault": {
     "message": "Reset to default settings"
+  },
+  "importExport": {
+    "message": "Import or export settings"
   },
   "relatedAddons": {
     "message": "Related addons:"
@@ -176,6 +182,9 @@
   "reset": {
     "message": "Reset"
   },
+  "resetTo": {
+    "message": "Reset to..."
+  },
   "default": {
     "message": "Default"
   },
@@ -184,6 +193,15 @@
   },
   "preview": {
     "message": "Preview"
+  },
+  "addRow": {
+    "message": "Add table row"
+  },
+  "addPresetRow": {
+    "message": "Add preset table row"
+  },
+  "deleteRow": {
+    "message": "Delete table row"
   },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
@@ -196,6 +214,9 @@
   },
   "dark": {
     "message": "Dark"
+  },
+  "toggleTheme": {
+    "message": "Toggle dark mode"
   },
   "loading": {
     "message": "Loading..."

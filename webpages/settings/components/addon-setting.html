@@ -9,7 +9,7 @@
   >
     <div class="setting-label-container">
       <div class="setting-label" v-html="settingsName(addon)"></div>
-      <div v-if="setting.description" :class="{tooltip: addon._enabled}">
+      <div v-if="setting.description" :class="{tooltip: addon._enabled}" :tabindex="addon._enabled ? '0' : '-1' ">
         <img src="../../images/icons/help.svg" class="icon-type setting-help-icon" />
         <span class="tooltiptext tooltiptexttop">{{setting.description}}</span>
       </div>
@@ -20,7 +20,7 @@
         <div class="setting-table-list" v-sortable>
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
-              <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
+              <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)" :title="msg('deleteRow')">
                 <img class="icon-type" src="../../images/icons/close.svg" />
               </button>
               <button :disabled="!addon._enabled" class="addon-buttons handle">
@@ -39,12 +39,13 @@
           </div>
         </div>
         <div class="addon-split-button setting-table-dropdown dropdown-parent">
-          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
+          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()" :title="msg('addRow')">
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
           <dropdown
             button-class="addon-buttons addon-split-button-dropdown"
             :is-disabled="!addon._enabled"
+            :title="msg('addPresetRow')"
             align-start="true"
           >
             <li tabindex="0" role="menuitem" v-for="preset of setting.presets" @click="addTableRow(preset.values)">
