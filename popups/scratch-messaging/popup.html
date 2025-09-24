@@ -523,7 +523,9 @@
 
     <!-- Bottom bar-->
     <div id="bottom-bar">
-      <a tabindex="0" v-cloak @click="markAsRead()" @keydown.enter="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
+      <a tabindex="0" v-cloak @click="markAsRead()" @keydown.enter="markAsRead()" v-show="!markedAsRead"
+        >{{ uiMessages.markAsReadMsg }}</a
+      >
       <span v-cloak v-show="markedAsRead" class="marked-as-read"
         ><img class="small-icon" src="../../images/icons/read.svg" draggable="false" /> {{ uiMessages.markedAsReadMsg
         }}</span
