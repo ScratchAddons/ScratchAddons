@@ -156,7 +156,7 @@
     "message": "Reset to default settings"
   },
   "importExport": {
-    "message": "export/import settings"
+    "message": "Export/import settings"
   },
   "relatedAddons": {
     "message": "Related addons:"
@@ -195,10 +195,10 @@
     "message": "Preview"
   },
   "addRow": {
-    "message": "Add table row"
+    "message": "Add row"
   },
   "addPresetRow": {
-    "message": "Add preset table row"
+    "message": "Add preset row"
   },
   "deleteRow": {
     "message": "Delete table row"
@@ -212,11 +212,14 @@
   "light": {
     "message": "Light"
   },
+  "switchLight": {
+    "message": "Switch to light theme"
+  },
   "dark": {
     "message": "Dark"
   },
-  "toggleTheme": {
-    "message": "Toggle dark mode"
+  "switchDark": {
+    "message": "Switch to dark theme"
   },
   "loading": {
     "message": "Loading..."

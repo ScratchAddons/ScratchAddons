@@ -17,6 +17,10 @@ body {
   display: none !important;
 }
 
+button {
+  font: inherit;
+}
+
 .navbar {
   height: 60px;
   background: var(--brand-orange);

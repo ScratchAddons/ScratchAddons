@@ -15,6 +15,7 @@ body {
 button {
   background-color: transparent;
   border: none;
+  font: inherit;
 }
 
 [v-cloak] {
