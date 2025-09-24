@@ -54,7 +54,7 @@
   right: 50%;
 }
 
-.tooltip:is(:hover, :focus) .tooltiptext {
+.tooltip:is(:hover, :focus-within) .tooltiptext {
   display: block;
 }
 .tooltip .tooltiptext::after {
