@@ -6,10 +6,30 @@ import "../../libraries/thirdparty/cs/bezier.js";
 var App = /** @class */ (function () {
     function App() {
         var _this = this;
+        let renderTimeout;
         this.renderCurrent = function () {
+            clearTimeout(renderTimeout);
+            renderTimeout = setTimeout(function () {
             _this.errorDisplay.innerHTML = '';
             var size = parseFloat(_this.sizeInput.value) || 100;
-            _this.render(_this.selectFamily.selectedIndex, _this.selectVariant.selectedIndex, _this.textInput.value, size, _this.unionCheckbox.checked, _this.filledCheckbox.checked, _this.kerningCheckbox.checked, _this.separateCheckbox.checked, parseFloat(_this.bezierAccuracy.value) || undefined, _this.selectUnits.value, _this.fillInput.value, _this.strokeInput.value, _this.strokeWidthInput.value, _this.strokeNonScalingCheckbox.checked, _this.fillRuleInput.value);
+            _this.render(
+                _this.selectFamily.selectedIndex,
+                _this.selectVariant.selectedIndex,
+                _this.textInput.value,
+                size,
+                _this.unionCheckbox.checked,
+                _this.filledCheckbox.checked,
+                _this.kerningCheckbox.checked,
+                _this.separateCheckbox.checked,
+                parseFloat(_this.bezierAccuracy.value) || undefined,
+                _this.selectUnits.value,
+                _this.fillInput.value,
+                _this.strokeInput.value,
+                _this.strokeWidthInput.value,
+                _this.strokeNonScalingCheckbox.checked,
+                _this.fillRuleInput.value
+            );
+            }, 100);
         };
         this.loadVariants = function () {
             _this.selectVariant.options.length = 0;
