@@ -156,7 +156,7 @@
     "message": "Reset to default settings"
   },
   "importExport": {
-    "message": "Import or export settings"
+    "message": "export/import settings"
   },
   "relatedAddons": {
     "message": "Related addons:"
