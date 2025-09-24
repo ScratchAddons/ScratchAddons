@@ -306,10 +306,10 @@ export default async function ({ addon, console, msg }) {
         const heading4 = createElement('h3', { innerHTML: 'Render Options' });
         holder.appendChild(heading4);
 
-        const inputFill = createElement('input', { id: 'sa-svg-maker-input-fill', type: 'text', value: '#000', className: 'sa-svg-maker-input sa-svg-maker-input-fill' });
+        const inputFill = createElement('input', { id: 'sa-svg-maker-input-fill', type: 'color', value: '#fff', className: 'sa-svg-maker-input sa-svg-maker-input-fill' });
         holder.appendChild(createInputHolder(`${msg('fill')}:`, inputFill));
 
-        const inputStroke = createElement('input', { id: 'sa-svg-maker-input-stroke', type: 'text', value: '#000', className: 'sa-svg-maker-input sa-svg-maker-input-stroke' });
+        const inputStroke = createElement('input', { id: 'sa-svg-maker-input-stroke', type: 'color', value: '#fff', className: 'sa-svg-maker-input sa-svg-maker-input-stroke' });
         holder.appendChild(createInputHolder(`${msg('outline')}:`, inputStroke));
 
         const inputStrokeWidth = createElement('input', { id: 'sa-svg-maker-input-stroke-width', type: 'text', value: '0mm', className: 'sa-svg-maker-input sa-svg-maker-input-stroke-width' });
