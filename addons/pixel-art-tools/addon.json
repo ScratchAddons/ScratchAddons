@@ -25,17 +25,17 @@
       "name": "Default width",
       "id": "defaultWidth",
       "type": "integer",
-      "default": 64,
+      "default": 32,
       "min": 1,
-      "max": 1024
+      "max": 480
     },
     {
       "name": "Default height",
       "id": "defaultHeight",
       "type": "integer",
-      "default": 64,
+      "default": 32,
       "min": 1,
-      "max": 1024
+      "max": 360
     },
     {
       "name": "Enable pixel mode by default",
