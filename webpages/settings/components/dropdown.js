@@ -5,7 +5,6 @@ export default async function ({ template }) {
     data() {
       return {
         isOpen: false,
-        focusedIndex: 0,
         shiftAmountsByKey: {
           ArrowUp: -1,
           ArrowDown: 1,

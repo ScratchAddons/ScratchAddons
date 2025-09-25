@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const Modal = Vue.extend({
-    props: ["isOpen", "title"],
+    props: ["title"],
     template,
     methods: {
       closeModal() {
