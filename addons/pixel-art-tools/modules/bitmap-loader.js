@@ -22,13 +22,6 @@ export function wrapCreateBitmapSkin(runtime, createBitmapSkin) {
   };
 }
 
-export function wrapGetSkinSize(getSkinSize) {
-  return function (...args) {
-    const size = getSkinSize.call(this, ...args);
-    return [size[0] / 2, size[1] / 2];
-  };
-}
-
 export function wrapAddCostumeWait(addon, originalAddCostume) {
   return async function (...args) {
     const out = await originalAddCostume.call(this, ...args);
@@ -60,18 +53,5 @@ export function wrapAddCostumeWait(addon, originalAddCostume) {
     // scratch won't update visuals until we change costume in the gui.
     assetSelect(addon, idx - 1, "costume");
     assetSelect(addon, idx, "costume");
-  };
-}
-
-export function wrapUpdateBitmap(originalUpdateBitmap) {
-  return function (...args) {
-    args[args.length - 1] = 1;
-    return originalUpdateBitmap.call(this, ...args);
-  };
-}
-
-export function wrapGetCostume(originalGetCostume) {
-  return function (...args) {
-    return originalGetCostume.call(this, ...args);
   };
 }
