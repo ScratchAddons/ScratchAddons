@@ -8,6 +8,13 @@
     }
   ],
   "versionAdded": "1.44.0",
+  "info": [
+    {
+      "type": "notice",
+      "id": "performance",
+      "text": "The Prehistoric and Mystery modes may impact performance when the editor is open."
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
