@@ -1,13 +1,7 @@
 import { createPaletteModule } from "./modules/palette/index.js";
 import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
-import {
-  wrapGetCostume,
-  wrapAddCostumeWait,
-  wrapCreateBitmapSkin,
-  wrapGetSkinSize,
-  wrapUpdateBitmap,
-} from "./modules/bitmap-loader.js";
+import {wrapAddCostumeWait, wrapCreateBitmapSkin} from "./modules/bitmap-loader.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function ({ addon, msg, console }) {
