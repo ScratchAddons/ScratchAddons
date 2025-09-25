@@ -15,7 +15,8 @@ async function halveAsset(asset) {
 export function wrapCreateBitmapSkin(runtime, createBitmapSkin) {
   return function (canvas, bitmapResolution, center) {
     // keep existing conflict modal behavior etc
-    bitmapResolution = 1;
+    // Scratch will use bitmapResolution = 2 which resizes our canvas so we are going to halve it to fix this
+    // but we'll keep it at bitmapResolution = 2, so that scratch doesn't resize it again the next time the project loads
     canvas = runtime.v2BitmapAdapter.resize(canvas, canvas.width / 2, canvas.height / 2);
     return createBitmapSkin.call(this, canvas, bitmapResolution, center);
   };
@@ -35,13 +36,16 @@ export function wrapAddCostumeWait(addon, originalAddCostume) {
     const target = this.runtime.getTargetById(args[2]);
     const idx = target.currentCostume;
     const asset = target.getCostumes()[idx].asset;
+
+    // Scratch will use bitmapResolution = 2 which resizes our canvas so we are going to halve it to fix this
+    // but we'll keep it at bitmapResolution = 2, so that scratch doesn't resize it again the next time the project loads
     await halveAsset(asset);
 
     const costume = target.sprite?.costumes_[idx];
-    costume.size = [costume.size[0] / 2, costume.size[1] / 2];
-    costume.bitmapResolution = 1;
-    costume.rotationCenterX = costume.rotationCenterX / 2;
-    costume.rotationCenterY = costume.rotationCenterY / 2;
+
+    // need to update assetId and md5 to be in sync with the modified asset, or scratch will revert changes on save.
+    costume.assetId = costume.asset.assetId;
+    costume.md5 = `${costume.assetId}.${costume.asset.dataFormat}`;
     assetSelect(addon, idx - 1, "costume");
     assetSelect(addon, idx, "costume");
   };

@@ -97,6 +97,6 @@ export default async function ({ addon, msg, console }) {
     vm.renderer.createBitmapSkin = wrapCreateBitmapSkin(vm.runtime, vm.renderer.createBitmapSkin);
     // vm.renderer.getSkinSize = wrapGetSkinSize(vm.renderer.getSkinSize)
     vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume);
-    vm.updateBitmap = wrapUpdateBitmap(vm.updateBitmap);
+    // vm.updateBitmap = wrapUpdateBitmap(vm.updateBitmap);
   }, 100);
 }

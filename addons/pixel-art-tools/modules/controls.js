@@ -8,10 +8,11 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     const target = vm.editingTarget || vm.runtime.getEditingTarget();
     const costume = target?.sprite?.costumes?.[target.currentCostume];
     if (!costume) return null;
-    const resolution = costume.bitmapResolution || 1;
+    // scratch shows the costume size in the gui as half what it actually is,
+    // but in in the actual data for the costume the size is correct so we don't need to modify it
     return {
-      width: Math.round(costume.size[0] / resolution),
-      height: Math.round(costume.size[1] / resolution),
+      width: Math.round(costume.size[0]),
+      height: Math.round(costume.size[1]),
     };
   };
 
@@ -61,11 +62,16 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       setPixelMode(true);
     } else if (isCurrentlyBitmap) {
       const costumeSize = getCostumeSize();
-      if (costumeSize && (costumeSize.width > 64 || costumeSize.height > 64)) {
-        Object.assign(state.pendingSize, costumeSize);
-        state.widthInput.value = costumeSize.width;
-        state.heightInput.value = costumeSize.height;
-        if (state.enabled) canvasAdjuster.enable(costumeSize.width, costumeSize.height);
+      if (costumeSize) {
+        const defaultWidth = addon.settings.get("defaultWidth");
+        const defaultHeight = addon.settings.get("defaultHeight");
+        const useWidth = costumeSize.width >= defaultWidth ? costumeSize.width : defaultWidth;
+        const useHeight = costumeSize.height >= defaultHeight ? costumeSize.height : defaultHeight;
+
+        Object.assign(state.pendingSize, { width: useWidth, height: useHeight });
+        state.widthInput.value = useWidth;
+        state.heightInput.value = useHeight;
+        if (state.enabled) canvasAdjuster.enable(useWidth, useHeight);
       }
     }
   };
