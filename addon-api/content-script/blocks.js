@@ -188,7 +188,7 @@ const injectWorkspace = (ScratchBlocks) => {
 
   // recolour existing procedure blocks incase this injection is called after the blocks have already been created
   for (const block of ScratchBlocks.mainWorkspace.getAllBlocks(false)) {
-    if (block.type === "procedures_call" || block.parentBlock_?.type === "procedures_call"){
+    if (block.type === "procedures_call" || block.parentBlock_?.type === "procedures_call") {
       block.applyColour?.() || block.updateColour?.();
     }
   }
