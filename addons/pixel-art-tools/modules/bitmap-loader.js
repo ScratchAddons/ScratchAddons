@@ -39,11 +39,11 @@ export function wrapAddCostumeWait(addon, originalAddCostume) {
     const asset = target.getCostumes()[idx].asset;
 
     // only apply this modification to bitmaps
-    if(asset.dataFormat == "svg"){
-      if(!args[2] && addon.settings.get("autoBitmap")){
+    if (asset.dataFormat == "svg") {
+      if (!args[2] && addon.settings.get("autoBitmap")) {
         // if we are creating a new costume then we will automatically convert to a bitmap for the user
         // but we need a timeout, or the click will apply to the current costume
-        setTimeout(()=>document.querySelectorAll("[class*='paint-editor_bitmap-button_']")[0].click(),100);
+        setTimeout(() => document.querySelectorAll("[class*='paint-editor_bitmap-button_']")[0].click(), 100);
       }
       return out;
     }
