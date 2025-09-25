@@ -19,7 +19,7 @@ export default async function ({ addon, console }) {
       }[mode] || initialSrc;
   }
   function updateProjectorSound() {
-    if (["editor", "fullscreen"].includes(addon.tab.editorMode) && mode === "oldTimey") {
+    if (addon.tab.editorMode === "editor" && mode === "oldTimey") {
       if (!projectorSound) {
         projectorSound = new Audio(addon.self.dir + "/assets/projector2.mp3");
         projectorSound.volume = 0.1;
@@ -48,21 +48,31 @@ export default async function ({ addon, console }) {
 
   document.documentElement.style.setProperty("--sa-mouse-x", `${window.innerWidth / 2}px`);
   document.documentElement.style.setProperty("--sa-mouse-y", `${window.innerHeight / 2}px`);
-  document.addEventListener("pointermove", (e) => {
+  const pointerMoveListener = (e) => {
     document.documentElement.style.setProperty("--sa-mouse-x", `${e.clientX}px`);
     document.documentElement.style.setProperty("--sa-mouse-y", `${e.clientY}px`);
-  });
+  };
+  function updatePointerMoveListener() {
+    if (addon.tab.editorMode === "editor" && ["prehistoric", "mystery"].includes(mode)) {
+      document.addEventListener("pointermove", pointerMoveListener);
+    } else {
+      document.removeEventListener("pointermove", pointerMoveListener);
+    }
+  }
+  updatePointerMoveListener();
 
   const onSettingChange = () => {
     mode = getMode();
     updateLogo();
     updateProjectorSound();
+    updatePointerMoveListener();
   };
   addon.self.addEventListener("disabled", onSettingChange);
   addon.self.addEventListener("reenabled", onSettingChange);
   addon.settings.addEventListener("change", onSettingChange);
   addon.tab.addEventListener("urlChange", () => {
     updateProjectorSound();
+    updatePointerMoveListener();
   });
   while (true) {
     logo = await addon.tab.waitForElement("[class*='menu-bar_scratch-logo_']", {
