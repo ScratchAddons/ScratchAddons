@@ -139,7 +139,7 @@ const generateBlockXML = () => {
   return xml;
 };
 
-const injectWorkspace = (ScratchBlocks) => {
+const injectWorkspace = (ScratchBlocks, Workspace) => {
   const isHighContrast = (workspace) => {
     if (ScratchBlocks.registry)
       return workspace.getTheme().name === "high-contrast"; // new Blockly
@@ -187,7 +187,7 @@ const injectWorkspace = (ScratchBlocks) => {
   }
 
   // recolour existing procedure blocks incase this injection is called after the blocks have already been created
-  for (const block of ScratchBlocks.mainWorkspace.getAllBlocks(false)) {
+  for (const block of Workspace.getAllBlocks(false)) {
     if (block.type === "procedures_call" || block.parentBlock_?.type === "procedures_call") {
       block.applyColour?.() || block.updateColour?.();
     }
@@ -323,5 +323,6 @@ export async function init(tab) {
   };
 
   const ScratchBlocks = await tab.traps.getBlockly();
-  injectWorkspace(ScratchBlocks);
+  const Workspace = tab.traps.getWorkspace();
+  injectWorkspace(ScratchBlocks, Workspace);
 }
