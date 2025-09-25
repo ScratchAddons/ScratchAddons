@@ -49,15 +49,11 @@ export default async function ({ addon, msg, console }) {
   // Main Redux event handler for paint events
   redux.addEventListener("statechanged", ({ detail }) => {
     if (!detail || !detail.prev || !detail.next) return;
-
     if (detail.action.type === "scratch-paint/modes/CHANGE_MODE") {
       controls.updateBrushControlVisibility();
     }
 
-    if (
-      detail.action.type === "scratch-paint/view/UPDATE_VIEW_BOUNDS" &&
-      detail.next.scratchGui.editorTab.activeTabIndex === 1
-    ) {
+    if (detail.action.type === "scratch-paint/view/UPDATE_VIEW_BOUNDS") {
       controls.updatePixelModeVisibility();
     }
 
