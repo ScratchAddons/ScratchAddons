@@ -1,3 +1,6 @@
+import * as oldTimey from "./oldtimey.js";
+import * as mystery from "./mystery.js";
+
 export default async function ({ addon, console }) {
   function getMode() {
     if (addon.self.disabled) return null;
@@ -7,7 +10,6 @@ export default async function ({ addon, console }) {
   let mode = getMode();
   let logo;
   let initialSrc;
-  let projectorSound;
 
   function updateLogo() {
     if (!logo) return;
@@ -18,16 +20,6 @@ export default async function ({ addon, console }) {
         prehistoric: addon.self.dir + "/assets/prehistoric-logo.svg",
       }[mode] || initialSrc;
   }
-  function updateProjectorSound() {
-    if (addon.tab.editorMode === "editor" && mode === "oldTimey") {
-      if (!projectorSound) {
-        projectorSound = new Audio(addon.self.dir + "/assets/projector2.mp3");
-        projectorSound.volume = 0.1;
-        projectorSound.loop = true;
-      }
-      projectorSound.play();
-    } else if (projectorSound) projectorSound.pause();
-  }
 
   document.body.appendChild(
     Object.assign(document.createElement("div"), {
@@ -35,13 +27,14 @@ export default async function ({ addon, console }) {
     })
   );
 
-  updateProjectorSound();
+  oldTimey.updateSound(addon, mode);
+  mystery.update(addon, mode);
 
-  // start playing when user interacts with the page
+  // start playing sound when user interacts with the page
   const interactionListener = () => {
     document.removeEventListener("click", interactionListener);
     document.removeEventListener("keydown", interactionListener);
-    updateProjectorSound();
+    oldTimey.updateSound(addon, mode);
   };
   document.addEventListener("click", interactionListener);
   document.addEventListener("keydown", interactionListener);
@@ -51,6 +44,7 @@ export default async function ({ addon, console }) {
   const pointerMoveListener = (e) => {
     document.documentElement.style.setProperty("--sa-mouse-x", `${e.clientX}px`);
     document.documentElement.style.setProperty("--sa-mouse-y", `${e.clientY}px`);
+    mystery.setMousePosition(e.clientX, e.clientY);
   };
   function updatePointerMoveListener() {
     if (addon.tab.editorMode === "editor" && ["prehistoric", "mystery"].includes(mode)) {
@@ -64,14 +58,16 @@ export default async function ({ addon, console }) {
   const onSettingChange = () => {
     mode = getMode();
     updateLogo();
-    updateProjectorSound();
+    oldTimey.updateSound(addon, mode);
+    mystery.update(addon, mode);
     updatePointerMoveListener();
   };
   addon.self.addEventListener("disabled", onSettingChange);
   addon.self.addEventListener("reenabled", onSettingChange);
   addon.settings.addEventListener("change", onSettingChange);
   addon.tab.addEventListener("urlChange", () => {
-    updateProjectorSound();
+    oldTimey.updateSound(addon, mode);
+    mystery.update(addon, mode);
     updatePointerMoveListener();
   });
   while (true) {
