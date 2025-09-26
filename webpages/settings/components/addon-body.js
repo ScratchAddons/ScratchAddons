@@ -12,7 +12,6 @@ export default async function ({ template }) {
         everExpanded: this.getDefaultExpanded(),
         hoveredSettingId: null,
         highlightedSettingId: null,
-        isDropdownOpen: false,
       };
     },
     computed: {
@@ -103,7 +102,6 @@ export default async function ({ template }) {
         );
         document.body.appendChild(inputElem);
         inputElem.click();
-        this.toggleDropdown();
       },
       exportPreset() {
         const preset = {
@@ -114,7 +112,6 @@ export default async function ({ template }) {
         const blob = new Blob([JSON.stringify(preset)], { type: "application/json" });
         const name = this.addon.name.replaceAll(" ", "-").toLowerCase();
         downloadBlob(`${name}.json`, blob);
-        this.toggleDropdown();
       },
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
@@ -128,9 +125,6 @@ export default async function ({ template }) {
       },
       toggleAddonRequest(event) {
         const toggle = () => {
-          // Prevents selecting text when the shift key is being held down
-          event.preventDefault();
-
           const newState = !this.addon._enabled;
           this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
@@ -140,9 +134,7 @@ export default async function ({ template }) {
             ? this.expanded
             : isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
-              : event.shiftKey
-                ? false
-                : newState;
+              : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
         };
@@ -152,11 +144,15 @@ export default async function ({ template }) {
         );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
           const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
-          if (!confirmation) return;
+          if (!confirmation) {
+            event.preventDefault();
+            return;
+          }
         }
         if (!this.addon._enabled && requiredPermissions.length) {
           const result = requiredPermissions.every((p) => this.$root.grantedOptionalPermissions.includes(p));
           if (result === false) {
+            event.preventDefault();
             if (isIframe) {
               this.$root.addonToEnable = this.addon;
               document.querySelector(".popup").style.animation = "dropDown 0.35s 1";
@@ -186,13 +182,6 @@ export default async function ({ template }) {
         this.$root.openRelatedAddons(this.addon);
         this.$root.blinkAddon(clickedAddon._addonId);
       },
-      toggleDropdown() {
-        this.isDropdownOpen = !this.isDropdownOpen;
-        this.$root.closePickers({ isTrusted: true }, null, {
-          callCloseDropdowns: false,
-        });
-        this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
-      },
     },
     watch: {
       groupId(newValue) {
@@ -207,17 +196,7 @@ export default async function ({ template }) {
         if (newValue === true) this.everExpanded = true;
       },
     },
-    events: {
-      closeDropdowns(...params) {
-        return this.$root.closeDropdowns(...params);
-      },
-    },
     ready() {
-      this.$root.$on("close-dropdowns", (except) => {
-        if (this.isDropdownOpen && this !== except) {
-          this.isDropdownOpen = false;
-        }
-      });
       const onHashChange = () => {
         if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
           this.expanded = true;
