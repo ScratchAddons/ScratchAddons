@@ -417,6 +417,7 @@ export default class Tab extends Listenable {
    * assetContextMenuAfterDelete - after the delete button of asset (sprite, costume, etc)'s context menu
    * monitor - after the end of the stage monitor context menu
    * paintEditorZoomControls - before the zoom controls in the paint editor
+   * paintEditorModeSelector - after the mode selector in the paint editor
    *
    *
    * @param {object} opts - options.
@@ -662,6 +663,11 @@ export default class Tab extends Listenable {
             })()
           );
         },
+        from: () => [],
+        until: () => [],
+      },
+      paintEditorModeSelector: {
+        element: () => q("[class*='paint-editor_mode-selector']"),
         from: () => [],
         until: () => [],
       },
