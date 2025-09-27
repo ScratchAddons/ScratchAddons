@@ -65,11 +65,19 @@ export default async function ({ addon, console }) {
   addon.self.addEventListener("disabled", onSettingChange);
   addon.self.addEventListener("reenabled", onSettingChange);
   addon.settings.addEventListener("change", onSettingChange);
-  addon.tab.addEventListener("urlChange", () => {
-    oldTimey.updateSound(addon, mode);
-    mystery.update(addon, mode);
-    updatePointerMoveListener();
+
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (
+      e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN" ||
+      e.detail.action.type === "scratch-gui/mode/SET_PLAYER"
+    ) {
+      oldTimey.updateSound(addon, mode);
+      mystery.update(addon, mode);
+      updatePointerMoveListener();
+    }
   });
+
   while (true) {
     logo = await addon.tab.waitForElement("[class*='menu-bar_scratch-logo_']", {
       markAsSeen: true,
