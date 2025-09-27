@@ -71,6 +71,7 @@
               @click="replying = true"
               @keydown.enter="replying = true"
               :class="{'replying': replying}"
+              :style="{'visibility': replying ? 'hidden' : 'visible'}"
               v-show="!deleted"
               >{{ messages.replyMsg }}</a
             >
@@ -109,6 +110,7 @@
             <button class="btn-dropdown">
               <img
                 src="../../images/icons/expand.svg"
+                alt="v"
                 :class="{'reverted': messageTypeExtended.stMessages}"
                 draggable="false"
               />

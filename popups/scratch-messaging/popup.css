@@ -207,7 +207,7 @@ a.message-type-title-text {
 }
 .delete-btn {
   float: right;
-  visibility: hidden;
+  opacity: 0;
   color: var(--gray-text);
   font-size: 0.65rem;
   padding-top: 2px;
@@ -229,15 +229,14 @@ a.message-type-title-text {
   font-weight: 500;
 }
 .reply-button-comment {
-  visibility: hidden;
+  opacity: 0;
   color: var(--blue-text);
   font-weight: 500;
   user-select: none;
 }
-.comment:is(:hover, :focus-within) .reply-button-comment:not(.replying),
-.comment:is(:hover, :focus-within) .delete-btn,
-.message-type-admin .delete-btn {
-  visibility: visible;
+.comment:is(:hover, :focus-within) .reply-button-comment,
+.comment:is(:hover, :focus-within) .delete-btn {
+  opacity: 1;
 }
 .reply-textarea {
   display: block;
