@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const Dropdown = Vue.extend({
-    props: ["buttonClass", "buttonTitle", "isDisabled", "alignStart"],
+    props: ["buttonClass", "buttonTitle", "disabled", "alignStart"],
     template,
     data() {
       return {

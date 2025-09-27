@@ -54,7 +54,7 @@
           </button>
           <dropdown
             button-class="addon-buttons addon-split-button-dropdown"
-            :is-disabled="!addon._enabled"
+            :disabled="!addon._enabled"
             :button-title="msg('addPresetRow')"
             align-start="true"
           >
@@ -145,7 +145,7 @@
         ></picker
       ></template>
       <template v-if="showResetDropdown"
-        ><reset-dropdown :setting="setting" :enabled="addon._enabled" :presets="addon.presets"></reset-dropdown
+        ><reset-dropdown :setting="setting" :disabled="!addon._enabled" :presets="addon.presets"></reset-dropdown
       ></template>
       <template v-if="!tableChild && !showResetDropdown"
         ><button

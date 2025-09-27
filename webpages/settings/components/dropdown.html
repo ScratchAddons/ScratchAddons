@@ -4,7 +4,7 @@
       aria-haspopup="true"
       :aria-expanded="(isOpen) ? 'true' : 'false'"
       :class="['dropdown-btn', buttonClass, {'open': isOpen}]"
-      :disabled="isDisabled"
+      :disabled="disabled"
       :title="buttonTitle"
       @click="toggle"
     >
