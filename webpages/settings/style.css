@@ -149,7 +149,9 @@ h1 {
   transition: background-color 0.2s ease;
 }
 
-.arrow-button:hover {
+.arrow-button:hover,
+.clickable-area:hover .arrow-button,
+.addon-group:hover .arrow-button {
   background-color: var(--hover-highlight);
 }
 

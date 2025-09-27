@@ -10,8 +10,8 @@ export default async function ({ template }) {
           ArrowDown: 1,
           ArrowLeft: -1,
           ArrowRight: 1,
-          Home: -1000,
-          End: 1000,
+          Home: -Infinity,
+          End: Infinity,
         },
       };
     },
@@ -29,7 +29,7 @@ export default async function ({ template }) {
         this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
       },
       listClick(e) {
-        if (e.target.tagName === "LI") {
+        if (e.target.closest("li")) {
           this.$root.closeDropdowns();
         }
       },

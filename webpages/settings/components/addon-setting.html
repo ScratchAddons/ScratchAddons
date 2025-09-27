@@ -55,7 +55,7 @@
           <dropdown
             button-class="addon-buttons addon-split-button-dropdown"
             :is-disabled="!addon._enabled"
-            :title="msg('addPresetRow')"
+            :button-title="msg('addPresetRow')"
             align-start="true"
           >
             <li tabindex="0" role="menuitem" v-for="preset of setting.presets" @click="addTableRow(preset.values)">

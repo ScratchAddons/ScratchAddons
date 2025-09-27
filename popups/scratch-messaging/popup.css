@@ -17,6 +17,7 @@ button {
   border-radius: 4px;
   background-color: transparent;
   border: none;
+  cursor: pointer;
 }
 .message-type-title:hover .btn-dropdown {
   background: var(--hover-highlight);
