@@ -134,7 +134,9 @@ export default async function ({ template }) {
             ? this.expanded
             : isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
-              : newState;
+              : event.shiftKey
+                ? false // Prevent expanding when shift-clicked (#1484)
+                : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
         };
@@ -178,7 +180,8 @@ export default async function ({ template }) {
       msg(...params) {
         return this.$root.msg(...params);
       },
-      openRelated(clickedAddon) {
+      openRelated(clickedAddon, event) {
+        event.preventDefault();
         this.$root.openRelatedAddons(this.addon);
         this.$root.blinkAddon(clickedAddon._addonId);
       },

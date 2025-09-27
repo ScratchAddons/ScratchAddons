@@ -116,7 +116,7 @@
         <div class="addon-message">
           <span class="related-addons-text">{{msg('relatedAddons')}}</span>
           <span v-for="addonManifest of addon._relatedAddons">
-            <a href="#" @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
+            <a href="#" @click="openRelated(addonManifest, $event)">{{addonManifest.name}}</a>
           </span>
         </div>
       </div>

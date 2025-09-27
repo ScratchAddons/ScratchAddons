@@ -6,12 +6,10 @@ export default async function ({ template }) {
       resetToDefault() {
         this.$parent.addonSettings[this.setting.id] = this.setting.default;
         this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
-        this.toggle();
       },
       resetToPreset(preset) {
         this.$parent.addonSettings[this.setting.id] = preset.values[this.setting.id];
         this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
-        this.toggle();
       },
       msg(...params) {
         return this.$root.msg(...params);
