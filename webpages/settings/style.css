@@ -188,7 +188,11 @@ h1 {
   cursor: pointer;
   padding: 17.5px;
   line-height: 0;
-  transition: 0.2s ease;
+  transition: background 0.2s ease;
+  outline-offset: -2px;
+}
+.header-button:focus-visible {
+  outline: 2px solid var(--white-text);
 }
 .sidebarToggleOpen,
 .header-button:hover {

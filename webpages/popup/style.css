@@ -33,10 +33,15 @@ button {
   line-height: 0;
   user-select: none;
   transition: background 0.2s ease;
+  outline-offset: -2px;
 }
 .header-button:hover {
   background: var(--header-hover-darken);
 }
+.header-button:focus-visible {
+  outline: 2px solid var(--white-text);
+}
+
 #title-text,
 .header-button {
   font-size: 18px;
