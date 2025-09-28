@@ -245,13 +245,13 @@
     transition: 0.2s ease;
   }
   .addon-buttons:hover:not([disabled]),
-  .addon-split-button.open .addon-split-button-dropdown,
-  .addon-split-button.open:hover .addon-split-button-dropdown:not(:hover) {
+  .addon-split-button .addon-split-button-dropdown.open,
+  .addon-split-button:hover .addon-split-button-dropdown.open:not(:hover) {
     background: var(--hover-highlight);
   }
   .addon-split-button:hover:not([disabled]) .addon-split-button-button:not(:hover),
   .addon-split-button:hover:not([disabled]) .addon-split-button-dropdown:not(:hover),
-  .addon-split-button.open .addon-split-button-button {
+  .addon-split-button:has(.open) .addon-split-button-button {
     background: var(--hover-highlight-reduced);
   }
   [disabled] {
@@ -274,8 +274,8 @@
   [dir="rtl"] .addon-split-button-dropdown {
     border-radius: 4px 0 0 4px;
   }
-  .addon-split-button.open .addon-split-button-button,
-  .addon-split-button.open .addon-split-button-dropdown {
+  .addon-split-button:has(.open) .addon-split-button-button,
+  .addon-split-button .addon-split-button-dropdown.open {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
