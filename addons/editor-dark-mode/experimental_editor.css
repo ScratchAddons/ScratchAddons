@@ -464,6 +464,7 @@ img[class*="tool-select-base_tool-select-icon_"],
   background-color: hsla(30, 100%, 55%, 1);
 }
 [class*="gui_extension-button-container_"],
+[class*="extension-button_extension-button-container_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="custom-procedures_button-row_"] button[class*="custom-procedures_ok-button_"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"],
@@ -540,6 +541,20 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="action-menu_main-button_"]:hover {
   box-shadow: 0 0 0 6px var(--editorDarkMode-primary-transparent35);
 }
+[class*="extension-button_radiate_"]::before,
+[class*="extension-button_radiate_"]::after {
+  animation-name: sa-radiate;
+  --radiate-color: var(--editorDarkMode-primary);
+}
+@keyframes sa-radiate {
+  0% {
+    box-shadow: 0 0 0 0 var(--radiate-color); /* for browsers that don't support color-mix */
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--radiate-color) 70%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 20px transparent;
+  }
+}
 [class*="dial_gauge-path_"] {
   fill: var(--editorDarkMode-primary-transparent35);
   stroke: var(--editorDarkMode-primary);
@@ -551,6 +566,7 @@ img[class*="tool-select-base_tool-select-icon_"],
   color: var(--editorDarkMode-primary-text);
 }
 [class*="gui_extension-button-icon_"],
+[class*="extension-button_extension-button-icon_"],
 [class*="delete-button_delete-icon_"],
 [class*="action-menu_main-button_"]:not(:hover) [class*="action-menu_main-icon_"],
 [class*="action-menu_more-button_"]:not(:hover) [class*="action-menu_more-icon_"],

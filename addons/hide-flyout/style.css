@@ -105,7 +105,7 @@
   /* .blocklyFlyoutScrollbar (z-index: 30) */
   /* and above these so that dragged sprites aren't obscured: */
   /* .blocklyToolbox (z-index: 40) */
-  /* .gui_extension-button-container_b4rCs (z-index: 42) */
+  /* .extension-button_extension-button-container_##### (z-index: 42) */
   z-index: 43;
   padding-inline: 0.5rem;
   background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));
