@@ -29,6 +29,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    outline-offset: -2px;
   }
 
   /* Classes used by index.html */
@@ -64,6 +65,9 @@
   .category:hover,
   .category.sel {
     background: var(--hover-darken);
+  }
+  .category:focus-visible {
+    outline: 2px solid var(--content-text);
   }
   .category::before {
     content: "";

@@ -332,7 +332,7 @@ a.message-type-title-text {
   user-select: none;
 }
 #bottom-bar > * {
-  padding: 8px 0;
+  margin: 8px 0;
 }
 #bottom-bar > a {
   font-weight: var(--brand-orange-min-font-weight);
