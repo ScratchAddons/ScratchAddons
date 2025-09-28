@@ -27,6 +27,11 @@ export default async function ({ template }) {
           callCloseDropdowns: false,
         });
         this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
+        if (this.isOpen) {
+          this.$nextTick(() => {
+            this.$els.list.firstElementChild.focus();
+          });
+        }
       },
       listClick(e) {
         if (e.target.closest("li")) {
