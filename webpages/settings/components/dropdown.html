@@ -6,6 +6,7 @@
       :class="['dropdown-btn', buttonClass, {'open': isOpen}]"
       :disabled="disabled"
       :title="buttonTitle"
+      v-el:button
       @click="toggle"
     >
       <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />

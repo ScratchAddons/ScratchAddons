@@ -42,6 +42,7 @@ export default async function ({ template }) {
         const element = this.$els.list;
         if (e.ctrlKey || e.metaKey || e.altKey) return;
         if (e.key === "Tab") {
+          this.$els.button.focus(); // then let the default behavior of tab take over
           this.$root.closeDropdowns();
         } else if (document.activeElement.tagName === "LI" && e.key === "Enter") {
           document.activeElement.click();
