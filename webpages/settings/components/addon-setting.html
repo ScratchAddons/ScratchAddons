@@ -73,15 +73,18 @@
         :disabled="!addon._enabled"
       />
       <div v-if="setting.type === 'select'" class="filter-options">
-        <button
-          class="filter-option"
-          v-for="option of setting.potentialValues"
-          :class="{'sel' : addonSettings[setting.id] === option.id, 'disabled': !addon._enabled}"
-          :disabled="!addon._enabled"
-          @click="updateOption(option.id);"
-        >
-          {{ option.name }}
-        </button>
+        <div v-for="option of setting.potentialValues">
+          <input
+            type="radio"
+            :name="addon._addonId+'-'+setting.id"
+            :id="addon._addonId+'-'+setting.id+'-'+option.id"
+            :value="option.id"
+            :disabled="!addon._enabled"
+            v-model="addonSettings[setting.id]"
+            @change="updateSettings()"
+          />
+          <label class="filter-option" :for="addon._addonId+'-'+setting.id+'-'+option.id">{{ option.name }}</label>
+        </div>
       </div>
     </template>
     <div v-else class="setting-input-container" :class="{ 'full-radius': tableChild }">

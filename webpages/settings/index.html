@@ -325,12 +325,22 @@
               <div class="filter-selector">
                 <div class="filter-text">{{ msg("theme") }}</div>
                 <div class="filter-options">
-                  <button class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
-                    {{ msg("light") }}
-                  </button>
-                  <button class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
-                    {{ msg("dark") }}
-                  </button>
+                  <input
+                    type="radio"
+                    name="theme-selector"
+                    id="theme-select-light"
+                    :checked="theme === true"
+                    @change="setTheme(true)"
+                  />
+                  <label for="theme-select-light" class="filter-option">{{ msg("light") }}</label>
+                  <input
+                    type="radio"
+                    name="theme-selector"
+                    id="theme-select-dark"
+                    :checked="theme === false"
+                    @change="setTheme(false)"
+                  />
+                  <label for="theme-select-dark" class="filter-option">{{ msg("dark") }}</label>
                 </div>
               </div>
             </div>

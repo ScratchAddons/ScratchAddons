@@ -20,6 +20,7 @@
 }
 
 .filter-option {
+  display: block;
   padding: 0 12px;
   line-height: 30px;
   background: var(--button-background);
@@ -28,23 +29,29 @@
   transition: background 0.2s ease;
   outline-offset: -2px;
 }
+.filter-options input {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .filter-option:hover {
   background: var(--button-hover-background);
 }
-.filter-option:focus-visible {
+.filter-options input:focus-visible + label {
   outline: 2px solid var(--content-text);
 }
-.filter-option:not(.sel):hover {
+.filter-options input:not(:checked) + label:hover {
   cursor: pointer;
 }
 .filter-option:last-child {
   border-inline-end: none;
 }
-.filter-option.sel {
+.filter-options input:checked + label {
   background: var(--brand-orange);
   color: var(--white-text);
 }
-.filter-option.disabled {
+.filter-options input:disabled + label {
   filter: grayscale(80%);
   pointer-events: none;
 }
