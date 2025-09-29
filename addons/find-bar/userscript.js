@@ -557,16 +557,6 @@ export default async function ({ addon, msg, console }) {
         let blocks = this.getCallsToProcedureById(item.data.labelID);
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
-        /*
-          let blocks = [this.workspace.getBlockById(li.data.labelID)];
-          if (li.data.clones) {
-              for (const cloneID of li.data.clones) {
-                  blocks.push(this.workspace.getBlockById(cloneID))
-              }
-          }
-          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-        */
-        // Now, fetch the events from the scratch runtime instead of blockly
         let blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
           // Can we start by selecting the first block on 'this' sprite
