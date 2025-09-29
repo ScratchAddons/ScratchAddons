@@ -30,8 +30,8 @@
   outline-offset: -2px;
 }
 .filter-options input {
-  position: fixed;
-  opacity: 0;
+  position: absolute;
+  appearance: none;
   pointer-events: none;
 }
 
@@ -44,7 +44,7 @@
 .filter-options input:not(:checked) + label:hover {
   cursor: pointer;
 }
-.filter-option:last-child {
+.filter-options > :last-child > .filter-option {
   border-inline-end: none;
 }
 .filter-options input:checked + label {

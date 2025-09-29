@@ -72,7 +72,7 @@
         @change="updateSettings()"
         :disabled="!addon._enabled"
       />
-      <div v-if="setting.type === 'select'" class="filter-options">
+      <div v-if="setting.type === 'select'" class="filter-options" role="radiogroup">
         <div v-for="option of setting.potentialValues">
           <input
             type="radio"
