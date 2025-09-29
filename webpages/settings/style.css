@@ -280,7 +280,10 @@ body.iframe .search-box input {
   text-align: right;
   bottom: 0;
   position: fixed;
+  padding: 0;
   margin: 5px;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
   user-select: none;
 }

@@ -237,13 +237,13 @@
           <span>{{ msg("moreSettings") }}</span>
         </button>
       </div>
-      <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
+      <button v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()" :title="msg('toggleSidebar')">
         <img
           src="../../images/icons/left-arrow.svg"
           :class="{flipped: categoryOpen === (direction() === 'rtl')}"
           draggable="false"
         />
-      </div>
+      </button>
 
       <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
