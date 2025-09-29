@@ -72,9 +72,11 @@ export default async function ({ addon, console }) {
       e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN" ||
       e.detail.action.type === "scratch-gui/mode/SET_PLAYER"
     ) {
-      oldTimey.updateSound(addon, mode);
-      mystery.update(addon, mode);
-      updatePointerMoveListener();
+      setTimeout(() => {
+        oldTimey.updateSound(addon, mode);
+        mystery.update(addon, mode);
+        updatePointerMoveListener();
+      }, 0); // wait for addon.tab.editorMode to update
     }
   });
 
