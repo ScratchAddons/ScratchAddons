@@ -15,7 +15,7 @@ export default async function ({ addon, console }) {
     if (!logo) return;
     logo.src =
       {
-        "90s": addon.self.dir + "/assets/nineties_logo.svg",
+        "90s": addon.self.dir + "/assets/90s-logo.svg",
         oldTimey: addon.self.dir + "/assets/oldtimey-logo.svg",
         prehistoric: addon.self.dir + "/assets/prehistoric-logo.svg",
       }[mode] || initialSrc;

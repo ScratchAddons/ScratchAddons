@@ -94,7 +94,7 @@
 }
 
 .sa-mode::after {
-  background-image: url("assets/torch.gif");
+  background-image: url("assets/prehistoric-torch.gif");
   background-position: calc(var(--sa-mouse-x, -10000px) - 35px) calc(var(--sa-mouse-y, -10000px) - 220px);
   background-repeat: no-repeat;
   opacity: 0.8;
