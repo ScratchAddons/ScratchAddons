@@ -14,9 +14,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       bannerSettings: { lastShown: `${major}.${minor}` },
     });
   }
-});
-chrome.management.getSelf((result) => {
-  if (result.installType !== "development") {
+  if (!developerMode) {
     chrome.runtime.setUninstallURL(`https://scratchaddons.com/${localeSlash}farewell?${utm}`);
   }
 });
