@@ -262,12 +262,7 @@
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
-          <template v-if="searchInput && hasNoResults">
-            <p id="search-not-found" v-if="selectedCategory === 'all' || !selectedCategoryName">
-              {{ msg("searchNotFound") }}
-            </p>
-            <p id="search-not-found" v-else>{{ msg("searchNotFoundInCategory", selectedCategoryName) }}</p>
-          </template>
+          <p v-if="searchInput && hasNoResults" id="search-not-found">{{ msg("searchNotFound") }}</p>
           <template v-if="relatedAddonsOpen">
             <addon-body
               v-for="addonManifest of relatedAddons"

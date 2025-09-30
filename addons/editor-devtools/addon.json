@@ -25,6 +25,12 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "../../libraries/common/cs/blockly-menu-separators.css",
+      "matches": ["projects"]
+    }
+  ],
   "versionAdded": "1.0.0",
   "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": true

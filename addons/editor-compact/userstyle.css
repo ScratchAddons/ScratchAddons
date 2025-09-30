@@ -475,6 +475,19 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 .sa-debugger-tabs li + li {
   margin-inline-start: 0.25rem;
 }
+.sa-debugger-footer {
+  padding: 0.25rem 0.5rem;
+}
+.sa-debugger-footer-buttons {
+  gap: 0.25rem;
+}
+.sa-debugger-footer-buttons > div {
+  padding: 0.25rem 0.5rem;
+}
+
+.sa-debugger-unpause-container:not(:last-child) {
+  padding-right: 0.25rem;
+}
 
 [class*="modal_header"],
 [class*="library_filter-bar"] {
@@ -554,6 +567,13 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 .blocklyTextRemoveIcon {
   top: -35px;
 }
+.sa-reorder-inputs-arrow {
+  top: -44px;
+}
 [class*="custom-procedures_body"] [role="button"] {
   padding: 0.5rem;
+}
+.sa-rcb-colorButton {
+  height: 1.5rem;
+  padding: 0 !important;
 }

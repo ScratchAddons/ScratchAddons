@@ -107,7 +107,8 @@
   "versionAdded": "1.0.0",
   "latestUpdate": {
     "version": "1.43.0",
-    "newSettings": ["titles"]
+    "newSettings": ["titles"],
+    "isMajor": true
   },
   "tags": ["community", "forums", "recommended", "profiles", "projectPage"],
   "relatedAddons": ["infinite-scroll"],

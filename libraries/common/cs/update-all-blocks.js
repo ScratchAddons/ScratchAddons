@@ -1,3 +1,6 @@
+// Event emitter for updateAllBlocks
+const updateAllBlocksEvents = new EventTarget();
+
 export async function updateAllBlocks(
   tab,
   { updateMainWorkspace = true, updateFlyout = true, updateCategories = false } = {}
@@ -13,7 +16,18 @@ export async function updateAllBlocks(
 
   if (workspace) {
     if (updateMainWorkspace) {
-      blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(workspace), workspace);
+      let clearWorkspaceAndLoadFromXml;
+      const xml = blockly.Xml.workspaceToDom(workspace);
+      if (blockly.registry) {
+        // new Blockly: use Scratch's modified implementation instead of the one from Blockly
+        clearWorkspaceAndLoadFromXml = blockly.clearWorkspaceAndLoadFromXml;
+        if (!xml.querySelector("variables")) {
+          xml.appendChild(blockly.utils.xml.createElement("variables"));
+        }
+      } else {
+        clearWorkspaceAndLoadFromXml = blockly.Xml.clearWorkspaceAndLoadFromXml;
+      }
+      clearWorkspaceAndLoadFromXml(xml, workspace);
     }
     const toolbox = workspace.getToolbox();
     const flyout = workspace.getFlyout();
@@ -50,4 +64,18 @@ export async function updateAllBlocks(
   }
 
   blockly.Events.enable();
+
+  // Emit event to notify that blocks have been updated
+  updateAllBlocksEvents.dispatchEvent(
+    new CustomEvent("blocksUpdated", {
+      detail: {
+        updateMainWorkspace,
+        updateFlyout,
+        updateCategories,
+      },
+    })
+  );
 }
+
+// Export the event emitter for external subscriptions
+export { updateAllBlocksEvents };

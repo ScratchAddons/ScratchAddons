@@ -1,0 +1,42 @@
+/* When middle middle-click-popup creates it's block renders, it uses the block's current colors, */
+/* but overrides them with .sa-block-color-. Disabling this for sa-mcp-preview-block allows us */
+/* to see the our custom block colors */
+.sa-mcp-preview-block .sa-block-color-more {
+  --sa-block-background-primary: unset;
+  --sa-block-background-secondary: unset;
+  --sa-block-background-tertiary: unset;
+  --sa-block-field-background: unset;
+}
+
+.sa-rcb-custom-procedures_colors-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5em;
+}
+.sa-rcb-colorButton {
+  aspect-ratio: 1;
+  height: 2rem;
+  overflow: hidden;
+  border: 2px solid;
+  transition: all 0.2s;
+  border-radius: 100%;
+  margin-bottom: 0.125rem;
+  padding: 4px;
+}
+.sa-rcb-colorButton:hover {
+  filter: brightness(120%);
+}
+
+.sa-rcb-colorButtonCheck {
+  display: none;
+}
+.sa-rcb-colorButtonCheck.active {
+  display: unset;
+}
+
+.sa-rcb-colorButton.sa-rcb-colorPicker {
+  border-bottom-color: #ff6680;
+  border-top-color: #59c059;
+  border-right-color: #ffbf00;
+  border-left-color: #4c97ff;
+}

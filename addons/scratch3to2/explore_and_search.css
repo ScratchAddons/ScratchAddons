@@ -170,7 +170,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select {
   right: 11px;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
-  border-top: 4px solid var(--darkWww-box-scratchr2Caret, black);
+  border-top: 4px solid var(--darkWww-box-scratchr2BlackText, black);
   opacity: 0.5;
   pointer-events: none;
 }

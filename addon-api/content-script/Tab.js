@@ -845,16 +845,27 @@ export default class Tab extends Listenable {
           }
         }
 
+        const oldCreateWidget = ScratchBlocks.ContextMenu.createWidget_;
+        ScratchBlocks.ContextMenu.createWidget_ = function (...args) {
+          oldCreateWidget.call(this, ...args);
+          // Add styles to separator items
+          // This must be done before ContextMenu.position_() is called because it changes the height
+          const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
+          items.forEach((item, i) => {
+            if (item.separator) {
+              const itemElt = blocklyContextMenu.children[i];
+              itemElt.setAttribute("role", "separator");
+              itemElt.style.padding = "0";
+              if (i !== 0) {
+                itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+              }
+            }
+          });
+        };
+
         oldShow.call(this, event, items, rtl);
 
-        const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
-        items.forEach((item, i) => {
-          if (i !== 0 && item.separator) {
-            const itemElt = blocklyContextMenu.children[i];
-            itemElt.style.paddingTop = "2px";
-            itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-          }
-        });
+        ScratchBlocks.ContextMenu.createWidget_ = oldCreateWidget;
       };
     });
   }

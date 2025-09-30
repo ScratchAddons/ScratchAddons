@@ -169,6 +169,7 @@ body:not(.sa-body-editor) input.formik-radio-input,
 .wedo .project-card,
 .transfer-host-modal .cancel-button,
 .transfer-host-modal .transfer-password-input,
+.share-modal .share-modal-inner,
 .update-thumbnail-info-modal .update-thumbnail-info-modal-inner,
 .comments-container .sa-emoji-picker,
 .studio-compose-container .sa-emoji-picker {
@@ -190,7 +191,8 @@ body:not(.sa-body-editor) .button.white,
 .index .title-banner p a button,
 .financials-section .financials-button,
 .donate-section .donate-button,
-.initiatives-section .initiatives-subsection-content .bubble.inverted {
+.initiatives-section .initiatives-subsection-content .bubble.inverted,
+.share-modal .change-thumbnail-button {
   background-color: var(--darkWww-box);
 }
 .ReactModal__Content[style*="background: rgb(255, 255, 255)"] {
@@ -235,7 +237,8 @@ a.social-messages-profile-link:link,
 .studio-project-tile .studio-project-username,
 .studio-member-tile .studio-member-role,
 body:not(.sa-body-editor) .join-flow-title,
-.registration-step .bold-link {
+.registration-step .bold-link,
+.checkbox-container {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
@@ -662,7 +665,6 @@ a:hover {
 
 /* Footer background */
 #footer,
-#donor,
 .gray-area,
 .starter-projects-page .getting-started,
 .parents .title-banner.faq-banner,
@@ -707,7 +709,8 @@ body:not(.sa-body-editor) .select select,
 p.callout,
 .input,
 .row .col-sm-9 input[type="radio"]:not(:checked),
-.extension-landing .tip-box {
+.extension-landing .tip-box,
+.checkbox-container input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border);
 }
 .grid .thumbnail,

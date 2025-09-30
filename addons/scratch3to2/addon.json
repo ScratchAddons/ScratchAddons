@@ -16,7 +16,8 @@
   "versionAdded": "1.41.0",
   "latestUpdate": {
     "version": "1.43.0",
-    "newSettings": ["navbarSeparators"]
+    "newSettings": ["navbarSeparators"],
+    "isMajor": true
   },
   "settings": [
     {

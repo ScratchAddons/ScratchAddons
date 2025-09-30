@@ -186,6 +186,13 @@ const injectWorkspace = (ScratchBlocks) => {
     };
   }
 
+  // recolour existing procedure blocks incase this injection is called after the blocks have already been created
+  for (const block of tabAPI.traps.getWorkspace().getAllBlocks(false)) {
+    if (block.type === "procedures_call" || block.parentBlock_?.type === "procedures_call") {
+      block.applyColour?.() || block.updateColour?.();
+    }
+  }
+
   // We use Scratch's extension category mechanism to create a new category.
   // https://github.com/scratchfoundation/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
   // https://github.com/scratchfoundation/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
