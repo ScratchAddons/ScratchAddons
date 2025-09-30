@@ -112,19 +112,6 @@
           :required="!!setting.min"
         />
       </template>
-      <template v-if="setting.type === 'key'"
-        ><input
-          type="text"
-          class="setting-input"
-          v-model="addonSettings[setting.id]"
-          @input="updateSettings"
-          @keydown="keySettingKeyDown"
-          @keyup="keySettingKeyUp"
-          :disabled="!addon._enabled"
-          :placeholder="setting.default"
-          maxlength="100"
-          spellcheck="false"
-      /></template>
       <template v-if="setting.type === 'color'">
         <picker
           :value="addonSettings[setting.id] || setting.default"
