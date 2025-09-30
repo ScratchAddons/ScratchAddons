@@ -529,7 +529,7 @@ export default async function ({ addon, console }) {
   } else {
     const oldUpdateColour = Blockly.BlockSvg.prototype.updateColour;
     Blockly.BlockSvg.prototype.updateColour = function (...args) {
-      if (!this.isInsertionMarker() && this.getCategory?.() == null) {
+      if (!this.isInsertionMarker() && this.getCategory?.() === null) {
         const block = this.procCode_ && this.recolorCustomBlock;
         if (block) {
           const color = this.recolorCustomBlock;
