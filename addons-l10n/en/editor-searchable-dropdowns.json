@@ -3,5 +3,6 @@
   "editor-searchable-dropdowns/createLocalVariable": "Create variable \"{name}\" for this sprite only",
   "editor-searchable-dropdowns/createGlobalList": "Create list \"{name}\" for all sprites",
   "editor-searchable-dropdowns/createLocalList": "Create list \"{name}\" for this sprite only",
-  "editor-searchable-dropdowns/createBroadcast": "Create message \"{name}\""
+  "editor-searchable-dropdowns/createBroadcast": "Create message \"{name}\"",
+  "editor-searchable-dropdowns/noResults": "No results"
 }

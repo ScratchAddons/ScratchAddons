@@ -7,7 +7,8 @@
       "link": "https://scratch.mit.edu/TheColaber"
     }
   ],
-  "tags": ["editor", "codeEditor", "featured"],
+  "tags": ["editor", "codeEditor", "theme", "featured"],
+  "relatedAddons": ["data-category-tweaks-v2", "editor-stage-left", "editor-compact"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [

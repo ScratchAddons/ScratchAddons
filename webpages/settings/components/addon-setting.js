@@ -9,7 +9,7 @@ export default async function ({ template }) {
       };
     },
     ready() {
-      this.$root.$on("close-reset-dropdowns", (except) => {
+      this.$root.$on("close-dropdowns", (except) => {
         if (this.rowDropdownOpen && this !== except) {
           this.rowDropdownOpen = false;
         }
@@ -76,37 +76,19 @@ export default async function ({ template }) {
             return icon.slice(1);
           }
           if (icon[0] === "@") {
-            return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+            return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}" draggable="false"/>`;
           }
           if (icon[0] === "#") {
-            return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+            return `<img class="inline-icon" src="../../addons/${addon._addonId}/${
+              icon.split("#")[1]
+            }" draggable="false"/>`;
           }
         });
       },
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
         let input = this.$event.target;
-        this.addonSettings[this.setting.id] = input.validity.valid ? input.value : this.setting.default;
-      },
-      keySettingKeyDown(e) {
-        e.preventDefault();
-        e.target.value = e.ctrlKey
-          ? "Ctrl" +
-            (e.shiftKey ? " + Shift" : "") +
-            (e.key === "Control" || e.key === "Shift"
-              ? ""
-              : (e.ctrlKey ? " + " : "") +
-                (e.key.toUpperCase() === e.key
-                  ? e.code.includes("Digit")
-                    ? e.code.substring(5, e.code.length)
-                    : e.key
-                  : e.key.toUpperCase()))
-          : "";
-      },
-      keySettingKeyUp(e) {
-        // Ctrl by itself isn't a hotkey
-        if (e.target.value === "Ctrl") e.target.value = "";
-        this.updateOption(e.target.value);
+        if (!input.validity.valid) this.addonSettings[this.setting.id] = this.setting.default;
       },
       getTableSetting(id) {
         return this.setting.row.find((setting) => setting.id === id);
@@ -133,7 +115,7 @@ export default async function ({ template }) {
         this.$root.closePickers({ isTrusted: true }, null, {
           callCloseDropdowns: false,
         });
-        this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+        this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
       },
       msg(...params) {
         return this.$root.msg(...params);
@@ -151,8 +133,8 @@ export default async function ({ template }) {
       closePickers(...params) {
         return this.$root.closePickers(...params);
       },
-      closeResetDropdowns(...params) {
-        return this.$root.closeResetDropdowns(...params);
+      closeDropdowns(...params) {
+        return this.$root.closeDropdowns(...params);
       },
     },
     directives: {

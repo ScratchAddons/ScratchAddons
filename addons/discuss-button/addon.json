@@ -4,7 +4,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["https://scratch.mit.edu/*", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "runAtComplete": false
     },
     {
@@ -14,14 +14,14 @@
     },
     {
       "url": "r2.js",
-      "matches": ["isNotScratchWWW"],
+      "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "compact-nav.css",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["https://scratch.mit.edu/*", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "if": {
         "settings": {
           "compact-nav": true
@@ -122,6 +122,7 @@
     "isMajor": false
   },
   "tags": ["community", "featured"],
+  "relatedAddons": ["custom-menu-bar", "expanding-search-bar"],
   "enabledByDefault": false,
   "updateUserstylesOnSettingsChange": true
 }

@@ -44,7 +44,7 @@ export default async function ({ addon, console, msg }) {
   manager.appendChild(globalVars);
 
   const varTab = document.createElement("li");
-  addon.tab.displayNoneWhileDisabled(varTab, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(varTab);
   varTab.classList.add(addon.tab.scratchClass("react-tabs_react-tabs__tab"), addon.tab.scratchClass("gui_tab"));
   // Cannot use number due to conflict after leaving and re-entering editor
   varTab.id = "react-tabs-sa-variable-manager";
@@ -157,7 +157,7 @@ export default async function ({ addon, console, msg }) {
       label.htmlFor = id;
       const onLabelOut = (e) => {
         e.preventDefault();
-        const workspace = Blockly.getMainWorkspace();
+        const workspace = addon.tab.traps.getWorkspace();
 
         let newName = label.value;
         if (newName === this.scratchVariable.name) {
@@ -185,14 +185,15 @@ export default async function ({ addon, console, msg }) {
           nameAlreadyUsed = existingNames.includes(newName);
         } else {
           // Local variables must not conflict with any global variables or local variables in this sprite.
-          nameAlreadyUsed = !!workspace.getVariable(newName, this.scratchVariable.type);
+          nameAlreadyUsed = !!workspace.getVariableMap().getVariable(newName, this.scratchVariable.type);
         }
 
         const isEmpty = !newName.trim();
         if (isEmpty || nameAlreadyUsed) {
           label.value = this.scratchVariable.name;
         } else {
-          workspace.renameVariableById(this.scratchVariable.id, newName);
+          const blocklyVariable = workspace.getVariableMap().getVariableById(this.scratchVariable.id);
+          workspace.getVariableMap().renameVariable(blocklyVariable, newName);
           // Only update the input's value when we need to to avoid resetting undo history.
           if (label.value !== newName) {
             label.value = newName;

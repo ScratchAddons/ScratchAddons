@@ -22,5 +22,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.21.0",
   "tags": ["editor", "codeEditor", "featured"],
+  "relatedAddons": ["block-cherry-picking"],
   "enabledByDefault": false
 }

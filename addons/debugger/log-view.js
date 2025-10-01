@@ -47,6 +47,20 @@ class LogView {
     this.innerElement.addEventListener("scroll", this._handleScroll.bind(this), { passive: true });
     this.innerElement.addEventListener("wheel", this._handleWheel.bind(this), { passive: true });
 
+    // Add ResizeObserver to update height when debugger is resized
+    if (window.ResizeObserver) {
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.visible) {
+          const newHeight = this.innerElement.offsetHeight;
+          if (newHeight !== this.height) {
+            this.height = newHeight;
+            this.queueUpdateContent();
+          }
+        }
+      });
+      this.resizeObserver.observe(this.innerElement);
+    }
+
     this.endElement = document.createElement("div");
     this.endElement.className = "sa-debugger-log-end";
     this.endElement.dataset.index = "-1";
@@ -112,15 +126,30 @@ class LogView {
     }
   }
 
-  scrollIntoView(index) {
-    const distanceFromTop = index * this.rowHeight;
+  /**
+   * @param {number} index
+   * @param {number} [margin] # of pixels on top and bottom that are not considered part of the view
+   * @returns {boolean}
+   */
+  isInView(index, margin = 0) {
+    const topEdgeFromTop = index * this.rowHeight;
+    const bottomEdgeFromTop = topEdgeFromTop + this.rowHeight;
     const viewportStart = this.scrollTop;
-    const viewportEnd = this.scrollTop + this.height;
-    const isInView = distanceFromTop > viewportStart && distanceFromTop < viewportEnd;
-    if (!isInView) {
-      this.scrollTop = distanceFromTop;
-      this.innerElement.scrollTop = distanceFromTop;
-    }
+    const viewportEnd = viewportStart + this.height;
+    return topEdgeFromTop >= viewportStart + margin && bottomEdgeFromTop <= viewportEnd - margin;
+  }
+
+  /**
+   * @param {number} index
+   */
+  scrollTo(index) {
+    // There is one extra pixel from this.endElement
+    const maximumScrollTop = Math.max(0, this.rows.length * this.rowHeight - this.height + 1);
+
+    // Try to leave the item above slightly visible to make it more obvious to the user that they can
+    // still scroll.
+    this.scrollTop = Math.min(maximumScrollTop, index * this.rowHeight - this.rowHeight * 0.3);
+    this.innerElement.scrollTop = this.scrollTop;
   }
 
   _queueScrollToEnd() {

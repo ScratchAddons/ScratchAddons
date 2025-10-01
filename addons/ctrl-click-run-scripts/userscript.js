@@ -7,15 +7,11 @@ export default async function ({ addon, console }) {
   const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
 
   let ctrlKeyPressed = false;
-  document.addEventListener(
-    "mousedown",
-    function (e) {
-      ctrlKeyPressed = e.ctrlKey || e.metaKey;
-    },
-    {
-      capture: true,
-    }
-  );
+  const onMouseDown = function (e) {
+    ctrlKeyPressed = e.ctrlKey || e.metaKey;
+  };
+  document.addEventListener("mousedown", onMouseDown, { capture: true }); // for old Blockly
+  document.addEventListener("pointerdown", onMouseDown, { capture: true }); // for new Blockly
 
   let doubleClick = false;
   let doubleClickTimeout;
@@ -30,7 +26,12 @@ export default async function ({ addon, console }) {
 
   // Capture clicks on scripts
   const newBlocklyListen = function (e) {
-    if (!addon.self.disabled && e.element === "stackclick" && !ctrlKeyPressed) {
+    if (
+      !addon.self.disabled &&
+      // new Blockly || old Blockly
+      ((e.type === "click" && e.targetType === "block") || e.element === "stackclick") &&
+      !ctrlKeyPressed
+    ) {
       if (doubleClick) {
         // Allow script to execute on double click
         clearTimeout(doubleClickTimeout);

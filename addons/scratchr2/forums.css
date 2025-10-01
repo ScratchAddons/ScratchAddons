@@ -1,4 +1,4 @@
-@import url("%addon-self-dir%/../../libraries/common/css/spinner.css");
+@import url("%addon-self-dir%/../../libraries/common/cs/spinner.css");
 
 body > #pagewrapper {
   min-height: 0;
@@ -66,11 +66,17 @@ body > #pagewrapper {
   background: none;
   border-top: none;
 }
-#forum-search-input {
-  width: calc(85% - 8px);
+#forum-search-input,
+#forum-search-filter-input {
   margin-right: 8px;
   height: 48px;
   padding: 4px 20px;
+}
+#forum-search-dropdown {
+  margin-right: 8px;
+}
+#forum-search-form .button {
+  padding: 4px 16px;
 }
 .forum-search-list {
   width: 942px;

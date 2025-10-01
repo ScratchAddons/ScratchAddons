@@ -1,1 +1,1 @@
-{"60fps/@name":"60FPS proje oynatıcı modu","60fps/@description":"60FPS'ye geçmek için yeşil bayrağa alt tuşuna basılıyken tıklayın.","60fps/@info-projectRunsFasterNotice":"Çoğu proje, 60FPS'de çalışırken düzgün davranmayacaktır, çünkü kare hızını arttırmak, kodların çalışma hızını da artırır. Bu, yalnızca 60FPS'yi destekleyen projelerde kullanılmalıdır.","60fps/@settings-name-framerate":"Alt+Yeşil Bayrak FPS"}
+{"60fps/@name":"Daha yüksek proje kare hızı modu"}

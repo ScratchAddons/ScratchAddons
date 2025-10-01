@@ -1,0 +1,35 @@
+{
+  "name": "Recolor custom blocks",
+  "description": "Adds an option to choose a custom color when creating a block. This feature works by adding the color code or category name at the beginning of the block's label.",
+  "credits": [
+    {
+      "name": "FlamedDogo99",
+      "link": "https://github.com/FlamedDogo99"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "relatedAddons": ["data-category-tweaks-v2", "editor-theme3"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hide color prefixes",
+      "id": "hideColorPrefix",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.44.0"
+}

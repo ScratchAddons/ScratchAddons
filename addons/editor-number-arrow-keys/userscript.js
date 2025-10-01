@@ -26,7 +26,7 @@ export default async function ({ addon }) {
         numStr = numArrFiltered.join("");
       }
     }
-    return Number(numStr) * (isNumberNegative ? -1 : 1);
+    return BigInt(numStr) * (isNumberNegative ? -1n : 1n);
   };
   const shiftDecimalPointToLeft = (num, times) => {
     const isNumberNegative = num[0] === "-";
@@ -44,68 +44,71 @@ export default async function ({ addon }) {
         numStr = numArrFiltered.join("");
       }
     }
-    return Number(numStr) * (isNumberNegative ? -1 : 1);
-  };
-
-  const normalizeNumber = (numStr) => {
-    const isNumberNegative = numStr[0] === "-";
-    const numStrPositive = isNumberNegative ? numStr.substring(1) : numStr;
-
-    let normalizedNum = numStrPositive;
 
     // Adds zero before the decimal point if necessary (.1 → 0.1)
-    if (normalizedNum[0] === ".") {
-      normalizedNum = "0" + normalizedNum;
-    }
-
-    // Removes leading zeros (02.25 → 2.25)
-    if (/^0*$/.test(numStrPositive.split(".")[0])) {
-      // Case where integerPart = (0 or 00 or 000, etc...)
-      const decimalPart = numStrPositive.split(".")[1] || "";
-      normalizedNum = `0.${decimalPart}`;
-    } else {
-      normalizedNum = normalizedNum.replace(/^0*|0*$/, "");
+    if (numStr[0] === ".") {
+      numStr = "0" + numStr;
     }
 
     // Removes trailing zeros (2.250 → 2.25)
-    if (numStrPositive.includes(".")) {
-      normalizedNum = normalizedNum.replace(/0*$/, "");
+    if (numStr.includes(".")) {
+      numStr = numStr.replace(/0*$/, "");
     }
 
     // Removes the decimal point if it's the last character (2. → 2)
-    if (normalizedNum.endsWith(".")) {
-      normalizedNum = normalizedNum.slice(0, -1);
+    if (numStr.endsWith(".")) {
+      numStr = numStr.slice(0, -1);
     }
 
-    return (isNumberNegative ? "-" : "") + normalizedNum;
+    return numStr ? (isNumberNegative ? "-" : "") + numStr : 0;
   };
 
   const isValidNumber = (numStr) => {
-    if (numStr.length > 10) return false;
-    if (amountOfDecimals(numStr) > 5) return false;
-    return normalizeNumber(numStr) === Number(numStr).toString();
+    if (numStr.length > 30) return false;
+    try {
+      BigInt(numStr.replace(".", ""));
+    } catch {
+      return false; // Even though an error would occur later anyway, we still catch now to abort before e.preventDefault().
+    }
+    return true;
   };
 
   const isSupportedElement = (el) => {
-    if (el.classList.contains("blocklyHtmlInput")) return true;
-    else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
+    let inputSelector = " input[type=number]";
+    if (!el.classList) return false;
+    if (el.classList.contains("blocklyHtmlInput"))
+      return true; // Block inputs do not have a type attribute
+    else if (el.matches("[class*=mediaRecorderPopupContent]" + inputSelector)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
-    } else if (el.className.includes("input_input-form_")) {
-      if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
-        // Sprite X/Y coordinates, size and direction (excludes sprite name)
+    } else if (el.matches("[class*=input_input-form_]")) {
+      // The following elements have this in their class list
+      if (el.matches("[class*=input_input-small_]")) {
+        // Inputs in sprite propeties (exluding sprite name)
         return true;
-      } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
-        // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
+      } else if (
+        el.matches("[class*=paint-editor_editor-container-top_]" + inputSelector) &&
+        !el.matches("[class*=fixed-tools_costume-input_]")
+      ) {
+        // All costume editor inputs (in the top bar: outline width, brush size, etc) except costume name
         return true;
-      } else return false;
+      } else if (el.matches("[class*=Popover-body]" + inputSelector)) {
+        // Any inputs in the colour popover
+        return true;
+      }
+    } else if (el.matches("[class*=sa-paint-snap-settings]" + inputSelector)) {
+      // The paint-snap distance setting
+      return true;
+    } else if (el.matches("[class*=sa-onion-settings]" + inputSelector)) {
+      // All inputs in the onion-skinning settings
+      return true;
     }
     return false;
   };
 
   document.body.addEventListener("keydown", (e) => {
     if (addon.self.disabled) return;
-    if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
+    if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
     if (!isSupportedElement(e.target)) return;
     if (!e.target.value) return;
     if (!isValidNumber(e.target.value)) return;
@@ -115,7 +118,7 @@ export default async function ({ addon }) {
     // If this is a number input, it will prevent the default browser behavior when pressing up/down in a
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
-    let changeBy = e.code === "ArrowUp" ? 1 : -1;
+    let changeBy = e.key === "ArrowUp" ? 1 : -1;
     if (addon.settings.get("useCustom")) {
       let settingValue = e.shiftKey
         ? addon.settings.get("shiftCustom")
@@ -141,9 +144,11 @@ export default async function ({ addon }) {
           : settings[addon.settings.get("regular")];
     }
 
-    const newValueAsInt =
-      shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
-    const newValue = shiftDecimalPointToLeft(newValueAsInt.toString(), 5);
+    const decimalCount = Math.max(amountOfDecimals(e.target.value), amountOfDecimals(changeBy.toString()));
+    const newValueAsBigInt =
+      shiftDecimalPointToRight(e.target.value, decimalCount) +
+      shiftDecimalPointToRight(changeBy.toString(), decimalCount);
+    const newValue = shiftDecimalPointToLeft(newValueAsBigInt.toString(), decimalCount);
 
     if (e.target.className.includes("input_input-form_")) {
       Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
@@ -178,6 +183,7 @@ export default async function ({ addon }) {
     } else {
       // Normal Blockly input
       e.target.value = newValue.toString();
+      e.target.dispatchEvent(new Event("input"));
     }
   });
 }

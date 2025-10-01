@@ -154,11 +154,13 @@ class TokenProvider {
    * Return the tokens found by this token provider in `query` at character `idx`.
    * @param {QueryInfo} query The query to search
    * @param {number} idx The index to start the search at
+   * @param {number} depth The number of blocks this token is inside of.
+   *  For the query 1 + 1, the `+` block token would have a depth of 0 and the `1` tokens would have a depth of 1.
    * @yields {Token} All the tokens found
    * @abstract
    */
   // eslint-disable-next-line require-yield
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     throw new Error("Sub-class must override abstract method.");
   }
 }
@@ -181,9 +183,9 @@ class TokenProviderOptional extends TokenProvider {
     this.inner = inner;
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     yield TokenTypeBlank.INSTANCE.createToken(idx);
-    yield* this.inner.parseTokens(query, idx);
+    yield* this.inner.parseTokens(query, idx, depth);
   }
 }
 
@@ -207,9 +209,9 @@ class TokenProviderSingleCache extends TokenProvider {
     }
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     if (!this.inner.shouldCache) {
-      yield* this.inner.parseTokens();
+      yield* this.inner.parseTokens(query, idx, depth);
       return;
     }
     if (this.cacheQueryID !== query.id) {
@@ -222,7 +224,7 @@ class TokenProviderSingleCache extends TokenProvider {
       return;
     }
     this.cache[idx] = cacheEntry = [];
-    for (const token of this.inner.parseTokens(query, idx)) {
+    for (const token of this.inner.parseTokens(query, idx, depth)) {
       cacheEntry.push(token);
       yield token;
     }
@@ -272,10 +274,10 @@ class TokenProviderGroup extends TokenProvider {
     else this.illegalProviders.push(...providers);
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     // If none of our providers are cacheable, just parse all the tokens again
     if (!this.hasCacheable) {
-      for (const provider of this.providers) yield* provider.parseTokens(query, idx, false);
+      for (const provider of this.providers) yield* provider.parseTokens(query, idx, depth);
       return;
     }
 
@@ -293,7 +295,7 @@ class TokenProviderGroup extends TokenProvider {
         for (let i = 0; i < tokenCaches.length; i++) {
           const tokenCache = tokenCaches[i];
           const providerCache = providerCaches[i];
-          for (const provider of providerCache) yield* provider.parseTokens(query, idx, false);
+          for (const provider of providerCache) yield* provider.parseTokens(query, idx, depth);
           yield* tokenCache;
         }
         return;
@@ -312,7 +314,7 @@ class TokenProviderGroup extends TokenProvider {
 
     for (const provider of this.providers) {
       if (provider.shouldCache) {
-        for (const token of provider.parseTokens(query, idx, false)) {
+        for (const token of provider.parseTokens(query, idx, depth)) {
           tokenCache.push(token);
           yield token;
         }
@@ -324,11 +326,11 @@ class TokenProviderGroup extends TokenProvider {
           providerCaches.push(providerCache);
         }
         providerCache.push(provider);
-        yield* provider.parseTokens(query, idx, false);
+        yield* provider.parseTokens(query, idx, depth);
       }
     }
     for (const provider of this.illegalProviders) {
-      for (let token of provider.parseTokens(query, idx, false)) {
+      for (let token of provider.parseTokens(query, idx, depth)) {
         token = { ...token, isLegal: false };
         tokenCache.push(token);
         yield token;
@@ -403,7 +405,7 @@ class TokenTypeBlank extends TokenType {
     this.isConstant = true;
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     yield this.createToken(idx);
   }
 
@@ -434,7 +436,6 @@ class TokenTypeStringEnum extends TokenType {
    * @typedef StringEnumValue
    * @property {string} value The string that needs to be in the query
    * @property {string} lower Cached value.toLowerCase()
-   * @property {string[]} parts lower, split up by ignoreable characters.
    */
 
   /**
@@ -448,44 +449,29 @@ class TokenTypeStringEnum extends TokenType {
     this.values = [];
     for (const value of values) {
       let lower = value.string.toLowerCase();
-      const parts = [];
-      {
-        let lastPart = 0;
-        for (let i = 0; i <= lower.length; i++) {
-          const char = lower[i];
-          if (QueryInfo.IGNORABLE_CHARS.indexOf(char) !== -1 || !char) {
-            parts.push(lower.substring(lastPart, i));
-            i = QueryInfo.skipIgnorable(lower, i);
-            lastPart = i;
-          }
-        }
-      }
-      this.values.push({ lower, parts, value });
+
+      this.values.push({ lower, value });
     }
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
       const valueInfo = this.values[valueIdx];
-      let yieldedToken = false;
 
       const remainingChar = query.length - idx;
       const substr = query.lowercase.substring(idx);
 
-      // If all we have is a string which could be a number, it doesn't count as a defining feature.
-      // This is to get rid of "10" constantly suggesting "10 ^ of ()"
-      let isDefiningFeature = !TokenTypeNumberLiteral.isValidNumber(substr);
-
       if (remainingChar < valueInfo.lower.length) {
         if (valueInfo.lower.startsWith(substr)) {
+          // If all we have is a string which could be a number, it doesn't count as a defining feature.
+          // This is to get rid of "10" constantly suggesting "10 ^ of ()"
+          let isDefiningFeature = !TokenTypeNumberLiteral.isValidNumber(substr);
           const end = remainingChar < 0 ? 0 : query.length;
           yield new Token(idx, end, this, valueInfo, { isTruncated: true, isDefiningFeature });
-          yieldedToken = true;
         }
       } else {
         if (query.lowercase.startsWith(valueInfo.lower, idx)) {
-          yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo, { isDefiningFeature });
-          yieldedToken = true;
+          yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo, { isDefiningFeature: true });
         }
       }
     }
@@ -520,7 +506,7 @@ class TokenTypeStringLiteral extends TokenType {
    * Hello World for 10 seconds', but that's just the price we pay for trying to enumerate every
    * interpretation.
    */
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     // First, look for strings in quotes
     let quoteEnd = -1;
     if (query.str[idx] === '"' || query.str[idx] === "'") {
@@ -544,7 +530,7 @@ class TokenTypeStringLiteral extends TokenType {
     for (let i = idx; i <= query.length; i++) {
       const isTerminator = TokenTypeStringLiteral.isTerminator(query.str[i]);
       const isIgnorable = QueryInfo.IGNORABLE_CHARS.includes(query.str[i]);
-      if ((wasTerminator !== isTerminator || i == query.length) && !wasIgnorable && i !== idx && i !== quoteEnd) {
+      if ((wasTerminator !== isTerminator || i === query.length) && !wasIgnorable && i !== idx && i !== quoteEnd) {
         const value = query.str.substring(idx, i);
         yield new Token(idx, i, this, value);
       }
@@ -568,7 +554,7 @@ class TokenTypeNumberLiteral extends TokenType {
     return !isNaN(+str) || !isNaN(parseFloat(+str));
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     for (let i = idx; i <= query.length; i++) {
       if (TokenTypeStringLiteral.isTerminator(query.str[i]) && i !== idx) {
         const value = query.str.substring(idx, i);
@@ -592,7 +578,7 @@ class TokenTypeColor extends TokenType {
   static INSTANCE = new TokenProviderOptional(new TokenTypeColor());
   static HEX_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     if (!query.str.startsWith("#", idx)) return;
     for (let i = 0; i < 6; i++) {
       if (TokenTypeColor.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1) return;
@@ -601,7 +587,7 @@ class TokenTypeColor extends TokenType {
   }
 
   createText(token, query, endOnly) {
-    return query.query.substring(token.start, token.end);
+    return query.str.substring(token.start, token.end);
   }
 }
 
@@ -618,11 +604,11 @@ class TokenTypeBrackets extends TokenType {
     this.tokenProvider = tokenProvider;
   }
 
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
     const start = idx;
     if (query.str[idx++] !== "(") return;
     idx = query.skipIgnorable(idx);
-    for (const token of this.tokenProvider.parseTokens(query, idx)) {
+    for (const token of this.tokenProvider.parseTokens(query, idx, depth)) {
       if (token.type instanceof TokenTypeBlank) continue; // Do not allow empty brackets like '()'
       var tokenEnd = query.skipIgnorable(token.end);
       let isTruncated = token.isTruncated;
@@ -724,16 +710,50 @@ class TokenTypeBlock extends TokenType {
     this.stringForms = [];
 
     const enumerateStringForms = (partIdx = 0, strings = [], inputs = [], length = 0) => {
+      /**
+       * @param {string} value
+       * @returns string[]
+       */
+      function splitIntoString(value) {
+        const strings = [];
+
+        let lastPart = 0;
+        const valueLower = value.toLowerCase();
+        for (let i = 0; i <= valueLower.length; i++) {
+          const char = valueLower[i];
+
+          if (!char) {
+            // End of string
+            strings.push(valueLower.substring(lastPart, i));
+            break;
+          } else if (QueryInfo.IGNORABLE_CHARS.indexOf(char) !== -1) {
+            // Ignorable char
+            strings.push(valueLower.substring(lastPart, i));
+            i = QueryInfo.skipIgnorable(valueLower, i);
+            lastPart = i;
+          } else if (QueryInfo.SPECIAL_CHARS.indexOf(char) !== -1) {
+            // Special char
+            strings.push(valueLower.substring(lastPart, i + 1));
+            lastPart = i + 1;
+          }
+        }
+        return strings;
+      }
+
       for (; partIdx < block.parts.length; partIdx++) {
         let blockPart = block.parts[partIdx];
         if (typeof blockPart === "string") {
           length += blockPart.length;
-          strings.push(...blockPart.toLowerCase().split(" "));
+
+          // Split the string up into parts
+          strings.push(...splitIntoString(blockPart));
         } else if (blockPart.type === BlockInputType.ENUM) {
           for (const enumValue of blockPart.values) {
+            if (this.stringForms.length >= WorkspaceQuerier.MAX_RESULTS) return;
+
             enumerateStringForms(
               partIdx + 1,
-              [...strings, ...enumValue.string.toLowerCase().split(" ")],
+              [...strings, ...splitIntoString(enumValue.string)],
               [...inputs, enumValue],
               length + enumValue.string.length
             );
@@ -743,19 +763,29 @@ class TokenTypeBlock extends TokenType {
           inputs.push(null);
         }
       }
+
       this.stringForms.push({ strings, inputs, length });
     };
 
     enumerateStringForms();
+
+    if (this.stringForms.length >= WorkspaceQuerier.MAX_STRING_FORMS) {
+      console.warn(
+        "Warning: Block '" + this.block.id + "' has too many string forms. Search results may not be very good."
+      );
+      this.stringForms.length = 0;
+    }
   }
 
   /**
-   *
    * @param {QueryInfo} query
-   * @param {*} idx
+   * @param {number} idx
+   * @param {number} depth
    * @returns
    */
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx, depth) {
+    if (depth !== 0 && !query.canCreateMoreNestedBlocks()) return;
+
     let yieldedTokens = false;
 
     for (const subtokens of this._parseSubtokens(query, idx, this.fullTokenProviders)) {
@@ -776,7 +806,14 @@ class TokenTypeBlock extends TokenType {
       while (true) {
         i = query.skipIgnorable(i);
 
-        const wordEnd = query.skipUnignorable(i);
+        let wordEnd;
+
+        // Special chars get their own string part
+        if (QueryInfo.SPECIAL_CHARS.indexOf(query.lowercase[i]) !== -1) {
+          if (i < query.lowercase.length) wordEnd = i + 1;
+        } else {
+          wordEnd = query.skipUnignorable(i);
+        }
 
         if (wordEnd === i) {
           if (hasDefiningFeature)
@@ -849,17 +886,22 @@ class TokenTypeBlock extends TokenType {
    * @param {QueryInfo} query
    * @param {number} idx
    * @param {TokenProvider[]} subtokenProviders
+   * @param {number} depth
    * @param {number} tokenProviderIdx
-   * @param {boolean} parseSubSubTokens
+   * @param {boolean} parseNextToken
    * @yields {Token[]}
    */
-  *_parseSubtokens(query, idx, subtokenProviders, tokenProviderIdx = 0, parseSubSubTokens = true) {
+  *_parseSubtokens(query, idx, subtokenProviders, depth, tokenProviderIdx = 0, parseNextToken = true) {
+    if (tokenProviderIdx >= subtokenProviders.length) return;
+
     idx = query.skipIgnorable(idx);
     let tokenProvider = subtokenProviders[tokenProviderIdx];
 
-    for (const token of tokenProvider.parseTokens(query, idx)) {
+    for (const token of tokenProvider.parseTokens(query, idx, depth + 1)) {
       ++query.tokenCount;
+
       if (!query.canCreateMoreTokens()) break;
+      if (depth !== 0 && !query.canCreateMoreNestedBlocks()) break;
 
       if (this.block.precedence !== -1) {
         if (
@@ -883,13 +925,14 @@ class TokenTypeBlock extends TokenType {
         }
       }
 
-      if (!parseSubSubTokens || !token.isLegal || tokenProviderIdx === subtokenProviders.length - 1) {
+      if (!parseNextToken || !token.isLegal || tokenProviderIdx === subtokenProviders.length - 1) {
         yield [token];
       } else {
         for (const subTokenArr of this._parseSubtokens(
           query,
           token.end,
           subtokenProviders,
+          depth,
           tokenProviderIdx + 1,
           !token.isTruncated
         )) {
@@ -1037,7 +1080,7 @@ export class QueryResult {
           } else if (part instanceof BlockInputString && input !== part.defaultValue) {
             // Make string inputs 100x their real length so they appear at the bottom
             stringLength += ("" + input).length * 100;
-          } else if (input != null) {
+          } else if (input !== null) {
             stringLength += ("" + input).length;
           }
         }
@@ -1060,6 +1103,9 @@ class QueryInfo {
   /** Characters that can be safely skipped over. */
   static IGNORABLE_CHARS = [" "];
 
+  /** Characters which are treated as dividing string into 'parts' for partial matching */
+  static SPECIAL_CHARS = ["!", "@", "#", "$", "%", "^", "&", "_", "'", '"', ".", ","];
+
   constructor(querier, query, id) {
     /** @type {WorkspaceQuerier} */
     this.querier = querier;
@@ -1069,8 +1115,10 @@ class QueryInfo {
     this.lowercase = this.str.toLowerCase();
     /** @type {number} A unique identifier for this query */
     this.id = id;
-    /** @type{number} The number of tokens we've found so far */
+    /** @type {number} The number of tokens we've found so far */
     this.tokenCount = 0;
+    /** @type {number} The number of query results we've found so far */
+    this.resultCount = 0;
   }
 
   /**
@@ -1117,6 +1165,10 @@ class QueryInfo {
   canCreateMoreTokens() {
     return this.tokenCount < WorkspaceQuerier.MAX_TOKENS;
   }
+
+  canCreateMoreNestedBlocks() {
+    return this.canCreateMoreTokens() && this.resultCount < WorkspaceQuerier.MAX_RESULTS;
+  }
 }
 
 /**
@@ -1143,14 +1195,19 @@ export default class WorkspaceQuerier {
   ];
 
   /**
-   * The maximum number of results to find before giving up.
+   * The maximum number of results to find before we give up searching sub-blocks.
    */
-  static MAX_RESULTS = 1000;
+  static MAX_RESULTS = 2000;
 
   /**
    * The maximum number of tokens to find before giving up.
    */
-  static MAX_TOKENS = 10000;
+  static MAX_TOKENS = 100000;
+
+  /**
+   * The maximum number of string forms a block can have before we give up.
+   */
+  static MAX_STRING_FORMS = 500;
 
   /**
    * Indexes a workspace in preparation for querying it.
@@ -1180,7 +1237,7 @@ export default class WorkspaceQuerier {
     let bestIllegalResult = null;
     let bestIllegalResultText = "";
 
-    for (const option of this.tokenGroupBlocks.parseTokens(query, 0)) {
+    for (const option of this.tokenGroupBlocks.parseTokens(query, 0, 0)) {
       if (option.end >= queryStr.length) {
         if (option.isLegal) {
           results.push(new QueryResult(query, option));
@@ -1192,14 +1249,14 @@ export default class WorkspaceQuerier {
           }
         }
       }
-      ++foundTokenCount;
-      if (foundTokenCount > WorkspaceQuerier.MAX_RESULTS) {
-        console.log("Warning: Workspace query exceeded maximum result count.");
+      ++query.resultCount;
+      if (!limited && query.resultCount >= WorkspaceQuerier.MAX_RESULTS) {
+        console.warn("Warning: Workspace query exceeded maximum result count.");
         limited = true;
-        break;
       }
+
       if (!query.canCreateMoreTokens()) {
-        console.log("Warning: Workspace query exceeded maximum token count.");
+        console.warn("Warning: Workspace query exceeded maximum token count.");
         limited = true;
         break;
       }
@@ -1234,7 +1291,7 @@ export default class WorkspaceQuerier {
     validResults = validResults.sort((a, b) => {
       const aLengths = a.getLengths();
       const bLengths = b.getLengths();
-      if (aLengths.stringLength != bLengths.stringLength) return aLengths.stringLength - bLengths.stringLength;
+      if (aLengths.stringLength !== bLengths.stringLength) return aLengths.stringLength - bLengths.stringLength;
       return aLengths.tokenLength - bLengths.tokenLength;
     });
 

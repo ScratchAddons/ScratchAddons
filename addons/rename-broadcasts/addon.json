@@ -10,7 +10,7 @@
       "name": "GarboMuffin"
     }
   ],
-  "tags": ["editor", "featured"],
+  "tags": ["editor", "codeEditor", "featured"],
   "userscripts": [
     {
       "url": "userscript.js",

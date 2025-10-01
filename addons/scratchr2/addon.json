@@ -2,6 +2,7 @@
   "name": "Scratch 2.0 \u2192 3.0",
   "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0.",
   "tags": ["community", "theme", "recommended"],
+  "relatedAddons": ["scratch3to2"],
   "credits": [
     {
       "name": "Maximouse",
@@ -22,13 +23,15 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.1.0",
   "updateUserstylesOnSettingsChange": true,
+  "userscripts": [
+    {
+      "url": "profile.js",
+      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/classes/*/"]
+    }
+  ],
   "userstyles": [
     {
       "url": "scratchr2.css",
-      "matches": ["isNotScratchWWW"]
-    },
-    {
-      "url": "scratchr2_errors.css",
       "matches": ["isNotScratchWWW"]
     },
     {
@@ -74,7 +77,7 @@
     {
       "url": "v_tabs.css",
       "matches": [
-        "https://scratch.mit.edu/mystuff/",
+        "https://scratch.mit.edu/mystuff/*",
         "https://scratch.mit.edu/accounts/settings/*",
         "https://scratch.mit.edu/accounts/password_change/",
         "https://scratch.mit.edu/accounts/email_change/"
@@ -82,7 +85,7 @@
     },
     {
       "url": "mystuff.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"]
+      "matches": ["https://scratch.mit.edu/mystuff/*"]
     },
     {
       "url": "settings.css",
@@ -123,5 +126,6 @@
       ],
       "default": "box"
     }
-  ]
+  ],
+  "libraries": ["scratch-www"]
 }

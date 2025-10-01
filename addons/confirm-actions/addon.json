@@ -66,5 +66,6 @@
     "newSettings": ["removingprojects"]
   },
   "tags": ["community", "recommended"],
+  "relatedAddons": ["no-sprite-confirm"],
   "enabledByDefault": false
 }

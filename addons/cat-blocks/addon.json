@@ -32,7 +32,9 @@
     }
   ],
   "versionAdded": "1.14.0",
-  "tags": ["editor", "codeEditor", "featured"],
-  "enabledByDefault": false,
+  "tags": ["editor", "codeEditor", "theme", "featured"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "relatedAddons": ["custom-block-shape", "editor-theme3"],
   "libraries": ["scratch-blocks"]
 }

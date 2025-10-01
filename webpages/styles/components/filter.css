@@ -5,8 +5,9 @@
 }
 
 .filter-text {
-  font-weight: 600;
+  font-weight: 500;
   margin-inline-end: 20px;
+  user-select: none;
 }
 
 .filter-options {
@@ -41,4 +42,14 @@
 .filter-option.disabled {
   filter: grayscale(80%);
   pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .filter-options {
+    flex-wrap: wrap;
+  }
+  .filter-option {
+    flex-grow: 1;
+    text-align: center;
+  }
 }

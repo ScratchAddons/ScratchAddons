@@ -104,6 +104,7 @@ export default async function ({ addon, console, msg }) {
    * updated.
    */
   async function inject() {
+    if (addon.self.disabled) return;
     // Determine which tab we're on and switch the placeholder text
     if (window.location.href.includes("galleries")) {
       searchBar.setAttribute("placeholder", msg("studio-placeholder"));
