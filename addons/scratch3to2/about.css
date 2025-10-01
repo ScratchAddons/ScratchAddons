@@ -1,0 +1,124 @@
+/* Page */
+#view {
+  padding-top: 15px;
+  padding-bottom: 40px;
+}
+
+/* Introduction */
+h1 {
+  margin-bottom: 10px;
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+  font-size: 31.2px;
+  line-height: 40.8px;
+}
+h1::before {
+  content: url("https://cdn.scratch.mit.edu/scratchr2/static/images/help/cat1.png") " ";
+}
+h1 span {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 30px;
+}
+@media (min-width: 942px) {
+  .about .masthead > div:first-child {
+    width: 480px;
+  }
+}
+.about .masthead p {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 15px;
+  line-height: 22px;
+}
+.about .masthead div ul {
+  margin-bottom: 15px;
+  font-size: 15px;
+  line-height: 22px;
+}
+.about .masthead div li {
+  margin: 0;
+}
+.about .masthead div li:nth-child(odd) {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.about .masthead div li:nth-child(odd)::after {
+  content: " |\a0"; /* U+00A0 NO-BREAK SPACE */
+}
+.about .masthead div li a {
+  font-weight: bold;
+}
+.video-player {
+  border: 1px solid var(--darkWww-border-20, #ccc);
+  border-radius: 0;
+}
+
+/* Box */
+.about .body {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 25px 50px 8.4px;
+  border-color: var(--darkWww-box-scratchr2Border, #e0e0e0);
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.27);
+}
+.about .body li {
+  margin-top: 0;
+  margin-bottom: 11.6px;
+}
+.about .body h2 {
+  margin-bottom: 10px;
+  color: var(--darkWww-box-scratchr2HeaderText, #554747);
+  font-size: 21.6px;
+  line-height: 32px;
+}
+.about .body img {
+  margin-bottom: 10px;
+  width: 384px;
+  height: 210px;
+  border-color: var(--darkWww-border-20, #ccc);
+}
+.about .body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.about .body a {
+  font-weight: bold;
+}
+
+/* Links */
+.about .body > ul > li > ul {
+  margin: 0 0 1em 2em;
+  list-style: disc;
+  font-size: 15.6px;
+  line-height: 20px;
+}
+.about .body > ul > li > ul > li {
+  margin-bottom: 0.5em;
+  display: list-item;
+}
+
+/* Donate button */
+.about-button {
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  line-height: 30px;
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+.about-button:hover {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Show project thumbnail while loading",
+  "description": "Shows the project's thumbnail as a placeholder before the project is started and while it loads.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://github.com/Samq64"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "scratch3to2.css",
+      "matches": ["projects"],
+      "if": {
+        "addonEnabled": ["scratch3to2"]
+      }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "versionAdded": "1.40.0",
+  "tags": ["community", "theme", "projectPage"]
+}

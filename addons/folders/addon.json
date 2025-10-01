@@ -11,6 +11,9 @@
   "credits": [
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "Valmontechno"
     }
   ],
   "userscripts": [
@@ -28,5 +31,10 @@
   ],
   "versionAdded": "1.11.0",
   "tags": ["editor", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "libraries": ["scratch-gui"],
+  "latestUpdate": {
+    "version": "1.43.0",
+    "temporaryNotice": "You can now delete all folder contents using the right click context menu."
+  }
 }
