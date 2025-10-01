@@ -3,15 +3,7 @@ export default async function ({ addon, console }) {
   const loadExtensions = () => {
     if (addon.self.disabled) return;
     // IDs are taken from https://github.com/scratchfoundation/scratch-vm/blob/ffa78b91b8645b6a8c80f698a3637bb73abf2931/src/extension-support/extension-manager.js#L11
-    const EXTENSIONS = [
-      "music",
-      "pen",
-      "videoSensing",
-      "faceSensing",
-      "text2speech",
-      "translate",
-      "makeymakey"
-    ];
+    const EXTENSIONS = ["music", "pen", "videoSensing", "faceSensing", "text2speech", "translate", "makeymakey"];
     for (let ext of EXTENSIONS) {
       // Check if setting enabled and it's not already loaded
       if (addon.settings.get(ext) && !vm.extensionManager.isExtensionLoaded(ext)) {
