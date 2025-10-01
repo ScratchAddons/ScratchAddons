@@ -7,14 +7,10 @@ export default async function ({ addon, console }) {
       "music",
       "pen",
       "videoSensing",
+      "faceSensing",
       "text2speech",
       "translate",
-      "makeymakey",
-      "microbit",
-      "ev3",
-      "boost",
-      "wedo2",
-      "gdxfor",
+      "makeymakey"
     ];
     for (let ext of EXTENSIONS) {
       // Check if setting enabled and it's not already loaded

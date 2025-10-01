@@ -39,6 +39,12 @@
       "default": false
     },
     {
+      "name": "Face Sensing",
+      "id": "faceSensing",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Text to Speech",
       "id": "text2speech",
       "type": "boolean",
@@ -55,44 +61,14 @@
       "id": "makeymakey",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "micro:bit",
-      "id": "microbit",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "LEGO MINDSTORMS EV3",
-      "id": "ev3",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "LEGO BOOST",
-      "id": "boost",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "LEGO Education WeDo 2.0",
-      "id": "wedo2",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Go Direct Force & Acceleration",
-      "id": "gdxfor",
-      "type": "boolean",
-      "default": false
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.10.0",
   "latestUpdate": {
-    "version": "1.33.0",
-    "newSettings": ["videoSensing", "makeymakey", "microbit", "ev3", "boost", "wedo2", "gdxfor"]
+    "version": "1.44.0",
+    "newSettings": ["videoSensing", "faceSensing", "makeymakey"]
   },
   "tags": ["editor", "codeEditor", "featured"]
 }
