@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "When the video sensing option is enabled, the webcam will turn on every time the editor is opened.",
+      "text": "When the video or face sensing options are enabled, the webcam will turn on every time the editor is opened.",
       "id": "webcam"
     },
     {
