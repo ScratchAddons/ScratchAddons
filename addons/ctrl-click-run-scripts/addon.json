@@ -1,12 +1,6 @@
 {
-  "name": "Ctrl+Click to run scripts",
-  "description": "Only execute clicked blocks and scripts if also holding the Ctrl key or, optionally, if double clicked.",
-  "info": [
-    {
-      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
-      "id": "macContextDisabled"
-    }
-  ],
+  "name": "Customizable action to run scripts",
+  "description": "Change the method used to trigger blocks and scripts to run.",
   "credits": [
     {
       "name": "lisa_wolfgang",
@@ -31,18 +25,41 @@
   ],
   "settings": [
     {
-      "name": "Execute on double click",
-      "id": "double-click",
-      "type": "boolean",
-      "default": true
+      "name": "Run by...",
+      "id": "run-action",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "single",
+          "name": "Clicking once"
+        },
+        {
+          "id": "double",
+          "name": "Clicking twice"
+        },
+        {
+          "id": "ctrl",
+          "name": "Ctrl-clicking"
+        }
+      ],
+      "default": "single"
+    },
+    {
+      "name": "Double-click timeout (ms)",
+      "id": "timeout",
+      "type": "integer",
+      "min": 200,
+      "max": 1000,
+      "default": 500,
+      "if": { "settings": { "run-action": [ "single", "double" ] } }
     }
   ],
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.15.0",
   "latestUpdate": {
-    "version": "1.36.0",
-    "newSettings": ["double-click"],
-    "temporaryNotice": "Scripts can now be executed by double clicking."
+    "version": "1.44.0",
+    "newSettings": ["run-action"],
+    "temporaryNotice": "This addon used to be called \"Ctrl+Click to run scripts\" \u2014 new options have now been added."
   },
   "enabledByDefault": false
 }

@@ -6,21 +6,48 @@ export default async function ({ addon, console }) {
   });
   const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
 
+  let singleClickRequired,
+    doubleClickRequired,
+    ctrlClickRequired = false;
+  let multiClickTime;
+  function updateSettings() {
+    singleClickRequired = addon.settings.get("run-action") === "single";
+    doubleClickRequired = addon.settings.get("run-action") === "double";
+    ctrlClickRequired = addon.settings.get("run-action") === "ctrl";
+    multiClickTime = addon.settings.get("timeout");
+  }
+  addon.settings.addEventListener("change", updateSettings);
+  updateSettings();
+
+  let multiClickTimeout;
+  let consecutiveClicks = 0;
   let ctrlKeyPressed = false;
   const onMouseDown = function (e) {
+    // Check if either Ctrl or Cmd are pressed during a click
     ctrlKeyPressed = e.ctrlKey || e.metaKey;
+    // Start a multi-click
+    consecutiveClicks += 1;
+    clearTimeout(multiClickTimeout);
+    multiClickTimeout = setTimeout(() => {
+      consecutiveClicks = 0;
+    }, multiClickTime);
   };
-  document.addEventListener("mousedown", onMouseDown, { capture: true }); // for old Blockly
-  document.addEventListener("pointerdown", onMouseDown, { capture: true }); // for new Blockly
+  document.addEventListener("pointerdown", onMouseDown, { capture: true });
 
-  let doubleClick = false;
-  let doubleClickTimeout;
-  function startDoubleClick() {
-    if (addon.settings.get("double-click")) {
-      doubleClick = true;
-      doubleClickTimeout = setTimeout(() => {
-        doubleClick = false;
-      }, 400);
+  function canExecuteScript() {
+    if (singleClickRequired) {
+      // Ignore double clicks
+      return consecutiveClicks !== 2;
+    } else if (doubleClickRequired) {
+      // Ignore single clicks
+      return consecutiveClicks >= 2;
+    } else if (ctrlClickRequired) {
+      // Only respond to clicks while holding Ctrl or Cmd
+      return ctrlKeyPressed;
+    } else {
+      // ...Huh?
+      console.warn("Required action not specified.");
+      return true;
     }
   }
 
@@ -30,18 +57,9 @@ export default async function ({ addon, console }) {
       !addon.self.disabled &&
       // new Blockly || old Blockly
       ((e.type === "click" && e.targetType === "block") || e.element === "stackclick") &&
-      !ctrlKeyPressed
+      !canExecuteScript()
     ) {
-      if (doubleClick) {
-        // Allow script to execute on double click
-        clearTimeout(doubleClickTimeout);
-        startDoubleClick();
-        originalBlocklyListen.call(this, e);
-      } else {
-        // Start a double-click timeout and prevent script execution
-        startDoubleClick();
-        return;
-      }
+      // Ignore
     } else {
       originalBlocklyListen.call(this, e);
     }
