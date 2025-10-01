@@ -4,12 +4,12 @@
   "info": [
     {
       "type": "notice",
-      "text": "When the video or face sensing options are enabled, the webcam will turn on every time the editor is opened.",
+      "text": "When the video or face sensing options are enabled the webcam will attempt to turn on every time the editor is opened.",
       "id": "webcam"
     },
     {
       "type": "notice",
-      "text": "If an extension monitor, for example, the tempo is shown on the stage, that extension will stay loaded in that project even after hiding all monitors and disabling the addon.",
+      "text": "If an extension monitor, for example, the tempo is shown on the stage when a project is saved, that extension will stay in that project even after hiding all monitors and disabling this addon.",
       "id": "monitors"
     }
   ],
