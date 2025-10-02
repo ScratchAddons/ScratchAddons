@@ -542,7 +542,9 @@ img[class*="tool-select-base_tool-select-icon_"],
   box-shadow: 0 0 0 6px var(--editorDarkMode-primary-transparent35);
 }
 [class*="extension-button_radiate_"]::before,
-[class*="extension-button_radiate_"]::after {
+[class*="extension-button_radiate_"]::after,
+[class*="library-item_radiate_"]::before,
+[class*="library-item_radiate_"]::after {
   animation-name: sa-radiate;
   --radiate-color: var(--editorDarkMode-primary);
 }
