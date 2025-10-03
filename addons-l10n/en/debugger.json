@@ -2,7 +2,6 @@
   "debugger/console": "Logs",
   "debugger/debug": "Debug",
   "debugger/export": "Export",
-  "debugger/tools": "Tools",
   "debugger/clear": "Clear",
   "debugger/close": "Close",
   "debugger/step": "Step",
