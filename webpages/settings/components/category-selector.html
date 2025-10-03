@@ -29,6 +29,9 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    margin: 10px;
+    margin-bottom: 0;
+    border-radius: 4px;
   }
 
   /* Classes used by index.html */
@@ -57,17 +60,19 @@
     opacity: 0;
   }
 
-  .category:hover,
-  .category.sel {
+  .category:hover {
     background: var(--hover-darken);
+  }
+  .category.sel {
+    background: var(--sel-darken);
   }
   .category::before {
     content: "";
     transition: all 0.2s ease;
     display: block;
     width: 4px;
-    border-radius: 0 4px 4px 0;
-    height: 40px;
+    border-radius: 4px 0 0 4px;
+    height: 100%;
     background: var(--orange);
     position: absolute;
     left: 0;
@@ -75,13 +80,13 @@
   }
   [dir="rtl"] .category::before {
     right: 0;
-    border-radius: 4px 0 0 4px;
+    border-radius: 0 4px 4px 0;
   }
   .category.sel::before {
     opacity: 1;
   }
   .category.hasParent::before {
-    height: 25px;
+    height: 100%;
   }
 
   .category img {

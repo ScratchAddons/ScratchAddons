@@ -8,7 +8,7 @@
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
-  padding: 20px 0;
+  padding: 5px 0 20px 0;
 }
 
 .categories-block.smallMode {
