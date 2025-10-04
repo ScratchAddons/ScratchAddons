@@ -316,8 +316,7 @@ let fuse;
         inputElem.click();
       },
       applyLanguageSettings() {
-        alert(chrome.i18n.getMessage("importSuccess"));
-        chrome.runtime.reload();
+        chrome.runtime.sendMessage("reloadAddonManifests", () => location.reload());
       },
       openFullSettings() {
         window.open(
