@@ -177,7 +177,7 @@ export async function openMessageCache(cookieStoreId, forceClear) {
  */
 export async function updateMessages(cookieStoreId, forceClear, username, xToken) {
   await openMessageCache(cookieStoreId, forceClear);
-  if (username === null) return [];
+  if (typeof username === "undefined" || username === null) return [];
   const msgCountData = await fetchMessageCount(username);
   const messageCount = await getUpToDateMsgCount(cookieStoreId, msgCountData);
   const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);

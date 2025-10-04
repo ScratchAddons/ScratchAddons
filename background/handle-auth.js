@@ -4,176 +4,214 @@ import { purgeDatabase } from "../addons/scratch-notifier/notifier.js";
 
 async function getDefaultStoreId() {
   const CHROME_DEFAULT = "0";
-  const FIFEFOX_DEFAULT = "firefox-default";
+  const FIREFOX_DEFAULT = "firefox-default";
   const cookieStores = await chrome.cookies.getAllCookieStores();
-  if (cookieStores.length === 0) throw "";
+  // This should technically never occur.
+  if (cookieStores.length === 0) throw "Unable to find a default cookie store!";
+  // Usually the chrome/ff default is the first in the list, but just in case...
   if (cookieStores.some((store) => store.id === CHROME_DEFAULT)) {
-    // Chrome
-    return (scratchAddons.cookieStoreId = CHROME_DEFAULT);
+    return CHROME_DEFAULT;
   }
-  if (cookieStores.some((store) => store.id === FIFEFOX_DEFAULT)) {
-    // Firefox
-    return (scratchAddons.cookieStoreId = FIFEFOX_DEFAULT);
+  if (cookieStores.some((store) => store.id === FIREFOX_DEFAULT)) {
+    return FIREFOX_DEFAULT;
   }
-  return (scratchAddons.cookieStoreId = cookieStores[0].id);
+  return cookieStores[0].id; // Just in case
 }
 
 (async function () {
-  const defaultStoreId = await getDefaultStoreId();
-  console.log("Default cookie store ID: ", defaultStoreId);
-  await checkSession(true);
-  startCache(defaultStoreId);
+  // If this key wasn't made in the storage, it's likely the first time this code has ever ran.
+  // This can also run if a fetch to /session failed and a refetch it needed.
+  const { checkedSession } = (await chrome.storage.session?.get("checkedSession")) ?? {};
+
+  scratchAddons.cookieStoreId = await getDefaultStoreId();
+  console.log("Default cookie store ID: ", scratchAddons.cookieStoreId);
+  // This won't actually do anything if the service worker falls asleep and wakes up
+  // since one of the checkSessions above will run, setting isCheckingSession to true.
+  await checkSession(!checkedSession);
+  startCache(scratchAddons.cookieStoreId);
 })();
 
-const onCookiesChanged = ({ cookie, cause, removed }) => {
-  // We already know that this is true:
-  // `cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken"`
-  if (cookie.name === "scratchlanguage") {
-    setLanguage();
-  } else if (!scratchAddons.cookieStoreId) {
-    getDefaultStoreId().then(() => checkSession());
-  } else if (
-    // do not refetch for csrf token expiration date change
-    cookie.storeId === scratchAddons.cookieStoreId &&
-    !(cookie.name === "scratchcsrftoken" && cookie.value === scratchAddons.globalState.auth.csrfToken)
-  ) {
-    checkSession().then(() => {
-      if (cookie.name === "scratchsessionsid") {
-        startCache(scratchAddons.cookieStoreId, true);
-        purgeDatabase();
-      }
-    });
-  } else if (cookie.name === "scratchsessionsid") {
-    // Clear message cache for the store
-    // This is not the main one, so we don't refetch here
-    openMessageCache(cookie.storeId, true);
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "recheckSession") {
+    console.log("Rechecking session...");
+    // If the service worker is just waking up, it's likely the checkSession above will run and this won't.
+    // That's because isCheckingSession will be true and stop this one.
+    checkSession(true);
   }
-  notify(cookie);
-};
+});
 
-const COOKIE_CHANGE_RATE_LIMIT = 5000; // (ms) First events get processed immediately, then rate-limit is used.
-const queue = []; // We store cookies.onChanged events here. We'll try to process them all, but there's no guarantee.
-let timer = null; // The integer ID returned by setInterval.
-let n = 0; // Resets to 0 after each "burst" ends. If number is low, the event is processed with no delay.
+// We store cookies.onChanged events here.
+const cookieQueue = [];
 
-const process = ({ clearIntervalIfQueueEmpty }) => {
-  if (queue.length > 0) {
-    const item = queue.shift();
-    onCookiesChanged(item);
-    if (clearIntervalIfQueueEmpty) console.log("Processed cookies.onChanged event from queue.");
-  }
-  if (clearIntervalIfQueueEmpty && queue.length === 0) {
-    clearInterval(timer);
-    timer = null;
-    n = 0;
-  }
-};
+// The amount of time (ms) before we run process code after cookies are changed.
+// Every time a new cookie is added to the queue, we reset the timeout.
+const TIMEOUT_DURATION = 500;
+let processTimeout;
+let isProcessing = false;
+
 const addToQueue = (item) => {
-  const { cookie } = item;
-  if (cookie.name !== "scratchsessionsid" && cookie.name !== "scratchlanguage" && cookie.name !== "scratchcsrftoken") {
-    // Ignore this event
+  // This is to prevent a race condition which has a 1 in a billion chance of occurance.
+  if (!scratchAddons.cookieStoreId) {
+    console.log("ignored cookies due to default store not found");
     return;
   }
 
-  queue.push(item);
-  n++;
-  if (timer === null) {
-    timer = setInterval(() => process({ clearIntervalIfQueueEmpty: true }), COOKIE_CHANGE_RATE_LIMIT);
-    // setInterval may not work as expected in the extension background context, but worst
-    // that can happen is that we discard events instead of processing them later.
+  // This is so we never run into infinite loops.
+  // It is possible that we miss important cookie changes.
+  // But it's worth it. Trust me.
+  if (isProcessing || isCheckingSession) {
+    console.log("ignored cookies due to processing");
+    return;
   }
-  if (n <= 5) {
-    // Process first 5 events immediately (gets reset after receiving 0 events for `COOKIE_CHANGE_RATE_LIMIT` milliseconds)
-    process({ clearIntervalIfQueueEmpty: false });
+
+  const { cookie } = item;
+  if (cookie.name !== "scratchsessionsid" && cookie.name !== "scratchcsrftoken") {
+    // These are the only two cookies scratch manages that triggers cookies.onChanged.
+    // Any other cookies are made by other programs/the user and should be ignored.
+    return;
   }
-  if (queue.length > 8) {
-    // If queue has more than 8 items, remove the oldest one.
-    queue.shift();
-  }
+
+  cookieQueue.push(item);
+  clearTimeout(processTimeout);
+  processTimeout = setTimeout(processCookieChanges, TIMEOUT_DURATION);
 };
-chrome.cookies.onChanged.addListener((e) => addToQueue(e));
 
-function getCookieValue(name) {
-  return new Promise((resolve) => {
-    chrome.cookies.get(
-      {
-        url: "https://scratch.mit.edu/",
-        name,
-      },
-      (cookie) => {
-        if (cookie && cookie.value) resolve(cookie.value);
-        else resolve(null);
-      }
-    );
-  });
-}
+const oldCookies = {};
 
-async function setLanguage() {
-  scratchAddons.globalState.auth.scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
-}
+const processCookieChanges = () => {
+  // Organize cookie changes by which store they occur in and get fill with most recent cookie changes.
+  const cookieChangesByStore = {};
+  // Reverse the array since the last cookie changes are the most recent ones.
+  for (const change of cookieQueue.reverse()) {
+    const { cookie } = change;
+    const changes = cookieChangesByStore[cookie.storeId] || {};
+    // Check if we already found a more recent cookie
+    // Note the only cookie names possible are "scratchsessionsid" or "scratchcsrftoken"
+    if (changes[cookie.name]) continue;
+    // But if the cookie has been removed, set an empty value
+    if (change.removed) cookie.value = "";
+    // Check if this cookie changed from the last time
+    if (oldCookies[cookie.name] === cookie.value) continue;
+    changes[cookie.name] = cookie;
+    oldCookies[cookie.name] = cookie.value;
+    cookieChangesByStore[cookie.storeId] = changes;
+  }
+  // Reset Queue
+  cookieQueue.length = 0;
 
-let isChecking = false;
-
-async function checkSession(firstTime = false) {
-  let res;
-  let json;
-  if (isChecking) return;
-  isChecking = true;
-  const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
-  if (firstTime && scratchSession) {
-    console.log("Used cached /session info.");
-    json = scratchSession;
-  } else {
-    try {
-      res = await fetch("https://scratch.mit.edu/session/", {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      });
-      json = await res.json();
-      chrome.storage.session?.set({ scratchSession: json });
-    } catch (err) {
-      console.warn(err);
-      json = {};
-      // If Scratch is down, or there was no internet connection, recheck soon:
-      if ((res && !res.ok) || !res) {
-        isChecking = false;
-        setTimeout(checkSession, 60000);
-        scratchAddons.globalState.auth = {
-          isLoggedIn: false,
-          username: null,
-          userId: null,
-          xToken: null,
-          csrfToken: null,
-          scratchLang: (await getCookieValue("scratchlanguage")) || navigator.language,
-        };
-        return;
-      }
+  const processes = [];
+  for (const storeId in cookieChangesByStore) {
+    const changes = cookieChangesByStore[storeId];
+    if (scratchAddons.cookieStoreId === storeId) {
+      // Recheck session if the changed cookie occurs in the default store.
+      // We don't care if it happens in the other stores since currently we only use session data from default
+      processes.push(
+        checkSession(true).then(() => {
+          // The session id changing means we need to refetch all messages
+          // That's why the second parameter of startCache is set to true, to force clear.
+          if (changes.scratchsessionsid) {
+            return Promise.all([startCache(storeId, true), purgeDatabase()]);
+          }
+        })
+      );
+    } else if (changes.scratchsessionsid) {
+      // Clear message cache for the store
+      // This is not the main one, so we don't refetch here
+      processes.push(openMessageCache(storeId, true));
     }
   }
+
+  isProcessing = true;
+  // Run all processes, then allow any new cookie changes to occur
+  // Note that it is possible for no processes need to be ran
+  // That would occur if the scratchcsrftoken token changes in a store other than the default one
+  Promise.all(processes).then(() => (isProcessing = false));
+
+  // Notify open tabs and popups
+  notify(Object.keys(cookieChangesByStore));
+};
+
+// Note scratchlanguage is not marked as "secure" and does not trigger cookies.onChanged.
+// Thus would never possibily get added to the queue.
+chrome.cookies.onChanged.addListener(addToQueue);
+
+// It's good to know that chrome.cookies works without internet connection.
+const getCookieValue = async (name) => {
+  const cookie = await chrome.cookies.get({
+    url: "https://scratch.mit.edu/",
+    name,
+  });
+  return (cookie && cookie.value) || null;
+};
+
+let isCheckingSession = false;
+async function checkSession(forceFetch = false) {
+  // In case the alarm exists, clear it so we don't have an unnessary call.
+  await chrome.alarms.clear("recheckSession");
+  let sessionData;
+  if (isCheckingSession) return;
+  isCheckingSession = true;
+
+  // If the service worker is running this function on wake up, use cached data.
+  // Otherwise, try fetching /session and store session data.
+  if (!forceFetch) {
+    const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
+    sessionData = scratchSession;
+    if (sessionData) {
+      console.log("Used cached /session info.");
+    }
+  }
+  if (!sessionData) {
+    sessionData = await fetch("https://scratch.mit.edu/session/", {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then((res) => (res.ok ? res : Promise.reject(res)))
+      .then((res) => res.json())
+      .catch(async () => {
+        // This could happen if there was no internet connection or Scratch is down
+        // Either way, recheck after a certain period of time.
+        const { recheckDelay = 1 } = (await chrome.storage.session?.get(["scratchSession", "recheckDelay"])) ?? {};
+        await chrome.alarms.create("recheckSession", { delayInMinutes: recheckDelay });
+        // The delays should go 1 min, 2 min, 4 min, 8 min, 16 min, 32 min, 64 min and should cap at 64 minutes.
+        const delayMultiply = recheckDelay > 33 ? 1 : 2;
+        await chrome.storage.session?.set({ checkedSession: false, recheckDelay: recheckDelay * delayMultiply });
+        isCheckingSession = false;
+        throw `Fetch to /session failed. Retrying in ${recheckDelay} minutes.`;
+      });
+    chrome.storage.session?.set({ scratchSession: sessionData });
+  }
+  const isLoggedIn = Boolean(sessionData.user);
+  const { username, id: userId, token: xToken } = sessionData.user || {};
+
   const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
   const csrfToken = await getCookieValue("scratchcsrftoken");
+
   scratchAddons.globalState.auth = {
-    isLoggedIn: Boolean(json.user),
-    username: json.user ? json.user.username : null,
-    userId: json.user ? json.user.id : null,
-    xToken: json.user ? json.user.token : null,
+    isLoggedIn,
+    username,
+    userId,
+    xToken,
     csrfToken,
     scratchLang,
   };
-  isChecking = false;
+
+  await chrome.storage.session?.set({ checkedSession: true });
+  isCheckingSession = false;
 }
 
-function notify(cookie) {
-  if (cookie.name === "scratchlanguage") return;
-  const storeId = cookie.storeId;
+function notify(storeIds) {
   const cond = {};
   if (typeof browser === "object") {
-    // Firefox-exclusive.
-    cond.cookieStoreId = storeId;
+    // Firefox-exclusive. Chrome does not have this option.
+    cond.cookieStoreId = storeIds;
   }
   // On Chrome this can cause unnecessary session re-fetch, but there should be
   // no harm (aside from extra requests) when doing so.
+  // On top of that, we still send this message to every tab in the store; not good with lots of tabs open.
+  // In the future, we should try to only send this to one tab, or maybe have data sent to all tabs
+  // so that less requests are made.
   chrome.tabs.query(cond, (tabs) =>
     tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
   );
