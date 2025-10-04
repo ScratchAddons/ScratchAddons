@@ -27,7 +27,8 @@
   min-height: 36px;
   border-bottom: 1px solid var(--content-border);
 }
-.more-settings .addon-name {
+.more-settings .addon-name,
+.more-settings .addon-icon {
   margin-inline-start: 10px;
 }
 .more-settings .addon-settings {
