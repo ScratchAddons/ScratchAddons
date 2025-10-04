@@ -613,8 +613,8 @@ const showBanner = () => {
   */
   const notifImage = Object.assign(document.createElement("img"), {
     className: "sa-notification-image",
-    alt: chrome.i18n.getMessage("extensionUpdateImageAlt_v1_43"),
-    src: chrome.runtime.getURL("/images/cs/update-v1.43.png"),
+    alt: chrome.i18n.getMessage("extensionUpdateImageAlt_v1_44"),
+    src: chrome.runtime.getURL("/images/cs/update-v1.44.png"),
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -643,7 +643,7 @@ const showBanner = () => {
       .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_43", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_44", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -656,7 +656,7 @@ const showBanner = () => {
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_43"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_44"),
   });
   const notifFooter = document.createElement("span");
   const uiLanguage = chrome.i18n.getUILanguage();
@@ -746,6 +746,7 @@ const showBanner = () => {
           height: 120px;
           /* border-radius: 5px; */
           padding: 20px;
+          /* v1.44 */ height: 220px;
         }
 
         #sa-notification-text {
