@@ -71,17 +71,17 @@ export default async function ({ addon, console, msg }) {
     },
   });
   addon.tab.addBlock("\u200B\u200Bstart timer\u200B\u200B %s", {
-    args: ["content"],
+    args: [{ name: "label", default: msg("default-timer-label") }],
     displayName: msg("block-start-timer"),
-    callback: ({ content }, thread) => {
-      if (timingTab) timingTab.startTimer(content, thread.target.id, thread.peekStack());
+    callback: ({ label }, thread) => {
+      if (timingTab) timingTab.startTimer(label, thread.target.id, thread.peekStack());
     },
   });
   addon.tab.addBlock("\u200B\u200Bstop timer\u200B\u200B %s", {
-    args: ["content"],
+    args: [{ name: "label", default: msg("default-timer-label") }],
     displayName: msg("block-stop-timer"),
-    callback: ({ content }) => {
-      if (timingTab) timingTab.stopTimer(content);
+    callback: ({ label }) => {
+      if (timingTab) timingTab.stopTimer(label);
     },
   });
 
