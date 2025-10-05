@@ -7,22 +7,23 @@ export default async function ({ addon, console, msg }) {
 
   let autoResume = false;
   const img = document.createElement("img");
-  img.className = "pause-btn";
-  img.draggable = false;
-  img.title = msg("pause");
 
   const setSrc = () => {
     img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg");
     img.title = isPaused() ? msg("play") : msg("pause");
   };
-  img.addEventListener("click", () => setPaused(!isPaused()));
-  addon.self.addEventListener("disabled", () => setPaused(false));
-  setSrc();
-  onPauseChanged(setSrc);
-
   const updateVisibility = () => {
     img.toggleAttribute("hidden", addon.self.disabled || !addon.settings.get("pause-button"));
   };
+
+  img.className = "pause-btn";
+  img.draggable = false;
+  img.title = msg("pause");
+  img.addEventListener("click", () => setPaused(!isPaused()));
+  addon.self.addEventListener("disabled", () => setPaused(false));
+  updateVisibility();
+  setSrc();
+  onPauseChanged(setSrc);
 
   document.addEventListener(
     "keydown",
