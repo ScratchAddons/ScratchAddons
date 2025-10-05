@@ -60,7 +60,7 @@
   .filter-options {
     flex-wrap: wrap;
   }
-  .filter-option {
+  .filter-options > div {
     flex-grow: 1;
     text-align: center;
   }
