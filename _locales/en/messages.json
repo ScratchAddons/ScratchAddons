@@ -277,7 +277,7 @@
     "message": "send feedback"
   },
   "extensionUpdateInfo2_v1_44": {
-    "message": "This update also includes improvements to \"debugger\" and \"old studio layout\"."
+    "message": "This update also adds timing blocks and line-by-line profiling to the \"debugger\" addon."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
