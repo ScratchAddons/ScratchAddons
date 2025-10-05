@@ -263,11 +263,11 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateImageAlt_v1_43": {
-    "message": "Screenshot of the code area context menu with the \"Clean up Blocks +\" option highlighted"
+  "extensionUpdateImageAlt_v1_44": {
+    "message": "Screenshot of the \"recolor custom blocks\" addon in action"
   },
-  "extensionUpdateInfo1_v1_43": {
-    "message": "The \"enhanced clean up tool\" addon, previously part of \"developer tools\", can now be toggled separately in $1. You can also choose whether to remove unused variables and lists.",
+  "extensionUpdateInfo1_v1_44": {
+    "message": "The new \"recolor custom blocks\" addon adds an option to choose a custom color when creating a block. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
@@ -276,8 +276,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_43": {
-    "message": "Other new features in this update are new settings for \"Scratch 3.0 \u2192 2.0\" and \"full areas\" and improved support for mobile devices."
+  "extensionUpdateInfo2_v1_44": {
+    "message": "This update also adds timing blocks and line-by-line profiling to the \"debugger\" addon."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
