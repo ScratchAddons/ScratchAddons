@@ -1,6 +1,12 @@
 {
   "name": "Pause button",
   "description": "Adds a button to pause the project next to the green flag.",
+  "info": [
+    {
+      "text": "The project can also be paused with Alt+X (Option+X on macOS).",
+      "id": "keybind"
+    }
+  ],
   "credits": [
     {
       "name": "Jeffalo"
@@ -33,7 +39,6 @@
       "type": "boolean",
       "id": "pause-button",
       "name": "Show pause button",
-      "description": "When hidden, you can still pause by pressing Alt+X or Option+X.",
       "default": true
     },
     {
