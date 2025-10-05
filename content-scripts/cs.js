@@ -746,7 +746,7 @@ const showBanner = () => {
           height: 120px;
           /* border-radius: 5px; */
           padding: 20px;
-          /* v1.44 */ height: 220px;
+          /* v1.44 */ height: 180px;
         }
 
         #sa-notification-text {
