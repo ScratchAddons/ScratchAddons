@@ -545,8 +545,9 @@ export default async function ({ addon, console }) {
     return function (...args) {
       if (addon.self.disabled) return oldCreateAllInputs.call(this, ...args);
       updateBlockColors(this);
+      const isEdited = this?.recolorCustomBlock?.isEdited;
       const prefix = this?.recolorCustomBlock?.prefix;
-      if (prefix && addon.settings.get("hideColorPrefix")) {
+      if (isEdited && prefix && addon.settings.get("hideColorPrefix")) {
         const originalProcCode = this.procCode_;
         this.procCode_ = this.procCode_.slice(prefix.length + 1);
         const results = oldCreateAllInputs.call(this, ...args);
