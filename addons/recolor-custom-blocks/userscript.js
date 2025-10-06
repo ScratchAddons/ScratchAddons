@@ -340,30 +340,19 @@ export default async function ({ addon, console }) {
       if (blocklyColors) {
         // If it's a valid Blockly color, color it
         setBlockColor(block, blocklyColors, true, prefix);
-        return {
-          prefix: prefix,
-          colors: null,
-        };
+        return;
       }
       const fakeColors = isHexColor(prefix) ? getFakeBlockColors(block, prefix) : false;
       if (fakeColors) {
         // If instead it's a valid hex color, create colors and color the block
         setBlockColor(block, fakeColors, true, prefix);
-        return {
-          prefix: prefix,
-          colors: fakeColors,
-        };
+        return;
       }
     }
     // Otherwise, the colors need to be unset, if the block has been edited
     if (block.recolorCustomBlock?.isEdited) {
       setBlockColor(block, getBlocklyColors("more"), false, "more");
-      return {
-        prefix: null,
-        colors: null,
-      };
     }
-    return false;
   };
 
   const setNewPrefix = (block, prefix) => {
@@ -556,8 +545,9 @@ export default async function ({ addon, console }) {
     return function (...args) {
       if (addon.self.disabled) return oldCreateAllInputs.call(this, ...args);
       updateBlockColors(this);
+      const isEdited = this?.recolorCustomBlock?.isEdited;
       const prefix = this?.recolorCustomBlock?.prefix;
-      if (prefix && addon.settings.get("hideColorPrefix")) {
+      if (isEdited && prefix && addon.settings.get("hideColorPrefix")) {
         const originalProcCode = this.procCode_;
         this.procCode_ = this.procCode_.slice(prefix.length + 1);
         const results = oldCreateAllInputs.call(this, ...args);
