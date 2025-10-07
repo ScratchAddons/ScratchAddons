@@ -6,10 +6,8 @@
 
 .sa-flag-context-menu {
   position: fixed;
-  pointer-events: none;
 }
 
 .sa-flag-context-menu.sa-flag-menu-open {
-  opacity: 1 !important;
-  pointer-events: auto;
+  visibility: visible !important;
 }

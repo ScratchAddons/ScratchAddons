@@ -1,11 +1,9 @@
 export default async function ({ addon, console, msg }) {
   let greenFlag;
 
-  const contextMenuClass =
-    addon.tab.scratchClass("context-menu_context-menu") || addon.tab.scratchClass("context-menu_context-menu-content"); // React 16 || React 18
   const contextMenu = Object.assign(document.createElement("nav"), {
     role: "menu",
-    className: `${contextMenuClass} sa-flag-context-menu`,
+    className: addon.tab.scratchClass("context-menu_context-menu-content", { others: "sa-flag-context-menu" }),
   });
   const createItem = ({ id, text = "" } = {}) => {
     const item = Object.assign(document.createElement("div"), {
@@ -54,7 +52,7 @@ export default async function ({ addon, console, msg }) {
     greenFlag.dispatchEvent(new MouseEvent("click", { bubbles: true, ctrlKey: true }));
   });
 
-  contextMenu.style.opacity = 0; // Setting opacity here fixes a visual glitch on dynamic enable
+  contextMenu.style.visibility = "hidden"; // Setting visibility here fixes a visual glitch on dynamic enable
   addon.tab.displayNoneWhileDisabled(contextMenu);
   addon.self.addEventListener("disabled", closeContextMenu);
 
