@@ -51,7 +51,7 @@ export default async function ({ addon, console, msg }) {
     //Catch all upload menus as they are created
     const spriteSelector = '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"]';
     const stageSelector = '[class*="stage-selector_stage-selector_"] [class*="action-menu_more-buttons_"]';
-    const costumeSelector = '[data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]';
+    const costumeSelector = '[class^="gui_tabs_"] > :nth-child(3) [class*="action-menu_more-buttons_"]';
     let menu = await addon.tab.waitForElement(`${spriteSelector}, ${stageSelector}, ${costumeSelector}`, {
       markAsSeen: true,
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
