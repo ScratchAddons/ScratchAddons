@@ -1,0 +1,13 @@
+/* Hide context menu items related to other addons by default */
+#sa-flag-menu-fps,
+#sa-flag-menu-mute {
+  display: none;
+}
+
+.sa-flag-context-menu {
+  position: fixed;
+}
+
+.sa-flag-context-menu.sa-flag-menu-open {
+  visibility: visible !important;
+}

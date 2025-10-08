@@ -1,6 +1,6 @@
 import { setup, isMuted, onVolumeChanged, setMuted } from "../vol-slider/module.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
   setup(vm);
 
@@ -14,6 +14,7 @@ export default async function ({ addon, console }) {
 
   const updateIcon = () => {
     icon.style.display = addon.self.disabled || !isMuted() ? "none" : "";
+    updateMuteUnmuteLabel(document.getElementById("sa-flag-menu-mute"));
   };
   onVolumeChanged(updateIcon);
   updateIcon();
@@ -31,6 +32,21 @@ export default async function ({ addon, console }) {
       setMuted(false);
     }
   });
+
+  // flag-menu addon
+  function updateMuteUnmuteLabel(menuItem) {
+    if (!menuItem) return;
+    const key = isMuted() ? "unmute" : "mute";
+    menuItem.textContent = msg("/flag-menu/" + key);
+  }
+  (async () => {
+    const menuItem = await addon.tab.waitForElement("#sa-flag-menu-mute", {
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
+    menuItem.style.display = "flex";
+    addon.tab.displayNoneWhileDisabled(menuItem);
+    updateMuteUnmuteLabel(menuItem);
+  })();
 
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {

@@ -1,0 +1,34 @@
+{
+  "name": "Green flag context menu",
+  "description": "Lets you toggle turbo mode and other settings by right clicking the green flag.",
+  "info": [
+    {
+      "id": "longpress",
+      "text": "On a touch screen, you can open the context menu by pressing and holding the green flag."
+    }
+  ],
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects", "projectEmbeds"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "context_menu.css",
+      "matches": ["projects", "projectEmbeds"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.44.0",
+  "tags": ["player", "featured"],
+  "enabledByDefault": true,
+  "relatedAddons": ["60fps", "mute-project"]
+}
