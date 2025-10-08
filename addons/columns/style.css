@@ -64,7 +64,6 @@
   align-items: center;
 }
 
-[class*="gui_extension-button-container_"],
 [class*="extension-button_extension-button-container_"] {
   top: var(--sa-add-extension-button-y);
   bottom: auto;
@@ -76,34 +75,28 @@
 }
 
 /* [dir] is for specificity to override editor-stage-left */
-[dir] [class*="gui_extension-button-container_"],
 [dir] [class*="extension-button_extension-button-container_"] {
   border-radius: 0.25rem;
 }
 
-[class*="gui_extension-button-container_"]:hover,
 [class*="extension-button_extension-button-container_"]:hover {
   background-color: var(--editorDarkMode-accent, white);
 }
 
-[class*="gui_extension-button-container_"]::before,
 [class*="extension-button_extension-button-container_"]::before {
   display: none;
 }
 
-[class*="gui_extension-button_"],
 [class*="extension-button_extension-button_"] {
   display: flex;
   align-items: center;
   padding-inline: 0;
 }
 
-[class*="gui_extension-button-icon_"],
 [class*="extension-button_extension-button-icon_"] {
   filter: var(--editorDarkMode-categoryMenu-invertedFilter, brightness(0.4));
 }
 
-[class*="gui_extension-button-container_"]:hover [class*="gui_extension-button-icon_"],
 [class*="extension-button_extension-button-container_"]:hover [class*="extension-button_extension-button-icon_"] {
   filter: var(--editorDarkMode-accent-invertedFilter, brightness(0.4));
 }
@@ -113,7 +106,6 @@
   font-size: 0.65rem;
 }
 
-[class*="gui_extension-button-container_"]:hover .sa-add-extension-label,
 [class*="extension-button_extension-button-container_"]:hover .sa-add-extension-label {
   color: var(--editorDarkMode-accent-text, #575e75);
   font-size: 0.65rem;
