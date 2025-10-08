@@ -5,28 +5,21 @@ export default async function ({ addon, console, msg }) {
     role: "menu",
     className: addon.tab.scratchClass("context-menu_context-menu-content", { others: "sa-flag-context-menu" }),
   });
-  const createItem = ({ id, text = "" } = {}) => {
+  const createItem = (id, textContent = "") => {
     const item = Object.assign(document.createElement("div"), {
       role: "menuitem",
       className: addon.tab.scratchClass("context-menu_menu-item"),
       id,
-      textContent: text,
+      textContent,
     });
     item.addEventListener("mouseenter", () => item.setAttribute("data-highlighted", ""));
     item.addEventListener("mouseleave", () => item.removeAttribute("data-highlighted"));
     return item;
   };
   contextMenu.append(
-    createItem({
-      id: "sa-flag-menu-turbo",
-      text: msg("turbo-on"),
-    }),
-    createItem({
-      id: "sa-flag-menu-fps",
-    }),
-    createItem({
-      id: "sa-flag-menu-mute",
-    })
+    createItem("sa-flag-menu-turbo", msg("turbo-on")),
+    createItem("sa-flag-menu-fps"),
+    createItem("sa-flag-menu-mute")
   );
 
   function closeContextMenu() {
