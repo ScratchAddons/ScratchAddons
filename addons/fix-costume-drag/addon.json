@@ -48,7 +48,7 @@
   ],
   "tags": ["editor", "costumeEditor", "recommended"],
   "enabledByDefault": true,
-  "versionAdded": "1.44.0",
+  "versionAdded": "1.45.0",
   "dynamicEnable": true,
   "dynamicDisable": true
 }
