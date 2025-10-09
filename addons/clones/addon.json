@@ -48,5 +48,6 @@
     "newSettings": ["projectpage"]
   },
   "tags": ["player", "recommended"],
+  "relatedAddons": ["fps", "debugger"],
   "enabledByDefault": false
 }
