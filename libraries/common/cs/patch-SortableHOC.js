@@ -54,7 +54,7 @@ export const verifySortableHOC = (sortableHOCInstance, ignoreReactMethods) => {
     isSortableHOC(sortableHOCInstance) &&
     ((typeof SortableHOC.prototype.componentDidMount === "undefined" &&
       typeof SortableHOC.prototype.componentDidUpdate === "undefined") ||
-      ignoreReactMethods == true)
+      ignoreReactMethods === true)
   )
     return;
   throw new Error("Can not comprehend SortableHOC");
