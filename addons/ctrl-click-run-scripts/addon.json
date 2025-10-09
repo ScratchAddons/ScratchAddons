@@ -1,6 +1,6 @@
 {
-  "name": "Customizable action to run scripts",
-  "description": "Change the method used to trigger blocks and scripts to run.",
+  "name": "Double click to run scripts",
+  "description": "Require a double click to trigger blocks and scripts to run.",
   "credits": [
     {
       "name": "lisa_wolfgang",
@@ -25,41 +25,20 @@
   ],
   "settings": [
     {
-      "name": "Run by...",
-      "id": "run-action",
-      "type": "select",
-      "potentialValues": [
-        {
-          "id": "single",
-          "name": "Clicking once"
-        },
-        {
-          "id": "double",
-          "name": "Clicking twice"
-        },
-        {
-          "id": "ctrl",
-          "name": "Ctrl-clicking"
-        }
-      ],
-      "default": "single"
-    },
-    {
       "name": "Double-click timeout (ms)",
       "id": "timeout",
       "type": "integer",
       "min": 200,
       "max": 1000,
-      "default": 500,
-      "if": { "settings": { "run-action": ["single", "double"] } }
+      "default": 500
     }
   ],
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.15.0",
   "latestUpdate": {
-    "version": "1.44.0",
-    "newSettings": ["run-action", "timeout"],
-    "temporaryNotice": "This addon used to be called \"Ctrl+Click to run scripts\" \u2014 new options have now been added."
+    "version": "1.45.0",
+    "newSettings": ["timeout"],
+    "temporaryNotice": "Scripts can now be executed by double clicking them."
   },
   "enabledByDefault": false
 }
