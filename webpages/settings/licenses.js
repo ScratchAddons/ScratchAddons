@@ -1,7 +1,8 @@
 import globalTheme from "../../libraries/common/global-theme.js";
+import { getMessage } from "../../libraries/common/settings-page-apis.js";
 
 globalTheme();
-document.title = chrome.i18n.getMessage("licensesTitle");
+document.title = getMessage("licensesTitle");
 
 const vue = new Vue({
   el: "body",
@@ -10,7 +11,7 @@ const vue = new Vue({
   },
   methods: {
     msg(message, ...param) {
-      return chrome.i18n.getMessage(message, ...param);
+      return getMessage(message, ...param);
     },
   },
 });

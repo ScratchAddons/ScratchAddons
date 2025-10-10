@@ -1,30 +1,33 @@
-import minifySettings from "../../libraries/common/minify-settings.js";
+import {
+  getAddonEnabledStates,
+  getAddonSettings,
+  getGlobalTheme,
+  requestPermission,
+  setAddonEnabledStates,
+  setAddonSettings,
+  setGlobalTheme,
+  versionName,
+} from "../../libraries/common/settings-page-apis.js";
 
 let handleConfirmClicked = null;
 
 export const serializeSettings = async () => {
-  const storedSettings = await chrome.storage.sync.get([
-    "globalTheme",
-    "addonSettings1",
-    "addonSettings2",
-    "addonSettings3",
-    "addonsEnabled",
+  const [globalTheme, addonSettings, addonsEnabled] = await Promise.all([
+    getGlobalTheme(),
+    getAddonSettings(),
+    getAddonEnabledStates(),
   ]);
-  const addonSettings = {
-    ...storedSettings.addonSettings1,
-    ...storedSettings.addonSettings2,
-    ...storedSettings.addonSettings3,
-  };
+
   const serialized = {
     core: {
-      lightTheme: storedSettings.globalTheme,
-      version: chrome.runtime.getManifest().version_name,
+      lightTheme: globalTheme,
+      version: versionName,
     },
     addons: {},
   };
-  for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
+  for (const addonId of Object.keys(addonsEnabled)) {
     serialized.addons[addonId] = {
-      enabled: storedSettings.addonsEnabled[addonId],
+      enabled: addonsEnabled[addonId],
       settings: addonSettings[addonId] || {},
     };
   }
@@ -33,17 +36,8 @@ export const serializeSettings = async () => {
 
 export const deserializeSettings = async (str, manifests, confirmElem, { browserLevelPermissions }) => {
   const obj = JSON.parse(str);
-  const { addonsEnabled, ...storageItems } = await chrome.storage.sync.get([
-    "addonSettings1",
-    "addonSettings2",
-    "addonSettings3",
-    "addonsEnabled",
-  ]);
-  const addonSettings = {
-    ...storageItems.addonSettings1,
-    ...storageItems.addonSettings2,
-    ...storageItems.addonSettings3,
-  };
+  const [addonSettings, addonsEnabled] = await Promise.all([getAddonSettings(), getAddonEnabledStates()]);
+
   const pendingPermissions = {};
   for (const addonId of Object.keys(obj.addons)) {
     const addonValue = obj.addons[addonId];
@@ -68,19 +62,17 @@ export const deserializeSettings = async (str, manifests, confirmElem, { browser
   handleConfirmClicked = async () => {
     handleConfirmClicked = null;
     if (Object.keys(pendingPermissions).length) {
-      const granted = await chrome.permissions.request({
+      const granted = await requestPermission({
         permissions: Object.values(pendingPermissions).flat(),
       });
       Object.keys(pendingPermissions).forEach((addonId) => {
         addonsEnabled[addonId] = granted;
       });
     }
-    const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
-    await chrome.storage.sync.set({
-      globalTheme: !!obj.core.lightTheme,
-      addonsEnabled,
-      ...minifySettings(addonSettings, prerelease ? null : manifests),
-    });
+    const prerelease = versionName.endsWith("-prerelease");
+    setGlobalTheme(!!obj.core.lightTheme);
+    setAddonEnabledStates(addonsEnabled);
+    setAddonSettings(addonSettings, prerelease ? null : manifests);
     resolvePromise();
   };
   confirmElem.classList.remove("hidden-button");

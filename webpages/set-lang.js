@@ -1,4 +1,6 @@
+import { getLanguage } from "../libraries/common/settings-page-apis.js";
 import getDirection from "./rtl-list.js";
 
-document.documentElement.lang = chrome.i18n.getUILanguage();
-document.body.dir = getDirection(chrome.i18n.getUILanguage());
+const lang = getLanguage();
+document.documentElement.lang = lang;
+document.body.dir = getDirection(lang);

@@ -1,5 +1,7 @@
+import { getComponentURL, isDeveloperMode } from "./settings-page-apis.js";
+
 const styles = {};
-const developerMode = (await chrome.management.getSelf()).installType === "development";
+const developerMode = await isDeveloperMode();
 
 /**
  * Loads Vue components.
@@ -9,8 +11,8 @@ const developerMode = (await chrome.management.getSelf()).installType === "devel
 export default (filenames) =>
   Promise.all(
     filenames.map((filename) => {
-      const htmlUrl = chrome.runtime.getURL(`${filename}.html`);
-      const jsUrl = chrome.runtime.getURL(`${filename}.js`);
+      const htmlUrl = getComponentURL(filename, "html");
+      const jsUrl = getComponentURL(filename, "js");
       const jsPromise = import(jsUrl);
       return fetch(htmlUrl)
         .then((resp) => resp.text())
