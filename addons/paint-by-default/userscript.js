@@ -111,7 +111,6 @@ export default async function ({ addon, console }) {
       elementToClick.click();
     },
     {
-      bubble: true,
       capture: true,
     }
   );
