@@ -112,6 +112,7 @@ export default async function ({ addon, console }) {
     },
     {
       bubble: true,
+      capture: true,
     }
   );
   document.body.addEventListener(
