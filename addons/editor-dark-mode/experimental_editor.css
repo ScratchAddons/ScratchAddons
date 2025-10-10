@@ -484,8 +484,11 @@ img[class*="tool-select-base_tool-select-icon_"],
 .driver-popover[class*="tooltip-face-sensing"] {
   border-color: var(--editorDarkMode-primary);
 }
-.driver-popover[class*="tooltip-face-sensing"] .driver-popover-arrow-side-right {
+.driver-popover-arrow.driver-popover-arrow-side-right[class*="driver-popover-arrow-align-"] {
   border-right-color: var(--editorDarkMode-primary);
+}
+.driver-popover-arrow.driver-popover-arrow-side-left.driver-popover-arrow-align-start {
+  border-left-color: var(--editorDarkMode-primary);
 }
 .sa-body-editor input {
   outline-color: var(--editorDarkMode-primary);
