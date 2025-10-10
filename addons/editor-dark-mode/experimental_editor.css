@@ -455,7 +455,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="audio-trimmer_selection-background_"],
 [class*="tag-button_tag-button_"]:not([class*="tag-button_active_"]),
 [class*="action-menu_button_"],
-[class*="context-menu_menu-item_"]:hover {
+[class*="context-menu_menu-item_"]:hover,
+.driver-popover[class*="tooltip-face-sensing"] {
   background-color: var(--editorDarkMode-primary);
   color: var(--editorDarkMode-primary-text);
 }
@@ -479,8 +480,15 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="stage-selector_stage-selector_"]:hover,
 [class*="drag-layer_image_"],
 [class*="sound-editor_button_"]:focus::before,
-[class*="library-item_library-item_"]:hover {
+[class*="library-item_library-item_"]:hover,
+.driver-popover[class*="tooltip-face-sensing"] {
   border-color: var(--editorDarkMode-primary);
+}
+.driver-popover-arrow.driver-popover-arrow-side-right[class*="driver-popover-arrow-align-"] {
+  border-right-color: var(--editorDarkMode-primary);
+}
+.driver-popover-arrow.driver-popover-arrow-side-left.driver-popover-arrow-align-start {
+  border-left-color: var(--editorDarkMode-primary);
 }
 .sa-body-editor input {
   outline-color: var(--editorDarkMode-primary);
