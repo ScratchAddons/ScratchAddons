@@ -1,22 +1,28 @@
 import { isPaused, setPaused, onPauseChanged, setup } from "../debugger/module.js";
+import { checkForOnlineFeatures, getHasOnlineFeatures } from "./check-online.js";
 
 export default async function ({ addon, console, msg }) {
   setup(addon);
+
+  const togglePause = () => {
+    if (getHasOnlineFeatures() && !isPaused()) return;
+    setPaused(!isPaused());
+  };
+  const setSrc = () => {
+    img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg");
+    img.title = isPaused() ? msg("play") : msg("pause");
+  };
 
   const img = document.createElement("img");
   img.className = "pause-btn";
   img.draggable = false;
   img.title = msg("pause");
-
-  const setSrc = () => {
-    img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg");
-    img.title = isPaused() ? msg("play") : msg("pause");
-  };
-  img.addEventListener("click", () => setPaused(!isPaused()));
+  img.addEventListener("click", togglePause);
   addon.tab.displayNoneWhileDisabled(img);
   addon.self.addEventListener("disabled", () => setPaused(false));
   setSrc();
   onPauseChanged(setSrc);
+  checkForOnlineFeatures(addon, console, msg, img);
 
   document.addEventListener(
     "keydown",
@@ -28,7 +34,7 @@ export default async function ({ addon, console, msg }) {
       if (e.altKey && (e.key.toLowerCase() === "x" || e.keyCode === 88) && !addon.self.disabled) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        setPaused(!isPaused());
+        togglePause();
       }
     },
     { capture: true }
