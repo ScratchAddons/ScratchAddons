@@ -1,0 +1,48 @@
+.switch {
+  appearance: none;
+  display: block;
+  background: var(--button-background);
+  width: 40px;
+  height: 20px;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid var(--switch-border);
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: var(--switch-inner-background);
+  border-radius: 5px;
+  top: 4px;
+  left: 4px;
+  transition: all 0.25s ease;
+}
+
+[dir="rtl"] .switch::before {
+  left: 24px;
+}
+
+.switch:checked {
+  background: var(--brand-orange);
+  border-color: var(--brand-orange);
+}
+
+.switch.blue:checked {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.switch:checked::before {
+  background: var(--white-text);
+  left: 24px;
+}
+
+[dir="rtl"] .switch:checked::before {
+  left: 4px;
+}

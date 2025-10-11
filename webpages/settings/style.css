@@ -17,6 +17,10 @@ body {
   display: none !important;
 }
 
+button {
+  font: inherit;
+}
+
 .navbar {
   height: 60px;
   background: var(--brand-orange);
@@ -133,20 +137,28 @@ h1 {
   align-items: center;
 }
 
-.back-button {
-  width: 24px;
-  height: 24px;
-  vertical-align: bottom;
+.arrow-button {
+  display: flex;
+  align-items: center;
   padding: 4px;
-  margin-inline-end: 8px;
+  margin-inline-end: 9px;
   border-radius: 4px;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
-  transition: 0.2s ease;
-  filter: var(--content-icon-filter);
+  transition: background-color 0.2s ease;
 }
 
-.back-button:hover {
+.arrow-button:hover,
+.clickable-area:hover .arrow-button,
+.addon-group:hover .arrow-button {
   background-color: var(--hover-highlight);
+}
+
+.arrow-button > img {
+  width: 24px;
+  height: 24px;
+  filter: var(--content-icon-filter);
 }
 
 .clear-button {
@@ -171,10 +183,16 @@ h1 {
   transform: scaleY(-1);
 }
 .header-button {
+  background-color: transparent;
+  border: none;
   cursor: pointer;
   padding: 17.5px;
   line-height: 0;
-  transition: 0.2s ease;
+  transition: background 0.2s ease;
+  outline-offset: -2px;
+}
+.header-button:focus-visible {
+  outline: 2px solid var(--white-text);
 }
 .sidebarToggleOpen,
 .header-button:hover {
@@ -262,7 +280,10 @@ body.iframe .search-box input {
   text-align: right;
   bottom: 0;
   position: fixed;
+  padding: 0;
   margin: 5px;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
   user-select: none;
 }
