@@ -464,7 +464,7 @@ export default async function ({ addon, console }) {
   const oldBlockInitSvg = Blockly.BlockSvg.prototype.initSvg;
   Blockly.BlockSvg.prototype.initSvg = function (...args) {
     const initSvgResult = oldBlockInitSvg.call(this, ...args);
-    if (this.type === "procedures_declaration" && !this.recolorCustomBlockInjected) {
+    if (this.type === "procedures_declaration" && !this.recolorCustomBlockInjected && !this.workspace.toolbox_) {
       addColorMenu(this);
       shimOnChangeFn(this);
       updateBlockColors(this);
