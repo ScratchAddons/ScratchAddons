@@ -439,9 +439,12 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   color: var(--darkWww-box-scratchr2Text, #322f31);
   text-shadow: none;
 }
-.preview .project-description-edit ::placeholder {
+.preview .project-description-edit .inplace-textarea:empty:not(:focus) {
+  /* spacing around placeholder */
   padding: 5px;
   padding-top: 65px; /* center vertically */
+}
+.preview .project-description-edit ::placeholder {
   color: var(--darkWww-box-transparentText, #bebebe);
   text-shadow: none;
   font-size: 16px;
