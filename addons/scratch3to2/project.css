@@ -359,6 +359,11 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   display: none;
 }
 
+/* animated-thumb dropdown */
+.sa-set-thumbnail-upload-button > img {
+  filter: var(--darkWww-box-filterInverted, brightness(0.4));
+}
+
 /* Scratch's Set Thumbnail modal */
 .update-thumbnail-info-modal .update-thumbnail-info-modal-title {
   height: auto;
