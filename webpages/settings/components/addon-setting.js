@@ -4,16 +4,8 @@ export default async function ({ template }) {
     template,
     data() {
       return {
-        rowDropdownOpen: false,
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
       };
-    },
-    ready() {
-      this.$root.$on("close-dropdowns", (except) => {
-        if (this.rowDropdownOpen && this !== except) {
-          this.rowDropdownOpen = false;
-        }
-      });
     },
     computed: {
       show() {
@@ -110,13 +102,6 @@ export default async function ({ template }) {
         this.updateSettings();
         if (this.rowDropdownOpen) this.toggleRowDropdown();
       },
-      toggleRowDropdown() {
-        this.rowDropdownOpen = !this.rowDropdownOpen;
-        this.$root.closePickers({ isTrusted: true }, null, {
-          callCloseDropdowns: false,
-        });
-        this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
-      },
       msg(...params) {
         return this.$root.msg(...params);
       },
@@ -132,9 +117,6 @@ export default async function ({ template }) {
     events: {
       closePickers(...params) {
         return this.$root.closePickers(...params);
-      },
-      closeDropdowns(...params) {
-        return this.$root.closeDropdowns(...params);
       },
     },
     directives: {

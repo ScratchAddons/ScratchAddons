@@ -143,6 +143,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "toggleSidebar": {
+    "message": "Toggle sidebar"
+  },
   "close": {
     "message": "Close"
   },
@@ -151,6 +154,9 @@
   },
   "resetToDefault": {
     "message": "Reset to default settings"
+  },
+  "importExport": {
+    "message": "Export/import settings"
   },
   "relatedAddons": {
     "message": "Related addons:"
@@ -164,8 +170,20 @@
   "viewLicenses": {
     "message": "View library licenses"
   },
+  "back": {
+    "message": "Go back"
+  },
+  "collapse": {
+    "message": "Collapse"
+  },
+  "expand": {
+    "message": "Expand"
+  },
   "reset": {
     "message": "Reset"
+  },
+  "resetTo": {
+    "message": "Reset to..."
   },
   "default": {
     "message": "Default"
@@ -176,6 +194,15 @@
   "preview": {
     "message": "Preview"
   },
+  "addRow": {
+    "message": "Add row"
+  },
+  "addPresetRow": {
+    "message": "Add preset row"
+  },
+  "deleteRow": {
+    "message": "Delete row"
+  },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
   },
@@ -185,8 +212,14 @@
   "light": {
     "message": "Light"
   },
+  "switchLight": {
+    "message": "Switch to light theme"
+  },
   "dark": {
     "message": "Dark"
+  },
+  "switchDark": {
+    "message": "Switch to dark theme"
   },
   "loading": {
     "message": "Loading..."

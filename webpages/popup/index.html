@@ -26,14 +26,14 @@
           <a id="version" :href="changelogLink" target="_blank" title="{{ msg('changelog') }}">v{{ version }}</a>
         </span>
       </div>
-      <div class="header-button" @click="openSettingsPage()">
+      <a href="#" class="header-button" @click="openSettingsPage()">
         <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" draggable="false" />
-      </div>
+      </a>
     </div>
     <div id="popups">
       <div id="popup-bar" v-cloak>
         <div id="popup-chooser">
-          <div
+          <button
             v-for="popup of popups"
             class="popup-name"
             :class="{ sel: currentPopup === popup }"
@@ -49,7 +49,7 @@
                 draggable="false"
               />
             </span>
-          </div>
+          </button>
         </div>
       </div>
       <iframe
