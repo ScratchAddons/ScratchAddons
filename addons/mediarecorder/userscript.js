@@ -55,11 +55,11 @@ export default async ({ addon, console, msg }) => {
         "video/webm",
         // Safari only supports encoding H264 as mp4
         "video/mp4",
-      ]
-    }
+      ],
+    };
     mimeType = mimeOrder[addon.settings.get("preferred")].find((i) => MediaRecorder.isTypeSupported(i));
     fileExtension = mimeType.split(";")[0].split("/")[1];
-  }
+  };
 
   addon.settings.addEventListener("change", setMimeType);
   setMimeType();
