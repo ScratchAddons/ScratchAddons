@@ -56,30 +56,13 @@ const onReactContextMenu = async function (e) {
   // This function expects "this" to be an addon.tab instance.
 
   if (!e.target) return;
-  const ctxTarget = e.target.closest(".react-contextmenu-wrapper, [data-state]");
+  const ctxTarget = e.target.closest("[data-state]");
   if (!ctxTarget) return;
-
-  const isReact18 = !ctxTarget.classList.contains("react-contextmenu-wrapper");
-  let ctxMenu;
-  if (isReact18) ctxMenu = await this.waitForElement("[data-radix-menu-content]");
-  else ctxMenu = ctxTarget.querySelector("nav.react-contextmenu");
+  let ctxMenu = await this.waitForElement("[data-radix-menu-content]");
 
   let type;
   const extra = {};
-  if ((!ctxMenu || isReact18) && ctxTarget.closest(".monitor-overlay")) {
-    // Monitor context menus are currently rendered on document.body (this will change
-    // when Scratch updates to React 18).
-    if (!isReact18) {
-      // This is internal id which is different from the actual monitor ID.
-      // Optional chain just to prevent crashes when they change the internal stuff.
-      const mInternalId = ctxTarget[this.traps.getInternalKey(ctxTarget)]?.return?.stateNode?.props?.id;
-      if (!mInternalId) return;
-      ctxMenu = Array.prototype.find.call(
-        document.querySelectorAll("body > nav.react-contextmenu"),
-        (candidate) => candidate[this.traps.getInternalKey(candidate)]?.return?.stateNode?.props?.id === mInternalId
-      );
-      if (!ctxMenu) return;
-    }
+  if (ctxTarget.closest(".monitor-overlay")) {
     const props = findMonitor(ctxTarget[this.traps.getInternalKey(ctxTarget)]).props;
     if (!props) return;
     extra.monitorParams = props.params;
@@ -107,14 +90,12 @@ const onReactContextMenu = async function (e) {
     if (existing.classList.contains("sa-ctx-menu")) existing.remove();
   });
 
-  if (isReact18) {
-    // Allow arrow keys to move focus from existing menu items to those added by addons.
-    // capture: true is needed so that stopPropagation() prevents the context menu library's
-    // original listener from running.
-    ctxMenu.addEventListener("keydown", menuArrowKeyListener(ctxMenu), { capture: true });
-    for (const existing of ctxMenu.children) {
-      existing.addEventListener("keydown", itemArrowKeyListener(ctxMenu, existing), { capture: true });
-    }
+  // Allow arrow keys to move focus from existing menu items to those added by addons.
+  // capture: true is needed so that stopPropagation() prevents the context menu library's
+  // original listener from running.
+  ctxMenu.addEventListener("keydown", menuArrowKeyListener(ctxMenu), { capture: true });
+  for (const existing of ctxMenu.children) {
+    existing.addEventListener("keydown", itemArrowKeyListener(ctxMenu, existing), { capture: true });
   }
 
   for (const item of hasDynamicContextMenu
@@ -130,10 +111,8 @@ const onReactContextMenu = async function (e) {
     itemElem.className = this.scratchClass(...classes, {
       others: ["react-contextmenu-item", "sa-ctx-menu", item.className || ""],
     });
-    if (isReact18) {
-      itemElem.role = "menuitem";
-      itemElem.tabIndex = "-1";
-    }
+    itemElem.role = "menuitem";
+    itemElem.tabIndex = "-1";
     const label = document.createElement("span");
     label.textContent = item.label;
     itemElem.append(label);
@@ -141,32 +120,20 @@ const onReactContextMenu = async function (e) {
 
     const onClick = (e) => {
       e.stopPropagation();
-      if (isReact18) {
-        document.dispatchEvent(new PointerEvent("pointerdown"));
-      } else {
-        window.dispatchEvent(
-          new CustomEvent("REACT_CONTEXTMENU_HIDE", {
-            detail: {
-              action: "REACT_CONTEXTMENU_HIDE",
-            },
-          })
-        );
-      }
+      document.dispatchEvent(new PointerEvent("pointerdown")); // close menu
       item.callback(ctx);
     };
     itemElem.addEventListener("click", onClick);
 
-    if (isReact18) {
-      itemElem.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          onClick(e);
-        }
-      });
+    itemElem.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        onClick(e);
+      }
+    });
 
-      itemElem.addEventListener("mouseenter", () => setFocus(itemElem));
-      itemElem.addEventListener("mouseleave", () => removeFocus(itemElem));
-      itemElem.addEventListener("keydown", itemArrowKeyListener(ctxMenu, itemElem));
-    }
+    itemElem.addEventListener("mouseenter", () => setFocus(itemElem));
+    itemElem.addEventListener("mouseleave", () => removeFocus(itemElem));
+    itemElem.addEventListener("keydown", itemArrowKeyListener(ctxMenu, itemElem));
 
     this.appendToSharedSpace({
       space: item.position,
