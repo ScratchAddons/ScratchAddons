@@ -20,6 +20,8 @@ export default async ({ addon, console, msg }) => {
   let recordBuffer = [];
   let recorder;
   let timeout;
+  let mimeType;
+  let fileExtension;
 
   let recordElem;
 
@@ -34,17 +36,33 @@ export default async ({ addon, console, msg }) => {
     }
   };
 
-  const mimeType = [
-    // Prefer mp4 format over webm (Chrome and Safari)
-    "video/mp4; codecs=mp4a.40.2",
-    "video/mp4",
-    // Chrome 125 and below and Firefox only support encoding as webm
-    // VP9 is preferred as its playback is better supported across platforms
-    "video/webm; codecs=vp9",
-    // Firefox only supports encoding VP8
-    "video/webm",
-  ].find((i) => MediaRecorder.isTypeSupported(i));
-  const fileExtension = mimeType.split(";")[0].split("/")[1];
+  const setMimeType = () => {
+    const mimeOrder = {
+      mp4: [
+        // Prefer mp4 format over webm (Chrome and Safari)
+        "video/mp4; codecs=mp4a.40.2",
+        "video/mp4",
+        // Chrome 125 and below and Firefox only support encoding as webm
+        // VP9 is preferred as its playback is better supported across platforms
+        "video/webm; codecs=vp9",
+        // Firefox only supports encoding VP8
+        "video/webm",
+      ],
+      webm: [
+        // Prefer VP9 as mp4 (Chrome)
+        "video/webm; codecs=vp9",
+        // Firefox only supports encoding VP8
+        "video/webm",
+        // Safari only supports encoding H264 as mp4
+        "video/mp4",
+      ]
+    }
+    mimeType = mimeOrder[addon.settings.get("preferred")].find((i) => MediaRecorder.isTypeSupported(i));
+    fileExtension = mimeType.split(";")[0].split("/")[1];
+  }
+
+  addon.settings.addEventListener("change", setMimeType);
+  setMimeType();
 
   while (true) {
     const referenceElem = await addon.tab.waitForElement(
