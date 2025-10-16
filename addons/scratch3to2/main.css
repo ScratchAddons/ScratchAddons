@@ -70,6 +70,7 @@ body:not(.sa-body-editor) .button.white:hover {
   width: auto;
   height: auto;
   padding: 2px 5px 3px 5px;
+  background-color: rgba(0, 0, 0, 0.1);
   border: 3px solid transparent;
   border-radius: 35px;
   box-shadow: none;
