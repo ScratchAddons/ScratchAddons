@@ -9,6 +9,10 @@
   pointer-events: none;
 }
 
+body.driver-active .sa-mode {
+  pointer-events: none;
+}
+
 :root:not(.sa-editor) .sa-mode,
 .sa-fullscreen .sa-mode {
   display: none;
