@@ -1,0 +1,9 @@
+.sa-editor:not(.sa-fullscreen) {
+  filter: hue-rotate(40deg);
+}
+
+.sa-mode {
+  z-index: 50;
+  background-image: url("assets/90s-shapes.svg");
+  opacity: 0.2;
+}
