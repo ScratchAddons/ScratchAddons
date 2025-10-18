@@ -1,12 +1,17 @@
 body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper"] {
   position: relative;
 }
-body:not(.sa-body-editor) div[class*="loader_background_"],
-body:not(.sa-body-editor) .sa-project-thumb {
+body:not(.sa-body-editor) div[class*="stage_green-flag-overlay-wrapper_"] {
+  margin: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+body:not(.sa-body-editor) div[class*="loader_background_"] {
   border-radius: 0;
 }
-body:not(.sa-body-editor) :not([class*="stage-wrapper_full-screen_"]) > div[class*="loader_background_"],
-body:not(.sa-body-editor) .sa-project-thumb.loading {
+body:not(.sa-body-editor) :not([class*="stage-wrapper_full-screen_"]) > div[class*="loader_background_"] {
   top: 38px;
   height: calc(100% - 39px);
 }
