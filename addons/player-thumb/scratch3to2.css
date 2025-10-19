@@ -3,10 +3,6 @@ body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper"] {
 }
 body:not(.sa-body-editor) div[class*="stage_green-flag-overlay-wrapper_"] {
   margin: 0;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
 }
 body:not(.sa-body-editor) div[class*="loader_background_"] {
   border-radius: 0;
