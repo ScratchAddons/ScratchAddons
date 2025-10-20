@@ -238,7 +238,9 @@ a.social-messages-profile-link:link,
 .studio-member-tile .studio-member-role,
 body:not(.sa-body-editor) .join-flow-title,
 .registration-step .bold-link,
-.checkbox-container {
+.checkbox-container,
+.tou-step-title,
+.tou-step-description {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
@@ -295,14 +297,16 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
   border-color: var(--darkWww-box-greenText);
 }
 .donate-banner .donate-container .donate-button,
-.donate-section .donate-button {
+.donate-section .donate-button,
+.tou-modal a.link {
   color: var(--darkWww-box-greenText);
-}
-.tou-modal-link {
-  color: var(--darkWww-box-greenText) !important;
 }
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
+}
+.tou-step-error,
+.tou-step-inner-content .validation-message {
+  color: var(--darkWww-box-redText);
 }
 .social-message-icon {
   opacity: var(--darkWww-box-messageIconOpacity);
