@@ -22,5 +22,6 @@
     }
   ],
   "tags": ["editor", "player", "featured"],
+  "relatedAddons": ["clones", "debugger"],
   "versionAdded": "1.42.0"
 }

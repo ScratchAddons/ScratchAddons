@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const ColorInput = Vue.extend({
-    props: ["value", "addon", "setting", "no_alpha"],
+    props: ["value", "addon", "setting", "no_alpha", "disabled"],
     template,
     data() {
       return {

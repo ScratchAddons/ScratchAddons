@@ -1,4 +1,4 @@
-[class*="monitor_monitor-container_"],
+body [class*="monitor_monitor-container_"],
 [class*="monitor_list-body_"] {
   background-color: var(--editorDarkMode-page);
   color: var(--editorDarkMode-page-text);

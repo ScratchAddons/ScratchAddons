@@ -12,6 +12,12 @@ body {
   color: var(--white-text);
 }
 
+button {
+  background-color: transparent;
+  border: none;
+  font: inherit;
+}
+
 [v-cloak] {
   display: none !important;
 }
@@ -26,11 +32,16 @@ body {
   padding: 18px;
   line-height: 0;
   user-select: none;
-  transition: 0.2s ease;
+  transition: background 0.2s ease;
+  outline-offset: -2px;
 }
 .header-button:hover {
   background: var(--header-hover-darken);
 }
+.header-button:focus-visible {
+  outline: 2px solid var(--white-text);
+}
+
 #title-text,
 .header-button {
   font-size: 18px;
@@ -83,13 +94,17 @@ body {
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
   user-select: none;
-  transition: 0.2s ease;
+  transition: background 0.2s ease;
+  outline-offset: -2px;
 }
 .popup-name:hover {
   background-color: var(--hover-darken);
 }
 .popup-name:not(.sel):hover {
   cursor: pointer;
+}
+.popup-name:focus-visible {
+  outline: 2px solid var(--content-text);
 }
 .popup-name:not(:last-child) {
   border-inline-end: none;

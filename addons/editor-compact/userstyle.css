@@ -331,7 +331,7 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webk
 body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolbox::-webkit-scrollbar {
   display: none;
 }
-body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-button-container_"] {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="extension-button_extension-button-container_"] {
   height: 2rem;
 }
 
@@ -474,6 +474,19 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 }
 .sa-debugger-tabs li + li {
   margin-inline-start: 0.25rem;
+}
+.sa-debugger-footer {
+  padding: 0.25rem 0.5rem;
+}
+.sa-debugger-footer-buttons {
+  gap: 0.25rem;
+}
+.sa-debugger-footer-buttons > div {
+  padding: 0.25rem 0.5rem;
+}
+
+.sa-debugger-unpause-container:not(:last-child) {
+  padding-right: 0.25rem;
 }
 
 [class*="modal_header"],

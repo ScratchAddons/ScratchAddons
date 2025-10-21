@@ -666,7 +666,7 @@ export default async function ({ addon, console, msg }) {
     else this.saOriginalSrc = src;
     if ((src.startsWith("data:") || src.includes("static/assets")) && this.sourceBlock_) {
       // Extension icon
-      const iconsToReplace = ["music", "pen", "text2speech", "translate", "videoSensing"];
+      const iconsToReplace = ["music", "pen", "text2speech", "translate", "videoSensing", "faceSensing"];
       const extensionId = this.sourceBlock_.type.split("_")[0];
       if (iconsToReplace.includes(extensionId)) {
         if (extensionId === "translate" && !useBlackIcons()) src = `${iconPath()}/extensions/translate.png`;

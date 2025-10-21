@@ -1,10 +1,11 @@
 <template>
-  <div
+  <button
     class="category"
     :class="{
         sel: category.id === selectedCategory && !this.$root.relatedAddonsOpen,
         hasParent: category.parent,
       }"
+    v-if="!category.hidden"
     v-show="shouldShow"
     transition="expand"
     :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
@@ -12,7 +13,7 @@
   >
     <img :src="'../../images/icons/' + category.icon + '.svg'" draggable="false" />
     <span>{{ category.name }}</span>
-  </div>
+  </button>
 </template>
 
 <style>
@@ -28,6 +29,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    outline-offset: -2px;
   }
 
   /* Classes used by index.html */
@@ -38,6 +40,10 @@
   a.category > span > img /* popout icon */ {
     height: 12px;
     vertical-align: -1px;
+  }
+  button.category {
+    background-color: transparent;
+    border: none;
   }
 
   .category.sel {
@@ -59,6 +65,9 @@
   .category:hover,
   .category.sel {
     background: var(--hover-darken);
+  }
+  .category:focus-visible {
+    outline: 2px solid var(--content-text);
   }
   .category::before {
     content: "";

@@ -205,7 +205,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select {
   border-radius: 0;
 }
 .thumbnail .thumbnail-title a {
-  font-weight: 800;
+  font-weight: bold;
 }
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a {
   color: var(--darkWww-page-scratchr2Text, #322f31);

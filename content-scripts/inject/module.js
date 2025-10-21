@@ -212,16 +212,28 @@ function onDataReady() {
   }
 }
 
-function bodyIsEditorClassCheck() {
-  if (isScratchGui) return document.body.classList.add("sa-body-editor");
+function editorClassCheck() {
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
-  if (!split[0] || split[0] !== "projects") return;
-  if (split.includes("editor") || split.includes("fullscreen")) document.body.classList.add("sa-body-editor");
-  else document.body.classList.remove("sa-body-editor");
+  if (!isScratchGui && split[0] !== "projects") return;
+  let isInEditor = false;
+  let isFullScreen = false;
+  const state = __scratchAddonsRedux.state;
+  if (state) {
+    isInEditor = !state.scratchGui.mode.isPlayerOnly;
+    isFullScreen = state.scratchGui.mode.isFullScreen;
+  } else if (isScratchGui) {
+    isInEditor = true;
+  } else {
+    isInEditor = split.includes("editor");
+    isFullScreen = split.includes("fullscreen");
+  }
+  document.documentElement.classList.toggle("sa-editor", isInEditor || isFullScreen);
+  document.documentElement.classList.toggle("sa-fullscreen", isFullScreen);
+  document.body.classList.toggle("sa-body-editor", isInEditor || isFullScreen);
 }
-if (!document.body) document.addEventListener("DOMContentLoaded", bodyIsEditorClassCheck);
-else bodyIsEditorClassCheck();
+if (!document.body) document.addEventListener("DOMContentLoaded", editorClassCheck);
+else editorClassCheck();
 
 const originalReplaceState = history.replaceState;
 history.replaceState = function () {
@@ -232,7 +244,7 @@ history.replaceState = function () {
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
-  bodyIsEditorClassCheck();
+  editorClassCheck();
   return returnValue;
 };
 
@@ -245,7 +257,7 @@ history.pushState = function () {
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
-  bodyIsEditorClassCheck();
+  editorClassCheck();
   return returnValue;
 };
 
@@ -256,7 +268,21 @@ window.addEventListener("popstate", () => {
     // There isn't really a way to get the previous URL from popstate event.
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl: "", newUrl } }));
   }
-  bodyIsEditorClassCheck();
+  editorClassCheck();
+});
+
+// In scratch-gui and /projects/editor, the URL doesn't change when toggling full screen,
+// so we use Redux to detect it.
+window.addEventListener("load", () => {
+  if (!__scratchAddonsRedux.target) return;
+  __scratchAddonsRedux.target.addEventListener("statechanged", (e) => {
+    if (
+      e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN" ||
+      e.detail.action.type === "scratch-gui/mode/SET_PLAYER"
+    ) {
+      editorClassCheck();
+    }
+  });
 });
 
 function getAllRules(e) {
