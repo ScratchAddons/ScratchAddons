@@ -1,18 +1,18 @@
 .scratch-stats-box img.views-icon {
-    filter: invert(37%) sepia(95%) saturate(4000%) hue-rotate(200deg) brightness(95%) contrast(90%);
+  filter: invert(37%) sepia(95%) saturate(4000%) hue-rotate(200deg) brightness(95%) contrast(90%);
 }
 
 .scratch-stats-box img.remix-icon {
-    filter: invert(55%) sepia(72%) saturate(500%) hue-rotate(90deg) brightness(95%) contrast(90%);
+  filter: invert(55%) sepia(72%) saturate(500%) hue-rotate(90deg) brightness(95%) contrast(90%);
 }
 
 .scratch-stats-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-top: 15px;
-    font-size: 14px;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-top: 15px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
 }
