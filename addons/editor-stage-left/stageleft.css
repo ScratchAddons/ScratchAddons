@@ -38,6 +38,7 @@
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0.5rem;
 }
+[dir="ltr"] [class^="gui_extension-button-container"],
 [dir="ltr"] [class^="extension-button_extension-button-container"] {
   border-bottom-left-radius: 0.5rem;
 }
@@ -56,6 +57,7 @@
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0.5rem;
 }
+[dir="rtl"] [class^="gui_extension-button-container"],
 [dir="rtl"] [class^="extension-button_extension-button-container"] {
   border-bottom-right-radius: 0.5rem;
 }
