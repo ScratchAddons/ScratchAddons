@@ -128,6 +128,24 @@
   "easterEggs": {
     "message": "Easter Eggs"
   },
+  "editorFeature": {
+    "message": "Editor feature"
+  },
+  "websiteFeature": {
+    "message": "Website feature"
+  },
+  "playerFeature": {
+    "message": "Project player feature"
+  },
+  "themeAddon": {
+    "message": "Theme"
+  },
+  "popupFeature": {
+    "message": "Extension popup feature"
+  },
+  "easterEgg": {
+    "message": "Easter egg"
+  },
   "theme": {
     "message": "Theme:"
   },
@@ -169,6 +187,15 @@
   },
   "viewLicenses": {
     "message": "View library licenses"
+  },
+  "infoMessage": {
+    "message": "Information"
+  },
+  "noticeMessage": {
+    "message": "Notice"
+  },
+  "warningMessage": {
+    "message": "Warning"
   },
   "back": {
     "message": "Go back"
@@ -259,6 +286,9 @@
   },
   "search": {
     "message": "Search"
+  },
+  "clearSearch": {
+    "message": "Clear search query"
   },
   "permissionsTitle": {
     "message": "Permissions - Scratch Addons"

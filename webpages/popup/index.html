@@ -37,10 +37,11 @@
             v-for="popup of popups"
             class="popup-name"
             :class="{ sel: currentPopup === popup }"
+            :aria-labelledby="'popup-' + popups.indexOf(popup)"
             @click="setPopup(popup)"
           >
-            <img v-if="popup.icon" :src="popup.icon" class="popup-icon" draggable="false" />
-            <a class="popup-title">{{ popup.name }}</a>
+            <img v-if="popup.icon" aria-hidden="true" :src="popup.icon" class="popup-icon" draggable="false" />
+            <a :id="'popup-' + popups.indexOf(popup)" class="popup-title">{{ popup.name }}</a>
             <span v-if="popup.fullscreen" class="popout" @click="openInNewTab(popup)">
               <img
                 src="../../images/icons/popout.svg"
