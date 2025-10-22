@@ -237,6 +237,7 @@ a.social-messages-profile-link:link,
 .studio-project-tile .studio-project-username,
 .studio-member-tile .studio-member-role,
 body:not(.sa-body-editor) .join-flow-title,
+.join-flow-parental-consent-message,
 .registration-step .bold-link,
 .checkbox-container,
 .tou-step-title,
@@ -304,6 +305,7 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
 }
+.validation-checkbox-required,
 .tou-step-error,
 .tou-step-inner-content .validation-message {
   color: var(--darkWww-box-redText);
