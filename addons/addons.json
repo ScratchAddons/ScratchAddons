@@ -67,6 +67,7 @@
   "editor-sounds",
   "transparent-orphans",
   "gamepad",
+  "remove-curved-stage-border",
   "fix-pasted-scripts",
   "better-img-uploads",
   "ctrl-click-run-scripts",
@@ -187,7 +188,6 @@
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "fullscreen",
-  "remove-curved-stage-border",
   "columns",
   "editor-compact",
   "editor-theme3"
