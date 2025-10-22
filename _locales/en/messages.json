@@ -188,6 +188,15 @@
   "viewLicenses": {
     "message": "View library licenses"
   },
+  "infoBox": {
+    "message": "Information message"
+  },
+  "noticeBox": {
+    "message": "Notice message"
+  },
+  "warningBox": {
+    "message": "Warning message"
+  },
   "infoMessage": {
     "message": "Information"
   },
@@ -289,6 +298,22 @@
   },
   "clearSearch": {
     "message": "Clear search query"
+  },
+  "expandedAddonGroup": {
+    "message": "$1 section, expanded",
+    "description": "A label used by screen readers."
+  },
+  "collapsedAddonGroup": {
+    "message": "$1 section, collapsed",
+    "description": "A label used by screen readers."
+  },
+  "enabledAddon": {
+    "message": "$1, add-on, on",
+    "description": "A label used by screen readers."
+  },
+  "disabledAddon": {
+    "message": "$1, add-on, off",
+    "description": "A label used by screen readers."
   },
   "permissionsTitle": {
     "message": "Permissions - Scratch Addons"

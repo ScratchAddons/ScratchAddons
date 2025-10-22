@@ -1,5 +1,10 @@
 <template>
-  <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
+  <div
+    class="addon-body"
+    v-show="shouldShow"
+    :id="'addon-' + addon._addonId"
+    :aria-label="msg(addon._enabled ? 'enabledAddon' : 'disabledAddon', [addon.name])"
+  >
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
         <button class="arrow-button" :title="msg(expanded ? 'collapse' : 'expand')">
@@ -39,7 +44,14 @@
         {{ addon.latestUpdate.temporaryNotice }}
       </div>
       <div id="info" v-for="info of addon.info">
-        <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
+        <div
+          :class="['addon-message', 'addon-' + (info.type || 'info')]"
+          :aria-label="msg({
+            'warning': 'warningBox',
+            'notice': 'noticeBox',
+            'info': 'infoBox',
+          }[info.type || 'info'])"
+        >
           <img
             :src="'../../images/icons/' + {
               'warning': 'warning.svg',
