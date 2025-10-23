@@ -42,12 +42,12 @@
           v-model="addon._enabled"
           :aria-label="msg('nameAddon', [addon.name])"
           @click="toggleAddonRequest"
-          :aria-describedby="(addon._enabled ? 'addon-description-full-' : 'addon-description-') + addon._addonId"
+          :aria-describedby="'addon-description-' + addon._addonId"
         />
       </div>
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
-      <div class="addon-description-full" :id="'addon-description-full-' + addon._addonId">{{ addon.description }}</div>
+      <div class="addon-description-full">{{ addon.description }}</div>
       <div class="addon-message addon-update" v-if="showUpdateNotice" :aria-label="msg('updateBox')">
         <addon-tag tag="new"></addon-tag>
         {{ addon.latestUpdate.temporaryNotice }}
