@@ -18,7 +18,7 @@
     <link rel="preload" href="../styles/colors-light.css" as="style" />
   </head>
   <body class="loading">
-    <div id="header">
+    <div id="header" role="banner">
       <div id="title">
         <img src="../../images/icon-transparent.svg" id="logo" alt="Logo" draggable="false" />
         <span id="title-text" v-cloak>
@@ -31,17 +31,20 @@
       </a>
     </div>
     <div id="popups">
-      <div id="popup-bar" v-cloak>
-        <div id="popup-chooser">
+      <nav id="popup-bar" v-cloak>
+        <div id="popup-chooser" role="tablist">
           <button
             v-for="popup of popups"
+            role="tab"
             class="popup-name"
             :class="{ sel: currentPopup === popup }"
-            :aria-labelledby="'popup-' + popups.indexOf(popup)"
+            :aria-controls="'tab-' + popups.indexOf(popup)"
+            :aria-selected="currentPopup === popup ? 'true' : 'false'"
+            :aria-labelledby="'popup-anchor-' + popups.indexOf(popup)"
             @click="setPopup(popup)"
           >
-            <img v-if="popup.icon" aria-hidden="true" :src="popup.icon" class="popup-icon" draggable="false" />
-            <a :id="'popup-' + popups.indexOf(popup)" class="popup-title">{{ popup.name }}</a>
+            <img v-if="popup.icon" :src="popup.icon" class="popup-icon" draggable="false" />
+            <a :id="'popup-anchor-' + popups.indexOf(popup)" class="popup-title">{{ popup.name }}</a>
             <span v-if="popup.fullscreen" class="popout" @click="openInNewTab(popup)">
               <img
                 src="../../images/icons/popout.svg"
@@ -52,8 +55,11 @@
             </span>
           </button>
         </div>
-      </div>
+      </nav>
       <iframe
+        role="tabpanel"
+        :id="'tab-' + popups.indexOf(popup)"
+        :aria-label="popup.name"
         v-cloak
         v-for="popup in popupsWithIframes"
         v-show="currentPopup === popup"
