@@ -296,8 +296,13 @@
   "search": {
     "message": "Search"
   },
+  "searchAddons": {
+    "message": "Search add-ons",
+    "description": "A label used by screen readers."
+  },
   "clearSearch": {
-    "message": "Clear search query"
+    "message": "Clear search query",
+    "description": "A label used by screen readers."
   },
   "expandedAddonGroup": {
     "message": "$1 section, expanded",
