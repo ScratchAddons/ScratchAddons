@@ -14,7 +14,7 @@
         <!-- prettier-ignore -->
         <div class="addon-name-and-tags">
           <div class="addon-name tooltip">
-            <span>{{ addon.name }}</span>
+            <span role="heading" aria-level="3">{{ addon.name }}</span>
             <span v-if="devMode" class="tooltiptext tooltiptexttop">{{ addon._addonId }}</span>
           </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
