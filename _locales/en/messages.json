@@ -315,6 +315,14 @@
     "message": "$1, add-on, off",
     "description": "A label used by screen readers."
   },
+  "nameAddon": {
+    "message": "$1 add-on",
+    "description": "A label used by screen readers."
+  },
+  "nameSetting": {
+    "message": "$1 setting",
+    "description": "A label used by screen readers."
+  },
   "permissionsTitle": {
     "message": "Permissions - Scratch Addons"
   },

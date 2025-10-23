@@ -19,7 +19,9 @@
           </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
       </div>
-      <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
+      <div class="addon-description" :id="'addon-description-' + addon._addonId" v-show="!expanded" dir="auto">
+        {{ addon.description }}
+      </div>
       <div class="addon-check">
         <div v-show="expanded && addon._enabled" v-if="addon.settings" class="addon-split-button dropdown-parent">
           <button
@@ -34,12 +36,19 @@
             <li role="menuitem" tabindex="0" @click="importPreset">{{ msg('import') }}</li>
           </dropdown>
         </div>
-        <input type="checkbox" class="switch" v-model="addon._enabled" @click="toggleAddonRequest" />
+        <input
+          type="checkbox"
+          class="switch"
+          v-model="addon._enabled"
+          :aria-label="msg('nameAddon', [addon.name])"
+          @click="toggleAddonRequest"
+          :aria-describedby="(addon._enabled ? 'addon-description-full-' : 'addon-description-') + addon._addonId"
+        />
       </div>
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
-      <div class="addon-description-full">{{ addon.description }}</div>
-      <div class="addon-message addon-update" v-if="showUpdateNotice">
+      <div class="addon-description-full" :id="'addon-description-full-' + addon._addonId">{{ addon.description }}</div>
+      <div class="addon-message addon-update" v-if="showUpdateNotice" :aria-label="msg('updateBox')">
         <addon-tag tag="new"></addon-tag>
         {{ addon.latestUpdate.temporaryNotice }}
       </div>
