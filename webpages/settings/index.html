@@ -258,9 +258,9 @@
               <button class="arrow-button" :title="msg('back')" @click="backRelatedAddon()">
                 <img src="../../images/icons/left-arrow.svg" draggable="false" />
               </button>
-              <span>{{ msg("relatedTo", relatedToAddonName) }}</span>
+              <span role="heading" aria-level="1">{{ msg("relatedTo", relatedToAddonName) }}</span>
             </div>
-            <span v-else>{{ selectedCategoryName }}</span>
+            <span role="heading" aria-level="1" v-else>{{ selectedCategoryName }}</span>
           </div>
           <div
             role="search"
