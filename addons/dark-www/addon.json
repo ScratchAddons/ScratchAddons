@@ -563,6 +563,18 @@
       }
     },
     {
+      "name": "box-redText",
+      "value": {
+        "type": "textColor",
+        "black": "#cc4400",
+        "white": "#ff9966",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-buttonDisabled",
       "value": {
         "type": "textColor",
