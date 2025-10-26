@@ -20,7 +20,6 @@
       "matches": ["https://scratch.mit.edu/users/*"]
     }
   ],
-  "settings": [],
   "enabledByDefault": false,
   "targets": ["profiles"],
   "versionAdded": "1.44.0",
