@@ -3,12 +3,13 @@
     v-show="show"
     class="addon-setting"
     :class="{
-    'boolean-setting': setting.type === 'boolean',
-    'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
-  }"
+      'boolean-setting': setting.type === 'boolean',
+      'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
+    }"
+    :aria-label="msg('addonSettingsBlock')"
   >
     <div class="setting-label-container">
-      <div class="setting-label" v-html="settingsName(addon)"></div>
+      <div class="setting-label" :id="'setting-name-' + setting.id" v-html="settingsName(addon)"></div>
       <div v-if="setting.description" :class="{tooltip: addon._enabled}" :tabindex="addon._enabled ? '0' : '-1' ">
         <img
           src="../../images/icons/help.svg"
@@ -16,9 +17,9 @@
           tabindex="-1"
           :aria-labelledby="'setting-description-' + setting.id"
         />
-        <span aria-hidden="true" :id="'setting-description-' + setting.id" class="tooltiptext tooltiptexttop"
-          >{{setting.description}}</span
-        >
+        <span aria-hidden="true" :id="'setting-description-' + setting.id" class="tooltiptext tooltiptexttop">
+          {{ setting.description }}
+        </span>
       </div>
       <addon-tag v-if="isNewOption" tag="new"></addon-tag>
     </div>
@@ -76,7 +77,7 @@
         type="checkbox"
         class="switch blue"
         v-model="addonSettings[setting.id]"
-        :aria-label="msg('nameSetting', [setting.name])"
+        :aria-labelledby="'setting-name-' + setting.id"
         :aria-describedby="setting.description ? 'setting-description-' + setting.id : ''"
         @change="updateSettings()"
         :disabled="!addon._enabled"
@@ -85,7 +86,7 @@
         v-if="setting.type === 'select'"
         class="filter-options"
         role="radiogroup"
-        :aria-label="msg('nameSetting', [setting.name])"
+        :aria-labelledby="'setting-name-' + setting.id"
         :aria-describedby="setting.description ? 'setting-description-' + setting.id : ''"
       >
         <div v-for="option of setting.potentialValues">
@@ -108,7 +109,7 @@
           type="number"
           class="setting-input number"
           v-model="addonSettings[setting.id]"
-          :aria-label="msg('nameSetting', [setting.name])"
+          :aria-labelledby="'setting-name-' + setting.id"
           :aria-describedby="setting.description ? 'setting-description-' + setting.id : ''"
           @change="checkValidity() || updateSettings()"
           :disabled="!addon._enabled"
@@ -121,7 +122,7 @@
           type="number"
           class="setting-input number"
           v-model="addonSettings[setting.id]"
-          :aria-label="msg('nameSetting', [setting.name])"
+          :aria-labelledby="'setting-name-' + setting.id"
           :aria-describedby="setting.description ? 'setting-description-' + setting.id : ''"
           @change="checkValidity() || updateSettings()"
           :disabled="!addon._enabled"
@@ -135,7 +136,7 @@
           type="text"
           class="setting-input string"
           v-model="addonSettings[setting.id]"
-          :aria-label="msg('nameSetting', [setting.name])"
+          :aria-labelledby="'setting-name-' + setting.id"
           :aria-describedby="setting.description ? 'setting-description-' + setting.id : ''"
           @change="checkValidity() || updateSettings()"
           :disabled="!addon._enabled"
@@ -147,7 +148,7 @@
       </template>
       <template v-if="setting.type === 'color'">
         <picker
-          :aria-label="msg('nameSetting', [setting.name])"
+          :aria-labelledby="'setting-name-' + setting.id"
           :aria-describedby="setting.description ? 'setting-description-' + setting.id : ''"
           :value="addonSettings[setting.id] || setting.default"
           :setting="setting"

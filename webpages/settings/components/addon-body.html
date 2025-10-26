@@ -3,7 +3,7 @@
     class="addon-body"
     v-show="shouldShow"
     :id="'addon-' + addon._addonId"
-    :aria-label="msg(addon._enabled ? 'enabledAddon' : 'disabledAddon', [addon.name])"
+    :aria-label="msg(addon._enabled ? 'enabledAddonBlock' : 'disabledAddonBlock', [addon.name])"
   >
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
@@ -14,7 +14,7 @@
         <!-- prettier-ignore -->
         <div class="addon-name-and-tags">
           <div class="addon-name tooltip">
-            <span role="heading" aria-level="3">{{ addon.name }}</span>
+            <span role="heading" aria-level="3" :id="'addon-name-' + addon._addonId">{{ addon.name }}</span>
             <span v-if="devMode" class="tooltiptext tooltiptexttop">{{ addon._addonId }}</span>
           </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
@@ -40,8 +40,8 @@
           type="checkbox"
           class="switch"
           v-model="addon._enabled"
-          :aria-label="msg('nameAddon', [addon.name])"
           @click="toggleAddonRequest"
+          :aria-labelledby="'addon-name-' + addon._addonId"
           :aria-describedby="'addon-description-' + addon._addonId"
         />
       </div>

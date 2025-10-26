@@ -312,20 +312,16 @@
     "message": "$1 section, collapsed",
     "description": "A label used by screen readers."
   },
-  "enabledAddon": {
+  "enabledAddonBlock": {
     "message": "$1, add-on, on",
     "description": "A label used by screen readers."
   },
-  "disabledAddon": {
+  "disabledAddonBlock": {
     "message": "$1, add-on, off",
     "description": "A label used by screen readers."
   },
-  "nameAddon": {
-    "message": "$1 add-on",
-    "description": "A label used by screen readers."
-  },
-  "nameSetting": {
-    "message": "$1 setting",
+  "addonSettingsBlock": {
+    "message": "Add-on settings",
     "description": "A label used by screen readers."
   },
   "permissionsTitle": {
