@@ -32,20 +32,20 @@
   height: calc(100% - 2.75rem - 2px);
 }
 
-[class*="stage-wrapper_full-screen"] .sa-project-thumb {
+.sa-fullscreen .sa-project-thumb {
   top: 3px;
   left: 3px;
   height: calc(100% - 6px);
   border-radius: calc(0.5rem - 3px);
 }
 
-[class*="stage-wrapper_full-screen"] .sa-project-thumb.loading {
+.sa-fullscreen .sa-project-thumb.loading {
   top: 6px;
   left: auto;
   height: min(100% - 12px, 100vw * 0.75);
 }
 
-[class*="stage-wrapper_full-screen"] .sa-loader-background {
+.sa-fullscreen .sa-loader-background {
   top: calc(2.75rem + 6px);
   left: auto;
   width: auto;
@@ -53,7 +53,7 @@
   aspect-ratio: 4 / 3;
 }
 
-[class*="stage-wrapper_full-screen"] [class*="loader_block-animation_"],
+.sa-fullscreen [class*="loader_block-animation_"],
 :root:not(.sa-editor) [class*="loader_block-animation_"] {
   /* Remove transparency */
   filter: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='opaque'><feComponentTransfer><feFuncA type='linear' slope='3.5'></feFuncA></feComponentTransfer></filter></svg>#opaque");
