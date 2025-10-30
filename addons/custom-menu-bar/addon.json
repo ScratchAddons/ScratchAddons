@@ -30,7 +30,7 @@
   "relatedAddons": ["discuss-button", "editor-compact"],
   "settings": [
     {
-      "name": "Menu item appearance",
+      "name": "Menu button appearance",
       "id": "menu-labels",
       "type": "select",
       "potentialValues": [
