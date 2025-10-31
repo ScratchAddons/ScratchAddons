@@ -180,97 +180,97 @@
     width: 480px;
   }
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper_"],
-body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper-overlay_"] /* embeds */ {
+:root:not(.sa-editor) [class*="stage-header_stage-header-wrapper_"],
+:root:not(.sa-editor) [class*="stage-header_stage-header-wrapper-overlay_"] /* embeds */ {
   background-image: linear-gradient(white, #e6e8e8);
   border: 1px solid #d0d1d2;
   border-bottom: none;
   border-radius: 8px 8px 0 0;
 }
 @media (max-width: 767px) {
-  body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper_"] {
+  :root:not(.sa-editor) [class*="stage-header_stage-header-wrapper_"] {
     margin: 0 1px;
     width: 478px;
     border: none;
     border-radius: 0;
   }
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-header-wrapper-overlay_"] /* embeds */ {
+:root:not(.sa-editor) [class*="stage-header_stage-header-wrapper-overlay_"] /* embeds */ {
   top: 8px;
   margin: auto;
   width: max-content;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-menu-wrapper_"] {
+:root:not(.sa-editor) [class*="stage-header_stage-menu-wrapper_"] {
   height: 38px;
   padding: 0 6px;
 }
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"],
-body:not(.sa-body-editor) [class*="stop-all_stop-all_"],
-body:not(.sa-body-editor) .pause-btn {
+:root:not(.sa-editor) [class*="green-flag_green-flag_"],
+:root:not(.sa-editor) [class*="stop-all_stop-all_"],
+:root:not(.sa-editor) .pause-btn {
   padding: 1rem; /* hide original icons */
   background-repeat: no-repeat;
   background-position: center center;
 }
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"]:hover,
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"][class*="green-flag_is-active_"],
-body:not(.sa-body-editor) [class*="stop-all_stop-all_"]:hover,
-body:not(.sa-body-editor) .pause-btn:hover {
+:root:not(.sa-editor) [class*="green-flag_green-flag_"]:hover,
+:root:not(.sa-editor) [class*="green-flag_green-flag_"][class*="green-flag_is-active_"],
+:root:not(.sa-editor) [class*="stop-all_stop-all_"]:hover,
+:root:not(.sa-editor) .pause-btn:hover {
   background-color: transparent;
 }
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"] {
+:root:not(.sa-editor) [class*="green-flag_green-flag_"] {
   background-image: url("%addon-self-dir%/assets/green_flag.png");
 }
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"]:hover,
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
+:root:not(.sa-editor) [class*="green-flag_green-flag_"]:hover,
+:root:not(.sa-editor) [class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
   background-image: url("%addon-self-dir%/assets/green_flag_hover.png");
 }
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps] {
+:root:not(.sa-editor) [class*="green-flag_green-flag_"][data-sa-60fps] {
   background-image: url("%addon-self-dir%/assets/green_flag_60fps.png");
 }
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps]:hover,
-body:not(.sa-body-editor) [class*="green-flag_green-flag_"][data-sa-60fps][class*="green-flag_is-active_"] {
+:root:not(.sa-editor) [class*="green-flag_green-flag_"][data-sa-60fps]:hover,
+:root:not(.sa-editor) [class*="green-flag_green-flag_"][data-sa-60fps][class*="green-flag_is-active_"] {
   background-image: url("%addon-self-dir%/assets/green_flag_60fps_hover.png");
 }
-body:not(.sa-body-editor) [class*="stop-all_stop-all_"] {
+:root:not(.sa-editor) [class*="stop-all_stop-all_"] {
   background-image: url("%addon-self-dir%/assets/stop_hover.png");
   opacity: 1;
 }
-body:not(.sa-body-editor) [class*="stop-all_stop-all_"][class*="stop-all_is-active_"]:not(:hover) {
+:root:not(.sa-editor) [class*="stop-all_stop-all_"][class*="stop-all_is-active_"]:not(:hover) {
   background-image: url("%addon-self-dir%/assets/stop.png");
 }
-body:not(.sa-body-editor) .pause-btn[src$="pause.svg"] {
+:root:not(.sa-editor) .pause-btn[src$="pause.svg"] {
   background-image: url("%addon-self-dir%/assets/pause.svg");
   background-size: 20px 20px;
 }
-body:not(.sa-body-editor) .pause-btn[src$="pause.svg"]:hover {
+:root:not(.sa-editor) .pause-btn[src$="pause.svg"]:hover {
   background-image: url("%addon-self-dir%/assets/pause_hover.svg");
 }
-body:not(.sa-body-editor) .pause-btn[src$="play.svg"] {
+:root:not(.sa-editor) .pause-btn[src$="play.svg"] {
   background-image: url("%addon-self-dir%/assets/play.svg");
   background-size: 20px 20px;
 }
-body:not(.sa-body-editor) .pause-btn[src$="play.svg"]:hover {
+:root:not(.sa-editor) .pause-btn[src$="play.svg"]:hover {
   background-image: url("%addon-self-dir%/assets/play_hover.svg");
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-size-row_"] > * {
+:root:not(.sa-editor) [class*="stage-header_stage-size-row_"] > * {
   background-color: transparent;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button_"] {
+:root:not(.sa-editor) [class*="stage-header_stage-button_"] {
   background-color: transparent;
   border: none;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:not(.sa-gamepad-container *) {
+:root:not(.sa-editor) [class*="stage-header_stage-button_"]:not(.sa-gamepad-container *) {
   background-image: url("%addon-self-dir%/assets/full_screen.png");
   background-repeat: no-repeat;
   background-position: center center;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:active {
+:root:not(.sa-editor) [class*="stage-header_stage-button_"]:active {
   background-color: transparent;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"] {
+:root:not(.sa-editor) [class*="stage-header_stage-button-icon_"] {
   filter: none;
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gamepad-container *) {
+:root:not(.sa-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gamepad-container *) {
   display: none;
 }
 [class*="stage-header_rightSection_"] [class*="stage-header_setThumbnailButton_"],
@@ -323,31 +323,31 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gam
 [class*="stage-header_embed-scratch-logo_"] img:hover {
   background-image: url("%addon-self-dir%/assets/embed_logo_hover.png");
 }
-body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper_"][class*="stage-wrapper_full-screen_"] {
+:root:not(.sa-editor) [class*="stage-wrapper_stage-wrapper_"][class*="stage-wrapper_full-screen_"] {
   /* Override dark-www */
   background-color: transparent;
 }
-body:not(.sa-body-editor) [class*="stage_stage_"] {
+:root:not(.sa-editor) [class*="stage_stage_"] {
   border-color: #d0d1d2;
   border-radius: 0;
 }
 @media (max-width: 767px) {
-  body:not(.sa-body-editor) [class*="stage_stage_"] {
+  :root:not(.sa-editor) [class*="stage_stage_"] {
     border-left: none;
     border-right: none;
     border-bottom: none;
   }
 }
-body:not(.sa-body-editor) [class*="stage-wrapper_full-screen_"] [class*="stage_stage_"] /* embeds */ {
+:root:not(.sa-editor) [class*="stage-wrapper_full-screen_"] [class*="stage_stage_"] /* embeds */ {
   border: 1px solid #d0d1d2;
 }
-body:not(.sa-body-editor) [class*="stage_green-flag-overlay-wrapper_"] {
+:root:not(.sa-editor) [class*="stage_green-flag-overlay-wrapper_"] {
   margin: 1px;
   width: calc(100% - 2px);
   height: calc(100% - 2px);
   border-radius: 0;
 }
-body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] {
+:root:not(.sa-editor) [class*="stage_green-flag-overlay_"] {
   background-color: transparent;
   background-image: url("%addon-self-dir%/assets/green_flag_large.png");
   background-repeat: no-repeat;
@@ -355,7 +355,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] {
   border: none;
   opacity: 0.9;
 }
-body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
+:root:not(.sa-editor) [class*="stage_green-flag-overlay_"] > img {
   display: none;
 }
 

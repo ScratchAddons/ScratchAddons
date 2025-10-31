@@ -159,9 +159,9 @@
 
 /* Accent background */
 [class*="backpack_backpack-header_"],
-.sa-body-editor [class*="stage-header_stage-button_"],
-.sa-body-editor [class*="stage-header_stage-size-row_"] > *,
-.sa-body-editor [class*="stage-header_unselect-wrapper_"],
+.sa-editor [class*="stage-header_stage-button_"],
+.sa-editor [class*="stage-header_stage-size-row_"] > *,
+.sa-editor [class*="stage-header_unselect-wrapper_"],
 [class*="sprite-info_sprite-info_"],
 div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="stage-selector_stage-selector_"],
@@ -228,7 +228,7 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
-.sa-body-editor [class*="stage-header_stage-button_"] [class*="stage-header_stage-button-icon_"],
+.sa-editor [class*="stage-header_stage-button_"] [class*="stage-header_stage-button-icon_"],
 [class*="sprite-info_icon-wrapper_"],
 img[class*="tool-select-base_tool-select-icon_"],
 [class*="paint-editor_button-group-button-icon_"],
@@ -488,7 +488,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 .driver-popover-arrow.driver-popover-arrow-side-left.driver-popover-arrow-align-start {
   border-left-color: var(--editorDarkMode-primary);
 }
-.sa-body-editor input {
+.sa-editor input {
   outline-color: var(--editorDarkMode-primary);
 }
 [class*="green-flag_green-flag_"]:hover,
@@ -504,7 +504,7 @@ img[class*="tool-select-base_tool-select-icon_"],
   --colour-contextualMenuHover: var(--editorDarkMode-primary-transparent15);
 }
 [class*="library_filter-bar_"],
-.sa-body-editor [class*="stage-header_stage-button_"]:active,
+.sa-editor [class*="stage-header_stage-button_"]:active,
 [class*="stage_frame_"],
 [class*="toggle-buttons_button_"]:active,
 [class*="button_button_"]:active,
@@ -606,7 +606,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 }
 
 /* Text and icon highlight color */
-.sa-body-editor a:link,
+.sa-editor a:link,
 [class*="gui_tab_"][class*="gui_is-selected_"],
 div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="dropdown_dropdown_"],
@@ -646,8 +646,8 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [dir="rtl"] [class*="blocks_blocks_"] .blocklyFlyout,
 [class*="backpack_backpack-header_"],
 [class*="backpack_backpack-list_"],
-.sa-body-editor [class*="stage_stage_"],
-.sa-body-editor [class*="stage-header_stage-button_"],
+.sa-editor [class*="stage_stage_"],
+.sa-editor [class*="stage-header_stage-button_"],
 [class*="toggle-buttons_button_"],
 [dir="rtl"] [class*="toggle-buttons_button_"]:not(:last-child),
 [class*="sprite-selector_sprite-selector_"],
