@@ -131,6 +131,18 @@
       }
     },
     {
+      "name": "page-greenText",
+      "value": {
+        "type": "textColor",
+        "black": "#328554",
+        "white": "#13ecaf",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "page-colorScheme",
       "value": {
         "type": "textColor",

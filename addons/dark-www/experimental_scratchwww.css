@@ -12,6 +12,7 @@ body {
   color-scheme: light;
 }
 #view,
+.page #view,
 .crash-container,
 .semicolon {
   background-color: var(--darkWww-page);
@@ -19,7 +20,10 @@ body {
 }
 .subactions .share-date,
 .guidelines-page .navigation .navigation-buttons a,
-.conf2019-description {
+.conf2019-description,
+/* blocking ToU acceptance flow */
+.page-title,
+.page-description {
   color: var(--darkWww-page-text);
 }
 .tips,
@@ -54,6 +58,12 @@ body {
 .plan section,
 .extension-landing hr {
   border-color: var(--darkWww-page-divider15);
+}
+.page-description a,
+.page-description a:link,
+.page-description a:visited,
+.page-description a:active {
+  color: var(--darkWww-page-greenText);
 }
 
 /* Navigation bar background */
