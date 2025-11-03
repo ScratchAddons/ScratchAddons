@@ -5,26 +5,26 @@ body [class*="stage_green-flag-overlay-wrapper_"],
   background-size: cover;
 }
 
-body:not(.sa-body-editor) .sa-controls-disabled > img,
+:root:not(.sa-editor) .sa-controls-disabled > img,
 .sa-fullscreen .sa-controls-disabled > img {
   pointer-events: none;
   opacity: 0.5;
 }
 
-body:not(.sa-body-editor) [class*="stage_green-flag-overlay-wrapper_"] {
+:root:not(.sa-editor) [class*="stage_green-flag-overlay-wrapper_"] {
   top: 1px;
   height: calc(100% - 2px);
   border-radius: calc(0.5rem - 1px);
 }
 
-body:not(.sa-body-editor) .sa-loader-background,
-body:not(.sa-body-editor) [class*="stage_green-flag-overlay-wrapper_"] {
+:root:not(.sa-editor) .sa-loader-background,
+:root:not(.sa-editor) [class*="stage_green-flag-overlay-wrapper_"] {
   left: 1px;
   width: calc(100% - 2px);
   border-radius: calc(0.5rem - 1px);
 }
 
-body:not(.sa-body-editor) .sa-loader-background {
+:root:not(.sa-editor) .sa-loader-background {
   top: calc(2.75rem + 1px);
   height: calc(100% - 2.75rem - 2px);
 }
@@ -46,8 +46,8 @@ body:not(.sa-body-editor) .sa-loader-background {
   border-radius: calc(0.5rem - 3px);
 }
 
-[class*="stage-wrapper_full-screen"] [class*="loader_block-animation_"],
-body:not(.sa-body-editor) [class*="loader_block-animation_"] {
+.sa-fullscreen [class*="loader_block-animation_"],
+:root:not(.sa-editor) [class*="loader_block-animation_"] {
   /* Remove transparency */
   filter: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='opaque'><feComponentTransfer><feFuncA type='linear' slope='3.5'></feFuncA></feComponentTransfer></filter></svg>#opaque");
 }

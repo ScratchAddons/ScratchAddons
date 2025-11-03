@@ -1,13 +1,11 @@
-body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper"] {
+:root:not(.sa-editor) [class*="stage-wrapper_stage-wrapper"] {
   position: relative;
 }
-body:not(.sa-body-editor) div[class*="stage_green-flag-overlay-wrapper_"] {
+:root:not(.sa-editor) div[class*="stage_green-flag-overlay-wrapper_"] {
   margin: 0;
 }
-body:not(.sa-body-editor) div[class*="loader_background_"] {
+:root:not(.sa-editor) .sa-loader-background {
   border-radius: 0;
-}
-body:not(.sa-body-editor) :not([class*="stage-wrapper_full-screen_"]) > div[class*="loader_background_"] {
   top: 38px;
   height: calc(100% - 39px);
 }

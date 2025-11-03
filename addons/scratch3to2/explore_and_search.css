@@ -99,7 +99,7 @@
   padding: 0;
 }
 .outer .categories li,
-body:not(.sa-body-editor) .outer .sort-mode .select select {
+:root:not(.sa-editor) .outer .sort-mode .select select {
   height: 32px;
   box-sizing: border-box;
   padding: 0 10px;
@@ -133,8 +133,8 @@ body:not(.sa-body-editor) .outer .sort-mode .select select {
     0 1px 2px rgba(0, 0, 0, 0.05);
 }
 .outer .categories li:hover,
-body:not(.sa-body-editor) .outer .sort-mode .select select:hover,
-body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
+:root:not(.sa-editor) .outer .sort-mode .select select:hover,
+:root:not(.sa-editor) .outer .sort-mode .select select:focus {
   background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
   background-image: none;
 }
@@ -156,7 +156,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
   width: auto;
   position: relative;
 }
-body:not(.sa-body-editor) .outer .sort-mode .select select {
+:root:not(.sa-editor) .outer .sort-mode .select select {
   appearance: none;
   width: auto;
   padding-right: 25px;

@@ -213,6 +213,9 @@ function onDataReady() {
 }
 
 function editorClassCheck() {
+  const pathname = location.pathname.toLowerCase();
+  const split = pathname.split("/").filter(Boolean);
+  if (!isScratchGui && split[0] !== "projects") return;
   let isInEditor = false;
   let isFullScreen = false;
   const state = __scratchAddonsRedux.state;
@@ -222,16 +225,11 @@ function editorClassCheck() {
   } else if (isScratchGui) {
     isInEditor = true;
   } else {
-    const pathname = location.pathname.toLowerCase();
-    const split = pathname.split("/").filter(Boolean);
-    if (split[0] && split[0] === "projects") {
-      isInEditor = split.includes("editor");
-      isFullScreen = split.includes("fullscreen");
-    }
+    isInEditor = split.includes("editor");
+    isFullScreen = split.includes("fullscreen");
   }
   document.documentElement.classList.toggle("sa-editor", isInEditor || isFullScreen);
   document.documentElement.classList.toggle("sa-fullscreen", isFullScreen);
-  document.body.classList.toggle("sa-body-editor", isInEditor || isFullScreen);
 }
 if (!document.body) document.addEventListener("DOMContentLoaded", editorClassCheck);
 else editorClassCheck();

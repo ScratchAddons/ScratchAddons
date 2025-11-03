@@ -1,5 +1,5 @@
-[class*="stage-wrapper_full-screen"] [class*="stage_full-screen"],
-[class*="stage-wrapper_full-screen"] [class*="stage_green-flag-overlay-wrapper"],
+.sa-fullscreen [class*="stage_full-screen"],
+.sa-fullscreen [class*="stage_green-flag-overlay-wrapper"],
 .sa-fullscreen .sa-loader-background {
   border: 0 !important;
   border-radius: 0 !important;
@@ -16,7 +16,7 @@
   height: 100%;
 }
 
-[class*="stage-wrapper_full-screen"] .sa-loader-background {
+.sa-fullscreen .sa-loader-background {
   top: 2.75rem;
   height: min(100% - 2.75rem, 100vw * 0.75);
 }
