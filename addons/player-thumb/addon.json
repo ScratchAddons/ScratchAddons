@@ -44,5 +44,9 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.40.0",
+  "latestUpdate": {
+    "version": "1.45.0",
+    "newSettings": ["darken"]
+  },
   "tags": ["community", "theme", "projectPage"]
 }
