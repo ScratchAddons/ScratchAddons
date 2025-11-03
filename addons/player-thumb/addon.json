@@ -31,6 +31,16 @@
       "runAtComplete": false
     }
   ],
+  "settings": [
+    {
+      "name": "Darken (%)",
+      "id": "darken",
+      "type": "integer",
+      "min": 0,
+      "max": 90,
+      "default": 25
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.40.0",
