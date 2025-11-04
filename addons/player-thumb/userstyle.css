@@ -13,20 +13,18 @@ body [class*="stage_green-flag-overlay-wrapper_"],
 
 :root:not(.sa-editor) [class*="stage_green-flag-overlay-wrapper_"] {
   top: 1px;
-  height: calc(100% - 2px);
-  border-radius: calc(0.5rem - 1px);
-}
-
-:root:not(.sa-editor) .sa-loader-background,
-:root:not(.sa-editor) [class*="stage_green-flag-overlay-wrapper_"] {
   left: 1px;
   width: calc(100% - 2px);
+  height: calc(100% - 2px);
   border-radius: calc(0.5rem - 1px);
 }
 
 :root:not(.sa-editor) .sa-loader-background {
   top: calc(2.75rem + 1px);
+  left: 1px;
+  width: calc(100% - 2px);
   height: calc(100% - 2.75rem - 2px);
+  border-radius: calc(0.5rem - 1px);
 }
 
 .sa-fullscreen [class*="stage_green-flag-overlay-wrapper_"] {
