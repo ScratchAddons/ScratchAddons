@@ -3,6 +3,6 @@
 }
 :root:not(.sa-editor) .sa-loader-background {
   border-radius: 0;
-  top: 38px;
-  height: calc(100% - 39px);
+  top: 40px;
+  height: calc(100% - 41px);
 }
