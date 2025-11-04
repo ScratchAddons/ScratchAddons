@@ -33,10 +33,10 @@
   ],
   "settings": [
     {
-      "name": "Darken (%)",
+      "name": "Darken thumbnail (%)",
       "id": "darken",
       "type": "integer",
-      "min": 0,
+      "min": 10,
       "max": 90,
       "default": 25
     }

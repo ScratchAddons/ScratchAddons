@@ -1,6 +1,6 @@
 body [class*="stage_green-flag-overlay-wrapper_"],
 .sa-loader-background {
-  background-image: linear-gradient(rgba(0, 0, 0, calc(var(--playerThumb-darken) / 100))), var(--thumb-src);
+  background-image: linear-gradient(rgba(0, 0, 0, calc(var(--playerThumb-darken) / 100))), var(--sa-player-thumb-src);
   background-position: center;
   background-size: cover;
 }

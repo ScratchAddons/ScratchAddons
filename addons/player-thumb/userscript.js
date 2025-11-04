@@ -3,7 +3,7 @@ export default async function ({ addon, console }) {
 
   const projectId = location.pathname.split("/")[2];
   document.documentElement.style.setProperty(
-    "--thumb-src",
+    "--sa-player-thumb-src",
     `url(https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png)`
   );
 
