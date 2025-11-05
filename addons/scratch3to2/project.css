@@ -342,7 +342,8 @@
   border: 1px solid #d0d1d2;
 }
 :root:not(.sa-editor) [class*="stage_green-flag-overlay-wrapper_"] {
-  margin: 1px;
+  top: 1px;
+  left: 1px;
   width: calc(100% - 2px);
   height: calc(100% - 2px);
   border-radius: 0;
