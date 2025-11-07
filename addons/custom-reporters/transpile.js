@@ -108,7 +108,11 @@ class Transpiler {
       for (const id in this._blocks) {
         if (!Object.prototype.hasOwnProperty.call(this._blocks, id)) continue;
         const block = this._blocks[id];
-        if (["procedures_definition", "procedures_definition_reporter", "procedures_definition_boolean"].includes(block.opcode)) {
+        if (
+          ["procedures_definition", "procedures_definition_reporter", "procedures_definition_boolean"].includes(
+            block.opcode
+          )
+        ) {
           const internal = this._getCustomBlockInternal(block);
           if (internal && internal.mutation.proccode === name) {
             this._cache.procedureDefinitions[name] = id; // The outer define block id

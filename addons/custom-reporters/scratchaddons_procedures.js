@@ -154,14 +154,14 @@ export class ScratchAddonsProcedureBlocks {
           return currentId;
         }
         const newId = this.pushProcReporterCalls(currentId, currentBlock);
-        console.log(currentId, newId, this.target.blocks.getBlock(newId))
+        console.log(currentId, newId, this.target.blocks.getBlock(newId));
         this.reuseStackForNextBlock(newId);
         let newBlock = this.target.blocks.getBlock(newId);
         if (newBlock.__sa_proper_call) {
           this.peekStackFrame().__sa_proper_call = true;
           this.peekStackFrame().__sa_inspected = true;
         }
-        return this.stack.at(-1)
+        return this.stack.at(-1);
       } else {
         return null;
       }
