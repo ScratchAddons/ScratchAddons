@@ -29,6 +29,7 @@ export const uid = function () {
  */
 export function getStackBlock(block) {
   if (!block.parent) return block;
+  if (!this.getBlock(block.parent)) return block;
   if (this.getBlock(block.parent).next === block.id) return block;
   return this.getStackBlock(this.getBlock(block.parent));
 }

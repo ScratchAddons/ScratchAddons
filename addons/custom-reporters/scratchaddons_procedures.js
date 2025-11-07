@@ -30,7 +30,7 @@ export class ScratchAddonsProcedureBlocks {
     if (StackFrame._sa_polluted) {
       return;
     }
-    console.log("StackFrame not yet polluted, polluting now");
+    // console.log("StackFrame not yet polluted, polluting now");
     StackFrame._sa_polluted = true;
 
     const oldReset = StackFrame.reset;
@@ -81,7 +81,7 @@ export class ScratchAddonsProcedureBlocks {
     Thread._pushProcReporterCalls = function (calls, outerBlock) {
       for (const { block } of Object.values(this.target.blocks.getInputs(outerBlock) ?? {})) {
         const inputBlock = this.target.blocks.getBlock(block);
-        console.log("input opcode: %s", inputBlock.opcode);
+        // console.log("input opcode: %s", inputBlock.opcode);
         if (inputBlock.opcode === "procedures_call_reporter" || inputBlock.opcode === "procedures_call_boolean") {
           calls.push(inputBlock);
         }
@@ -101,7 +101,6 @@ export class ScratchAddonsProcedureBlocks {
       this._pushProcReporterCalls(calls, outerBlock);
       calls.reverse();
       const uuids = Array.from({ length: calls.length }, uid);
-      console.log(calls, uuids);
       uuids.push(outerBlockId);
       for (let i = 0; i < calls.length; i++) {
         this.target.blocks._blocks[uuids[i]] = Object.assign(structuredClone(calls[i]), {
@@ -114,30 +113,6 @@ export class ScratchAddonsProcedureBlocks {
       return uuids[0];
     };
 
-    /** adaptation of original function to insert fake calls where needed,
-     * and label them as "proper calls" (which actually means fake calls,
-     * but means they'll actually be executed) where appropriate.
-     */
-    // Thread.goToNextBlock = function () {
-    //   const nextBlockId = this.target.blocks.getNextBlock(this.peekStack());
-    //   this.reuseStackForNextBlock(nextBlockId);
-    //   ScratchAddonsProcedureBlocks.polluteStackFrame(this.stackFrames.at(-1).constructor.prototype);
-    //   if (this.stack.length !== 0 && !this.stack.every((a) => a === null)) {
-    //     console.log("nonempty stack yay!", this.stack, this.stackFrames);
-    //   }
-    //   if (nextBlockId !== null) {
-    //     const nextBlock = this.target.blocks.getBlock(nextBlockId);
-
-    //     const newId = this.pushProcReporterCalls(nextBlockId, nextBlock);
-    //     this.reuseStackForNextBlock(newId);
-    //     this.peekStackFrame().__sa_inspected = true;
-    //     let newBlock = this.target.blocks.getBlock(newId);
-    //     if (newBlock.__sa_proper_call) {
-    //       this.peekStackFrame().__sa_proper_call = true;
-    //     }
-    //   }
-    // };
-
     Thread.peekStack = function () {
       if (this.stack.length > 0 && this.stack.at(-1) !== null) {
         ScratchAddonsProcedureBlocks.polluteStackFrame(this.peekStackFrame().constructor.prototype);
@@ -149,12 +124,10 @@ export class ScratchAddonsProcedureBlocks {
           return currentId;
         }
         let currentBlock = this.target.blocks.getBlock(currentId);
-        console.log("nonempty stack yay!", this.stack, this.stackFrames);
         if (currentBlock.__sa_proper_call) {
           return currentId;
         }
         const newId = this.pushProcReporterCalls(currentId, currentBlock);
-        console.log(currentId, newId, this.target.blocks.getBlock(newId))
         // this.reuseStackForNextBlock(newId);
         this.stack[this.stack.length - 1] = newId; // we don't want to reuseStackForNextBlock because we'll lose information like looping
         let newBlock = this.target.blocks.getBlock(newId);
@@ -167,29 +140,6 @@ export class ScratchAddonsProcedureBlocks {
         return null;
       }
     };
-
-    // Thread.peekStack = function () {
-    //   const peeked = this.stack.length > 0 ? this.stack.at(-1) : null;
-    //   if (peeked === null) {
-    //     return null;
-    //   }
-    //   const stackFrame = this.peekStackFrame();
-    //   ScratchAddonsProcedureBlocks.polluteStackFrame(stackFrame.constructor.prototype);
-    //   if (stackFrame._sa_inputs_inspected) {
-    //     let block = this.target.blocks.getBlock(peeked);
-    //     if (block?.opcode) {
-    //       console.log("%s (already inspected)", block.opcode);
-    //     }
-    //     return peeked;
-    //   }
-    //   let block = this.target.blocks.getBlock(peeked);
-    //   if (block?.opcode) {
-    //     console.log(block.opcode);
-    //   }
-    //   // this.pushProcReporterCalls(block);
-    //   stackFrame._sa_inputs_inspected = true;
-    //   return this.stack.at(-1);
-    // };
 
     /** adaptation of existing function to account for new opcodes */
     Thread.isRecursiveCall = function (procedureCode) {
@@ -233,12 +183,12 @@ export class ScratchAddonsProcedureBlocks {
   call(args, util) {
     /// adapted from https://github.com/scratchfoundation/scratch-vm/blob/develop/src/blocks/procedures.js
 
-    console.log(util.thread.stack.length);
+    // console.log(util.thread.stack.length);
     const procedureCode = args.mutation.proccode;
     const paramNamesIdsAndDefaults = util.getProcedureParamNamesIdsAndDefaults(procedureCode);
     if (util.stackFrame._sa_proper_call || util.target.blocks.getBlock(util.thread.peekStack())?.__sa_proper_call) {
       if (!util.stackFrame.executed) {
-        console.log("got proper call");
+        // console.log("got proper call");
 
         if (paramNamesIdsAndDefaults === null) {
           return;
@@ -257,7 +207,7 @@ export class ScratchAddonsProcedureBlocks {
         util.stackFrame.executed = true;
         util.startProcedure(procedureCode);
       } else {
-        console.log("got proper call, but it was already executed");
+        // console.log("got proper call, but it was already executed");
         if (paramNamesIdsAndDefaults === null) {
           return "";
         }
@@ -268,7 +218,7 @@ export class ScratchAddonsProcedureBlocks {
         return variable.value;
       }
     } else {
-      console.log("got non-proper call");
+      // console.log("got non-proper call");
       if (paramNamesIdsAndDefaults === null) {
         return "";
       }
@@ -281,7 +231,7 @@ export class ScratchAddonsProcedureBlocks {
   }
 
   return(args, util) {
-    console.log("returned!", util.stackFrame._sa_inputs_inspected, util.stackFrame._sa_proper_call);
+    // console.log("returned!", util.stackFrame._sa_inputs_inspected, util.stackFrame._sa_proper_call);
     const thisId = util.thread.peekStack();
     const target = util.target;
     const blocks = target.blocks._blocks;

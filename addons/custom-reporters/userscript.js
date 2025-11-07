@@ -408,7 +408,6 @@ export default async function ({ addon, msg, console }) {
     const modal = (
       await addon.tab.waitForElement("div[class*=custom-procedures_modal-content_]", { markAsSeen: true })
     ).querySelector("div");
-    alert("modal");
     const header = modal.querySelector("div[class*=modal_header]");
     const selectTypeDiv = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("custom-procedures_options-row", "custom-procedures4body box_box"),
