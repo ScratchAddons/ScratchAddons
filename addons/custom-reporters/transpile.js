@@ -62,11 +62,11 @@ class Transpiler {
     this.vm.runtime._registerBlockPackages();
 
     let runtimePushThread = this.vm.runtime.constructor.prototype._pushThread;
-    this.vm.runtime.constructor.prototype._pushThread = function(id, target, ops) {
+    this.vm.runtime.constructor.prototype._pushThread = function (id, target, ops) {
       let thread = runtimePushThread.call(this, id, target, ops);
       blockPackage.polluteThread(thread.constructor.prototype);
       return thread;
-    }
+    };
 
     // const g = this.vm.runtime.getOpcodeFunction;
     // this.vm.runtime.getOpcodeFunction = function (a) {
