@@ -10,6 +10,12 @@
       "link": "https://scratch.mit.edu/users/Chrome_Cat/"
     }
   ],
+  "info": [
+    {
+      "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
+      "id": "developer-tools"
+    }
+  ],
   "settings": [
     {
       "name": "Find unused variables",

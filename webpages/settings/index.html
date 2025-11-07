@@ -113,6 +113,8 @@
     <!-- Preload components -->
     <link rel="preload" href="components/picker-component.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/picker-component.js" />
+    <link rel="preload" href="components/dropdown.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/dropdown.js" />
     <link rel="preload" href="components/reset-dropdown.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/reset-dropdown.js" />
     <link rel="preload" href="components/addon-setting.html" as="fetch" crossorigin />
@@ -156,6 +158,7 @@
       @import url("../styles/components/filter.css");
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
+      @import url("../styles/components/switch.css");
       @import url("../styles/components/tooltips.css");
       /* Modals and popups are needed last */
       @import url("../styles/components/modal.css");
@@ -174,21 +177,26 @@
   </head>
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
-      <img
-        src="../../images/icons/menu.svg"
+      <button
         id="sidebar-toggle"
         class="header-button"
         :class="{sidebarToggleOpen: categoryOpen === true}"
+        :title="msg('toggleSidebar')"
         @click="sidebarToggle()"
         v-cloak
         v-show="smallMode"
-        draggable="false"
-      />
+      >
+        <img src="../../images/icons/menu.svg" draggable="false" />
+      </button>
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <div @click="setTheme(!theme)" class="header-button header-end">
+      <button
+        @click="setTheme(!theme)"
+        class="header-button header-end"
+        :title="msg(theme ? 'switchDark' : 'switchLight')"
+      >
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
-      </div>
+      </button>
     </div>
     <div class="main">
       <div
@@ -224,37 +232,41 @@
           <img src="../../images/icons/comment.svg" draggable="false" />
           <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
-        <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
+        <button v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
           <img src="../../images/icons/wrench.svg" draggable="false" />
           <span>{{ msg("moreSettings") }}</span>
-        </div>
+        </button>
       </div>
-      <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
+      <button
+        v-show="!isIframe && smallMode === false"
+        class="categories-shrink"
+        @click="sidebarToggle()"
+        :title="msg('toggleSidebar')"
+      >
         <img
           src="../../images/icons/left-arrow.svg"
           :class="{flipped: categoryOpen === (direction() === 'rtl')}"
           draggable="false"
         />
-      </div>
+      </button>
 
       <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="addons-block-header">
           <div v-if="!isIframe" class="category-header-title" v-cloak>
             <div v-if="relatedAddonsOpen" class="related-addons-header">
-              <img
-                src="../../images/icons/left-arrow.svg"
-                class="back-button"
-                draggable="false"
-                @click="backRelatedAddon()"
-              />
+              <button class="arrow-button" :title="msg('back')" @click="backRelatedAddon()">
+                <img src="../../images/icons/left-arrow.svg" draggable="false" />
+              </button>
               <span>{{ msg("relatedTo", relatedToAddonName) }}</span>
             </div>
             <span v-else>{{ selectedCategoryName }}</span>
           </div>
           <div v-cloak class="search-box" v-if="!relatedAddonsOpen" :class="{smallMode: smallMode === true}">
             <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
-            <button v-show="searchInput === ''"><img src="../../images/icons/search.svg" class="search-icon" /></button>
+            <button disabled v-show="searchInput === ''">
+              <img src="../../images/icons/search.svg" class="search-icon" />
+            </button>
             <button v-else @click="clearAndFocusSearch()">
               <img src="../../images/icons/x.svg" class="search-icon" />
             </button>
@@ -262,12 +274,7 @@
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
-          <template v-if="searchInput && hasNoResults">
-            <p id="search-not-found" v-if="selectedCategory === 'all' || !selectedCategoryName">
-              {{ msg("searchNotFound") }}
-            </p>
-            <p id="search-not-found" v-else>{{ msg("searchNotFoundInCategory", selectedCategoryName) }}</p>
-          </template>
+          <p v-if="searchInput && hasNoResults" id="search-not-found">{{ msg("searchNotFound") }}</p>
           <template v-if="relatedAddonsOpen">
             <addon-body
               v-for="addonManifest of relatedAddons"
@@ -304,7 +311,13 @@
         </div>
       </div>
     </div>
-    <modal class="more-settings" :is-open.sync="moreSettingsOpen" :title="msg('moreSettings')" v-cloak>
+    <modal
+      class="more-settings"
+      :is-open.sync="moreSettingsOpen"
+      :title="msg('moreSettings')"
+      v-cloak
+      v-el:moreSettings
+    >
       <div class="addon-block settings-block">
         <div class="addon-body">
           <div class="addon-topbar">
@@ -316,12 +329,26 @@
             <div class="addon-setting">
               <div class="filter-selector">
                 <div class="filter-text">{{ msg("theme") }}</div>
-                <div class="filter-options">
-                  <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
-                    {{ msg("light") }}
+                <div class="filter-options" role="radiogroup">
+                  <div>
+                    <input
+                      type="radio"
+                      name="theme-selector"
+                      id="theme-select-light"
+                      :checked="theme === true"
+                      @change="setTheme(true)"
+                    />
+                    <label for="theme-select-light" class="filter-option">{{ msg("light") }}</label>
                   </div>
-                  <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
-                    {{ msg("dark") }}
+                  <div>
+                    <input
+                      type="radio"
+                      name="theme-selector"
+                      id="theme-select-dark"
+                      :checked="theme === false"
+                      @change="setTheme(false)"
+                    />
+                    <label for="theme-select-dark" class="filter-option">{{ msg("dark") }}</label>
                   </div>
                 </div>
               </div>
@@ -362,7 +389,7 @@
             <div class="addon-setting" style="margin-top: 0">
               <input
                 type="checkbox"
-                class="setting-input check"
+                class="switch"
                 v-model="forceEnglishSetting"
                 style="margin-inline-start: 0; margin-inline-end: 8px"
               />

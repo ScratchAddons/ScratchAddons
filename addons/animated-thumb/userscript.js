@@ -1,11 +1,7 @@
 import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
-import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
-import { init, saveConfig, isOverwritingEnabled, blockOverwriting } from "./persistent-thumb.js";
 
 export default async function ({ addon, console, msg }) {
-  init(console);
   let projectId = location.href.match(/\d+/)?.[0];
-  if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   const createModal = () => {
     // User Interface
     let ignoreClickOutside = false;
@@ -14,53 +10,13 @@ export default async function ({ addon, console, msg }) {
       container,
       content,
       closeButton: headerCloseButton,
+      open,
       remove,
     } = addon.tab.createModal(msg("set-thumbnail"), {
-      isOpen: true,
+      isOpen: false,
     });
     container.classList.add("sa-animated-thumb-popup");
     content.classList.add("sa-animated-thumb-popup-content");
-    content.appendChild(
-      Object.assign(document.createElement("p"), {
-        textContent: msg("description"),
-        className: "sa-animated-thumb-text",
-      })
-    );
-    const modalButtons = Object.assign(document.createElement("div"), {
-      className: "flex-row action-buttons sa-animated-thumb-popup-actions",
-    });
-    const uploadFromFileButton = Object.assign(document.createElement("button"), {
-      textContent: msg("select-file"),
-      className: "button action-button sa-animated-thumb-popup-action",
-    });
-    const uploadFromStageButton = Object.assign(document.createElement("button"), {
-      textContent: msg("use-stage"),
-      className: "button action-button sa-animated-thumb-popup-action",
-    });
-    modalButtons.appendChild(uploadFromFileButton);
-    modalButtons.appendChild(uploadFromStageButton);
-    content.appendChild(modalButtons);
-    const stopOverwritingRow = Object.assign(document.createElement("p"), {
-      className: "sa-animated-thumb-text",
-    });
-    const stopOverwritingCheckbox = Object.assign(document.createElement("input"), {
-      type: "checkbox",
-      checked: true,
-      id: "sa-animated-thumb-stop-overwrite",
-    });
-    const stopOverwritingLabel = Object.assign(document.createElement("label"), {
-      textContent: msg("keep-thumb"),
-      htmlFor: "sa-animated-thumb-stop-overwrite",
-    });
-    stopOverwritingRow.appendChild(stopOverwritingCheckbox);
-    stopOverwritingRow.appendChild(stopOverwritingLabel);
-    content.appendChild(stopOverwritingRow);
-    content.appendChild(
-      Object.assign(document.createElement("p"), {
-        textContent: msg("keep-thumb-desc"),
-        className: "sa-animated-thumb-text",
-      })
-    );
     const modalResultArea = Object.assign(document.createElement("div"), {
       className: "sa-animated-thumb-result-failure hidden",
     });
@@ -127,7 +83,7 @@ export default async function ({ addon, console, msg }) {
             if (canceled) return;
             thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
             content.classList.add("sa-animated-thumb-successful");
-            saveConfig(projectId, stopOverwritingCheckbox.checked);
+            open();
           },
           (status) => {
             modalResultArea.classList.remove("hidden");
@@ -142,63 +98,91 @@ export default async function ({ addon, console, msg }) {
               default:
                 modalResultArea.textContent = msg("error");
             }
+            open();
           }
         )
         .finally(() => {
           ignoreClickOutside = false;
-          uploadFromFileButton.removeAttribute("disabled");
-          uploadFromFileButton.classList.remove("loading");
-          uploadFromStageButton.removeAttribute("disabled");
-          uploadFromStageButton.classList.remove("loading");
         });
 
     const upload = () => {
       modalResultArea.classList.add("hidden");
-      uploadFromFileButton.setAttribute("disabled", "true");
-      uploadFromStageButton.setAttribute("disabled", "true");
     };
 
-    uploadFromFileButton.addEventListener("click", (e) => {
-      uploadFromFileButton.classList.add("loading");
+    const uploadFromFile = () => {
       upload();
       setter.addFileInput();
       ignoreClickOutside = true; // To stop modal from being closed
       setter.showInput();
-    });
-    uploadFromStageButton.addEventListener("click", (e) => {
-      uploadFromStageButton.classList.add("loading");
-      upload();
-      addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: true });
-      addon.tab.traps.vm.renderer.requestSnapshot((dataURL) => {
-        addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: false });
-        setter.upload(dataURLToBlob(dataURL));
-      });
-      addon.tab.traps.vm.renderer.draw();
-    });
+    };
+    uploadFromFile();
   };
 
-  addon.tab.addEventListener("urlChange", () => {
-    projectId = location.href.match(/\d+/)?.[0] || projectId;
-    if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
-  });
+  let uploadButton = null;
 
-  while (true) {
-    await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    });
-    if (!document.querySelector(".form-group.project-title")) continue;
-    const element = Object.assign(document.createElement("button"), {
-      textContent: msg("set-thumbnail"),
-      className: "button action-button sa-set-thumbnail-button",
+  const closeDropdown = () => {
+    if (!uploadButton) return;
+    uploadButton.remove();
+    uploadButton = null;
+  };
+
+  const toggleDropdown = (parent) => {
+    if (uploadButton) {
+      closeDropdown();
+      return;
+    }
+    uploadButton = Object.assign(document.createElement("button"), {
+      className: addon.tab.scratchClass("button_outlined-button", "stage-header_setThumbnailButton", {
+        others: "sa-set-thumbnail-upload-button",
+      }),
+      textContent: msg("dropdown-upload"),
       title: msg("added-by"),
     });
-    addon.tab.displayNoneWhileDisabled(element);
-    element.addEventListener("click", () => createModal());
+    uploadButton.insertBefore(
+      Object.assign(document.createElement("img"), {
+        src: addon.self.dir + "/upload.svg",
+      }),
+      uploadButton.firstChild
+    );
+    uploadButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      createModal();
+    });
+    parent.appendChild(uploadButton);
+    document.addEventListener("click", () => closeDropdown(), { once: true });
+  };
+
+  while (true) {
+    const setThumbnailButton = await addon.tab.waitForElement(
+      "[class*='stage-header_rightSection_'] > [class*='stage-header_setThumbnailButton_']",
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+      }
+    );
+    setThumbnailButton.classList.add("sa-has-dropdown");
+    const dropdownContainer = Object.assign(document.createElement("div"), {
+      className: "sa-set-thumbnail-dropdown-container",
+    });
+    const dropdownButton = Object.assign(document.createElement("button"), {
+      className: "sa-set-thumbnail-dropdown-button",
+    });
+    dropdownButton.appendChild(
+      Object.assign(document.createElement("img"), {
+        src: "/static/blocks-media/default/dropdown-arrow.svg",
+        draggable: false,
+      })
+    );
+    dropdownButton.addEventListener("click", (e) => {
+      toggleDropdown(dropdownContainer);
+      e.stopPropagation();
+    });
+    dropdownContainer.appendChild(dropdownButton);
+    addon.tab.displayNoneWhileDisabled(dropdownContainer);
     addon.tab.appendToSharedSpace({
-      space: "beforeProjectActionButtons",
-      order: 0,
-      element,
+      space: "stageHeader",
+      order: -1,
+      element: dropdownContainer,
     });
   }
 }

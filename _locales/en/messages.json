@@ -125,6 +125,9 @@
   "popupFeatures": {
     "message": "Extension Popup Features"
   },
+  "easterEggs": {
+    "message": "Easter Eggs"
+  },
   "theme": {
     "message": "Theme:"
   },
@@ -140,6 +143,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "toggleSidebar": {
+    "message": "Toggle sidebar"
+  },
   "close": {
     "message": "Close"
   },
@@ -148,6 +154,9 @@
   },
   "resetToDefault": {
     "message": "Reset to default settings"
+  },
+  "importExport": {
+    "message": "Export/import settings"
   },
   "relatedAddons": {
     "message": "Related addons:"
@@ -161,8 +170,20 @@
   "viewLicenses": {
     "message": "View library licenses"
   },
+  "back": {
+    "message": "Go back"
+  },
+  "collapse": {
+    "message": "Collapse"
+  },
+  "expand": {
+    "message": "Expand"
+  },
   "reset": {
     "message": "Reset"
+  },
+  "resetTo": {
+    "message": "Reset to..."
   },
   "default": {
     "message": "Default"
@@ -173,6 +194,15 @@
   "preview": {
     "message": "Preview"
   },
+  "addRow": {
+    "message": "Add row"
+  },
+  "addPresetRow": {
+    "message": "Add preset row"
+  },
+  "deleteRow": {
+    "message": "Delete row"
+  },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
   },
@@ -182,8 +212,14 @@
   "light": {
     "message": "Light"
   },
+  "switchLight": {
+    "message": "Switch to light theme"
+  },
   "dark": {
     "message": "Dark"
+  },
+  "switchDark": {
+    "message": "Switch to dark theme"
   },
   "loading": {
     "message": "Loading..."
@@ -216,7 +252,7 @@
     "message": "report it here"
   },
   "forumWarning": {
-    "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
+    "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled. This can be done by going to $2 and turning every extension off, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
   },
   "forumWarningGeneral": {
     "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found a bug, please $1."
@@ -260,8 +296,11 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_42": {
-    "message": "New addon: \"FPS counter\", which shows the project framerate above the stage. Go to $1 to enable it.",
+  "extensionUpdateImageAlt_v1_44": {
+    "message": "Screenshot of the \"recolor custom blocks\" addon in action"
+  },
+  "extensionUpdateInfo1_v1_44": {
+    "message": "The new \"recolor custom blocks\" addon adds an option to choose a custom color when creating a block. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
@@ -270,8 +309,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_42": {
-    "message": "Another new addon is \"Instant forum read indicators\", which instantly marks topics as read when opening them in a new tab."
+  "extensionUpdateInfo2_v1_44": {
+    "message": "This update also adds timing blocks and line-by-line profiling to the \"debugger\" addon."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
@@ -334,6 +373,9 @@
   "importFailed": {
     "message": "The settings file is invalid. Please try again."
   },
+  "incorrectAddonImport": {
+    "message": "The selected file is for the \"$1\" addon."
+  },
   "confirmImport": {
     "message": "Confirm"
   },
@@ -354,10 +396,10 @@
     "description": "Used as a category name for recently used addons"
   },
   "settingsPagePermission": {
-    "message": "To enable the \"$1\" addon, go to the full screen settings page."
+    "message": "To enable the \"$1\" addon, go to the settings page."
   },
   "openFullSettings": {
-    "message": "Open full screen settings"
+    "message": "Open settings page"
   },
   "skipOpenFullSettings": {
     "message": "Cancel"
@@ -368,9 +410,6 @@
   },
   "searchNotFound": {
     "message": "No results found. Perhaps try different keywords?"
-  },
-  "searchNotFoundInCategory": {
-    "message": "No results found in \"$1\". Perhaps try different keywords?"
   },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: your comment mentions a browser extension. The $1 urges Scratchers not to advertise them, as the Scratch Team have not reviewed them for safety and can't possibly check every single one. Please follow the aforementioned policy by avoiding any references to browser extensions when posting on Scratch.",

@@ -25,6 +25,7 @@ let fuse;
 
   await loadVueComponent([
     "webpages/settings/components/picker-component",
+    "webpages/settings/components/dropdown",
     "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-setting",
     "webpages/settings/components/addon-tag",
@@ -184,7 +185,7 @@ let fuse;
     methods: {
       openMoreSettings: function () {
         this.closePickers();
-        this.moreSettingsOpen = true;
+        this.$els.moresettings.showModal();
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
@@ -261,10 +262,10 @@ let fuse;
       },
       closePickers(e, leaveOpen, { callCloseDropdowns = true } = {}) {
         this.$emit("close-pickers", leaveOpen);
-        if (callCloseDropdowns) this.closeResetDropdowns();
+        if (callCloseDropdowns) this.closeDropdowns();
       },
-      closeResetDropdowns(e, leaveOpen) {
-        this.$emit("close-reset-dropdowns", leaveOpen);
+      closeDropdowns(e, leaveOpen) {
+        this.$emit("close-dropdowns", leaveOpen);
       },
       exportSettings() {
         serializeSettings().then((serialized) => {
@@ -352,7 +353,7 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target.id === "sidebar-toggle") return;
+        if (event?.target?.closest("#sidebar-toggle")) return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
@@ -668,9 +669,16 @@ let fuse;
     if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
       document.querySelector("#searchBox").focus();
-    } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
-      e.preventDefault();
-      vue.searchInputReal = "";
+    } else if (e.key === "Escape") {
+      if (document.activeElement === document.querySelector("#searchBox")) {
+        e.preventDefault();
+        vue.searchInputReal = "";
+      } else if (vue.categoryOpen && vue.smallMode) {
+        vue.categoryOpen = false;
+      } else {
+        vue.closeDropdowns();
+        vue.closePickers();
+      }
     }
   });
 
@@ -713,5 +721,7 @@ let fuse;
     }
   });
 
-  chrome.runtime.sendMessage("checkPermissions");
+  if (!isIframe) {
+    chrome.runtime.sendMessage("checkPermissions");
+  }
 })();

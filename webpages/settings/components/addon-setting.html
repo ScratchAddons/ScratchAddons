@@ -9,7 +9,7 @@
   >
     <div class="setting-label-container">
       <div class="setting-label" v-html="settingsName(addon)"></div>
-      <div v-if="setting.description" :class="{tooltip: addon._enabled}">
+      <div v-if="setting.description" :class="{tooltip: addon._enabled}" :tabindex="addon._enabled ? '0' : '-1' ">
         <img src="../../images/icons/help.svg" class="icon-type setting-help-icon" />
         <span class="tooltiptext tooltiptexttop">{{setting.description}}</span>
       </div>
@@ -20,7 +20,12 @@
         <div class="setting-table-list" v-sortable>
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
-              <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
+              <button
+                :disabled="!addon._enabled"
+                class="addon-buttons"
+                @click="deleteTableRow(i)"
+                :title="msg('deleteRow')"
+              >
                 <img class="icon-type" src="../../images/icons/close.svg" />
               </button>
               <button :disabled="!addon._enabled" class="addon-buttons handle">
@@ -38,40 +43,47 @@
             </div>
           </div>
         </div>
-        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
-          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
+        <div class="addon-split-button setting-table-dropdown dropdown-parent">
+          <button
+            :disabled="!addon._enabled"
+            class="addon-buttons addon-split-button-button"
+            @click="addTableRow()"
+            :title="msg('addRow')"
+          >
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
-          <div v-click-outside="closeResetDropdowns">
-            <button
-              :disabled="!addon._enabled"
-              class="addon-buttons addon-split-button-dropdown"
-              @click="toggleRowDropdown"
-            >
-              <img class="icon-type" src="../../images/icons/expand.svg" draggable="false" />
-            </button>
-            <ul>
-              <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
-            </ul>
-          </div>
+          <dropdown
+            button-class="addon-buttons addon-split-button-dropdown"
+            :disabled="!addon._enabled"
+            :button-title="msg('addPresetRow')"
+            align-start="true"
+          >
+            <li tabindex="0" role="menuitem" v-for="preset of setting.presets" @click="addTableRow(preset.values)">
+              {{ preset.name }}
+            </li>
+          </dropdown>
         </div>
       </div>
       <input
         v-if="setting.type === 'boolean'"
         type="checkbox"
-        class="setting-input check"
+        class="switch blue"
         v-model="addonSettings[setting.id]"
         @change="updateSettings()"
         :disabled="!addon._enabled"
       />
-      <div v-if="setting.type === 'select'" class="filter-options">
-        <div
-          class="filter-option"
-          v-for="option of setting.potentialValues"
-          :class="{'sel' : addonSettings[setting.id] === option.id, 'disabled': !addon._enabled}"
-          @click="updateOption(option.id);"
-        >
-          {{ option.name }}
+      <div v-if="setting.type === 'select'" class="filter-options" role="radiogroup">
+        <div v-for="option of setting.potentialValues">
+          <input
+            type="radio"
+            :name="addon._addonId+'-'+setting.id"
+            :id="addon._addonId+'-'+setting.id+'-'+option.id"
+            :value="option.id"
+            :disabled="!addon._enabled"
+            v-model="addonSettings[setting.id]"
+            @change="updateSettings()"
+          />
+          <label class="filter-option" :for="addon._addonId+'-'+setting.id+'-'+option.id">{{ option.name }}</label>
         </div>
       </div>
     </template>
@@ -112,35 +124,18 @@
           :required="!!setting.min"
         />
       </template>
-      <template v-if="setting.type === 'key'"
-        ><input
-          type="text"
-          class="setting-input"
-          v-model="addonSettings[setting.id]"
-          @input="updateSettings"
-          @keydown="keySettingKeyDown"
-          @keyup="keySettingKeyUp"
-          :disabled="!addon._enabled"
-          :placeholder="setting.default"
-          maxlength="100"
-          spellcheck="false"
-      /></template>
       <template v-if="setting.type === 'color'">
         <picker
           :value="addonSettings[setting.id] || setting.default"
           :setting="setting"
           :addon="addon"
           :no_alpha="!setting.allowTransparency"
+          :disabled="!addon._enabled"
           v-click-outside="closePickers"
         ></picker
       ></template>
       <template v-if="showResetDropdown"
-        ><reset-dropdown
-          :setting="setting"
-          :enabled="addon._enabled"
-          :presets="addon.presets"
-          v-click-outside="closeResetDropdowns"
-        ></reset-dropdown
+        ><reset-dropdown :setting="setting" :disabled="!addon._enabled" :presets="addon.presets"></reset-dropdown
       ></template>
       <template v-if="!tableChild && !showResetDropdown"
         ><button
@@ -195,48 +190,6 @@
     box-shadow: var(--input-focus-shadow);
   }
 
-  .setting-input.check {
-    appearance: none;
-    display: block;
-    background: var(--button-background);
-    width: 40px;
-    height: 20px;
-    border-radius: 10px;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    border: 1px solid var(--switch-border);
-  }
-
-  .setting-input.check::before {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 10px;
-    height: 10px;
-    background-color: var(--switch-inner-background);
-    border-radius: 5px;
-    top: 4px;
-    left: 4px;
-    transition: all 0.25s ease;
-  }
-  [dir="rtl"] .setting-input.check::before {
-    left: 24px;
-  }
-
-  .setting-input.check:checked {
-    background-color: var(--blue);
-    border-color: var(--blue);
-  }
-
-  .setting-input.check:checked::before {
-    background-color: var(--white-text);
-    left: 24px;
-  }
-  [dir="rtl"] .setting-input.check:checked::before {
-    left: 4px;
-  }
-
   .setting-input.number {
     max-width: 150px;
     border-radius: 16px 0 0 16px;
@@ -267,37 +220,18 @@
     min-width: 70px;
   }
 
-  .setting-dropdown,
-  .setting-table-dropdown {
-    position: relative;
-  }
-  .setting-dropdown.open .clear-button {
+  .setting-dropdown .clear-button.open {
     border-bottom-right-radius: 0;
     background: var(--button-hover-background);
   }
-  [dir="rtl"] .setting-dropdown.open .clear-button {
+  [dir="rtl"] .setting-dropdown .clear-button.open {
     border-bottom-left-radius: 0;
   }
-  .iframe .setting-dropdown.open .clear-button {
+  .iframe .setting-dropdown .clear-button.open {
     border-bottom-right-radius: 4px;
   }
-  .iframe[dir="rtl"] .setting-dropdown.open .clear-button {
+  .iframe[dir="rtl"] .setting-dropdown .clear-button.open {
     border-bottom-left-radius: 4px;
-  }
-  .setting-dropdown ul,
-  .setting-table-dropdown ul {
-    position: absolute;
-    top: calc(100% - 1px);
-    right: 0;
-    margin: 0;
-    padding: 6px 0;
-    display: none;
-    z-index: 3;
-    border-radius: 4px;
-    border-top-right-radius: 0;
-    background: var(--button-background);
-    color: var(--content-text);
-    border: 1px solid var(--control-border);
   }
   .iframe .setting-dropdown ul {
     right: auto;
@@ -314,23 +248,6 @@
     left: auto;
     right: -100px;
     border-top-left-radius: 4px;
-  }
-  .setting-dropdown.open ul,
-  .setting-table-dropdown.open ul {
-    display: block;
-  }
-  .setting-dropdown li,
-  .setting-table-dropdown li {
-    padding: 6px 12px;
-    list-style: none;
-    white-space: nowrap;
-    text-align: start;
-    transition: 0.2s ease;
-    user-select: none;
-  }
-  .setting-dropdown li:hover,
-  .setting-table-dropdown li:hover {
-    background: var(--button-hover-background);
   }
   .setting-dropdown li > * {
     vertical-align: middle;
@@ -397,31 +314,16 @@
   }
   .setting-table-dropdown {
     align-self: flex-start;
-    display: flex;
-  }
-  .setting-table-dropdown ul {
-    right: auto;
-    left: 0;
-    border-radius: 4px;
-    border-top-left-radius: 0;
-  }
-  [dir="rtl"] .setting-table-dropdown ul {
-    left: auto;
-    right: 0;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 0;
   }
 
   @media (max-width: 700px) {
     .setting-label-container {
       width: auto;
+      margin-bottom: 5px;
       max-width: calc(100% - 66px); /* prevent setting description tooltip from overflowing */
     }
     .setting-label-container:not(:has(.tooltip)) {
       max-width: none;
-    }
-    .setting-label {
-      margin-bottom: 5px;
     }
     .setting-input {
       flex-shrink: 0;

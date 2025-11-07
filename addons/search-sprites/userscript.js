@@ -1,3 +1,5 @@
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
+
 export default async function ({ addon, console, msg }) {
   let spritesContainer;
   let spriteSelectorContainer;
@@ -25,8 +27,8 @@ export default async function ({ addon, console, msg }) {
       const visible =
         !query ||
         containsQuery(sprite.children[0].children[1].innerText) ||
-        (containsQuery(sprite.children[0].children[2].children[0].innerText) &&
-          sprite.children[0].classList.contains("sa-folders-folder"));
+        (sprite.children[0].classList.contains("sa-folders-folder") &&
+          containsQuery(sprite.children[0].children[2].children[0].innerText));
       sprite.style.display = visible ? "" : "none";
     }
   };
@@ -66,6 +68,8 @@ export default async function ({ addon, console, msg }) {
   container.appendChild(searchIcon);
   container.appendChild(resetButton);
 
+  addSmallStageClass();
+
   while (true) {
     await addon.tab.waitForElement("div[class^='sprite-selector_items-wrapper']", {
       markAsSeen: true,
@@ -75,8 +79,7 @@ export default async function ({ addon, console, msg }) {
 
     spritesContainer = document.querySelector('[class^="sprite-selector_items-wrapper"]');
     spriteSelectorContainer = document.querySelector('[class^="sprite-selector_sprite-selector"]');
-    const addButton = document.querySelector('[class*="sprite-selector_add-button"]');
-    spriteSelectorContainer.insertBefore(container, addButton);
+    spriteSelectorContainer.appendChild(container);
     reset(); // Clear search box after going outside then inside
   }
 }

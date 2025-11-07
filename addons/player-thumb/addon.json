@@ -31,6 +31,22 @@
       "runAtComplete": false
     }
   ],
+  "settings": [
+    {
+      "name": "Darken thumbnail (%)",
+      "id": "darken",
+      "type": "integer",
+      "min": 10,
+      "max": 90,
+      "default": 25
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.40.0",
+  "latestUpdate": {
+    "version": "1.45.0",
+    "newSettings": ["darken"]
+  },
   "tags": ["community", "theme", "projectPage"]
 }

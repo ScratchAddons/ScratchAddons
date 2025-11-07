@@ -78,10 +78,13 @@ export default async ({ addon, msg, safeMsg }) => {
             .join("");
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
-          const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
-          const regex = /scratchadons/;
-          return regex.test(limitedValue);
+          const limitedValue = removeReiteratedChars(
+            value
+              .toLowerCase()
+              .match(/[a-z]+/g)
+              .join("")
+          );
+          return limitedValue.includes("scratchadon");
         };
         if (shouldCaptureComment(this.replyBoxValue)) {
           alert(chrome.i18n.getMessage("captureCommentError", [chrome.i18n.getMessage("captureCommentPolicy")]));

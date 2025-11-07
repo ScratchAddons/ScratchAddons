@@ -18,11 +18,6 @@ scratchAddons.isLightMode = false;
 scratchAddons.cookieFetchingFailed = false;
 scratchAddons.cookies = new Map();
 
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
-
 function getCookieValue(name, getCookie, storeId) {
   return new Promise((resolve) => {
     chrome.cookies.get(
@@ -45,7 +40,7 @@ async function getActualCookieStore() {
   // the cookie for the default context, not container context.
   // Since popups can't be containers, they must be tabs,
   // which means tabs.getCurrent can be used to grab the store ID instead.
-  const current = await promisify(chrome.tabs.getCurrent.bind(chrome.tabs))();
+  const current = await chrome.tabs.getCurrent();
   // Return undefined in popup
   return current?.cookieStoreId || undefined;
 }
@@ -94,7 +89,9 @@ async function refetchSession(addon) {
 (async () => {
   const addonId = location.pathname.split("/")[2];
 
-  const sendMessage = promisify(chrome.runtime.sendMessage.bind(chrome.runtime));
+  // The value returned on await of `chrome.runtime.sendMessage` is only permited in Chrome 99+
+  const sendMessage = (...args) => new Promise((resolve) => chrome.runtime.sendMessage(...args, resolve));
+
   const popupData = await sendMessage({
     requestPopupInfo: {
       addonId,

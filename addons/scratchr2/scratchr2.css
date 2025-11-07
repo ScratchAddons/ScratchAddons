@@ -311,6 +311,7 @@ select:focus {
   background-color: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));
 }
 #topnav ul.site-nav li a {
+  vertical-align: middle;
   height: 33px;
   padding: 13px 15px 4px 15px;
   color: var(--darkWww-navbar-text, white);
@@ -707,4 +708,9 @@ select:focus {
   border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
   background: var(--darkWww-box, white);
   color: var(--darkWww-link, #855cd6);
+}
+
+/* collapse-footer */
+:root {
+  --footer-hover-height: 328px !important;
 }
