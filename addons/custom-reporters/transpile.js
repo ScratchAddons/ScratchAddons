@@ -216,8 +216,9 @@ export class VarTranspiler extends Transpiler {
         }
         case "procedures_call_reporter":
         case "procedures_call_boolean": {
+          console.log(block)
           if (block.__sa_proper_call) {
-            delete blocks[block.id];
+            delete blocks[blockid];
             break;
           }
           const topBlock = target.blocks.getStackBlock(block);

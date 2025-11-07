@@ -154,8 +154,9 @@ export class ScratchAddonsProcedureBlocks {
           return currentId;
         }
         const newId = this.pushProcReporterCalls(currentId, currentBlock);
-        console.log(currentId, newId, this.target.blocks.getBlock(newId));
-        this.reuseStackForNextBlock(newId);
+        console.log(currentId, newId, this.target.blocks.getBlock(newId))
+        // this.reuseStackForNextBlock(newId);
+        this.stack[this.stack.length - 1] = newId; // we don't want to reuseStackForNextBlock because we'll lose information like looping
         let newBlock = this.target.blocks.getBlock(newId);
         if (newBlock.__sa_proper_call) {
           this.peekStackFrame().__sa_proper_call = true;
