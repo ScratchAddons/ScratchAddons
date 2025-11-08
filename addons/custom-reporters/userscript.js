@@ -1,15 +1,13 @@
 /*
   todo:
+  - more transpiler modes
   - fix errors when trying to edit blocks (fixup Blockly.Procedures.editProcedureCallback)
   - fix errors when editing/deleting arguments
   - change procedures_return_reporter to procedures_return_boolean when necessary, and vice versa
-  - transpile return blocks
-  - transpile procedures_call blocks
-  - run everything correctly in the vm
   - dynamic enable/disable?
 */
-import { VarTranspiler } from "./transpile.js";
-import { ScratchAddonsProcedureBlocks } from "./scratchaddons_procedures.js";
+import { VarTranspiler } from "./transpilers/var.js";
+import { ListTranspiler } from "./transpilers/list.js";
 
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
@@ -400,8 +398,19 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  const varTranspiler = new VarTranspiler(vm, ScratchBlocks);
-  varTranspiler.init(ScratchAddonsProcedureBlocks);
+  let Transpiler;
+  switch (addon.settings.get("transpilerMode")) {
+    case "var":
+      Transpiler = VarTranspiler;
+      break;
+    case "list_no_gc":
+      Transpiler = ListTranspiler;
+      break;
+    default:
+      throw "unknown value of transpilerMode setting"
+  }
+
+  new Transpiler(vm, ScratchBlocks);
 
   let hasSetUpInputButtons = false;
   while (true) {

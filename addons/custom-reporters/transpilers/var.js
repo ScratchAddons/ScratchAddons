@@ -1,154 +1,10 @@
-/**
- * Defines transpilation schemes for custom reporters
- */
-
-import { getStackBlock, getReturnVar, uid } from "./util.js";
-
-/**
- * Base transpiler class, to be extended for each transpilation scheme
- */
-class Transpiler {
-  constructor(vm) {
-    this.vm = vm;
-  }
-
-  init(blockPackage) {
-    if (!this.vm.editingTarget) {
-      throw new Error("editingTarget must be ready before Transpiler#init is called");
-    }
-
-    this.vm.editingTarget.blocks.constructor.prototype.getStackBlock = getStackBlock;
-    this.vm.editingTarget.constructor.prototype.getReturnVar = getReturnVar;
-
-    this.transpileTargetToSA(this.vm.editingTarget);
-
-    const setEditingTarget = this.vm.constructor.prototype.setEditingTarget;
-    const transpilerThis = this;
-    this.vm.constructor.prototype.setEditingTarget = function (targetId) {
-      setEditingTarget.call(this, targetId);
-      transpilerThis.transpileTargetToSA(this.editingTarget);
-    };
-
-    const toJSON = this.vm.constructor.prototype.toJSON;
-    this.vm.constructor.prototype.toJSON = function (optTargetId) {
-      if (optTargetId) {
-        const target = this.runtime.getTargetById(optTargetId);
-        transpilerThis.transpileTargetToVanilla(target, false);
-        const json = toJSON.call(this, optTargetId);
-        transpilerThis.transpileTargetToSA(target, false);
-        return json;
-      }
-      for (const target of this.runtime.targets) {
-        transpilerThis.transpileTargetToVanilla(target, false);
-      }
-      const json = toJSON.call(this, optTargetId);
-      if (this.editingTarget) {
-        transpilerThis.transpileTargetToSA(this.editingTarget, false);
-      }
-      return json;
-    };
-
-    const registerBlockPackages = this.vm.runtime.constructor.prototype._registerBlockPackages;
-    this.vm.runtime.constructor.prototype._registerBlockPackages = function () {
-      registerBlockPackages.call(this);
-      const packageObject = new blockPackage(this);
-      const packagePrimitives = packageObject.getPrimitives();
-      for (const op in packagePrimitives) {
-        if (Object.prototype.hasOwnProperty.call(packagePrimitives, op)) {
-          this._primitives[op] = packagePrimitives[op].bind(packageObject);
-        }
-      }
-    };
-    this.vm.runtime._registerBlockPackages();
-
-    let runtimePushThread = this.vm.runtime.constructor.prototype._pushThread;
-    this.vm.runtime.constructor.prototype._pushThread = function (id, target, ops) {
-      let thread = runtimePushThread.call(this, id, target, ops);
-      blockPackage.polluteThread(thread.constructor.prototype);
-      return thread;
-    };
-
-    // const g = this.vm.runtime.getOpcodeFunction;
-    // this.vm.runtime.getOpcodeFunction = function (a) {
-    //   console.log(a);
-    //   return g.call(this, a);
-    // };
-
-    this.vm.editingTarget.blocks.constructor.prototype.getProcedureParamNamesIdsAndDefaults = function (name) {
-      const cachedNames = this._cache.procedureParamNames[name];
-      if (typeof cachedNames !== "undefined") {
-        return cachedNames;
-      }
-      for (const id in this._blocks) {
-        if (!Object.prototype.hasOwnProperty.call(this._blocks, id)) continue;
-        const block = this._blocks[id];
-        if (
-          ["procedures_prototype", "procedures_prototype_reporter", "procedures_prototype_boolean"].includes(
-            block.opcode
-          ) &&
-          block.mutation.proccode === name
-        ) {
-          const names = JSON.parse(block.mutation.argumentnames);
-          const ids = JSON.parse(block.mutation.argumentids);
-          const defaults = JSON.parse(block.mutation.argumentdefaults);
-
-          this._cache.procedureParamNames[name] = [names, ids, defaults];
-          return this._cache.procedureParamNames[name];
-        }
-      }
-      this._cache.procedureParamNames[name] = null;
-      return null;
-    };
-
-    this.vm.editingTarget.blocks.constructor.prototype.getProcedureDefinition = function (name) {
-      const blockID = this._cache.procedureDefinitions[name];
-      if (typeof blockID !== "undefined") {
-        return blockID;
-      }
-      for (const id in this._blocks) {
-        if (!Object.prototype.hasOwnProperty.call(this._blocks, id)) continue;
-        const block = this._blocks[id];
-        if (
-          ["procedures_definition", "procedures_definition_reporter", "procedures_definition_boolean"].includes(
-            block.opcode
-          )
-        ) {
-          const internal = this._getCustomBlockInternal(block);
-          if (internal && internal.mutation.proccode === name) {
-            this._cache.procedureDefinitions[name] = id; // The outer define block id
-            return id;
-          }
-        }
-      }
-      this._cache.procedureDefinitions[name] = null;
-      return null;
-    };
-  }
-
-  transpileTargetToVanilla(target, shouldEmitWorkspaceUpdate = true) {
-    if (!target.transpiledToSA) return;
-    this._toVanilla(target, (shouldEmitWorkspaceUpdate = true));
-    target.transpiledToSA = false;
-  }
-
-  transpileTargetToSA(target, shouldEmitWorkspaceUpdate = true) {
-    if (target.transpiledToSA) return;
-    this._toSA(target, (shouldEmitWorkspaceUpdate = true));
-    target.transpiledToSA = true;
-  }
-
-  _toVanilla(target, shouldEmitWorkspaceUpdate = true) {
-    throw new Error("transpileTargetToVanilla must be overriden by derived class");
-  }
-
-  _toSA(target, shouldEmitWorkspaceUpdate = true) {
-    throw new Error("transpileTargetToSA must be overriden by derived class");
-  }
-}
+import { uid } from "../util.js";
+import { Transpiler } from "./base.js";
 
 export class VarTranspiler extends Transpiler {
   constructor(vm) {
     super(vm);
+    this.init(VarProcedureBlocks);
   }
 
   _toVanilla(target, shouldEmitWorkspaceUpdate = true) {
@@ -334,5 +190,151 @@ export class VarTranspiler extends Transpiler {
     if (shouldEmitWorkspaceUpdate) {
       this.vm.emitWorkspaceUpdate();
     }
+  }
+
+  /**
+   * @this{vm.Thread}
+   * @param {string} outerBlockId
+   * @param {object} outerBlock
+   * @returns {string}
+   */
+  pushProcReporterCalls(outerBlockId, outerBlock) {
+    const calls = [];
+    this.target.blocks._pushProcReporterCalls(calls, outerBlock);
+    calls.reverse();
+    const uuids = Array.from({ length: calls.length }, uid);
+    uuids.push(outerBlockId);
+    for (let i = 0; i < calls.length; i++) {
+      this.target.blocks._blocks[uuids[i]] = Object.assign(structuredClone(calls[i]), {
+        id: uuids[i],
+        next: uuids[i + 1],
+        __sa_proper_call: true,
+      });
+    }
+    return uuids[0];
+  }
+
+  /**
+   * @this {vm.Thread}
+   * @returns string
+   */
+  peekStack() {
+    if (this.stack.length > 0 && this.stack.at(-1) !== null) {
+      this.polluteStackFrame(this.peekStackFrame().constructor.prototype);
+      let currentId = this.stack.at(-1);
+      if (this.peekStackFrame().__sa_inspected) {
+        return currentId;
+      }
+      if (!(currentId in this.target.blocks._blocks)) {
+        return currentId;
+      }
+      let currentBlock = this.target.blocks.getBlock(currentId);
+      if (currentBlock.__sa_proper_call) {
+        return currentId;
+      }
+      const newId = this.pushProcReporterCalls(currentId, currentBlock);
+      // this.reuseStackForNextBlock(newId);
+      this.stack[this.stack.length - 1] = newId; // we don't want to reuseStackForNextBlock because we'll lose information like looping
+      let newBlock = this.target.blocks.getBlock(newId);
+      if (newBlock.__sa_proper_call) {
+        this.peekStackFrame().__sa_proper_call = true;
+        this.peekStackFrame().__sa_inspected = true;
+      }
+      return this.stack.at(-1);
+    } else {
+      return null;
+    }
+  }
+}
+
+class VarProcedureBlocks {
+  constructor(runtime) {
+    /**
+     * The runtime instantiating this block package.
+     * @type {Vm.Runtime}
+     */
+    this.runtime = runtime;
+  }
+
+  /**
+   * Retrieve the block primitives implemented by this package.
+   * @return {object.<string, Function>} Mapping of opcode to Function.
+   */
+  getPrimitives() {
+    return {
+      procedures_definition_reporter: this.definition,
+      procedures_definition_boolean: this.definition,
+      procedures_call_reporter: this.call,
+      procedures_call_boolean: this.call,
+      procedures_return_reporter: this.return,
+      procedures_return_boolean: this.return,
+    };
+  }
+
+  definition() {
+    // No-op: execute the blocks.
+  }
+
+  call(args, util) {
+    /// adapted from https://github.com/scratchfoundation/scratch-vm/blob/develop/src/blocks/procedures.js
+
+    // console.log(util.thread.stack.length);
+    const procedureCode = args.mutation.proccode;
+    const paramNamesIdsAndDefaults = util.getProcedureParamNamesIdsAndDefaults(procedureCode);
+    if (util.stackFrame._sa_proper_call || util.target.blocks.getBlock(util.thread.peekStack())?.__sa_proper_call) {
+      if (!util.stackFrame.executed) {
+        // console.log("got proper call");
+
+        if (paramNamesIdsAndDefaults === null) {
+          return;
+        }
+
+        const [paramNames, paramIds, paramDefaults] = paramNamesIdsAndDefaults;
+
+        util.initParams();
+        for (let i = 0; i < paramIds.length; i++) {
+          if (Object.prototype.hasOwnProperty.call(args, paramIds[i])) {
+            util.pushParam(paramNames[i], args[paramIds[i]]);
+          } else {
+            util.pushParam(paramNames[i], paramDefaults[i]);
+          }
+        }
+        util.stackFrame.executed = true;
+        util.startProcedure(procedureCode);
+      } else {
+        // console.log("got proper call, but it was already executed");
+        if (paramNamesIdsAndDefaults === null) {
+          return "";
+        }
+        const target = util.target;
+        const proccode = args.mutation.proccode;
+        const variableInfo = target.getReturnVar(proccode);
+        const variable = target.lookupOrCreateVariable(variableInfo.id, variableInfo.value);
+        return variable.value;
+      }
+    } else {
+      // console.log("got non-proper call");
+      if (paramNamesIdsAndDefaults === null) {
+        return "";
+      }
+      const target = util.target;
+      const proccode = args.mutation.proccode;
+      const variableInfo = target.getReturnVar(proccode);
+      const variable = target.lookupOrCreateVariable(variableInfo.id, variableInfo.value);
+      return variable.value;
+    }
+  }
+
+  return(args, util) {
+    // console.log("returned!", util.stackFrame._sa_inputs_inspected, util.stackFrame._sa_proper_call);
+    const thisId = util.thread.peekStack();
+    const target = util.target;
+    const blocks = target.blocks._blocks;
+    const proccode =
+      blocks[blocks[target.blocks.getTopLevelScript(thisId)].inputs.custom_block.block].mutation.proccode;
+    const variableInfo = target.getReturnVar(proccode);
+    const variable = util.target.lookupOrCreateVariable(variableInfo.id, variableInfo.value);
+    variable.value = args.return_value;
+    util.stopThisScript();
   }
 }

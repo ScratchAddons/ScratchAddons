@@ -47,15 +47,15 @@ export function getStackBlock(block) {
  * @this {Vm.Target}
  * @returns {VariableInfo}
  */
-export function getReturnVar(proccode) {
+export function getReturnVar(proccode, type="") {
   const varname = `_return ${proccode}`;
-  const internalVariable = this.lookupVariableByNameAndType(varname);
+  const internalVariable = this.lookupVariableByNameAndType(varname, type);
   let variable;
   if (!internalVariable) {
     variable = {
       value: varname,
       id: uid(),
-      variableType: "",
+      variableType: type,
     };
     this.createVariable(variable.id, variable.value, variable.variableType);
   } else {
