@@ -1,0 +1,25 @@
+{
+  "name": "Font to SVG tab",
+  "description": "Adds a tab in the editor for creating vectors from custom fonts.",
+  "credits": [
+    {
+      "name": "GavinGoGaming",
+	    "link": "https://gavingogaming.com/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "editorMenuBar"],
+  "enabledByDefault": false,
+  "versionAdded": "1.44.0"
+}
