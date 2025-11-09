@@ -308,9 +308,9 @@ export default async function ({ addon, msg, console }) {
     // Assume that a procedure definition is a top block.
     var blocks = workspace.getTopBlocks(false);
     for (var i = 0; i < blocks.length; i++) {
-      if (blocks[i].type == "procedures_definition" || blocks[i].type == "procedures_definition_reporter") {
+      if (blocks[i].type === "procedures_definition" || blocks[i].type === "procedures_definition_reporter") {
         var prototypeBlock = blocks[i].getInput("custom_block").connection.targetBlock();
-        if (prototypeBlock.getProcCode && prototypeBlock.getProcCode() == procCode) {
+        if (prototypeBlock.getProcCode && prototypeBlock.getProcCode() === procCode) {
           return blocks[i];
         }
       }
@@ -494,8 +494,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/stack.svg">
+        addon.self.dir
+      }/stack.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("stack")}</span>
                 </div>
@@ -504,8 +504,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/reporter.svg">
+        addon.self.dir
+      }/reporter.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("numortext")}</span>
                 </div>
@@ -514,8 +514,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/predicate.svg">
+        addon.self.dir
+      }/predicate.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("boolean")}</span>
                 </div>

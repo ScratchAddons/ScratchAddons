@@ -15,6 +15,7 @@
       "matches": ["projects"]
     }
   ],
+  "versionAdded": "1.99.0",
   "enabledByDefault": true,
   "dynamicEnable": false,
   "dynamicDisable": false,

@@ -10,7 +10,7 @@ export class ListTranspiler extends Transpiler {
   _toVanilla(target, shouldEmitWorkspaceUpdate = true) {
     console.log("tovanilla");
     const blocks = target.blocks._blocks;
-    for (const blockid in blocks) {
+    for (const blockid of Object.keys(blocks)) {
       const block = blocks[blockid];
       switch (block.opcode) {
         case "procedures_prototype_reporter": {
@@ -194,7 +194,7 @@ export class ListTranspiler extends Transpiler {
     console.log("tosa");
     const blocks = target.blocks._blocks;
     const toDelete = [];
-    for (const blockid in blocks) {
+    for (const blockid of Object.keys(blocks)) {
       const block = blocks[blockid];
       switch (block.opcode) {
         case "procedures_prototype": {
