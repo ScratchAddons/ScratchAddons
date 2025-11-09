@@ -1,7 +1,7 @@
 /*
   todo:
   - more transpiler modes
-  - fix errors when trying to edit blocks (fixup Blockly.Procedures.editProcedureCallback)
+  - initialise custom block editor modal correctly when editing blocks
   - fix errors when editing/deleting arguments
   - change procedures_return_reporter to procedures_return_boolean when necessary, and vice versa
   - dynamic enable/disable?
@@ -249,6 +249,73 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
+  // adapted from original to account for new opcodes
+  ScratchBlocks.Procedures.editProcedureCallback_ = function (block) {
+    // Edit can come from one of three block types (call, define, prototype)
+    // Normalize by setting the block to the prototype block for the procedure.
+    if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
+      const input = block.getInput("custom_block");
+      if (!input) {
+        alert("Bad input"); // TODO: Decide what to do about this.
+        return;
+      }
+      const conn = input.connection;
+      if (!conn) {
+        alert("Bad connection"); // TODO: Decide what to do about this.
+        return;
+      }
+      const innerBlock = conn.targetBlock();
+      if (
+        !innerBlock ||
+        !(
+          innerBlock.type === "procedures_prototype" ||
+          innerBlock.type === "procedures_prototype_reporter" ||
+          innerBlock.type === "procedures_prototype_boolean"
+        )
+      ) {
+        alert("Bad inner block"); // TODO: Decide what to do about this.
+        return;
+      }
+      block = innerBlock;
+    } else if (
+      block.type === "procedures_call" ||
+      block.type === "procedures_call_reporter" ||
+      block.type === "procedures_call_boolean"
+    ) {
+      // This is a call block, find the prototype corresponding to the procCode.
+      // Make sure to search the correct workspace, call block can be in flyout.
+      var workspaceToSearch = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
+      block = ScratchBlocks.Procedures.getPrototypeBlock(block.getProcCode(), workspaceToSearch);
+    }
+    // Block now refers to the procedure prototype block, it is safe to proceed.
+    ScratchBlocks.Procedures.externalProcedureDefCallback(
+      block.mutationToDom(),
+      ScratchBlocks.Procedures.editProcedureCallbackFactory_(block)
+    );
+  };
+
+  ScratchBlocks.Procedures.getPrototypeBlock = function (procCode, workspace) {
+    const defineBlock = ScratchBlocks.Procedures.getDefineBlock(procCode, workspace);
+    if (defineBlock) {
+      return defineBlock.getInput("custom_block").connection.targetBlock();
+    }
+    return null;
+  };
+
+  ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
+    // Assume that a procedure definition is a top block.
+    var blocks = workspace.getTopBlocks(false);
+    for (var i = 0; i < blocks.length; i++) {
+      if (blocks[i].type == "procedures_definition" || blocks[i].type == "procedures_definition_reporter") {
+        var prototypeBlock = blocks[i].getInput("custom_block").connection.targetBlock();
+        if (prototypeBlock.getProcCode && prototypeBlock.getProcCode() == procCode) {
+          return blocks[i];
+        }
+      }
+    }
+    return null;
+  };
+
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
   const UPDATE_TOOLBOX_ACTION = "scratch-gui/toolbox/UPDATE_TOOLBOX";
@@ -407,7 +474,7 @@ export default async function ({ addon, msg, console }) {
       Transpiler = ListTranspiler;
       break;
     default:
-      throw "unknown value of transpilerMode setting"
+      throw "unknown value of transpilerMode setting";
   }
 
   new Transpiler(vm, ScratchBlocks);
@@ -425,8 +492,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/stack.svg">
+        addon.self.dir
+      }/stack.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("stack")}</span>
                 </div>
@@ -435,8 +502,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/reporter.svg">
+        addon.self.dir
+      }/reporter.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("numortext")}</span>
                 </div>
@@ -445,8 +512,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/predicate.svg">
+        addon.self.dir
+      }/predicate.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("boolean")}</span>
                 </div>
