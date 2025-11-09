@@ -104,7 +104,7 @@ export class ListTranspiler extends Transpiler {
             if (blocks[inspecting_id].mutation.proccode === newBlock.mutation.proccode) {
               call_count += 1;
             }
-            inspecting_id = blocks[inspecting_id].parent;
+            inspecting_id = Object.entries(blocks).find((id, b) => b.next === inspecting_id)?.[0];
           }
           const list = target.getReturnVar(block.mutation.proccode, "list");
           const lengthBlock = uid();
@@ -154,12 +154,11 @@ export class ListTranspiler extends Transpiler {
               NUM1: {
                 name: "NUM1",
                 block: lengthBlock,
-                // shadow: numShadow2
               },
               NUM2: {
                 name: "NUM2",
                 block: numShadow,
-                // shadow: numShadow,
+                shadow: numShadow,
               },
             },
             fields: {},
@@ -194,6 +193,7 @@ export class ListTranspiler extends Transpiler {
   _toSA(target, shouldEmitWorkspaceUpdate = true) {
     console.log("tosa");
     const blocks = target.blocks._blocks;
+    const toDelete = [];
     for (const blockid in blocks) {
       const block = blocks[blockid];
       switch (block.opcode) {
@@ -245,15 +245,17 @@ export class ListTranspiler extends Transpiler {
           console.log("satisfied subtraction child");
           const length = blocks[index.inputs.NUM1.block];
           if (length?.opcode !== "data_lengthoflist") break;
-          console.log("satsified list length");
+          console.log("satisfied list length");
           if (length.fields.LIST.id !== block.fields.LIST.id) break;
           console.log("satisfied same list");
           const call_num_block = blocks[index.inputs.NUM2.block];
           if (call_num_block?.opcode !== "math_number") break;
-          console.log("satisifes other subtraction operand");
+          console.log("satisfied other subtraction operand");
           const call_num = call_num_block.fields.NUM.value;
           let call_counter = call_num + 1;
-          let inspecting_id = topBlock.parent;
+          console.log(call_counter);
+          console.log(topBlock);
+          let inspecting_id = Object.entries(blocks).find((id, b) => b.next === topBlock.id)?.[0] ?? topBlock.parent;
           let caller = null;
           while (
             blocks[inspecting_id]?.opcode === "procedures_call" &&
@@ -261,14 +263,16 @@ export class ListTranspiler extends Transpiler {
             call_counter > 0
           ) {
             const candidate = blocks[inspecting_id];
+            console.log(candidate);
             if (
               target.lookupVariableById(block.fields.LIST.id).name ===
-              target.getReturnVar(candidate.mutation.proccode).value
+              target.getReturnVar(candidate.mutation.proccode, "list").value
             ) {
               caller = candidate;
               call_counter -= 1;
             }
-            inspecting_id = blocks[inspecting_id].parent;
+            inspecting_id = Object.entries(blocks).find((id, b) => b.next === inspecting_id)?.[0] ?? candidate.parent;
+            console.log(blocks[inspecting_id]);
           }
           if (call_counter > 0) break;
           console.log("satisfies call found");
@@ -281,17 +285,22 @@ export class ListTranspiler extends Transpiler {
             topLevel: false,
             id: blockid,
           };
-          const previousParentId = caller.parent;
-          const previousParent = blocks[previousParentId] ?? null;
-          if (previousParent) {
-            previousParent.next = topBlock.id;
-          }
-          blocks[caller.next].parent = previousParentId;
-          delete blocks[caller.id];
+          toDelete.push(caller.id);
           break;
         }
       }
     }
+
+    for (const deletee of toDelete) {
+      const previousParentId = blocks[deletee].parent;
+      const previousParent = blocks[previousParentId] ?? null;
+      if (previousParent) {
+        previousParent.next = blocks[deletee].next;
+      }
+      blocks[blocks[deletee].next].parent = previousParentId;
+      delete blocks[deletee];
+    }
+
     if (shouldEmitWorkspaceUpdate) {
       this.vm.emitWorkspaceUpdate();
     }
