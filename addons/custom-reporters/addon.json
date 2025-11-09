@@ -19,14 +19,16 @@
   "dynamicEnable": false,
   "dynamicDisable": false,
   "libraries": ["scratch-blocks"],
-  "settings":[{
-    "name": "Transpiler mode",
-    "id": "transpilerMode",
-    "type": "select",
-    "default": "var",
-    "potentialValues": [
-      { "id": "var", "name": "variable" },
-      { "id": "list_no_gc", "name": "list (no GC)" }
-    ]
-  }]
+  "settings": [
+    {
+      "name": "Transpiler mode",
+      "id": "transpilerMode",
+      "type": "select",
+      "default": "var",
+      "potentialValues": [
+        { "id": "var", "name": "variable" },
+        { "id": "list_no_gc", "name": "list (no GC)" }
+      ]
+    }
+  ]
 }
