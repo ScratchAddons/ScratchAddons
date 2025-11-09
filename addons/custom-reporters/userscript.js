@@ -1,10 +1,12 @@
 /*
   todo:
   - more transpiler modes
-  - initialise custom block editor modal correctly when editing blocks
-  - fix errors when editing/deleting arguments
+    - including auto-detect most suitable mode?
+  - initialise custom block editor modal to use correct shape when editing blocks
+  - fix block editor modal only working the first time it's opened
+  - fix errors when editing/deleting arguments (atm labels/inputs can't be renamed if block has been reshaped)
   - change procedures_return_reporter to procedures_return_boolean when necessary, and vice versa
-  - dynamic enable/disable?
+  - dynamic enable/disable/settings change?
 */
 import { VarTranspiler } from "./transpilers/var.js";
 import { ListTranspiler } from "./transpilers/list.js";
