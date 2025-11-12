@@ -3,17 +3,22 @@
   "description": "Choose a list of links to be displayed in the navigation bar.",
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
-      "runAtComplete": false
-    },
-    {
-      "url": "www.js",
+      "url": "items_scratchwww.js",
       "matches": ["scratchWWWNoProject", "projects"],
       "runAtComplete": false
     },
     {
-      "url": "r2.js",
+      "url": "items_scratchr2.js",
+      "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
+      "runAtComplete": false
+    },
+    {
+      "url": "compact_scratchwww.js",
+      "matches": ["scratchWWWNoProject", "projects"],
+      "runAtComplete": false
+    },
+    {
+      "url": "compact_scratchr2.js",
       "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "runAtComplete": false
     }
@@ -44,10 +49,10 @@
       "id": "items",
       "type": "table",
       "default": [
-        { "name": "Create", "url": "/projects/editor/" },
-        { "name": "Explore", "url": "/explore/projects/all" },
-        { "name": "Ideas", "url": "/ideas" },
-        { "name": "About", "url": "/about" }
+        { "name": "Create", "url": "/projects/editor/", "visibility": "always" },
+        { "name": "Explore", "url": "/explore/projects/all", "visibility": "always" },
+        { "name": "Ideas", "url": "/ideas", "visibility": "always" },
+        { "name": "Membership", "url": "/membership", "visibility": "loggedOut" }
       ],
       "row": [
         {
@@ -61,32 +66,56 @@
           "id": "url",
           "type": "untranslated",
           "default": ""
+        },
+        {
+          "name": "Visibility",
+          "id": "visibility",
+          "type": "select",
+          "potentialValues": [
+            {
+              "id": "always",
+              "name": "Always"
+            },
+            {
+              "id": "loggedIn",
+              "name": "When logged in"
+            },
+            {
+              "id": "loggedOut",
+              "name": "When not logged in"
+            }
+          ],
+          "default": "always"
         }
       ],
       "presets": [
         {
           "name": "Create",
-          "values": { "name": "Create", "url": "/projects/editor/" }
+          "values": { "name": "Create", "url": "/projects/editor/", "visibility": "always" }
         },
         {
           "name": "Explore",
-          "values": { "name": "Explore", "url": "/explore/projects/all" }
+          "values": { "name": "Explore", "url": "/explore/projects/all", "visibility": "always" }
         },
         {
           "name": "Ideas",
-          "values": { "name": "Ideas", "url": "/ideas" }
+          "values": { "name": "Ideas", "url": "/ideas", "visibility": "always" }
+        },
+        {
+          "name": "Membership",
+          "values": { "name": "Membership", "url": "/membership", "visibility": "loggedOut" }
         },
         {
           "name": "About",
-          "values": { "name": "About", "url": "/about" }
+          "values": { "name": "About", "url": "/about", "visibility": "always" }
         },
         {
           "name": "Discuss",
-          "values": { "name": "Discuss", "url": "/discuss" }
+          "values": { "name": "Discuss", "url": "/discuss", "visibility": "always" }
         },
         {
           "name": "Wiki",
-          "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
+          "values": { "name": "Wiki", "url": "https://scratch-wiki.info/", "visibility": "always" }
         }
       ]
     },
