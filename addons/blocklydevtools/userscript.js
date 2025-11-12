@@ -421,7 +421,13 @@ export default async function ({ addon, console }) {
                     event.preventDefault();
                     if (element.hasAttribute("data-id")) {
                         blockId = element.getAttribute("data-id");
-                        workspace.getBlockById(blockId).dispose(false); //dispose(false) means "do not heal stack"
+                        const block = workspace.getBlockById(blockId);
+                        block.getDescendants(false, true).forEach((block) => {
+                            block.dispose(true);
+                        });
+                        //previously was using dispose(false) aka  "do not heal stack"
+                        // switched to descending delete with healing to avoid some project corruption issues
+                      
                         if (workspace.getToolbox() //If the blockly instance has a toolbox, it needs to be refreshed,
                         ) {
                             workspace.getToolbox().refreshSelection();
