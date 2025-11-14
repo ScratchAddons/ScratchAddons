@@ -13,6 +13,10 @@
     },
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "dynamicEnable": true,
@@ -30,10 +34,26 @@
       "matches": ["projects", "projectEmbeds"]
     }
   ],
+  "settings": [
+    {
+      "type": "boolean",
+      "id": "pause-button",
+      "name": "Show pause button",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "auto-pause",
+      "name": "Pause automatically",
+      "description": "The project pauses automatically when the window does not have focus. Does not apply to cloud projects.",
+      "default": false
+    }
+  ],
   "tags": ["player", "recommended"],
   "latestUpdate": {
-    "version": "1.33.0",
-    "temporaryNotice": "There's now a keybind to pause projects.",
+    "version": "1.44.0",
+    "temporaryNotice": "The pause button can now be hidden, and you can choose to have projects pause automatically in the background.",
+    "newSettings": ["pause-button", "auto-pause"],
     "isMajor": false
   },
   "enabledByDefault": true
