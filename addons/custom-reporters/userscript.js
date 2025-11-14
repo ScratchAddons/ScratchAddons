@@ -1,13 +1,3 @@
-/*
-  todo:
-  - more transpiler modes
-    - including auto-detect most suitable mode?
-  - initialise custom block editor modal to use correct shape when editing blocks
-  - fix block editor modal only working the first time it's opened
-  - fix errors when editing/deleting arguments (atm labels/inputs can't be renamed if block has been reshaped)
-  - change procedures_return_reporter to procedures_return_boolean when necessary, and vice versa
-  - dynamic enable/disable/settings change?
-*/
 import { VarTranspiler } from "./transpilers/var.js";
 import { ListTranspiler } from "./transpilers/list.js";
 
@@ -20,138 +10,82 @@ export default async function ({ addon, msg, console }) {
     /**
      * Block for calling a procedure with a return value, for rendering inside
      * define block.
-     * @this ScratchBlocks.Block
+     * @this {ProcedurePrototypeBlock}
      */
     init: function () {
-      this.jsonInit({
-        extensions: ["colours_more", "output_number", "output_string"],
-      });
-
-      /* Data known about the procedure. */
-      this.procCode_ = "";
-      this.displayNames_ = [];
-      this.argumentIds_ = [];
-      this.argumentDefaults_ = [];
-      this.warp_ = false;
+      const originalJsonInit = ScratchBlocks.BlockSvg.prototype.jsonInit;
+      ScratchBlocks.BlockSvg.prototype.jsonInit = function (json) {
+        originalJsonInit.call(
+          this,
+          Object.assign(json, {
+            extensions: ["colours_more", "output_number", "output_string"],
+          })
+        );
+      };
+      ScratchBlocks.Blocks["procedures_prototype"].init.call(this);
+      ScratchBlocks.BlockSvg.prototype.jsonInit = originalJsonInit;
     },
-    // Shared.
-    getProcCode: ScratchBlocks.ScratchBlocks.ProcedureUtils.getProcCode,
-    removeAllInputs_: ScratchBlocks.ScratchBlocks.ProcedureUtils.removeAllInputs_,
-    disconnectOldBlocks_: ScratchBlocks.ScratchBlocks.ProcedureUtils.disconnectOldBlocks_,
-    deleteShadows_: ScratchBlocks.ScratchBlocks.ProcedureUtils.deleteShadows_,
-    createAllInputs_: ScratchBlocks.ScratchBlocks.ProcedureUtils.createAllInputs_,
-    updateDisplay_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateDisplay_,
-
-    // Exist on all three blocks, but have different implementations.
-    mutationToDom: ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom,
-    domToMutation: ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionDomToMutation,
-    populateArgument_: ScratchBlocks.ScratchBlocks.ProcedureUtils.populateArgumentOnPrototype_,
-    addProcedureLabel_: ScratchBlocks.ScratchBlocks.ProcedureUtils.addLabelField_,
-
-    // Only exists on procedures_prototype.
-    createArgumentReporter_: ScratchBlocks.ScratchBlocks.ProcedureUtils.createArgumentReporter_,
-    updateArgumentReporterNames_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateArgumentReporterNames_,
   };
 
   ScratchBlocks.Blocks["procedures_prototype_boolean"] = {
     /**
      * Block for calling a procedure with a boolean return value, for rendering inside
      * define block.
-     * @this ScratchBlocks.Block
+     * @this {ProcedurePrototypeBlock}
      */
     init: function () {
-      this.jsonInit({
-        extensions: ["colours_more", "output_boolean"],
-      });
-
-      /* Data known about the procedure. */
-      this.procCode_ = "";
-      this.displayNames_ = [];
-      this.argumentIds_ = [];
-      this.argumentDefaults_ = [];
-      this.warp_ = false;
+      const originalJsonInit = ScratchBlocks.BlockSvg.prototype.jsonInit;
+      ScratchBlocks.BlockSvg.prototype.jsonInit = function (json) {
+        originalJsonInit.call(
+          this,
+          Object.assign(json, {
+            extensions: ["colours_more", "output_boolean"],
+          })
+        );
+      };
+      ScratchBlocks.Blocks["procedures_prototype"].init.call(this);
+      ScratchBlocks.BlockSvg.prototype.jsonInit = originalJsonInit;
     },
-    // Shared.
-    getProcCode: ScratchBlocks.ScratchBlocks.ProcedureUtils.getProcCode,
-    removeAllInputs_: ScratchBlocks.ScratchBlocks.ProcedureUtils.removeAllInputs_,
-    disconnectOldBlocks_: ScratchBlocks.ScratchBlocks.ProcedureUtils.disconnectOldBlocks_,
-    deleteShadows_: ScratchBlocks.ScratchBlocks.ProcedureUtils.deleteShadows_,
-    createAllInputs_: ScratchBlocks.ScratchBlocks.ProcedureUtils.createAllInputs_,
-    updateDisplay_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateDisplay_,
-
-    // Exist on all three blocks, but have different implementations.
-    mutationToDom: ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom,
-    domToMutation: ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionDomToMutation,
-    populateArgument_: ScratchBlocks.ScratchBlocks.ProcedureUtils.populateArgumentOnPrototype_,
-    addProcedureLabel_: ScratchBlocks.ScratchBlocks.ProcedureUtils.addLabelField_,
-
-    // Only exists on procedures_prototype.
-    createArgumentReporter_: ScratchBlocks.ScratchBlocks.ProcedureUtils.createArgumentReporter_,
-    updateArgumentReporterNames_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateArgumentReporterNames_,
   };
 
   ScratchBlocks.Blocks["procedures_call_reporter"] = {
     /**
      * Block for calling a procedure with no return value.
-     * @this ScratchBlocks.Block
+     * @this {ProcedureCallBlock}
      */
     init: function () {
-      this.jsonInit({
-        extensions: ["colours_more", "output_string", "output_number", "procedure_call_contextmenu"],
-      });
-      this.procCode_ = "";
-      this.argumentIds_ = [];
-      this.warp_ = false;
+      const originalJsonInit = ScratchBlocks.BlockSvg.prototype.jsonInit;
+      ScratchBlocks.BlockSvg.prototype.jsonInit = function (json) {
+        originalJsonInit.call(
+          this,
+          Object.assign(json, {
+            extensions: ["colours_more", "output_string", "output_number", "procedure_call_contextmenu"],
+          })
+        );
+      };
+      ScratchBlocks.Blocks["procedures_call"].init.call(this);
+      ScratchBlocks.BlockSvg.prototype.jsonInit = originalJsonInit;
     },
-    // Shared.
-    getProcCode: ScratchBlocks.ScratchBlocks.ProcedureUtils.getProcCode,
-    removeAllInputs_: ScratchBlocks.ScratchBlocks.ProcedureUtils.removeAllInputs_,
-    disconnectOldBlocks_: ScratchBlocks.ScratchBlocks.ProcedureUtils.disconnectOldBlocks_,
-    deleteShadows_: ScratchBlocks.ScratchBlocks.ProcedureUtils.deleteShadows_,
-    createAllInputs_: ScratchBlocks.ScratchBlocks.ProcedureUtils.createAllInputs_,
-    updateDisplay_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateDisplay_,
-
-    // Exist on all three blocks, but have different implementations.
-    mutationToDom: ScratchBlocks.ScratchBlocks.ProcedureUtils.callerMutationToDom,
-    domToMutation: ScratchBlocks.ScratchBlocks.ProcedureUtils.callerDomToMutation,
-    populateArgument_: ScratchBlocks.ScratchBlocks.ProcedureUtils.populateArgumentOnCaller_,
-    addProcedureLabel_: ScratchBlocks.ScratchBlocks.ProcedureUtils.addLabelField_,
-
-    // Only exists on the external caller.
-    attachShadow_: ScratchBlocks.ScratchBlocks.ProcedureUtils.attachShadow_,
-    buildShadowDom_: ScratchBlocks.ScratchBlocks.ProcedureUtils.buildShadowDom_,
   };
 
   ScratchBlocks.Blocks["procedures_call_boolean"] = {
     /**
      * Block for calling a procedure with no return value.
-     * @this ScratchBlocks.Block
+     * @this {ProcedureCallBlock}
      */
     init: function () {
-      this.jsonInit({
-        extensions: ["colours_more", "output_boolean", "procedure_call_contextmenu"],
-      });
-      this.procCode_ = "";
-      this.argumentIds_ = [];
-      this.warp_ = false;
+      const originalJsonInit = ScratchBlocks.BlockSvg.prototype.jsonInit;
+      ScratchBlocks.BlockSvg.prototype.jsonInit = function (json) {
+        originalJsonInit.call(
+          this,
+          Object.assign(json, {
+            extensions: ["colours_more", "output_boolean", "procedure_call_contextmenu"],
+          })
+        );
+      };
+      ScratchBlocks.Blocks["procedures_call"].init.call(this);
+      ScratchBlocks.BlockSvg.prototype.jsonInit = originalJsonInit;
     },
-    // Shared.
-    getProcCode: ScratchBlocks.ScratchBlocks.ProcedureUtils.getProcCode,
-    removeAllInputs_: ScratchBlocks.ScratchBlocks.ProcedureUtils.removeAllInputs_,
-    disconnectOldBlocks_: ScratchBlocks.ScratchBlocks.ProcedureUtils.disconnectOldBlocks_,
-    deleteShadows_: ScratchBlocks.ScratchBlocks.ProcedureUtils.deleteShadows_,
-    createAllInputs_: ScratchBlocks.ScratchBlocks.ProcedureUtils.createAllInputs_,
-    updateDisplay_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateDisplay_,
-
-    // Exist on all three blocks, but have different implementations.
-    mutationToDom: ScratchBlocks.ScratchBlocks.ProcedureUtils.callerMutationToDom,
-    domToMutation: ScratchBlocks.ScratchBlocks.ProcedureUtils.callerDomToMutation,
-    populateArgument_: ScratchBlocks.ScratchBlocks.ProcedureUtils.populateArgumentOnCaller_,
-    addProcedureLabel_: ScratchBlocks.ScratchBlocks.ProcedureUtils.addLabelField_,
-
-    // Only exists on the external caller.
-    attachShadow_: ScratchBlocks.ScratchBlocks.ProcedureUtils.attachShadow_,
-    buildShadowDom_: ScratchBlocks.ScratchBlocks.ProcedureUtils.buildShadowDom_,
   };
 
   ScratchBlocks.Blocks["procedures_definition_reporter"] = {
@@ -184,7 +118,6 @@ export default async function ({ addon, msg, console }) {
             name: "return_value",
           },
         ],
-        category: ScratchBlocks.Categories.more,
         extensions: ["colours_more", "shape_end"],
       });
     },
@@ -202,60 +135,136 @@ export default async function ({ addon, msg, console }) {
             check: "Boolean",
           },
         ],
-        category: ScratchBlocks.Categories.more,
         extensions: ["colours_more", "shape_end"],
       });
     },
   };
 
-  const oldRenderDrawTop = ScratchBlocks.BlockSvg.prototype.renderDrawTop_;
-  ScratchBlocks.BlockSvg.prototype.renderDrawTop_ = function (steps, rightEdge) {
-    if (this.type === "procedures_definition_reporter") {
-      this.type = "procedures_definition";
-      oldRenderDrawTop.call(this, steps, rightEdge);
-      this.type = "procedures_definition_reporter";
-    } else {
-      oldRenderDrawTop.call(this, steps, rightEdge);
-    }
+  console.log(ScratchBlocks);
+
+  // const oldDraw = ScratchBlocks.zelos.Drawer.prototype.draw;
+  // ScratchBlocks.zelos.Drawer.prototype.draw = function () {
+  //   this.info_.constructor.prototype.isBowlerHatBlock = function () {
+  //     if (this.block_.type === "procedures_definition_reporter") {
+  //       this.block_.hat = "bowler";
+  //     }
+  //     return this.block_.hat === "bowler" || this.block_.type === "procedures_definition_reporter";
+  //   };
+  //   return oldDraw.call(this);
+  // };
+
+  // const oldRenderDrawRight = ScratchBlocks.BlockSvg.prototype.renderDrawRight_;
+  // ScratchBlocks.BlockSvg.prototype.renderDrawRight_ = function (steps, inputRows, iconWidth) {
+  //   if (this.type === "procedures_definition_reporter") {
+  //     this.type = "procedures_definition";
+  //     const returnVal = oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
+  //     this.type = "procedures_definition_reporter";
+  //     return returnVal;
+  //   }
+  //   return oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
+  // };
+
+  // const oldRenderCompute = ScratchBlocks.BlockSvg.prototype.renderCompute_;
+  // ScratchBlocks.BlockSvg.prototype.renderCompute_ = function (iconWidth) {
+  //   if (this.type === "procedures_definition_reporter") {
+  //     this.type = "procedures_definition";
+  //     const returnVal = oldRenderCompute.call(this, iconWidth);
+  //     this.type = "procedures_definition_reporter";
+  //     return returnVal;
+  //   }
+  //   return oldRenderCompute.call(this, iconWidth);
+  // };
+
+  // const oldRenderDrawLeft = ScratchBlocks.BlockSvg.prototype.renderDrawLeft_;
+  // ScratchBlocks.BlockSvg.prototype.renderDrawLeft_ = function (steps) {
+  //   oldRenderDrawLeft.call(this, steps);
+  //   if (this.type === "procedures_definition_reporter") {
+  //     const vIndex = steps.indexOf("v"); // presumably this might not always be in the same position (eg when cat blocks)
+  //     if (vIndex === -1) return;
+  //     steps[vIndex + 1] = 68; // todo: compat w/ custom-block-shape
+  //   }
+  // };
+
+  // todo: patch allProcedureMutations
+
+  ScratchBlocks.Procedures.getCallers = function (name, workspace, definitionRoot, allowRecursive) {
+    return workspace.getTopBlocks().flatMap((block) => {
+      if (block.id === definitionRoot.id && !allowRecursive) {
+        return [];
+      }
+
+      return block.getDescendants(false).filter((descendant) => {
+        return (
+          ScratchBlocks.Procedures.isProcedureBlock(descendant) &&
+          (descendant.type === "procedures_call" ||
+            descendant.type === "procedures_call_reporter" ||
+            descendant.type === "procedures_call_boolean") &&
+          descendant.getProcCode() === name
+        );
+      });
+    });
   };
 
-  const oldRenderDrawRight = ScratchBlocks.BlockSvg.prototype.renderDrawRight_;
-  ScratchBlocks.BlockSvg.prototype.renderDrawRight_ = function (steps, inputRows, iconWidth) {
-    if (this.type === "procedures_definition_reporter") {
-      this.type = "procedures_definition";
-      const returnVal = oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
-      this.type = "procedures_definition_reporter";
-      return returnVal;
-    }
-    return oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
+  // TODO: check: does this actually patch the function we want to? It doesn't seem to be exported
+  // but it is present in the module. :thinking:
+  ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
+    // Assume that a procedure definition is a top block.
+    return workspace.getTopBlocks(false).find((block) => {
+      if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
+        const prototypeBlock = block.getInput("custom_block").connection.targetBlock();
+        return isProcedureBlock(prototypeBlock) && prototypeBlock.getProcCode() === procCode;
+      }
+
+      return false;
+    });
   };
 
-  const oldRenderCompute = ScratchBlocks.BlockSvg.prototype.renderCompute_;
-  ScratchBlocks.BlockSvg.prototype.renderCompute_ = function (iconWidth) {
-    if (this.type === "procedures_definition_reporter") {
-      this.type = "procedures_definition";
-      const returnVal = oldRenderCompute.call(this, iconWidth);
-      this.type = "procedures_definition_reporter";
-      return returnVal;
+  function mutateCallersAndPrototype(name, workspace, mutation) {
+    const defineBlock = ScratchBlocks.Procedures.getDefineBlock(name, workspace);
+    const prototypeBlock = ScratchBlocks.Procedures.getPrototypeBlock(name, workspace);
+    if (!(defineBlock && prototypeBlock)) {
+      alert("No define block on workspace"); // TODO decide what to do about this.
+      return;
     }
-    return oldRenderCompute.call(this, iconWidth);
-  };
 
-  const oldRenderDrawLeft = ScratchBlocks.BlockSvg.prototype.renderDrawLeft_;
-  ScratchBlocks.BlockSvg.prototype.renderDrawLeft_ = function (steps) {
-    oldRenderDrawLeft.call(this, steps);
-    if (this.type === "procedures_definition_reporter") {
-      const vIndex = steps.indexOf("v"); // presumably this might not always be in the same position (eg when cat blocks)
-      if (vIndex === -1) return;
-      steps[vIndex + 1] = 68; // todo: compat w/ custom-block-shape
-    }
-  };
+    const callers = getCallers(name, defineBlock.workspace, defineBlock, true /* allowRecursive */);
+    callers.push(prototypeBlock);
+    ScratchBlocks.Events.setGroup(true);
+    callers.forEach((caller) => {
+      const oldMutationDom = caller.mutationToDom();
+      const oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+      caller.domToMutation(mutation);
+      const newMutationDom = caller.mutationToDom();
+      const newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
+      if (oldMutation !== newMutation) {
+        ScratchBlocks.Events.fire(
+          new (ScratchBlocks.Events.get(ScratchBlocks.Events.BLOCK_CHANGE))(
+            caller,
+            "mutation",
+            null,
+            oldMutation,
+            newMutation
+          )
+        );
+      }
+    });
+    ScratchBlocks.Events.setGroup(false);
+  }
 
-  // adapted from original to account for new opcodes
-  ScratchBlocks.Procedures.editProcedureCallback_ = function (block) {
+  function editProcedureCallbackFactory(block) {
+    return (mutation) => {
+      if (mutation && isProcedureBlock(block)) {
+        mutateCallersAndPrototype(block.getProcCode(), block.workspace, mutation);
+      }
+    };
+  }
+
+  // TODO: actually patch this in the relevant places; the function isn't exported
+  ScratchBlocks.Procedures.editProcedureCallback__Sa = function (block) {
     // Edit can come from one of three block types (call, define, prototype)
     // Normalize by setting the block to the prototype block for the procedure.
-    if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
+    let prototypeBlock;
+    if (block.type === "procedures_definition" || block.type == "procedures_definition") {
       const input = block.getInput("custom_block");
       if (!input) {
         alert("Bad input"); // TODO: Decide what to do about this.
@@ -269,30 +278,43 @@ export default async function ({ addon, msg, console }) {
       const innerBlock = conn.targetBlock();
       if (
         !innerBlock ||
-        !(
-          innerBlock.type === "procedures_prototype" ||
-          innerBlock.type === "procedures_prototype_reporter" ||
-          innerBlock.type === "procedures_prototype_boolean"
-        )
+        (innerBlock.type !== "procedures_prototype" &&
+          innerBlock.type !== "procedures_prototype_reporter" &&
+          innerBlock.type !== "procedures_prototype_boolean")
       ) {
         alert("Bad inner block"); // TODO: Decide what to do about this.
         return;
       }
-      block = innerBlock;
+      prototypeBlock = innerBlock;
     } else if (
-      block.type === "procedures_call" ||
-      block.type === "procedures_call_reporter" ||
-      block.type === "procedures_call_boolean"
+      (block.type === "procedures_call" ||
+        block.type === "procedures_call_reporter" ||
+        block.type === "procedures_call_boolean") &&
+      ScratchBlocks.Procedures.isProcedureBlock(block)
     ) {
       // This is a call block, find the prototype corresponding to the procCode.
       // Make sure to search the correct workspace, call block can be in flyout.
-      var workspaceToSearch = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
-      block = ScratchBlocks.Procedures.getPrototypeBlock(block.getProcCode(), workspaceToSearch);
+      const workspaceToSearch = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
+      prototypeBlock = ScratchBlocks.Procedures.getPrototypeBlock(block.getProcCode(), workspaceToSearch);
+    } else {
+      prototypeBlock = block;
     }
     // Block now refers to the procedure prototype block, it is safe to proceed.
-    ScratchBlocks.Procedures.externalProcedureDefCallback(
-      block.mutationToDom(),
-      ScratchBlocks.Procedures.editProcedureCallbackFactory_(block)
+    ScratchProcedures.externalProcedureDefCallback(
+      prototypeBlock.mutationToDom(),
+      editProcedureCallbackFactory(prototypeBlock)
+    );
+  };
+
+  ScratchBlocks.Procedures.isProcedureBlock = function (block) {
+    return (
+      block.type === "procedures_call" ||
+      block.type === "procedures_call_reporter" ||
+      block.type === "procedures_call_boolean" ||
+      block.type === "procedures_declaration" ||
+      block.type === "procedures_prototype" ||
+      block.type === "procedures_prototype_reporter" ||
+      block.type === "procedures_prototype_boolean"
     );
   };
 
@@ -301,21 +323,7 @@ export default async function ({ addon, msg, console }) {
     if (defineBlock) {
       return defineBlock.getInput("custom_block").connection.targetBlock();
     }
-    return null;
-  };
-
-  ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
-    // Assume that a procedure definition is a top block.
-    var blocks = workspace.getTopBlocks(false);
-    for (var i = 0; i < blocks.length; i++) {
-      if (blocks[i].type === "procedures_definition" || blocks[i].type === "procedures_definition_reporter") {
-        var prototypeBlock = blocks[i].getInput("custom_block").connection.targetBlock();
-        if (prototypeBlock.getProcCode && prototypeBlock.getProcCode() === procCode) {
-          return blocks[i];
-        }
-      }
-    }
-    return null;
+    return undefined;
   };
 
   addon.tab.redux.initialize();
@@ -334,11 +342,63 @@ export default async function ({ addon, msg, console }) {
       .replace(/'/g, "&apos;");
   }
 
+  // source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L235C1-L247C2
+  function newProcedureMutation() {
+    const mutationText = `
+    <xml>
+      <mutation
+        proccode="${Blockly.Msg["PROCEDURE_DEFAULT_NAME"]}"
+        argumentids="[]"
+        argumentnames="[]"
+        argumentdefaults="[]"
+        warp="false">
+      </mutation>
+    </xml>`;
+    return ScratchBlocks.utils.xml.textToDom(mutationText).firstElementChild;
+  }
+
+  function createProcedureCallbackFactory(workspace) {
+    return (mutation) => {
+      if (!mutation) return;
+
+      const blockText = `
+      <xml>
+        <block type="procedures_definition">
+          <statement name="custom_block">
+            <shadow type="procedures_prototype">
+              ${ScratchBlocks.Xml.domToText(mutation)}
+            </shadow>
+          </statement>
+        </block>
+      </xml>`;
+      const blockDom = ScratchBlocks.utils.xml.textToDom(blockText).firstElementChild;
+      ScratchBlocks.Events.setGroup(true);
+      const block = Blockly.Xml.domToBlock(blockDom, workspace);
+      ScratchBlocks.renderManagement.finishQueuedRenders().then(() => {
+        // To convert from pixel units to workspace units
+        const scale = workspace.scale;
+        // Position the block so that it is at the top left of the visible
+        // workspace, padded from the edge by 30 units. Position in the top right
+        // if RTL.
+        let posX = -workspace.scrollX;
+        if (workspace.RTL) {
+          posX += workspace.getMetrics().contentWidth - 30;
+        } else {
+          posX += 30;
+        }
+        block.moveBy(posX / scale, (-workspace.scrollY + 30) / scale);
+        block.scheduleSnapAndBump();
+        ScratchBlocks.Events.setGroup(false);
+      });
+    };
+  }
+
   const reduxStateListener = async (e) => {
     if (e.detail.action.type === UPDATE_TOOLBOX_ACTION && !e.detail.action.saExtraBlocks) {
       const toolboxXML = xmlParser.parseFromString(e.detail.action.toolboxXML, "text/xml");
       const blocks = vm.editingTarget.blocks;
-      const myBlocksCat = toolboxXML.querySelector("category#myBlocks");
+      const myBlocksCat = toolboxXML.querySelector(`category[toolboxitemid="myBlocks"`);
+      console.log(toolboxXML, myBlocksCat);
       myBlocksCat.removeAttribute("custom");
       myBlocksCat.innerHTML = "";
       const myBlocks = [];
@@ -387,11 +447,12 @@ export default async function ({ addon, msg, console }) {
       const newBlockButton = toolboxXML.createElement("button");
       newBlockButton.setAttribute("text", ScratchBlocks.Msg.NEW_PROCEDURE);
       newBlockButton.setAttribute("callbackKey", "CREATE_PROCEDURE");
-      addon.tab.traps
-        .getWorkspace()
-        .registerButtonCallback("CREATE_PROCEDURE", () =>
-          ScratchBlocks.Procedures.createProcedureDefCallback_(addon.tab.traps.getWorkspace())
+      addon.tab.traps.getWorkspace().registerButtonCallback("CREATE_PROCEDURE", () => {
+        ScratchBlocks.ScratchProcedures.externalProcedureDefCallback(
+          newProcedureMutation(),
+          createProcedureCallbackFactory(addon.tab.traps.getWorkspace())
         );
+      });
       myBlocksCat.appendChild(newBlockButton);
       addon.tab.redux.dispatch({
         type: UPDATE_TOOLBOX_ACTION,
@@ -494,8 +555,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/stack.svg">
+        addon.self.dir
+      }/stack.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("stack")}</span>
                 </div>
@@ -504,8 +565,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/reporter.svg">
+        addon.self.dir
+      }/reporter.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("numortext")}</span>
                 </div>
@@ -514,8 +575,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/predicate.svg">
+        addon.self.dir
+      }/predicate.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("boolean")}</span>
                 </div>
@@ -542,36 +603,63 @@ export default async function ({ addon, msg, console }) {
           })
         );
       };
-      return originalInit.call(this, ...args);
-    };
+      originalInit.call(this, ...args);
 
-    // ignore any calls from scratch to add labels/inputs, as it tries to add them to a block that probably won't exist anymore
-    // yet it will add an extra inputs after first page load if you don't change the block type?
-    const oldAddLabel = ScratchBlocks.Blocks.procedures_declaration.addLabelExternal;
-    ScratchBlocks.Blocks.procedures_declaration.addLabelExternal = function (isSA) {
-      if (isSA) {
-        return oldAddLabel.call(this);
-      }
-    };
-    const oldAddBool = ScratchBlocks.Blocks.procedures_declaration.addBooleanExternal;
-    ScratchBlocks.Blocks.procedures_declaration.addBooleanExternal = function (isSA) {
-      if (isSA) {
-        return oldAddBool.call(this);
-      }
-    };
-    const oldAddStringNum = ScratchBlocks.Blocks.procedures_declaration.addStringNumberExternal;
-    ScratchBlocks.Blocks.procedures_declaration.addStringNumberExternal = function (isSA) {
-      if (isSA) {
-        return oldAddStringNum.call(this);
-      }
+      // ignore any calls from scratch to add labels/inputs, as it tries to add them to a block that probably won't exist anymore
+      // yet it will add an extra inputs after first page load if you don't change the block type?
+      const oldAddLabel = this.addLabelExternal;
+      this.addLabelExternal = function (isSA) {
+        if (isSA) {
+          return oldAddLabel.call(this);
+        }
+      };
+      const oldAddBool = this.addBooleanExternal;
+      this.addBooleanExternal = function (isSA) {
+        if (isSA) {
+          return oldAddBool.call(this);
+        }
+      };
+      const oldAddStringNum = this.addStringNumberExternal;
+      this.addStringNumberExternal = function (isSA) {
+        if (isSA) {
+          return oldAddStringNum.call(this);
+        }
+      };
     };
 
     const workspace = ScratchBlocks.getMainWorkspace();
-    let mutationRoot = workspace.topBlocks_[0];
+    let mutationRoot = workspace.getTopBlocks()[0];
+    const originalMutationRoot = mutationRoot;
+
+    mutationRoot.dispose();
+
+    const setupMutationRoot = () => {
+      // from https://github.com/LLK/scratch-gui/blob/c5d4aea493b58c15570915753e1c0f9e7e812ec1/src/containers/custom-procedures.jsx
+      mutationRoot.setMovable(false);
+      mutationRoot.setDeletable(false);
+      mutationRoot.contextMenu = false;
+      mutationRoot.domToMutation(addon.tab.redux.state.scratchGui.customProcedures.mutator);
+      mutationRoot.initSvg();
+      mutationRoot.render();
+      // Allow the initial events to run to position this block, then focus.
+      setTimeout(() => {
+        mutationRoot.focusLastEditor_();
+      });
+    };
+
+    mutationRoot = workspace.newBlock("procedures_declaration");
+    setupMutationRoot();
+
+    originalMutationRoot.mutationToDom = function (arg) {
+      return mutationRoot.mutationToDom(arg);
+    };
 
     let rtlOffset = 0;
 
-    workspace.listeners_[0] = () => null; // stop scratch from trying to move its potentially deleted block around
+    // stop scratch from trying to move its potentially deleted block around...
+    // at the moment this uses some sort of magic number which isn't ideal. mabe just get rid
+    // of all event listeners and rebuild.
+    workspace.listeners[3] = () => null;
 
     workspace.addChangeListener(() => {
       // from https://github.com/LLK/scratch-gui/blob/c5d4aea493b58c15570915753e1c0f9e7e812ec1/src/containers/custom-procedures.jsx
@@ -625,20 +713,6 @@ export default async function ({ addon, msg, console }) {
       mutationRoot.moveBy(dx, dy);
     });
 
-    const setupMutationRoot = () => {
-      // from https://github.com/LLK/scratch-gui/blob/c5d4aea493b58c15570915753e1c0f9e7e812ec1/src/containers/custom-procedures.jsx
-      mutationRoot.setMovable(false);
-      mutationRoot.setDeletable(false);
-      mutationRoot.contextMenu = false;
-      mutationRoot.domToMutation(addon.tab.redux.state.scratchGui.customProcedures.mutator);
-      mutationRoot.initSvg();
-      mutationRoot.render();
-      // Allow the initial events to run to position this block, then focus.
-      setTimeout(() => {
-        mutationRoot.focusLastEditor_();
-      });
-    };
-
     const setUpButtons = () => {
       const inputAddButtons = modal.querySelectorAll("div[class*=custom-procedures_body] > div > div");
       inputAddButtons[0].addEventListener("click", () => mutationRoot.addStringNumberExternal(true));
@@ -662,12 +736,16 @@ export default async function ({ addon, msg, console }) {
           mutator: mutationRoot.mutationToDom(),
           callback: addon.tab.redux.state.scratchGui.customProcedures.callback,
         });
+        console.log(workspace);
         selectedType = type;
         rtlOffset = 0;
-        ScratchBlocks.duplicate_(workspace.topBlocks_[0]);
-        workspace.topBlocks_[0].dispose();
-        mutationRoot = workspace.topBlocks_[0];
+        ScratchBlocks.Xml.domToBlock(ScratchBlocks.Xml.blockToDom(workspace.getTopBlocks()[0]), workspace);
+        const oldMutationRoot = mutationRoot;
+        mutationRoot = workspace.getTopBlocks().at(-1);
         setupMutationRoot();
+        console.log(workspace);
+        oldMutationRoot.dispose();
+        console.log(workspace);
       };
     };
 
@@ -733,8 +811,9 @@ export default async function ({ addon, msg, console }) {
             `</${statementOrValue}>` +
             "</block>" +
             "</xml>";
-          var blockDom = ScratchBlocks.Xml.textToDom(blockText).firstChild;
+          var blockDom = ScratchBlocks.utils.xml.textToDom(blockText).firstChild;
           ScratchBlocks.Events.setGroup(true);
+          console.log(blockDom);
           var block = ScratchBlocks.Xml.domToBlock(blockDom, wksp);
           var scale = wksp.scale; // To convert from pixel units to workspace units
           // Position the block so that it is at the top left of the visible workspace,
