@@ -36,8 +36,8 @@
               <addon-setting
                 v-for="(id, val) of row"
                 :addon="addon"
+                :table-child="true"
                 :setting="getTableSetting(id)"
-                :setting-path="settingPath.concat([i, id])"
                 :addon-settings="row"
               ></addon-setting>
             </div>
@@ -76,14 +76,14 @@
         <div v-for="option of setting.potentialValues">
           <input
             type="radio"
-            :name="selectName"
-            :id="selectOptionId(option)"
+            :name="addon._addonId+'-'+setting.id"
+            :id="addon._addonId+'-'+setting.id+'-'+option.id"
             :value="option.id"
             :disabled="!addon._enabled"
             v-model="addonSettings[setting.id]"
             @change="updateSettings()"
           />
-          <label class="filter-option" :for="selectOptionId(option)">{{ option.name }}</label>
+          <label class="filter-option" :for="addon._addonId+'-'+setting.id+'-'+option.id">{{ option.name }}</label>
         </div>
       </div>
     </template>
