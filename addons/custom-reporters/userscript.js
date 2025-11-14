@@ -212,7 +212,7 @@ export default async function ({ addon, msg, console }) {
     return workspace.getTopBlocks(false).find((block) => {
       if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
         const prototypeBlock = block.getInput("custom_block").connection.targetBlock();
-        return isProcedureBlock(prototypeBlock) && prototypeBlock.getProcCode() === procCode;
+        return ScratchBlocks.Procedures.isProcedureBlock(prototypeBlock) && prototypeBlock.getProcCode() === procCode;
       }
 
       return false;
@@ -227,7 +227,7 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
-    const callers = getCallers(name, defineBlock.workspace, defineBlock, true /* allowRecursive */);
+    const callers = ScratchBlocks.Procedures.getCallers(name, defineBlock.workspace, defineBlock, true /* allowRecursive */);
     callers.push(prototypeBlock);
     ScratchBlocks.Events.setGroup(true);
     callers.forEach((caller) => {
@@ -253,7 +253,7 @@ export default async function ({ addon, msg, console }) {
 
   function editProcedureCallbackFactory(block) {
     return (mutation) => {
-      if (mutation && isProcedureBlock(block)) {
+      if (mutation && ScratchBlocks.Procedures.isProcedureBlock(block)) {
         mutateCallersAndPrototype(block.getProcCode(), block.workspace, mutation);
       }
     };
@@ -264,7 +264,7 @@ export default async function ({ addon, msg, console }) {
     // Edit can come from one of three block types (call, define, prototype)
     // Normalize by setting the block to the prototype block for the procedure.
     let prototypeBlock;
-    if (block.type === "procedures_definition" || block.type == "procedures_definition") {
+    if (block.type === "procedures_definition" || block.type === "procedures_definition") {
       const input = block.getInput("custom_block");
       if (!input) {
         alert("Bad input"); // TODO: Decide what to do about this.
@@ -300,7 +300,7 @@ export default async function ({ addon, msg, console }) {
       prototypeBlock = block;
     }
     // Block now refers to the procedure prototype block, it is safe to proceed.
-    ScratchProcedures.externalProcedureDefCallback(
+    ScratchBlocks.ScratchProcedures.externalProcedureDefCallback(
       prototypeBlock.mutationToDom(),
       editProcedureCallbackFactory(prototypeBlock)
     );
