@@ -46,19 +46,25 @@ export default async function ({ addon, console }) {
     const result = oldRender.call(this);
     Object.freeze = oldFreeze;
 
-    const loggedIn = !!this.props.user;
     const list = result.props.children[0];
     if (list.type !== "ul") return result;
+
+    let items = addon.settings.get("items");
+    const loggedIn = !!this.props.user;
+    if (!loggedIn && addon.settings.get("showMembership")) {
+      items = [
+        ...items,
+        {
+          name: addon.tab.scratchMessage("general.membership"),
+          url: "/membership",
+        },
+      ];
+    }
+
     list.props.children = [
       list.props.children[0], // logo
 
-      ...addon.settings.get("items").map(({ name, url, visibility }) => {
-        const visible =
-          visibility === "always" ||
-          (visibility === "loggedIn" && loggedIn) ||
-          (visibility === "loggedOut" && !loggedIn);
-        if (!visible) return null;
-
+      ...items.map(({ name, url }) => {
         const absolute = new URL(url, location.origin);
         return createReactElement(
           "li",

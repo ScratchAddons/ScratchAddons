@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   let originalNavbar = [];
   await addon.tab.waitForElement(".search", { markAsSeen: true });
   const list = document.querySelector(".site-nav");
@@ -27,7 +27,6 @@ export default async function ({ addon, console }) {
         ...Array.prototype.map.call(list.children, (item) => ({
           name: item.innerText,
           url: item.firstChild.href,
-          visibility: "always",
         }))
       );
     }
@@ -37,17 +36,20 @@ export default async function ({ addon, console }) {
     return;
   }
   async function init() {
-    removeAllItems();
-    const items = addon.self.disabled ? originalNavbar : addon.settings.get("items");
     const loggedIn = await addon.auth.fetchIsLoggedIn();
+    removeAllItems();
+    let items = addon.self.disabled ? originalNavbar : addon.settings.get("items");
+    if (!addon.self.disabled && !loggedIn && addon.settings.get("showMembership")) {
+      items = [
+        ...items,
+        {
+          name: msg("membership"),
+          url: "/membership",
+        },
+      ];
+    }
     items.forEach((item, i) => {
-      if (
-        item.visibility === "always" ||
-        (item.visibility === "loggedIn" && loggedIn) ||
-        (item.visibility === "loggedOut" && !loggedIn)
-      ) {
-        list.append(createItem(item, i + 1 === items.length));
-      }
+      list.append(createItem(item, i + 1 === items.length));
     });
   }
   init();

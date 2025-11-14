@@ -49,10 +49,9 @@
       "id": "items",
       "type": "table",
       "default": [
-        { "name": "Create", "url": "/projects/editor/", "visibility": "always" },
-        { "name": "Explore", "url": "/explore/projects/all", "visibility": "always" },
-        { "name": "Ideas", "url": "/ideas", "visibility": "always" },
-        { "name": "Membership", "url": "/membership", "visibility": "loggedOut" }
+        { "name": "Create", "url": "/projects/editor/" },
+        { "name": "Explore", "url": "/explore/projects/all" },
+        { "name": "Ideas", "url": "/ideas" }
       ],
       "row": [
         {
@@ -66,58 +65,40 @@
           "id": "url",
           "type": "untranslated",
           "default": ""
-        },
-        {
-          "name": "Visibility",
-          "id": "visibility",
-          "type": "select",
-          "potentialValues": [
-            {
-              "id": "always",
-              "name": "Always"
-            },
-            {
-              "id": "loggedIn",
-              "name": "When logged in"
-            },
-            {
-              "id": "loggedOut",
-              "name": "When not logged in"
-            }
-          ],
-          "default": "always"
         }
       ],
       "presets": [
         {
           "name": "Create",
-          "values": { "name": "Create", "url": "/projects/editor/", "visibility": "always" }
+          "values": { "name": "Create", "url": "/projects/editor/" }
         },
         {
           "name": "Explore",
-          "values": { "name": "Explore", "url": "/explore/projects/all", "visibility": "always" }
+          "values": { "name": "Explore", "url": "/explore/projects/all" }
         },
         {
           "name": "Ideas",
-          "values": { "name": "Ideas", "url": "/ideas", "visibility": "always" }
-        },
-        {
-          "name": "Membership",
-          "values": { "name": "Membership", "url": "/membership", "visibility": "loggedOut" }
+          "values": { "name": "Ideas", "url": "/ideas" }
         },
         {
           "name": "About",
-          "values": { "name": "About", "url": "/about", "visibility": "always" }
+          "values": { "name": "About", "url": "/about" }
         },
         {
           "name": "Discuss",
-          "values": { "name": "Discuss", "url": "/discuss", "visibility": "always" }
+          "values": { "name": "Discuss", "url": "/discuss" }
         },
         {
           "name": "Wiki",
-          "values": { "name": "Wiki", "url": "https://scratch-wiki.info/", "visibility": "always" }
+          "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
         }
       ]
+    },
+    {
+      "name": "Show Membership link when logged out",
+      "id": "showMembership",
+      "type": "boolean",
+      "default": true
     },
     {
       "name": "Compact user dropdown",
