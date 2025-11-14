@@ -372,6 +372,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 /* Blue background */
 .empty,
 .intro-banner .intro-subnav,
+.membership-page .scratch-membership-section,
 .social-message.mod-unread,
 .preview .remix-credit,
 .preview .project-description,
