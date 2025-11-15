@@ -604,8 +604,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-        addon.self.dir
-      }/stack.svg">
+                  addon.self.dir
+                }/stack.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("stack")}</span>
                 </div>
@@ -614,8 +614,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-        addon.self.dir
-      }/reporter.svg">
+                  addon.self.dir
+                }/reporter.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("numortext")}</span>
                 </div>
@@ -624,8 +624,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-        addon.self.dir
-      }/predicate.svg">
+                  addon.self.dir
+                }/predicate.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("boolean")}</span>
                 </div>
