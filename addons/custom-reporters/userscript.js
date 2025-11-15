@@ -547,8 +547,6 @@ export default async function ({ addon, msg, console }) {
 
   new Transpiler(vm, ScratchBlocks);
 
-  let hasSetUpInputButtonsEver = false;
-
   let selectedType = "stack";
   const blockExtensions = {
     stack: ["shape_statement"],
@@ -593,7 +591,7 @@ export default async function ({ addon, msg, console }) {
   };
 
   while (true) {
-    let hasSetUpInputButtonsThisTime = false;
+    selectedType = "stack";
 
     const modal = (
       await addon.tab.waitForElement("div[class*=custom-procedures_modal-content_]", { markAsSeen: true })
@@ -733,13 +731,6 @@ export default async function ({ addon, msg, console }) {
 
     const selectBlockTypeFactory = (type) => {
       return () => {
-        // don't set these listeners up until we first change the block type,
-        // since before that scratch will add them just fine for some reason
-        if (!hasSetUpInputButtonsThisTime) {
-          setUpButtons();
-          hasSetUpInputButtonsEver = true;
-          hasSetUpInputButtonsThisTime = true;
-        }
         // scratch-gui doesn't seem to keep track of the mutator
         // so we do it instead, so inputs aren't lost when changing block type
         // addon.tab.redux.state.scratchGui.customProcedures.mutator = mutationRoot.mutationToDom();
@@ -768,10 +759,7 @@ export default async function ({ addon, msg, console }) {
         .addEventListener("click", selectBlockTypeFactory(blockType));
     }
 
-    if (hasSetUpInputButtonsEver) {
-      setUpButtons();
-      hasSetUpInputButtonsThisTime = true;
-    }
+    setUpButtons();
 
     const oldReduxCb = addon.tab.redux.state.scratchGui.customProcedures.callback;
 
