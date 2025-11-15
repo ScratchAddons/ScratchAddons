@@ -184,8 +184,11 @@ export default async function ({ addon, msg, console }) {
   // Adapted from original to account for new opcodes.
   // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L145
   function mutateCallersAndPrototype(name, workspace, mutation) {
+    console.log("mutateCallersAndPrototype");
+    console.log(name, mutation);
     const defineBlock = ScratchBlocks.Procedures.getDefineBlock(name, workspace);
     const prototypeBlock = ScratchBlocks.Procedures.getPrototypeBlock(name, workspace);
+    console.log(defineBlock, prototypeBlock);
     if (!(defineBlock && prototypeBlock)) {
       alert("No define block on workspace"); // TODO decide what to do about this.
       return;
@@ -198,6 +201,7 @@ export default async function ({ addon, msg, console }) {
       true /* allowRecursive */
     );
     callers.push(prototypeBlock);
+    console.log(callers);
     ScratchBlocks.Events.setGroup(true);
     callers.forEach((caller) => {
       const oldMutationDom = caller.mutationToDom();
@@ -223,7 +227,9 @@ export default async function ({ addon, msg, console }) {
   // Adapted from original to call patched version of mutateCallersAndPrototype.
   // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L359
   function editProcedureCallbackFactory(block) {
+    console.log("editProcedureCallbackFactory");
     return (mutation) => {
+      console.log("editProcedureCallbackFactory()()");
       if (mutation && ScratchBlocks.Procedures.isProcedureBlock(block)) {
         mutateCallersAndPrototype(block.getProcCode(), block.workspace, mutation);
       }
@@ -274,6 +280,7 @@ export default async function ({ addon, msg, console }) {
     if (/reporter$/.test(block.type)) selectedType = "number";
     else if (/boolean$/.test(block.type)) selectedType = "boolean";
     else selectedType = "stack";
+    callback = editProcedureCallbackFactory(prototypeBlock);
     // Block now refers to the procedure prototype block, it is safe to proceed.
     ScratchBlocks.ScratchProcedures.externalProcedureDefCallback(
       prototypeBlock.mutationToDom(),
@@ -294,6 +301,51 @@ export default async function ({ addon, msg, console }) {
       weight: 7,
     };
   };
+
+  // The following two functions are adapted from the originals to use patched versions of makeEditOption
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/blocks/vertical_extensions.ts#L145C1-L213C3
+  const PROCEDURE_DEF_CONTEXTMENU = function () {
+    this.mixin(
+      {
+        customContextMenu: function (menuOptions) {
+          console.log("customContextMenu");
+          // Add the edit option at the end.
+          menuOptions.push(ScratchBlocks.ScratchProcedures.makeEditOption(this));
+
+          // Find and remove the duplicate option
+          for (let i = 0, option; (option = menuOptions[i]); i++) {
+            if (option.text == ScratchBlocks.Msg.DUPLICATE) {
+              menuOptions.splice(i, 1);
+              break;
+            }
+          }
+        },
+        checkAndDelete: function () {
+          const input = this.getInput("custom_block");
+          // this is the root block, not the shadow block.
+          if (input && input.connection && input.connection.targetBlock()) {
+            const procCode = input.connection.targetBlock().getProcCode();
+            const didDelete = ScratchBlocks.ScratchProcedures.deleteProcedureDefCallback(procCode, this);
+            if (!didDelete) {
+              alert(ScratchBlocks.Msg.PROCEDURE_USED);
+            }
+          }
+        },
+      },
+      true
+    );
+  };
+  const PROCEDURE_CALL_CONTEXTMENU = {
+    customContextMenu: function (menuOptions) {
+      console.log("customContextMenu");
+      menuOptions.push(ScratchBlocks.ScratchProcedures.makeEditOption(this));
+    },
+  };
+
+  ScratchBlocks.Extensions.unregister("procedure_def_contextmenu");
+  ScratchBlocks.Extensions.register("procedure_def_contextmenu", PROCEDURE_DEF_CONTEXTMENU);
+  ScratchBlocks.Extensions.unregister("procedure_call_contextmenu");
+  ScratchBlocks.Extensions.registerMixin("procedure_call_contextmenu", PROCEDURE_CALL_CONTEXTMENU);
 
   // Adapted from original to account for new opcodes.
   // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L423
@@ -354,14 +406,26 @@ export default async function ({ addon, msg, console }) {
     return (mutation) => {
       if (!mutation) return;
 
+      const statementOrValue = {
+        stack: "statement",
+        number: "value",
+        boolean: "value",
+      }[selectedType];
+
       const blockText = `
       <xml>
-        <block type="procedures_definition">
-          <statement name="custom_block">
-            <shadow type="procedures_prototype">
+        <block type="procedures_definition${statementOrValue === "value" ? "_reporter" : ""}">
+          <${statementOrValue} name="custom_block">
+            <shadow type="procedures_prototype${
+              {
+                stack: "",
+                number: "_reporter",
+                boolean: "_boolean",
+              }[selectedType]
+            }">
               ${ScratchBlocks.Xml.domToText(mutation)}
             </shadow>
-          </statement>
+          </${statementOrValue}>
         </block>
       </xml>`;
       const blockDom = ScratchBlocks.utils.xml.textToDom(blockText).firstElementChild;
@@ -441,6 +505,7 @@ export default async function ({ addon, msg, console }) {
       newBlockButton.setAttribute("text", ScratchBlocks.Msg.NEW_PROCEDURE);
       newBlockButton.setAttribute("callbackKey", "CREATE_PROCEDURE");
       addon.tab.traps.getWorkspace().registerButtonCallback("CREATE_PROCEDURE", () => {
+        callback = createProcedureCallbackFactory(addon.tab.traps.getWorkspace());
         ScratchBlocks.ScratchProcedures.externalProcedureDefCallback(
           newProcedureMutation(),
           createProcedureCallbackFactory(addon.tab.traps.getWorkspace())
@@ -541,6 +606,8 @@ export default async function ({ addon, msg, console }) {
     number: ["output_number", "output_string"],
     boolean: ["output_boolean"],
   };
+
+  let callback = () => null;
 
   // make the custom block editor thing the right shape
   const originalInit = ScratchBlocks.Blocks.procedures_declaration.init;
@@ -725,7 +792,7 @@ export default async function ({ addon, msg, console }) {
         addon.tab.redux.dispatch({
           type: "scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES",
           mutator: mutationRoot.mutationToDom(),
-          callback: addon.tab.redux.state.scratchGui.customProcedures.callback,
+          callback: callback,
         });
         console.log(workspace);
         selectedType = type;
@@ -740,6 +807,12 @@ export default async function ({ addon, msg, console }) {
       };
     };
 
+    addon.tab.redux.dispatch({
+      type: "scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES",
+      mutator: mutationRoot.mutationToDom(),
+      callback: callback,
+    });
+
     header.insertAdjacentElement("afterend", selectTypeDiv);
     for (const blockType of ["stack", "number", "boolean"]) {
       document
@@ -749,84 +822,8 @@ export default async function ({ addon, msg, console }) {
 
     setUpButtons();
 
-    const oldReduxCb = addon.tab.redux.state.scratchGui.customProcedures.callback;
-
-    /*console.log(oldReduxCb.toString());
-    addon.tab.redux.dispatch({
-      type: "scratch-gui/custom-procedures/SET_CALLBACK",
-      callback: function (t) {
-        if (t) {
-          (t =
-            '<xml><block type="procedures_definition"><statement name="custom_block"><shadow type="procedures_prototype">' +
-            ScratchBlocks.Xml.domToText(t) +
-            "</shadow></statement></block></xml>"),
-            (t = ScratchBlocks.Xml.textToDom(t).firstChild),
-            ScratchBlocks.Events.setGroup(!0),
-            (t = ScratchBlocks.Xml.domToBlock(t, e));
-          var o = e.scale,
-            n = -e.scrollX;
-          (n = e.RTL ? n + (e.getMetrics().contentWidth - 30) : n + 30),
-            t.moveBy(n / o, (30 - e.scrollY) / o),
-            t.scheduleSnapAndBump(),
-            ScratchBlocks.Events.setGroup(!1);
-        }
-      },
-    });*/
-
-    const oldCreateProcedureCallbackFactory = ScratchBlocks.Procedures.createProcedureCallbackFactory_;
-    addon.tab.redux.dispatch({
-      type: "scratch-gui/custom-procedures/SET_CALLBACK",
-      callback: (mutation) => {
-        if (mutation) {
-          const wksp = addon.tab.traps.getWorkspace();
-          const statementOrValue = {
-            stack: "statement",
-            number: "value",
-            boolean: "value",
-          }[selectedType];
-          const blockText =
-            "<xml>" +
-            `<block type="procedures_definition${statementOrValue === "value" ? "_reporter" : ""}">` +
-            `<${statementOrValue} name="custom_block">` +
-            `<shadow type="procedures_prototype${
-              {
-                stack: "",
-                number: "_reporter",
-                boolean: "_boolean",
-              }[selectedType]
-            }">` +
-            ScratchBlocks.Xml.domToText(mutation) +
-            "</shadow>" +
-            `</${statementOrValue}>` +
-            "</block>" +
-            "</xml>";
-          var blockDom = ScratchBlocks.utils.xml.textToDom(blockText).firstChild;
-          ScratchBlocks.Events.setGroup(true);
-          console.log(blockDom);
-          var block = ScratchBlocks.Xml.domToBlock(blockDom, wksp);
-          var scale = wksp.scale; // To convert from pixel units to workspace units
-          // Position the block so that it is at the top left of the visible workspace,
-          // padded from the edge by 30 units. Position in the top right if RTL.
-          var posX = -wksp.scrollX;
-          if (workspace.RTL) {
-            posX += wksp.getMetrics().contentWidth - 30;
-          } else {
-            posX += 30;
-          }
-          block.moveBy(posX / scale, (-wksp.scrollY + 30) / scale);
-          block.scheduleSnapAndBump();
-          ScratchBlocks.Events.setGroup(false);
-        }
-      },
-    });
-
     modal.querySelector("div[class*=custom-procedures_checkbox-row] input").addEventListener("change", (e) => {
       mutationRoot.setWarp(e.target.checked);
     });
-
-    /*modal.querySelector("button[class*=custom-procedures_ok-button]").addEventListener("click", () => {
-      console.log(mutationRoot.mutationToDom(true));
-      oldReduxCb(mutationRoot.mutationToDom(true));
-    });*/
   }
 }
