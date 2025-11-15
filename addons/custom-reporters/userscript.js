@@ -142,51 +142,10 @@ export default async function ({ addon, msg, console }) {
 
   console.log(ScratchBlocks);
 
-  // const oldDraw = ScratchBlocks.zelos.Drawer.prototype.draw;
-  // ScratchBlocks.zelos.Drawer.prototype.draw = function () {
-  //   this.info_.constructor.prototype.isBowlerHatBlock = function () {
-  //     if (this.block_.type === "procedures_definition_reporter") {
-  //       this.block_.hat = "bowler";
-  //     }
-  //     return this.block_.hat === "bowler" || this.block_.type === "procedures_definition_reporter";
-  //   };
-  //   return oldDraw.call(this);
-  // };
-
-  // const oldRenderDrawRight = ScratchBlocks.BlockSvg.prototype.renderDrawRight_;
-  // ScratchBlocks.BlockSvg.prototype.renderDrawRight_ = function (steps, inputRows, iconWidth) {
-  //   if (this.type === "procedures_definition_reporter") {
-  //     this.type = "procedures_definition";
-  //     const returnVal = oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
-  //     this.type = "procedures_definition_reporter";
-  //     return returnVal;
-  //   }
-  //   return oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
-  // };
-
-  // const oldRenderCompute = ScratchBlocks.BlockSvg.prototype.renderCompute_;
-  // ScratchBlocks.BlockSvg.prototype.renderCompute_ = function (iconWidth) {
-  //   if (this.type === "procedures_definition_reporter") {
-  //     this.type = "procedures_definition";
-  //     const returnVal = oldRenderCompute.call(this, iconWidth);
-  //     this.type = "procedures_definition_reporter";
-  //     return returnVal;
-  //   }
-  //   return oldRenderCompute.call(this, iconWidth);
-  // };
-
-  // const oldRenderDrawLeft = ScratchBlocks.BlockSvg.prototype.renderDrawLeft_;
-  // ScratchBlocks.BlockSvg.prototype.renderDrawLeft_ = function (steps) {
-  //   oldRenderDrawLeft.call(this, steps);
-  //   if (this.type === "procedures_definition_reporter") {
-  //     const vIndex = steps.indexOf("v"); // presumably this might not always be in the same position (eg when cat blocks)
-  //     if (vIndex === -1) return;
-  //     steps[vIndex + 1] = 68; // todo: compat w/ custom-block-shape
-  //   }
-  // };
-
   // todo: patch allProcedureMutations
 
+  // Adapted from original to account for new opcodes.
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L118
   ScratchBlocks.Procedures.getCallers = function (name, workspace, definitionRoot, allowRecursive) {
     return workspace.getTopBlocks().flatMap((block) => {
       if (block.id === definitionRoot.id && !allowRecursive) {
@@ -205,6 +164,9 @@ export default async function ({ addon, msg, console }) {
     });
   };
 
+  // Adapted from original to account for new opcodes.
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L192
+  //
   // TODO: check: does this actually patch the function we want to? It doesn't seem to be exported
   // but it is present in the module. :thinking:
   ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
@@ -219,6 +181,8 @@ export default async function ({ addon, msg, console }) {
     });
   };
 
+  // Adapted from original to account for new opcodes.
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L145
   function mutateCallersAndPrototype(name, workspace, mutation) {
     const defineBlock = ScratchBlocks.Procedures.getDefineBlock(name, workspace);
     const prototypeBlock = ScratchBlocks.Procedures.getPrototypeBlock(name, workspace);
@@ -256,6 +220,8 @@ export default async function ({ addon, msg, console }) {
     ScratchBlocks.Events.setGroup(false);
   }
 
+  // Adapted from original to call patched version of mutateCallersAndPrototype.
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L359
   function editProcedureCallbackFactory(block) {
     return (mutation) => {
       if (mutation && ScratchBlocks.Procedures.isProcedureBlock(block)) {
@@ -264,6 +230,8 @@ export default async function ({ addon, msg, console }) {
     };
   }
 
+  // Adapted from original to take into account new opcodes.
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L310
   function editProcedureCallback(block) {
     // Edit can come from one of three block types (call, define, prototype)
     // Normalize by setting the block to the prototype block for the procedure.
@@ -313,6 +281,8 @@ export default async function ({ addon, msg, console }) {
     );
   }
 
+  // Adapted from original to use patched version of editProcedureCallback.
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L376
   ScratchBlocks.ScratchProcedures.makeEditOption = function (block) {
     return {
       enabled: true,
@@ -325,6 +295,8 @@ export default async function ({ addon, msg, console }) {
     };
   };
 
+  // Adapted from original to account for new opcodes.
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L423
   ScratchBlocks.Procedures.isProcedureBlock = function (block) {
     return (
       block.type === "procedures_call" ||
@@ -337,6 +309,8 @@ export default async function ({ addon, msg, console }) {
     );
   };
 
+  // Adapted from original to use patched version of getDefineBlock
+  // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L218
   ScratchBlocks.Procedures.getPrototypeBlock = function (procCode, workspace) {
     const defineBlock = ScratchBlocks.Procedures.getDefineBlock(procCode, workspace);
     if (defineBlock) {
