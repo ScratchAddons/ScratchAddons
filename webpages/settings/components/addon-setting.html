@@ -6,7 +6,6 @@
       'boolean-setting': setting.type === 'boolean',
       'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
     }"
-    :aria-label="msg('addonSettingsBlock')"
   >
     <div class="setting-label-container">
       <div class="setting-label" :id="'setting-name-' + setting.id" v-html="settingsName(addon)"></div>

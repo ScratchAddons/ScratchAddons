@@ -104,7 +104,11 @@
           @areahover="highlightSetting"
         />
       </div>
-      <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+      <div
+        class="settings-column"
+        v-bind:class="[!addon._enabled ? 'disabled' : '']"
+        :aria-label="msg('addonSettingsBlock')"
+      >
         <addon-setting
           v-for="setting of addon.settings"
           :class="{'setting-highlighted': highlightedSettingId === setting.id}"
