@@ -303,6 +303,9 @@ export default async function ({ addon, msg, console }) {
     } else {
       prototypeBlock = block;
     }
+    if (/reporter$/.test(block.type)) selectedType = "number";
+    else if (/boolean$/.test(block.type)) selectedType = "boolean";
+    else selectedType = "stack";
     // Block now refers to the procedure prototype block, it is safe to proceed.
     ScratchBlocks.ScratchProcedures.externalProcedureDefCallback(
       prototypeBlock.mutationToDom(),
