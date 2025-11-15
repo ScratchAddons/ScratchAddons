@@ -264,12 +264,11 @@ export default async function ({ addon, msg, console }) {
     };
   }
 
-  // TODO: actually patch this in the relevant places; the function isn't exported
-  ScratchBlocks.Procedures.editProcedureCallback__Sa = function (block) {
+  function editProcedureCallback(block) {
     // Edit can come from one of three block types (call, define, prototype)
     // Normalize by setting the block to the prototype block for the procedure.
     let prototypeBlock;
-    if (block.type === "procedures_definition" || block.type === "procedures_definition") {
+    if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
       const input = block.getInput("custom_block");
       if (!input) {
         alert("Bad input"); // TODO: Decide what to do about this.
@@ -309,6 +308,18 @@ export default async function ({ addon, msg, console }) {
       prototypeBlock.mutationToDom(),
       editProcedureCallbackFactory(prototypeBlock)
     );
+  }
+
+  ScratchBlocks.ScratchProcedures.makeEditOption = function (block) {
+    return {
+      enabled: true,
+      text: ScratchBlocks.Msg.EDIT_PROCEDURE,
+      callback: () => {
+        editProcedureCallback(block);
+      },
+      scope: block,
+      weight: 7,
+    };
   };
 
   ScratchBlocks.Procedures.isProcedureBlock = function (block) {
