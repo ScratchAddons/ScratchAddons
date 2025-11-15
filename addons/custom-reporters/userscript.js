@@ -232,10 +232,10 @@ export default async function ({ addon, msg, console }) {
     ScratchBlocks.Events.setGroup(true);
     callers.forEach((caller) => {
       const oldMutationDom = caller.mutationToDom();
-      const oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+      const oldMutation = oldMutationDom && ScratchBlocks.Xml.domToText(oldMutationDom);
       caller.domToMutation(mutation);
       const newMutationDom = caller.mutationToDom();
-      const newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
+      const newMutation = newMutationDom && ScratchBlocks.Xml.domToText(newMutationDom);
       if (oldMutation !== newMutation) {
         ScratchBlocks.Events.fire(
           new (ScratchBlocks.Events.get(ScratchBlocks.Events.BLOCK_CHANGE))(
@@ -347,7 +347,7 @@ export default async function ({ addon, msg, console }) {
     const mutationText = `
     <xml>
       <mutation
-        proccode="${Blockly.Msg["PROCEDURE_DEFAULT_NAME"]}"
+        proccode="${ScratchBlocks.Msg["PROCEDURE_DEFAULT_NAME"]}"
         argumentids="[]"
         argumentnames="[]"
         argumentdefaults="[]"
@@ -373,7 +373,7 @@ export default async function ({ addon, msg, console }) {
       </xml>`;
       const blockDom = ScratchBlocks.utils.xml.textToDom(blockText).firstElementChild;
       ScratchBlocks.Events.setGroup(true);
-      const block = Blockly.Xml.domToBlock(blockDom, workspace);
+      const block = ScratchBlocks.Xml.domToBlock(blockDom, workspace);
       ScratchBlocks.renderManagement.finishQueuedRenders().then(() => {
         // To convert from pixel units to workspace units
         const scale = workspace.scale;
@@ -543,6 +543,7 @@ export default async function ({ addon, msg, console }) {
   new Transpiler(vm, ScratchBlocks);
 
   let hasSetUpInputButtons = false;
+
   while (true) {
     const modal = (
       await addon.tab.waitForElement("div[class*=custom-procedures_modal-content_]", { markAsSeen: true })
@@ -629,6 +630,8 @@ export default async function ({ addon, msg, console }) {
 
     const workspace = ScratchBlocks.getMainWorkspace();
     let mutationRoot = workspace.getTopBlocks()[0];
+    const mutator = mutationRoot.mutationToDom();
+    console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator.outerHTML)
     const originalMutationRoot = mutationRoot;
 
     mutationRoot.dispose();
@@ -638,6 +641,7 @@ export default async function ({ addon, msg, console }) {
       mutationRoot.setMovable(false);
       mutationRoot.setDeletable(false);
       mutationRoot.contextMenu = false;
+      console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator.outerHTML, mutator.outerHTML)
       mutationRoot.domToMutation(addon.tab.redux.state.scratchGui.customProcedures.mutator);
       mutationRoot.initSvg();
       mutationRoot.render();
