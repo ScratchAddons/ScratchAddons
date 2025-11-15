@@ -227,7 +227,12 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
-    const callers = ScratchBlocks.Procedures.getCallers(name, defineBlock.workspace, defineBlock, true /* allowRecursive */);
+    const callers = ScratchBlocks.Procedures.getCallers(
+      name,
+      defineBlock.workspace,
+      defineBlock,
+      true /* allowRecursive */
+    );
     callers.push(prototypeBlock);
     ScratchBlocks.Events.setGroup(true);
     callers.forEach((caller) => {
@@ -542,9 +547,54 @@ export default async function ({ addon, msg, console }) {
 
   new Transpiler(vm, ScratchBlocks);
 
-  let hasSetUpInputButtons = false;
+  let hasSetUpInputButtonsEver = false;
+
+  let selectedType = "stack";
+  const blockExtensions = {
+    stack: ["shape_statement"],
+    number: ["output_number", "output_string"],
+    boolean: ["output_boolean"],
+  };
+
+  // make the custom block editor thing the right shape
+  const originalInit = ScratchBlocks.Blocks.procedures_declaration.init;
+  ScratchBlocks.Blocks.procedures_declaration.init = function (...args) {
+    const originalJsonInit = this.jsonInit;
+    this.jsonInit = function (obj) {
+      return originalJsonInit.call(
+        this,
+        Object.assign(obj, {
+          extensions: ["colours_more", ...blockExtensions[selectedType]],
+        })
+      );
+    };
+    originalInit.call(this, ...args);
+
+    // ignore any calls from scratch to add labels/inputs, as it tries to add them to a block that probably won't exist anymore
+    // yet it will add an extra inputs after first page load if you don't change the block type?
+    const oldAddLabel = this.addLabelExternal;
+    this.addLabelExternal = function (isSA) {
+      if (isSA) {
+        return oldAddLabel.call(this);
+      }
+    };
+    const oldAddBool = this.addBooleanExternal;
+    this.addBooleanExternal = function (isSA) {
+      if (isSA) {
+        return oldAddBool.call(this);
+      }
+    };
+    const oldAddStringNum = this.addStringNumberExternal;
+    this.addStringNumberExternal = function (isSA) {
+      if (isSA) {
+        return oldAddStringNum.call(this);
+      }
+    };
+  };
 
   while (true) {
+    let hasSetUpInputButtonsThisTime = false;
+
     const modal = (
       await addon.tab.waitForElement("div[class*=custom-procedures_modal-content_]", { markAsSeen: true })
     ).querySelector("div");
@@ -556,8 +606,8 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/stack.svg">
+        addon.self.dir
+      }/stack.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("stack")}</span>
                 </div>
@@ -566,18 +616,18 @@ export default async function ({ addon, msg, console }) {
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/reporter.svg">
+        addon.self.dir
+      }/reporter.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("numortext")}</span>
                 </div>
             </div>
-            <div id="sa-custom-reporter_select-block-type_predicate" class="${addon.tab.scratchClass(
+            <div id="sa-custom-reporter_select-block-type_boolean" class="${addon.tab.scratchClass(
               "custom-procedures_option-card"
             )}" role="button" tabindex="0">
                 <img class="${addon.tab.scratchClass("custom-procedures_option-icon")}" src="${
-                  addon.self.dir
-                }/predicate.svg">
+        addon.self.dir
+      }/predicate.svg">
                 <div class="${addon.tab.scratchClass("custom-procedures_option-title")}">
                     <span>${msg("boolean")}</span>
                 </div>
@@ -585,53 +635,10 @@ export default async function ({ addon, msg, console }) {
             `,
     });
 
-    let selectedType = "stack";
-    const blockExtensions = {
-      stack: ["shape_statement"],
-      number: ["output_number", "output_string"],
-      predicate: ["output_boolean"],
-    };
-
-    // make the custom block editor thing the right shape
-    const originalInit = ScratchBlocks.Blocks.procedures_declaration.init;
-    ScratchBlocks.Blocks.procedures_declaration.init = function (...args) {
-      const originalJsonInit = this.jsonInit;
-      this.jsonInit = function (obj) {
-        return originalJsonInit.call(
-          this,
-          Object.assign(obj, {
-            extensions: ["colours_more", ...blockExtensions[selectedType]],
-          })
-        );
-      };
-      originalInit.call(this, ...args);
-
-      // ignore any calls from scratch to add labels/inputs, as it tries to add them to a block that probably won't exist anymore
-      // yet it will add an extra inputs after first page load if you don't change the block type?
-      const oldAddLabel = this.addLabelExternal;
-      this.addLabelExternal = function (isSA) {
-        if (isSA) {
-          return oldAddLabel.call(this);
-        }
-      };
-      const oldAddBool = this.addBooleanExternal;
-      this.addBooleanExternal = function (isSA) {
-        if (isSA) {
-          return oldAddBool.call(this);
-        }
-      };
-      const oldAddStringNum = this.addStringNumberExternal;
-      this.addStringNumberExternal = function (isSA) {
-        if (isSA) {
-          return oldAddStringNum.call(this);
-        }
-      };
-    };
-
     const workspace = ScratchBlocks.getMainWorkspace();
     let mutationRoot = workspace.getTopBlocks()[0];
     const mutator = mutationRoot.mutationToDom();
-    console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator.outerHTML)
+    console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator.outerHTML);
     const originalMutationRoot = mutationRoot;
 
     mutationRoot.dispose();
@@ -641,7 +648,7 @@ export default async function ({ addon, msg, console }) {
       mutationRoot.setMovable(false);
       mutationRoot.setDeletable(false);
       mutationRoot.contextMenu = false;
-      console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator.outerHTML, mutator.outerHTML)
+      console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator.outerHTML, mutator.outerHTML);
       mutationRoot.domToMutation(addon.tab.redux.state.scratchGui.customProcedures.mutator);
       mutationRoot.initSvg();
       mutationRoot.render();
@@ -728,9 +735,10 @@ export default async function ({ addon, msg, console }) {
       return () => {
         // don't set these listeners up until we first change the block type,
         // since before that scratch will add them just fine for some reason
-        if (!hasSetUpInputButtons) {
+        if (!hasSetUpInputButtonsThisTime) {
           setUpButtons();
-          hasSetUpInputButtons = true;
+          hasSetUpInputButtonsEver = true;
+          hasSetUpInputButtonsThisTime = true;
         }
         // scratch-gui doesn't seem to keep track of the mutator
         // so we do it instead, so inputs aren't lost when changing block type
@@ -754,14 +762,15 @@ export default async function ({ addon, msg, console }) {
     };
 
     header.insertAdjacentElement("afterend", selectTypeDiv);
-    for (const blockType of ["stack", "number", "predicate"]) {
+    for (const blockType of ["stack", "number", "boolean"]) {
       document
         .getElementById(`sa-custom-reporter_select-block-type_${blockType}`)
         .addEventListener("click", selectBlockTypeFactory(blockType));
     }
 
-    if (hasSetUpInputButtons) {
+    if (hasSetUpInputButtonsEver) {
       setUpButtons();
+      hasSetUpInputButtonsThisTime = true;
     }
 
     const oldReduxCb = addon.tab.redux.state.scratchGui.customProcedures.callback;
@@ -797,7 +806,7 @@ export default async function ({ addon, msg, console }) {
           const statementOrValue = {
             stack: "statement",
             number: "value",
-            predicate: "value",
+            boolean: "value",
           }[selectedType];
           const blockText =
             "<xml>" +
@@ -807,7 +816,7 @@ export default async function ({ addon, msg, console }) {
               {
                 stack: "",
                 number: "_reporter",
-                predicate: "_boolean",
+                boolean: "_boolean",
               }[selectedType]
             }">` +
             ScratchBlocks.Xml.domToText(mutation) +
