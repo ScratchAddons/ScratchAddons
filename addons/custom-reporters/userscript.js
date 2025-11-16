@@ -314,7 +314,7 @@ export default async function ({ addon, msg, console }) {
 
           // Find and remove the duplicate option
           for (let i = 0, option; (option = menuOptions[i]); i++) {
-            if (option.text == ScratchBlocks.Msg.DUPLICATE) {
+            if (option.text === ScratchBlocks.Msg.DUPLICATE) {
               menuOptions.splice(i, 1);
               break;
             }
