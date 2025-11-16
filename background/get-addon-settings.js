@@ -744,6 +744,12 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             // Respect the value of enabledByDefault (by doing nothing)
           }
         }
+
+        if (addonId === "discuss-button" && settings.showMembership === undefined) {
+          if (settings.items) settings.items = settings.items.filter((i) => i.url !== "/about");
+          settings.showMembership = true;
+          madeAnyChanges = madeChangesToAddon = true;
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
