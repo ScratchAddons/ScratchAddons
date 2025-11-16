@@ -1,0 +1,52 @@
+{
+  "name": "Show project thumbnail while loading",
+  "description": "Shows the project's thumbnail as a placeholder before the project is started and while it loads.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://github.com/Samq64"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "scratch3to2.css",
+      "matches": ["projects"],
+      "if": {
+        "addonEnabled": ["scratch3to2"]
+      }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Darken thumbnail (%)",
+      "id": "darken",
+      "type": "integer",
+      "min": 10,
+      "max": 90,
+      "default": 25
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.40.0",
+  "latestUpdate": {
+    "version": "1.45.0",
+    "newSettings": ["darken"]
+  },
+  "tags": ["community", "theme", "projectPage"]
+}

@@ -2,6 +2,7 @@
   "name": "Sprite and script count",
   "description": "Shows the number of sprites and scripts a project has next to the Remix button.",
   "tags": ["community", "projectPage", "featured"],
+  "relatedAddons": ["block-count"],
   "credits": [
     {
       "name": "TheColaber",
@@ -33,7 +34,7 @@
   ],
   "settings": [
     {
-      "name": "Show...",
+      "name": "Appearance",
       "id": "show",
       "type": "select",
       "potentialValues": [

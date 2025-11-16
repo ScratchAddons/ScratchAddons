@@ -20,20 +20,11 @@ globalTheme().then(({ theme }) => {
 
 document.title = chrome.i18n.getMessage("permissionsTitle");
 
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
-
-const MANIFEST_VERSION = 3;
-
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
-  const HOST_PERMISSIONS_KEY_NAME = MANIFEST_VERSION === 2 ? "permissions" : "host_permissions";
-
   const manifest = chrome.runtime.getManifest();
-  const origins = manifest[HOST_PERMISSIONS_KEY_NAME].filter((url) => url.startsWith("https://"));
+  const origins = manifest.host_permissions.filter((url) => url.startsWith("https://"));
 
-  const granted = await promisify(chrome.permissions.request)({ origins });
+  const granted = await chrome.permissions.request({ origins });
   if (granted) {
     return chrome.runtime.reload();
   }

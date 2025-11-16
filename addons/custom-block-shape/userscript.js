@@ -1,12 +1,12 @@
-import { updateAllBlocks } from "./update-all-blocks.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 export default async function ({ addon, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
+  if (BlocklyInstance.registry) return;
 
   (function (Blockly) {
     const BlockSvg = BlocklyInstance.BlockSvg;
     var originalDropdownObject = BlocklyInstance.FieldDropdown.prototype.positionArrow;
-    var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
 
@@ -239,7 +239,7 @@ export default async function ({ addon, console }) {
 
     function applyAndUpdate(...args) {
       applyChanges(...args);
-      updateAllBlocks(vm, addon.tab.traps.getWorkspace(), BlocklyInstance);
+      updateAllBlocks(addon.tab);
     }
 
     addon.settings.addEventListener("change", () => applyAndUpdate());

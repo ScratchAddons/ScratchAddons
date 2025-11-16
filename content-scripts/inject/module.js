@@ -37,6 +37,8 @@ const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
 const comlinkIframe4 = document.getElementById("scratchaddons-iframe-4");
 const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
 
+const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+
 const page = {
   _globalState: null,
   get globalState() {
@@ -56,24 +58,13 @@ const page = {
   set dataReady(val) {
     this._dataReady = val;
     onDataReady(); // Assume set to true
-    this.refetchSession();
+    this.refetchSession(true);
   },
 
   runAddonUserscripts, // Gets called by cs.js when addon enabled late
 
   fireEvent(info) {
     if (info.addonId) {
-      if (info.name === "disabled") {
-        document.documentElement.style.setProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
-          "none"
-        );
-      } else if (info.name === "reenabled") {
-        document.documentElement.style.removeProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
-        );
-      }
-
       // Addon specific events, like settings change and self disabled
       const eventTarget = scratchAddons.eventTargets[info.target].find(
         (eventTarget) => eventTarget._addonId === info.addonId
@@ -87,28 +78,53 @@ const page = {
     }
   },
   isFetching: false,
-  async refetchSession() {
-    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return;
-    let res;
-    let d;
-    if (this.isFetching) return;
-    this.isFetching = true;
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
-    try {
-      res = await fetch("/session/", {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      });
-      d = await res.json();
-    } catch (e) {
-      d = {};
-      scratchAddons.console.warn("Session fetch failed: ", e);
-      if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+  async refetchSession(firstTime = false) {
+    if (isScratchGui) return;
+    const isScratchR2 =
+      !document.querySelector("meta[name='format-detection']") &&
+      document.querySelector("script[type='text/javascript']");
+    if (!firstTime && isScratchR2) {
+      // We assume this function always gets called with firstTime:true at least once.
+      // scratchr2 pages do not support logging in/out without a page reload.
+      // Why even bother to check auth again?
+      return;
     }
-    scratchAddons.session = d;
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
-    this.isFetching = false;
+
+    const refreshFn = async () => {
+      let res;
+      let d;
+      if (this.isFetching) return;
+      this.isFetching = true;
+      if (firstTime && window.__scratchAddonsSessionRes?.loaded) {
+        d = window.__scratchAddonsSessionRes.session;
+      } else {
+        try {
+          res = await fetch("/session/", {
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+            },
+          });
+          d = await res.json();
+        } catch (e) {
+          d = {};
+          scratchAddons.console.warn("Session fetch failed: ", e);
+          if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+        }
+      }
+      scratchAddons.session = d;
+      scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
+      this.isFetching = false;
+    };
+
+    let calledFn = false;
+    const refreshFnOnce = () => {
+      if (!calledFn) {
+        calledFn = true;
+        refreshFn();
+      }
+    };
+
+    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh(refreshFnOnce));
   },
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
@@ -196,17 +212,27 @@ function onDataReady() {
   }
 }
 
-function bodyIsEditorClassCheck() {
-  if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601")
-    return document.body.classList.add("sa-body-editor");
+function editorClassCheck() {
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
-  if (!split[0] || split[0] !== "projects") return;
-  if (split.includes("editor") || split.includes("fullscreen")) document.body.classList.add("sa-body-editor");
-  else document.body.classList.remove("sa-body-editor");
+  if (!isScratchGui && split[0] !== "projects") return;
+  let isInEditor = false;
+  let isFullScreen = false;
+  const state = __scratchAddonsRedux.state;
+  if (state) {
+    isInEditor = !state.scratchGui.mode.isPlayerOnly;
+    isFullScreen = state.scratchGui.mode.isFullScreen;
+  } else if (isScratchGui) {
+    isInEditor = true;
+  } else {
+    isInEditor = split.includes("editor");
+    isFullScreen = split.includes("fullscreen");
+  }
+  document.documentElement.classList.toggle("sa-editor", isInEditor || isFullScreen);
+  document.documentElement.classList.toggle("sa-fullscreen", isFullScreen);
 }
-if (!document.body) document.addEventListener("DOMContentLoaded", bodyIsEditorClassCheck);
-else bodyIsEditorClassCheck();
+if (!document.body) document.addEventListener("DOMContentLoaded", editorClassCheck);
+else editorClassCheck();
 
 const originalReplaceState = history.replaceState;
 history.replaceState = function () {
@@ -217,7 +243,7 @@ history.replaceState = function () {
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
-  bodyIsEditorClassCheck();
+  editorClassCheck();
   return returnValue;
 };
 
@@ -230,7 +256,7 @@ history.pushState = function () {
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
-  bodyIsEditorClassCheck();
+  editorClassCheck();
   return returnValue;
 };
 
@@ -241,8 +267,32 @@ window.addEventListener("popstate", () => {
     // There isn't really a way to get the previous URL from popstate event.
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl: "", newUrl } }));
   }
-  bodyIsEditorClassCheck();
+  editorClassCheck();
 });
+
+// In scratch-gui and /projects/editor, the URL doesn't change when toggling full screen,
+// so we use Redux to detect it.
+window.addEventListener("load", () => {
+  if (!__scratchAddonsRedux.target) return;
+  __scratchAddonsRedux.target.addEventListener("statechanged", (e) => {
+    if (
+      e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN" ||
+      e.detail.action.type === "scratch-gui/mode/SET_PLAYER"
+    ) {
+      editorClassCheck();
+    }
+  });
+});
+
+function getAllRules(e) {
+  // Returns all CSS style rules, including nested ones
+  let result = [];
+  if (e instanceof CSSStyleRule) result.push(e);
+  try {
+    result = [...result, [...e.cssRules].map((e) => getAllRules(e)).flat()];
+  } catch {}
+  return result.flat();
+}
 
 function loadClasses() {
   scratchAddons.classNames.arr = [
@@ -258,19 +308,14 @@ function loadClasses() {
                 styleSheet.ownerNode.textContent.includes("label_input-group_"))
             )
         )
-        .map((e) => {
-          try {
-            return [...e.cssRules];
-          } catch (e) {
-            return [];
-          }
-        })
+        .map((e) => getAllRules(e))
         .flat()
         .map((e) => e.selectorText)
         .filter((e) => e)
-        .map((e) => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
+        .map((e) => e.match(/(([\w-]+?)_([\w-]+)_(([\w\d-]|\\\+)+))/g))
         .filter((e) => e)
         .flat()
+        .map((e) => e.replace(/\\\+/g, "+"))
     ),
   ];
   scratchAddons.classNames.loaded = true;
@@ -280,7 +325,6 @@ function loadClasses() {
 const isProject =
   location.pathname.split("/")[1] === "projects" &&
   !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
-const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 if (isScratchGui || isProject) {
   // Stylesheets are considered to have loaded if this element exists
   const elementSelector = isScratchGui ? "div[class*=index_app_]" : ":root > body > .ReactModalPortal";
@@ -300,18 +344,4 @@ if (isScratchGui || isProject) {
       if (!foundElement) scratchAddons.console.log("Did not find elementSelector element after 10 seconds.");
     }, 10000);
   }
-}
-
-if (location.pathname === "/discuss/3/topic/add/") {
-  const checkUA = () => {
-    if (!window.mySettings) return false;
-    const ua = window.mySettings.markupSet.find((x) => x.className);
-    ua.openWith = window._simple_http_agent = ua.openWith.replace("version", "versions");
-    const textarea = document.getElementById("id_body");
-    if (textarea?.value) {
-      textarea.value = ua.openWith;
-      return true;
-    }
-  };
-  if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }

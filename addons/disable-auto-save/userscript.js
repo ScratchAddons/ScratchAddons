@@ -6,11 +6,6 @@ export default async ({ addon, console, msg }) => {
     console.log("Pending autosave prevented.");
   });
 
-  // If the addon is enable late, don't use the `waitForElement` below
-  // because the `waitForElement` below only runs on certain redux events
-  if (addon.self.enabledLate) {
-    addListener(document.querySelector('[class*="community-button_community-button_"]'));
-  }
   while (true) {
     const btn = await addon.tab.waitForElement('[class*="community-button_community-button_"]', {
       markAsSeen: true,

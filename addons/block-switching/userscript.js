@@ -691,9 +691,14 @@ export default async function ({ addon, console, msg }) {
       const logProc = "\u200B\u200Blog\u200B\u200B %s";
       const warnProc = "\u200B\u200Bwarn\u200B\u200B %s";
       const errorProc = "\u200B\u200Berror\u200B\u200B %s";
+      const starttimerProc = "\u200B\u200Bstart timer\u200B\u200B %s";
+      const stoptimerProc = "\u200B\u200Bstop timer\u200B\u200B %s";
       const logMessage = msg("debugger_log");
       const warnMessage = msg("debugger_warn");
       const errorMessage = msg("debugger_error");
+      const starttimerMessage = msg("debugger_starttimer");
+      const stoptimerMessage = msg("debugger_stoptimer");
+
       const logSwitch = {
         mutate: {
           proccode: logProc,
@@ -711,6 +716,18 @@ export default async function ({ addon, console, msg }) {
           proccode: errorProc,
         },
         msg: errorMessage,
+      };
+      const starttimerSwitch = {
+        mutate: {
+          proccode: starttimerProc,
+        },
+        msg: starttimerMessage,
+      };
+      const stoptimerSwitch = {
+        mutate: {
+          proccode: stoptimerProc,
+        },
+        msg: stoptimerMessage,
       };
       procedureSwitches[logProc] = [
         {
@@ -735,6 +752,20 @@ export default async function ({ addon, console, msg }) {
           msg: errorMessage,
           isNoop: true,
         },
+      ];
+      procedureSwitches[stoptimerProc] = [
+        starttimerSwitch,
+        {
+          msg: stoptimerMessage,
+          isNoop: true,
+        },
+      ];
+      procedureSwitches[starttimerProc] = [
+        {
+          msg: starttimerMessage,
+          isNoop: true,
+        },
+        stoptimerSwitch,
       ];
     }
 
@@ -1007,21 +1038,28 @@ export default async function ({ addon, console, msg }) {
               : // If there's no such button, insert at end
                 items.length;
           const text = opcodeData.msg ? opcodeData.msg : opcodeData.opcode ? msg(opcodeData.opcode) : msg(block.type);
-          items.splice(insertBeforeIndex, 0, {
+          const item = {
             enabled: true,
             text,
             callback: menuCallbackFactory(block, opcodeData),
-            separator: i === 0,
-          });
+          };
+          items.splice(insertBeforeIndex, 0, item);
+          if (i === 0) {
+            items.splice(insertBeforeIndex, 0, { separator: true });
+          }
         });
 
         if (block.type === "data_variable" || block.type === "data_listcontents") {
-          // Add top border to first variable (if it exists)
+          // Add separator above first variable (if it exists)
           const delBlockIndex = items.findIndex((item) => item.text === ScratchBlocks.Msg.DELETE_BLOCK);
+          const firstVariableIndex = delBlockIndex + 1;
           // firstVariableItem might be undefined, a variable to switch to,
           // or an item added by editor-devtools (or any addon before this one)
-          const firstVariableItem = items[delBlockIndex + 1];
-          if (firstVariableItem) firstVariableItem.separator = true;
+          const firstVariableItem = items[firstVariableIndex];
+          // Only add a separator if it isn't already there
+          if (firstVariableItem && !firstVariableItem.separator) {
+            items.splice(firstVariableIndex, 0, { separator: true });
+          }
         }
       }
       return items;

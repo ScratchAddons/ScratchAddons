@@ -1,7 +1,9 @@
 :root {
-  --brand-orange-min-font-weight: 600;
+  color-scheme: light;
+
+  --brand-orange-min-font-weight: 500;
   --green-text: var(--green);
-  --blue-text: var(--blue);
+  --blue-text: #175ef8;
 
   --page-background: #fcfcfc;
   --content-background: #f7f7f7;

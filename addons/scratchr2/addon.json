@@ -2,6 +2,7 @@
   "name": "Scratch 2.0 \u2192 3.0",
   "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0.",
   "tags": ["community", "theme", "recommended"],
+  "relatedAddons": ["scratch3to2"],
   "credits": [
     {
       "name": "Maximouse",
@@ -31,10 +32,6 @@
   "userstyles": [
     {
       "url": "scratchr2.css",
-      "matches": ["isNotScratchWWW"]
-    },
-    {
-      "url": "scratchr2_errors.css",
       "matches": ["isNotScratchWWW"]
     },
     {
@@ -72,10 +69,6 @@
     {
       "url": "scratchr2_comments.css",
       "matches": ["https://scratch.mit.edu/users/*/"]
-    },
-    {
-      "url": "remixtree.css",
-      "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
     },
     {
       "url": "v_tabs.css",
@@ -129,5 +122,6 @@
       ],
       "default": "box"
     }
-  ]
+  ],
+  "libraries": ["scratch-www"]
 }
