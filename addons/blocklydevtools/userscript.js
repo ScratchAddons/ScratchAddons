@@ -5,8 +5,8 @@ export default async function ({ addon, console }) {
             markAsSeen: true
         }); //Wait for the workspace to be ready. (Necessary for ScratchAddons)
 
-        var Blockly = window.Blockly; //Blockly is usually exposed by default.
-        if (!Blockly) {
+        let Blockly = window.Blockly; //Blockly is usually exposed by default.
+        if (!Blockly || !Blockly.getMainWorkspace) { // Updated scratch now no longer exposes the full Blockly global
             Blockly = await addon.tab.traps.getBlockly(); //I doubt code in here will ever run.
         }
 
@@ -14,9 +14,9 @@ export default async function ({ addon, console }) {
             return "Failed to find Blockly instance!";
         }
 
-        var workspace = Blockly.getMainWorkspace();
+        let workspace = Blockly.getMainWorkspace();
 
-        var dom = Blockly.Xml.workspaceToDom(workspace); //Export the workspace to a DOM representing the save XML.
+        let dom = Blockly.Xml.workspaceToDom(workspace); //Export the workspace to a DOM representing the save XML.
         workspace.addChangeListener(() => { //Every time the workspace changes, update the dom variable.
             if (!document.querySelector("g.blocklyDraggable[data-id].blocklyInsertionMarker")) { //Blockly will try to serialise insertion markers, which will cause an internal crash.
                 dom = Blockly.Xml.workspaceToDom(workspace);
@@ -84,7 +84,7 @@ export default async function ({ addon, console }) {
         }
 
         function makeEditorContainer() {
-            var editor = document.createElement("div");
+            let editor = document.createElement("div");
 
             editor.setAttribute("data-isblocklydeveditor", "true"); //Attribute to identify element as editor
             editor.contentEditable = true; //Allow editing of content
@@ -135,8 +135,8 @@ export default async function ({ addon, console }) {
         }
 
         function formatXml(xml, innerHTMLMode = false) { //Utility function to format XML, optionally outputting valid HTML
-            var formatted = '', indent = '';
-            var tab = '\t';
+            let formatted = '', indent = '';
+            let tab = '\t';
             xml.split(/>\s*</).forEach(function (node) {
                 if (node.match(/^\/\w/)) indent = indent.substring(tab.length);
                 formatted += indent + '<' + node + '>\r\n';
@@ -178,7 +178,7 @@ export default async function ({ addon, console }) {
             }
 
             function getXmlFromVarId(id, dom) { //Utility function to get the block's XML string from a Blockly serialised DOM.
-                var variables = dom.querySelector("variables");
+                let variables = dom.querySelector("variables");
                 for (const element of variables.children) {
                     if (element.tagName.toLowerCase() === "variable" && element.getAttribute("id") === id) {
                         return element.outerHTML;
@@ -186,19 +186,19 @@ export default async function ({ addon, console }) {
                 }
             }
 
-            var originalXml = getXmlFromBlockId(blockId, dom); //Store the block's original, un-edited XML.
+            let originalXml = getXmlFromBlockId(blockId, dom); //Store the block's original, un-edited XML.
 
 
-            var container = makeEditorContainer(); //Create the editor
+            let container = makeEditorContainer(); //Create the editor
 
             //Set the editor's contents to the formatted original XML.
             container.innerHTML = formatXml(originalXml, true);
             firefoxSpacingFix(container);
 
-            var referencesVars = block.getVars(); //Array of variable ids referenced by block (directly)
-            var editorVar = referencesVars[0]; //The variable to display
-            var secondaryEditor = makeEditorContainer(); //Create secondary editor
-            var originalVarXml = editorVar ? getXmlFromVarId(editorVar, dom) : null;
+            let referencesVars = block.getVars(); //Array of variable ids referenced by block (directly)
+            let editorVar = referencesVars[0]; //The variable to display
+            let secondaryEditor = makeEditorContainer(); //Create secondary editor
+            let originalVarXml = editorVar ? getXmlFromVarId(editorVar, dom) : null;
 
             secondaryEditor.innerHTML = originalVarXml ? formatXml(originalVarXml, true) : "";
             secondaryEditor.style.display = originalVarXml ? "block" : "none";
@@ -228,7 +228,7 @@ export default async function ({ addon, console }) {
             workspace.addChangeListener(update); //Register change listener
 
             container.save = function () { //Function to save
-                var xmlStr = (Blockly.Xml.domToText || Blockly.utils.xml.domToText)(dom); //Convert the dom to string
+                let xmlStr = (Blockly.Xml.domToText || Blockly.utils.xml.domToText)(dom); //Convert the dom to string
                 if (!xmlStr.includes(originalXml)) { //If the domn does not contain the original block XML, it is impossible to save changes.
                     throw new Error("Workspace XML does not contain block!");
                 }
@@ -238,10 +238,10 @@ export default async function ({ addon, console }) {
                 }
                 //xmlStr = xmlStr.replace(/\u2003/g, "").replace(/\n/g, "");
                 xmlStr = xmlStr.replace(/\u00A0/g, "\u0020"); //Replace any non-breaking spaces with normal ones.
-                var tempDom = (Blockly.Xml.textToDom || Blockly.utils.xml.textToDom)(xmlStr);
+                let tempDom = (Blockly.Xml.textToDom || Blockly.utils.xml.textToDom)(xmlStr);
                 if (tempDom.querySelector("parsererror")) {
                     tempDom.querySelectorAll("parsererror").forEach(err => {
-                        var display = document.createElement("div");
+                        let display = document.createElement("div");
                         display.innerText = err.querySelector("div").innerText;
                         display.classList.add("sa-blocklyDevtoolsError");
                         display.classList.add("sa-blocklyDevtoolsElement");
@@ -271,8 +271,8 @@ export default async function ({ addon, console }) {
         }
         function processBlock(element) { //Function to hook block svg element
             if (isNewBlocklyBlock(element)) { //Check if we have not already hooked it
-                var blockId = element.getAttribute("data-id"); //Get the id
-                var internalBlock = workspace.getBlockById(blockId); //Get the internal block object
+                let blockId = element.getAttribute("data-id"); //Get the id
+                let internalBlock = workspace.getBlockById(blockId); //Get the internal block object
                 if (!internalBlock) {
                     return;
                 }
@@ -311,7 +311,7 @@ export default async function ({ addon, console }) {
 
                 //Get the block's hull and calculate bounding box. Used to calculate where to position elements.
                 const path = getSvgPathFromBlock(element);
-                var bbox = path.getBBox();
+                let bbox = path.getBBox();
 
                 //Attributes and styles for the foreignObject
                 //Width and height are 1 instead of 0 because firefox is won't render the element if it doesn't have a positive size.
@@ -387,13 +387,13 @@ export default async function ({ addon, console }) {
 
                         internalBlock.setCollapsed(!internalBlock.isCollapsed()); //Toggle collapsed for the current block
 
-                        var collapsed = internalBlock.isCollapsed(); //Store collapsed as variable for efficiency
+                        let collapsed = internalBlock.isCollapsed(); //Store collapsed as variable for efficiency
 
                         //Loop through all sub-blocks and set collapsed to match.
-                        var blocks = element.querySelectorAll("g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)");
+                        let blocks = element.querySelectorAll("g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)");
                         for (let i = 0; i < blocks.length; i++) {
                             const b = blocks[i];
-                            var bId = b.getAttribute("data-id");
+                            let bId = b.getAttribute("data-id");
                             workspace.getBlockById(bId).setCollapsed(collapsed);
                         }
                         if (collapsed) { //Change button
@@ -422,8 +422,9 @@ export default async function ({ addon, console }) {
                     if (element.hasAttribute("data-id")) {
                         blockId = element.getAttribute("data-id");
                         const block = workspace.getBlockById(blockId);
-                        block.getDescendants(false, true).forEach((block) => {
-                            block.dispose(true);
+                        // getDescendants.length === 1 is for stone-age support (backwards compatability)
+                        block.getDescendants(block.getDescendants.length === 1, true).reverse().forEach((child) => {
+                            child.dispose(true);
                         });
                         //previously was using dispose(false) aka  "do not heal stack"
                         // switched to descending delete with healing to avoid some project corruption issues
@@ -437,7 +438,7 @@ export default async function ({ addon, console }) {
                     capture: true
                 });
 
-                var updateObserver = new MutationObserver(function () { //When this block updates
+                let updateObserver = new MutationObserver(function () { //When this block updates
                     blockId = element.getAttribute("data-id");
                     bbox = path.getBBox();
 
@@ -456,7 +457,7 @@ export default async function ({ addon, console }) {
                 updateObserver.observe(element, observerConfig); //Initialise observer
             }
         }
-        var observer = new MutationObserver(mutationHandler);
+        let observer = new MutationObserver(mutationHandler);
 
         function mutationHandler(mutationRecords) { //Handler that tries to process all blocks every time the block canvas changes.
             mutationRecords.forEach(function (mutation) {
@@ -467,7 +468,7 @@ export default async function ({ addon, console }) {
         }
 
         //Initial block processing
-        var blocks = getBlocklyBlockCanvas().children;
+        let blocks = getBlocklyBlockCanvas().children;
         for (let i = 0; i < blocks.length; i++) {
             const block = blocks[i];
             processBlock(block);
