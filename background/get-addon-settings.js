@@ -10,6 +10,7 @@ import { onReady } from "./imports/on-ready.js";
  - editor-theme3 4 (last bumped in v1.39)
  - dark-www 7 (bumped twice in v1.34.0)
  - forum-quote-code-beautifier 1 (last bumped in v1.34)
+ - discuss-button 1 (last bumped in v1.44.3)
  */
 
 // The following three functions are helper functions for the setting migration code
@@ -745,9 +746,10 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
           }
         }
 
-        if (addonId === "discuss-button" && settings.showMembership === undefined) {
+        if (addonId === "discuss-button" && (settings._version || 0) < 1) {
+          // Transition v1.44.2 to v1.44.3
           if (settings.items) settings.items = settings.items.filter((i) => i.url !== "/about");
-          settings.showMembership = true;
+          settings._version = 1;
           madeAnyChanges = madeChangesToAddon = true;
         }
       }
