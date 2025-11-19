@@ -385,8 +385,7 @@ let fuse;
       // Autofocus search bar in iframe mode for both browsers
       // autofocus attribute only works in Chrome for us, so
       // we also manually focus on Firefox, even in fullscreen
-      if (isIframe || isFirefox())
-        setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
+      if (isIframe || isFirefox()) setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
 
       const exampleAddonListItem = {
         // Need to specify all used properties for reactivity!
