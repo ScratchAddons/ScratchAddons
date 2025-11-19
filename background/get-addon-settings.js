@@ -749,6 +749,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
         if (addonId === "discuss-button" && (settings._version || 0) < 1) {
           // Transition v1.44.2 to v1.44.3
           if (settings.items) settings.items = settings.items.filter((i) => i.url !== "/about");
+          settings._version = 1;
           madeAnyChanges = madeChangesToAddon = true;
         }
       }
