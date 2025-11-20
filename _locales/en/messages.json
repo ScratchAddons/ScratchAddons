@@ -203,6 +203,12 @@
   "deleteRow": {
     "message": "Delete row"
   },
+  "moveRow": {
+    "message": "Move row"
+  },
+  "dragRow": {
+    "message": "Drag or use the arrow keys to move"
+  },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
   },
