@@ -1,3 +1,5 @@
+import { isFirefox } from "../libraries/common/detect-browser.js";
+
 const dataURLToArrayBuffer = function (dataURL) {
   const byteString = atob(dataURL.split(",")[1]);
   const arrayBuffer = new ArrayBuffer(byteString.length);
@@ -8,8 +10,7 @@ const dataURLToArrayBuffer = function (dataURL) {
   return arrayBuffer;
 };
 
-if (typeof browser !== "undefined") {
-  // Firefox
+if (isFirefox()) {
   browser.runtime.onMessage.addListener(function (request) {
     if (request.clipboardDataURL && browser && browser.clipboard && browser.clipboard.setImageData) {
       const arrayBuffer = dataURLToArrayBuffer(request.clipboardDataURL);
