@@ -1,6 +1,6 @@
 {
   "name": "Improved dragging of costumes and sounds",
-  "description": "When dragging a costume or sound, automatically scrolls the list and fixes a Scratch bug where the asset isn't placed as expected after scrolling.",
+  "description": "When dragging a costume or sound, automatically scrolls the list and fixes a Scratch bug where the dragged item isn't placed at the right position after scrolling.",
   "credits": [
     {
       "name": "mysinginmonsters",
@@ -12,11 +12,11 @@
       "name": "Auto-scroll speed",
       "id": "scroll-speed",
       "type": "select",
-      "description": "Drag a costume or sound at the top or bottom of the list to auto-scroll",
+      "description": "Drag and hold a costume or sound at the top or bottom of the list to auto scroll.",
       "potentialValues": [
         {
           "id": "none",
-          "name": "None"
+          "name": "Off"
         },
         {
           "id": "slow",
@@ -24,7 +24,7 @@
         },
         {
           "id": "default",
-          "name": "Default"
+          "name": "Medium"
         },
         {
           "id": "fast",
