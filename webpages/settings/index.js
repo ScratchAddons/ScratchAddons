@@ -9,7 +9,7 @@ import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
-import { isFirefox } from "../../libraries/common/detect-browser.js";
+import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 
 let isIframe = false;
 if (window.parent !== window) {

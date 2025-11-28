@@ -1,4 +1,4 @@
-import { isFirefox } from "../libraries/common/detect-browser.js";
+import { isFirefox } from "../libraries/common/cs/detect-browser.js";
 
 if (isFirefox() && chrome.scripting) {
   const manifest = chrome.runtime.getManifest();

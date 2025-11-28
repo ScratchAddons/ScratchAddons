@@ -1,4 +1,4 @@
-import { isFirefox } from "../libraries/common/detect-browser.js";
+import { isFirefox } from "../libraries/common/cs/detect-browser.js";
 
 const dataURLToArrayBuffer = function (dataURL) {
   const byteString = atob(dataURL.split(",")[1]);
