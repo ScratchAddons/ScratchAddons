@@ -41,7 +41,7 @@
       "default": true
     },
     {
-      "name": "Add to Studio Menu",
+      "name": "Browse Projects Popup",
       "id": "studioBrowseProjectScroll",
       "type": "boolean",
       "default": true
