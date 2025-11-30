@@ -1,12 +1,6 @@
 {
-  "name": "Ctrl+Click to run scripts",
-  "description": "Only run scripts on click if also holding the Ctrl key.",
-  "info": [
-    {
-      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
-      "id": "macContextDisabled"
-    }
-  ],
+  "name": "Double click to run scripts",
+  "description": "Require a double click to trigger blocks and scripts to run.",
   "credits": [
     {
       "name": "lisa_wolfgang",
@@ -15,6 +9,10 @@
     {
       "name": "apple502j",
       "link": "https://github.com/apple502j"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "dynamicEnable": true,
@@ -25,8 +23,23 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Double-click timeout (ms)",
+      "id": "timeout",
+      "type": "integer",
+      "min": 200,
+      "max": 1000,
+      "default": 500
+    }
+  ],
   "tags": ["editor", "codeEditor"],
   "relatedAddons": ["fix-pasted-scripts"],
   "versionAdded": "1.15.0",
+  "latestUpdate": {
+    "version": "1.45.0",
+    "newSettings": ["timeout"],
+    "temporaryNotice": "Scripts can now be executed by double clicking them."
+  },
   "enabledByDefault": false
 }
