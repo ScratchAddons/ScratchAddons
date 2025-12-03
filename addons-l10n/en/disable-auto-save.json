@@ -1,3 +1,7 @@
 {
-  "disable-auto-save/save-and-leave": "Message by \"disable auto-save\" addon from Scratch Addons: going to the project page will save your changes. Do you want to save the project and leave the editor?"
+  "disable-auto-save/alert-title": "Disable autosave addon",
+  "disable-auto-save/unsaved-changes": "Do you want to save your changes before leaving the editor?",
+  "disable-auto-save/save": "Save",
+  "disable-auto-save/discard": "Don't save",
+  "disable-auto-save/cancel": "Back"
 }
