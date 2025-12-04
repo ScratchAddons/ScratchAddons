@@ -1,3 +1,5 @@
+import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
+
 let console = window.console;
 
 /*
@@ -652,7 +654,7 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   // Firefox on Linux before version 123 has a broken gamepad API that results in strange and unusable mappings
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1680982
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1643835
-  if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Linux")) {
+  if (isFirefox() && navigator.userAgent.includes("Linux")) {
     const agentMatch = navigator.userAgent.match(/Firefox\/(\d+)/);
     // If we couldn't find the version number, we'll assume that this is some distant future version of
     // Firefox that we just can't comprehend with the technology of today. Surely gamepad will work well
@@ -662,7 +664,7 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   }
   // Firefox on macOS has other bugs that result in strange and unusable mappings
   // eg. https://bugzilla.mozilla.org/show_bug.cgi?id=1434408
-  if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Mac OS")) {
+  if (isFirefox() && navigator.userAgent.includes("Mac OS")) {
     return true;
   }
   return false;
