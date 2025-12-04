@@ -5,7 +5,13 @@ export default async ({ addon, console, msg }) => {
     parent.appendChild(element);
     return element;
   }
-  const PROJECT_PAGE_BUTTON = "[class*='community-button_community-button_']";
+  function setProjectChanged(changed) {
+    addon.tab.redux.dispatch({
+      type: "scratch-gui/project-changed/SET_PROJECT_CHANGED",
+      changed,
+    });
+  }
+  const PAGE_BUTTON_SELECTOR = "[class*='community-button_community-button_']";
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
@@ -44,14 +50,14 @@ export default async ({ addon, console, msg }) => {
 
         if (e.target.value === "discard") {
           // Mark changes as saved to avoid a save-on-navigation
-          addon.tab.redux.dispatch({
-            type: "scratch-gui/project-changed/SET_PROJECT_CHANGED",
-            changed: false,
-          });
+          setProjectChanged(false);
           await new Promise((resolve) => setTimeout(resolve, 0));
+          document.querySelector(PAGE_BUTTON_SELECTOR).click();
+          await new Promise((resolve) => setTimeout(resolve, 0));
+          setProjectChanged(true);
         }
-        if (e.target.value === "discard" || e.target.value === "save") {
-          document.querySelector(PROJECT_PAGE_BUTTON).click();
+        if (e.target.value === "save") {
+          document.querySelector(PAGE_BUTTON_SELECTOR).click();
         }
       },
       { bubble: true }
@@ -61,7 +67,7 @@ export default async ({ addon, console, msg }) => {
   }
 
   while (true) {
-    const btn = await addon.tab.waitForElement(PROJECT_PAGE_BUTTON, {
+    const btn = await addon.tab.waitForElement(PAGE_BUTTON_SELECTOR, {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
