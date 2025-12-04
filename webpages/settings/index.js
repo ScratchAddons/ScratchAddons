@@ -9,6 +9,7 @@ import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
+import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -63,8 +64,7 @@ let fuse;
 
   // REMINDER: update similar code at /background/imports/util.js
   const browserLevelPermissions = ["notifications"];
-  if (typeof browser !== "undefined") {
-    // Firefox only
+  if (isFirefox()) {
     if (typeof Clipboard.prototype.write !== "function") {
       // Firefox 109-126 only
       browserLevelPermissions.push("clipboardWrite");
@@ -384,8 +384,7 @@ let fuse;
       // Autofocus search bar in iframe mode for both browsers
       // autofocus attribute only works in Chrome for us, so
       // we also manually focus on Firefox, even in fullscreen
-      if (isIframe || typeof browser !== "undefined")
-        setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
+      if (isIframe || isFirefox()) setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
 
       const exampleAddonListItem = {
         // Need to specify all used properties for reactivity!
