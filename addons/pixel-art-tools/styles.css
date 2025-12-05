@@ -117,6 +117,7 @@
   max-height: 28vh;
   overflow: auto;
   padding-right: 0.15rem;
+  overflow: visible;
 }
 
 .sa-pixel-art-color {
