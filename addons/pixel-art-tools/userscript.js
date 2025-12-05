@@ -78,6 +78,14 @@ export default async function ({ addon, msg, console }) {
     controls.handleReenabled();
   });
 
+  // Settings change handler
+  addon.settings.addEventListener("change", () => {
+    state.pendingSize.width = addon.settings.get("defaultWidth");
+    state.pendingSize.height = addon.settings.get("defaultHeight");
+    if (state.widthInput) state.widthInput.value = state.pendingSize.width;
+    if (state.heightInput) state.heightInput.value = state.pendingSize.height;
+  });
+
   // Initialize all components
   controls.setupControls();
   palette.setupPalettePanel();
