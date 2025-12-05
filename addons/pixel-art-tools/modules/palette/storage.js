@@ -85,7 +85,7 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
     runtime.emitProjectChanged();
   };
 
-  const getCostumeKey = (c) => c?.md5Ext || c?.md5 || c?.assetId || c?.name;
+  const getCostumeKey = (c) => c?.name || c?.md5Ext || c?.md5 || c?.assetId;
 
   const readCostumePaletteId = () => {
     const t = vm.editingTarget || runtime.getEditingTarget();
@@ -102,6 +102,15 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
     const mappings = loadMappings(t);
     mappings[key] = paletteId;
     writeMappings(t, mappings);
+  };
+
+  const renameCostumeMapping = (target, oldName, newName) => {
+    if (!target || !oldName || !newName || oldName === newName) return;
+    const mappings = loadMappings(target);
+    if (!(oldName in mappings)) return;
+    mappings[newName] = mappings[oldName];
+    delete mappings[oldName];
+    writeMappings(target, mappings);
   };
 
   const handleDeletePalette = async () => {
@@ -152,6 +161,7 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
     writeProjectComment,
     readCostumePaletteId,
     writeCostumePaletteId,
+    renameCostumeMapping,
     loadMappings,
     writeMappings,
     handleDeletePalette,

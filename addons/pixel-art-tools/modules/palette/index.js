@@ -161,6 +161,17 @@ export function createPaletteModule(addon, state, redux, msg) {
     };
   };
 
+  // Wrap renameCostume to update palette mappings when costumes are renamed
+  const RenderedTarget = (vm.editingTarget || runtime.targets?.[0])?.constructor;
+  if (RenderedTarget?.prototype.renameCostume) {
+    const original = RenderedTarget.prototype.renameCostume;
+    RenderedTarget.prototype.renameCostume = function (costumeIndex, newName) {
+      const oldName = this.getCostumes()[costumeIndex]?.name;
+      original.call(this, costumeIndex, newName);
+      storage.renameCostumeMapping(this, oldName, this.getCostumes()[costumeIndex]?.name);
+    };
+  }
+
   addon.self.addEventListener("disabled", () => state.teardownVmTargetsListener?.());
   addon.self.addEventListener("reenabled", () => {
     attachVmListener();
