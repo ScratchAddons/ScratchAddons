@@ -1,15 +1,41 @@
 // Initial code was written by Norbiros
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
+
+  function spriteToFront(id) {
+    const target = vm.runtime.getTargetById(id);
+    target.goToFront();
+    target.setVisible(true);
+  }
+
   document.body.addEventListener("click", (e) => {
     if (e.shiftKey && !addon.self.disabled) {
       const parentDiv = e.target.closest("div[class^='sprite-selector_sprite-wrapper']");
-      if (parentDiv) {
-        const spriteName = parentDiv.querySelector("div[class^='sprite-selector-item_sprite-name']").innerText;
-        // move the sprite with that name to front
-        vm.runtime.getSpriteTargetByName(spriteName).goToFront();
+      if (
+        parentDiv &&
+        !e.target.closest("div[class^='delete-button_delete-button_']") &&
+        !e.target.closest(".sa-sprite-properties-info-btn")
+      ) {
+        const reactInternalKey = addon.tab.traps.getInternalKey(parentDiv);
+        const spriteId = parentDiv[reactInternalKey].child.stateNode.props.id;
+        if (typeof spriteId === "string") {
+          // Not a folder itself
+          spriteToFront(spriteId);
+        }
       }
     }
   });
+  addon.tab.createEditorContextMenu(
+    (ctx) => {
+      spriteToFront(ctx.itemId);
+    },
+    {
+      types: ["sprite"],
+      position: "assetContextMenuAfterExport",
+      order: 1,
+      label: msg("move-to-front-layer"),
+      condition: (ctx) => typeof ctx.itemId === "string",
+    }
+  );
 }

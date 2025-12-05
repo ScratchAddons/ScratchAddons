@@ -1,3 +1,4 @@
+const blockTheme = window.getCookie("scratchtheme") === "high-contrast" ? "scratch3-high-contrast" : "scratch3";
 let isCurrentlyProcessing = false;
 let currentPage = 0;
 let hits = 10000; // elastic default
@@ -75,7 +76,7 @@ function appendSearch(box, query, filter, page, term, msg) {
       `https://scratchdb.lefty.one/search/indexes/forum_posts/search?attributesToSearchOn=content&hitsPerPage=50&q=${encodeURIComponent(
         query
       )}&filter=${encodeURIComponent(filter)}&page=${page + 1}${
-        term == "newest" ? "&sort=id:desc" : term == "oldest" ? "&sort=id:asc" : ""
+        term === "newest" ? "&sort=id:desc" : term === "oldest" ? "&sort=id:asc" : ""
       }`,
       {
         headers: {
@@ -236,16 +237,15 @@ function appendSearch(box, query, filter, page, term, msg) {
 
         box.appendChild(postElem);
       }
-      scratchblocks.renderMatching(".forum-search-list pre.blocks");
+      scratchblocks.renderMatching(".forum-search-list pre.blocks", {
+        style: blockTheme,
+        scale: 0.675,
+      });
       isCurrentlyProcessing = false;
     });
 }
 
 export default async function ({ addon, console, msg }) {
-  if (!window.scratchAddons._scratchblocks3Enabled) {
-    window.scratchblocks = (await import("../../libraries/thirdparty/cs/scratchblocks.min.es.js")).default;
-  }
-
   // create the search bar
   let search = document.createElement("form");
   addon.tab.displayNoneWhileDisabled(search);

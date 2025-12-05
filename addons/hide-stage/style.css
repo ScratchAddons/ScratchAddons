@@ -3,9 +3,19 @@
   height: auto;
 }
 
-.sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
-.sa-stage-hidden [class*="asset-panel_wrapper_"],
-.sa-stage-hidden [class*="backpack_backpack-header_"] {
+[dir="ltr"] .sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
+[dir="rtl"] .sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
+[dir="ltr"] .sa-stage-hidden [class*="asset-panel_wrapper_"],
+[dir="rtl"] .sa-stage-hidden [class*="asset-panel_wrapper_"],
+[dir="ltr"] .sa-stage-hidden [class*="backpack_backpack-header_"],
+[dir="rtl"] .sa-stage-hidden [class*="backpack_backpack-header_"],
+/* for editor-stage-left: */
+[dir="ltr"] .sa-stage-hidden [class*="extension-button_extension-button-container_"],
+[dir="rtl"] .sa-stage-hidden [class*="extension-button_extension-button-container_"],
+[dir="ltr"] .sa-stage-hidden [class*="selector_wrapper_"],
+[dir="rtl"] .sa-stage-hidden [class*="selector_wrapper_"],
+[dir="ltr"] [class*="selector_new-buttons_"]::before,
+[dir="rtl"] [class*="selector_new-buttons_"]::before {
   border-radius: 0;
 }
 
@@ -16,15 +26,11 @@
   padding: 0;
 }
 
-.sa-stage-hidden
-  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
-  [class*="controls_controls-container_"],
+:root:not(.sa-fullscreen) .sa-stage-hidden [class*="controls_controls-container_"],
 .sa-stage-hidden [class*="gui_target-wrapper_"] {
   display: none;
 }
-.sa-stage-hidden
-  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
-  [class*="stage-wrapper_stage-canvas-wrapper_"] {
+:root:not(.sa-fullscreen) .sa-stage-hidden [class*="stage-wrapper_stage-canvas-wrapper_"] {
   /* can't use display: none because that causes the canvas's clientWidth/Height to become 0 which causes crashes */
   visibility: hidden;
   position: absolute;
@@ -34,10 +40,7 @@
   /* and move it up so that the mouse can't hover over the stage while its hidden */
   bottom: 100%;
 }
-[dir="rtl"]
-  .sa-stage-hidden
-  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
-  [class*="stage-wrapper_stage-canvas-wrapper_"] {
+:root:not(.sa-fullscreen) [dir="rtl"] .sa-stage-hidden [class*="stage-wrapper_stage-canvas-wrapper_"] {
   right: initial;
   left: 0;
 }

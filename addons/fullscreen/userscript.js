@@ -86,20 +86,11 @@ export default async function ({ addon, console }) {
 
   updatePhantomHeader();
 
-  async function setPageScrollbar() {
-    const body = await addon.tab.waitForElement(".sa-body-editor");
-    if (addon.tab.redux.state.scratchGui.mode.isFullScreen) {
-      body.classList.add("sa-fullscreen");
-    } else {
-      body.classList.remove("sa-fullscreen");
-    }
-  }
-
   // Properly resize the canvas and scale variable monitors on stage resize.
   let monitorScaler, resizeObserver, stage;
   async function initScaler() {
     monitorScaler = await addon.tab.waitForElement("[class*=monitor-list_monitor-list-scaler]");
-    stage = await addon.tab.waitForElement('[class*="stage-wrapper_full-screen"] [class*="stage_stage"] canvas');
+    stage = await addon.tab.waitForElement('.sa-fullscreen [class*="stage_stage"] canvas');
     resizeObserver = new ResizeObserver(() => {
       const stageSize = stage.getBoundingClientRect();
       // When switching between project page and editor, the canvas
@@ -121,7 +112,6 @@ export default async function ({ addon, console }) {
 
   // Running this on page load handles the case of the project initially
   // loading in Scratch fullscreen mode.
-  setPageScrollbar();
   updateBrowserFullscreen();
 
   // Changing to or from Scratch fullscreen is signified by a state change
@@ -131,7 +121,6 @@ export default async function ({ addon, console }) {
     if (e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN") {
       initScaler();
       updateBrowserFullscreen();
-      setPageScrollbar();
       updatePhantomHeader();
     }
   });

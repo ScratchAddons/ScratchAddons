@@ -7,9 +7,15 @@ body {
   height: var(--height, 599px);
   overflow: hidden;
   margin: 0;
-  background-color: var(--brand-orange); /* Firefox popup arrow */
-  font-family: "Sora", sans-serif;
+  background-color: var(--page-background);
+  font-family: "Roboto", sans-serif;
   color: var(--white-text);
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  font: inherit;
 }
 
 [v-cloak] {
@@ -19,16 +25,23 @@ body {
 #header {
   display: flex;
   height: 60px;
+  background-color: var(--brand-orange);
 }
 .header-button {
   cursor: pointer;
   padding: 18px;
   line-height: 0;
-  transition: 0.2s ease;
+  user-select: none;
+  transition: background 0.2s ease;
+  outline-offset: -2px;
 }
 .header-button:hover {
   background: var(--header-hover-darken);
 }
+.header-button:focus-visible {
+  outline: 2px solid var(--white-text);
+}
+
 #title-text,
 .header-button {
   font-size: 18px;
@@ -39,6 +52,8 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
+  font-family: "Sora", sans-serif;
+  user-select: none;
 }
 #logo {
   height: 25px;
@@ -75,16 +90,21 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  font-size: 12px;
+  font-size: 14px;
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
-  transition: 0.2s ease;
+  user-select: none;
+  transition: background 0.2s ease;
+  outline-offset: -2px;
 }
 .popup-name:hover {
   background-color: var(--hover-darken);
 }
 .popup-name:not(.sel):hover {
   cursor: pointer;
+}
+.popup-name:focus-visible {
+  outline: 2px solid var(--content-text);
 }
 .popup-name:not(:last-child) {
   border-inline-end: none;
@@ -118,11 +138,14 @@ body {
 .popup-title {
   padding-inline-start: 5px;
 }
+.popout {
+  cursor: pointer;
+}
 .popout > .popout-img {
   display: inline-block;
   vertical-align: -3px;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   padding: 2px;
   margin-inline-start: 3px;
   margin-inline-end: -2px;
@@ -142,11 +165,14 @@ iframe {
   border: none;
   overflow-y: scroll;
   background-color: var(--page-background);
+  user-select: none;
 }
 #version {
   color: var(--white-text);
   margin: 5px;
   text-decoration: none;
   opacity: 0.75;
-  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  user-select: text;
 }

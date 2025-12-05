@@ -14,16 +14,39 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects", "projectEmbeds"]
+      "matches": ["projects"]
+    },
+    {
+      "url": "scratch3to2.css",
+      "matches": ["projects"],
+      "if": {
+        "addonEnabled": ["scratch3to2"]
+      }
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects", "projectEmbeds"],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],
+  "settings": [
+    {
+      "name": "Darken thumbnail (%)",
+      "id": "darken",
+      "type": "integer",
+      "min": 10,
+      "max": 90,
+      "default": 25
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.40.0",
+  "latestUpdate": {
+    "version": "1.45.0",
+    "newSettings": ["darken"]
+  },
   "tags": ["community", "theme", "projectPage"]
 }

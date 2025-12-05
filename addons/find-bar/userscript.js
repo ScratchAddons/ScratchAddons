@@ -3,13 +3,6 @@ import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
 export default async function ({ addon, msg, console }) {
-  if (!addon.self._isDevtoolsExtension && window.initGUI) {
-    console.log("Extension running, stopping addon");
-    window._devtoolsAddonEnabled = true;
-    window.dispatchEvent(new CustomEvent("scratchAddonsDevtoolsAddonStopped"));
-    return;
-  }
-
   const Blockly = await addon.tab.traps.getBlockly();
 
   class FindBar {
@@ -28,7 +21,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     get workspace() {
-      return Blockly.getMainWorkspace();
+      return addon.tab.traps.getWorkspace();
     }
 
     createDom(root) {
@@ -140,7 +133,7 @@ export default async function ({ addon, msg, console }) {
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
-      if (e.key.toLowerCase() === "f" && ctrlKey && !e.shiftKey) {
+      if (e.key?.toLowerCase() === "f" && ctrlKey && !e.shiftKey && !document.activeElement.closest(".sa-find-bar")) {
         // Ctrl + F (Override default Ctrl+F find)
         this.findInput.focus();
         this.findInput.select();
@@ -181,9 +174,15 @@ export default async function ({ addon, msg, console }) {
       // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
       // Blockly.onKeyDown_:
       // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
+      // onKeyDown() in Blockly.inject module:
+      // https://github.com/google/blockly/blob/089179b/core/inject.ts#L294
       // KeyboardShortcutsHOC.handleKeyPress:
       // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
-      if (!Blockly.utils.isTargetInput(e) && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
+      let isTargetInput = false;
+      if (Blockly.registry)
+        isTargetInput = Blockly.browserEvents.isTargetInput(e); // new Blockly
+      else isTargetInput = Blockly.utils.isTargetInput(e);
+      if (!isTargetInput && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
         if (
           (ctrlKey || e.altKey) &&
           (e.keyCode === 90 || e.key === "z" || (e.shiftKey && e.key.toLowerCase() === "z"))
@@ -271,7 +270,7 @@ export default async function ({ addon, msg, console }) {
         let desc;
         for (const fieldRow of fields.fieldRow) {
           desc = desc ? desc + " " : "";
-          if (fieldRow instanceof Blockly.FieldImage && fieldRow.src_.endsWith("green-flag.svg")) {
+          if (fieldRow instanceof Blockly.FieldImage && fieldRow.getValue().endsWith("green-flag.svg")) {
             desc += msg("/_general/blocks/green-flag");
           } else {
             desc += fieldRow.getText();
@@ -436,7 +435,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     get workspace() {
-      return Blockly.getMainWorkspace();
+      return addon.tab.traps.getWorkspace();
     }
 
     createDom() {
@@ -558,16 +557,6 @@ export default async function ({ addon, msg, console }) {
         let blocks = this.getCallsToProcedureById(item.data.labelID);
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
-        /*
-          let blocks = [this.workspace.getBlockById(li.data.labelID)];
-          if (li.data.clones) {
-              for (const cloneID of li.data.clones) {
-                  blocks.push(this.workspace.getBlockById(cloneID))
-              }
-          }
-          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-        */
-        // Now, fetch the events from the scratch runtime instead of blockly
         let blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
           // Can we start by selecting the first block on 'this' sprite
@@ -796,12 +785,14 @@ export default async function ({ addon, msg, console }) {
 
   const findBar = new FindBar();
 
-  const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
-  Blockly.Gesture.prototype.doBlockClick_ = function () {
-    if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
+  const doBlockClickMethodName = Blockly.registry ? "doBlockClick" : "doBlockClick_";
+  const _doBlockClick_ = Blockly.Gesture.prototype[doBlockClickMethodName];
+  Blockly.Gesture.prototype[doBlockClickMethodName] = function () {
+    const event = Blockly.registry ? this.mostRecentEvent : this.mostRecentEvent_;
+    if (!addon.self.disabled && (event.button === 1 || event.shiftKey)) {
       // Wheel button...
       // Intercept clicks to allow jump to...?
-      let block = this.startBlock_;
+      let block = Blockly.registry ? this.startBlock : this.startBlock_;
       for (; block; block = block.getSurroundParent()) {
         if (block.type === "procedures_definition" || (!this.jumpToDef && block.type === "procedures_call")) {
           let id = block.id ? block.id : block.getId ? block.getId() : null;

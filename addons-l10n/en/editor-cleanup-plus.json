@@ -1,0 +1,6 @@
+{
+  "editor-cleanup-plus/orphaned": "{count, plural, one {Cleanup Plus: Delete 1 orphaned reporter block?} other {Developer tools: Delete # orphaned reporter blocks?} }",
+  "editor-cleanup-plus/unused-var": "{count, plural, one {Cleanup Plus: Delete 1 unused local variable? Here it is:\n{names}} other {Cleanup Plus: Delete # unused local variables? Here they are:\n{names}} }",
+  "editor-cleanup-plus/unused-list": "{count, plural, one {Cleanup Plus: Delete 1 unused local list? Here it is:\n{names}} other {Cleanup Plus: Delete # unused local lists? Here they are:\n{names}} }",
+  "editor-cleanup-plus/clean-plus": "Clean up Blocks +"
+}

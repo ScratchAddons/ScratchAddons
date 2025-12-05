@@ -10,6 +10,7 @@
 }
 
 .tooltiptext {
+  display: none;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -24,7 +25,6 @@
   background: var(--tooltip-background);
   color: var(--content-text);
   text-align: center;
-  visibility: hidden;
 
   filter: var(--large-shadow-filter);
 }
@@ -43,9 +43,19 @@
   right: auto;
   left: 100%;
 }
+.tooltiptext.tooltiptexttop {
+  left: 50%;
+  top: -10px;
+  transform: translate(-50%, -100%);
+  margin-inline-start: 0;
+}
+[dir="rtl"] .tooltiptext.tooltiptexttop {
+  transform: translate(50%, -100%);
+  right: 50%;
+}
 
-.tooltip:hover .tooltiptext {
-  visibility: visible;
+.tooltip:is(:hover, :focus-within) .tooltiptext {
+  display: block;
 }
 .tooltip .tooltiptext::after {
   content: "";
@@ -72,7 +82,11 @@
   left: auto;
   right: 100%;
 }
-
-.tooltiptext:hover .tooltiptext:after {
-  visibility: visible;
+.tooltip .tooltiptext.tooltiptexttop::after {
+  top: 100%;
+  right: 50%;
+  margin-top: 0;
+  margin-right: -5px;
+  border-inline-end-color: transparent;
+  border-top-color: var(--tooltip-background);
 }

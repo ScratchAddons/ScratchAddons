@@ -50,6 +50,14 @@ export default [
     },
   },
   {
+    name: "forPlayer",
+    matchName: "player",
+    color: "lightblue",
+    addonTabShow: {
+      theme: true,
+    },
+  },
+  {
     name: "forWebsite",
     matchName: "community",
     color: "yellow",

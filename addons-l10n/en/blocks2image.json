@@ -1,8 +1,8 @@
 {
-  "blocks2image/saveAll": "Save all as an image",
-  "blocks2image/save": "Save as an image",
-  "blocks2image/modalTitle": "Blocks to image",
-  "blocks2image/clipboard": "Copy to clipboard",
+  "blocks2image/saveAll": "Save All as Image",
+  "blocks2image/save": "Save as Image",
+  "blocks2image/modalTitle": "Save as Image",
+  "blocks2image/clipboard": "Copy",
   "blocks2image/svg": "Download as SVG",
   "blocks2image/png": "Download as PNG",
   "blocks2image/loading": "Loading preview..."

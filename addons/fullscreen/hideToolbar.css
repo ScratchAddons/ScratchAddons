@@ -9,6 +9,11 @@
   transition: transform 0.3s;
 }
 
+.sa-fullscreen .sa-loader-background {
+  height: 100%;
+  top: 0;
+}
+
 .phantom-header {
   position: absolute;
   top: 0px;

@@ -1,3 +1,4 @@
+import downloadBlob from "../../../libraries/common/cs/download-blob.js";
 const isIframe = window.parent !== window;
 
 export default async function ({ template }) {
@@ -20,6 +21,7 @@ export default async function ({ template }) {
       addonIconSrc() {
         const map = {
           editor: "puzzle",
+          player: "player",
           community: "web",
           theme: "brush",
           easterEgg: "egg-easter",
@@ -53,6 +55,64 @@ export default async function ({ template }) {
           console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
         }
       },
+      importPreset() {
+        const inputElem = Object.assign(document.createElement("input"), {
+          hidden: true,
+          type: "file",
+          accept: "application/json",
+        });
+        inputElem.addEventListener(
+          "change",
+          async (e) => {
+            const text = await inputElem.files[0].text();
+            inputElem.remove();
+            let obj;
+            try {
+              obj = JSON.parse(text);
+              if (!obj.addonId) {
+                // Check if it's a full extension settings file
+                const settings = obj?.addons?.[this.addon._addonId]?.settings;
+                if (settings) {
+                  this.loadPreset({ id: "extracted-settings", values: settings });
+                  return;
+                } else {
+                  throw "Missing addon ID";
+                }
+              }
+              if (obj.addonId !== this.addon._addonId) {
+                console.warn(`Incorrect addon ID: ${obj.addonId}`);
+                alert(this.msg("incorrectAddonImport", this.$root.manifestsById[obj.addonId].name));
+                return;
+              }
+            } catch (e) {
+              console.warn(`Error importing settings file for ${this.addon._addonId}:`, e);
+              alert(chrome.i18n.getMessage("importFailed"));
+              return;
+            }
+            this.loadPreset(obj);
+          },
+          { once: true }
+        );
+        inputElem.addEventListener(
+          "cancel",
+          () => {
+            inputElem.remove();
+          },
+          { once: true }
+        );
+        document.body.appendChild(inputElem);
+        inputElem.click();
+      },
+      exportPreset() {
+        const preset = {
+          addonId: this.addon._addonId,
+          id: "custom-preset",
+          values: this.addonSettings,
+        };
+        const blob = new Blob([JSON.stringify(preset)], { type: "application/json" });
+        const name = this.addon.name.replaceAll(" ", "-").toLowerCase();
+        downloadBlob(`${name}.json`, blob);
+      },
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
@@ -65,18 +125,17 @@ export default async function ({ template }) {
       },
       toggleAddonRequest(event) {
         const toggle = () => {
-          // Prevents selecting text when the shift key is being held down
-          event.preventDefault();
-
           const newState = !this.addon._enabled;
           this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
-          this.expanded =
-            isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
+          // Do not collapse when disabling in related addons view
+          this.expanded = this.$root.relatedAddonsOpen
+            ? this.expanded
+            : isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
               : event.shiftKey
-                ? false
+                ? false // Prevent expanding when shift-clicked (#1484)
                 : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
@@ -87,11 +146,15 @@ export default async function ({ template }) {
         );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
           const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
-          if (!confirmation) return;
+          if (!confirmation) {
+            event.preventDefault();
+            return;
+          }
         }
         if (!this.addon._enabled && requiredPermissions.length) {
           const result = requiredPermissions.every((p) => this.$root.grantedOptionalPermissions.includes(p));
           if (result === false) {
+            event.preventDefault();
             if (isIframe) {
               this.$root.addonToEnable = this.addon;
               document.querySelector(".popup").style.animation = "dropDown 0.35s 1";
@@ -116,6 +179,11 @@ export default async function ({ template }) {
       },
       msg(...params) {
         return this.$root.msg(...params);
+      },
+      openRelated(clickedAddon, event) {
+        event.preventDefault();
+        this.$root.openRelatedAddons(this.addon);
+        this.$root.blinkAddon(clickedAddon._addonId);
       },
     },
     watch: {

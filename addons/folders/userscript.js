@@ -1,4 +1,10 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+import {
+  getSortableHOCFromElement,
+  verifySortableHOC,
+  setReactInternalKey,
+  getReactInternalKey,
+} from "../../libraries/common/cs/patch-SortableHOC.js";
 
 const DIVIDER = "//";
 
@@ -86,18 +92,17 @@ export default async function ({ addon, console, msg }) {
   // These two components communicate through the `name` property of the items.
   // We touch some things on the VM to make dragging items work properly.
 
-  const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
   // We run too early, will be set later
   let vm;
 
-  let reactInternalKey;
-
   let currentSpriteItems;
   let currentAssetItems;
+
+  let restoreButtonMsg = null;
+  let restorationFunctions = [];
 
   const untilInEditor = () => {
     if (addon.tab.editorMode === "editor") return;
@@ -112,22 +117,22 @@ export default async function ({ addon, console, msg }) {
     });
   };
 
-  const getSortableHOCFromElement = (el) => {
-    const nearestSpriteSelector = el.closest("[class*='sprite-selector_sprite-selector']");
-    if (nearestSpriteSelector) {
-      return nearestSpriteSelector[reactInternalKey].child.sibling.child.stateNode;
+  const getBackpackFromElement = (el) => {
+    const backpackContainer = el.closest('[class*="backpack_backpack-container_"]');
+    if (!backpackContainer) throw new Error("cannot find Backpack");
+    let reactInternalInstance = backpackContainer[getReactInternalKey()];
+    while (!isBackpack(reactInternalInstance.stateNode)) {
+      reactInternalInstance = reactInternalInstance.return;
     }
-    const nearestAssetPanelWrapper = el.closest('[class*="asset-panel_wrapper"]');
-    if (nearestAssetPanelWrapper) {
-      return nearestAssetPanelWrapper[reactInternalKey].child.child.stateNode;
-    }
-    throw new Error("cannot find SortableHOC");
+    return reactInternalInstance.stateNode;
   };
 
-  const getBackpackFromElement = (el) => {
-    const gui = el.closest('[class*="gui_editor-wrapper"]');
-    if (!gui) throw new Error("cannot find Backpack");
-    return gui[reactInternalKey].child.sibling.child.stateNode;
+  const getSpriteSelectorItemFromElement = (el) => {
+    let reactInternalInstance = el[getReactInternalKey()];
+    while (!reactInternalInstance.stateNode?.props?.dragType) {
+      reactInternalInstance = reactInternalInstance.return;
+    }
+    return reactInternalInstance.stateNode;
   };
 
   const clamp = (n, min, max) => {
@@ -270,38 +275,29 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
-  const verifySortableHOC = (sortableHOCInstance) => {
-    const SortableHOC = sortableHOCInstance.constructor;
-    if (
-      Array.isArray(sortableHOCInstance.props.items) &&
-      (typeof sortableHOCInstance.props.selectedId === "string" ||
-        typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
-      typeof sortableHOCInstance.containerBox !== "undefined" &&
-      typeof SortableHOC.prototype.componentDidMount === "undefined" &&
-      typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
-      typeof SortableHOC.prototype.handleAddSortable === "function" &&
-      typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
-      typeof SortableHOC.prototype.setRef === "function"
-    )
-      return;
-    throw new Error("Can not comprehend SortableHOC");
+  const isSpriteSelectorItem = (spriteSelectorItemInstance) => {
+    try {
+      const SpriteSelectorItem = spriteSelectorItemInstance.constructor;
+      return (
+        typeof spriteSelectorItemInstance.props.asset === "object" &&
+        typeof spriteSelectorItemInstance.props.name === "string" &&
+        typeof spriteSelectorItemInstance.props.dragType === "string" &&
+        typeof SpriteSelectorItem.prototype.handleClick === "function" &&
+        typeof SpriteSelectorItem.prototype.setRef === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDeleteButtonClick === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDeleteSpriteModalConfirm === "function" &&
+        typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
+        typeof SpriteSelectorItem.prototype.handleExport === "function"
+      );
+    } catch {
+      return false;
+    }
   };
 
   const verifySpriteSelectorItem = (spriteSelectorItemInstance) => {
-    const SpriteSelectorItem = spriteSelectorItemInstance.constructor;
-    if (
-      typeof spriteSelectorItemInstance.props.asset === "object" &&
-      typeof spriteSelectorItemInstance.props.name === "string" &&
-      typeof spriteSelectorItemInstance.props.dragType === "string" &&
-      typeof SpriteSelectorItem.prototype.handleClick === "function" &&
-      typeof SpriteSelectorItem.prototype.setRef === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDelete === "function" &&
-      typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
-      typeof SpriteSelectorItem.prototype.handleExport === "function"
-    )
-      return;
+    if (isSpriteSelectorItem(spriteSelectorItemInstance)) return;
     throw new Error("Can not comprehend SpriteSelectorItem");
   };
 
@@ -319,14 +315,20 @@ export default async function ({ addon, console, msg }) {
     throw new Error("Can not comprehend VM");
   };
 
-  const verifyBackpack = (backpackInstance) => {
-    const Backpack = backpackInstance.constructor;
-    if (
-      typeof Backpack.prototype.handleDrop === "function" &&
-      typeof Backpack.prototype.componentDidUpdate === "undefined"
-    ) {
-      return;
+  const isBackpack = (backpackInstance) => {
+    try {
+      const Backpack = backpackInstance.constructor;
+      return (
+        typeof Backpack.prototype.handleDrop === "function" &&
+        typeof Backpack.prototype.componentDidUpdate === "undefined"
+      );
+    } catch {
+      return false;
     }
+  };
+
+  const verifyBackpack = (backpackInstance) => {
+    if (isBackpack(backpackInstance)) return;
     throw new Error("Can not comprehend Backpack");
   };
 
@@ -638,7 +640,7 @@ export default async function ({ addon, console, msg }) {
       const selectedItem = getSelectedItem(this);
       if (selectedItem) {
         const folder = getFolderFromName(selectedItem.name);
-        const currentFolder = this.state.folders.includes(folder) ? folder : null;
+        const currentFolder = this.state && this.state.folders.includes(folder) ? folder : null;
         if (type === TYPE_SPRITES) {
           currentSpriteFolder = currentFolder;
         } else if (type === TYPE_ASSETS) {
@@ -655,7 +657,7 @@ export default async function ({ addon, console, msg }) {
         }
         if (selectedItemChanged) {
           if (!selectedItem.isStage) {
-            if (typeof folder === "string" && !this.state.folders.includes(folder)) {
+            if (typeof folder === "string" && (!this.state || !this.state.folders.includes(folder))) {
               this.setState((prevState) => ({
                 folders: [...prevState.folders, folder],
               }));
@@ -723,10 +725,39 @@ export default async function ({ addon, console, msg }) {
     });
   };
 
+  function restore(type, lastCostumeDeleted) {
+    // Reintegrate the only and last costume to the folder
+    if (lastCostumeDeleted !== null) {
+      // type === "costume"
+      const index = lastCostumeDeleted.target.sprite.costumes.findIndex(
+        (costume) => costume.assetId === lastCostumeDeleted.assetId
+      );
+      vm.renameCostume(index, lastCostumeDeleted.name);
+      lastCostumeDeleted = null;
+    }
+
+    // Close all folders to prevent sprites from being renamed
+    if (type === "sprite") {
+      const element = document.querySelector(
+        "[class*='sprite-selector_sprite-wrapper'] [class*='sprite-selector-item_sprite-selector-item']"
+      );
+      if (element) {
+        const component = getSpriteSelectorItemFromElement(element);
+        vm.runtime.targets.forEach((target) => {
+          setFolderOpen(component, getFolderFromName(target.sprite.name), false);
+        });
+      }
+    }
+
+    restorationFunctions.reverse();
+    restorationFunctions.forEach((restoreFun) => restoreFun());
+    restorationFunctions = [];
+  }
+
   await addon.tab.scratchClassReady();
   addon.tab.createEditorContextMenu((ctxType, ctx) => {
     if (ctxType !== "sprite" && ctxType !== "costume" && ctxType !== "sound") return;
-    const component = ctx.target[addon.tab.traps.getInternalKey(ctx.target)].return.return.return.stateNode;
+    const component = getSpriteSelectorItemFromElement(ctx.target);
     const data = getItemData(component.props);
     if (!data) return;
     if (typeof data.folder === "string") {
@@ -791,6 +822,83 @@ export default async function ({ addon, console, msg }) {
       const removeFolder = () => {
         renameItems(null);
       };
+
+      const deleteFolderContents = async () => {
+        const type = component.props.dragType.toLowerCase();
+        if (
+          await addon.tab.confirm(
+            msg("delete-folder-contents-prompt-title"),
+            msg(`delete-${type}s-folder-contents-prompt`),
+            {
+              useEditorClasses: true,
+            }
+          )
+        ) {
+          if (type === "sprite") {
+            const targets = vm.runtime.targets;
+            restorationFunctions = [];
+
+            for (let i = targets.length - 1; i > -1; i--) {
+              if (getFolderFromName(targets[i].sprite.name) === data.folder) {
+                let deleted = vm.deleteSprite(targets[i].id);
+                if (deleted) restorationFunctions.push(deleted);
+              }
+            }
+
+            window.getSpriteSelectorItemFromElement = getSpriteSelectorItemFromElement;
+
+            addon.tab.redux.dispatch({
+              type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
+              state: {
+                restoreFun: restore.bind(this, type, null),
+                deletedItem: "Sprite",
+              },
+            });
+            queueMicrotask(() => {
+              if (restorationFunctions.length > 1) {
+                restoreButtonMsg = "/_general/restore/sprites";
+              }
+            });
+          } else if (type === "costume" || type === "sound") {
+            restorationFunctions = [];
+            const assets = type === "costume" ? vm.editingTarget.sprite.costumes : vm.editingTarget.sprite.sounds;
+
+            for (let i = assets.length - 1; i > -1; i--) {
+              if (getFolderFromName(assets[i].name) === data.folder) {
+                let deleted = type === "costume" ? vm.deleteCostume(i) : vm.deleteSound(i);
+                if (deleted) restorationFunctions.push(deleted);
+              }
+            }
+
+            vm.emitTargetsUpdate();
+
+            // The last costume cannot be deleted, but at least it can be removed from the folder
+            let lastCostumeRemoved = null;
+            if (type === "costume" && assets.length === 1 && getFolderFromName(assets[0].name) === data.folder) {
+              lastCostumeRemoved = {
+                assetId: assets[0].assetId,
+                name: assets[0].name,
+                target: vm.editingTarget,
+              };
+              vm.renameCostume(0, getNameWithoutFolder(assets[0].name));
+            }
+
+            addon.tab.redux.dispatch({
+              type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
+              state: {
+                restoreFun: restore.bind(this, type, lastCostumeRemoved),
+                deletedItem: type === "costume" ? "Costume" : "Sound",
+              },
+            });
+            queueMicrotask(() => {
+              if (restorationFunctions.length + (lastCostumeRemoved !== null) > 1) {
+                restoreButtonMsg = `/_general/restore/${type}s`;
+              }
+            });
+          }
+        }
+      };
+
       return [
         {
           className: "sa-folders-rename-folder",
@@ -805,6 +913,14 @@ export default async function ({ addon, console, msg }) {
           callback: removeFolder,
           position: "assetContextMenuAfterDelete",
           order: 11,
+        },
+        {
+          className: "sa-folders-delete-folder-contents",
+          label: msg("delete-folder-contents"),
+          callback: deleteFolderContents,
+          position: "assetContextMenuAfterDelete",
+          order: 12,
+          dangerous: true,
         },
       ];
     } else {
@@ -885,7 +1001,12 @@ export default async function ({ addon, console, msg }) {
   });
 
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
-    for (const method of ["handleDelete", "handleDuplicate", "handleExport"]) {
+    for (const method of [
+      "handleDeleteButtonClick",
+      "handleDeleteSpriteModalConfirm",
+      "handleDuplicate",
+      "handleExport",
+    ]) {
       const original = SpriteSelectorItem.prototype[method];
       SpriteSelectorItem.prototype[method] = function (...args) {
         if (typeof this.props.id === "number") {
@@ -1301,6 +1422,25 @@ export default async function ({ addon, console, msg }) {
 
   await untilInEditor();
 
+  // Update restore button
+  {
+    addon.tab.redux.initialize();
+    addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+      const e = detail;
+      if (!e.action) return;
+      if (e.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE") {
+        restoreButtonMsg = null;
+      } else if (e.action.type === "scratch-gui/menus/OPEN_MENU" && e.action.menu === "editMenu" && restoreButtonMsg) {
+        queueMicrotask(() => {
+          const restoreButton = document.querySelector(
+            '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span'
+          );
+          restoreButton.innerText = msg(restoreButtonMsg);
+        });
+      }
+    });
+  }
+
   // Backpack
   {
     const clickListener = (e) => {
@@ -1327,10 +1467,14 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     vm = addon.tab.traps.vm;
-    reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
+    setReactInternalKey(addon.tab.traps.getInternalKey(spriteSelectorItemElement));
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
-    const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
-    verifySortableHOC(sortableHOCInstance);
+    let reactInternalInstance = spriteSelectorItemElement[getReactInternalKey()];
+    while (!isSpriteSelectorItem(reactInternalInstance.stateNode)) {
+      reactInternalInstance = reactInternalInstance.child;
+    }
+    const spriteSelectorItemInstance = reactInternalInstance.stateNode;
+    verifySortableHOC(sortableHOCInstance, false);
     verifySpriteSelectorItem(spriteSelectorItemInstance);
     verifyVM(vm);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
@@ -1345,7 +1489,7 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex !== 0 && !state.scratchGui.mode.isPlayerOnly,
     });
     const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
-    verifySortableHOC(sortableHOCInstance);
+    verifySortableHOC(sortableHOCInstance, false);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
     sortableHOCInstance.saInitialSetup();
   }

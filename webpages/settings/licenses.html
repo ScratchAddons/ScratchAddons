@@ -9,6 +9,11 @@
       /* Imports are here to attempt to speed up load */
       @import url("../styles/colors.css");
       @import url("../styles/components/licenses.css");
+
+      .licenses-body pre {
+        /* Workaround for a Firefox bug. Doesn't work if it's in licenses.css. */
+        width: calc(100vw - 4rem);
+      }
     </style>
     <link rel="icon" href="../../images/icon.png" id="favicon" />
     <link rel="stylesheet" href="style.css" />
@@ -18,7 +23,9 @@
   </head>
   <body class="licenses">
     <div class="navbar">
-      <a href="./index.html"><img src="../../images/icon-transparent.svg" class="logo header-button" alt="Logo" /></a>
+      <a href="./index.html"
+        ><img src="../../images/icon-transparent.svg" class="logo header-button" alt="Logo" draggable="false"
+      /></a>
       <h1 v-cloak>{{ msg("licenses") }}</h1>
     </div>
     <div class="main">

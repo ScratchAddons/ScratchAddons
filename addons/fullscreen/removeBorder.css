@@ -1,17 +1,22 @@
-[class*="stage-wrapper_full-screen"] [class*="stage_full-screen"],
-[class*="stage-wrapper_full-screen"] [class*="stage_green-flag-overlay-wrapper"],
-.sa-project-thumb {
+.sa-fullscreen [class*="stage_full-screen"],
+.sa-fullscreen [class*="stage_green-flag-overlay-wrapper"],
+.sa-fullscreen .sa-loader-background {
   border: 0 !important;
   border-radius: 0 !important;
 }
 
 [class*="stage_stage-overlays_"][class*="stage_full-screen_"],
-.sa-project-thumb {
+.sa-fullscreen [class*="stage_green-flag-overlay-wrapper_"] {
   top: 0;
   left: 0;
 }
 
-.sa-project-thumb {
+.sa-fullscreen [class*="stage_green-flag-overlay-wrapper_"] {
   width: 100%;
   height: 100%;
+}
+
+.sa-fullscreen .sa-loader-background {
+  top: 2.75rem;
+  height: min(100% - 2.75rem, 100vw * 0.75);
 }
