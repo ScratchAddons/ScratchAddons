@@ -3,6 +3,7 @@ import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
 import { createAnimationPreview } from "./modules/animation-preview.js";
 import { wrapAddCostumeWait, wrapCreateBitmapSkin } from "./modules/bitmap-loader.js";
+import { createTextToolScaler } from "./modules/text-tool-scaler.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function ({ addon, msg, console }) {
@@ -42,12 +43,14 @@ export default async function ({ addon, msg, console }) {
   const palette = createPaletteModule(addon, state, redux, msg);
   const animationPreview = createAnimationPreview(addon, state, msg);
   const controls = createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview);
+  const textToolScaler = createTextToolScaler(addon, paper);
 
   // Main Redux event handler for paint events
   redux.addEventListener("statechanged", ({ detail }) => {
     if (!detail || !detail.prev || !detail.next) return;
     if (detail.action.type === "scratch-paint/modes/CHANGE_MODE") {
       controls.updateBrushControlVisibility();
+      textToolScaler.onModeChanged(detail.action.mode);
     }
 
     if (detail.action.type === "scratch-paint/view/UPDATE_VIEW_BOUNDS") {
@@ -94,6 +97,7 @@ export default async function ({ addon, msg, console }) {
   palette.setupPalettePanel();
   palette.updatePaletteSelection();
   animationPreview.setupPanel();
+  textToolScaler.onModeChanged(redux.state.scratchPaint?.mode);
 
   // Auto-add colors to palette when drawing
   const DRAWING_MODES = ["BIT_BRUSH", "BIT_LINE", "BIT_RECT", "BIT_OVAL", "BIT_FILL"];
