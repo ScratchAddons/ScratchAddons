@@ -8,11 +8,11 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     const target = vm.editingTarget || vm.runtime.getEditingTarget();
     const costume = target?.sprite?.costumes?.[target.currentCostume];
     if (!costume) return null;
-    // scratch shows the costume size in the gui as half what it actually is,
-    // but in in the actual data for the costume the size is correct so we don't need to modify it
+    // bitmapResolution 1 reports half size which happens in case of vector so double it.
+    const mul = costume.bitmapResolution === 1 ? 2 : 1;
     return {
-      width: Math.round(costume.size[0]),
-      height: Math.round(costume.size[1]),
+      width: Math.round(costume.size[0] * mul),
+      height: Math.round(costume.size[1] * mul),
     };
   };
 
