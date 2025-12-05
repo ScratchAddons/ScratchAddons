@@ -260,7 +260,7 @@ body.sa-pixel-art-mode-active .sa-pixel-art-brush[data-visible="true"] {
 
 .sa-pixel-art-action-button {
   border: none;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgb(87 94 117);;
   color: inherit;
   border-radius: 0.35rem;
   width: 2rem;
