@@ -8,6 +8,11 @@
       "type": "notice",
       "text": "Shift-click a palette color to edit it. Right-click a color to remove it from the palette.",
       "id": "paletteControls"
+    },
+    {
+      "type": "notice",
+      "text": "Imported costumes will be half their original size. Use \"set size to 200%\" in your project to display them at full size.",
+      "id": "importedCostumeSize"
     }
   ],
   "userscripts": [
