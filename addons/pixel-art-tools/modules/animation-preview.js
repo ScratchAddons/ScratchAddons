@@ -6,6 +6,8 @@ export function createAnimationPreview(addon, state, msg) {
   let currentFrame = -1;
   let fps = 12;
   let exporting = false;
+  let rangeStart = null;
+  let rangeEnd = null;
   const resolveExtUrl = (path) => {
     const clean = path.replace(/^\//, "");
     if (chrome?.runtime?.getURL) return chrome.runtime.getURL(clean);
@@ -16,8 +18,16 @@ export function createAnimationPreview(addon, state, msg) {
   const gifWorkerPath = "/libraries/thirdparty/cs/gif.worker.js";
   let gifWorkerBlobUrl = null;
 
+  const applyRange = (images) => {
+    if (!rangeStart && !rangeEnd) return images;
+    const start = rangeStart ? Math.max(1, rangeStart) : 1;
+    const end = rangeEnd ? rangeEnd : images.length;
+    const clampedEnd = Math.min(images.length, Math.max(start, end));
+    return images.slice(start - 1, clampedEnd);
+  };
+
   const captureFrames = async () => {
-    const images = getCostumeImages();
+    const images = applyRange(getCostumeImages());
     if (!images.length) return [];
     const width = images[0].naturalWidth || images[0].width;
     const height = images[0].naturalHeight || images[0].height;
@@ -111,7 +121,7 @@ export function createAnimationPreview(addon, state, msg) {
 
   const updatePreview = () => {
     if (!panel || panel.style.display === "none") return;
-    const images = getCostumeImages();
+    const images = applyRange(getCostumeImages());
     if (!images.length) return;
     currentFrame = (currentFrame + 1) % images.length;
     const src = images[currentFrame]?.src;
@@ -213,6 +223,70 @@ export function createAnimationPreview(addon, state, msg) {
     fpsRow.append(fpsLabel, fpsSlider);
     fpsRow.appendChild(tooltip);
     panel.appendChild(fpsRow);
+
+    const rangeWrapper = Object.assign(document.createElement("div"), {
+      className: "sa-pixel-art-animation-range-wrapper",
+    });
+
+    const rangeToggle = Object.assign(document.createElement("button"), {
+      type: "button",
+      className: "sa-pixel-art-animation-range-toggle",
+      ariaExpanded: "false",
+      title: msg("animationRangeToggle") || "Animation range",
+    });
+    rangeToggle.innerHTML =
+      '<svg viewBox="0 0 16 16" role="img" aria-hidden="true" focusable="false" class="sa-pixel-art-animation-range-icon"><path d="M4 6.5 8 10l4-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    const rangeRow = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-range" });
+    const makeRangeInput = (onChange) => {
+      const input = Object.assign(document.createElement("input"), {
+        type: "number",
+        min: "1",
+        step: "1",
+        placeholder: "",
+      });
+      input.onchange = () => {
+        const val = input.value.trim();
+        const parsed = val === "" ? null : Math.max(1, Math.floor(+val || 0));
+        if (parsed === null) input.value = "";
+        onChange(parsed);
+        currentFrame = -1;
+        updatePreview();
+      };
+      return input;
+    };
+
+    const startGroup = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-range-group" });
+    const endGroup = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-range-group" });
+
+    const startLabel = Object.assign(document.createElement("span"), {
+      textContent: msg("animationRangeStart") || "Start",
+      className: "sa-pixel-art-animation-range-label",
+    });
+    const endLabel = Object.assign(document.createElement("span"), {
+      textContent: msg("animationRangeEnd") || "End",
+      className: "sa-pixel-art-animation-range-label",
+    });
+
+    const startInput = makeRangeInput((val) => (rangeStart = val));
+    const endInput = makeRangeInput((val) => (rangeEnd = val));
+
+    startGroup.append(startLabel, startInput);
+    endGroup.append(endLabel, endInput);
+
+    rangeRow.append(startGroup, endGroup);
+      rangeRow.style.display = "none";
+
+    rangeToggle.onclick = () => {
+      const expanded = rangeRow.style.display === "flex";
+      rangeRow.style.display = expanded ? "none" : "flex";
+      rangeToggle.classList.toggle("sa-expanded", !expanded);
+      rangeWrapper.classList.toggle("sa-range-open", !expanded);
+      rangeToggle.setAttribute("aria-expanded", String(!expanded));
+    };
+
+    rangeWrapper.append(rangeRow, rangeToggle);
+    panel.append(rangeWrapper);
 
     state.animationPanel = panel;
     if (state.enabled) startAnimation();
