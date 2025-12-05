@@ -4,6 +4,7 @@ import { createControlsModule } from "./modules/controls.js";
 import { createAnimationPreview } from "./modules/animation-preview.js";
 import { wrapAddCostumeWait, wrapCreateBitmapSkin } from "./modules/bitmap-loader.js";
 import { createTextToolScaler } from "./modules/text-tool-scaler.js";
+import { installBitmapSkinPad } from "./modules/bitmap-skin-pad.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function ({ addon, msg, console }) {
@@ -44,6 +45,7 @@ export default async function ({ addon, msg, console }) {
   const animationPreview = createAnimationPreview(addon, state, msg);
   const controls = createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview);
   const textToolScaler = createTextToolScaler(addon, paper);
+  installBitmapSkinPad(addon, state);
 
   // Main Redux event handler for paint events
   redux.addEventListener("statechanged", ({ detail }) => {
