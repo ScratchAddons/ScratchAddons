@@ -30,8 +30,12 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     if (state.enabled === enabled) return;
     state.pixelModeDesired = enabled;
     updatePixelModeState(enabled);
-    if (enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
-    else {
+    if (enabled) {
+      canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+      // Set brush size to 1 when entering pixel mode
+      redux.dispatch({ type: "scratch-paint/brush-mode/CHANGE_BIT_BRUSH_SIZE", brushSize: 1 });
+      updateBrushSelection(1);
+    } else {
       canvasAdjuster.disable();
       palette.updatePaletteSelection();
     }
