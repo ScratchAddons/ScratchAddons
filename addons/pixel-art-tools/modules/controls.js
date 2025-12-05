@@ -67,6 +67,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
 
     if (!isCurrentlyBitmap && state.enabled) {
       updatePixelModeState(false);
+      canvasAdjuster.disable();
       updateBrushControlVisibility();
     } else if (isCurrentlyBitmap && state.pixelModeDesired && !state.enabled) {
       setPixelMode(true);
