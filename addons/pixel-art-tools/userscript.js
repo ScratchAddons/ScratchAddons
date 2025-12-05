@@ -83,6 +83,16 @@ export default async function ({ addon, msg, console }) {
   palette.setupPalettePanel();
   palette.updatePaletteSelection();
 
+  // Auto-add colors to palette when drawing
+  const DRAWING_MODES = ["BIT_BRUSH", "BIT_LINE", "BIT_RECT", "BIT_OVAL", "BIT_FILL"];
+  paper.view.on("mouseup", () => {
+    if (!state.enabled) return;
+    const mode = redux.state.scratchPaint?.mode;
+    if (DRAWING_MODES.includes(mode)) {
+      palette.addPaletteColor(null, { silent: true });
+    }
+  });
+
   setTimeout(() => {
     vm.renderer.createBitmapSkin = wrapCreateBitmapSkin(vm.runtime, vm.renderer.createBitmapSkin);
     vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume);

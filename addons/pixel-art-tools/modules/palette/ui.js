@@ -123,13 +123,13 @@ export function createUIModule(addon, state, redux, msg, storage, importExport) 
     if (state.paletteNotice) state.paletteNotice.hidden = colors.length > 0;
   };
 
-  const addPaletteColor = (hex) => {
+  const addPaletteColor = (hex, { silent = false } = {}) => {
     const palette = state.projectPalettes.find((p) => p.id === state.selectedPaletteId);
     const normalized = sanitizeHex(hex || getFillHex());
     if (!palette || !normalized) return;
 
     if (palette.colors.includes(normalized)) {
-      showPaletteMessage(msg("colorAlreadyExists") || "Color already exists", "info");
+      if (!silent) showPaletteMessage(msg("colorAlreadyExists") || "Color already exists", "info");
       updatePaletteSelection(normalized);
       return;
     }
