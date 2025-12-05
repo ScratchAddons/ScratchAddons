@@ -65,7 +65,9 @@ export function createAnimationPreview(addon, state, msg) {
       ensureWorkerPromise = fetch(workerUrl)
         .then((res) => (res.ok ? res.text() : null))
         .then((text) => {
-          gifWorkerBlobUrl = text ? URL.createObjectURL(new Blob([text], { type: "application/javascript" })) : workerUrl;
+          gifWorkerBlobUrl = text
+            ? URL.createObjectURL(new Blob([text], { type: "application/javascript" }))
+            : workerUrl;
           return gifWorkerBlobUrl;
         })
         .catch(() => workerUrl);
@@ -164,12 +166,24 @@ export function createAnimationPreview(addon, state, msg) {
 
     // Draggable when floating
     let dragStart = null;
-    header.onmousedown = (e) => panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
-    document.addEventListener("mousemove", (e) => dragStart && Object.assign(panel.style, { left: `${e.clientX - dragStart.x}px`, top: `${e.clientY - dragStart.y}px`, right: "auto" }));
+    header.onmousedown = (e) =>
+      panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
+    document.addEventListener(
+      "mousemove",
+      (e) =>
+        dragStart &&
+        Object.assign(panel.style, {
+          left: `${e.clientX - dragStart.x}px`,
+          top: `${e.clientY - dragStart.y}px`,
+          right: "auto",
+        })
+    );
     document.addEventListener("mouseup", () => (dragStart = null));
 
     // Preview image + export overlay
-    const previewWrapper = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-preview-wrap" });
+    const previewWrapper = Object.assign(document.createElement("div"), {
+      className: "sa-pixel-art-animation-preview-wrap",
+    });
     previewImg = Object.assign(document.createElement("img"), {
       className: "sa-pixel-art-animation-preview",
       alt: "Animation preview",
@@ -256,7 +270,9 @@ export function createAnimationPreview(addon, state, msg) {
       return input;
     };
 
-    const startGroup = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-range-group" });
+    const startGroup = Object.assign(document.createElement("div"), {
+      className: "sa-pixel-art-animation-range-group",
+    });
     const endGroup = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-range-group" });
 
     const startLabel = Object.assign(document.createElement("span"), {
@@ -275,7 +291,7 @@ export function createAnimationPreview(addon, state, msg) {
     endGroup.append(endLabel, endInput);
 
     rangeRow.append(startGroup, endGroup);
-      rangeRow.style.display = "none";
+    rangeRow.style.display = "none";
 
     rangeToggle.onclick = () => {
       const expanded = rangeRow.style.display === "flex";

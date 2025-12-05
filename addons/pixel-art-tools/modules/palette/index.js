@@ -99,8 +99,18 @@ export function createPaletteModule(addon, state, redux, msg) {
 
     // Draggable when floating
     let dragStart = null;
-    header.onmousedown = (e) => panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
-    document.addEventListener("mousemove", (e) => dragStart && Object.assign(panel.style, { left: `${e.clientX - dragStart.x}px`, top: `${e.clientY - dragStart.y}px`, right: "auto" }));
+    header.onmousedown = (e) =>
+      panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
+    document.addEventListener(
+      "mousemove",
+      (e) =>
+        dragStart &&
+        Object.assign(panel.style, {
+          left: `${e.clientX - dragStart.x}px`,
+          top: `${e.clientY - dragStart.y}px`,
+          right: "auto",
+        })
+    );
     document.addEventListener("mouseup", () => (dragStart = null));
 
     // Float when narrow viewport
