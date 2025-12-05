@@ -49,10 +49,12 @@ export function createCanvasAdjuster(paper) {
     const white = new paper.Shape.Rectangle(r.expand(1));
     white.strokeWidth = 2;
     white.strokeColor = "white";
+    white.guide = true;
     const blue = new paper.Shape.Rectangle(r.expand(5));
     blue.strokeWidth = 2;
     blue.strokeColor = "#4280D7";
     blue.opacity = 0.25;
+    blue.guide = true;
     return [white, blue];
   };
 
