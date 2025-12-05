@@ -217,22 +217,23 @@ export function createAnimationPreview(addon, state, msg) {
     state.animationPanel = panel;
     if (state.enabled) startAnimation();
 
-    // Float logic - position below palette if palette is floating
+    // Always float; stack under palette if palette is floating
     const updateFloat = () => {
-      const shouldFloat = window.innerWidth < 1256;
       const canvas = document.querySelector("[class*='paper-canvas_paper-canvas']");
-      if (shouldFloat && canvas) {
-        panel.dataset.floating = "true";
-        canvas.parentElement.appendChild(panel);
-        // Position below palette if it exists
-        const paletteBottom = state.palettePanel?.offsetTop + state.palettePanel?.offsetHeight;
-        const top = paletteBottom ? paletteBottom + 10 : 10;
-        Object.assign(panel.style, { right: "10px", top: `${top}px`, left: "auto" });
-      } else {
-        delete panel.dataset.floating;
-        Object.assign(panel.style, { left: "", top: "", right: "" });
-        document.querySelector("[class*='paint-editor_mode-selector']")?.appendChild(panel);
+      const host = canvas?.parentElement;
+      if (!host) return;
+      panel.dataset.floating = "true";
+      if (panel.parentElement !== host) host.appendChild(panel);
+
+      const margin = 10;
+      let top = margin;
+      const palette = state.palettePanel;
+      const paletteFloating = palette?.dataset?.floating === "true" && palette.parentElement === host;
+      if (paletteFloating) {
+        top = (palette.offsetTop || 0) + (palette.offsetHeight || 0) + margin;
       }
+
+      Object.assign(panel.style, { right: `${margin}px`, top: `${top}px`, left: "auto" });
     };
     window.addEventListener("resize", updateFloat);
     updateFloat();

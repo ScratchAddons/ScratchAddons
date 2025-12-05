@@ -60,6 +60,8 @@
   align-self: flex-start;
   min-width: 0;
   width: 100%;
+  max-height: 40vh;
+  overflow: hidden;
 }
 
 .sa-pixel-art-palette-header,
@@ -79,7 +81,7 @@
 
 .sa-pixel-art-palette-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 0.35rem;
   margin-top: 0.4rem;
 }
@@ -112,6 +114,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(1.2rem, 1fr));
   gap: 0.4rem;
+  max-height: 28vh;
+  overflow: auto;
+  padding-right: 0.15rem;
 }
 
 .sa-pixel-art-color {
