@@ -31,7 +31,12 @@ export function wrapAddCostumeWait(addon, originalAddCostume) {
     const target = targetId ? this.runtime.getTargetById(targetId) : this.editingTarget;
 
     // Track existing asset IDs to detect duplicates
-    const existingAssetIds = new Set(target.getCostumes().map((c) => c.asset?.assetId).filter(Boolean));
+    const existingAssetIds = new Set(
+      target
+        .getCostumes()
+        .map((c) => c.asset?.assetId)
+        .filter(Boolean)
+    );
 
     // Set flag so wrapCreateBitmapSkin knows this is a new import
     isNewImport = true;

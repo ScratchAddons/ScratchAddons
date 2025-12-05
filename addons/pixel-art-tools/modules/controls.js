@@ -57,7 +57,9 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       });
       input.classList.add("sa-pixel-art-hide-when-pixel");
     } else {
-      document.querySelector("[class*='mode-tools'] input[type='number']")?.classList.remove("sa-pixel-art-hide-when-pixel");
+      document
+        .querySelector("[class*='mode-tools'] input[type='number']")
+        ?.classList.remove("sa-pixel-art-hide-when-pixel");
     }
   };
 
