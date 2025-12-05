@@ -1,5 +1,8 @@
 import { assetSelect } from "../../asset-conflict-dialog/utils.js";
 
+// Flag set when vm.addCostume is called (new import), not set for duplicates
+let isNewImport = false;
+
 async function halveAsset(asset) {
   const img = await createImageBitmap(await (await fetch(asset.encodeDataURI())).blob());
   const c = Object.assign(document.createElement("canvas"), {
@@ -14,20 +17,27 @@ async function halveAsset(asset) {
 
 export function wrapCreateBitmapSkin(runtime, createBitmapSkin) {
   return function (canvas, bitmapResolution, center) {
-    // keep existing conflict modal behavior etc
-    // Scratch will use bitmapResolution = 2 which resizes our canvas so we are going to halve it to fix this
-    // but we'll keep it at bitmapResolution = 2, so that scratch doesn't resize it again the next time the project loads
-    canvas = runtime.v2BitmapAdapter.resize(canvas, canvas.width / 2, canvas.height / 2);
+    // Only halve for new imports (via vm.addCostume), not duplicates
+    if (isNewImport) {
+      canvas = runtime.v2BitmapAdapter.resize(canvas, canvas.width / 2, canvas.height / 2);
+    }
     return createBitmapSkin.call(this, canvas, bitmapResolution, center);
   };
 }
 
 export function wrapAddCostumeWait(addon, originalAddCostume) {
   return async function (...args) {
-    const out = await originalAddCostume.call(this, ...args);
-
     const targetId = args[2];
     const target = targetId ? this.runtime.getTargetById(targetId) : this.editingTarget;
+
+    // Track existing asset IDs to detect duplicates
+    const existingAssetIds = new Set(target.getCostumes().map((c) => c.asset?.assetId).filter(Boolean));
+
+    // Set flag so wrapCreateBitmapSkin knows this is a new import
+    isNewImport = true;
+    const out = await originalAddCostume.call(this, ...args);
+    isNewImport = false;
+
     const idx = target.currentCostume;
     const asset = target.getCostumes()[idx].asset;
 
@@ -38,6 +48,11 @@ export function wrapAddCostumeWait(addon, originalAddCostume) {
         // but we need a timeout, or the click will apply to the current costume
         setTimeout(() => document.querySelectorAll("[class*='paint-editor_bitmap-button_']")[0].click(), 100);
       }
+      return out;
+    }
+
+    // Skip halving for duplicates (asset already existed)
+    if (existingAssetIds.has(asset.assetId)) {
       return out;
     }
 
