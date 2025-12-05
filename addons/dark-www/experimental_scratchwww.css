@@ -526,7 +526,7 @@ p.callout,
 .banner-outer:not(.banner-danger) .banner-button /* Share */ {
   background-color: #ffab1a;
 }
-.membership-label-text  {
+.membership-label-text {
   color: var(--darkWww-button-text);
 }
 .row .col-sm-9 input[type="radio"]:checked::after {
