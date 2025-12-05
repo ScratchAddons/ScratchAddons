@@ -15,10 +15,10 @@ async function halveAsset(asset) {
   asset.setData(new Uint8Array(buff), "png", true);
 }
 
-export function wrapCreateBitmapSkin(runtime, createBitmapSkin) {
+export function wrapCreateBitmapSkin(addon, runtime, createBitmapSkin) {
   return function (canvas, bitmapResolution, center) {
     // Only halve for new imports (via vm.addCostume), not duplicates
-    if (isNewImport) {
+    if (!addon.self.disabled && isNewImport) {
       canvas = runtime.v2BitmapAdapter.resize(canvas, canvas.width / 2, canvas.height / 2);
     }
     return createBitmapSkin.call(this, canvas, bitmapResolution, center);
@@ -27,6 +27,8 @@ export function wrapCreateBitmapSkin(runtime, createBitmapSkin) {
 
 export function wrapAddCostumeWait(addon, originalAddCostume) {
   return async function (...args) {
+    if (addon.self.disabled) return originalAddCostume.call(this, ...args);
+
     const targetId = args[2];
     const target = targetId ? this.runtime.getTargetById(targetId) : this.editingTarget;
 

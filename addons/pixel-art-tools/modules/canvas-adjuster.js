@@ -1,5 +1,5 @@
 // canvas-adjuster.js
-export function createCanvasAdjuster(paper) {
+export function createCanvasAdjuster(addon, paper) {
   const getBgLayer = () => paper.project.layers.find((l) => l?.data?.isBackgroundGuideLayer);
   const getOutlineLayer = () => paper.project.layers.find((l) => l?.data?.isOutlineLayer);
   const getGuideLayer = () => paper.project.layers.find((l) => l?.data?.isGuideLayer);
@@ -70,6 +70,7 @@ export function createCanvasAdjuster(paper) {
     const up = tool.onMouseUp;
 
     tool.onMouseDown = function (evt) {
+      if (addon.self.disabled) return down?.call(this, evt);
       const rect = getAllowedRect();
       if (!rect || !down) return down?.call(this, evt);
       this.__strokeBlocked = !rect.contains(evt.point);
@@ -86,6 +87,7 @@ export function createCanvasAdjuster(paper) {
     };
 
     tool.onMouseDrag = function (evt) {
+      if (addon.self.disabled) return drag?.call(this, evt);
       const rect = getAllowedRect();
       if (!rect) return drag?.call(this, evt);
       if (this.__strokeBlocked) return;
@@ -108,6 +110,7 @@ export function createCanvasAdjuster(paper) {
     };
 
     tool.onMouseUp = function (evt) {
+      if (addon.self.disabled) return up?.call(this, evt);
       const rect = getAllowedRect();
       if (!rect) return up?.call(this, evt);
       if (this.__strokeBlocked) {
@@ -136,7 +139,7 @@ export function createCanvasAdjuster(paper) {
     const origActivate = paper.Tool.prototype.activate;
     paper.Tool.prototype.activate = function (...args) {
       const res = origActivate.apply(this, args);
-      wrapToolOnce(this);
+      if (!addon.self.disabled) wrapToolOnce(this);
       return res;
     };
 
@@ -150,6 +153,7 @@ export function createCanvasAdjuster(paper) {
     clickHiderAttached = true;
 
     paper.view.on("mousedown", (e) => {
+      if (addon.self.disabled) return;
       const rect = getAllowedRect();
       const inside = rect ? rect.contains(e.point) : true;
       if (inside) {
@@ -165,6 +169,7 @@ export function createCanvasAdjuster(paper) {
     });
 
     paper.view.on("mouseup", (e) => {
+      if (addon.self.disabled) return;
       if (!helpersHidden) return;
       helpersHidden = false;
       const gl = getGuideLayer();

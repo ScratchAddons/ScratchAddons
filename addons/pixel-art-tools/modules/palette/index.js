@@ -82,6 +82,7 @@ export function createPaletteModule(addon, state, redux, msg) {
   const setupPalettePanel = async () => {
     const panel = Object.assign(document.createElement("section"), { className: "sa-pixel-art-palette" });
     panel.style.display = "none";
+    addon.tab.displayNoneWhileDisabled(panel);
 
     const header = Object.assign(document.createElement("header"), {
       className: "sa-pixel-art-palette-header",
@@ -182,7 +183,9 @@ export function createPaletteModule(addon, state, redux, msg) {
     const handler = scheduleSync;
     vm.on("targetsUpdate", handler);
     state.teardownVmTargetsListener = () => {
-      (vm.off || vm.removeListener)?.("targetsUpdate", handler);
+      try {
+        (vm.off || vm.removeListener)?.call(vm, "targetsUpdate", handler);
+      } catch {}
       state.teardownVmTargetsListener = null;
     };
   };
@@ -194,6 +197,7 @@ export function createPaletteModule(addon, state, redux, msg) {
     RenderedTarget.prototype.renameCostume = function (costumeIndex, newName) {
       const oldName = this.getCostumes()[costumeIndex]?.name;
       original.call(this, costumeIndex, newName);
+      if (addon.self.disabled) return;
       storage.renameCostumeMapping(this, oldName, this.getCostumes()[costumeIndex]?.name);
     };
   }

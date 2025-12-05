@@ -36,7 +36,7 @@ export default async function ({ addon, msg, console }) {
   const redux = addon.tab.redux;
 
   // Initialize modules
-  const canvasAdjuster = createCanvasAdjuster(paper);
+  const canvasAdjuster = createCanvasAdjuster(addon, paper);
   const palette = createPaletteModule(addon, state, redux, msg);
   const controls = createControlsModule(addon, state, redux, msg, canvasAdjuster, palette);
 
@@ -94,7 +94,7 @@ export default async function ({ addon, msg, console }) {
   // Auto-add colors to palette when drawing
   const DRAWING_MODES = ["BIT_BRUSH", "BIT_LINE", "BIT_RECT", "BIT_OVAL", "BIT_FILL"];
   paper.view.on("mouseup", () => {
-    if (!state.enabled) return;
+    if (addon.self.disabled || !state.enabled) return;
     const mode = redux.state.scratchPaint?.mode;
     if (DRAWING_MODES.includes(mode)) {
       palette.addPaletteColor(null, { silent: true });
@@ -102,7 +102,7 @@ export default async function ({ addon, msg, console }) {
   });
 
   setTimeout(() => {
-    vm.renderer.createBitmapSkin = wrapCreateBitmapSkin(vm.runtime, vm.renderer.createBitmapSkin);
+    vm.renderer.createBitmapSkin = wrapCreateBitmapSkin(addon, vm.runtime, vm.renderer.createBitmapSkin);
     vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume);
   }, 100);
 }
