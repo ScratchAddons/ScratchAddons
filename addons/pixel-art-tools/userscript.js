@@ -1,6 +1,7 @@
 import { createPaletteModule } from "./modules/palette/index.js";
 import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
+import { createAnimationPreview } from "./modules/animation-preview.js";
 import { wrapAddCostumeWait, wrapCreateBitmapSkin } from "./modules/bitmap-loader.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
@@ -31,6 +32,7 @@ export default async function ({ addon, msg, console }) {
     pixelCheckerboardSize: 1,
     paletteNotice: null,
     toggleButton: null,
+    animationPanel: null,
   };
 
   const redux = addon.tab.redux;
@@ -38,7 +40,8 @@ export default async function ({ addon, msg, console }) {
   // Initialize modules
   const canvasAdjuster = createCanvasAdjuster(addon, paper);
   const palette = createPaletteModule(addon, state, redux, msg);
-  const controls = createControlsModule(addon, state, redux, msg, canvasAdjuster, palette);
+  const animationPreview = createAnimationPreview(addon, state, msg);
+  const controls = createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview);
 
   // Main Redux event handler for paint events
   redux.addEventListener("statechanged", ({ detail }) => {
@@ -90,6 +93,7 @@ export default async function ({ addon, msg, console }) {
   controls.setupControls();
   palette.setupPalettePanel();
   palette.updatePaletteSelection();
+  animationPreview.setupPanel();
 
   // Auto-add colors to palette when drawing
   const DRAWING_MODES = ["BIT_BRUSH", "BIT_LINE", "BIT_RECT", "BIT_OVAL", "BIT_FILL"];

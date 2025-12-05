@@ -1,6 +1,6 @@
 const BRUSH_SIZES = [1, 2, 3, 4];
 
-export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette) {
+export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview) {
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
 
   const getCostumeSize = () => {
@@ -24,6 +24,9 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     state.toggleButton.setAttribute("aria-pressed", enabled);
     state.palettePanel.style.display = enabled ? "block" : "none";
     state.sizeControls.style.display = enabled ? "flex" : "none";
+    if (animationPreview) {
+      enabled ? animationPreview.show() : animationPreview.hide();
+    }
   };
 
   const setPixelMode = (enabled) => {

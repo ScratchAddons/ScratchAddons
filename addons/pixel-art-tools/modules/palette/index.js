@@ -13,6 +13,13 @@ export function createPaletteModule(addon, state, redux, msg) {
     teardownVmTargetsListener: null,
   });
 
+  let resolvePalettePanelReady;
+  state.palettePanelReady =
+    state.palettePanelReady ||
+    new Promise((resolve) => {
+      resolvePalettePanelReady = resolve;
+    });
+
   const ui = createUIModule(addon, state, redux, msg, null, null);
   const storage = createStorageModule(addon, vm, runtime, msg, state, ui);
   const importExport = createImportExportModule(state, storage);
@@ -97,11 +104,8 @@ export function createPaletteModule(addon, state, redux, msg) {
     document.addEventListener("mouseup", () => (dragStart = null));
 
     // Float when narrow viewport
-    let floating = false;
     const updateFloat = () => {
       const shouldFloat = window.innerWidth < 1256;
-      if (shouldFloat === floating) return;
-      floating = shouldFloat;
       const canvas = document.querySelector("[class*='paper-canvas_paper-canvas']");
       if (shouldFloat && canvas) {
         panel.dataset.floating = "true";
@@ -157,6 +161,8 @@ export function createPaletteModule(addon, state, redux, msg) {
     panel.appendChild(actionsRow);
 
     state.palettePanel = panel;
+    resolvePalettePanelReady?.(panel);
+    resolvePalettePanelReady = null;
 
     while (true) {
       await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
