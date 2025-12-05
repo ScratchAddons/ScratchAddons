@@ -73,7 +73,13 @@ export function createCanvasAdjuster(paper) {
       this.__strokeBlocked = !rect.contains(evt.point);
       this.__paused = false;
       this.__lastInsidePoint = rect.contains(evt.point) ? evt.point.clone() : null;
-      if (this.__strokeBlocked) return;
+      if (this.__strokeBlocked) {
+        // Only let mousedown through if there's a selection to deselect
+        if (paper.project.selectedItems.length > 0) {
+          return down.call(this, evt);
+        }
+        return;
+      }
       return down.call(this, evt);
     };
 
