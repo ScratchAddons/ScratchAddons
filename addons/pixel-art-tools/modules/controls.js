@@ -42,13 +42,19 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     [...state.brushButtons.children].forEach((btn) => (btn.dataset.selected = +btn.dataset.size === size));
   };
 
-  const updateBrushControlVisibility = () => {
+  const updateBrushControlVisibility = async () => {
     const { mode, format } = redux.state.scratchPaint;
     const show = (mode === "BIT_BRUSH" || mode === "BIT_LINE") && format?.startsWith("BITMAP") && state.enabled;
     state.brushButtons.dataset.visible = show;
-    document
-      .querySelector("[class*='mode-tools'] input[type='number']")
-      ?.classList.toggle("sa-pixel-art-hide-when-pixel", show);
+    // If we need to hide the native input, wait for it to render first
+    if (show) {
+      const input = await addon.tab.waitForElement("[class*='mode-tools'] input[type='number']", {
+        reduxCondition: (store) => store.scratchPaint?.mode === mode,
+      });
+      input.classList.add("sa-pixel-art-hide-when-pixel");
+    } else {
+      document.querySelector("[class*='mode-tools'] input[type='number']")?.classList.remove("sa-pixel-art-hide-when-pixel");
+    }
   };
 
   const updatePixelModeVisibility = () => {
@@ -165,8 +171,8 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       const container = await addon.tab.waitForElement("[class*='mode-tools']");
       if (!container.contains(brushContainer)) {
         container.appendChild(brushContainer);
-        updateBrushControlVisibility();
       }
+      updateBrushControlVisibility();
 
       updatePixelModeVisibility();
     }
