@@ -3,6 +3,13 @@
   "description": "Adds pixel art focused tools and options to the bitmap costume editor, including a palette, pixel mode, pixel-sized canvas, and brush tweaks.",
   "tags": ["editor", "costumeEditor"],
   "versionAdded": "1.45.0",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Shift-click a palette color to edit it. Right-click a color to remove it from the palette.",
+      "id": "paletteControls"
+    }
+  ],
   "userscripts": [
     {
       "matches": ["projects"],
