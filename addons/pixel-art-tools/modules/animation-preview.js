@@ -240,7 +240,7 @@ export function createAnimationPreview(addon, state, msg) {
 
     while (true) {
       await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
-        markAsSeen: true,
+        markAsSeen: false, // Palette already uses markAsSeen:true, can't both mark same element
         reduxEvents: [
           "scratch-gui/navigation/ACTIVATE_TAB",
           "scratch-gui/targets/UPDATE_TARGET_LIST",
