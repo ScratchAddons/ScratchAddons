@@ -89,6 +89,31 @@ export function createPaletteModule(addon, state, redux, msg) {
     });
     panel.appendChild(header);
 
+    // Draggable when floating
+    let dragStart = null;
+    header.onmousedown = (e) => panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
+    document.addEventListener("mousemove", (e) => dragStart && Object.assign(panel.style, { left: `${e.clientX - dragStart.x}px`, top: `${e.clientY - dragStart.y}px`, right: "auto" }));
+    document.addEventListener("mouseup", () => (dragStart = null));
+
+    // Float when narrow viewport
+    let floating = false;
+    const updateFloat = () => {
+      const shouldFloat = window.innerWidth < 1256;
+      if (shouldFloat === floating) return;
+      floating = shouldFloat;
+      const canvas = document.querySelector("[class*='paper-canvas_paper-canvas']");
+      if (shouldFloat && canvas) {
+        panel.dataset.floating = "true";
+        canvas.parentElement.appendChild(panel);
+        Object.assign(panel.style, { right: "10px", top: "10px", left: "auto" });
+      } else {
+        delete panel.dataset.floating;
+        Object.assign(panel.style, { left: "", top: "", right: "" });
+        document.querySelector("[class*='paint-editor_mode-selector']")?.appendChild(panel);
+      }
+    };
+    window.addEventListener("resize", updateFloat);
+
     const selectorRow = Object.assign(document.createElement("div"), { className: "sa-pixel-art-palette-select-row" });
     const dropdown = Object.assign(document.createElement("select"), { className: "sa-pixel-art-palette-select" });
     dropdown.onchange = (e) => {
@@ -147,6 +172,7 @@ export function createPaletteModule(addon, state, redux, msg) {
       addon.tab.appendToSharedSpace({ space: "paintEditorModeSelector", element: panel, order: 1 });
       ui.renderSelector();
       ui.renderPalette();
+      updateFloat();
     }
   };
 

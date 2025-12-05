@@ -51,10 +51,11 @@
   gap: 0.4rem;
   color: #333;
   width: auto;
-  max-width: 210px;
+  max-width: 190px;
   align-self: flex-start;
   box-sizing: border-box;
   min-width: 0;
+  width: 100%;
 }
 
 .sa-pixel-art-palette-header {
@@ -260,11 +261,11 @@ body.sa-pixel-art-mode-active .sa-pixel-art-brush[data-visible="true"] {
 
 .sa-pixel-art-action-button {
   border: none;
-  background: rgb(87 94 117);;
+  background: rgb(87 94 117);
   color: inherit;
-  border-radius: 0.35rem;
-  width: 2rem;
-  height: 2rem;
+  border-radius: 0.3rem;
+  width: 1.6rem;
+  height: 1.6rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -293,4 +294,34 @@ body.sa-pixel-art-mode-active .sa-pixel-art-brush[data-visible="true"] {
 
 .sa-pixel-art-icon--invert {
   filter: brightness(0) invert(1);
+}
+
+.sa-pixel-art-palette[data-floating="true"] {
+  position: absolute;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.95);
+  margin-top: 0;
+}
+
+.sa-pixel-art-palette[data-floating="true"] .sa-pixel-art-palette-header {
+  cursor: grab;
+}
+
+.sa-pixel-art-palette[data-floating="true"] .sa-pixel-art-palette-actions {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  margin: 0;
+  gap: 0.2rem;
+}
+
+.sa-pixel-art-palette[data-floating="true"] .sa-pixel-art-action-button {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.sa-pixel-art-palette[data-floating="true"] .sa-pixel-art-icon {
+  width: 0.85rem;
+  height: 0.85rem;
 }
