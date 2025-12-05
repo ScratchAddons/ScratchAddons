@@ -72,6 +72,6 @@ export function wrapAddCostumeWait(addon, originalAddCostume) {
 
     // scratch won't update visuals until we change costume in the gui.
     assetSelect(addon, idx - 1, "costume");
-    assetSelect(addon, idx, "costume");
+    setTimeout(() => {assetSelect(addon, idx, "costume");});
   };
 }
