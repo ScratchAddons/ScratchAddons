@@ -10,6 +10,7 @@
       "runAtComplete": true
     }
   ],
+  "web_accessible_resources": ["libraries/thirdparty/cs/gif.js", "libraries/thirdparty/cs/gif.worker.js"],
   "userstyles": [
     {
       "matches": ["projects"],

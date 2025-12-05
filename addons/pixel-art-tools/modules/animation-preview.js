@@ -5,6 +5,102 @@ export function createAnimationPreview(addon, state, msg) {
   let intervalId = null;
   let currentFrame = -1;
   let fps = 12;
+  let exporting = false;
+  const resolveExtUrl = (path) => {
+    const clean = path.replace(/^\//, "");
+    if (chrome?.runtime?.getURL) return chrome.runtime.getURL(clean);
+    if (addon?.self?.dir) return new URL(`../../${clean}`, `${addon.self.dir}/`).href;
+    return path;
+  };
+  const gifLibPath = "/libraries/thirdparty/cs/gif.js";
+  const gifWorkerPath = "/libraries/thirdparty/cs/gif.worker.js";
+  let gifWorkerBlobUrl = null;
+
+  const captureFrames = async () => {
+    const images = getCostumeImages();
+    if (!images.length) return [];
+    const width = images[0].naturalWidth || images[0].width;
+    const height = images[0].naturalHeight || images[0].height;
+    if (!width || !height) return [];
+
+    const canvas = Object.assign(document.createElement("canvas"), { width, height });
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.imageSmoothingEnabled = false;
+
+    return images
+      .filter((img) => img.naturalWidth && img.naturalHeight)
+      .map((img) => {
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+        const frameCanvas = Object.assign(document.createElement("canvas"), { width, height });
+        frameCanvas.getContext("2d", { willReadFrequently: true }).drawImage(canvas, 0, 0);
+        return frameCanvas;
+      });
+  };
+
+  let loadGifLibPromise = null;
+  const ensureGifLib = () => {
+    if (typeof GIF !== "undefined") return Promise.resolve();
+    if (!loadGifLibPromise) {
+      loadGifLibPromise = addon.tab.loadScript(gifLibPath);
+    }
+    return loadGifLibPromise;
+  };
+
+  let ensureWorkerPromise = null;
+  const ensureGifWorkerUrl = () => {
+    if (gifWorkerBlobUrl) return Promise.resolve(gifWorkerBlobUrl);
+    if (!ensureWorkerPromise) {
+      const workerUrl = resolveExtUrl(gifWorkerPath);
+      ensureWorkerPromise = fetch(workerUrl)
+        .then((res) => (res.ok ? res.text() : null))
+        .then((text) => {
+          gifWorkerBlobUrl = text ? URL.createObjectURL(new Blob([text], { type: "application/javascript" })) : workerUrl;
+          return gifWorkerBlobUrl;
+        })
+        .catch(() => workerUrl);
+    }
+    return ensureWorkerPromise;
+  };
+
+  const exportGif = async () => {
+    if (exporting) return;
+    exporting = true;
+    try {
+      await ensureGifLib();
+      if (typeof GIF === "undefined") return;
+      const workerUrl = await ensureGifWorkerUrl();
+      const frames = await captureFrames();
+      if (!frames.length) return;
+      const delay = Math.max(20, Math.round(1000 / fps));
+      const gif = new window.GIF({
+        workers: 2,
+        quality: 1,
+        width: frames[0].width,
+        height: frames[0].height,
+        workerScript: workerUrl,
+      });
+      frames.forEach((frame) => gif.addFrame(frame, { delay, copy: true }));
+      const finish = () => {
+        exporting = false;
+      };
+      gif.on("finished", (blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = Object.assign(document.createElement("a"), {
+          href: url,
+          download: "animation.gif",
+        });
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        finish();
+      });
+      gif.on("abort", finish);
+      gif.render();
+    } catch (e) {
+      console.warn("pixel-art-tools: GIF export failed", e);
+      exporting = false;
+    }
+  };
 
   const getCostumeImages = () => {
     // Get costume thumbnails from the costume list in the paint editor
@@ -62,12 +158,26 @@ export function createAnimationPreview(addon, state, msg) {
     document.addEventListener("mousemove", (e) => dragStart && Object.assign(panel.style, { left: `${e.clientX - dragStart.x}px`, top: `${e.clientY - dragStart.y}px`, right: "auto" }));
     document.addEventListener("mouseup", () => (dragStart = null));
 
-    // Preview image
+    // Preview image + export overlay
+    const previewWrapper = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-preview-wrap" });
     previewImg = Object.assign(document.createElement("img"), {
       className: "sa-pixel-art-animation-preview",
       alt: "Animation preview",
     });
-    panel.appendChild(previewImg);
+    previewImg.onclick = exportGif;
+
+    const exportBtn = Object.assign(document.createElement("button"), {
+      type: "button",
+      className: "sa-pixel-art-animation-export",
+      textContent: msg("animationExport") || "Export GIF",
+    });
+    exportBtn.onclick = (e) => {
+      e.stopPropagation();
+      exportGif();
+    };
+
+    previewWrapper.append(previewImg, exportBtn);
+    panel.appendChild(previewWrapper);
 
     // FPS control
     const fpsRow = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-fps" });
@@ -80,20 +190,16 @@ export function createAnimationPreview(addon, state, msg) {
       value: String(fps),
       className: "sa-pixel-art-animation-slider",
     });
-    const updateFpsTooltip = (value) => {
+    const renderFpsLabel = (value) => {
       const label = `${value} FPS`;
-      fpsLabel.title = label;
-      fpsSlider.title = label;
-      tooltip.textContent = label;
+      fpsLabel.title = fpsSlider.title = tooltip.textContent = label;
     };
     const showTooltip = (value) => {
-      updateFpsTooltip(value);
+      renderFpsLabel(value);
       tooltip.dataset.show = "true";
     };
-    const hideTooltip = () => {
-      delete tooltip.dataset.show;
-    };
-    updateFpsTooltip(fps);
+    const hideTooltip = () => delete tooltip.dataset.show;
+    renderFpsLabel(fps);
     fpsSlider.onpointerdown = () => showTooltip(+fpsSlider.value);
     fpsSlider.oninput = (e) => {
       const value = +e.target.value;

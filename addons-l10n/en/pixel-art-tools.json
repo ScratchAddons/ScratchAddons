@@ -14,5 +14,6 @@
   "pixel-art-tools/paletteCreateNew": "Create new palette",
   "pixel-art-tools/deletePalette": "Delete palette",
   "pixel-art-tools/deletePaletteConfirm": "Are you sure you want to delete this palette?",
-  "pixel-art-tools/animationPreview": "Preview"
+  "pixel-art-tools/animationPreview": "Preview",
+  "pixel-art-tools/animationExport": "Export GIF"
 }
