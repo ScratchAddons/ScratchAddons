@@ -10,6 +10,7 @@ export function createCanvasAdjuster(paper) {
     outlineCenter = null;
   let clickHiderAttached = false;
   let gateInstalled = false;
+  let helpersHidden = false;
 
   const makeChecker = (w, h, size) => {
     const cols = Math.ceil(w / size),
@@ -143,21 +144,26 @@ export function createCanvasAdjuster(paper) {
     paper.view.on("mousedown", (e) => {
       const rect = getAllowedRect();
       const inside = rect ? rect.contains(e.point) : true;
-      if (inside) return;
+      if (inside) {
+        helpersHidden = false;
+        return;
+      }
       const gl = getGuideLayer();
       if (!gl) return;
       gl.children.forEach((ch) => {
         if (ch?.data?.isHelperItem) ch.visible = false;
       });
+      helpersHidden = true;
     });
 
     paper.view.on("mouseup", (e) => {
+      if (!helpersHidden) return;
+      helpersHidden = false;
       const gl = getGuideLayer();
       if (!gl) return;
       gl.children.forEach((ch) => {
         if (ch?.data?.isHelperItem) {
           ch.visible = true;
-          if (e?.point) ch.position = new paper.Point(~~e.point.x, ~~e.point.y);
         }
       });
     });
