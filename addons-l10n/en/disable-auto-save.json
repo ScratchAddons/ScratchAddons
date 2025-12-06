@@ -1,5 +1,6 @@
 {
-  "disable-auto-save/alert-title": "\"Disable auto-save\" addon",
+  "disable-auto-save/alert-title": "Exit to Project Page",
+  "disable-auto-save/alert-subtitle": "Message from \"Disable auto-save\" addon",
   "disable-auto-save/unsaved-changes": "Do you want to save your changes before leaving the editor?",
   "disable-auto-save/save": "Save",
   "disable-auto-save/discard": "Don't save",

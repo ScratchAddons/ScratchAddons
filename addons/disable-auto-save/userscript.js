@@ -27,6 +27,7 @@ export default async ({ addon, console, msg }) => {
     });
     modal.container.classList.add("unsavedChangesDialog");
 
+    appendChildWithAttributes(modal.content, "b", { textContent: msg("alert-subtitle") });
     appendChildWithAttributes(modal.content, "p", { textContent: msg("unsaved-changes") });
     const buttonRow = appendChildWithAttributes(modal.content, "div", {
       className: addon.tab.scratchClass("prompt_button-row", { others: "unsavedChangesDialog-actions" }),
@@ -39,6 +40,7 @@ export default async ({ addon, console, msg }) => {
       });
     }
     buttons.save.classList.add(addon.tab.scratchClass("prompt_ok-button"));
+    buttons.save.focus();
 
     // On any button click:
     buttonRow.addEventListener(
@@ -64,6 +66,10 @@ export default async ({ addon, console, msg }) => {
     );
 
     modal.closeButton.addEventListener("click", modal.remove);
+    modal.container.parentElement.addEventListener("click", modal.remove);
+    modal.container.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") modal.remove();
+    });
   }
 
   while (true) {
