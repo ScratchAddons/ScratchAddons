@@ -43,27 +43,23 @@ export default async ({ addon, console, msg }) => {
     buttons.save.focus();
 
     // On any button click:
-    buttonRow.addEventListener(
-      "click",
-      async (e) => {
-        if (!e.target.matches("button")) return;
-        // All buttons close the modal
-        modal.remove();
+    buttonRow.addEventListener("click", async (e) => {
+      if (!e.target.matches("button")) return;
+      // All buttons close the modal
+      modal.remove();
 
-        if (e.target.value === "discard") {
-          // Mark changes as saved to avoid a save-on-navigation
-          setProjectChanged(false);
-          await new Promise((resolve) => setTimeout(resolve, 0));
-          document.querySelector(PAGE_BUTTON_SELECTOR).click();
-          await new Promise((resolve) => setTimeout(resolve, 0));
-          setProjectChanged(true);
-        }
-        if (e.target.value === "save") {
-          document.querySelector(PAGE_BUTTON_SELECTOR).click();
-        }
-      },
-      { bubble: true }
-    );
+      if (e.target.value === "discard") {
+        // Mark changes as saved to avoid a save-on-navigation
+        setProjectChanged(false);
+        await new Promise((resolve) => setTimeout(resolve, 0)); // wait
+        document.querySelector(PAGE_BUTTON_SELECTOR).click();
+        await new Promise((resolve) => setTimeout(resolve, 0)); // wait
+        setProjectChanged(true);
+      }
+      if (e.target.value === "save") {
+        document.querySelector(PAGE_BUTTON_SELECTOR).click();
+      }
+    });
 
     modal.closeButton.addEventListener("click", modal.remove);
     modal.container.parentElement.addEventListener("click", modal.remove);
