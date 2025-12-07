@@ -48,7 +48,7 @@ export default async ({ addon, console, msg }) => {
       // All buttons close the modal
       modal.remove();
 
-      if (selection === "discard") {
+      if (e.target.value === "discard") {
         // Mark changes as saved to avoid a save-on-navigation
         setProjectChanged(false);
         // Wait for the state change to register
