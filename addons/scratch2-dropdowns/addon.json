@@ -2,6 +2,7 @@
 	"name":"Scratch 2.0 dropdowns",
 	"description":"Makes the drop-down inputs of blocks look like Scratch 2.0's.",
 	"tags":["editor"],
+	"versionAdded": "1.44.3",
 	"credits": [
 		{
 			"name": "Coshnaut",
