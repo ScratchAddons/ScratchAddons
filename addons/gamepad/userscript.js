@@ -124,8 +124,12 @@ export default async function ({ addon, console, msg }) {
         // Otherwise, if a stored mapping exists for this gamepad id at all, use it
         matchingOption = optionsArray.find((gamepads) => gamepads.id === gamepadId);
         if (!matchingOption) {
-          // Otherwise, use the first stored mapping no matter what it is
-          matchingOption = optionsArray.at(0);
+          // Otherwise, use the stored mapping at the same index if it exists
+          matchingOption = optionsArray.find((gamepads) => gamepads.index === gamepadIndex);
+          if (!matchingOption) {
+            // Otherwise, use the first stored mapping no matter what it is
+            matchingOption = optionsArray.at(0);
+          }
         }
       }
       return {
