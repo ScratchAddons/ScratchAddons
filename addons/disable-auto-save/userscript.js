@@ -48,12 +48,13 @@ export default async ({ addon, console, msg }) => {
       // All buttons close the modal
       modal.remove();
 
-      if (e.target.value === "discard") {
+      if (selection === "discard") {
         // Mark changes as saved to avoid a save-on-navigation
         setProjectChanged(false);
-        await new Promise((resolve) => setTimeout(resolve, 0)); // wait
+        // Wait for the state change to register
+        await addon.tab.redux.waitForState((state) => state !== "scratch-gui/project-changed/SET_PROJECT_CHANGED");
         document.querySelector(PAGE_BUTTON_SELECTOR).click();
-        await new Promise((resolve) => setTimeout(resolve, 0)); // wait
+        // Then we can mark it as changed again
         setProjectChanged(true);
       }
       if (e.target.value === "save") {
