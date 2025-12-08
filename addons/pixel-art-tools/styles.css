@@ -63,13 +63,14 @@
 }
 
 .sa-pixel-art-size input {
-  width: 3.5rem;
+  width: 3rem;
   border: 1px solid #e9eef2;
   background: #fff;
   text-align: center;
   font-size: 0.75rem;
   height: 1.95rem;
-  padding: 0 0.75rem;
+  padding-right: 0.1rem;
+  padding-left: 0.5rem;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
   color: #575e75;
