@@ -33,19 +33,19 @@ export default async function ({ addon, console }) {
 
   function fixArrows() {
     let state = arrowState();
-    if (state == 1) {
+    if (state === 1) {
       arrowDown.style.display = "none";
       arrowUp.style.display = "none";
     }
-    if (state == 2) {
+    if (state === 2) {
       arrowDown.style.display = "block";
       arrowUp.style.display = "none";
     }
-    if (state == 3) {
+    if (state === 3) {
       arrowDown.style.display = "block";
       arrowUp.style.display = "block";
     }
-    if (state == 4) {
+    if (state === 4) {
       arrowDown.style.display = "none";
       arrowUp.style.display = "block";
     }
@@ -57,7 +57,7 @@ export default async function ({ addon, console }) {
         const now = getComputedStyle(dropdown).display;
 
         if (now === "block" || now === "none") {
-          if (prev != now) {
+          if (prev !== now) {
             prev = now;
             fixArrows();
             if (now === "block") {

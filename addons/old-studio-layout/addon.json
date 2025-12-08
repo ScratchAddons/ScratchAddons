@@ -3,7 +3,6 @@
   "description": "Reverts the layout of the studio page back to the one used before the studio update.",
   "tags": ["community", "theme", "studios", "featured"],
   "relatedAddons": ["scratch3to2", "items-per-row", "studio-followers"],
-  "dynamicEnable": true,
   "credits": [
     {
       "name": "Maximouse",
