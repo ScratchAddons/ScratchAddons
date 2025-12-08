@@ -6,6 +6,7 @@ export function createAnimationPreview(addon, state, msg) {
   let currentFrame = -1;
   let fps = 12;
   let exporting = false;
+  let hidden = addon.settings.get("hideAnimationPreview");
   let rangeStart = null;
   let rangeEnd = null;
   const resolveExtUrl = (path) => {
@@ -155,7 +156,7 @@ export function createAnimationPreview(addon, state, msg) {
     }
 
     panel = Object.assign(document.createElement("section"), { className: "sa-pixel-art-animation" });
-    panel.style.display = state.enabled ? "block" : "none";
+    panel.style.display = state.enabled && !hidden ? "block" : "none";
     addon.tab.displayNoneWhileDisabled(panel);
 
     const header = Object.assign(document.createElement("header"), {
@@ -305,7 +306,7 @@ export function createAnimationPreview(addon, state, msg) {
     panel.append(rangeWrapper);
 
     state.animationPanel = panel;
-    if (state.enabled) startAnimation();
+    if (state.enabled && !hidden) startAnimation();
 
     // Always float; stack under palette if palette is floating
     const updateFloat = () => {
@@ -347,7 +348,7 @@ export function createAnimationPreview(addon, state, msg) {
   };
 
   const show = () => {
-    if (panel) {
+    if (panel && !hidden) {
       panel.style.display = "block";
       startAnimation();
     }
@@ -359,6 +360,17 @@ export function createAnimationPreview(addon, state, msg) {
       stopAnimation();
     }
   };
+
+  addon.settings.addEventListener("change", () => {
+    const nextHidden = addon.settings.get("hideAnimationPreview");
+    if (nextHidden === hidden) return;
+    hidden = nextHidden;
+    if (hidden) {
+      hide();
+    } else {
+      show();
+    }
+  });
 
   return {
     setupPanel,

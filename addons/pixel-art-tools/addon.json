@@ -66,6 +66,12 @@
       "id": "preventTrim",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Hide animation preview",
+      "id": "hideAnimationPreview",
+      "type": "boolean",
+      "default": false
     }
   ]
 }
