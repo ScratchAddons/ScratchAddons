@@ -61,7 +61,7 @@
   min-width: 0;
   width: 100%;
   max-height: 40vh;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .sa-pixel-art-palette-header,
@@ -116,8 +116,7 @@
   gap: 0.4rem;
   max-height: 28vh;
   overflow: auto;
-  padding-right: 0.15rem;
-  overflow: visible;
+  padding: 0.25rem;
 }
 
 .sa-pixel-art-color {
