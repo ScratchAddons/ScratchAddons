@@ -11,13 +11,24 @@ export function createAnimationPreview(addon, state, msg) {
   let rangeEnd = null;
   const resolveExtUrl = (path) => {
     const clean = path.replace(/^\//, "");
-    if (chrome?.runtime?.getURL) return chrome.runtime.getURL(clean);
-    if (addon?.self?.dir) return new URL(`../../${clean}`, `${addon.self.dir}/`).href;
-    return path;
+    return chrome?.runtime?.getURL?.(clean) ?? (addon?.self?.dir ? new URL(`../../${clean}`, `${addon.self.dir}/`).href : path);
   };
-  const gifLibPath = "/libraries/thirdparty/cs/gif.js";
   const gifWorkerPath = "/libraries/thirdparty/cs/gif.worker.js";
-  let gifWorkerBlobUrl = null;
+  const getWorkerUrl = (() => {
+    let promise;
+    return () =>
+      (promise ||= (async () => {
+        const url = resolveExtUrl(gifWorkerPath);
+        try {
+          const res = await fetch(url);
+          if (!res.ok) return url;
+          const text = await res.text();
+          return URL.createObjectURL(new Blob([text], { type: "application/javascript" }));
+        } catch {
+          return url;
+        }
+      })());
+  })();
 
   const applyRange = (images) => {
     if (!rangeStart && !rangeEnd) return images;
@@ -49,42 +60,20 @@ export function createAnimationPreview(addon, state, msg) {
       });
   };
 
-  let loadGifLibPromise = null;
-  const ensureGifLib = () => {
-    if (typeof GIF !== "undefined") return Promise.resolve();
-    if (!loadGifLibPromise) {
-      loadGifLibPromise = addon.tab.loadScript(gifLibPath);
-    }
-    return loadGifLibPromise;
-  };
-
-  let ensureWorkerPromise = null;
-  const ensureGifWorkerUrl = () => {
-    if (gifWorkerBlobUrl) return Promise.resolve(gifWorkerBlobUrl);
-    if (!ensureWorkerPromise) {
-      const workerUrl = resolveExtUrl(gifWorkerPath);
-      ensureWorkerPromise = fetch(workerUrl)
-        .then((res) => (res.ok ? res.text() : null))
-        .then((text) => {
-          gifWorkerBlobUrl = text
-            ? URL.createObjectURL(new Blob([text], { type: "application/javascript" }))
-            : workerUrl;
-          return gifWorkerBlobUrl;
-        })
-        .catch(() => workerUrl);
-    }
-    return ensureWorkerPromise;
-  };
-
   const exportGif = async () => {
     if (exporting) return;
     exporting = true;
     try {
-      await ensureGifLib();
-      if (typeof GIF === "undefined") return;
-      const workerUrl = await ensureGifWorkerUrl();
+      if (typeof GIF === "undefined") {
+        exporting = false;
+        return;
+      }
+      const workerUrl = await getWorkerUrl();
       const frames = await captureFrames();
-      if (!frames.length) return;
+      if (!frames.length) {
+        exporting = false;
+        return;
+      }
       const delay = Math.max(20, Math.round(1000 / fps));
       const gif = new window.GIF({
         workers: 2,

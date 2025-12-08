@@ -15,6 +15,7 @@ export default async function ({ addon, msg, console }) {
     return;
   }
   addon.tab.redux.initialize();
+  await addon.tab.loadScript("/libraries/thirdparty/cs/gif.js");
 
   const state = {
     enabled: false,
