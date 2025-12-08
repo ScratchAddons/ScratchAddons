@@ -2,6 +2,7 @@ import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
+import createTimingTab from "./timing/createTimingTab.js";
 import Utils from "../find-bar/blockly/Utils.js";
 import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
@@ -15,6 +16,7 @@ export default async function ({ addon, console, msg }) {
   setup(addon);
 
   let logsTab;
+  let timingTab;
   const messagesLoggedBeforeLogsTabLoaded = [];
   const logMessage = (...args) => {
     if (logsTab) {
@@ -66,6 +68,20 @@ export default async function ({ addon, console, msg }) {
     displayName: msg("block-error"),
     callback: ({ content }, thread) => {
       logMessage(content, thread, "error");
+    },
+  });
+  addon.tab.addBlock("\u200B\u200Bstart timer\u200B\u200B %s", {
+    args: [{ name: "label", default: msg("default-timer-label") }],
+    displayName: msg("block-start-timer"),
+    callback: ({ label }, thread) => {
+      if (timingTab) timingTab.startTimer(label, thread.target.id, thread.peekStack());
+    },
+  });
+  addon.tab.addBlock("\u200B\u200Bstop timer\u200B\u200B %s", {
+    args: [{ name: "label", default: msg("default-timer-label") }],
+    displayName: msg("block-stop-timer"),
+    callback: ({ label }) => {
+      if (timingTab) timingTab.stopTimer(label);
     },
   });
 
@@ -138,12 +154,12 @@ export default async function ({ addon, console, msg }) {
     mouseOffsetY = e.clientY - interfaceContainer.offsetTop;
     lastX = e.clientX;
     lastY = e.clientY;
-    document.addEventListener("mouseup", handleStopDrag);
-    document.addEventListener("mousemove", handleDragInterface);
+    document.addEventListener("pointerup", handleStopDrag);
+    document.addEventListener("pointermove", handleDragInterface);
   };
   const handleStopDrag = () => {
-    document.removeEventListener("mouseup", handleStopDrag);
-    document.removeEventListener("mousemove", handleDragInterface);
+    document.removeEventListener("pointerup", handleStopDrag);
+    document.removeEventListener("pointermove", handleDragInterface);
   };
   const moveInterface = (x, y) => {
     lastX = x;
@@ -162,7 +178,8 @@ export default async function ({ addon, console, msg }) {
   window.addEventListener("resize", () => {
     moveInterface(lastX, lastY);
   });
-  interfaceHeader.addEventListener("mousedown", handleStartDrag);
+  interfaceHeader.addEventListener("pointerdown", handleStartDrag);
+  interfaceHeader.addEventListener("touchmove", (e) => e.preventDefault());
 
   interfaceHeader.append(tabListElement, buttonContainerElement);
   interfaceFooter.appendChild(footerButtonContainer);
@@ -178,14 +195,17 @@ export default async function ({ addon, console, msg }) {
     if (description) {
       button.title = description;
     }
-    const imageElement = Object.assign(document.createElement("img"), {
-      src: icon,
-      draggable: false,
-    });
+    let imageElement = null;
+    if (icon) {
+      imageElement = Object.assign(document.createElement("img"), {
+        src: icon,
+        draggable: false,
+      });
+      button.appendChild(imageElement);
+    }
     const textElement = Object.assign(document.createElement("span"), {
       textContent: text,
     });
-    button.appendChild(imageElement);
     button.appendChild(textElement);
     return {
       element: button,
@@ -450,6 +470,11 @@ export default async function ({ addon, console, msg }) {
         formatProcedureCode(proccode)
       );
       category = "more";
+    } else if (block.opcode === "control_stop") {
+      // Procedural block - jsonInit not called, so we can't handle it with the fakeBlock approach
+      text = ScratchBlocks.ScratchMsgs.translate("CONTROL_STOP", "stop");
+      category = "control";
+      shape = "stacked";
     } else {
       // Try to call things like https://github.com/scratchfoundation/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
       var jsonData;
@@ -464,7 +489,7 @@ export default async function ({ addon, console, msg }) {
         try {
           blockConstructor.init.call(fakeBlock);
         } catch (e) {
-          // ignore
+          console.log(e);
         }
       }
       if (!jsonData) {
@@ -517,7 +542,8 @@ export default async function ({ addon, console, msg }) {
   logsTab = await createLogsTab(api);
   const threadsTab = await createThreadsTab(api);
   const performanceTab = await createPerformanceTab(api);
-  const allTabs = [logsTab, threadsTab, performanceTab];
+  timingTab = await createTimingTab(api);
+  const allTabs = [logsTab, threadsTab, performanceTab, timingTab];
 
   for (const message of messagesLoggedBeforeLogsTabLoaded) {
     logsTab.addLog(...message);
@@ -580,6 +606,7 @@ export default async function ({ addon, console, msg }) {
     if (addon.settings.get("log_clear_greenflag")) {
       logsTab.clearLogs();
     }
+    timingTab.clearTimers();
     if (addon.settings.get("log_greenflag")) {
       logsTab.addLog(msg("log-msg-flag-clicked"), null, "internal");
     }

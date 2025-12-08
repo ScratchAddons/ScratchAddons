@@ -340,30 +340,19 @@ export default async function ({ addon, console }) {
       if (blocklyColors) {
         // If it's a valid Blockly color, color it
         setBlockColor(block, blocklyColors, true, prefix);
-        return {
-          prefix: prefix,
-          colors: null,
-        };
+        return;
       }
       const fakeColors = isHexColor(prefix) ? getFakeBlockColors(block, prefix) : false;
       if (fakeColors) {
         // If instead it's a valid hex color, create colors and color the block
         setBlockColor(block, fakeColors, true, prefix);
-        return {
-          prefix: prefix,
-          colors: fakeColors,
-        };
+        return;
       }
     }
     // Otherwise, the colors need to be unset, if the block has been edited
     if (block.recolorCustomBlock?.isEdited) {
       setBlockColor(block, getBlocklyColors("more"), false, "more");
-      return {
-        prefix: null,
-        colors: null,
-      };
     }
-    return false;
   };
 
   const setNewPrefix = (block, prefix) => {
@@ -475,7 +464,7 @@ export default async function ({ addon, console }) {
   const oldBlockInitSvg = Blockly.BlockSvg.prototype.initSvg;
   Blockly.BlockSvg.prototype.initSvg = function (...args) {
     const initSvgResult = oldBlockInitSvg.call(this, ...args);
-    if (this.type === "procedures_declaration" && !this.recolorCustomBlockInjected) {
+    if (this.type === "procedures_declaration" && !this.recolorCustomBlockInjected && !this.workspace.toolbox_) {
       addColorMenu(this);
       shimOnChangeFn(this);
       updateBlockColors(this);
@@ -529,7 +518,7 @@ export default async function ({ addon, console }) {
   } else {
     const oldUpdateColour = Blockly.BlockSvg.prototype.updateColour;
     Blockly.BlockSvg.prototype.updateColour = function (...args) {
-      if (!this.isInsertionMarker() && this.getCategory?.() == null) {
+      if (!this.isInsertionMarker() && this.getCategory?.() === null) {
         const block = this.procCode_ && this.recolorCustomBlock;
         if (block) {
           const color = this.recolorCustomBlock;
@@ -556,8 +545,9 @@ export default async function ({ addon, console }) {
     return function (...args) {
       if (addon.self.disabled) return oldCreateAllInputs.call(this, ...args);
       updateBlockColors(this);
+      const isEdited = this?.recolorCustomBlock?.isEdited;
       const prefix = this?.recolorCustomBlock?.prefix;
-      if (prefix && addon.settings.get("hideColorPrefix")) {
+      if (isEdited && prefix && addon.settings.get("hideColorPrefix")) {
         const originalProcCode = this.procCode_;
         this.procCode_ = this.procCode_.slice(prefix.length + 1);
         const results = oldCreateAllInputs.call(this, ...args);

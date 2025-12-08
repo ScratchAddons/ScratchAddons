@@ -298,7 +298,6 @@
 }
 .studio-project-tile .studio-project-title {
   color: var(--darkWww-link-scratchr2, #855cd6);
-  font-weight: 800;
 }
 .studio-project-tile .studio-project-username {
   color: var(--darkWww-page-scratchr2Text, #322f31);

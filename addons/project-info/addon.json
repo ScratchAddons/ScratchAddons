@@ -34,7 +34,7 @@
   ],
   "settings": [
     {
-      "name": "Show...",
+      "name": "Appearance",
       "id": "show",
       "type": "select",
       "potentialValues": [

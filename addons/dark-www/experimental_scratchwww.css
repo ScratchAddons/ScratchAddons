@@ -4,7 +4,8 @@ body {
   background-color: var(--darkWww-page);
   color-scheme: var(--darkWww-page-colorScheme);
 }
-.sa-body-editor,
+.sa-editor,
+.sa-editor > body,
 [class*="stage-wrapper_stage-canvas-wrapper_"] {
   /* If website dark mode is enabled and editor dark mode
   is disabled, inputs and scrollbars in the editor should
@@ -128,9 +129,9 @@ body {
 .os-chooser,
 .studio-tab-nav li,
 .user-projects-modal .user-projects-modal-nav button,
-body:not(.sa-body-editor) .modal-content,
+:root:not(.sa-editor) .modal-content,
 .unsupported-browser .body,
-body:not(.sa-body-editor) .formik-input,
+:root:not(.sa-editor) .formik-input,
 .studio-info .studio-image,
 .studio-report-modal .studio-report-tile-image,
 .grid .thumbnail,
@@ -153,18 +154,18 @@ body:not(.sa-body-editor) .formik-input,
 .extension-landing .project-card,
 .extension-landing .hardware-card,
 .promote-modal .cancel-button,
-body:not(.sa-body-editor) [class*="stage-header_stage-size-row_"] > *,
-body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
+:root:not(.sa-editor) [class*="stage-header_stage-size-row_"] > *,
+:root:not(.sa-editor) [class*="stage-header_stage-button_"],
 .studio-adder-section .studio-adder-row input,
 .avatar-item img,
 .join-flow-outer-content /* username change */,
 .conf2019-panel-flag,
 .plan .faq .short,
 .conf2017-panel-flag,
-body:not(.sa-body-editor) .join-flow-input,
-body:not(.sa-body-editor) .select .join-flow-select,
-body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
-body:not(.sa-body-editor) input.formik-radio-input,
+:root:not(.sa-editor) .join-flow-input,
+:root:not(.sa-editor) .select .join-flow-select,
+:root:not(.sa-editor) input[type="radio"].formik-radio-button,
+:root:not(.sa-editor) input.formik-radio-input,
 .extension-landing .screenshot,
 .wedo .project-card,
 .transfer-host-modal .cancel-button,
@@ -177,7 +178,7 @@ body:not(.sa-body-editor) input.formik-radio-input,
   color: var(--darkWww-box-text);
   color-scheme: var(--darkWww-box-colorScheme);
 }
-body:not(.sa-body-editor) .button.white,
+:root:not(.sa-editor) .button.white,
 .intro-banner .intro-button,
 .donate-banner .donate-container .donate-button,
 .hoc-banner .hoc-more-activities,
@@ -201,7 +202,7 @@ body:not(.sa-body-editor) .button.white,
   border-color: transparent !important;
   color: var(--darkWww-box-text);
 }
-body:not(.sa-body-editor) [class*="stage-header_rightSection_"],
+:root:not(.sa-editor) [class*="stage-header_rightSection_"],
 .expect .keynote .card {
   background-color: transparent;
 }
@@ -236,7 +237,7 @@ a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
 .studio-member-tile .studio-member-role,
-body:not(.sa-body-editor) .join-flow-title,
+:root:not(.sa-editor) .join-flow-title,
 .registration-step .bold-link,
 .checkbox-container {
   color: var(--darkWww-box-text);
@@ -247,8 +248,8 @@ body:not(.sa-body-editor) .join-flow-title,
 .registration-step .help-text {
   color: var(--darkWww-box-transparentText);
 }
-body:not(.sa-body-editor) .formik-input::placeholder,
-body:not(.sa-body-editor) .join-flow-privacy-message,
+:root:not(.sa-editor) .formik-input::placeholder,
+:root:not(.sa-editor) .join-flow-privacy-message,
 .char-count {
   color: var(--darkWww-box-inputPlaceholder);
 }
@@ -266,7 +267,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-views::before,
 .playlist .spinner,
 .tabs button:not(.active) .tab-icon,
-body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
+:root:not(.sa-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img,
 .sa-footer-arrow {
   filter: var(--darkWww-box-filter);
@@ -317,7 +318,7 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
   background-color: var(--darkWww-box-buttonDisabled);
   color: white;
 }
-body:not(.sa-body-editor) .select .join-flow-select {
+:root:not(.sa-editor) .select .join-flow-select {
   background-image: var(--darkWww-box-caret);
 }
 .alert-wrapper .alert.alert-success,
@@ -334,8 +335,9 @@ body:not(.sa-body-editor) .select .join-flow-select {
 /* Gray background */
 .box .box-header,
 .outer #projectBox,
+.membership-page .faq-section,
 .download .installation,
-body:not(.sa-body-editor) .gender-radio-row,
+:root:not(.sa-editor) .gender-radio-row,
 .wedo .banner,
 .mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row {
   background-color: var(--darkWww-gray);
@@ -345,13 +347,16 @@ body:not(.sa-body-editor) .gender-radio-row,
 .mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected:hover {
   background-color: hsla(215, 100%, 65%, 0.25);
 }
-body:not(.sa-body-editor) /* specificity */ .outer .sort-mode .select select {
+.membership-page .faq-section .content-wrapper {
+  color: var(--darkWww-gray-text);
+}
+:root:not(.sa-editor) /* specificity */ .outer .sort-mode .select select {
   background-color: transparent;
   background-image: var(--darkWww-gray-caret);
   color: var(--darkWww-gray-text);
 }
-body:not(.sa-body-editor) .outer .sort-mode .select select:hover,
-body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
+:root:not(.sa-editor) .outer .sort-mode .select select:hover,
+:root:not(.sa-editor) .outer .sort-mode .select select:focus {
   background-image: var(--darkWww-gray-caretHover);
 }
 .box .box-header {
@@ -372,6 +377,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 /* Blue background */
 .empty,
 .intro-banner .intro-subnav,
+.membership-page .scratch-membership-section,
 .social-message.mod-unread,
 .preview .remix-credit,
 .preview .project-description,
@@ -403,7 +409,7 @@ p.callout,
 .sa-annual-report-2020 .initiatives-section .year-in-review,
 .initiatives-section .initiatives-subsection-content .map,
 .sa-annual-report-2021 .leadership-section .leadership-scratch-team .avatar-item img,
-body:not(.sa-body-editor) .gender-radio-row:hover,
+:root:not(.sa-editor) .gender-radio-row:hover,
 .educators .feature {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
@@ -456,8 +462,8 @@ body:not(.sa-body-editor) .gender-radio-row:hover,
   background-color: var(--darkWww-blue-25);
 }
 .extension-chip,
-body:not(.sa-body-editor) .gender-radio-row-selected,
-body:not(.sa-body-editor) .gender-radio-row-selected:hover {
+:root:not(.sa-editor) .gender-radio-row-selected,
+:root:not(.sa-editor) .gender-radio-row-selected:hover {
   background-color: var(--darkWww-blue-25);
   color: var(--darkWww-blue-text);
 }
@@ -475,10 +481,10 @@ body:not(.sa-body-editor) .gender-radio-row-selected:hover {
 }
 
 /* Input background */
-body:not(.sa-body-editor) .select select,
-body:not(.sa-body-editor) .select select:hover,
-body:not(.sa-body-editor) .select select:focus,
-body:not(.sa-body-editor) .select select > option,
+:root:not(.sa-editor) .select select,
+:root:not(.sa-editor) .select select:hover,
+:root:not(.sa-editor) .select select:focus,
+:root:not(.sa-editor) .select select > option,
 .inplace-input,
 .inplace-textarea,
 .textarea,
@@ -490,11 +496,11 @@ body:not(.sa-body-editor) .select select > option,
 .inplace-textarea::placeholder {
   color: var(--darkWww-input-transparentText);
 }
-body:not(.sa-body-editor) .select select {
+:root:not(.sa-editor) .select select {
   background-image: var(--darkWww-input-caret);
 }
-body:not(.sa-body-editor) .select select:hover,
-body:not(.sa-body-editor) .select select:focus {
+:root:not(.sa-editor) .select select:hover,
+:root:not(.sa-editor) .select select:focus {
   background-image: var(--darkWww-input-caretHover);
 }
 
@@ -502,6 +508,7 @@ body:not(.sa-body-editor) .select select:focus {
 .button,
 .outer .categories li.active,
 .subactions .action-buttons .action-button,
+.membership-label-container,
 .unsupported-browser .back-button,
 .studio-status-icon-unselected,
 .studio-info .studio-info-footer-report button,
@@ -519,6 +526,9 @@ body:not(.sa-body-editor) .select select:focus {
 .banner-outer:not(.banner-danger) .banner-button /* Share */ {
   background-color: #ffab1a;
 }
+.membership-label-text {
+  color: var(--darkWww-button-text);
+}
 .row .col-sm-9 input[type="radio"]:checked::after {
   background-color: var(--darkWww-button-text);
 }
@@ -535,7 +545,7 @@ body:not(.sa-body-editor) .select select:focus {
 .textarea:focus,
 .outer .categories li,
 .unsupported-browser .back-button,
-body:not(.sa-body-editor) .formik-input:focus,
+:root:not(.sa-editor) .formik-input:focus,
 .input:focus,
 .react-tel-input input[type="tel"]:focus {
   border-color: var(--darkWww-button);
@@ -547,7 +557,7 @@ body:not(.sa-body-editor) .formik-input:focus,
 .transfer-host-modal .cancel-button {
   box-shadow: 0 0 0 1px var(--darkWww-button);
 }
-body:not(.sa-body-editor) input {
+:root:not(.sa-editor) input {
   outline-color: var(--darkWww-button);
 }
 .button img,
@@ -583,10 +593,10 @@ body:not(.sa-body-editor) input {
 .inplace-input:focus,
 .inplace-textarea:focus,
 .studio-tile-added,
-body:not(.sa-body-editor) .formik-input:focus {
+:root:not(.sa-editor) .formik-input:focus {
   box-shadow: 0 0 0 4px var(--darkWww-button-transparent25);
 }
-body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:active {
+:root:not(.sa-editor) [class*="stage-header_stage-button_"]:active {
   background-color: var(--darkWww-button-transparent35);
 }
 .outer .categories li.active:hover,
@@ -611,7 +621,7 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:active {
 a,
 a:link,
 a:visited,
-body:not(.sa-body-editor) .button.white,
+:root:not(.sa-editor) .button.white,
 .news li h4,
 .intro-banner .intro-button,
 .hoc-banner .hoc-more-activities,
@@ -696,7 +706,7 @@ img.tips-icon {
 .tab-choice-selected-sa {
   border-color: var(--darkWww-border-5);
 }
-body:not(.sa-body-editor) .select select,
+:root:not(.sa-editor) .select select,
 .textarea,
 .action-button.close-button,
 .sa-collapse-footer #footer,
@@ -730,8 +740,8 @@ p.callout,
 .social-message,
 .comment-text,
 .comment-text::before,
-body:not(.sa-body-editor) [class*="stage_stage_"],
-body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
+:root:not(.sa-editor) [class*="stage_stage_"],
+:root:not(.sa-editor) [class*="stage-header_stage-button_"],
 .social-form,
 .studio-info .studio-image,
 .studio-report-modal .studio-report-tile-image,
@@ -751,7 +761,7 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .expect .schedule table td,
 .plan .faq .short,
 .supporters-section .supporters-level hr,
-body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
+:root:not(.sa-editor) input[type="radio"].formik-radio-button,
 .extension-landing .screenshot,
 .extension-landing .project-card,
 .extension-landing .hardware-card,
@@ -769,8 +779,8 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .compose-comment .textarea-row textarea:not(:focus),
 .studio-tab-nav,
 .messages-admin-list .admin-message,
-body:not(.sa-body-editor) .formik-input,
-body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
+:root:not(.sa-editor) .formik-input,
+:root:not(.sa-editor) input[type="checkbox"].formik-checkbox:not(:checked),
 .row .checkbox input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border-20);
 }

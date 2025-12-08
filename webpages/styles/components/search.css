@@ -53,3 +53,7 @@ body:not(.iframe) .search-box:focus-within {
   vertical-align: bottom;
   filter: var(--content-icon-filter);
 }
+
+.search-box > button:focus-visible > img {
+  filter: none;
+}

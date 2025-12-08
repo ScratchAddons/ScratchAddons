@@ -26,6 +26,7 @@
     }
   ],
   "tags": ["editor", "codeEditor"],
+  "relatedAddons": ["fix-pasted-scripts"],
   "versionAdded": "1.15.0",
   "enabledByDefault": false
 }

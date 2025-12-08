@@ -1,0 +1,19 @@
+.sa-mode {
+  position: fixed;
+  z-index: 100000; /* in front of .blocklyWidgetDiv */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+body.driver-active .sa-mode {
+  pointer-events: none;
+}
+
+:root:not(.sa-editor) .sa-mode,
+.sa-fullscreen .sa-mode {
+  display: none;
+}

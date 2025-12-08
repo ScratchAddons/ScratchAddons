@@ -46,7 +46,7 @@ export const getCustomBlock = (proccode) => {
 const getArgumentId = (index) => `arg${index}`;
 
 const getNamesIdsDefaults = (blockData) => [
-  blockData.args,
+  blockData.args.map((arg) => arg.name),
   blockData.args.map((_, i) => getArgumentId(i)),
   blockData.args.map(() => ""),
 ];
@@ -103,7 +103,8 @@ export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
 
   const blockData = {
     id: proccode,
-    args,
+    // Arguments can be specified as strings or objects.
+    args: args.map((arg) => (typeof arg === "string" ? { name: arg } : arg)),
     handler: callback,
     hide: !!hidden,
     displayName,
@@ -186,6 +187,13 @@ const injectWorkspace = (ScratchBlocks) => {
     };
   }
 
+  // recolour existing procedure blocks incase this injection is called after the blocks have already been created
+  for (const block of tabAPI.traps.getWorkspace().getAllBlocks(false)) {
+    if (block.type === "procedures_call" || block.parentBlock_?.type === "procedures_call") {
+      block.applyColour?.() || block.updateColour?.();
+    }
+  }
+
   // We use Scratch's extension category mechanism to create a new category.
   // https://github.com/scratchfoundation/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
   // https://github.com/scratchfoundation/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
@@ -248,18 +256,35 @@ const injectWorkspace = (ScratchBlocks) => {
     };
   }
 
+  // Replace proc code with display name when initializing the block.
   const newCreateAllInputs = (originalCreateAllInputs) =>
     function (...args) {
       const blockData = getCustomBlock(this.procCode_);
       if (blockData) {
         const originalProcCode = this.procCode_;
         this.procCode_ = blockData.displayName;
+        this.saArgs = blockData.args;
         const ret = originalCreateAllInputs.call(this, ...args);
         this.procCode_ = originalProcCode;
         return ret;
       }
       return originalCreateAllInputs.call(this, ...args);
     };
+
+  // Apply default argument values.
+  const newPopulateArgument = (originalPopulateArgument) =>
+    function (type, index, ...args) {
+      const procedure = this;
+      const originalSetFieldValue = ScratchBlocks.Block.prototype.setFieldValue;
+      ScratchBlocks.Block.prototype.setFieldValue = function (value, ...args) {
+        const defaultValue = procedure.saArgs ? procedure.saArgs[index].default : undefined;
+        if (defaultValue !== undefined) value = defaultValue;
+        originalSetFieldValue.call(this, value, ...args);
+      };
+      originalPopulateArgument.call(this, type, index, ...args);
+      ScratchBlocks.Block.prototype.setFieldValue = originalSetFieldValue;
+    };
+
   if (ScratchBlocks.registry) {
     // new Blockly
     const originalBlockDoInit = ScratchBlocks.Block.prototype.doInit_;
@@ -268,12 +293,16 @@ const injectWorkspace = (ScratchBlocks) => {
       if (this.type === "procedures_call") {
         const originalCreateAllInputs = this.createAllInputs_;
         this.createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);
+        const originalPopulateArgument = this.populateArgument_;
+        this.populateArgument_ = newPopulateArgument(originalPopulateArgument);
         return result;
       }
     };
   } else {
     const originalCreateAllInputs = ScratchBlocks.Blocks["procedures_call"].createAllInputs_;
     ScratchBlocks.Blocks["procedures_call"].createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);
+    const originalPopulateArgument = ScratchBlocks.Blocks["procedures_call"].populateArgument_;
+    ScratchBlocks.Blocks["procedures_call"].populateArgument_ = newPopulateArgument(originalPopulateArgument);
   }
 
   // Toolbox update may be required to make category appear in flyout

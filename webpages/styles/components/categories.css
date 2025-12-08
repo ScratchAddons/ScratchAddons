@@ -23,6 +23,7 @@
 
 .categories-block.smallMode.closed {
   transform: translateX(-100%);
+  visibility: hidden;
 }
 [dir="rtl"] .categories-block.smallMode.closed {
   transform: translateX(100%);

@@ -11,10 +11,24 @@
   "credits": [
     {
       "name": "RustingRobot"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    },
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "userstyles": [
+    {
+      "url": "modal.css",
+      "matches": ["projects"]
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",

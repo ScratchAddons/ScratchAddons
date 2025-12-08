@@ -2,26 +2,21 @@
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
-        <div class="btn-dropdown">
-          <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" draggable="false" />
-        </div>
+        <button class="arrow-button" :title="msg(expanded ? 'collapse' : 'expand')">
+          <img src="../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
+        </button>
         <img :src="addonIconSrc" class="icon-type addon-icon" draggable="false" />
         <!-- prettier-ignore -->
         <div class="addon-name-and-tags">
           <div class="addon-name tooltip">
-            <span>{{ addon.name}}</span>
+            <span>{{ addon.name }}</span>
             <span v-if="devMode" class="tooltiptext tooltiptexttop">{{ addon._addonId }}</span>
           </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
       </div>
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
-        <div
-          v-show="expanded && addon._enabled"
-          v-if="addon.settings"
-          class="addon-split-button dropdown-parent"
-          :class="{open: isDropdownOpen}"
-        >
+        <div v-show="expanded && addon._enabled" v-if="addon.settings" class="addon-split-button dropdown-parent">
           <button
             class="addon-buttons addon-split-button-button"
             title="{{ msg('resetToDefault') }}"
@@ -29,17 +24,12 @@
           >
             <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
           </button>
-          <div v-click-outside="closeDropdowns">
-            <button class="addon-buttons addon-split-button-dropdown" @click="toggleDropdown">
-              <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
-            </button>
-            <ul class="dropdown-list">
-              <li @click="exportPreset">{{ msg('export') }}</li>
-              <li @click="importPreset">{{ msg('import') }}</li>
-            </ul>
-          </div>
+          <dropdown button-class="addon-buttons addon-split-button-dropdown" :button-title="msg('importExport')">
+            <li role="menuitem" tabindex="0" @click="exportPreset">{{ msg('export') }}</li>
+            <li role="menuitem" tabindex="0" @click="importPreset">{{ msg('import') }}</li>
+          </dropdown>
         </div>
-        <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
+        <input type="checkbox" class="switch" v-model="addon._enabled" @click="toggleAddonRequest" />
       </div>
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
@@ -126,7 +116,7 @@
         <div class="addon-message">
           <span class="related-addons-text">{{msg('relatedAddons')}}</span>
           <span v-for="addonManifest of addon._relatedAddons">
-            <a @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
+            <a href="#" @click="openRelated(addonManifest, $event)">{{addonManifest.name}}</a>
           </span>
         </div>
       </div>
@@ -184,7 +174,7 @@
   }
 
   .addon-icon {
-    margin-inline-start: 10px;
+    margin-inline-start: 1px;
     padding-bottom: 1px; /* align with addon name */
     user-select: none;
   }
@@ -255,13 +245,13 @@
     transition: 0.2s ease;
   }
   .addon-buttons:hover:not([disabled]),
-  .addon-split-button.open .addon-split-button-dropdown,
-  .addon-split-button.open:hover .addon-split-button-dropdown:not(:hover) {
+  .addon-split-button .addon-split-button-dropdown.open,
+  .addon-split-button:hover .addon-split-button-dropdown.open:not(:hover) {
     background: var(--hover-highlight);
   }
   .addon-split-button:hover:not([disabled]) .addon-split-button-button:not(:hover),
   .addon-split-button:hover:not([disabled]) .addon-split-button-dropdown:not(:hover),
-  .addon-split-button.open .addon-split-button-button {
+  .addon-split-button:has(.open) .addon-split-button-button {
     background: var(--hover-highlight-reduced);
   }
   [disabled] {
@@ -284,72 +274,10 @@
   [dir="rtl"] .addon-split-button-dropdown {
     border-radius: 4px 0 0 4px;
   }
-  .addon-split-button.open .addon-split-button-button,
-  .addon-split-button.open .addon-split-button-dropdown {
+  .addon-split-button:has(.open) .addon-split-button-button,
+  .addon-split-button .addon-split-button-dropdown.open {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-  }
-
-  .dropdown-parent {
-    position: relative;
-  }
-  .dropdown-parent.open .dropdown-list {
-    display: block;
-  }
-  .dropdown-list {
-    position: absolute;
-    top: calc(100% - 1px);
-    right: 0;
-    margin: 0;
-    padding: 6px 0;
-    display: none;
-    z-index: 3;
-    border-radius: 4px;
-    border-top-right-radius: 0;
-    background: var(--button-background);
-    color: var(--content-text);
-    border: 1px solid var(--control-border);
-  }
-  .dropdown-list li {
-    padding: 6px 12px;
-    list-style: none;
-    white-space: nowrap;
-    text-align: start;
-    transition: 0.2s ease;
-    user-select: none;
-  }
-  .dropdown-list li:hover {
-    background: var(--button-hover-background);
-  }
-  .dropdown-list.align-start {
-    right: auto;
-    left: 0;
-    border-radius: 4px;
-    border-top-left-radius: 0;
-  }
-  [dir="rtl"] .dropdown-list.align-start {
-    left: auto;
-    right: 0;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 0;
-  }
-
-  .btn-dropdown {
-    display: flex;
-    align-items: center;
-    padding: 4px;
-    border-radius: 4px;
-    transition: 0.2s ease;
-    user-select: none;
-  }
-  .clickable-area:hover .btn-dropdown {
-    background: var(--hover-highlight);
-  }
-
-  .btn-dropdown img {
-    height: 24px;
-    width: 24px;
-    filter: var(--content-icon-filter);
   }
 
   .clickable-area {
@@ -470,47 +398,6 @@
     gap: 8px;
     display: flex;
     align-items: center;
-  }
-
-  .switch {
-    display: block;
-    background: var(--button-background);
-    width: 40px;
-    height: 20px;
-    border-radius: 10px;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    border: 1px solid var(--switch-border);
-    box-sizing: border-box;
-  }
-  .switch::before {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 10px;
-    height: 10px;
-    background: var(--switch-inner-background);
-    border-radius: 5px;
-    top: 4px;
-    left: 4px;
-    transition: all 0.25s ease;
-  }
-
-  .switch[state="on"] {
-    background: var(--brand-orange);
-    border-color: var(--brand-orange);
-  }
-  .switch[state="on"]::before {
-    background: var(--white-text);
-    left: 24px;
-  }
-
-  [dir="rtl"] .switch::before {
-    left: 24px;
-  }
-  [dir="rtl"] .switch[state="on"]::before {
-    left: 4px;
   }
 
   @media (max-width: 700px) {
