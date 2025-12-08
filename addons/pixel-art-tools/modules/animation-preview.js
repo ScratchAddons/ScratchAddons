@@ -11,7 +11,10 @@ export function createAnimationPreview(addon, state, msg) {
   let rangeEnd = null;
   const resolveExtUrl = (path) => {
     const clean = path.replace(/^\//, "");
-    return chrome?.runtime?.getURL?.(clean) ?? (addon?.self?.dir ? new URL(`../../${clean}`, `${addon.self.dir}/`).href : path);
+    return (
+      chrome?.runtime?.getURL?.(clean) ??
+      (addon?.self?.dir ? new URL(`../../${clean}`, `${addon.self.dir}/`).href : path)
+    );
   };
   const gifWorkerPath = "/libraries/thirdparty/cs/gif.worker.js";
   const getWorkerUrl = (() => {
