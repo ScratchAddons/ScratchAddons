@@ -406,7 +406,6 @@ body.sa-pixel-art-mode-active .sa-pixel-art-brush[data-visible="true"] {
   border-radius: 0;
   padding: 0;
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.45);
   width: auto;
   height: auto;
   display: inline-flex;
@@ -416,14 +415,9 @@ body.sa-pixel-art-mode-active .sa-pixel-art-brush[data-visible="true"] {
   margin-inline: auto;
 }
 
-.sa-pixel-art-animation-range-toggle:hover {
-  color: rgba(0, 0, 0, 0.75);
-}
-
 .sa-pixel-art-animation-range-icon {
   width: 1rem;
-  height: 1rem;
-  transition: transform 0.15s ease;
+  opacity: 0.7;
 }
 
 .sa-pixel-art-animation-range {
@@ -438,6 +432,10 @@ body.sa-pixel-art-mode-active .sa-pixel-art-brush[data-visible="true"] {
 
 .sa-pixel-art-animation-range-wrapper.sa-range-open .sa-pixel-art-animation-range-icon {
   transform: rotate(180deg);
+}
+
+.sa-pixel-art-animation-range-toggle:hover img {
+  opacity: 1;
 }
 
 .sa-pixel-art-animation-range-group {
