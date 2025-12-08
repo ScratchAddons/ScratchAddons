@@ -60,6 +60,12 @@
       "id": "autoBitmap",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Prevent automatic bitmap trimming",
+      "id": "preventTrim",
+      "type": "boolean",
+      "default": true
     }
   ]
 }
