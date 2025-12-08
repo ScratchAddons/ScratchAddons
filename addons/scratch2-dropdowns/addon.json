@@ -1,7 +1,8 @@
 {
   "name": "Scratch 2.0 dropdowns",
   "description": "Makes the drop-down inputs of blocks look like Scratch 2.0's.",
-  "tags": ["editor"],
+  "tags": ["editor", "theme"],
+  "relatedAddons": ["scratch3to2", "editor-compact", "editor-searchable-dropdowns"],
   "versionAdded": "1.44.3",
   "credits": [
     {
