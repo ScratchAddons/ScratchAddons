@@ -2,6 +2,7 @@ const BRUSH_SIZES = [1, 2, 3, 4];
 
 export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview) {
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
+  state.canvasSizeLocked = state.canvasSizeLocked || false;
 
   const getCostumeSize = () => {
     const vm = addon.tab.traps.vm;
@@ -32,6 +33,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
   const setPixelMode = (enabled) => {
     if (state.enabled === enabled) return;
     state.pixelModeDesired = enabled;
+    state.canvasSizeLocked = false;
     updatePixelModeState(enabled);
     if (enabled) {
       canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
@@ -77,6 +79,10 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     } else if (isCurrentlyBitmap && state.pixelModeDesired && !state.enabled) {
       setPixelMode(true);
     } else if (isCurrentlyBitmap) {
+      if (state.enabled && state.canvasSizeLocked) {
+        canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+        return;
+      }
       const costumeSize = getCostumeSize();
       if (costumeSize) {
         const defaultWidth = addon.settings.get("defaultWidth");
@@ -103,6 +109,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       const value = Math.max(1, Math.min(1024, +input.value || 1));
       state.pendingSize[dimension] = value;
       input.value = value;
+      state.canvasSizeLocked = true;
       if (state.enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
     };
     return input;
