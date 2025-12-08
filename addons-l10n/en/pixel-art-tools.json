@@ -8,7 +8,6 @@
   "pixel-art-tools/paletteExportLabel": "Palette exported from Scratch Addons",
   "pixel-art-tools/paletteFull": "Palette is full",
   "pixel-art-tools/colorAlreadyExists": "Color already in palette",
-  "pixel-art-tools/sizeSeparator": "x",
   "pixel-art-tools/emptyPalette": "Use the + swatch to add the current color or import a .gpl palette.",
   "pixel-art-tools/paletteSelectPlaceholder": "Select a palette",
   "pixel-art-tools/paletteCreateNew": "Create new palette",

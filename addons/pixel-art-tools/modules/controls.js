@@ -134,7 +134,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
 
     const sizeDiv = Object.assign(document.createElement("div"), { className: "sa-pixel-art-size" });
     sizeDiv.style.display = "none";
-    const separator = Object.assign(document.createElement("span"), { textContent: msg("sizeSeparator") });
+    const separator = Object.assign(document.createElement("span"), { textContent: "x" });
     const widthInput = createInput("width");
     const heightInput = createInput("height");
 
