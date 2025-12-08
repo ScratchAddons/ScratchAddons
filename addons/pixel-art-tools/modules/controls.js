@@ -124,13 +124,25 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
 
     const toggle = Object.assign(document.createElement("button"), {
       type: "button",
-      className: "sa-pixel-art-toggle",
+      className: "sa-pixel-art-toggle button_button_LhMbA paint-editor_button-group-button_ZLJcQ",
       title: msg("pixelModeButton"),
-      textContent: msg("pixelModeButton"),
+      ariaLabel: msg("pixelModeButton"),
     });
+    const toggleIcon = Object.assign(document.createElement("img"), {
+      src: `${addon.self.dir}/icons/pixel-mode.svg`,
+      alt: "",
+      className: "sa-pixel-art-toggle-icon",
+      draggable: false,
+    });
+    toggle.append(toggleIcon);
     toggle.dataset.active = false;
     toggle.setAttribute("aria-pressed", false);
     toggle.onclick = () => setPixelMode(!state.enabled);
+
+    const toggleWrapper = Object.assign(document.createElement("div"), {
+      className: "sa-pixel-art-toggle-wrapper",
+    });
+    toggleWrapper.append(toggle);
 
     const sizeDiv = Object.assign(document.createElement("div"), { className: "sa-pixel-art-size" });
     sizeDiv.style.display = "none";
@@ -139,7 +151,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     const heightInput = createInput("height");
 
     sizeDiv.append(widthInput, separator, heightInput);
-    wrapper.append(toggle, sizeDiv);
+    wrapper.append(toggleWrapper, sizeDiv);
 
     Object.assign(state, {
       toggleButton: toggle,
