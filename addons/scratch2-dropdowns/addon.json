@@ -9,6 +9,13 @@
       "link": "https://scratch.mit.edu/users/coshnaut/"
     }
   ],
+  "userscripts": [
+    {
+      "url": "scroll.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
   "userstyles": [
     {
       "url": "dropdowns.css",

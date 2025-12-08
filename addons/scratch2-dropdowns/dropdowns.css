@@ -1,23 +1,29 @@
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
 .blocklyDropDownDiv .blocklyMenu .blocklyMenuItem:hover,
-.blocklyDropDownDiv .blocklyMenu .u-dropdown-selected-item,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight,
-.sa-contextmenu-colored .blocklyContextMenu .blocklyMenuItem:hover {
-  background-color: rgba(256, 256, 256, 0.68);
+.blocklyDropDownDiv .blocklyMenu .u-dropdown-selected-item {
+  background-color: rgba(256, 256, 256, 0.6);
   color: black;
 }
 
 .blocklyDropDownDiv {
   padding: 0;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
   border-radius: 0;
   border: 0;
   transform: none !important;
   transition: none !important;
+  overflow: hidden;
 }
 
-.goog-menuitem-checkbox {
+.blocklyDropDownContent {
+  scrollbar-width: none;
+}
+.blocklyDropDownContent::-webkit-scrollbar {
+  display: none;
+}
+
+.blocklyDropDownContent .goog-menuitem-checkbox {
   display: none !important;
 }
 .blocklyDropDownArrow {
@@ -35,6 +41,13 @@
   font-size: 13px;
   min-height: 22px !important;
   margin: 0;
+}
+
+/* Scroll arrows */
+.dropdownArrow {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Search bar addon support */
