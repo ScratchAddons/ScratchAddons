@@ -25,8 +25,8 @@ export function createCanvasAdjuster(addon, paper) {
     const { width, height } = imageData;
     const rx = Math.floor(rect.x);
     const ry = Math.floor(rect.y);
-    const rx2 = rx + Math.round(rect.width);
-    const ry2 = ry + Math.round(rect.height);
+    const rx2 = Math.ceil(rect.x + rect.width);
+    const ry2 = Math.ceil(rect.y + rect.height);
     const sentinel = [1, 2, 3, 0];
     for (let y = 0; y < height; y++) {
       const gy = startY + y;
