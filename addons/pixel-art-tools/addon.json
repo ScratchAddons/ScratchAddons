@@ -5,7 +5,7 @@
   "versionAdded": "1.45.0",
   "info": [
     {
-      "type": "notice",
+      "type": "info",
       "text": "Shift-click a palette color to edit it. Right-click a color to remove it from the palette.",
       "id": "paletteControls"
     },
