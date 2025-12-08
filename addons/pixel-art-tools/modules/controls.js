@@ -193,8 +193,8 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
         const zoomControlsContainer = await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']");
         const groupClass = zoomControlsContainer?.firstChild?.className;
         const buttonClass = zoomControlsContainer?.firstChild?.firstChild?.className;
-        if (groupClass) wrapper.classList.add(groupClass);
-        if (buttonClass) state.toggleButton.classList.add(buttonClass);
+        if (groupClass) wrapper.classList.add(...groupClass.split(/\s+/).filter(Boolean));
+        if (buttonClass) state.toggleButton.classList.add(...buttonClass.split(/\s+/).filter(Boolean));
       }
 
       const container = await addon.tab.waitForElement("[class*='mode-tools']");
