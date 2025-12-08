@@ -1,3 +1,5 @@
+import { createFillContextClamp } from "./fill-context-clamp.js";
+
 // canvas-adjuster.js
 export function createCanvasAdjuster(addon, paper) {
   const getBgLayer = () => paper.project.layers.find((l) => l?.data?.isBackgroundGuideLayer);
@@ -7,9 +9,6 @@ export function createCanvasAdjuster(addon, paper) {
     const rasterLayer = paper.project.layers.find((l) => l?.data?.isRasterLayer);
     return rasterLayer?.children?.[0] || null;
   };
-  let pixelModeActive = false;
-  let fillScopeActive = false;
-  let fillScopeRect = null;
 
   let originalBg = null,
     originalOutline = null;
@@ -18,97 +17,8 @@ export function createCanvasAdjuster(addon, paper) {
   let clickHiderAttached = false;
   let gateInstalled = false;
   let helpersHidden = false;
-  let fillPatchInstalled = false;
-
-  const sanitizeImageData = (imageData, startX, startY, rect) => {
-    const { data } = imageData;
-    const { width, height } = imageData;
-    const rx = Math.floor(rect.x);
-    const ry = Math.floor(rect.y);
-    const rx2 = Math.ceil(rect.x + rect.width);
-    const ry2 = Math.ceil(rect.y + rect.height);
-    const sentinel = [1, 2, 3, 0];
-    for (let y = 0; y < height; y++) {
-      const gy = startY + y;
-      const inY = gy >= ry && gy < ry2;
-      for (let x = 0; x < width; x++) {
-        const gx = startX + x;
-        const inRect = inY && gx >= rx && gx < rx2;
-        if (inRect) continue;
-        const idx = (y * width + x) * 4;
-        // Only change empty pixels so we don't alter drawn content
-        if (data[idx + 3] === 0) {
-          data[idx + 0] = sentinel[0];
-          data[idx + 1] = sentinel[1];
-          data[idx + 2] = sentinel[2];
-          data[idx + 3] = sentinel[3];
-        }
-      }
-    }
-  };
-
-  const createClampedContext = (ctx, rect) => {
-    return new Proxy(ctx, {
-      get(target, prop) {
-        if (prop === "getImageData") {
-          return (sx, sy, sw, sh) => {
-            const img = target.getImageData(sx, sy, sw, sh);
-            sanitizeImageData(img, sx, sy, rect);
-            return img;
-          };
-        }
-        if (prop === "putImageData") {
-          return (...args) => {
-            const img = args[0];
-            let dx = args[1] || 0;
-            let dy = args[2] || 0;
-            // Optional dirty rect signature: putImageData(img, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight)
-            if (args.length >= 7) {
-              dx += args[3] || 0;
-              dy += args[4] || 0;
-            }
-            sanitizeImageData(img, dx, dy, rect);
-            return target.putImageData(...args);
-          };
-        }
-        const value = target[prop];
-        if (typeof value === "function") return value.bind(target);
-        return value;
-      },
-    });
-  };
-
-  const installFillContextPatch = () => {
-    if (fillPatchInstalled || !paper?.Raster?.prototype?.getContext) return;
-    fillPatchInstalled = true;
-    const origGetContext = paper.Raster.prototype.getContext;
-    const origGetImageData = paper.Raster.prototype.getImageData;
-
-    paper.Raster.prototype.getContext = function (...args) {
-      const ctx = origGetContext.apply(this, args);
-      if (!ctx || addon.self.disabled || !pixelModeActive || !fillScopeActive || !fillScopeRect) return ctx;
-      return createClampedContext(ctx, fillScopeRect);
-    };
-
-    if (typeof origGetImageData === "function") {
-      paper.Raster.prototype.getImageData = function (...args) {
-        const img = origGetImageData.apply(this, args);
-        if (!fillScopeActive || !fillScopeRect || !img?.data) return img;
-        // args[0] might be a Rectangle or x,y,width,height
-        let startX = 0;
-        let startY = 0;
-        if (args.length === 4) {
-          startX = args[0] || 0;
-          startY = args[1] || 0;
-        } else if (args[0] && typeof args[0] === "object") {
-          startX = args[0].x ?? args[0].left ?? 0;
-          startY = args[0].y ?? args[0].top ?? 0;
-        }
-        sanitizeImageData(img, startX, startY, fillScopeRect);
-        return img;
-      };
-    }
-  };
+  const getAllowedRect = () => getOutlineLayer()?.data?.artboardRect || null;
+  const fillContextClamp = createFillContextClamp(addon, paper, () => getAllowedRect());
 
   const makeChecker = (w, h, size) => {
     const cols = Math.ceil(w / size),
@@ -155,8 +65,6 @@ export function createCanvasAdjuster(addon, paper) {
     blue.guide = true;
     return [white, blue];
   };
-
-  const getAllowedRect = () => getOutlineLayer()?.data?.artboardRect || null;
 
   // Gate a tool's handlers to the artboard rect
   function wrapToolOnce(tool) {
@@ -229,31 +137,6 @@ export function createCanvasAdjuster(addon, paper) {
     };
   }
 
-  const looksLikeFillTool = (tool) =>
-    typeof tool.paint === "function" &&
-    typeof tool.setColor === "function" &&
-    typeof tool.setColor2 === "function" &&
-    typeof tool.setGradientType === "function";
-
-  function wrapFillTool(tool) {
-    if (!looksLikeFillTool(tool) || tool.__saFillWrapped) return;
-    tool.__saFillWrapped = true;
-    const origPaint = tool.paint;
-    tool.paint = function (evt) {
-      if (addon.self.disabled || !pixelModeActive) return origPaint.call(this, evt);
-      const rect = getAllowedRect();
-      if (!rect) return origPaint.call(this, evt);
-      fillScopeActive = true;
-      fillScopeRect = rect;
-      try {
-        return origPaint.call(this, evt);
-      } finally {
-        fillScopeActive = false;
-        fillScopeRect = null;
-      }
-    };
-  }
-
   // Patch activation so tools created on click are gated (and filled)
   function installToolGate() {
     if (gateInstalled) return;
@@ -263,14 +146,12 @@ export function createCanvasAdjuster(addon, paper) {
     paper.Tool.prototype.activate = function (...args) {
       const res = origActivate.apply(this, args);
       if (!addon.self.disabled) wrapToolOnce(this);
-      wrapFillTool(this);
       return res;
     };
 
     // Gate current active tool if any
     if (paper.tool) {
       wrapToolOnce(paper.tool);
-      wrapFillTool(paper.tool);
     }
   }
 
@@ -310,8 +191,7 @@ export function createCanvasAdjuster(addon, paper) {
   };
 
   const enable = (w, h) => {
-    pixelModeActive = true;
-    installFillContextPatch();
+    fillContextClamp.enable();
     const bg = getBgLayer();
     if (!bg?.bitmapBackground) return;
     originalBg ||= bg.bitmapBackground;
@@ -344,7 +224,7 @@ export function createCanvasAdjuster(addon, paper) {
   };
 
   const disable = () => {
-    pixelModeActive = false;
+    fillContextClamp.disable();
     const bg = getBgLayer();
     if (bg && originalBg) {
       if (bg.bitmapBackground !== originalBg) bg.bitmapBackground.remove();
