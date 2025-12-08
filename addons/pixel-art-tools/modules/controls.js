@@ -70,6 +70,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
 
   const updatePixelModeVisibility = () => {
     const isCurrentlyBitmap = isBitmap();
+    state.controlsGroup.style.display = isCurrentlyBitmap ? "flex" : "none";
     state.toggleButton.style.display = isCurrentlyBitmap ? "block" : "none";
 
     if (!isCurrentlyBitmap && state.enabled) {
@@ -118,6 +119,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
   const setupControls = async () => {
     const wrapper = Object.assign(document.createElement("div"), { className: "sa-pixel-art-controls" });
     wrapper.dataset.enabled = false;
+    wrapper.style.display = "none";
     addon.tab.displayNoneWhileDisabled(wrapper);
 
     const toggle = Object.assign(document.createElement("button"), {
@@ -171,6 +173,7 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
     updateBrushSelection(redux.state.scratchPaint?.bitBrushSize ?? 1);
     updateBrushControlVisibility();
 
+    let hasAppliedZoomClasses = false;
     while (true) {
       await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']", {
         markAsSeen: true,
@@ -184,6 +187,15 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       });
 
       addon.tab.appendToSharedSpace({ space: "paintEditorZoomControls", element: wrapper, order: 1 });
+
+      if (!hasAppliedZoomClasses) {
+        hasAppliedZoomClasses = true;
+        const zoomControlsContainer = await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']");
+        const groupClass = zoomControlsContainer?.firstChild?.className;
+        const buttonClass = zoomControlsContainer?.firstChild?.firstChild?.className;
+        if (groupClass) wrapper.classList.add(groupClass);
+        if (buttonClass) state.toggleButton.classList.add(buttonClass);
+      }
 
       const container = await addon.tab.waitForElement("[class*='mode-tools']");
       if (!container.contains(brushContainer)) {

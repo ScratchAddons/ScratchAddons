@@ -1,8 +1,8 @@
 .sa-pixel-art-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding-inline-start: 0.5rem;
+  gap: 0.35rem;
+  padding: 0;
 }
 
 .sa-pixel-art-controls[data-enabled="false"] input {
