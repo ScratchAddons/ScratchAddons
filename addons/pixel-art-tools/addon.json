@@ -53,6 +53,7 @@
       "name": "Auto-resize to costume size",
       "id": "autoResizeToCostume",
       "type": "boolean",
+      "description": "When enabled, pixel mode automatically increases the canvas to fit larger costumes. Disable to always use the default width and height.",
       "default": true
     },
     {
