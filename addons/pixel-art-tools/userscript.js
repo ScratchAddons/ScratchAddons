@@ -93,6 +93,7 @@ export default async function ({ addon, msg, console }) {
     state.pendingSize.height = addon.settings.get("defaultHeight");
     if (state.widthInput) state.widthInput.value = state.pendingSize.width;
     if (state.heightInput) state.heightInput.value = state.pendingSize.height;
+    controls.updatePixelModeVisibility();
   });
 
   // Initialize all components

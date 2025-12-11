@@ -84,18 +84,24 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
         canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
         return;
       }
-      const costumeSize = getCostumeSize();
-      if (costumeSize) {
-        const defaultWidth = addon.settings.get("defaultWidth");
-        const defaultHeight = addon.settings.get("defaultHeight");
-        const useWidth = costumeSize.width >= defaultWidth ? costumeSize.width : defaultWidth;
-        const useHeight = costumeSize.height >= defaultHeight ? costumeSize.height : defaultHeight;
+      const defaultWidth = addon.settings.get("defaultWidth");
+      const defaultHeight = addon.settings.get("defaultHeight");
+      const autoResize = addon.settings.get("autoResizeToCostume") !== false;
 
-        Object.assign(state.pendingSize, { width: useWidth, height: useHeight });
-        state.widthInput.value = useWidth;
-        state.heightInput.value = useHeight;
-        if (state.enabled) canvasAdjuster.enable(useWidth, useHeight);
+      let useWidth = defaultWidth;
+      let useHeight = defaultHeight;
+      if (autoResize) {
+        const costumeSize = getCostumeSize();
+        if (costumeSize) {
+          useWidth = costumeSize.width >= defaultWidth ? costumeSize.width : defaultWidth;
+          useHeight = costumeSize.height >= defaultHeight ? costumeSize.height : defaultHeight;
+        }
       }
+
+      Object.assign(state.pendingSize, { width: useWidth, height: useHeight });
+      state.widthInput.value = useWidth;
+      state.heightInput.value = useHeight;
+      if (state.enabled) canvasAdjuster.enable(useWidth, useHeight);
     }
   };
 

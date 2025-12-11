@@ -50,6 +50,12 @@
       "max": 360
     },
     {
+      "name": "Auto-resize to costume size",
+      "id": "autoResizeToCostume",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Enable pixel mode by default",
       "id": "enableByDefault",
       "type": "boolean",
