@@ -68,6 +68,33 @@ export function createCanvasAdjuster(addon, paper) {
     return [white, blue];
   };
 
+  // Extra bounds from makeOutline(): outer blue rect expands by 6px each side.
+  const OUTLINE_FIT_MARGIN = 12;
+  const FIT_PADDING_RATIO = 0.95;
+  const fitViewToArtboard = (w, h) => {
+    try {
+      const view = paper?.view;
+      if (!view) return;
+      const applyFit = () => {
+        const el = view.element;
+        const rect = el?.getBoundingClientRect?.();
+        const availW = rect?.width || view.size?.width || 0;
+        const availH = rect?.height || view.size?.height || 0;
+        if (!availW || !availH) return;
+
+        const effectiveW = w + OUTLINE_FIT_MARGIN;
+        const effectiveH = h + OUTLINE_FIT_MARGIN;
+        const fitZoom = Math.min(availW / effectiveW, availH / effectiveH) * FIT_PADDING_RATIO;
+        if (!Number.isFinite(fitZoom) || fitZoom <= 0) return;
+        view.zoom = fitZoom;
+        if (outlineCenter) view.center = outlineCenter.clone();
+        view.update?.();
+      };
+
+      requestAnimationFrame(() => requestAnimationFrame(applyFit));
+    } catch {}
+  };
+
   // Gate a tool's handlers to the artboard rect
   function wrapToolOnce(tool) {
     if (!tool || tool.__gated || !tool.onMouseDown) return;
@@ -192,7 +219,7 @@ export function createCanvasAdjuster(addon, paper) {
     });
   };
 
-  const enable = (w, h) => {
+  const enable = (w, h, options = null) => {
     fillContextClamp.enable();
     const bg = getBgLayer();
     if (!bg?.bitmapBackground) return;
@@ -213,6 +240,7 @@ export function createCanvasAdjuster(addon, paper) {
     if (canReuse) {
       installToolGate();
       installClickHider();
+      if (options?.fitView) fitViewToArtboard(w, h);
       return;
     }
 
@@ -242,6 +270,7 @@ export function createCanvasAdjuster(addon, paper) {
 
     installToolGate();
     installClickHider();
+    if (options?.fitView) fitViewToArtboard(w, h);
   };
 
   const disable = () => {
