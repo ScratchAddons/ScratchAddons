@@ -11,7 +11,6 @@ export function createControlsModule(
   paper = null
 ) {
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
-  state.canvasSizeLocked = state.canvasSizeLocked || false;
 
   const getCostumeSize = () => {
     const vm = addon.tab.traps.vm;
@@ -42,7 +41,6 @@ export function createControlsModule(
   const setPixelMode = (enabled) => {
     if (state.enabled === enabled) return;
     state.pixelModeDesired = enabled;
-    state.canvasSizeLocked = false;
     updatePixelModeState(enabled);
     if (enabled) {
       canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height, { fitView: true });
@@ -77,6 +75,19 @@ export function createControlsModule(
     }
   };
 
+  const computeDesiredSize = () => {
+    const defaultWidth = addon.settings.get("defaultWidth");
+    const defaultHeight = addon.settings.get("defaultHeight");
+    const costumeSize = getCostumeSize();
+    if (costumeSize) {
+      return {
+        width: Math.max(1, costumeSize.width),
+        height: Math.max(1, costumeSize.height),
+      };
+    }
+    return { width: defaultWidth, height: defaultHeight };
+  };
+
   const updatePixelModeVisibility = () => {
     const isCurrentlyBitmap = isBitmap();
     state.controlsGroup.style.display = isCurrentlyBitmap ? "flex" : "none";
@@ -87,30 +98,17 @@ export function createControlsModule(
       canvasAdjuster.disable();
       updateBrushControlVisibility();
     } else if (isCurrentlyBitmap && state.pixelModeDesired && !state.enabled) {
+      const { width, height } = computeDesiredSize();
+      Object.assign(state.pendingSize, { width, height });
+      if (state.widthInput) state.widthInput.value = width;
+      if (state.heightInput) state.heightInput.value = height;
       setPixelMode(true);
     } else if (isCurrentlyBitmap) {
-      if (state.enabled && state.canvasSizeLocked) {
-        canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
-        return;
-      }
-      const defaultWidth = addon.settings.get("defaultWidth");
-      const defaultHeight = addon.settings.get("defaultHeight");
-      const autoResize = addon.settings.get("autoResizeToCostume") !== false;
-
-      let useWidth = defaultWidth;
-      let useHeight = defaultHeight;
-      if (autoResize) {
-        const costumeSize = getCostumeSize();
-        if (costumeSize) {
-          useWidth = costumeSize.width >= defaultWidth ? costumeSize.width : defaultWidth;
-          useHeight = costumeSize.height >= defaultHeight ? costumeSize.height : defaultHeight;
-        }
-      }
-
-      Object.assign(state.pendingSize, { width: useWidth, height: useHeight });
-      state.widthInput.value = useWidth;
-      state.heightInput.value = useHeight;
-      if (state.enabled) canvasAdjuster.enable(useWidth, useHeight);
+      const { width, height } = computeDesiredSize();
+      Object.assign(state.pendingSize, { width, height });
+      if (state.widthInput) state.widthInput.value = width;
+      if (state.heightInput) state.heightInput.value = height;
+      if (state.enabled) canvasAdjuster.enable(width, height);
     }
   };
 
@@ -125,7 +123,6 @@ export function createControlsModule(
       const value = Math.max(1, Math.min(1024, +input.value || 1));
       state.pendingSize[dimension] = value;
       input.value = value;
-      state.canvasSizeLocked = true;
       if (state.enabled) {
         canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
         if (isBitmap() && paper?.tool && typeof paper.tool.onUpdateImage === "function") {
