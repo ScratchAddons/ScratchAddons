@@ -534,6 +534,34 @@ body.sa-pixel-art-mode-active .sa-pixel-art-brush[data-visible="true"] {
   display: none;
 }
 
+.sa-pixel-art-animation-toggle {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.3rem;
+  border: none;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border-radius: 0.25rem;
+  padding: 0.15rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.sa-pixel-art-animation-toggle-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  pointer-events: none;
+  filter: brightness(0) invert(1);
+}
+
 .sa-pixel-art-animation-preview-wrap:hover .sa-pixel-art-animation-export {
+  display: inline-flex;
+}
+
+.sa-pixel-art-animation-preview-wrap:hover .sa-pixel-art-animation-toggle {
   display: inline-flex;
 }

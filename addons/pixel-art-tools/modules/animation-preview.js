@@ -6,6 +6,7 @@ export function createAnimationPreview(addon, state, msg) {
   let currentFrame = -1;
   let fps = 12;
   let exporting = false;
+  let paused = false;
   let hidden = addon.settings.get("hideAnimationPreview");
   let rangeStart = null;
   let rangeEnd = null;
@@ -125,6 +126,7 @@ export function createAnimationPreview(addon, state, msg) {
 
   const startAnimation = () => {
     stopAnimation();
+    if (paused) return;
     intervalId = setInterval(updatePreview, 1000 / fps);
   };
 
@@ -183,6 +185,37 @@ export function createAnimationPreview(addon, state, msg) {
     });
     previewImg.onclick = exportGif;
 
+    const toggleBtn = Object.assign(document.createElement("button"), {
+      type: "button",
+      className: "sa-pixel-art-animation-toggle",
+    });
+    const toggleIcon = Object.assign(document.createElement("img"), {
+      alt: "",
+      className: "sa-pixel-art-animation-toggle-icon",
+      draggable: false,
+    });
+    toggleBtn.appendChild(toggleIcon);
+
+    const updateToggleState = () => {
+      const isPaused = paused;
+      toggleIcon.src = `${addon.self.dir}/icons/${isPaused ? "play.svg" : "pause.svg"}`;
+      const title =
+        msg(isPaused ? "animationPlay" : "animationPause") ||
+        (isPaused ? "Play" : "Pause");
+      toggleBtn.title = title;
+      toggleBtn.setAttribute("aria-label", title);
+      toggleBtn.dataset.paused = String(isPaused);
+    };
+    updateToggleState();
+
+    toggleBtn.onclick = (e) => {
+      e.stopPropagation();
+      paused = !paused;
+      if (paused) stopAnimation();
+      else startAnimation();
+      updateToggleState();
+    };
+
     const exportBtn = Object.assign(document.createElement("button"), {
       type: "button",
       className: "sa-pixel-art-animation-export",
@@ -193,7 +226,7 @@ export function createAnimationPreview(addon, state, msg) {
       exportGif();
     };
 
-    previewWrapper.append(previewImg, exportBtn);
+    previewWrapper.append(previewImg, toggleBtn, exportBtn);
     panel.appendChild(previewWrapper);
 
     // FPS control
@@ -239,7 +272,7 @@ export function createAnimationPreview(addon, state, msg) {
       type: "button",
       className: "sa-pixel-art-animation-range-toggle",
       ariaExpanded: "false",
-      title: msg("animationRangeToggle") || "Animation range",
+      title: msg("animationRangeToggle") || "Animation Range",
     });
     const rangeIcon = Object.assign(document.createElement("img"), {
       src: `${addon.self.dir}/icons/range-toggle.svg`,
@@ -346,7 +379,7 @@ export function createAnimationPreview(addon, state, msg) {
   const show = () => {
     if (panel && !hidden) {
       panel.style.display = "block";
-      startAnimation();
+      if (!paused) startAnimation();
     }
   };
 
