@@ -56,7 +56,7 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
     const s = runtime.getTargetForStage();
     if (!s) return;
     const snapshot = projectPalettes.map((p) => ({ ...p, colors: p.colors.slice(0, PALETTE_LIMIT) }));
-    const text = serializeComment({ palettes: snapshot }, PROJECT_COMMENT_MAGIC, "Scratch Addons Pixel Palette");
+    const text = serializeComment({ palettes: snapshot }, PROJECT_COMMENT_MAGIC, "Pixel Palette");
     const existing = findProjectComment();
     if (existing) existing.text = text;
     else s.createComment(randomId(), null, text, 60, 60, 360, 120, true);
@@ -76,7 +76,7 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
 
   const writeMappings = (target, mappings) => {
     if (!target) return;
-    const text = serializeComment({ mappings }, COSTUME_COMMENT_MAGIC, "Scratch Addons Palette Mapping");
+    const text = serializeComment({ mappings }, COSTUME_COMMENT_MAGIC, "Palette Mapping");
     const existing = Object.values(target.comments || {}).find(
       (c) => c.text?.includes(COSTUME_COMMENT_MAGIC) && parseComment(c.text, COSTUME_COMMENT_MAGIC)?.mappings
     );
