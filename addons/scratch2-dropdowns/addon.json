@@ -10,6 +10,14 @@
       "link": "https://scratch.mit.edu/users/coshnaut/"
     }
   ],
+  "settings": [
+    {
+      "name": "Enable shadows",
+      "id": "shadow",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "userscripts": [
     {
       "url": "scroll.js",

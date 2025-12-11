@@ -6,6 +6,18 @@ export default async function ({ addon, console }) {
 
     if (!dropdown) console.log("Failed to grab dropdown");
 
+    let shadow = addon.settings.get("shadow");
+    if (shadow) {
+      // its ok
+    } else {
+      dropdown.style.boxShadow = "none";
+      dropdown.style.borderColor = "inherit";
+      dropdown.style.borderStyle = "solid";
+      dropdown.style.borderWidth = "1px";
+
+      document.documentElement.style.setProperty("--dropdown-input-scratch2-shadow", "none");
+    }
+
     content.addEventListener(
       "wheel",
       (e) => {
