@@ -14,6 +14,8 @@ export function createCanvasAdjuster(addon, paper) {
     originalOutline = null;
   let bgCenter = null,
     outlineCenter = null;
+  let lastEnabledSize = null;
+  let lastChecker = null;
   let clickHiderAttached = false;
   let gateInstalled = false;
   let helpersHidden = false;
@@ -196,14 +198,33 @@ export function createCanvasAdjuster(addon, paper) {
     if (!bg?.bitmapBackground) return;
     originalBg ||= bg.bitmapBackground;
     bgCenter ||= originalBg.position.clone();
+
+    const ol = getOutlineLayer();
+    const canReuse =
+      lastEnabledSize &&
+      lastEnabledSize.width === w &&
+      lastEnabledSize.height === h &&
+      lastChecker &&
+      lastChecker.parent === bg &&
+      bg.bitmapBackground === lastChecker &&
+      (!ol?.data?.artboardRect ||
+        (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
+
+    if (canReuse) {
+      installToolGate();
+      installClickHider();
+      return;
+    }
+
     bg.bitmapBackground.remove();
     const g = makeChecker(w, h, 1);
+    lastChecker = g;
+    lastEnabledSize = { width: w, height: h };
     g.position = bgCenter;
     bg.addChild(g);
     bg.bitmapBackground = g;
     if (bg.vectorBackground) bg.vectorBackground.visible = false;
 
-    const ol = getOutlineLayer();
     if (ol) {
       if (!originalOutline) {
         outlineCenter = ol.bounds.center.clone();
