@@ -12,7 +12,6 @@ body {
   color-scheme: light;
 }
 #view,
-.page #view,
 .crash-container,
 .semicolon {
   background-color: var(--darkWww-page);
@@ -22,8 +21,8 @@ body {
 .guidelines-page .navigation .navigation-buttons a,
 .conf2019-description,
 /* blocking ToU acceptance flow */
-.page-title,
-.page-description {
+.parental-consent-form .page-inner-content .page-title,
+.parental-consent-form .page-inner-content .page-description {
   color: var(--darkWww-page-text);
 }
 .tips,
@@ -59,10 +58,7 @@ body {
 .extension-landing hr {
   border-color: var(--darkWww-page-divider15);
 }
-.page-description a,
-.page-description a:link,
-.page-description a:visited,
-.page-description a:active {
+.parental-consent-form .page-inner-content .page-description a /* ToU acceptance */ {
   color: var(--darkWww-page-greenText);
 }
 
@@ -182,7 +178,15 @@ body:not(.sa-body-editor) input.formik-radio-input,
 .share-modal .share-modal-inner,
 .update-thumbnail-info-modal .update-thumbnail-info-modal-inner,
 .comments-container .sa-emoji-picker,
-.studio-compose-container .sa-emoji-picker {
+.studio-compose-container .sa-emoji-picker,
+/* ToU acceptance */
+.page #view.blocking-view,
+.confirmation-section .parent-email-input .input,
+.parental-consent-form .parent-email-input .input,
+.profile-completion-step-content .country-select,
+.profile-completion-step-content .state-select,
+.profile-completion-step-content .month-select,
+.profile-completion-step-content .year-select {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-text);
   color-scheme: var(--darkWww-box-colorScheme);
@@ -250,8 +254,8 @@ body:not(.sa-body-editor) .join-flow-title,
 .join-flow-parental-consent-message,
 .registration-step .bold-link,
 .checkbox-container,
-.tou-step-title,
-.tou-step-description {
+.tou-modal .tou-step-inner-content .tou-step-info-wrapper .tou-step-title,
+.tou-modal .tou-step-inner-content .tou-step-info-wrapper .tou-step-description {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
@@ -309,15 +313,17 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 }
 .donate-banner .donate-container .donate-button,
 .donate-section .donate-button,
-.tou-modal a.link {
+.tou-modal .tou-step-inner-content a.link {
   color: var(--darkWww-box-greenText);
 }
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
 }
-.validation-checkbox-required,
-.tou-step-error,
-.tou-step-inner-content .validation-message {
+.validation-checkbox-required /* join flow */,
+/* ToU acceptance */
+.tou-step-next-button-wrapper .tou-step-error,
+.parental-consent-form .validation-message,
+.tou-modal .tou-step-inner-content .validation-message {
   color: var(--darkWww-box-redText);
 }
 .social-message-icon {

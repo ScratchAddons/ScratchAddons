@@ -585,10 +585,10 @@ body:not(.sa-body-editor) .select select > option {
   color: var(--darkWww-box-scratchr2HeaderText, #554747) !important;
   text-align: left !important;
 }
-.tou-step-top-bar {
+.tou-modal .tou-step-top-bar {
   display: none;
 }
-.tou-modal a.link {
+.tou-modal .tou-step-inner-content a.link {
   color: var(--darkWww-box-greenText, #328554);
 }
 .sa-confirm-text {
