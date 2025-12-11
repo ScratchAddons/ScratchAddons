@@ -199,9 +199,7 @@ export function createAnimationPreview(addon, state, msg) {
     const updateToggleState = () => {
       const isPaused = paused;
       toggleIcon.src = `${addon.self.dir}/icons/${isPaused ? "play.svg" : "pause.svg"}`;
-      const title =
-        msg(isPaused ? "animationPlay" : "animationPause") ||
-        (isPaused ? "Play" : "Pause");
+      const title = msg(isPaused ? "animationPlay" : "animationPause") || (isPaused ? "Play" : "Pause");
       toggleBtn.title = title;
       toggleBtn.setAttribute("aria-label", title);
       toggleBtn.dataset.paused = String(isPaused);

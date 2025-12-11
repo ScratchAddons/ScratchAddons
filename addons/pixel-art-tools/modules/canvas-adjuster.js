@@ -234,8 +234,7 @@ export function createCanvasAdjuster(addon, paper) {
       lastChecker &&
       lastChecker.parent === bg &&
       bg.bitmapBackground === lastChecker &&
-      (!ol?.data?.artboardRect ||
-        (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
+      (!ol?.data?.artboardRect || (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
 
     if (canReuse) {
       installToolGate();
