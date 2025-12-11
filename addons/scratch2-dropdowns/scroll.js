@@ -17,7 +17,13 @@ export default async function ({ addon, console }) {
 
       document.documentElement.style.setProperty("--dropdown-input-scratch2-shadow", "none");
     }
-
+	let checkmarks = addon.settings.get("checkmark");
+	if (checkmarks) {
+		// its ok
+	}else{
+		document.documentElement.style.setProperty("--dropdown-check-display-style","none");
+	}
+	
     content.addEventListener(
       "wheel",
       (e) => {

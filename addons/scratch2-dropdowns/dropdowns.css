@@ -1,5 +1,6 @@
 :root {
-  --dropdown-input-scratch2-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.5);
+  --dropdown-input-scratch2-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.5), inset -1px -1px 3px white;
+  --dropdown-check-display-style: block;
 }
 
 .blocklyDropDownDiv .goog-menuitem-highlight,
@@ -26,8 +27,13 @@
   display: none;
 }
 
-.blocklyDropDownContent .goog-menuitem-checkbox {
-  display: none !important;
+.blocklyDropDownContent .goog-menuitem-checkbox.goog-menuitem-checkbox {
+	display: var(--dropdown-check-display-style);
+  height: 22px;
+  width: 22px;
+  background: url("images/check_mark.png") !important;
+  left:0;
+  margin:0 0 0 -22px;
 }
 .blocklyDropDownArrow {
   display: none;
