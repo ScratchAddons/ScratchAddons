@@ -44,7 +44,16 @@ export default async function ({ addon, msg, console }) {
   const canvasAdjuster = createCanvasAdjuster(addon, paper);
   const palette = createPaletteModule(addon, state, redux, msg);
   const animationPreview = createAnimationPreview(addon, state, msg);
-  const controls = createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview);
+  const controls = createControlsModule(
+    addon,
+    state,
+    redux,
+    msg,
+    canvasAdjuster,
+    palette,
+    animationPreview,
+    paper
+  );
   const textToolScaler = createTextToolScaler(addon, paper);
   installRasterCropOverride(addon, state, paper);
 

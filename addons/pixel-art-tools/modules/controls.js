@@ -1,6 +1,15 @@
 const BRUSH_SIZES = [1, 2, 3, 4];
 
-export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview) {
+export function createControlsModule(
+  addon,
+  state,
+  redux,
+  msg,
+  canvasAdjuster,
+  palette,
+  animationPreview,
+  paper = null
+) {
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
   state.canvasSizeLocked = state.canvasSizeLocked || false;
 
@@ -117,7 +126,16 @@ export function createControlsModule(addon, state, redux, msg, canvasAdjuster, p
       state.pendingSize[dimension] = value;
       input.value = value;
       state.canvasSizeLocked = true;
-      if (state.enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+      if (state.enabled) {
+        canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+        if (isBitmap() && paper?.tool && typeof paper.tool.onUpdateImage === "function") {
+          try {
+            paper.tool.onUpdateImage();
+          } catch {
+            // ignore
+          }
+        }
+      }
     };
     return input;
   };
