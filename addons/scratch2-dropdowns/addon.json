@@ -17,7 +17,7 @@
       "type": "boolean",
       "default": false
     },
-	{
+    {
       "name": "Enable check-marks",
       "id": "checkmark",
       "type": "boolean",
