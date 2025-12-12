@@ -1,20 +1,27 @@
 <template>
-  <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
+  <div
+    class="addon-body"
+    v-show="shouldShow"
+    :id="'addon-' + addon._addonId"
+    :aria-label="msg(addon._enabled ? 'enabledAddonBlock' : 'disabledAddonBlock', [addon.name])"
+  >
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
         <button class="arrow-button" :title="msg(expanded ? 'collapse' : 'expand')">
           <img src="../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
         </button>
-        <img :src="addonIconSrc" class="icon-type addon-icon" draggable="false" />
+        <img :src="addonIconSrc" :title="addonIconAlt" class="icon-type addon-icon" draggable="false" />
         <!-- prettier-ignore -->
         <div class="addon-name-and-tags">
           <div class="addon-name tooltip">
-            <span>{{ addon.name }}</span>
+            <span role="heading" aria-level="3" :id="'addon-name-' + addon._addonId">{{ addon.name }}</span>
             <span v-if="devMode" class="tooltiptext tooltiptexttop">{{ addon._addonId }}</span>
           </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
       </div>
-      <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
+      <div class="addon-description" :id="'addon-description-' + addon._addonId" v-show="!expanded" dir="auto">
+        {{ addon.description }}
+      </div>
       <div class="addon-check">
         <div v-show="expanded && addon._enabled" v-if="addon.settings" class="addon-split-button dropdown-parent">
           <button
@@ -29,23 +36,42 @@
             <li role="menuitem" tabindex="0" @click="importPreset">{{ msg('import') }}</li>
           </dropdown>
         </div>
-        <input type="checkbox" class="switch" v-model="addon._enabled" @click="toggleAddonRequest" />
+        <input
+          type="checkbox"
+          class="switch"
+          v-model="addon._enabled"
+          @click="toggleAddonRequest"
+          :aria-labelledby="'addon-name-' + addon._addonId"
+          :aria-describedby="'addon-description-' + addon._addonId"
+        />
       </div>
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
-      <div class="addon-message addon-update" v-if="showUpdateNotice">
+      <div class="addon-message addon-update" v-if="showUpdateNotice" :aria-label="msg('updateBox')">
         <addon-tag tag="new"></addon-tag>
         {{ addon.latestUpdate.temporaryNotice }}
       </div>
       <div id="info" v-for="info of addon.info">
-        <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
+        <div
+          :class="['addon-message', 'addon-' + (info.type || 'info')]"
+          :aria-label="msg({
+            'warning': 'warningBox',
+            'notice': 'noticeBox',
+            'info': 'infoBox',
+          }[info.type || 'info'])"
+        >
           <img
             :src="'../../images/icons/' + {
               'warning': 'warning.svg',
               'notice': 'notice.svg',
               'info': 'help.svg',
             }[info.type || 'info']"
+            :alt="msg({
+              'warning': 'warningMessage',
+              'notice': 'noticeMessage',
+              'info': 'infoMessage',
+            }[info.type || 'info'])"
             draggable="false"
           />{{ info.text }}
         </div>
@@ -78,7 +104,11 @@
           @areahover="highlightSetting"
         />
       </div>
-      <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+      <div
+        class="settings-column"
+        v-bind:class="[!addon._enabled ? 'disabled' : '']"
+        :aria-label="msg('addonSettingsBlock')"
+      >
         <addon-setting
           v-for="setting of addon.settings"
           :class="{'setting-highlighted': highlightedSettingId === setting.id}"
