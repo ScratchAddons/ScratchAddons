@@ -10,6 +10,12 @@ export function createControlsModule(
   animationPreview,
   paper = null
 ) {
+  let lastUserSizeChangeAt = 0;
+  let lastCostumeKey = null;
+  let skipNextViewBounds = false;
+  let onUpdateImageTimer = null;
+  let sizeDirty = false;
+
   const el = (tag, props = {}, children = []) => {
     const e = Object.assign(document.createElement(tag), props);
     children.forEach((c) => (typeof c === "string" ? (e.textContent = c) : e.appendChild(c)));
@@ -18,13 +24,17 @@ export function createControlsModule(
 
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
 
-  const getCostumeSize = () => {
+  const getCostumeInfo = () => {
     const vm = addon.tab.traps.vm;
     const target = vm.editingTarget || vm.runtime.getEditingTarget();
+    const targetId = target?.id || null;
+    const costumeIndex = target?.currentCostume ?? null;
     const costume = target?.sprite?.costumes?.[target.currentCostume];
-    if (!costume) return null;
+    if (!costume) return { key: null, size: null, bitmapResolution: null };
     const mul = costume.bitmapResolution === 1 ? 2 : 1;
-    return { width: Math.round(costume.size[0] * mul), height: Math.round(costume.size[1] * mul) };
+    const size = { width: Math.round(costume.size[0] * mul), height: Math.round(costume.size[1] * mul) };
+    const key = `${targetId}:${costumeIndex}:${costume.md5 || costume.md5ext || ""}:${costume.bitmapResolution || ""}`;
+    return { key, size, bitmapResolution: costume.bitmapResolution ?? null };
   };
 
   const updatePixelModeState = (enabled) => {
@@ -73,7 +83,7 @@ export function createControlsModule(
   };
 
   const computeDesiredSize = () => {
-    const size = getCostumeSize();
+    const { size } = getCostumeInfo();
     return size
       ? { width: Math.max(1, size.width), height: Math.max(1, size.height) }
       : { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") };
@@ -96,25 +106,97 @@ export function createControlsModule(
       canvasAdjuster.disable();
       updateBrushControlVisibility();
     } else if (bitmap) {
-      const { width, height } = computeDesiredSize();
-      applySizeToInputs(width, height);
-      if (state.pixelModeDesired && !state.enabled) setPixelMode(true);
-      else if (state.enabled) canvasAdjuster.enable(width, height);
+      const { key, size } = getCostumeInfo();
+      const desired = size
+        ? { width: Math.max(1, size.width), height: Math.max(1, size.height) }
+        : { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") };
+
+      const recentlyUserChanged = Date.now() - lastUserSizeChangeAt < 600;
+      const costumeChanged = key && key !== lastCostumeKey;
+      const desiredDiffers =
+        desired.width !== state.pendingSize.width || desired.height !== state.pendingSize.height;
+
+      if (state.pixelModeDesired && !state.enabled) {
+        applySizeToInputs(desired.width, desired.height);
+        lastCostumeKey = key;
+        setPixelMode(true);
+        return;
+      }
+
+      if (state.enabled && skipNextViewBounds) {
+        skipNextViewBounds = false;
+        if (key) lastCostumeKey = key;
+        canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+        return;
+      }
+
+      if (costumeChanged || (!recentlyUserChanged && desiredDiffers)) {
+        applySizeToInputs(desired.width, desired.height);
+        lastCostumeKey = key;
+      } else if (key) {
+        lastCostumeKey = key;
+      }
+
+      if (state.enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
     }
   };
 
   const createInput = (dimension) => {
-    const input = el("input", { type: "number", min: "1", max: "1024", value: state.pendingSize[dimension] });
-    input.onchange = () => {
-      const value = Math.max(1, Math.min(1024, +input.value || 1));
+    const input = el("input", {
+      type: "number",
+      min: "2",
+      max: "1024",
+      step: "2",
+      value: state.pendingSize[dimension],
+    });
+
+    const normalizeAndStore = () => {
+      if (input.value === "") {
+        sizeDirty = true;
+        return;
+      }
+      const parsed = Number(input.value);
+      if (!Number.isFinite(parsed)) return;
+      state.pendingSize[dimension] = parsed;
+      sizeDirty = true;
+    };
+
+    const commitSizeIfDirty = () => {
+      if (!sizeDirty) return;
+      sizeDirty = false;
+      if (input.value === "") {
+        input.value = state.pendingSize[dimension];
+        return;
+      }
+      let value = Math.max(1, Math.min(1024, +input.value || 1));
+      // Pixel mode bitmap sizes effectively move in even steps; snap on commit only.
+      if (state.enabled && isBitmap() && value % 2 === 1) value = Math.min(1024, value + 1);
       state.pendingSize[dimension] = value;
       input.value = value;
+      lastUserSizeChangeAt = Date.now();
       if (state.enabled) {
         canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
-        if (isBitmap() && typeof paper?.tool?.onUpdateImage === "function")
-          try {
-            paper.tool.onUpdateImage();
-          } catch {}
+        if (isBitmap() && typeof paper?.tool?.onUpdateImage === "function") {
+          skipNextViewBounds = true;
+          if (onUpdateImageTimer) clearTimeout(onUpdateImageTimer);
+          onUpdateImageTimer = setTimeout(() => {
+            onUpdateImageTimer = null;
+            try {
+              paper.tool.onUpdateImage();
+            } catch {}
+          }, 0);
+        }
+      }
+    };
+
+    input.oninput = normalizeAndStore;
+    input.onchange = commitSizeIfDirty;
+    input.onblur = commitSizeIfDirty;
+    input.onkeydown = (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        commitSizeIfDirty();
+        input.blur();
       }
     };
     return input;
