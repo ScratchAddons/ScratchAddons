@@ -237,7 +237,8 @@ export default async function ({ addon, console, msg }) {
         "scratch-gui/mode/SET_PLAYER",
         "fontsLoaded/SET_FONTS_LOADED",
         "scratch-gui/locales/SELECT_LOCALE",
-        "scratch-gui/theme/SET_THEME",
+        "scratch-gui/settings/SET_COLOR_MODE",
+        "scratch-gui/settings/SET_THEME",
         "scratch-gui/monitors/UPDATE_MONITORS",
       ].includes(e.detail.action.type)
     ) {

@@ -11,7 +11,10 @@ export default async function ({ addon, console }) {
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/theme/SET_THEME" && !addon.self.disabled) {
+    if (
+      ["scratch-gui/settings/SET_COLOR_MODE", "scratch-gui/settings/SET_THEME"].includes(e.detail.action.type) &&
+      !addon.self.disabled
+    ) {
       // queueMicrotask isn't enough on new Blockly
       setTimeout(changeBackpackVisibility, 0);
     }

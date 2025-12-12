@@ -36,7 +36,8 @@ export default async function ({ addon, console }) {
       reduxEvents: [
         "scratch-gui/mode/SET_PLAYER",
         "scratch-gui/locales/SELECT_LOCALE",
-        "scratch-gui/theme/SET_THEME",
+        "scratch-gui/settings/SET_COLOR_MODE",
+        "scratch-gui/settings/SET_THEME",
         "fontsLoaded/SET_FONTS_LOADED",
       ],
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 0 && !state.scratchGui.mode.isPlayerOnly,
