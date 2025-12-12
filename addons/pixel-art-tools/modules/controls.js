@@ -1,15 +1,12 @@
 const BRUSH_SIZES = [1, 2, 3, 4];
 
-export function createControlsModule(
-  addon,
-  state,
-  redux,
-  msg,
-  canvasAdjuster,
-  palette,
-  animationPreview,
-  paper = null
-) {
+export function createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview, paper = null) {
+  const el = (tag, props = {}, children = []) => {
+    const e = Object.assign(document.createElement(tag), props);
+    children.forEach((c) => (typeof c === "string" ? (e.textContent = c) : e.appendChild(c)));
+    return e;
+  };
+
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
 
   const getCostumeSize = () => {
@@ -17,12 +14,8 @@ export function createControlsModule(
     const target = vm.editingTarget || vm.runtime.getEditingTarget();
     const costume = target?.sprite?.costumes?.[target.currentCostume];
     if (!costume) return null;
-    // bitmapResolution 1 reports half size which happens in case of vector so double it.
     const mul = costume.bitmapResolution === 1 ? 2 : 1;
-    return {
-      width: Math.round(costume.size[0] * mul),
-      height: Math.round(costume.size[1] * mul),
-    };
+    return { width: Math.round(costume.size[0] * mul), height: Math.round(costume.size[1] * mul) };
   };
 
   const updatePixelModeState = (enabled) => {
@@ -33,10 +26,10 @@ export function createControlsModule(
     state.toggleButton.setAttribute("aria-pressed", enabled);
     state.palettePanel.style.display = enabled ? "block" : "none";
     state.sizeControls.style.display = enabled ? "flex" : "none";
-    if (animationPreview) {
-      enabled ? animationPreview.show() : animationPreview.hide();
-    }
+    animationPreview?.[enabled ? "show" : "hide"]();
   };
+
+  const updateBrushSelection = (size) => [...state.brushButtons.children].forEach((btn) => (btn.dataset.selected = +btn.dataset.size === size));
 
   const setPixelMode = (enabled) => {
     if (state.enabled === enabled) return;
@@ -44,7 +37,6 @@ export function createControlsModule(
     updatePixelModeState(enabled);
     if (enabled) {
       canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height, { fitView: true });
-      // Set brush size to 1 when entering pixel mode
       redux.dispatch({ type: "scratch-paint/brush-mode/CHANGE_BIT_BRUSH_SIZE", brushSize: 1 });
       updateBrushSelection(1);
     } else {
@@ -54,152 +46,93 @@ export function createControlsModule(
     updateBrushControlVisibility();
   };
 
-  const updateBrushSelection = (size) => {
-    [...state.brushButtons.children].forEach((btn) => (btn.dataset.selected = +btn.dataset.size === size));
-  };
-
   const updateBrushControlVisibility = async () => {
     const { mode, format } = redux.state.scratchPaint;
     const show = (mode === "BIT_BRUSH" || mode === "BIT_LINE") && format?.startsWith("BITMAP") && state.enabled;
     state.brushButtons.dataset.visible = show;
-    // If we need to hide the native input, wait for it to render first
     if (show) {
-      const input = await addon.tab.waitForElement("[class*='mode-tools'] input[type='number']", {
-        reduxCondition: (store) => store.scratchPaint?.mode === mode,
-      });
+      const input = await addon.tab.waitForElement("[class*='mode-tools'] input[type='number']", { reduxCondition: (s) => s.scratchPaint?.mode === mode });
       input.classList.add("sa-pixel-art-hide-when-pixel");
     } else {
-      document
-        .querySelector("[class*='mode-tools'] input[type='number']")
-        ?.classList.remove("sa-pixel-art-hide-when-pixel");
+      document.querySelector("[class*='mode-tools'] input[type='number']")?.classList.remove("sa-pixel-art-hide-when-pixel");
     }
   };
 
   const computeDesiredSize = () => {
-    const defaultWidth = addon.settings.get("defaultWidth");
-    const defaultHeight = addon.settings.get("defaultHeight");
-    const costumeSize = getCostumeSize();
-    if (costumeSize) {
-      return {
-        width: Math.max(1, costumeSize.width),
-        height: Math.max(1, costumeSize.height),
-      };
-    }
-    return { width: defaultWidth, height: defaultHeight };
+    const size = getCostumeSize();
+    return size ? { width: Math.max(1, size.width), height: Math.max(1, size.height) }
+      : { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") };
+  };
+
+  const applySizeToInputs = (width, height) => {
+    Object.assign(state.pendingSize, { width, height });
+    if (state.widthInput) state.widthInput.value = width;
+    if (state.heightInput) state.heightInput.value = height;
   };
 
   const updatePixelModeVisibility = () => {
-    const isCurrentlyBitmap = isBitmap();
-    state.controlsGroup.style.display = isCurrentlyBitmap ? "flex" : "none";
-    state.toggleButton.style.display = isCurrentlyBitmap ? "block" : "none";
+    if (!state.controlsGroup) return;
+    const bitmap = isBitmap();
+    state.controlsGroup.style.display = bitmap ? "flex" : "none";
+    state.toggleButton.style.display = bitmap ? "block" : "none";
 
-    if (!isCurrentlyBitmap && state.enabled) {
+    if (!bitmap && state.enabled) {
       updatePixelModeState(false);
       canvasAdjuster.disable();
       updateBrushControlVisibility();
-    } else if (isCurrentlyBitmap && state.pixelModeDesired && !state.enabled) {
+    } else if (bitmap) {
       const { width, height } = computeDesiredSize();
-      Object.assign(state.pendingSize, { width, height });
-      if (state.widthInput) state.widthInput.value = width;
-      if (state.heightInput) state.heightInput.value = height;
-      setPixelMode(true);
-    } else if (isCurrentlyBitmap) {
-      const { width, height } = computeDesiredSize();
-      Object.assign(state.pendingSize, { width, height });
-      if (state.widthInput) state.widthInput.value = width;
-      if (state.heightInput) state.heightInput.value = height;
-      if (state.enabled) canvasAdjuster.enable(width, height);
+      applySizeToInputs(width, height);
+      if (state.pixelModeDesired && !state.enabled) setPixelMode(true);
+      else if (state.enabled) canvasAdjuster.enable(width, height);
     }
   };
 
   const createInput = (dimension) => {
-    const input = Object.assign(document.createElement("input"), {
-      type: "number",
-      min: "1",
-      max: "1024",
-      value: state.pendingSize[dimension],
-    });
+    const input = el("input", { type: "number", min: "1", max: "1024", value: state.pendingSize[dimension] });
     input.onchange = () => {
       const value = Math.max(1, Math.min(1024, +input.value || 1));
       state.pendingSize[dimension] = value;
       input.value = value;
       if (state.enabled) {
         canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
-        if (isBitmap() && paper?.tool && typeof paper.tool.onUpdateImage === "function") {
-          try {
-            paper.tool.onUpdateImage();
-          } catch {
-            // ignore
-          }
-        }
+        if (isBitmap() && typeof paper?.tool?.onUpdateImage === "function") try { paper.tool.onUpdateImage(); } catch {}
       }
     };
     return input;
   };
 
   const setupControls = async () => {
-    const wrapper = Object.assign(document.createElement("div"), { className: "sa-pixel-art-controls" });
+    const wrapper = el("div", { className: "sa-pixel-art-controls" });
     wrapper.dataset.enabled = false;
     wrapper.style.display = "none";
     addon.tab.displayNoneWhileDisabled(wrapper);
 
-    const toggle = Object.assign(document.createElement("button"), {
-      type: "button",
-      className: "sa-pixel-art-toggle button_button_LhMbA paint-editor_button-group-button_ZLJcQ",
-      title: msg("pixelModeButton"),
-      ariaLabel: msg("pixelModeButton"),
-    });
-    const toggleIcon = Object.assign(document.createElement("img"), {
-      src: `${addon.self.dir}/icons/pixel-mode.svg`,
-      alt: "",
-      className: "sa-pixel-art-toggle-icon",
-      draggable: false,
-    });
-    toggle.append(toggleIcon);
+    const toggleIcon = el("img", { src: `${addon.self.dir}/icons/pixel-mode.svg`, alt: "", className: "sa-pixel-art-toggle-icon", draggable: false });
+    const toggle = el("button", { type: "button", className: "sa-pixel-art-toggle button_button_LhMbA paint-editor_button-group-button_ZLJcQ", title: msg("pixelModeButton"), ariaLabel: msg("pixelModeButton") }, [toggleIcon]);
     toggle.dataset.active = false;
-    toggle.setAttribute("aria-pressed", false);
     toggle.onclick = () => setPixelMode(!state.enabled);
+    toggle.setAttribute("aria-pressed", false);
 
-    const toggleWrapper = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-toggle-wrapper",
-    });
-    toggleWrapper.append(toggle);
-
-    const sizeDiv = Object.assign(document.createElement("div"), { className: "sa-pixel-art-size" });
-    sizeDiv.style.display = "none";
-    const separator = Object.assign(document.createElement("span"), { textContent: "x" });
+    const sizeDiv = el("div", { className: "sa-pixel-art-size", style: "display:none" });
     const widthInput = createInput("width");
     const heightInput = createInput("height");
+    sizeDiv.append(widthInput, el("span", {}, ["x"]), heightInput);
 
-    sizeDiv.append(widthInput, separator, heightInput);
-    wrapper.append(toggleWrapper, sizeDiv);
+    wrapper.append(el("div", { className: "sa-pixel-art-toggle-wrapper" }, [toggle]), sizeDiv);
+    Object.assign(state, { toggleButton: toggle, controlsGroup: wrapper, sizeControls: sizeDiv, widthInput, heightInput });
 
-    Object.assign(state, {
-      toggleButton: toggle,
-      controlsGroup: wrapper,
-      sizeControls: sizeDiv,
-      widthInput,
-      heightInput,
-    });
-
-    const brushContainer = Object.assign(document.createElement("div"), { className: "sa-pixel-art-brush" });
+    const brushContainer = el("div", { className: "sa-pixel-art-brush" });
     brushContainer.dataset.visible = false;
     addon.tab.displayNoneWhileDisabled(brushContainer);
 
     BRUSH_SIZES.forEach((size) => {
-      const button = Object.assign(document.createElement("button"), {
-        type: "button",
-        className: "sa-pixel-art-brush-button",
-      });
-      button.dataset.size = size;
-      button.onclick = () => {
-        redux.dispatch({ type: "scratch-paint/brush-mode/CHANGE_BIT_BRUSH_SIZE", brushSize: size });
-        updateBrushSelection(size);
-      };
-      const preview = Object.assign(document.createElement("span"), { className: "sa-pixel-art-brush-preview" });
+      const preview = el("span", { className: "sa-pixel-art-brush-preview" });
       Object.assign(preview.style, { width: `${size * 6}px`, height: `${size * 6}px` });
-      button.appendChild(preview);
-      brushContainer.appendChild(button);
+      const btn = el("button", { type: "button", className: "sa-pixel-art-brush-button" }, [preview]);
+      btn.dataset.size = size;
+      btn.onclick = () => { redux.dispatch({ type: "scratch-paint/brush-mode/CHANGE_BIT_BRUSH_SIZE", brushSize: size }); updateBrushSelection(size); };
+      brushContainer.appendChild(btn);
     });
 
     state.brushButtons = brushContainer;
@@ -210,56 +143,30 @@ export function createControlsModule(
     while (true) {
       await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']", {
         markAsSeen: true,
-        reduxEvents: [
-          "scratch-gui/navigation/ACTIVATE_TAB",
-          "scratch-gui/targets/UPDATE_TARGET_LIST",
-          "scratch-paint/formats/CHANGE_FORMAT",
-        ],
-        reduxCondition: (store) =>
-          store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
+        reduxEvents: ["scratch-gui/navigation/ACTIVATE_TAB", "scratch-gui/targets/UPDATE_TARGET_LIST", "scratch-paint/formats/CHANGE_FORMAT"],
+        reduxCondition: (store) => store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
       });
 
       addon.tab.appendToSharedSpace({ space: "paintEditorZoomControls", element: wrapper, order: 1 });
 
       if (!hasAppliedZoomClasses) {
         hasAppliedZoomClasses = true;
-        const zoomControlsContainer = await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']");
-        const groupClass = zoomControlsContainer?.firstChild?.className;
-        const buttonClass = zoomControlsContainer?.firstChild?.firstChild?.className;
+        const zoomControls = await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']");
+        const groupClass = zoomControls?.firstChild?.className;
+        const buttonClass = zoomControls?.firstChild?.firstChild?.className;
         if (groupClass) wrapper.classList.add(...groupClass.split(/\s+/).filter(Boolean));
-        if (buttonClass) state.toggleButton.classList.add(...buttonClass.split(/\s+/).filter(Boolean));
+        if (buttonClass) toggle.classList.add(...buttonClass.split(/\s+/).filter(Boolean));
       }
 
       const container = await addon.tab.waitForElement("[class*='mode-tools']");
-      if (!container.contains(brushContainer)) {
-        container.appendChild(brushContainer);
-      }
+      if (!container.contains(brushContainer)) container.appendChild(brushContainer);
       updateBrushControlVisibility();
-
       updatePixelModeVisibility();
     }
   };
 
-  const handleDisabled = () => {
-    updatePixelModeState(false);
-    state.brushButtons.dataset.visible = false;
-    document.body.classList.remove("sa-pixel-art-mode-active");
-  };
+  const handleDisabled = () => { updatePixelModeState(false); state.brushButtons.dataset.visible = false; document.body.classList.remove("sa-pixel-art-mode-active"); };
+  const handleReenabled = () => { if (!state.enabled) return; updatePixelModeState(true); canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height); updateBrushControlVisibility(); };
 
-  const handleReenabled = () => {
-    if (!state.enabled) return;
-    updatePixelModeState(true);
-    canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
-    updateBrushControlVisibility();
-  };
-
-  return {
-    setPixelMode,
-    updateBrushSelection,
-    updateBrushControlVisibility,
-    updatePixelModeVisibility,
-    setupControls,
-    handleDisabled,
-    handleReenabled,
-  };
+  return { setPixelMode, updateBrushSelection, updateBrushControlVisibility, updatePixelModeVisibility, setupControls, handleDisabled, handleReenabled };
 }

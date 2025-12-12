@@ -1,8 +1,6 @@
 const DEFAULT_FONT_SIZE = 40;
-const DEFAULT_LEADING = 46.15;
-const DEFAULT_CANVAS_WIDTH = 480;
-const DEFAULT_CANVAS_HEIGHT = 360;
-const LEADING_RATIO = DEFAULT_LEADING / DEFAULT_FONT_SIZE;
+const LEADING_RATIO = 46.15 / DEFAULT_FONT_SIZE;
+const DEFAULT_SIZE = { width: 480, height: 360 };
 
 export function createTextToolScaler(addon, paper) {
   const patchedConstructors = new WeakSet();
@@ -11,110 +9,69 @@ export function createTextToolScaler(addon, paper) {
   let dynamicPadding = 8;
 
   const getCanvasSize = () => {
-    const outlineLayer = paper.project.layers.find((layer) => layer?.data?.isOutlineLayer);
-    const artboardRect = outlineLayer?.data?.artboardRect;
-    if (artboardRect) return { width: artboardRect.width, height: artboardRect.height };
-
-    const bgLayer = paper.project.layers.find((layer) => layer?.bitmapBackground);
-    const bgBounds = bgLayer?.bitmapBackground?.bounds;
-    if (bgBounds) return { width: bgBounds.width, height: bgBounds.height };
-
-    return null;
+    const outlineLayer = paper.project.layers.find((l) => l?.data?.isOutlineLayer);
+    const rect = outlineLayer?.data?.artboardRect;
+    if (rect) return { width: rect.width, height: rect.height };
+    const bgBounds = paper.project.layers.find((l) => l?.bitmapBackground)?.bitmapBackground?.bounds;
+    return bgBounds ? { width: bgBounds.width, height: bgBounds.height } : null;
   };
 
   const computeFontSize = () => {
-    const currentSize = getCanvasSize();
+    const size = getCanvasSize();
     const zoom = paper.view?.zoom || 1;
-
-    if (
-      !baseZoom &&
-      currentSize &&
-      (currentSize.width >= DEFAULT_CANVAS_WIDTH || currentSize.height >= DEFAULT_CANVAS_HEIGHT)
-    ) {
-      baseZoom = zoom;
-    }
-
-    const sizeRatio = currentSize
-      ? Math.min(currentSize.width / DEFAULT_CANVAS_WIDTH, currentSize.height / DEFAULT_CANVAS_HEIGHT)
-      : 1;
-
-    const zoomScale = baseZoom ? baseZoom / zoom : 1 / zoom;
-
-    const scale = Math.min(1, Math.max(Math.min(sizeRatio, zoomScale), 0.12));
+    if (!baseZoom && size && (size.width >= DEFAULT_SIZE.width || size.height >= DEFAULT_SIZE.height)) baseZoom = zoom;
+    const sizeRatio = size ? Math.min(size.width / DEFAULT_SIZE.width, size.height / DEFAULT_SIZE.height) : 1;
+    const scale = Math.min(1, Math.max(Math.min(sizeRatio, baseZoom ? baseZoom / zoom : 1 / zoom), 0.12));
     const scaled = DEFAULT_FONT_SIZE * scale;
-    if (!Number.isFinite(scaled) || scaled <= 0) return DEFAULT_FONT_SIZE;
+    return Number.isFinite(scaled) && scaled > 0 ? Math.max(Math.min(Math.round(scaled), DEFAULT_FONT_SIZE), 6) : DEFAULT_FONT_SIZE;
+  };
 
-    const rounded = Math.round(scaled);
-    return Math.max(Math.min(rounded, DEFAULT_FONT_SIZE), 6);
+  const applyGuideStyle = (guide, fontSize) => {
+    if (!guide) return;
+    const s = Math.max(0.4, Math.min(1, fontSize / DEFAULT_FONT_SIZE));
+    guide.strokeWidth = s;
+    guide.dashArray = [4 * s, 4 * s];
   };
 
   const patchTextTool = (tool) => {
     if (!tool) return;
     const ctor = tool.constructor;
     if (!ctor || patchedConstructors.has(ctor)) return;
-    const originalBeginTextEdit = ctor.prototype.beginTextEdit;
-    const originalResizeGuide = typeof ctor.prototype.resizeGuide === "function" ? ctor.prototype.resizeGuide : null;
-    if (typeof originalBeginTextEdit !== "function") return;
+    const origBegin = ctor.prototype.beginTextEdit;
+    const origResize = typeof ctor.prototype.resizeGuide === "function" ? ctor.prototype.resizeGuide : null;
+    if (typeof origBegin !== "function") return;
 
     ctor.prototype.beginTextEdit = function (textBox) {
-      if (
-        !addon.self.disabled &&
-        textBox &&
-        Math.round(textBox.fontSize) === DEFAULT_FONT_SIZE &&
-        (!textBox.content || textBox.content === "") &&
-        !textBox.data?.saPixelArtTextScaled
-      ) {
+      if (!addon.self.disabled && textBox && Math.round(textBox.fontSize) === DEFAULT_FONT_SIZE &&
+          (!textBox.content || textBox.content === "") && !textBox.data?.saPixelArtTextScaled) {
         const nextSize = computeFontSize();
         textBox.data = textBox.data || {};
         textBox.data.saPixelArtTextScaled = true;
         const paddingScale = Math.max(0.2, nextSize / DEFAULT_FONT_SIZE);
         dynamicPadding = Math.max(2, Math.min(8, Math.round(8 * paddingScale)));
-        // Override static getter to allow smaller padding for guides on tiny text
-        try {
-          Object.defineProperty(ctor, "TEXT_PADDING", {
-            configurable: true,
-            get() {
-              return dynamicPadding;
-            },
-          });
-        } catch (err) {
-          // ignore if redefining fails; worst case we keep default padding
-        }
+        try { Object.defineProperty(ctor, "TEXT_PADDING", { configurable: true, get: () => dynamicPadding }); } catch {}
         if (Math.round(nextSize) !== Math.round(textBox.fontSize)) {
           textBox.fontSize = nextSize;
           textBox.leading = nextSize * LEADING_RATIO;
-          // Force bounds update so guides match the resized text
           void textBox.bounds;
         }
       }
-      const result = originalBeginTextEdit.call(this, textBox);
-      const tool = this;
+      const result = origBegin.call(this, textBox);
+      const t = this;
       setTimeout(() => {
         if (!textBox?.data?.saPixelArtTextScaled) return;
-        // Touch bounds again post-render so the guide/textarea widths sync to the resized text
         void textBox.bounds;
         void textBox.internalBounds;
-        const guide = tool?.guide;
-        if (guide) {
-          const strokeScale = Math.max(0.4, Math.min(1, textBox.fontSize / DEFAULT_FONT_SIZE));
-          guide.strokeWidth = strokeScale;
-          guide.dashArray = [4 * strokeScale, 4 * strokeScale];
-        }
+        applyGuideStyle(t?.guide, textBox.fontSize);
         paper.view?.update?.();
       }, 0);
       return result;
     };
 
-    if (!ctor.__saScaledGuide && originalResizeGuide) {
+    if (!ctor.__saScaledGuide && origResize) {
       ctor.prototype.resizeGuide = function (...args) {
-        const res = originalResizeGuide.apply(this, args);
-        const guide = this.guide;
-        const tb = this.textBox;
-        if (guide && tb) {
-          const strokeScale = Math.max(0.4, Math.min(1, tb.fontSize / DEFAULT_FONT_SIZE));
-          guide.strokeWidth = strokeScale;
-          guide.dashArray = [4 * strokeScale, 4 * strokeScale];
-        }
+        const res = origResize.apply(this, args);
+        applyGuideStyle(this.guide, this.textBox?.fontSize);
         return res;
       };
       ctor.__saScaledGuide = true;
@@ -123,26 +80,18 @@ export function createTextToolScaler(addon, paper) {
     patchedConstructors.add(ctor);
   };
 
-  const onModeChanged = (mode) => {
-    if (mode === "TEXT" || mode === "BIT_TEXT") {
-      patchTextTool(paper.tool);
-    }
-  };
+  const onModeChanged = (mode) => { if (mode === "TEXT" || mode === "BIT_TEXT") patchTextTool(paper.tool); };
 
   const installActivationHook = () => {
     if (activationHookInstalled || !paper?.Tool) return;
     activationHookInstalled = true;
-    const originalActivate = paper.Tool.prototype.activate;
+    const origActivate = paper.Tool.prototype.activate;
     paper.Tool.prototype.activate = function (...args) {
-      const res = originalActivate ? originalActivate.apply(this, args) : undefined;
+      const res = origActivate?.apply(this, args);
       try {
         const mode = addon.tab?.redux?.state?.scratchPaint?.mode;
-        if (mode === "TEXT" || mode === "BIT_TEXT") {
-          patchTextTool(this);
-        }
-      } catch (err) {
-        // ignore
-      }
+        if (mode === "TEXT" || mode === "BIT_TEXT") patchTextTool(this);
+      } catch {}
       return res;
     };
   };

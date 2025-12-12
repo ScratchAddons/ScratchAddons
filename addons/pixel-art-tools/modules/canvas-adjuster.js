@@ -1,49 +1,25 @@
 import { createFillContextClamp } from "./fill-context-clamp.js";
 
-// canvas-adjuster.js
 export function createCanvasAdjuster(addon, paper) {
-  const getBgLayer = () => paper.project.layers.find((l) => l?.data?.isBackgroundGuideLayer);
-  const getOutlineLayer = () => paper.project.layers.find((l) => l?.data?.isOutlineLayer);
-  const getGuideLayer = () => paper.project.layers.find((l) => l?.data?.isGuideLayer);
-  const getRasterItem = () => {
-    const rasterLayer = paper.project.layers.find((l) => l?.data?.isRasterLayer);
-    return rasterLayer?.children?.[0] || null;
-  };
+  const getLayer = (key) => paper.project.layers.find((l) => l?.data?.[key]);
+  const getBgLayer = () => getLayer("isBackgroundGuideLayer");
+  const getOutlineLayer = () => getLayer("isOutlineLayer");
+  const getGuideLayer = () => getLayer("isGuideLayer");
 
-  let originalBg = null,
-    originalOutline = null;
-  let bgCenter = null,
-    outlineCenter = null;
-  let lastEnabledSize = null;
-  let lastChecker = null;
-  let clickHiderAttached = false;
-  let gateInstalled = false;
-  let helpersHidden = false;
+  let originalBg = null, originalOutline = null, bgCenter = null, outlineCenter = null;
+  let lastEnabledSize = null, lastChecker = null, clickHiderAttached = false, gateInstalled = false, helpersHidden = false;
   const getAllowedRect = () => getOutlineLayer()?.data?.artboardRect || null;
-  const fillContextClamp = createFillContextClamp(addon, paper, () => getAllowedRect());
+  const fillContextClamp = createFillContextClamp(addon, paper, getAllowedRect);
 
   const makeChecker = (w, h, size) => {
-    const cols = Math.ceil(w / size),
-      rows = Math.ceil(h / size);
+    const [cols, rows] = [Math.ceil(w / size), Math.ceil(h / size)];
     const base = new paper.Shape.Rectangle([0, 0], [cols, rows]);
     base.fillColor = "#fff";
     const pts = [];
-    let x = 0,
-      y = 0;
-    while (x < cols) {
-      pts.push([x, y]);
-      x++;
-      pts.push([x, y]);
-      y = y ? 0 : rows;
-    }
-    y = rows - 1;
-    x = cols;
-    while (y > 0) {
-      pts.push([x, y]);
-      x = x ? 0 : cols;
-      pts.push([x, y]);
-      y--;
-    }
+    let x = 0, y = 0;
+    while (x < cols) { pts.push([x, y]); x++; pts.push([x, y]); y = y ? 0 : rows; }
+    y = rows - 1; x = cols;
+    while (y > 0) { pts.push([x, y]); x = x ? 0 : cols; pts.push([x, y]); y--; }
     const path = new paper.Path(pts);
     path.fillRule = "evenodd";
     path.fillColor = "#D9E3F2";
@@ -57,52 +33,34 @@ export function createCanvasAdjuster(addon, paper) {
   const makeOutline = (w, h) => {
     const r = new paper.Rectangle(0, 0, w, h);
     const white = new paper.Shape.Rectangle(r.expand(2));
-    white.strokeWidth = 2;
-    white.strokeColor = "white";
-    white.guide = true;
     const blue = new paper.Shape.Rectangle(r.expand(6));
-    blue.strokeWidth = 2;
-    blue.strokeColor = "#4280D7";
-    blue.opacity = 0.25;
-    blue.guide = true;
+    Object.assign(white, { strokeWidth: 2, strokeColor: "white", guide: true });
+    Object.assign(blue, { strokeWidth: 2, strokeColor: "#4280D7", opacity: 0.25, guide: true });
     return [white, blue];
   };
 
-  // Extra bounds from makeOutline(): outer blue rect expands by 6px each side.
-  const OUTLINE_FIT_MARGIN = 12;
-  const FIT_PADDING_RATIO = 0.95;
+  const OUTLINE_FIT_MARGIN = 12, FIT_PADDING_RATIO = 0.95;
   const fitViewToArtboard = (w, h) => {
-    try {
-      const view = paper?.view;
-      if (!view) return;
-      const applyFit = () => {
-        const el = view.element;
-        const rect = el?.getBoundingClientRect?.();
-        const availW = rect?.width || view.size?.width || 0;
-        const availH = rect?.height || view.size?.height || 0;
-        if (!availW || !availH) return;
-
-        const effectiveW = w + OUTLINE_FIT_MARGIN;
-        const effectiveH = h + OUTLINE_FIT_MARGIN;
-        const fitZoom = Math.min(availW / effectiveW, availH / effectiveH) * FIT_PADDING_RATIO;
-        if (!Number.isFinite(fitZoom) || fitZoom <= 0) return;
-        view.zoom = fitZoom;
+    const view = paper?.view;
+    if (!view) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const rect = view.element?.getBoundingClientRect?.();
+      const [availW, availH] = [rect?.width || view.size?.width || 0, rect?.height || view.size?.height || 0];
+      if (!availW || !availH) return;
+      const zoom = Math.min(availW / (w + OUTLINE_FIT_MARGIN), availH / (h + OUTLINE_FIT_MARGIN)) * FIT_PADDING_RATIO;
+      if (Number.isFinite(zoom) && zoom > 0) {
+        view.zoom = zoom;
         if (outlineCenter) view.center = outlineCenter.clone();
         view.update?.();
-      };
-
-      requestAnimationFrame(() => requestAnimationFrame(applyFit));
-    } catch {}
+      }
+    }));
   };
 
-  // Gate a tool's handlers to the artboard rect
   function wrapToolOnce(tool) {
     if (!tool || tool.__gated || !tool.onMouseDown) return;
     tool.__gated = true;
-
-    const down = tool.onMouseDown;
-    const drag = tool.onMouseDrag;
-    const up = tool.onMouseUp;
+    const [down, drag, up] = [tool.onMouseDown, tool.onMouseDrag, tool.onMouseUp];
+    const reset = (t) => { t.__strokeBlocked = false; t.__paused = false; t.__lastInsidePoint = null; };
 
     tool.onMouseDown = function (evt) {
       if (addon.self.disabled) return down?.call(this, evt);
@@ -111,13 +69,7 @@ export function createCanvasAdjuster(addon, paper) {
       this.__strokeBlocked = !rect.contains(evt.point);
       this.__paused = false;
       this.__lastInsidePoint = rect.contains(evt.point) ? evt.point.clone() : null;
-      if (this.__strokeBlocked) {
-        // Only let mousedown through if there's a selection to deselect
-        if (paper.project.selectedItems.length > 0) {
-          return down.call(this, evt);
-        }
-        return;
-      }
+      if (this.__strokeBlocked) return paper.project.selectedItems.length > 0 ? down.call(this, evt) : undefined;
       return down.call(this, evt);
     };
 
@@ -126,96 +78,54 @@ export function createCanvasAdjuster(addon, paper) {
       const rect = getAllowedRect();
       if (!rect) return drag?.call(this, evt);
       if (this.__strokeBlocked) return;
-
-      const inside = rect.contains(evt.point);
-      if (inside) {
-        if (this.__paused && down) {
-          this.__paused = false;
-          down.call(this, evt);
-        }
+      if (rect.contains(evt.point)) {
+        if (this.__paused && down) { this.__paused = false; down.call(this, evt); }
         this.__lastInsidePoint = evt.point.clone();
         return drag?.call(this, evt);
-      } else {
-        if (!this.__paused && up && this.__lastInsidePoint) {
-          up.call(this, Object.assign({}, evt, { point: this.__lastInsidePoint }));
-        }
-        this.__paused = true;
-        return;
       }
+      if (!this.__paused && up && this.__lastInsidePoint) up.call(this, { ...evt, point: this.__lastInsidePoint });
+      this.__paused = true;
     };
 
     tool.onMouseUp = function (evt) {
       if (addon.self.disabled) return up?.call(this, evt);
       const rect = getAllowedRect();
       if (!rect) return up?.call(this, evt);
-      if (this.__strokeBlocked) {
-        this.__strokeBlocked = false;
-        this.__paused = false;
-        this.__lastInsidePoint = null;
-        return;
-      }
-      if (rect.contains(evt.point)) {
-        const res = up?.call(this, evt);
-        this.__paused = false;
-        this.__lastInsidePoint = null;
-        return res;
-      }
-      this.__paused = false;
-      this.__lastInsidePoint = null;
-      return;
+      if (this.__strokeBlocked) return reset(this);
+      if (rect.contains(evt.point)) { const res = up?.call(this, evt); reset(this); return res; }
+      reset(this);
     };
   }
 
-  // Patch activation so tools created on click are gated (and filled)
   function installToolGate() {
     if (gateInstalled) return;
     gateInstalled = true;
-
     const origActivate = paper.Tool.prototype.activate;
     paper.Tool.prototype.activate = function (...args) {
       const res = origActivate.apply(this, args);
       if (!addon.self.disabled) wrapToolOnce(this);
       return res;
     };
-
-    // Gate current active tool if any
-    if (paper.tool) {
-      wrapToolOnce(paper.tool);
-    }
+    if (paper.tool) wrapToolOnce(paper.tool);
   }
 
-  // Hide helper cursor outside artboard. Show and reposition on mouseup.
   const installClickHider = () => {
     if (clickHiderAttached) return;
     clickHiderAttached = true;
+    const setHelpers = (visible) => getGuideLayer()?.children.forEach((ch) => ch?.data?.isHelperItem && (ch.visible = visible));
 
     paper.view.on("mousedown", (e) => {
       if (addon.self.disabled) return;
       const rect = getAllowedRect();
-      const inside = rect ? rect.contains(e.point) : true;
-      if (inside) {
-        helpersHidden = false;
-        return;
-      }
-      const gl = getGuideLayer();
-      if (!gl) return;
-      gl.children.forEach((ch) => {
-        if (ch?.data?.isHelperItem) ch.visible = false;
-      });
+      if (!rect || rect.contains(e.point)) { helpersHidden = false; return; }
+      setHelpers(false);
       helpersHidden = true;
     });
 
-    paper.view.on("mouseup", (e) => {
-      if (addon.self.disabled) return;
-      if (!helpersHidden) return;
+    paper.view.on("mouseup", () => {
+      if (addon.self.disabled || !helpersHidden) return;
       helpersHidden = false;
-      const gl = getGuideLayer();
-      if (!gl) return;
-      gl.children.forEach((ch) => {
-        if (ch?.data?.isHelperItem) {
-          ch.visible = true;
-        }
-      });
+      setHelpers(true);
     });
   };
 
@@ -227,21 +137,10 @@ export function createCanvasAdjuster(addon, paper) {
     bgCenter ||= originalBg.position.clone();
 
     const ol = getOutlineLayer();
-    const canReuse =
-      lastEnabledSize &&
-      lastEnabledSize.width === w &&
-      lastEnabledSize.height === h &&
-      lastChecker &&
-      lastChecker.parent === bg &&
-      bg.bitmapBackground === lastChecker &&
-      (!ol?.data?.artboardRect || (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
+    const canReuse = lastEnabledSize?.width === w && lastEnabledSize?.height === h && lastChecker?.parent === bg &&
+      bg.bitmapBackground === lastChecker && (!ol?.data?.artboardRect || (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
 
-    if (canReuse) {
-      installToolGate();
-      installClickHider();
-      if (options?.fitView) fitViewToArtboard(w, h);
-      return;
-    }
+    if (canReuse) { installToolGate(); installClickHider(); if (options?.fitView) fitViewToArtboard(w, h); return; }
 
     bg.bitmapBackground.remove();
     const g = makeChecker(w, h, 1);
@@ -253,18 +152,12 @@ export function createCanvasAdjuster(addon, paper) {
     if (bg.vectorBackground) bg.vectorBackground.visible = false;
 
     if (ol) {
-      if (!originalOutline) {
-        outlineCenter = ol.bounds.center.clone();
-        originalOutline = ol.removeChildren();
-      } else ol.removeChildren();
+      if (!originalOutline) { outlineCenter = ol.bounds.center.clone(); originalOutline = ol.removeChildren(); }
+      else ol.removeChildren();
       const [white, blue] = makeOutline(w, h);
-      white.position = outlineCenter;
-      blue.position = outlineCenter;
+      white.position = blue.position = outlineCenter;
       ol.addChildren([white, blue]);
-      ol.data.artboardRect = new paper.Rectangle(
-        outlineCenter.subtract(new paper.Point(w / 2, h / 2)),
-        new paper.Size(w, h)
-      );
+      ol.data.artboardRect = new paper.Rectangle(outlineCenter.subtract(new paper.Point(w / 2, h / 2)), new paper.Size(w, h));
     }
 
     installToolGate();
@@ -282,11 +175,7 @@ export function createCanvasAdjuster(addon, paper) {
       if (bg.vectorBackground) bg.vectorBackground.visible = true;
     }
     const ol = getOutlineLayer();
-    if (ol && originalOutline) {
-      ol.removeChildren();
-      ol.addChildren(originalOutline);
-      delete ol.data.artboardRect;
-    }
+    if (ol && originalOutline) { ol.removeChildren(); ol.addChildren(originalOutline); delete ol.data.artboardRect; }
   };
 
   return { enable, disable };
