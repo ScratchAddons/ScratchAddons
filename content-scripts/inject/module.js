@@ -230,7 +230,6 @@ function editorClassCheck() {
   }
   document.documentElement.classList.toggle("sa-editor", isInEditor || isFullScreen);
   document.documentElement.classList.toggle("sa-fullscreen", isFullScreen);
-  document.body.classList.toggle("sa-body-editor", isInEditor || isFullScreen);
 }
 if (!document.body) document.addEventListener("DOMContentLoaded", editorClassCheck);
 else editorClassCheck();

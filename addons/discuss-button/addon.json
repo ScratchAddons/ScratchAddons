@@ -3,17 +3,22 @@
   "description": "Choose a list of links to be displayed in the navigation bar.",
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
-      "runAtComplete": false
-    },
-    {
-      "url": "www.js",
+      "url": "items_scratchwww.js",
       "matches": ["scratchWWWNoProject", "projects"],
       "runAtComplete": false
     },
     {
-      "url": "r2.js",
+      "url": "items_scratchr2.js",
+      "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
+      "runAtComplete": false
+    },
+    {
+      "url": "compact_scratchwww.js",
+      "matches": ["scratchWWWNoProject", "projects"],
+      "runAtComplete": false
+    },
+    {
+      "url": "compact_scratchr2.js",
       "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "runAtComplete": false
     }
@@ -46,8 +51,7 @@
       "default": [
         { "name": "Create", "url": "/projects/editor/" },
         { "name": "Explore", "url": "/explore/projects/all" },
-        { "name": "Ideas", "url": "/ideas" },
-        { "name": "About", "url": "/about" }
+        { "name": "Ideas", "url": "/ideas" }
       ],
       "row": [
         {
@@ -89,6 +93,12 @@
           "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
         }
       ]
+    },
+    {
+      "name": "Show Membership link when logged out",
+      "id": "showMembership",
+      "type": "boolean",
+      "default": true
     },
     {
       "name": "Compact user dropdown",
