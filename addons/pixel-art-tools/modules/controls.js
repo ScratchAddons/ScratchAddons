@@ -105,6 +105,11 @@ export function createControlsModule(
       updatePixelModeState(false);
       canvasAdjuster.disable();
       updateBrushControlVisibility();
+    } else if (state.restoreSizePending && state.lastAppliedSize) {
+      state.restoreSizePending = false;
+      const { width, height } = state.lastAppliedSize;
+      applySizeToInputs(width, height);
+      if (state.enabled) canvasAdjuster.enable(width, height);
     } else if (bitmap) {
       const { key, size } = getCostumeInfo();
       const desired = size
@@ -137,7 +142,10 @@ export function createControlsModule(
         lastCostumeKey = key;
       }
 
-      if (state.enabled) canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+      if (state.enabled) {
+        canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+        state.lastAppliedSize = { width: state.pendingSize.width, height: state.pendingSize.height };
+      }
     }
   };
 
@@ -176,6 +184,7 @@ export function createControlsModule(
       lastUserSizeChangeAt = Date.now();
       if (state.enabled) {
         canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+        state.lastAppliedSize = { width: state.pendingSize.width, height: state.pendingSize.height };
         if (isBitmap() && typeof paper?.tool?.onUpdateImage === "function") {
           skipNextViewBounds = true;
           if (onUpdateImageTimer) clearTimeout(onUpdateImageTimer);

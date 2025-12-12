@@ -24,6 +24,11 @@ export default async function ({ addon, msg, console }) {
     selectedPaletteIndex: -1,
     editingPaletteIndex: -1,
     pendingSize: { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") },
+    lastAppliedSize: {
+      width: addon.settings.get("defaultWidth"),
+      height: addon.settings.get("defaultHeight"),
+    },
+    restoreSizePending: false,
     brushButtons: null,
     controlsGroup: null,
     palettePanel: null,

@@ -29,6 +29,13 @@ export function installRasterCropOverride(addon, state, paper) {
       // Keep the origin from the hitBounds rect to avoid shifting content; only clamp the size.
       const x = rect?.x || 0;
       const y = rect?.y || 0;
+      const wouldCrop = rect && (rect.width > targetW || rect.height > targetH);
+      if (wouldCrop && state?.lastAppliedSize) {
+        // Revert to the last applied size; do not shrink below current content.
+        state.pendingSize = { ...state.lastAppliedSize };
+        state.restoreSizePending = true;
+        return originalGetImageData.apply(this, args);
+      }
       rect = { x, y, width: targetW, height: targetH };
       return originalGetImageData.call(this, rect);
     }
