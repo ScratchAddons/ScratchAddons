@@ -585,8 +585,11 @@ a:hover {
   color: var(--darkWww-box-scratchr2HeaderText, #554747) !important;
   text-align: left !important;
 }
-.tou-modal-top {
+.tou-modal .tou-step-top-bar {
   display: none;
+}
+.tou-modal .tou-step-inner-content a.link {
+  color: var(--darkWww-box-greenText, #328554);
 }
 .sa-confirm-text {
   margin-bottom: 0.9375rem !important;

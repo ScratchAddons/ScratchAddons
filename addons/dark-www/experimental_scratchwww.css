@@ -20,7 +20,10 @@ body {
 }
 .subactions .share-date,
 .guidelines-page .navigation .navigation-buttons a,
-.conf2019-description {
+.conf2019-description,
+/* blocking ToU acceptance flow */
+.parental-consent-form .page-inner-content .page-title,
+.parental-consent-form .page-inner-content .page-description {
   color: var(--darkWww-page-text);
 }
 .tips,
@@ -55,6 +58,9 @@ body {
 .plan section,
 .extension-landing hr {
   border-color: var(--darkWww-page-divider15);
+}
+.parental-consent-form .page-inner-content .page-description a /* ToU acceptance */ {
+  color: var(--darkWww-page-greenText);
 }
 
 /* Navigation bar background */
@@ -173,7 +179,15 @@ body {
 .share-modal .share-modal-inner,
 .update-thumbnail-info-modal .update-thumbnail-info-modal-inner,
 .comments-container .sa-emoji-picker,
-.studio-compose-container .sa-emoji-picker {
+.studio-compose-container .sa-emoji-picker,
+/* ToU acceptance */
+.page #view.blocking-view,
+.confirmation-section .parent-email-input .input,
+.parental-consent-form .parent-email-input .input,
+.profile-completion-step-content .country-select,
+.profile-completion-step-content .state-select,
+.profile-completion-step-content .month-select,
+.profile-completion-step-content .year-select {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-text);
   color-scheme: var(--darkWww-box-colorScheme);
@@ -238,8 +252,11 @@ a.social-messages-profile-link:link,
 .studio-project-tile .studio-project-username,
 .studio-member-tile .studio-member-role,
 :root:not(.sa-editor) .join-flow-title,
+.join-flow-parental-consent-message,
 .registration-step .bold-link,
-.checkbox-container {
+.checkbox-container,
+.tou-modal .tou-step-inner-content .tou-step-info-wrapper .tou-step-title,
+.tou-modal .tou-step-inner-content .tou-step-info-wrapper .tou-step-description {
   color: var(--darkWww-box-text);
 }
 .activity-li .social-message-date,
@@ -296,14 +313,19 @@ a.social-messages-profile-link:link,
   border-color: var(--darkWww-box-greenText);
 }
 .donate-banner .donate-container .donate-button,
-.donate-section .donate-button {
+.donate-section .donate-button,
+.tou-modal .tou-step-inner-content a.link {
   color: var(--darkWww-box-greenText);
-}
-.tou-modal-link {
-  color: var(--darkWww-box-greenText) !important;
 }
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
+}
+.validation-checkbox-required /* join flow */,
+/* ToU acceptance */
+.tou-step-next-button-wrapper .tou-step-error,
+.parental-consent-form .validation-message,
+.tou-modal .tou-step-inner-content .validation-message {
+  color: var(--darkWww-box-redText);
 }
 .social-message-icon {
   opacity: var(--darkWww-box-messageIconOpacity);
