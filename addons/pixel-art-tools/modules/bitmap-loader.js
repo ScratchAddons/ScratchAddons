@@ -1,81 +1,67 @@
-import { assetSelect } from "../../asset-conflict-dialog/utils.js";
+const EMPTY_COSTUME_MD5 = "cd21514d0531fdffb22204e0ec5ed84a.svg";
 
-// Flag set when vm.addCostume is called (new import), not set for duplicates
-let isNewImport = false;
-
-async function halveAsset(asset) {
-  const img = await createImageBitmap(await (await fetch(asset.encodeDataURI())).blob());
-  const c = Object.assign(document.createElement("canvas"), {
-    width: img.width >> 1,
-    height: img.height >> 1,
-  });
-  c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-  const b = await new Promise((r) => c.toBlob(r, "image/png"));
-  const buff = await b.arrayBuffer();
-  asset.setData(new Uint8Array(buff), "png", true);
+async function canvasToAsset(storage, canvas) {
+  const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
+  const data = new Uint8Array(await blob.arrayBuffer());
+  return storage.createAsset(storage.AssetType.ImageBitmap, storage.DataFormat.PNG, data, null, true);
 }
 
-export function wrapCreateBitmapSkin(addon, runtime, createBitmapSkin) {
-  return function (canvas, bitmapResolution, center) {
-    // Only halve for new imports (via vm.addCostume), not duplicates
-    if (!addon.self.disabled && isNewImport) {
-      canvas = runtime.v2BitmapAdapter.resize(canvas, canvas.width / 2, canvas.height / 2);
-    }
-    return createBitmapSkin.call(this, canvas, bitmapResolution, center);
+async function halveAsset(storage, asset) {
+  const img = await createImageBitmap(await (await fetch(asset.encodeDataURI())).blob());
+  const w = img.width >> 1;
+  const h = img.height >> 1;
+  const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
+  canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+  return { asset: await canvasToAsset(storage, canvas), w, h };
+}
+
+function buildCostume(asset, costumeObj, extra = {}) {
+  return {
+    ...costumeObj,
+    asset,
+    assetId: asset.assetId,
+    dataFormat: asset.dataFormat,
+    md5: `${asset.assetId}.${asset.dataFormat}`,
+    bitmapResolution: 2,
+    skinId: null,
+    ...extra,
   };
 }
 
-export function wrapAddCostumeWait(addon, originalAddCostume) {
-  return async function (...args) {
-    if (addon.self.disabled) return originalAddCostume.call(this, ...args);
+export function wrapAddCostumeWait(addon, original, canvasAdjuster) {
+  return async function (md5ext, costumeObj = {}, targetId, optId) {
+    if (addon.self.disabled) return original.call(this, md5ext, costumeObj, targetId, optId);
 
-    const targetId = args[2];
+    const storage = this.runtime.storage;
+    const ext = md5ext.split(".").pop().toLowerCase();
+    const isBlank = [md5ext, costumeObj.md5, costumeObj.md5ext].includes(EMPTY_COSTUME_MD5);
+
+    // Create blank bitmap instead of empty SVG
+    if (isBlank && !targetId && addon.settings.get("autoBitmap")) {
+      const w = addon.settings.get("defaultWidth");
+      const h = addon.settings.get("defaultHeight");
+      const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
+      const asset = await canvasToAsset(storage, canvas);
+      const costume = buildCostume(asset, costumeObj, { rotationCenterX: w / 2, rotationCenterY: h / 2 });
+      const result = await original.call(this, costume.md5, costume, targetId, optId);
+      canvasAdjuster.enable(w, h, { fitView: true });
+      return result;
+    }
+
+    if (ext === "svg") return original.call(this, md5ext, costumeObj, targetId, optId);
+
+    // Pre-halve imported bitmaps (skip duplicates)
     const target = targetId ? this.runtime.getTargetById(targetId) : this.editingTarget;
-
-    // Track existing asset IDs to detect duplicates
-    const existingAssetIds = new Set(
-      target
-        .getCostumes()
-        .map((c) => c.asset?.assetId)
-        .filter(Boolean)
-    );
-
-    // Set flag so wrapCreateBitmapSkin knows this is a new import
-    isNewImport = true;
-    const out = await originalAddCostume.call(this, ...args);
-    isNewImport = false;
-
-    const idx = target.currentCostume;
-    const asset = target.getCostumes()[idx].asset;
-
-    // only apply this modification to bitmaps
-    if (asset.dataFormat == "svg") {
-      if (!args[2] && addon.settings.get("autoBitmap")) {
-        // if we are creating a new costume then we will automatically convert to a bitmap for the user
-        // but we need a timeout, or the click will apply to the current costume
-        setTimeout(() => document.querySelectorAll("[class*='paint-editor_bitmap-button_']")[0].click(), 100);
-      }
-      return out;
+    const isDuplicate = target?.getCostumes().some((c) => c.md5 === md5ext);
+    if (!isDuplicate) {
+      const loaded = costumeObj.asset || await storage.load(storage.AssetType.ImageBitmap, md5ext.split(".")[0], ext);
+      const { asset, w, h } = await halveAsset(storage, loaded);
+      const costume = buildCostume(asset, costumeObj);
+      const result = await original.call(this, costume.md5, costume, targetId, optId);
+      canvasAdjuster.enable(w, h, { fitView: true });
+      return result;
     }
 
-    // Skip halving for duplicates (asset already existed)
-    if (existingAssetIds.has(asset.assetId)) {
-      return out;
-    }
-
-    // Scratch will use bitmapResolution = 2 which resizes our canvas so we are going to halve it to fix this
-    // but we'll keep it at bitmapResolution = 2, so that scratch doesn't resize it again the next time the project loads
-    await halveAsset(asset);
-
-    // need to update assetId and md5 to be in sync with the modified asset, or scratch will revert changes on save.
-    const costume = target.sprite?.costumes_[idx];
-    costume.assetId = costume.asset.assetId;
-    costume.md5 = `${costume.assetId}.${costume.asset.dataFormat}`;
-
-    // scratch won't update visuals until we change costume in the gui.
-    assetSelect(addon, idx - 1, "costume");
-    setTimeout(() => {
-      assetSelect(addon, idx, "costume");
-    });
+    return original.call(this, md5ext, costumeObj, targetId, optId);
   };
 }

@@ -2,7 +2,7 @@ import { createPaletteModule } from "./modules/palette/index.js";
 import { createCanvasAdjuster } from "./modules/canvas-adjuster.js";
 import { createControlsModule } from "./modules/controls.js";
 import { createAnimationPreview } from "./modules/animation-preview.js";
-import { wrapAddCostumeWait, wrapCreateBitmapSkin } from "./modules/bitmap-loader.js";
+import { wrapAddCostumeWait } from "./modules/bitmap-loader.js";
 import { createTextToolScaler } from "./modules/text-tool-scaler.js";
 import { installRasterCropOverride } from "./modules/raster-crop-override.js";
 
@@ -123,7 +123,6 @@ export default async function ({ addon, msg, console }) {
   });
 
   setTimeout(() => {
-    vm.renderer.createBitmapSkin = wrapCreateBitmapSkin(addon, vm.runtime, vm.renderer.createBitmapSkin);
-    vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume);
+    vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume, canvasAdjuster);
   }, 100);
 }
