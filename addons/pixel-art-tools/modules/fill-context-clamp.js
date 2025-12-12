@@ -9,7 +9,12 @@ export function createFillContextClamp(addon, paper, getAllowedRect) {
 
   const sanitizeImageData = (imageData, startX, startY, rect) => {
     const { data, width, height } = imageData;
-    const [rx, ry, rx2, ry2] = [Math.floor(rect.x), Math.floor(rect.y), Math.ceil(rect.x + rect.width), Math.ceil(rect.y + rect.height)];
+    const [rx, ry, rx2, ry2] = [
+      Math.floor(rect.x),
+      Math.floor(rect.y),
+      Math.ceil(rect.x + rect.width),
+      Math.ceil(rect.y + rect.height),
+    ];
     for (let y = 0; y < height; y++) {
       const gy = startY + y;
       for (let x = 0; x < width; x++) {
@@ -21,24 +26,33 @@ export function createFillContextClamp(addon, paper, getAllowedRect) {
     }
   };
 
-  const createClampedContext = (ctx, rect) => new Proxy(ctx, {
-    get(target, prop) {
-      if (prop === "getImageData") return (sx, sy, sw, sh) => {
-        const img = target.getImageData(sx, sy, sw, sh);
-        sanitizeImageData(img, sx, sy, rect);
-        return img;
-      };
-      if (prop === "putImageData") return (...args) => {
-        const [img, dx, dy, dirtyX = 0, dirtyY = 0] = args;
-        sanitizeImageData(img, (dx || 0) + (args.length >= 7 ? dirtyX : 0), (dy || 0) + (args.length >= 7 ? dirtyY : 0), rect);
-        return target.putImageData(...args);
-      };
-      const value = target[prop];
-      return typeof value === "function" ? value.bind(target) : value;
-    },
-  });
+  const createClampedContext = (ctx, rect) =>
+    new Proxy(ctx, {
+      get(target, prop) {
+        if (prop === "getImageData")
+          return (sx, sy, sw, sh) => {
+            const img = target.getImageData(sx, sy, sw, sh);
+            sanitizeImageData(img, sx, sy, rect);
+            return img;
+          };
+        if (prop === "putImageData")
+          return (...args) => {
+            const [img, dx, dy, dirtyX = 0, dirtyY = 0] = args;
+            sanitizeImageData(
+              img,
+              (dx || 0) + (args.length >= 7 ? dirtyX : 0),
+              (dy || 0) + (args.length >= 7 ? dirtyY : 0),
+              rect
+            );
+            return target.putImageData(...args);
+          };
+        const value = target[prop];
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    });
 
-  const looksLikeFillTool = (tool) => ["paint", "setColor", "setColor2", "setGradientType"].every((m) => typeof tool?.[m] === "function");
+  const looksLikeFillTool = (tool) =>
+    ["paint", "setColor", "setColor2", "setGradientType"].every((m) => typeof tool?.[m] === "function");
 
   const wrapFillTool = (tool) => {
     if (!looksLikeFillTool(tool) || tool.__saFillWrapped) return;
@@ -50,8 +64,12 @@ export function createFillContextClamp(addon, paper, getAllowedRect) {
       if (!rect) return origPaint.call(this, evt);
       fillScopeActive = true;
       fillScopeRect = rect;
-      try { return origPaint.call(this, evt); }
-      finally { fillScopeActive = false; fillScopeRect = null; }
+      try {
+        return origPaint.call(this, evt);
+      } finally {
+        fillScopeActive = false;
+        fillScopeRect = null;
+      }
     };
   };
 
@@ -63,7 +81,8 @@ export function createFillContextClamp(addon, paper, getAllowedRect) {
     paper.Raster.prototype.getContext = function (...args) {
       const ctx = origGetContext.apply(this, args);
       return ctx && !addon.self.disabled && pixelModeActive && fillScopeActive && fillScopeRect
-        ? createClampedContext(ctx, fillScopeRect) : ctx;
+        ? createClampedContext(ctx, fillScopeRect)
+        : ctx;
     };
 
     const origGetImageData = paper.Raster.prototype.getImageData;
@@ -71,8 +90,10 @@ export function createFillContextClamp(addon, paper, getAllowedRect) {
       paper.Raster.prototype.getImageData = function (...args) {
         const img = origGetImageData.apply(this, args);
         if (!fillScopeActive || !fillScopeRect || !img?.data) return img;
-        const [startX, startY] = args.length === 4 ? [args[0] || 0, args[1] || 0]
-          : [args[0]?.x ?? args[0]?.left ?? 0, args[0]?.y ?? args[0]?.top ?? 0];
+        const [startX, startY] =
+          args.length === 4
+            ? [args[0] || 0, args[1] || 0]
+            : [args[0]?.x ?? args[0]?.left ?? 0, args[0]?.y ?? args[0]?.top ?? 0];
         sanitizeImageData(img, startX, startY, fillScopeRect);
         return img;
       };
@@ -88,7 +109,14 @@ export function createFillContextClamp(addon, paper, getAllowedRect) {
   };
 
   return {
-    enable: () => { pixelModeActive = true; installPatch(); },
-    disable: () => { pixelModeActive = false; fillScopeActive = false; fillScopeRect = null; },
+    enable: () => {
+      pixelModeActive = true;
+      installPatch();
+    },
+    disable: () => {
+      pixelModeActive = false;
+      fillScopeActive = false;
+      fillScopeRect = null;
+    },
   };
 }

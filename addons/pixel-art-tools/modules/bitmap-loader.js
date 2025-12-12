@@ -54,7 +54,7 @@ export function wrapAddCostumeWait(addon, original, canvasAdjuster) {
     const target = targetId ? this.runtime.getTargetById(targetId) : this.editingTarget;
     const isDuplicate = target?.getCostumes().some((c) => c.md5 === md5ext);
     if (!isDuplicate) {
-      const loaded = costumeObj.asset || await storage.load(storage.AssetType.ImageBitmap, md5ext.split(".")[0], ext);
+      const loaded = costumeObj.asset || (await storage.load(storage.AssetType.ImageBitmap, md5ext.split(".")[0], ext));
       const { asset, w, h } = await halveAsset(storage, loaded);
       const costume = buildCostume(asset, costumeObj);
       const result = await original.call(this, costume.md5, costume, targetId, optId);

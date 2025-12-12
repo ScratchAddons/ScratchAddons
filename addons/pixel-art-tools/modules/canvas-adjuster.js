@@ -6,8 +6,15 @@ export function createCanvasAdjuster(addon, paper) {
   const getOutlineLayer = () => getLayer("isOutlineLayer");
   const getGuideLayer = () => getLayer("isGuideLayer");
 
-  let originalBg = null, originalOutline = null, bgCenter = null, outlineCenter = null;
-  let lastEnabledSize = null, lastChecker = null, clickHiderAttached = false, gateInstalled = false, helpersHidden = false;
+  let originalBg = null,
+    originalOutline = null,
+    bgCenter = null,
+    outlineCenter = null;
+  let lastEnabledSize = null,
+    lastChecker = null,
+    clickHiderAttached = false,
+    gateInstalled = false,
+    helpersHidden = false;
   const getAllowedRect = () => getOutlineLayer()?.data?.artboardRect || null;
   const fillContextClamp = createFillContextClamp(addon, paper, getAllowedRect);
 
@@ -16,10 +23,22 @@ export function createCanvasAdjuster(addon, paper) {
     const base = new paper.Shape.Rectangle([0, 0], [cols, rows]);
     base.fillColor = "#fff";
     const pts = [];
-    let x = 0, y = 0;
-    while (x < cols) { pts.push([x, y]); x++; pts.push([x, y]); y = y ? 0 : rows; }
-    y = rows - 1; x = cols;
-    while (y > 0) { pts.push([x, y]); x = x ? 0 : cols; pts.push([x, y]); y--; }
+    let x = 0,
+      y = 0;
+    while (x < cols) {
+      pts.push([x, y]);
+      x++;
+      pts.push([x, y]);
+      y = y ? 0 : rows;
+    }
+    y = rows - 1;
+    x = cols;
+    while (y > 0) {
+      pts.push([x, y]);
+      x = x ? 0 : cols;
+      pts.push([x, y]);
+      y--;
+    }
     const path = new paper.Path(pts);
     path.fillRule = "evenodd";
     path.fillColor = "#D9E3F2";
@@ -39,28 +58,35 @@ export function createCanvasAdjuster(addon, paper) {
     return [white, blue];
   };
 
-  const OUTLINE_FIT_MARGIN = 12, FIT_PADDING_RATIO = 0.95;
+  const OUTLINE_FIT_MARGIN = 12,
+    FIT_PADDING_RATIO = 0.95;
   const fitViewToArtboard = (w, h) => {
     const view = paper?.view;
     if (!view) return;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      const rect = view.element?.getBoundingClientRect?.();
-      const [availW, availH] = [rect?.width || view.size?.width || 0, rect?.height || view.size?.height || 0];
-      if (!availW || !availH) return;
-      const zoom = Math.min(availW / (w + OUTLINE_FIT_MARGIN), availH / (h + OUTLINE_FIT_MARGIN)) * FIT_PADDING_RATIO;
-      if (Number.isFinite(zoom) && zoom > 0) {
-        view.zoom = zoom;
-        if (outlineCenter) view.center = outlineCenter.clone();
-        view.update?.();
-      }
-    }));
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        const rect = view.element?.getBoundingClientRect?.();
+        const [availW, availH] = [rect?.width || view.size?.width || 0, rect?.height || view.size?.height || 0];
+        if (!availW || !availH) return;
+        const zoom = Math.min(availW / (w + OUTLINE_FIT_MARGIN), availH / (h + OUTLINE_FIT_MARGIN)) * FIT_PADDING_RATIO;
+        if (Number.isFinite(zoom) && zoom > 0) {
+          view.zoom = zoom;
+          if (outlineCenter) view.center = outlineCenter.clone();
+          view.update?.();
+        }
+      })
+    );
   };
 
   function wrapToolOnce(tool) {
     if (!tool || tool.__gated || !tool.onMouseDown) return;
     tool.__gated = true;
     const [down, drag, up] = [tool.onMouseDown, tool.onMouseDrag, tool.onMouseUp];
-    const reset = (t) => { t.__strokeBlocked = false; t.__paused = false; t.__lastInsidePoint = null; };
+    const reset = (t) => {
+      t.__strokeBlocked = false;
+      t.__paused = false;
+      t.__lastInsidePoint = null;
+    };
 
     tool.onMouseDown = function (evt) {
       if (addon.self.disabled) return down?.call(this, evt);
@@ -79,7 +105,10 @@ export function createCanvasAdjuster(addon, paper) {
       if (!rect) return drag?.call(this, evt);
       if (this.__strokeBlocked) return;
       if (rect.contains(evt.point)) {
-        if (this.__paused && down) { this.__paused = false; down.call(this, evt); }
+        if (this.__paused && down) {
+          this.__paused = false;
+          down.call(this, evt);
+        }
         this.__lastInsidePoint = evt.point.clone();
         return drag?.call(this, evt);
       }
@@ -92,7 +121,11 @@ export function createCanvasAdjuster(addon, paper) {
       const rect = getAllowedRect();
       if (!rect) return up?.call(this, evt);
       if (this.__strokeBlocked) return reset(this);
-      if (rect.contains(evt.point)) { const res = up?.call(this, evt); reset(this); return res; }
+      if (rect.contains(evt.point)) {
+        const res = up?.call(this, evt);
+        reset(this);
+        return res;
+      }
       reset(this);
     };
   }
@@ -112,12 +145,16 @@ export function createCanvasAdjuster(addon, paper) {
   const installClickHider = () => {
     if (clickHiderAttached) return;
     clickHiderAttached = true;
-    const setHelpers = (visible) => getGuideLayer()?.children.forEach((ch) => ch?.data?.isHelperItem && (ch.visible = visible));
+    const setHelpers = (visible) =>
+      getGuideLayer()?.children.forEach((ch) => ch?.data?.isHelperItem && (ch.visible = visible));
 
     paper.view.on("mousedown", (e) => {
       if (addon.self.disabled) return;
       const rect = getAllowedRect();
-      if (!rect || rect.contains(e.point)) { helpersHidden = false; return; }
+      if (!rect || rect.contains(e.point)) {
+        helpersHidden = false;
+        return;
+      }
       setHelpers(false);
       helpersHidden = true;
     });
@@ -137,10 +174,19 @@ export function createCanvasAdjuster(addon, paper) {
     bgCenter ||= originalBg.position.clone();
 
     const ol = getOutlineLayer();
-    const canReuse = lastEnabledSize?.width === w && lastEnabledSize?.height === h && lastChecker?.parent === bg &&
-      bg.bitmapBackground === lastChecker && (!ol?.data?.artboardRect || (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
+    const canReuse =
+      lastEnabledSize?.width === w &&
+      lastEnabledSize?.height === h &&
+      lastChecker?.parent === bg &&
+      bg.bitmapBackground === lastChecker &&
+      (!ol?.data?.artboardRect || (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
 
-    if (canReuse) { installToolGate(); installClickHider(); if (options?.fitView) fitViewToArtboard(w, h); return; }
+    if (canReuse) {
+      installToolGate();
+      installClickHider();
+      if (options?.fitView) fitViewToArtboard(w, h);
+      return;
+    }
 
     bg.bitmapBackground.remove();
     const g = makeChecker(w, h, 1);
@@ -152,12 +198,17 @@ export function createCanvasAdjuster(addon, paper) {
     if (bg.vectorBackground) bg.vectorBackground.visible = false;
 
     if (ol) {
-      if (!originalOutline) { outlineCenter = ol.bounds.center.clone(); originalOutline = ol.removeChildren(); }
-      else ol.removeChildren();
+      if (!originalOutline) {
+        outlineCenter = ol.bounds.center.clone();
+        originalOutline = ol.removeChildren();
+      } else ol.removeChildren();
       const [white, blue] = makeOutline(w, h);
       white.position = blue.position = outlineCenter;
       ol.addChildren([white, blue]);
-      ol.data.artboardRect = new paper.Rectangle(outlineCenter.subtract(new paper.Point(w / 2, h / 2)), new paper.Size(w, h));
+      ol.data.artboardRect = new paper.Rectangle(
+        outlineCenter.subtract(new paper.Point(w / 2, h / 2)),
+        new paper.Size(w, h)
+      );
     }
 
     installToolGate();
@@ -175,7 +226,11 @@ export function createCanvasAdjuster(addon, paper) {
       if (bg.vectorBackground) bg.vectorBackground.visible = true;
     }
     const ol = getOutlineLayer();
-    if (ol && originalOutline) { ol.removeChildren(); ol.addChildren(originalOutline); delete ol.data.artboardRect; }
+    if (ol && originalOutline) {
+      ol.removeChildren();
+      ol.addChildren(originalOutline);
+      delete ol.data.artboardRect;
+    }
   };
 
   return { enable, disable };

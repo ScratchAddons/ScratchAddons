@@ -7,11 +7,17 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
 
   const parseComment = (text, magic) => {
     const line = text?.split("\n").find((l) => l.trim().endsWith(magic));
-    try { return line ? JSON.parse(line.trim().slice(0, -magic.length)) : null; } catch { return null; }
+    try {
+      return line ? JSON.parse(line.trim().slice(0, -magic.length)) : null;
+    } catch {
+      return null;
+    }
   };
 
   const findComment = (target, magic, filter) =>
-    Object.values(target?.comments || {}).find((c) => c.text?.includes(magic) && (!filter || filter(parseComment(c.text, magic))));
+    Object.values(target?.comments || {}).find(
+      (c) => c.text?.includes(magic) && (!filter || filter(parseComment(c.text, magic)))
+    );
 
   const writeComment = (target, magic, payload, header, pos) => {
     if (!target) return;
@@ -36,7 +42,9 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
       return {
         id,
         name: name?.trim() || `${msg("paletteTitle") || "Palette"} ${i + 1}`,
-        colors: Array.isArray(colors) ? [...new Set(colors.map(sanitizeHex).filter(Boolean))].slice(0, PALETTE_LIMIT) : [],
+        colors: Array.isArray(colors)
+          ? [...new Set(colors.map(sanitizeHex).filter(Boolean))].slice(0, PALETTE_LIMIT)
+          : [],
       };
     });
   };
@@ -48,7 +56,13 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
 
   const writeProjectComment = (palettes) => {
     const snapshot = palettes.map((p) => ({ ...p, colors: p.colors.slice(0, PALETTE_LIMIT) }));
-    writeComment(runtime.getTargetForStage(), PROJECT_MAGIC, { palettes: snapshot }, "Pixel Palette", [60, 60, 360, 120]);
+    writeComment(
+      runtime.getTargetForStage(),
+      PROJECT_MAGIC,
+      { palettes: snapshot },
+      "Pixel Palette",
+      [60, 60, 360, 120]
+    );
   };
 
   const loadMappings = (target) => {
@@ -62,19 +76,22 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
     return mappings;
   };
 
-  const writeMappings = (target, mappings) => writeComment(target, COSTUME_MAGIC, { mappings }, "Palette Mapping", [80, 80, 320, 100]);
+  const writeMappings = (target, mappings) =>
+    writeComment(target, COSTUME_MAGIC, { mappings }, "Palette Mapping", [80, 80, 320, 100]);
 
   const getCostumeKey = (c) => c?.name || c?.md5Ext || c?.md5 || c?.assetId;
   const getTarget = () => vm.editingTarget || runtime.getEditingTarget();
   const getCostume = (t) => t?.sprite?.costumes?.[t.currentCostume];
 
   const readCostumePaletteId = () => {
-    const t = getTarget(), key = getCostumeKey(getCostume(t));
+    const t = getTarget(),
+      key = getCostumeKey(getCostume(t));
     return key ? loadMappings(t)[key] : null;
   };
 
   const writeCostumePaletteId = (paletteId) => {
-    const t = getTarget(), key = getCostumeKey(getCostume(t));
+    const t = getTarget(),
+      key = getCostumeKey(getCostume(t));
     if (!t || !key || !paletteId) return;
     const mappings = loadMappings(t);
     mappings[key] = paletteId;
@@ -93,20 +110,39 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
   const handleDeletePalette = async () => {
     const p = state.projectPalettes.find((p) => p.id === state.selectedPaletteId);
     if (!p) return;
-    if (!await addon.tab.confirm(msg("deletePalette"), `${msg("deletePaletteConfirm")}\n\n${p.name}`, { useEditorClasses: true })) return;
+    if (
+      !(await addon.tab.confirm(msg("deletePalette"), `${msg("deletePaletteConfirm")}\n\n${p.name}`, {
+        useEditorClasses: true,
+      }))
+    )
+      return;
 
     state.projectPalettes = state.projectPalettes.filter((e) => e.id !== p.id);
-    if (!state.projectPalettes.length) state.projectPalettes.push({ id: `pal-${randomId()}`, name: `${msg("paletteTitle") || "Palette"} 1`, colors: [] });
+    if (!state.projectPalettes.length)
+      state.projectPalettes.push({
+        id: `pal-${randomId()}`,
+        name: `${msg("paletteTitle") || "Palette"} 1`,
+        colors: [],
+      });
     const fallbackId = state.projectPalettes[0].id;
 
     for (const t of runtime.targets || []) {
       const m = loadMappings(t);
       let dirty = false;
-      for (const k of Object.keys(m)) if (m[k] === p.id) { m[k] = fallbackId; dirty = true; }
+      for (const k of Object.keys(m))
+        if (m[k] === p.id) {
+          m[k] = fallbackId;
+          dirty = true;
+        }
       if (dirty) writeMappings(t, m);
     }
 
-    Object.assign(state, { selectedPaletteId: fallbackId, palette: state.projectPalettes[0].colors, editingPaletteIndex: -1, selectedPaletteIndex: -1 });
+    Object.assign(state, {
+      selectedPaletteId: fallbackId,
+      palette: state.projectPalettes[0].colors,
+      editingPaletteIndex: -1,
+      selectedPaletteIndex: -1,
+    });
     writeProjectComment(state.projectPalettes);
     writeCostumePaletteId(fallbackId);
     ui.renderSelector();
@@ -114,5 +150,15 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
     ui.updatePaletteSelection();
   };
 
-  return { loadProjectPalettes, writeProjectComment, readCostumePaletteId, writeCostumePaletteId, renameCostumeMapping, loadMappings, writeMappings, handleDeletePalette, randomId };
+  return {
+    loadProjectPalettes,
+    writeProjectComment,
+    readCostumePaletteId,
+    writeCostumePaletteId,
+    renameCostumeMapping,
+    loadMappings,
+    writeMappings,
+    handleDeletePalette,
+    randomId,
+  };
 }

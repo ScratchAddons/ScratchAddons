@@ -23,7 +23,9 @@ export function createTextToolScaler(addon, paper) {
     const sizeRatio = size ? Math.min(size.width / DEFAULT_SIZE.width, size.height / DEFAULT_SIZE.height) : 1;
     const scale = Math.min(1, Math.max(Math.min(sizeRatio, baseZoom ? baseZoom / zoom : 1 / zoom), 0.12));
     const scaled = DEFAULT_FONT_SIZE * scale;
-    return Number.isFinite(scaled) && scaled > 0 ? Math.max(Math.min(Math.round(scaled), DEFAULT_FONT_SIZE), 6) : DEFAULT_FONT_SIZE;
+    return Number.isFinite(scaled) && scaled > 0
+      ? Math.max(Math.min(Math.round(scaled), DEFAULT_FONT_SIZE), 6)
+      : DEFAULT_FONT_SIZE;
   };
 
   const applyGuideStyle = (guide, fontSize) => {
@@ -42,14 +44,21 @@ export function createTextToolScaler(addon, paper) {
     if (typeof origBegin !== "function") return;
 
     ctor.prototype.beginTextEdit = function (textBox) {
-      if (!addon.self.disabled && textBox && Math.round(textBox.fontSize) === DEFAULT_FONT_SIZE &&
-          (!textBox.content || textBox.content === "") && !textBox.data?.saPixelArtTextScaled) {
+      if (
+        !addon.self.disabled &&
+        textBox &&
+        Math.round(textBox.fontSize) === DEFAULT_FONT_SIZE &&
+        (!textBox.content || textBox.content === "") &&
+        !textBox.data?.saPixelArtTextScaled
+      ) {
         const nextSize = computeFontSize();
         textBox.data = textBox.data || {};
         textBox.data.saPixelArtTextScaled = true;
         const paddingScale = Math.max(0.2, nextSize / DEFAULT_FONT_SIZE);
         dynamicPadding = Math.max(2, Math.min(8, Math.round(8 * paddingScale)));
-        try { Object.defineProperty(ctor, "TEXT_PADDING", { configurable: true, get: () => dynamicPadding }); } catch {}
+        try {
+          Object.defineProperty(ctor, "TEXT_PADDING", { configurable: true, get: () => dynamicPadding });
+        } catch {}
         if (Math.round(nextSize) !== Math.round(textBox.fontSize)) {
           textBox.fontSize = nextSize;
           textBox.leading = nextSize * LEADING_RATIO;
@@ -80,7 +89,9 @@ export function createTextToolScaler(addon, paper) {
     patchedConstructors.add(ctor);
   };
 
-  const onModeChanged = (mode) => { if (mode === "TEXT" || mode === "BIT_TEXT") patchTextTool(paper.tool); };
+  const onModeChanged = (mode) => {
+    if (mode === "TEXT" || mode === "BIT_TEXT") patchTextTool(paper.tool);
+  };
 
   const installActivationHook = () => {
     if (activationHookInstalled || !paper?.Tool) return;

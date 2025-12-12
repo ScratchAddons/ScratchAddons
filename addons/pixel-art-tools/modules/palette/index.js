@@ -12,7 +12,12 @@ export function createPaletteModule(addon, state, redux, msg) {
     return e;
   };
 
-  Object.assign(state, { projectPalettes: state.projectPalettes || [], selectedPaletteId: state.selectedPaletteId || null, paletteDropdown: null, teardownVmTargetsListener: null });
+  Object.assign(state, {
+    projectPalettes: state.projectPalettes || [],
+    selectedPaletteId: state.selectedPaletteId || null,
+    paletteDropdown: null,
+    teardownVmTargetsListener: null,
+  });
 
   let resolvePalettePanelReady;
   state.palettePanelReady = state.palettePanelReady || new Promise((r) => (resolvePalettePanelReady = r));
@@ -22,7 +27,11 @@ export function createPaletteModule(addon, state, redux, msg) {
   const importExport = createImportExportModule(state, storage);
   ui.setDependencies(storage, importExport);
 
-  const createPalette = (name) => ({ id: `pal-${storage.randomId()}`, name: name || `${msg("paletteTitle") || "Palette"} ${state.projectPalettes.length + 1}`, colors: [] });
+  const createPalette = (name) => ({
+    id: `pal-${storage.randomId()}`,
+    name: name || `${msg("paletteTitle") || "Palette"} ${state.projectPalettes.length + 1}`,
+    colors: [],
+  });
 
   const ensureActivePalette = () => {
     if (!state.projectPalettes.length) {
@@ -40,7 +49,12 @@ export function createPaletteModule(addon, state, redux, msg) {
   const setActivePalette = (paletteId, persistCostume = true) => {
     const palette = state.projectPalettes.find((p) => p.id === paletteId);
     if (!palette) return;
-    Object.assign(state, { selectedPaletteId: paletteId, palette: palette.colors, editingPaletteIndex: -1, selectedPaletteIndex: -1 });
+    Object.assign(state, {
+      selectedPaletteId: paletteId,
+      palette: palette.colors,
+      editingPaletteIndex: -1,
+      selectedPaletteIndex: -1,
+    });
     ui.renderSelector();
     ui.renderPalette();
     ui.updatePaletteSelection();
@@ -54,11 +68,21 @@ export function createPaletteModule(addon, state, redux, msg) {
     ensureActivePalette();
     const paletteId = storage.readCostumePaletteId();
     const findId = (id) => state.projectPalettes.some((p) => p.id === id);
-    setActivePalette(findId(paletteId) ? paletteId : findId(currentId) ? currentId : state.projectPalettes[0].id, !findId(paletteId) && !findId(currentId));
+    setActivePalette(
+      findId(paletteId) ? paletteId : findId(currentId) ? currentId : state.projectPalettes[0].id,
+      !findId(paletteId) && !findId(currentId)
+    );
   };
 
   let syncPending = false;
-  const scheduleSync = () => { if (syncPending) return; syncPending = true; queueMicrotask(() => { syncPending = false; syncPalette(); }); };
+  const scheduleSync = () => {
+    if (syncPending) return;
+    syncPending = true;
+    queueMicrotask(() => {
+      syncPending = false;
+      syncPalette();
+    });
+  };
 
   const setupPalettePanel = async () => {
     const panel = el("section", { className: "sa-pixel-art-palette" });
@@ -68,8 +92,18 @@ export function createPaletteModule(addon, state, redux, msg) {
     // Header (draggable when floating)
     const header = el("header", { className: "sa-pixel-art-palette-header" }, [msg("paletteTitle")]);
     let dragStart = null;
-    header.onmousedown = (e) => panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
-    document.addEventListener("mousemove", (e) => dragStart && Object.assign(panel.style, { left: `${e.clientX - dragStart.x}px`, top: `${e.clientY - dragStart.y}px`, right: "auto" }));
+    header.onmousedown = (e) =>
+      panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
+    document.addEventListener(
+      "mousemove",
+      (e) =>
+        dragStart &&
+        Object.assign(panel.style, {
+          left: `${e.clientX - dragStart.x}px`,
+          top: `${e.clientY - dragStart.y}px`,
+          right: "auto",
+        })
+    );
     document.addEventListener("mouseup", () => (dragStart = null));
     panel.appendChild(header);
 
@@ -121,8 +155,13 @@ export function createPaletteModule(addon, state, redux, msg) {
     while (true) {
       await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
         markAsSeen: true,
-        reduxEvents: ["scratch-gui/navigation/ACTIVATE_TAB", "scratch-gui/targets/UPDATE_TARGET_LIST", "scratch-paint/formats/CHANGE_FORMAT"],
-        reduxCondition: (store) => store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
+        reduxEvents: [
+          "scratch-gui/navigation/ACTIVATE_TAB",
+          "scratch-gui/targets/UPDATE_TARGET_LIST",
+          "scratch-paint/formats/CHANGE_FORMAT",
+        ],
+        reduxCondition: (store) =>
+          store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
       });
       addon.tab.appendToSharedSpace({ space: "paintEditorModeSelector", element: panel, order: 1 });
       ui.renderSelector();
@@ -136,7 +175,12 @@ export function createPaletteModule(addon, state, redux, msg) {
     state.teardownVmTargetsListener?.();
     const handler = scheduleSync;
     vm.on("targetsUpdate", handler);
-    state.teardownVmTargetsListener = () => { try { (vm.off || vm.removeListener)?.call(vm, "targetsUpdate", handler); } catch {} state.teardownVmTargetsListener = null; };
+    state.teardownVmTargetsListener = () => {
+      try {
+        (vm.off || vm.removeListener)?.call(vm, "targetsUpdate", handler);
+      } catch {}
+      state.teardownVmTargetsListener = null;
+    };
   };
 
   // Update palette mappings when costumes are renamed
@@ -151,9 +195,18 @@ export function createPaletteModule(addon, state, redux, msg) {
   }
 
   addon.self.addEventListener("disabled", () => state.teardownVmTargetsListener?.());
-  addon.self.addEventListener("reenabled", () => { attachVmListener(); scheduleSync(); });
+  addon.self.addEventListener("reenabled", () => {
+    attachVmListener();
+    scheduleSync();
+  });
   attachVmListener();
   scheduleSync();
 
-  return { updatePaletteSelection: ui.updatePaletteSelection, renderPalette: ui.renderPalette, addPaletteColor: ui.addPaletteColor, setupPalettePanel, updatePaletteColorFromFill: ui.updatePaletteColorFromFill };
+  return {
+    updatePaletteSelection: ui.updatePaletteSelection,
+    renderPalette: ui.renderPalette,
+    addPaletteColor: ui.addPaletteColor,
+    setupPalettePanel,
+    updatePaletteColorFromFill: ui.updatePaletteColorFromFill,
+  };
 }
