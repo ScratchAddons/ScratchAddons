@@ -1,4 +1,3 @@
-// animation-preview.js
 export function createAnimationPreview(addon, state, msg) {
   let panel = null;
   let previewImg = null;
@@ -10,97 +9,66 @@ export function createAnimationPreview(addon, state, msg) {
   let hidden = addon.settings.get("hideAnimationPreview");
   let rangeStart = null;
   let rangeEnd = null;
-  const resolveExtUrl = (path) => {
-    const clean = path.replace(/^\//, "");
-    return (
-      chrome?.runtime?.getURL?.(clean) ??
-      (addon?.self?.dir ? new URL(`../../${clean}`, `${addon.self.dir}/`).href : path)
-    );
+
+  const el = (tag, props = {}, children = []) => {
+    const e = Object.assign(document.createElement(tag), props);
+    children.forEach((c) => (typeof c === "string" ? (e.textContent = c) : e.appendChild(c)));
+    return e;
   };
-  const gifWorkerPath = "/libraries/thirdparty/cs/gif.worker.js";
+
   const getWorkerUrl = (() => {
     let promise;
-    return () =>
-      (promise ||= (async () => {
-        const url = resolveExtUrl(gifWorkerPath);
-        try {
-          const res = await fetch(url);
-          if (!res.ok) return url;
-          const text = await res.text();
-          return URL.createObjectURL(new Blob([text], { type: "application/javascript" }));
-        } catch {
-          return url;
-        }
-      })());
+    return () => (promise ||= fetch(addon.self.dir + "/../../../libraries/thirdparty/cs/gif.worker.js")
+      .then((r) => r.text())
+      .then((t) => URL.createObjectURL(new Blob([t], { type: "application/javascript" })))
+      .catch(() => addon.self.dir + "/../../../libraries/thirdparty/cs/gif.worker.js"));
   })();
 
+  const getCostumeImages = () => [...(document.querySelector("[class*='selector_list-area']")?.querySelectorAll("img[class*='sprite-image']") || [])];
+
   const applyRange = (images) => {
-    if (!rangeStart && !rangeEnd) return images;
-    const start = rangeStart ? Math.max(1, rangeStart) : 1;
-    const end = rangeEnd ? rangeEnd : images.length;
-    const clampedEnd = Math.min(images.length, Math.max(start, end));
-    return images.slice(start - 1, clampedEnd);
+    const start = Math.max(1, rangeStart || 1);
+    const end = Math.min(images.length, Math.max(start, rangeEnd || images.length));
+    return images.slice(start - 1, end);
   };
 
   const captureFrames = async () => {
-    const images = applyRange(getCostumeImages());
+    const images = applyRange(getCostumeImages()).filter((img) => img.naturalWidth && img.naturalHeight);
     if (!images.length) return [];
-    const width = images[0].naturalWidth || images[0].width;
-    const height = images[0].naturalHeight || images[0].height;
-    if (!width || !height) return [];
-
-    const canvas = Object.assign(document.createElement("canvas"), { width, height });
+    const { naturalWidth: width, naturalHeight: height } = images[0];
+    const canvas = el("canvas", { width, height });
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     ctx.imageSmoothingEnabled = false;
-
-    return images
-      .filter((img) => img.naturalWidth && img.naturalHeight)
-      .map((img) => {
-        ctx.clearRect(0, 0, width, height);
-        ctx.drawImage(img, 0, 0, width, height);
-        const frameCanvas = Object.assign(document.createElement("canvas"), { width, height });
-        frameCanvas.getContext("2d", { willReadFrequently: true }).drawImage(canvas, 0, 0);
-        return frameCanvas;
-      });
+    return images.map((img) => {
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+      const frame = el("canvas", { width, height });
+      frame.getContext("2d").drawImage(canvas, 0, 0);
+      return frame;
+    });
   };
 
   const exportGif = async () => {
-    if (exporting) return;
+    if (exporting || typeof GIF === "undefined") return;
     exporting = true;
     try {
-      if (typeof GIF === "undefined") {
-        exporting = false;
-        return;
-      }
-      const workerUrl = await getWorkerUrl();
       const frames = await captureFrames();
-      if (!frames.length) {
-        exporting = false;
-        return;
-      }
-      const delay = Math.max(20, Math.round(1000 / fps));
+      if (!frames.length) return (exporting = false);
       const gif = new window.GIF({
         workers: 2,
         quality: 1,
         width: frames[0].width,
         height: frames[0].height,
-        workerScript: workerUrl,
+        workerScript: await getWorkerUrl(),
       });
-      frames.forEach((frame) => gif.addFrame(frame, { delay, copy: true }));
-      const finish = () => {
-        exporting = false;
-      };
+      frames.forEach((frame) => gif.addFrame(frame, { delay: Math.max(20, Math.round(1000 / fps)), copy: true }));
       gif.on("finished", (blob) => {
         const url = URL.createObjectURL(blob);
-        const link = Object.assign(document.createElement("a"), {
-          href: url,
-          download: "animation.gif",
-        });
-        link.click();
+        el("a", { href: url, download: "animation.gif" }).click();
         setTimeout(() => URL.revokeObjectURL(url), 5000);
-        finish();
+        exporting = false;
       });
-      gif.on("abort", finish);
+      gif.on("abort", () => (exporting = false));
       gif.render();
     } catch (e) {
       console.warn("pixel-art-tools: GIF export failed", e);
@@ -108,300 +76,127 @@ export function createAnimationPreview(addon, state, msg) {
     }
   };
 
-  const getCostumeImages = () => {
-    // Get costume thumbnails from the costume list in the paint editor
-    const costumeList = document.querySelector("[class*='selector_list-area']");
-    if (!costumeList) return [];
-    return [...costumeList.querySelectorAll("img[class*='sprite-image']")];
-  };
-
   const updatePreview = () => {
     if (!panel || panel.style.display === "none") return;
     const images = applyRange(getCostumeImages());
     if (!images.length) return;
     currentFrame = (currentFrame + 1) % images.length;
-    const src = images[currentFrame]?.src;
-    if (src && previewImg) previewImg.src = src;
+    if (images[currentFrame]?.src && previewImg) previewImg.src = images[currentFrame].src;
   };
 
-  const startAnimation = () => {
-    stopAnimation();
-    if (paused) return;
-    intervalId = setInterval(updatePreview, 1000 / fps);
-  };
+  const stopAnimation = () => intervalId && (clearInterval(intervalId), (intervalId = null));
+  const startAnimation = () => (stopAnimation(), paused || (intervalId = setInterval(updatePreview, 1000 / fps)));
+  const setFps = (v) => ((fps = Math.max(1, Math.min(60, v))), intervalId && startAnimation());
 
-  const stopAnimation = () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
-    }
-  };
-
-  const setFps = (newFps) => {
-    fps = Math.max(1, Math.min(60, newFps));
-    if (intervalId) startAnimation();
-  };
+  const show = () => panel && !hidden && ((panel.style.display = "block"), paused || startAnimation());
+  const hide = () => panel && ((panel.style.display = "none"), stopAnimation());
 
   const setupPanel = async () => {
-    if (state.palettePanelReady) {
-      try {
-        await state.palettePanelReady;
-      } catch {}
-    }
+    if (state.palettePanelReady) try { await state.palettePanelReady; } catch {}
 
-    panel = Object.assign(document.createElement("section"), { className: "sa-pixel-art-animation" });
+    panel = el("section", { className: "sa-pixel-art-animation" });
     panel.style.display = state.enabled && !hidden ? "block" : "none";
     addon.tab.displayNoneWhileDisabled(panel);
 
-    const header = Object.assign(document.createElement("header"), {
-      className: "sa-pixel-art-animation-header",
-      textContent: msg("animationPreview") || "Preview",
-    });
+    // Header (draggable when floating)
+    const header = el("header", { className: "sa-pixel-art-animation-header" }, [msg("animationPreview") || "Preview"]);
+    let dragStart = null;
+    header.onmousedown = (e) => panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
+    document.addEventListener("mousemove", (e) => dragStart && Object.assign(panel.style, { left: `${e.clientX - dragStart.x}px`, top: `${e.clientY - dragStart.y}px`, right: "auto" }));
+    document.addEventListener("mouseup", () => (dragStart = null));
     panel.appendChild(header);
 
-    // Draggable when floating
-    let dragStart = null;
-    header.onmousedown = (e) =>
-      panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
-    document.addEventListener(
-      "mousemove",
-      (e) =>
-        dragStart &&
-        Object.assign(panel.style, {
-          left: `${e.clientX - dragStart.x}px`,
-          top: `${e.clientY - dragStart.y}px`,
-          right: "auto",
-        })
-    );
-    document.addEventListener("mouseup", () => (dragStart = null));
+    // Preview image
+    previewImg = el("img", { className: "sa-pixel-art-animation-preview", alt: "Animation preview", onclick: exportGif });
 
-    // Preview image + export overlay
-    const previewWrapper = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-animation-preview-wrap",
-    });
-    previewImg = Object.assign(document.createElement("img"), {
-      className: "sa-pixel-art-animation-preview",
-      alt: "Animation preview",
-    });
-    previewImg.onclick = exportGif;
-
-    const toggleBtn = Object.assign(document.createElement("button"), {
-      type: "button",
-      className: "sa-pixel-art-animation-toggle",
-    });
-    const toggleIcon = Object.assign(document.createElement("img"), {
-      alt: "",
-      className: "sa-pixel-art-animation-toggle-icon",
-      draggable: false,
-    });
-    toggleBtn.appendChild(toggleIcon);
-
-    const updateToggleState = () => {
-      const isPaused = paused;
-      toggleIcon.src = `${addon.self.dir}/icons/${isPaused ? "play.svg" : "pause.svg"}`;
-      const title = msg(isPaused ? "animationPlay" : "animationPause") || (isPaused ? "Play" : "Pause");
-      toggleBtn.title = title;
-      toggleBtn.setAttribute("aria-label", title);
-      toggleBtn.dataset.paused = String(isPaused);
+    // Play/pause toggle
+    const toggleIcon = el("img", { alt: "", className: "sa-pixel-art-animation-toggle-icon", draggable: false });
+    const toggleBtn = el("button", { type: "button", className: "sa-pixel-art-animation-toggle" }, [toggleIcon]);
+    const updateToggle = () => {
+      toggleIcon.src = `${addon.self.dir}/icons/${paused ? "play" : "pause"}.svg`;
+      toggleBtn.title = toggleBtn.ariaLabel = msg(paused ? "animationPlay" : "animationPause") || (paused ? "Play" : "Pause");
+      toggleBtn.dataset.paused = String(paused);
     };
-    updateToggleState();
+    updateToggle();
+    toggleBtn.onclick = (e) => (e.stopPropagation(), (paused = !paused), paused ? stopAnimation() : startAnimation(), updateToggle());
 
-    toggleBtn.onclick = (e) => {
-      e.stopPropagation();
-      paused = !paused;
-      if (paused) stopAnimation();
-      else startAnimation();
-      updateToggleState();
-    };
+    // Export button
+    const exportBtn = el("button", { type: "button", className: "sa-pixel-art-animation-export", onclick: (e) => (e.stopPropagation(), exportGif()) }, [msg("animationExport") || "Export GIF"]);
 
-    const exportBtn = Object.assign(document.createElement("button"), {
-      type: "button",
-      className: "sa-pixel-art-animation-export",
-      textContent: msg("animationExport") || "Export GIF",
-    });
-    exportBtn.onclick = (e) => {
-      e.stopPropagation();
-      exportGif();
-    };
-
-    previewWrapper.append(previewImg, toggleBtn, exportBtn);
+    const previewWrapper = el("div", { className: "sa-pixel-art-animation-preview-wrap" }, [previewImg, toggleBtn, exportBtn]);
     panel.appendChild(previewWrapper);
 
-    // FPS control
-    const fpsRow = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-fps" });
-    const fpsLabel = Object.assign(document.createElement("span"), { textContent: "FPS" });
-    const tooltip = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-tooltip" });
-    const fpsSlider = Object.assign(document.createElement("input"), {
-      type: "range",
-      min: "1",
-      max: "30",
-      value: String(fps),
-      className: "sa-pixel-art-animation-slider",
-    });
-    const renderFpsLabel = (value) => {
-      const label = `${value} FPS`;
-      fpsLabel.title = fpsSlider.title = tooltip.textContent = label;
-    };
-    const showTooltip = (value) => {
-      renderFpsLabel(value);
-      tooltip.dataset.show = "true";
-    };
-    const hideTooltip = () => delete tooltip.dataset.show;
-    renderFpsLabel(fps);
-    fpsSlider.onpointerdown = () => showTooltip(+fpsSlider.value);
-    fpsSlider.oninput = (e) => {
-      const value = +e.target.value;
-      setFps(value);
-      showTooltip(value);
-    };
-    fpsSlider.onpointerup = hideTooltip;
-    fpsSlider.onpointerleave = (e) => {
-      if (!e.buttons) hideTooltip();
-    };
-    fpsRow.append(fpsLabel, fpsSlider);
-    fpsRow.appendChild(tooltip);
-    panel.appendChild(fpsRow);
+    // FPS slider
+    const tooltip = el("div", { className: "sa-pixel-art-animation-tooltip" });
+    const fpsLabel = el("span", {}, ["FPS"]);
+    const renderFps = (v) => (fpsLabel.title = tooltip.textContent = `${v} FPS`);
+    const fpsSlider = el("input", { type: "range", min: "1", max: "30", value: String(fps), className: "sa-pixel-art-animation-slider" });
+    renderFps(fps);
+    fpsSlider.onpointerdown = () => ((tooltip.dataset.show = "true"), renderFps(+fpsSlider.value));
+    fpsSlider.oninput = (e) => (setFps(+e.target.value), renderFps(+e.target.value));
+    fpsSlider.onpointerup = fpsSlider.onpointerleave = (e) => (!e.buttons || e.type === "pointerup") && delete tooltip.dataset.show;
+    panel.appendChild(el("div", { className: "sa-pixel-art-animation-fps" }, [fpsLabel, fpsSlider, tooltip]));
 
-    const rangeWrapper = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-animation-range-wrapper",
-    });
-
-    const rangeToggle = Object.assign(document.createElement("button"), {
-      type: "button",
-      className: "sa-pixel-art-animation-range-toggle",
-      ariaExpanded: "false",
-      title: msg("animationRangeToggle") || "Animation Range",
-    });
-    const rangeIcon = Object.assign(document.createElement("img"), {
-      src: `${addon.self.dir}/icons/range-toggle.svg`,
-      alt: "",
-      className: "sa-pixel-art-animation-range-icon",
-    });
-    rangeToggle.append(rangeIcon);
-
-    const rangeRow = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-range" });
-    const makeRangeInput = (onChange) => {
-      const input = Object.assign(document.createElement("input"), {
-        type: "number",
-        min: "1",
-        step: "1",
-        placeholder: "",
-      });
+    // Range controls
+    const makeRangeInput = (setter) => {
+      const input = el("input", { type: "number", min: "1", step: "1", placeholder: "" });
       input.onchange = () => {
         const val = input.value.trim();
-        const parsed = val === "" ? null : Math.max(1, Math.floor(+val || 0));
-        if (parsed === null) input.value = "";
-        onChange(parsed);
+        setter(val === "" ? null : Math.max(1, Math.floor(+val || 0)));
+        if (val === "") input.value = "";
         currentFrame = -1;
         updatePreview();
       };
       return input;
     };
-
-    const startGroup = Object.assign(document.createElement("div"), {
-      className: "sa-pixel-art-animation-range-group",
-    });
-    const endGroup = Object.assign(document.createElement("div"), { className: "sa-pixel-art-animation-range-group" });
-
-    const startLabel = Object.assign(document.createElement("span"), {
-      textContent: msg("animationRangeStart") || "Start",
-      className: "sa-pixel-art-animation-range-label",
-    });
-    const endLabel = Object.assign(document.createElement("span"), {
-      textContent: msg("animationRangeEnd") || "End",
-      className: "sa-pixel-art-animation-range-label",
-    });
-
-    const startInput = makeRangeInput((val) => (rangeStart = val));
-    const endInput = makeRangeInput((val) => (rangeEnd = val));
-
-    startGroup.append(startLabel, startInput);
-    endGroup.append(endLabel, endInput);
-
-    rangeRow.append(startGroup, endGroup);
-    rangeRow.style.display = "none";
-
+    const rangeRow = el("div", { className: "sa-pixel-art-animation-range", style: "display:none" }, [
+      el("div", { className: "sa-pixel-art-animation-range-group" }, [el("span", { className: "sa-pixel-art-animation-range-label" }, [msg("animationRangeStart") || "Start"]), makeRangeInput((v) => (rangeStart = v))]),
+      el("div", { className: "sa-pixel-art-animation-range-group" }, [el("span", { className: "sa-pixel-art-animation-range-label" }, [msg("animationRangeEnd") || "End"]), makeRangeInput((v) => (rangeEnd = v))]),
+    ]);
+    const rangeToggle = el("button", { type: "button", className: "sa-pixel-art-animation-range-toggle", ariaExpanded: "false", title: msg("animationRangeToggle") || "Animation Range" }, [
+      el("img", { src: `${addon.self.dir}/icons/range-toggle.svg`, alt: "", className: "sa-pixel-art-animation-range-icon" }),
+    ]);
     rangeToggle.onclick = () => {
-      const expanded = rangeRow.style.display === "flex";
-      rangeRow.style.display = expanded ? "none" : "flex";
-      rangeToggle.classList.toggle("sa-expanded", !expanded);
-      rangeWrapper.classList.toggle("sa-range-open", !expanded);
-      rangeToggle.setAttribute("aria-expanded", String(!expanded));
+      const open = rangeRow.style.display !== "flex";
+      rangeRow.style.display = open ? "flex" : "none";
+      rangeToggle.classList.toggle("sa-expanded", open);
+      rangeToggle.ariaExpanded = String(open);
     };
-
-    rangeWrapper.append(rangeRow, rangeToggle);
-    panel.append(rangeWrapper);
+    const rangeWrapper = el("div", { className: "sa-pixel-art-animation-range-wrapper" }, [rangeRow, rangeToggle]);
+    panel.appendChild(rangeWrapper);
 
     state.animationPanel = panel;
     if (state.enabled && !hidden) startAnimation();
 
-    // Always float; stack under palette if palette is floating
+    // Floating position
     const updateFloat = () => {
-      const canvas = document.querySelector("[class*='paper-canvas_paper-canvas']");
-      const host = canvas?.parentElement;
+      const host = document.querySelector("[class*='paper-canvas_paper-canvas']")?.parentElement;
       if (!host) return;
       panel.dataset.floating = "true";
       if (panel.parentElement !== host) host.appendChild(panel);
-
-      const margin = 10;
-      let top = margin;
       const palette = state.palettePanel;
-      const paletteFloating = palette?.dataset?.floating === "true" && palette.parentElement === host;
-      if (paletteFloating) {
-        top = (palette.offsetTop || 0) + (palette.offsetHeight || 0) + margin;
-      }
-
-      Object.assign(panel.style, { right: `${margin}px`, top: `${top}px`, left: "auto" });
+      const top = palette?.dataset?.floating === "true" && palette.parentElement === host ? (palette.offsetTop || 0) + (palette.offsetHeight || 0) + 10 : 10;
+      Object.assign(panel.style, { right: "10px", top: `${top}px`, left: "auto" });
     };
     window.addEventListener("resize", updateFloat);
     updateFloat();
 
     while (true) {
       await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
-        markAsSeen: false, // Palette already uses markAsSeen:true, can't both mark same element
-        reduxEvents: [
-          "scratch-gui/navigation/ACTIVATE_TAB",
-          "scratch-gui/targets/UPDATE_TARGET_LIST",
-          "scratch-paint/formats/CHANGE_FORMAT",
-        ],
-        reduxCondition: (store) =>
-          store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
+        markAsSeen: false,
+        reduxEvents: ["scratch-gui/navigation/ACTIVATE_TAB", "scratch-gui/targets/UPDATE_TARGET_LIST", "scratch-paint/formats/CHANGE_FORMAT"],
+        reduxCondition: (store) => store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
       });
-
       addon.tab.appendToSharedSpace({ space: "paintEditorModeSelector", element: panel, order: 2 });
       updateFloat();
       state.enabled ? show() : hide();
     }
   };
 
-  const show = () => {
-    if (panel && !hidden) {
-      panel.style.display = "block";
-      if (!paused) startAnimation();
-    }
-  };
-
-  const hide = () => {
-    if (panel) {
-      panel.style.display = "none";
-      stopAnimation();
-    }
-  };
-
   addon.settings.addEventListener("change", () => {
-    const nextHidden = addon.settings.get("hideAnimationPreview");
-    if (nextHidden === hidden) return;
-    hidden = nextHidden;
-    if (hidden) {
-      hide();
-    } else {
-      show();
-    }
+    const next = addon.settings.get("hideAnimationPreview");
+    if (next !== hidden) (hidden = next) ? hide() : show();
   });
 
-  return {
-    setupPanel,
-    show,
-    hide,
-  };
+  return { setupPanel, show, hide };
 }
