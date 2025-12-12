@@ -22,29 +22,16 @@ export function createCanvasAdjuster(addon, paper) {
     const [cols, rows] = [Math.ceil(w / size), Math.ceil(h / size)];
     const base = new paper.Shape.Rectangle([0, 0], [cols, rows]);
     base.fillColor = "#fff";
-    const pts = [];
-    let x = 0,
-      y = 0;
-    while (x < cols) {
-      pts.push([x, y]);
-      x++;
-      pts.push([x, y]);
-      y = y ? 0 : rows;
+    const dark = new paper.CompoundPath();
+    dark.fillColor = "#D9E3F2";
+    for (let y = 0; y < rows; y++) {
+      for (let x = y % 2; x < cols; x += 2) {
+        dark.addChild(new paper.Path.Rectangle(new paper.Rectangle(x, y, 1, 1)));
+      }
     }
-    y = rows - 1;
-    x = cols;
-    while (y > 0) {
-      pts.push([x, y]);
-      x = x ? 0 : cols;
-      pts.push([x, y]);
-      y--;
-    }
-    const path = new paper.Path(pts);
-    path.fillRule = "evenodd";
-    path.fillColor = "#D9E3F2";
     const mask = new paper.Shape.Rectangle(new paper.Rectangle(0, 0, w / size, h / size));
     mask.clipMask = true;
-    const g = new paper.Group([base, path, mask]);
+    const g = new paper.Group([base, dark, mask]);
     g.scale(size);
     return g;
   };
