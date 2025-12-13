@@ -118,8 +118,7 @@ export function createControlsModule(
 
       const recentlyUserChanged = Date.now() - lastUserSizeChangeAt < 600;
       const costumeChanged = key && key !== lastCostumeKey;
-      const desiredDiffers =
-        desired.width !== state.pendingSize.width || desired.height !== state.pendingSize.height;
+      const desiredDiffers = desired.width !== state.pendingSize.width || desired.height !== state.pendingSize.height;
 
       if (state.pixelModeDesired && !state.enabled) {
         applySizeToInputs(desired.width, desired.height);
