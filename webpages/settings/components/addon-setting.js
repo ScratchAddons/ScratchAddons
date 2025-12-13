@@ -102,6 +102,20 @@ export default async function ({ template }) {
         this.updateSettings();
         if (this.rowDropdownOpen) this.toggleRowDropdown();
       },
+      shiftTableRow(event, oldPosition) {
+        const shift = (event.key === "ArrowDown") - (event.key === "ArrowUp");
+        if (event.ctrlKey || event.metaKey || event.altKey || shift === 0) return;
+        event.preventDefault();
+        const items = this.addonSettings[this.setting.id];
+        const newPosition = Math.max(0, Math.min(oldPosition + shift, items.length - 1));
+        items.splice(newPosition, 0, items.splice(oldPosition, 1)[0]);
+        this.updateSettings();
+
+        // Refocus the handle in its new position
+        setTimeout(() => {
+          this.$el.querySelector(`.setting-table-row:nth-child(${newPosition + 1}) .handle`).focus();
+        }, 0);
+      },
       msg(...params) {
         return this.$root.msg(...params);
       },
@@ -125,8 +139,8 @@ export default async function ({ template }) {
           handle: ".handle",
           animation: 300,
           onUpdate: (event) => {
-            let list = this.vm.addonSettings[this.vm.setting.id];
-            list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
+            const items = this.vm.addonSettings[this.vm.setting.id];
+            items.splice(event.newIndex, 0, items.splice(event.oldIndex, 1)[0]);
             this.vm.updateSettings();
           },
           disabled: !this.vm.addon._enabled,
