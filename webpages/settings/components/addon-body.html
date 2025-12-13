@@ -5,7 +5,7 @@
         <button class="arrow-button" :title="msg(expanded ? 'collapse' : 'expand')">
           <img src="../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
         </button>
-        <img :src="addonIconSrc" class="icon-type addon-icon" draggable="false" />
+        <img :src="addonIconSrc" :title="addonIconAlt" class="icon-type addon-icon" draggable="false" />
         <!-- prettier-ignore -->
         <div class="addon-name-and-tags">
           <div class="addon-name tooltip">
@@ -46,6 +46,11 @@
               'notice': 'notice.svg',
               'info': 'help.svg',
             }[info.type || 'info']"
+            :alt="msg({
+              'warning': 'warningMessage',
+              'notice': 'noticeMessage',
+              'info': 'infoMessage',
+            }[info.type || 'info'])"
             draggable="false"
           />{{ info.text }}
         </div>

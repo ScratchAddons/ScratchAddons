@@ -128,6 +128,24 @@
   "easterEggs": {
     "message": "Easter Eggs"
   },
+  "editorFeature": {
+    "message": "Editor feature"
+  },
+  "playerFeature": {
+    "message": "Project player feature"
+  },
+  "websiteFeature": {
+    "message": "Website feature"
+  },
+  "themeAddon": {
+    "message": "Theme"
+  },
+  "popupFeature": {
+    "message": "Extension popup feature"
+  },
+  "easterEgg": {
+    "message": "Easter egg"
+  },
   "theme": {
     "message": "Theme:"
   },
@@ -170,8 +188,20 @@
   "viewLicenses": {
     "message": "View library licenses"
   },
+  "infoMessage": {
+    "message": "Information"
+  },
+  "noticeMessage": {
+    "message": "Notice"
+  },
+  "warningMessage": {
+    "message": "Warning"
+  },
   "back": {
     "message": "Go back"
+  },
+  "clear": {
+    "message": "Clear"
   },
   "collapse": {
     "message": "Collapse"
