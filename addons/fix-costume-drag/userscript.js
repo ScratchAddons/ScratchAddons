@@ -122,18 +122,21 @@ export default async function ({ addon, console }) {
           this.initialScrollTop +
           96;
 
-        if (this.boxes.length === 0) {
-          index = 0;
-        } else {
-          index = indexForPositionOnList({ x, y }, this.boxes, this.props.isRtl);
-        }
+        const { left, right } = this.containerBox;
+        if (x >= left && x <= right) {
+          if (this.boxes.length === 0) {
+            index = 0;
+          } else {
+            index = indexForPositionOnList({ x, y }, this.boxes, this.props.isRtl);
+          }
 
-        // Auto scroll
-        const edgeSize = 30; // Distance from the top/bottom to trigger scroll
-        if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
-          scrollContainer.scrollTop -= scrollSpeed;
-        } else if (this.props.dragInfo.currentOffset.y > containerRect.bottom - edgeSize) {
-          scrollContainer.scrollTop += scrollSpeed;
+          // Auto scroll
+          const edgeSize = 30; // Distance from the top/bottom to trigger scroll
+          if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
+            scrollContainer.scrollTop -= scrollSpeed;
+          } else if (this.props.dragInfo.currentOffset.y > containerRect.bottom - edgeSize) {
+            scrollContainer.scrollTop += scrollSpeed;
+          }
         }
       }
       return index;
