@@ -9,11 +9,12 @@ export default async function ({ addon, console }) {
   // Related to settings
   const SPEED_PRESETS = {
     none: 0,
-    slow: 3,
-    default: 6,
-    fast: 12,
+    slow: 5,
+    default: 10,
+    fast: 15,
   };
   let scrollSpeed = SPEED_PRESETS[addon.settings.get("scroll-speed")];
+  let lastTime = NaN;
 
   // indexForPositionOnList taken from https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/drag-utils.js
   const indexForPositionOnList = ({ x, y }, boxes, isRtl) => {
@@ -132,13 +133,19 @@ export default async function ({ addon, console }) {
 
           // Auto scroll
           const edgeSize = 30; // Distance from the top/bottom to trigger scroll
+          const deltaTime = performance.now() - lastTime;
+          // Drag updates happen whenever you move your mouse or the list is scrolled, so if your mouse
+          // approaches the auto-scroll zone very slowly, the rate of drag updates will decrease which
+          // means delta time will be greater. That's why it is capped at 100ms:
+          const scrollAmount = (scrollSpeed / 15) * Math.min(deltaTime, 100);
           if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
-            scrollContainer.scrollTop -= scrollSpeed;
+            scrollContainer.scrollTop -= scrollAmount;
           } else if (this.props.dragInfo.currentOffset.y > containerRect.bottom - edgeSize) {
-            scrollContainer.scrollTop += scrollSpeed;
+            scrollContainer.scrollTop += scrollAmount;
           }
         }
       }
+      lastTime = performance.now();
       return index;
     };
   };
