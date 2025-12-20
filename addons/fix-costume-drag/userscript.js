@@ -133,8 +133,11 @@ export default async function ({ addon, console }) {
 
           // Auto scroll
           const edgeSize = 30; // Distance from the top/bottom to trigger scroll
-          const delta = performance.now() - lastTime; // Calculate delta time
-          const scrollAmount = (scrollSpeed * Math.min(delta, 100)) / 15;
+          const deltaTime = performance.now() - lastTime;
+          // Drag updates happen whenever you move your mouse or the list is scrolled, so if your mouse
+          // approaches the auto-scroll zone very slowly, the rate of drag updates will decrease which
+          // means delta time will be greater. That's why it is capped at 100ms:
+          const scrollAmount = (scrollSpeed / 15) * Math.min(deltaTime, 100);
           if (this.props.dragInfo.currentOffset.y < containerRect.top + edgeSize) {
             scrollContainer.scrollTop -= scrollAmount;
           } else if (this.props.dragInfo.currentOffset.y > containerRect.bottom - edgeSize) {
