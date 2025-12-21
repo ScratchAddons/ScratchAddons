@@ -29,6 +29,17 @@ export default async function ({ template }) {
         };
         return `../../images/icons/${map[this.addon._icon]}.svg`;
       },
+      addonIconAlt() {
+        const map = {
+          editor: "editorFeature",
+          player: "playerFeature",
+          community: "websiteFeature",
+          theme: "themeAddon",
+          easterEgg: "easterEgg",
+          popup: "popupFeature",
+        };
+        return chrome.i18n.getMessage(map[this.addon._icon]);
+      },
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];
       },
