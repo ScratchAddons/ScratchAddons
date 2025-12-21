@@ -397,8 +397,10 @@ button:hover,
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button {
-  background-color: var(--darkWww-button-scratchr2);
-  background-image: none; /* Fixes Scratch bug: https://scratch.mit.edu/discuss/topic/694218/ */
+  background-image: linear-gradient(
+    var(--darkWww-button-scratchr2),
+    var(--darkWww-button-scratchr2)
+  );
   border-color: var(--darkWww-button-scratchr2);
   color: var(--darkWww-button-scratchr2ButtonText);
 }
@@ -411,8 +413,10 @@ button:hover,
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button:hover {
-  background-color: var(--darkWww-button-scratchr2Hover);
-  background-image: none; /* Fixes Scratch bug: https://scratch.mit.edu/discuss/topic/694218/ */
+  background-image: linear-gradient(
+    var(--darkWww-button-scratchr2Hover),
+    var(--darkWww-button-scratchr2Hover)
+  );
 }
 input:focus,
 textarea:focus,
