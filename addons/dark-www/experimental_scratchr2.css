@@ -397,10 +397,7 @@ button:hover,
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button {
-  background-image: linear-gradient(
-    var(--darkWww-button-scratchr2),
-    var(--darkWww-button-scratchr2)
-  );
+  background-image: linear-gradient(var(--darkWww-button-scratchr2), var(--darkWww-button-scratchr2));
   border-color: var(--darkWww-button-scratchr2);
   color: var(--darkWww-button-scratchr2ButtonText);
 }
@@ -413,10 +410,7 @@ button:hover,
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button:hover {
-  background-image: linear-gradient(
-    var(--darkWww-button-scratchr2Hover),
-    var(--darkWww-button-scratchr2Hover)
-  );
+  background-image: linear-gradient(var(--darkWww-button-scratchr2Hover), var(--darkWww-button-scratchr2Hover));
 }
 input:focus,
 textarea:focus,
