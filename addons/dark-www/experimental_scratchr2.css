@@ -389,6 +389,10 @@ button:hover,
 }
 
 /* Highlight color */
+.membership-label-container {
+  background-color: var(--darkWww-button-scratchr2);
+}
+.membership-label-text,
 .djangobb .new_topic {
   color: var(--darkWww-button-scratchr2ButtonText);
 }
