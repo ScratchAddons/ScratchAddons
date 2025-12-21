@@ -1,0 +1,15 @@
+@import url("../../libraries/common/cs/setting-managed-by-sa.css");
+
+.sa-theme-submenu li:nth-child(1),
+.sa-theme-submenu li:nth-child(2) {
+  filter: opacity(0.5) grayscale(1);
+  cursor: default;
+}
+.sa-theme-submenu li:nth-child(1) div [class*="settings-menu_check_"],
+.sa-theme-submenu li:nth-child(2) div [class*="settings-menu_check_"] {
+  visibility: hidden;
+}
+.sa-theme-submenu li:nth-child(1):hover,
+.sa-theme-submenu li:nth-child(2):hover {
+  background-color: transparent;
+}

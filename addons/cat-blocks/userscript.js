@@ -4,6 +4,7 @@
  */
 
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+import { managedBySa } from "../../libraries/common/cs/setting-managed-by-sa.js";
 
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -463,4 +464,16 @@ export default async function ({ addon, console }) {
       }
     }
   });
+
+  while (true) {
+    const themeSubmenu = await addon.tab.waitForElement(
+      "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2):not(:last-child) ul",
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      }
+    );
+    themeSubmenu.classList.add("sa-theme-submenu");
+    managedBySa(addon, themeSubmenu);
+  }
 }
