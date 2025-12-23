@@ -6,6 +6,29 @@
       "name": "random-beta-tube"
     }
   ],
+  "userstyles": [
+    {
+      "url": "hide_badges.css",
+      "matches": ["profiles"],
+      "if": {
+        "settings": { "badges": true }
+      }
+    },
+    {
+      "url": "hide_flairs.css",
+      "matches": ["profiles"],
+      "if": {
+        "settings": { "flairs": true }
+      }
+    },
+    {
+      "url": "hide_avatars.css",
+      "matches": ["profiles"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    }
+  ],
   "settings": [
     {
       "name": "Hide membership badges",
