@@ -5,9 +5,6 @@
 .sa-addon-settings-link [class*="settings-menu_check_"] {
   visibility: hidden;
 }
-.sa-managed-item:hover {
-  background-color: transparent;
-}
 .sa-addon-settings-link [class*="settings-menu_icon_"]:first-child {
   /* align with checkbox */
   margin-inline-start: -4px;
