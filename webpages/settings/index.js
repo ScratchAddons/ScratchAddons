@@ -654,7 +654,7 @@ let fuse;
 
         const addon = vue.manifestsById[addonId];
         vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-        this.blinkAddon(addonId);
+        vue.blinkAddon(addonId);
       }
     }, 0);
 
