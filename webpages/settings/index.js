@@ -11,6 +11,9 @@ import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
 import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 
+const MORE_SETTINGS_HASH = "#moresettings";
+const ADDON_HASH_PREFIX = "#addon-";
+
 let isIframe = false;
 if (window.parent !== window) {
   // We're in a popup!
@@ -322,7 +325,7 @@ let fuse;
       },
       openFullSettings() {
         window.open(
-          `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
+          `${chrome.runtime.getURL("webpages/settings/index.html")}${ADDON_HASH_PREFIX}${
             this.addonToEnable && this.addonToEnable._addonId
           }`
         );
@@ -415,10 +418,10 @@ let fuse;
       window.addEventListener(
         "hashchange",
         (e) => {
-          if (location.hash === "#moresettings") {
+          if (location.hash === MORE_SETTINGS_HASH) {
             vue.openMoreSettings();
-          } else {
-            const addonId = location.hash.replace(/^#addon-/, "");
+          } else if (location.hash.startsWith(ADDON_HASH_PREFIX)) {
+            const addonId = location.hash.substring(ADDON_HASH_PREFIX.length);
             const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
             if (!groupWithAddon) return; //Don't run if hash is invalid
             const addon = this.manifestsById[addonId];
@@ -644,10 +647,10 @@ let fuse;
     vue.loaded = true;
     setTimeout(() => {
       const hash = window.location.hash;
-      if (location.hash === "#moresettings") {
+      if (location.hash === MORE_SETTINGS_HASH) {
         vue.openMoreSettings();
-      } else if (hash.startsWith("#addon-")) {
-        const addonId = hash.substring("#addon-".length);
+      } else if (hash.startsWith(ADDON_HASH_PREFIX)) {
+        const addonId = hash.substring(ADDON_HASH_PREFIX.length);
         const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
         groupWithAddon.expanded = true;
