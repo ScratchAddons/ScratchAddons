@@ -16,17 +16,24 @@
     },
     {
       "url": "hide_flairs.css",
-      "matches": ["profiles"],
+      "matches": ["https://scratch.mit.edu/*"],
       "if": {
         "settings": { "flairs": true }
       }
     },
     {
       "url": "hide_avatars.css",
-      "matches": ["profiles"],
+      "matches": ["https://scratch.mit.edu/*"],
       "if": {
         "settings": { "avatars": true }
       }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": true
     }
   ],
   "settings": [

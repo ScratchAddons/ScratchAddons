@@ -1,0 +1,9 @@
+.avatar-badge-wrapper {
+  all: revert;
+}
+.avatar-badge-wrapper *{
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    background: none;
+}
