@@ -647,7 +647,7 @@ let fuse;
       if (location.hash === "#moresettings") {
         vue.openMoreSettings();
       } else if (hash.startsWith("#addon-")) {
-        const addonId = hash.substring(7);
+        const addonId = hash.substring("#addon-".length);
         const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
         groupWithAddon.expanded = true;
