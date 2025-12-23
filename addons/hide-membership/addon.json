@@ -29,6 +29,13 @@
       }
     }
   ],
+  "userscripts": [
+    {
+        "url": "userscript.js",
+        "matches": ["https://scratch.mit.edu/*"],
+        "runAtComplete": true
+    }
+  ],
   "settings": [
     {
       "name": "Hide membership badges",
@@ -43,7 +50,7 @@
       "type": "boolean"
     },
     {
-      "name": "Hide cat avatars",
+      "name": "Hide cat avatars (POORLY IMPLEMENTED!)",
       "default": true,
       "id": "avatars",
       "type": "boolean"
