@@ -1,0 +1,36 @@
+{
+  "name": "Hide membership",
+  "description": "Lets you hide the membership badges on other user profiles, 'member' flairs next to usernames and cat avatars around members.",
+  "credits": [
+    {
+      "name": "random-beta-tube"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hide membership badges",
+      "default": true,
+      "id": "badges",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide member flairs",
+      "default": true,
+      "id": "flairs",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide cat avatars",
+      "default": true,
+      "id": "avatars",
+      "type": "boolean"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "injectAsStyleElt": true,
+  "tags": ["community", "profiles"],
+  "versionAdded": "1.45.0",
+  "updateUserstylesOnSettingsChange": true,
+  "enabledByDefault": false
+}
