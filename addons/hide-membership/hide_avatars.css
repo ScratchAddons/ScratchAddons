@@ -1,15 +1,27 @@
 .avatar-badge-wrapper {
   all: revert;
 }
-.avatar-badge-wrapper *{
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    background: none;
-}
 .slider-carousel .avatar-badge-wrapper {
     height: 60px
 }
-div.avatar-wrapper.avatar-badge-wrapper img.avatar.avatar-badge {
+.slider-carousel img.avatar-badge {
     border: none;
+}
+img.avatar-badge{
+    border: none;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: none;
+}
+div.avatar-wrapper.avatar-badge-wrapper img.avatar.avatar-badge{
+    border: none;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: none;
+}
+dd.postavatar img.avatar-badge{
+    border: none;
+    box-sizing: border-box;
+    border-radius: 0px;
+    box-shadow: none;
 }

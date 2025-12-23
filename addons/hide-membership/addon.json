@@ -29,13 +29,6 @@
       }
     }
   ],
-  "userscripts": [
-    {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"],
-      "runAtComplete": true
-    }
-  ],
   "settings": [
     {
       "name": "Hide membership badges",
