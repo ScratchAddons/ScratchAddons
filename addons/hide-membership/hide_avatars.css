@@ -7,3 +7,9 @@
     padding: 0;
     background: none;
 }
+.slider-carousel .avatar-badge-wrapper {
+    height: 60px
+}
+div.avatar-wrapper.avatar-badge-wrapper img.avatar.avatar-badge {
+    border: none;
+}
