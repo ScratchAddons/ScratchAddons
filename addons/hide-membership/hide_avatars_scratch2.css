@@ -1,3 +1,4 @@
+/* scratch 2 style pages handled here */
 .slider-carousel .avatar-badge-wrapper{
     all: revert;
 }
@@ -6,7 +7,8 @@
     border-radius: 0px;
     box-sizing: content-box;
 }
-img.avatar-badge{
+/* forum */
+dd.postavatar img.avatar-badge {
     border: none;
     border-radius: 0px;
 }

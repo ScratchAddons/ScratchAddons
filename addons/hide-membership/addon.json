@@ -36,15 +36,8 @@
       }
     },
     {
-      "url": "hide_avatars_forums.css",
-      "matches": ["forums"],
-      "if": {
-        "settings": { "avatars": true }
-      }
-    },
-    {
-      "url": "hide_avatars_main_page.css",
-      "matches": ["https://scratch.mit.edu"],
+      "url": "hide_avatars_scratch3.css",
+      "matches": ["https://scratch.mit.edu", "https://scratch.mit.edu/messages"],
       "if": {
         "settings": { "avatars": true }
       }
