@@ -50,8 +50,15 @@
       }
     },
     {
-      "url": "hide_avatars_no_border_round.css",
+      "url": "hide_avatars_no_border_round_4px.css",
       "matches": ["studios", "https://scratch.mit.edu/explore/*"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    },
+    {
+      "url": "hide_avatars_no_border_round_5px.css",
+      "matches": ["projects"],
       "if": {
         "settings": { "avatars": true }
       }
