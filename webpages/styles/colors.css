@@ -22,8 +22,12 @@
 
   --page-background: #222;
   --content-background: #2a2a2a;
+  --glass-bg: rgba(42, 42, 42, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --glass-blur: 16px;
   --navigation-background: #333;
-  --search-toolbar-background: #2a2a2a;
+  --search-toolbar-background: rgba(42, 42, 42, 0.65);
   --button-background: #222;
   --button-hover-background: #1a1a1a;
   --input-background: #222;

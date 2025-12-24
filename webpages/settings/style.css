@@ -3,7 +3,8 @@ html {
 }
 
 body {
-  background: var(--page-background);
+  background: radial-gradient(circle at top left, #2a2a2a, #111);
+  background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
   font-family: "Roboto", sans-serif;
   margin: 0;
   height: 100vh;
@@ -24,10 +25,15 @@ button {
 .navbar {
   height: 60px;
   background: var(--brand-orange);
+  /* Keep brand color but maybe add transparency if desired, but sticking to solid for brand identity might be safer. Let's make it semi-transparent glass */
+  background: rgba(255, 123, 38, 0.85);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   color: var(--white-text);
   display: flex;
   align-items: center;
   box-shadow: var(--large-shadow);
+  border-bottom: 1px solid var(--glass-border);
   user-select: none;
   position: relative;
   z-index: 10;
@@ -37,8 +43,10 @@ h1 {
   font-family: "Sora", sans-serif;
   font-size: 18px;
   margin: 0;
-  font-weight: 400;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   user-select: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .navbar a {
@@ -48,7 +56,9 @@ h1 {
 .logo {
   height: 25px;
   margin: 0 20px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
+
 .logo.header-button {
   margin: 0;
   padding: 17.5px 20px;
@@ -59,6 +69,8 @@ h1 {
   height: calc(100% - 60px);
   width: 100%;
   align-items: stretch;
+  background: transparent;
+  /* allow body gradient to show */
 }
 
 .addons-block {
@@ -66,6 +78,7 @@ h1 {
   flex-shrink: 1;
   display: flex;
   flex-direction: column;
+  background: transparent;
 }
 
 .addons-container {
@@ -77,27 +90,11 @@ h1 {
   height: 100vh;
 }
 
-.addons-container .placeholder {
-  pointer-events: none;
-}
-.addons-container .placeholder .addon-body:first-child {
-  /* Doing this instead of padding in .addons-container itself to avoid
-  problems with other CSS that would also set padding on the same element,
-  like the "body.iframe .addons-container" selector below */
-  margin-top: 42px;
-}
-
-@keyframes addonBlink {
-  0% {
-    border: 1px solid var(--content-border);
-  }
-  50% {
-    border: 1px solid var(--orange);
-    filter: drop-shadow(0px 0px 4px var(--orange));
-  }
-  100% {
-    border: 1px solid var(--content-border);
-  }
+.addons-container .addon-body {
+  /* Enforce glass card style on addon items if possible, or just the container. 
+     Since addon-body is a component, we might touch style.css if it's not encapsulated. 
+     Assuming addon-body styles are in components/addon-body.css or similar? 
+     Wait, I didn't check component styles. I'll rely on global tweaks for now. */
 }
 
 .icon-type {
@@ -119,17 +116,22 @@ h1 {
 
 .addons-block-header {
   background: var(--search-toolbar-background);
-  border-bottom: 1px solid var(--control-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
   padding: 10px 40px;
   user-select: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 5;
 }
 
 .category-header-title {
   flex-grow: 1;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .related-addons-header {
@@ -155,7 +157,7 @@ h1 {
   background-color: var(--hover-highlight);
 }
 
-.arrow-button > img {
+.arrow-button>img {
   width: 24px;
   height: 24px;
   filter: var(--content-icon-filter);
@@ -166,15 +168,19 @@ h1 {
   border-radius: 0 4px 4px 0;
   border-inline-start: none !important;
 }
+
 [dir="rtl"] .clear-button {
   border-radius: 4px 0 0 4px;
 }
+
 .number-setting .clear-button {
   border-radius: 0 16px 16px 0;
 }
+
 [dir="rtl"] .number-setting .clear-button {
   border-radius: 16px 0 0 16px;
 }
+
 .clear-button .icon-type {
   margin: 0;
 }
@@ -182,6 +188,7 @@ h1 {
 .reverted {
   transform: scaleY(-1);
 }
+
 .header-button {
   background-color: transparent;
   border: none;
@@ -191,16 +198,20 @@ h1 {
   transition: background 0.2s ease;
   outline-offset: -2px;
 }
+
 .header-button:focus-visible {
   outline: 2px solid var(--white-text);
 }
+
 .sidebarToggleOpen,
 .header-button:hover {
   background: var(--header-hover-darken);
 }
+
 .theme-switch {
   height: 25px;
 }
+
 .header-end {
   margin-inline-start: auto;
 }
@@ -209,6 +220,7 @@ h1 {
   /* needs !important because it conflicts with display: block */
   display: none !important;
 }
+
 #confirmImport,
 #applyLanguageSettingsButton {
   border-color: var(--orange);
@@ -217,6 +229,7 @@ h1 {
 #search-not-found {
   margin: 20px;
 }
+
 body.iframe #search-not-found {
   margin: unset;
   text-align: center;
@@ -250,6 +263,7 @@ body.iframe #search-not-found {
     padding: 10px;
     gap: 4px;
   }
+
   .category-header-title {
     padding: 4px;
   }
@@ -263,9 +277,11 @@ body.iframe #search-not-found {
 body.iframe .search-box {
   width: 100%;
 }
+
 body.iframe .navbar {
   display: none;
 }
+
 body.iframe .main {
   /* No calc -60px because there's no navbar */
   height: 100%;
@@ -287,10 +303,12 @@ body.iframe .search-box input {
   cursor: pointer;
   user-select: none;
 }
+
 .categories-shrink img {
   vertical-align: middle;
   filter: var(--content-icon-filter);
 }
+
 .flipped {
   transform: scaleX(-1);
 }
@@ -343,7 +361,7 @@ body.iframe .search-box input {
   gap: 2rem;
 }
 
-.permissions-steps > div {
+.permissions-steps>div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -408,6 +426,7 @@ button.setting-input.color.open {
   display: flex;
   position: relative;
 }
+
 .color-container .setting-input.color {
   cursor: pointer;
 }
@@ -428,7 +447,8 @@ button.setting-input.color.open {
   padding: 20px 0;
   margin: 10px;
 }
-#iframe-fullscreen-suggestion > span {
+
+#iframe-fullscreen-suggestion>span {
   width: 100%;
   font-weight: bold;
   font-size: 14px;

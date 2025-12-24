@@ -104,6 +104,27 @@
   "profilesFeatures": {
     "message": "Profiles"
   },
+  "profiles": {
+    "message": "Profiles"
+  },
+  "manageProfiles": {
+    "message": "Manage Profiles"
+  },
+  "createProfile": {
+    "message": "Create Profile"
+  },
+  "profileNamePlaceholder": {
+    "message": "Profile Name"
+  },
+  "load": {
+    "message": "Load"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "noProfiles": {
+    "message": "No profiles saved."
+  },
   "projectPageFeatures": {
     "message": "Project Pages"
   },

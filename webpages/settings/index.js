@@ -90,6 +90,9 @@ let fuse;
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
         moreSettingsOpen: false,
+        profilesOpen: false,
+        profiles: [],
+        newProfileName: "",
         relatedAddonsOpen: false,
         relatedToAddonName: null,
         relatedAddons: [],
@@ -322,8 +325,7 @@ let fuse;
       },
       openFullSettings() {
         window.open(
-          `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
-            this.addonToEnable && this.addonToEnable._addonId
+          `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${this.addonToEnable && this.addonToEnable._addonId
           }`
         );
         setTimeout(() => window.parent.close(), 100);
@@ -349,6 +351,54 @@ let fuse;
       groupMarginAbove(group) {
         const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
         return group !== firstVisibleGroup;
+      },
+      openProfiles() {
+        this.closePickers();
+        this.$els.profilesmodal.showModal();
+        if (vue.smallMode) {
+          vue.sidebarToggle();
+        }
+      },
+      createProfile() {
+        if (!this.newProfileName) return;
+        const profile = {
+          name: this.newProfileName,
+          addons: JSON.parse(JSON.stringify(this.manifests.filter(m => m._enabled).map(m => m._addonId)))
+        };
+        this.profiles.push(profile);
+        chrome.storage.sync.set({ profiles: this.profiles });
+        this.newProfileName = "";
+      },
+      loadProfile(profile) {
+        if (!confirm(this.msg("confirmPreset"))) return;
+        // Disable all first
+        for (const manifest of this.manifests) {
+          if (manifest._enabled) {
+            manifest._enabled = false;
+            chrome.runtime.sendMessage({
+              changeAddonState: { addonId: manifest._addonId, newState: false },
+            });
+          }
+        }
+        // Enable from profile
+        for (const addonId of profile.addons) {
+          const manifest = this.manifestsById[addonId];
+          if (manifest) {
+            manifest._enabled = true;
+            chrome.runtime.sendMessage({
+              changeAddonState: { addonId: manifest._addonId, newState: true },
+            });
+          }
+        }
+        // Reload page to reflect changes nicely or just let reactivity handle it?
+        // Reactivity handles the switch toggle visually, but let's ensure message passing works.
+        alert(this.msg("importSuccess"));
+        chrome.runtime.reload();
+      },
+      deleteProfile(index) {
+        if (!confirm(this.msg("confirmReset"))) return; // Reusing confirmReset message for delete confirmation for now
+        this.profiles.splice(index, 1);
+        chrome.storage.sync.set({ profiles: this.profiles });
       },
     },
     events: {
@@ -386,6 +436,10 @@ let fuse;
       // autofocus attribute only works in Chrome for us, so
       // we also manually focus on Firefox, even in fullscreen
       if (isIframe || isFirefox()) setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
+
+      chrome.storage.sync.get("profiles", ({ profiles }) => {
+        if (profiles) this.profiles = profiles;
+      });
 
       const exampleAddonListItem = {
         // Need to specify all used properties for reactivity!
