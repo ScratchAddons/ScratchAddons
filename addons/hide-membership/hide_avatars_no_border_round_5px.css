@@ -1,6 +1,6 @@
 /* projects */
 div.avatar-wrapper.avatar-badge-wrapper img.avatar.avatar-badge {
-    border: none;
-    box-shadow: revert;
-    border-radius: 5px;
+  border: none;
+  box-shadow: revert;
+  border-radius: 5px;
 }
