@@ -7,8 +7,7 @@
     border-radius: 0px;
     box-sizing: content-box;
 }
-/* forum */
-dd.postavatar img.avatar-badge {
-    border: none;
-    border-radius: 0px;
+img.avatar-badge {
+    border: none !important;
+    border-radius: 0px !important;
 }
