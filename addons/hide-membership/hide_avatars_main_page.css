@@ -1,0 +1,5 @@
+/* forums */
+div.avatar-wrapper.avatar-badge-wrapper img.avatar.avatar-badge {
+    border: none;
+    border-radius: 0px;
+}

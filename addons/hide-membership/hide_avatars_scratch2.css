@@ -1,0 +1,12 @@
+.slider-carousel .avatar-badge-wrapper{
+    all: revert;
+}
+.slider-carousel img.avatar-badge {
+    border: 1px solid #ddd;
+    border-radius: 0px;
+    box-sizing: content-box;
+}
+img.avatar-badge{
+    border: none;
+    border-radius: 0px;
+}

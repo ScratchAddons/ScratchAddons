@@ -1,0 +1,7 @@
+/* cat ears */
+.avatar-badge-wrapper{
+    all: revert;
+}
+.comment .avatar {
+    box-shadow: 0px 0px 0px 1px rgba(77,151,255,.25) !important
+}

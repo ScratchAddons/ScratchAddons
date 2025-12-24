@@ -22,18 +22,39 @@
       }
     },
     {
-      "url": "hide_avatars.css",
+      "url": "hide_cat_ears.css",
       "matches": ["https://scratch.mit.edu/*"],
       "if": {
         "settings": { "avatars": true }
       }
-    }
-  ],
-  "userscripts": [
+    },
     {
-        "url": "userscript.js",
-        "matches": ["https://scratch.mit.edu/*"],
-        "runAtComplete": true
+      "url": "hide_avatars_scratch2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    },
+    {
+      "url": "hide_avatars_forums.css",
+      "matches": ["forums"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    },
+    {
+      "url": "hide_avatars_main_page.css",
+      "matches": ["https://scratch.mit.edu"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    },
+    {
+      "url": "hide_avatars_no_border_round.css",
+      "matches": ["studios", "https://scratch.mit.edu/explore/*"],
+      "if": {
+        "settings": { "avatars": true }
+      }
     }
   ],
   "settings": [
