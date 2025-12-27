@@ -1,5 +1,6 @@
 import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+import { managedBySa } from "../../libraries/common/cs/setting-managed-by-sa.js";
 // Module for sharing addon values and methods with recolor-custom-blocks
 import { registerAddon, shareMethod } from "./module.js";
 
@@ -1030,55 +1031,13 @@ export default async function ({ addon, console, msg }) {
 
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(
-      "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2) ul",
+      "[class*=menu-bar_menu-bar-menu_] > ul > li:last-child ul",
       {
         markAsSeen: true,
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
       }
     );
-    // We're running in the new version of the editor that includes this menu.
-
-    colorModeSubmenu.addEventListener(
-      "click",
-      (e) => {
-        if (addon.self.disabled) return;
-        if (!e.target.closest(".sa-colormode-submenu")) {
-          // Something went wrong with the code below this event listener
-          return;
-        }
-        if (e.target.closest(".sa-theme3-link")) {
-          window.open("https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-theme3");
-          e.stopPropagation();
-          return;
-        }
-        e.stopPropagation();
-      },
-      { capture: true }
-    );
-
-    const elementToClone = colorModeSubmenu.querySelector("[class*=settings-menu_selected_]").closest("li");
-
-    const SA_ICON_URL = addon.self.dir + "../../../images/cs/icon.svg";
-
-    const managedBySa = elementToClone.cloneNode(true);
-    addon.tab.displayNoneWhileDisabled(managedBySa);
-    managedBySa.classList.add("sa-theme3-managed");
-    managedBySa.querySelector("div span").textContent = msg("/_general/meta/managedBySa");
-    managedBySa.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
-
-    const addonSettingsLink = elementToClone.cloneNode(true);
-    addon.tab.displayNoneWhileDisabled(addonSettingsLink);
-    addonSettingsLink.classList.add("sa-theme3-link");
-    addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section") || "_");
-    addonSettingsLink.querySelector("div span").textContent = msg("/_general/meta/addonSettings");
-    addonSettingsLink.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
-    const addonSettingsImg = document.createElement("img");
-    addonSettingsImg.classList.add("sa-theme3-new-tab");
-    addonSettingsImg.src = addon.self.dir + "/open-link.svg";
-    addonSettingsLink.querySelector("div").appendChild(addonSettingsImg);
-
     colorModeSubmenu.classList.add("sa-colormode-submenu");
-    colorModeSubmenu.appendChild(managedBySa);
-    colorModeSubmenu.appendChild(addonSettingsLink);
+    managedBySa(addon, colorModeSubmenu);
   }
 }
