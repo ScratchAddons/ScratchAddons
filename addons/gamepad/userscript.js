@@ -60,8 +60,7 @@ export default async function ({ addon, console, msg }) {
     }
     return null;
   };
-  const parseOptionsComment = () => {
-    const comment = findOptionsComment();
+  const parseOptionsComment = (comment) => {
     if (!comment) {
       return null;
     }
@@ -71,27 +70,70 @@ export default async function ({ addon, console, msg }) {
       return null;
     }
     const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
-    let parsed;
+    let storedSettingsMap = null;
     try {
-      parsed = JSON.parse(jsonText);
-      if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.buttons) || !Array.isArray(parsed.axes)) {
+      const parsed = JSON.parse(jsonText);
+      if (!parsed || typeof parsed !== "object") {
+        throw new Error("Invalid data");
+      }
+
+      // The older version of this addon only saved one set of settings with 2 arrays: .buttons and .axes
+      // This version saves an array of multiple gamepads and their settings
+      //   This code determines whether the project has an older comment (V1) in it or a newer comment (V2)
+      if (Array.isArray(parsed)) {
+        // Comment is in the new V2 style
+        // Convert the array back into a Map
+        storedSettingsMap = new Map(parsed);
+      } else if (Array.isArray(parsed.buttons) && Array.isArray(parsed.axes)) {
+        // Comment is in the old V1 style
+        // Convert to V2 style as a Map containing a single unlabeled gamepad
+        storedSettingsMap = new Map([
+          [
+            "", // No gamepad type/key to store
+            {
+              id: "", // No gamepad id to store
+              index: 0,
+              settings: {
+                axes: parsed.axes,
+                buttons: parsed.buttons,
+              },
+            },
+          ],
+        ]);
+      } else {
         throw new Error("Invalid data");
       }
     } catch (e) {
       console.warn("Gamepad comment has invalid JSON", e);
       return null;
     }
-    return parsed;
+    return storedSettingsMap;
   };
 
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
-  gamepad.getUserHints = () => {
-    const parsedOptions = parseOptionsComment();
-    if (parsedOptions) {
+  gamepad.getUserHints = (gamepadId, gamepadIndex) => {
+    const parsedOptionsMap = parseOptionsComment(findOptionsComment());
+    if (parsedOptionsMap) {
+      const optionsArray = Array.from(parsedOptionsMap.values());
+      let matchingOption;
+      // If a stored mapping exists for this exact gamepad id and index, use it
+      matchingOption = optionsArray.find((gamepads) => gamepads.id === gamepadId && gamepads.index === gamepadIndex);
+      if (!matchingOption) {
+        // Otherwise, if a stored mapping exists for this gamepad id at all, use it
+        matchingOption = optionsArray.find((gamepads) => gamepads.id === gamepadId);
+        if (!matchingOption) {
+          // Otherwise, use the stored mapping at the same index if it exists
+          matchingOption = optionsArray.find((gamepads) => gamepads.index === gamepadIndex);
+          if (!matchingOption) {
+            // Otherwise, use the first stored mapping no matter what it is
+            matchingOption = optionsArray.at(0);
+          }
+        }
+      }
       return {
-        importedSettings: parsedOptions,
+        importedSettings: matchingOption.settings,
       };
     }
     return {
@@ -146,17 +188,33 @@ export default async function ({ addon, console, msg }) {
       vm.emitWorkspaceUpdate();
     }
   };
+
+  const formatMapAsComment = (settingsMap) => {
+    // JSON.stringify does not work on Maps, so convert the Map to an array first
+    return `${msg("config-header")}\n${JSON.stringify(Array.from(settingsMap.entries()))}${GAMEPAD_CONFIG_MAGIC}`;
+  };
+
   const storeMappings = () => {
-    const exported = editor.export();
-    if (!exported) {
+    const exportedSettingsMap = editor.exportSettings();
+    if (!exportedSettingsMap) {
       console.warn("Could not export gamepad settings");
       return;
     }
-    const text = `${msg("config-header")}\n${JSON.stringify(exported)}${GAMEPAD_CONFIG_MAGIC}`;
-    const existingComment = findOptionsComment();
+    let existingComment = findOptionsComment();
     if (existingComment) {
-      existingComment.text = text;
-    } else {
+      const parsedExistingSettingsMap = parseOptionsComment(existingComment);
+      if (parsedExistingSettingsMap) {
+        // Merge the existing settings map with the new exported map
+        //   Making the exported settings the second merging map ensures that it takes priority in case of a conflict
+        const mergedMap = new Map([...parsedExistingSettingsMap, ...exportedSettingsMap]);
+        existingComment.text = formatMapAsComment(mergedMap);
+      } else {
+        // In case of corrupted settings, remove the bad comment (a new one will be created below)
+        removeStoredMappings();
+        existingComment = null;
+      }
+    }
+    if (!existingComment) {
       const target = vm.runtime.getTargetForStage();
       target.createComment(
         // comment ID, just has to be a random string
@@ -164,7 +222,7 @@ export default async function ({ addon, console, msg }) {
         // block ID
         null,
         // text
-        text,
+        formatMapAsComment(exportedSettingsMap),
         // x, y, width, height
         50,
         50,
