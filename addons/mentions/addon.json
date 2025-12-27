@@ -1,0 +1,38 @@
+{
+  "name": "Highlight mentions",
+  "description": "Highlight when you are mentioned (e.g. @username).",
+  "tags": ["community", "profiles", "comments", "forums"],
+  "versionAdded": "1.40.0",
+  "userscripts": [
+    {
+      "matches": ["projects", "studios", "profiles", "forums"],
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects", "studios", "profiles", "forums"],
+      "url": "userstyle.css"
+    },
+    {
+      "matches": ["profiles", "forums"],
+      "url": "scratchr2.css"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Highlight direct links",
+      "id": "direct",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
