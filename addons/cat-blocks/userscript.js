@@ -429,7 +429,34 @@ export default async function ({ addon, console }) {
     attachMouseMoveListener(block);
   });
 
-  const update = () => {
+  let scratchTheme = "default";
+
+  const update = async () => {
+    if (addon.tab.redux.state) {
+      if (!addon.self.disabled) {
+        // disable Scratch's cat blocks theme to avoid conflicts
+        scratchTheme = addon.tab.redux.state.scratchGui.settings.theme;
+        addon.tab.redux.dispatch({
+          type: "scratch-gui/settings/SET_THEME",
+          theme: "default",
+        });
+      } else {
+        addon.tab.redux.dispatch({
+          type: "scratch-gui/settings/SET_THEME",
+          theme: scratchTheme,
+        });
+      }
+      // wait for new workspace to render
+      await new Promise((resolve) => {
+        const oldInject = Blockly.inject;
+        Blockly.inject = function (...args) {
+          Blockly.inject = oldInject;
+          resolve();
+          return oldInject.call(this, ...args);
+        };
+      });
+    }
+
     if (Blockly.registry) {
       // new Blockly
       const workspace = addon.tab.traps.getWorkspace();
