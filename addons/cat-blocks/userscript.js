@@ -433,7 +433,7 @@ export default async function ({ addon, console, msg }) {
   const setTheme = async (newTheme) => {
     if (!addon.tab.redux.state) return;
     const currentTheme = getTheme();
-    if (newTheme != currentTheme) {
+    if (newTheme !== currentTheme) {
       addon.tab.redux.dispatch({
         type: "scratch-gui/settings/SET_THEME",
         theme: newTheme,
