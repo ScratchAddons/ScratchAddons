@@ -431,30 +431,34 @@ export default async function ({ addon, console }) {
 
   let scratchTheme = "default";
 
-  const update = async () => {
-    if (addon.tab.redux.state) {
-      if (!addon.self.disabled) {
-        // disable Scratch's cat blocks theme to avoid conflicts
-        scratchTheme = addon.tab.redux.state.scratchGui.settings.theme;
-        addon.tab.redux.dispatch({
-          type: "scratch-gui/settings/SET_THEME",
-          theme: "default",
-        });
-      } else {
-        addon.tab.redux.dispatch({
-          type: "scratch-gui/settings/SET_THEME",
-          theme: scratchTheme,
-        });
-      }
+  const setTheme = async (newTheme) => {
+    const currentTheme = addon.tab.redux.state.scratchGui.settings.theme;
+    if (newTheme != currentTheme) {
+      addon.tab.redux.dispatch({
+        type: "scratch-gui/settings/SET_THEME",
+        theme: newTheme,
+      });
       // wait for new workspace to render
       await new Promise((resolve) => {
         const oldInject = Blockly.inject;
         Blockly.inject = function (...args) {
           Blockly.inject = oldInject;
-          resolve();
+          setTimeout(() => resolve(), 0);
           return oldInject.call(this, ...args);
         };
       });
+    }
+  };
+
+  const update = async () => {
+    if (addon.tab.redux.state) {
+      if (!addon.self.disabled) {
+        // disable Scratch's cat blocks theme to avoid conflicts
+        scratchTheme = addon.tab.redux.state.scratchGui.settings.theme;
+        await setTheme("default");
+      } else {
+        await setTheme(scratchTheme);
+      }
     }
 
     if (Blockly.registry) {
