@@ -429,10 +429,10 @@ export default async function ({ addon, console }) {
     attachMouseMoveListener(block);
   });
 
-  let scratchTheme = "default";
-
+  const getTheme = () => (addon.tab.redux.state ? addon.tab.redux.state.scratchGui.settings.theme : "default");
   const setTheme = async (newTheme) => {
-    const currentTheme = addon.tab.redux.state.scratchGui.settings.theme;
+    if (!addon.tab.redux.state) return;
+    const currentTheme = getTheme();
     if (newTheme != currentTheme) {
       addon.tab.redux.dispatch({
         type: "scratch-gui/settings/SET_THEME",
@@ -449,16 +449,15 @@ export default async function ({ addon, console }) {
       });
     }
   };
+  let scratchTheme = getTheme();
 
   const update = async () => {
-    if (addon.tab.redux.state) {
-      if (!addon.self.disabled) {
-        // disable Scratch's cat blocks theme to avoid conflicts
-        scratchTheme = addon.tab.redux.state.scratchGui.settings.theme;
-        await setTheme("default");
-      } else {
-        await setTheme(scratchTheme);
-      }
+    if (!addon.self.disabled) {
+      // disable Scratch's cat blocks theme to avoid conflicts
+      scratchTheme = getTheme();
+      await setTheme("default");
+    } else {
+      await setTheme(scratchTheme);
     }
 
     if (Blockly.registry) {
