@@ -6,7 +6,7 @@
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 import { managedBySa } from "../../libraries/common/cs/setting-managed-by-sa.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   let createSvgElement;
@@ -477,7 +477,51 @@ export default async function ({ addon, console }) {
 
   update();
 
-  addon.self.addEventListener("disabled", update);
+  addon.self.addEventListener("disabled", async () => {
+    await update();
+
+    if (getTheme() === "cat-blocks") {
+      const alertContainer = document.querySelector("[class*=alerts_alerts-inner-container_]");
+      const alert = Object.assign(document.createElement("div"), {
+        className: addon.tab.scratchClass("alert_alert", "alert_success", "box_box"),
+      });
+      alertContainer.appendChild(alert);
+      const message = Object.assign(document.createElement("div"), {
+        className: addon.tab.scratchClass("alert_alert-message"),
+        textContent: msg("disable-message"),
+      });
+      alert.appendChild(message);
+      const buttons = Object.assign(document.createElement("div"), {
+        className: addon.tab.scratchClass("alert_alert-buttons"),
+        style: "margin-inline-start: auto;",
+      });
+      alert.appendChild(buttons);
+      const closeContainer = Object.assign(document.createElement("div"), {
+        className: addon.tab.scratchClass("alert_alert-close-button-container", "box_box"),
+      });
+      buttons.appendChild(closeContainer);
+      const closeButton = Object.assign(document.createElement("button"), {
+        className: addon.tab.scratchClass(
+          "alert_alert-close-button",
+          "close-button_close-button",
+          "close-button_large"
+        ),
+        ariaLabel: addon.tab.scratchMessage("gui.cards.close"),
+        style: "border: none;",
+      });
+      closeContainer.appendChild(closeButton);
+      const closeIcon = Object.assign(document.createElement("img"), {
+        className: addon.tab.scratchClass("close-button_close-icon"),
+        src: addon.self.dir + "/../../images/cs/close-s3.svg",
+        draggable: false,
+      });
+      closeButton.appendChild(closeIcon);
+
+      const close = () => alert.remove();
+      closeButton.addEventListener("click", close);
+      setTimeout(close, 15000);
+    }
+  });
   addon.self.addEventListener("reenabled", update);
   addon.settings.addEventListener("change", () => {
     const workspace = addon.tab.traps.getWorkspace();
