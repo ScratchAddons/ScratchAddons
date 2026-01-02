@@ -1,0 +1,115 @@
+/*User style from my Project - Fixed with proper modal styling*/
+
+/* Modal container sizing - similar to media recorder */
+.sa-local-share-popup {
+  box-sizing: border-box;
+  width: 520px;
+  max-height: min(700px, 80vh);
+  max-width: 85%;
+  margin-top: 12vh;
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Content padding */
+.sa-local-share-content {
+  padding: 1.5rem 2.25rem;
+}
+
+/* Description text */
+.sa-description {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: var(--editorDarkMode-text, #575e75);
+}
+
+/* Labels */
+.sa-label {
+  display: block;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--editorDarkMode-text, #575e75);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Input fields */
+.sa-input {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  box-sizing: border-box;
+  border: 1px solid var(--editorDarkMode-border, #d9d9d9);
+  border-radius: 0.25rem;
+  background-color: var(--editorDarkMode-input, #ffffff);
+  color: var(--editorDarkMode-text, #575e75);
+  font-size: 0.95rem;
+  outline: none;
+  margin-bottom: 0.25rem;
+}
+
+.sa-input:focus {
+  border-color: var(--editorDarkMode-primary, #855cd6);
+}
+
+/* Progress container */
+.sa-progress-container {
+  display: none;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.sa-progress-track {
+  width: 100%;
+  height: 0.75rem;
+  background-color: var(--editorDarkMode-border, #d9d9d9);
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.sa-progress-fill {
+  height: 100%;
+  width: 0%;
+  background-color: var(--editorDarkMode-primary, #855cd6);
+  transition: width 0.2s ease;
+}
+
+.sa-progress-text {
+  font-size: 0.875rem;
+  color: var(--editorDarkMode-text, #575e75);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Button row */
+.sa-modal-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.sa-modal-buttons button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.sa-modal-buttons button:first-child {
+  background: transparent;
+  border: 1px solid var(--editorDarkMode-border, #d9d9d9);
+  color: var(--editorDarkMode-text, #575e75);
+}
+
+.sa-modal-buttons button:first-child:hover {
+  background-color: var(--editorDarkMode-primary-transparent15, rgba(133, 92, 214, 0.15));
+}
+
+/* Menu item styling */
+.sa-local-share-item {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: 4px;
+  padding-top: 4px;
+  cursor: pointer;
+}

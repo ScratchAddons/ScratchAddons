@@ -1,0 +1,38 @@
+{
+  "name": "Local Project Share",
+  "description": "Send Scratch projects to a local device via HTTP.",
+  "tags": ["editor", "editorMenuBar"],
+  "versionAdded": "1.45.0",
+  "enabledByDefault": false,
+  "settings": [
+    {
+      "name": "Host to send to",
+      "id": "host",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "Port to use",
+      "id": "port",
+      "type": "positive_integer",
+      "default": 3000
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "credits": [
+    {"name": "Br0tcraft"}
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
