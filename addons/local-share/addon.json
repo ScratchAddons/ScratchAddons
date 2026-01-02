@@ -1,6 +1,6 @@
 {
   "name": "Local Project Share",
-  "description": "Send Scratch projects to a local device via HTTP.",
+  "description": "Adds a \"Share locally\" button to the File dropdown menu, allowing you to send the current project to a local device via HTTP.",
   "tags": ["editor", "editorMenuBar"],
   "versionAdded": "1.45.0",
   "enabledByDefault": false,

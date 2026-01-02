@@ -1,4 +1,3 @@
-//userscript from my Project - Fixed
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
@@ -17,20 +16,22 @@ export default async function ({ addon, console, msg }) {
     };
   }
 
-  function getProjectInfo() {
+  async function getProjectInfo() {
     let title = "Scratch Project";
-    const titleInput = document.querySelector(".project-title-input");
-    if (titleInput && titleInput.value) {
+    const titleInput = document.querySelector("input[class*='project-title-input']");
+    if (titleInput?.value) {
       title = titleInput.value;
-    } else {
+    } else if (document.title) {
       title = document.title.replace(" on Scratch", "");
     }
 
-    return {
-      title: title,
-      id: location.pathname.split("/")[2] || "local",
-      author: "Me",
-    };
+    let author = "Me";
+    try {
+      const user = await addon.auth.getUser();
+      if (user?.username) author = user.username;
+    } catch (e) {}
+
+    return { title, author };
   }
 
   async function sendProject(base, onProgress) {
@@ -43,14 +44,15 @@ export default async function ({ addon, console, msg }) {
 
     const blob = await vm.saveProjectSb3();
     const startTime = Date.now();
+    const projectInfo = await getProjectInfo();
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      const filename = "project.sb3";
 
       xhr.open("POST", `${base}/send`);
       xhr.setRequestHeader("Content-Type", "application/octet-stream");
-      xhr.setRequestHeader("X-File-Name", filename);
+      xhr.setRequestHeader("X-Project-Title", projectInfo.title);
+      xhr.setRequestHeader("X-Project-Author", projectInfo.author);
       xhr.setRequestHeader("X-Chunk-Offset", "0");
 
       if (xhr.upload) {
@@ -125,13 +127,8 @@ export default async function ({ addon, console, msg }) {
       }, 500);
     } catch (err) {
       console.error(err);
-      let msg = err.message;
-      if (msg === "Failed to fetch") msg = "Server not reachable (wrong IP?).";
-
-      alert("Error: " + msg);
-
-      progContainer.style.display = "none";
-      btnRow.style.display = "flex";
+      alert("Error: " + err.message);
+      remove();
     }
   }
 
@@ -207,20 +204,20 @@ export default async function ({ addon, console, msg }) {
     const cancelBtn = Object.assign(document.createElement("button"), {
       textContent: "Cancel",
     });
-    cancelBtn.addEventListener("click", remove);
+    cancelBtn.onclick = () => remove;
 
     const sendBtn = Object.assign(document.createElement("button"), {
       textContent: "Send",
       className: addon.tab.scratchClass("prompt_ok-button"),
     });
-    sendBtn.addEventListener("click", () => startTransfer(content, remove));
+    sendBtn.onclick = () => startTransfer(content, remove);
 
     btnRow.appendChild(cancelBtn);
     btnRow.appendChild(sendBtn);
     content.appendChild(btnRow);
 
-    backdrop.addEventListener("click", remove);
-    closeButton.addEventListener("click", remove);
+    backdrop.onclick = () => remove;
+    closeButton.onclick = () => remove;
 
     inputHost.focus();
   }
@@ -241,7 +238,7 @@ export default async function ({ addon, console, msg }) {
     });
     li.appendChild(labelSpan);
 
-    li.addEventListener("click", (e) => {
+    li.onclick = (e) => {
       e.stopPropagation();
 
       const menuBar = document.querySelector("[class*='menu-bar_account-info-group']");
@@ -250,7 +247,7 @@ export default async function ({ addon, console, msg }) {
       }
 
       openScratchStyleModal();
-    });
+    };
 
     dropdownList.appendChild(li);
   }
