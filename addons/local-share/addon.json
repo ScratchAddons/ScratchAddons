@@ -16,6 +16,12 @@
       "id": "port",
       "type": "positive_integer",
       "default": 3000
+    },
+    {
+      "name": "Use HTTPS",
+      "id": "useHttps",
+      "type": "boolean",
+      "default": false
     }
   ],
   "userscripts": [

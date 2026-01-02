@@ -13,6 +13,7 @@ export default async function ({ addon, console, msg }) {
     return {
       host: addon.settings.get("host") || "",
       port: addon.settings.get("port") || 3000,
+      useHttps: addon.settings.get("useHttps") ?? true,
     };
   }
 
@@ -57,15 +58,17 @@ export default async function ({ addon, console, msg }) {
 
       if (xhr.upload) {
         xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) {
-            const percent = (e.loaded / e.total) * 100;
-            const timeElapsed = (Date.now() - startTime) / 1000;
-            const uploadSpeed = e.loaded / timeElapsed;
-            const remainingBytes = e.total - e.loaded;
-            const secondsLeft = remainingBytes / uploadSpeed;
-
-            onProgress(percent, secondsLeft);
+          if (!e.lengthComputable) {
+            onProgress(0, Infinity);
+            return;
           }
+          const percent = (e.loaded / e.total) * 100;
+          const timeElapsed = (Date.now() - startTime) / 1000;
+          const uploadSpeed = e.loaded / timeElapsed;
+          const remainingBytes = e.total - e.loaded;
+          const secondsLeft = remainingBytes / uploadSpeed;
+
+          onProgress(percent, secondsLeft);
         };
       }
 
@@ -83,7 +86,7 @@ export default async function ({ addon, console, msg }) {
     });
   }
 
-  async function startTransfer(content, remove) {
+  async function startTransfer(content, remove, useHttps) {
     const hostInput = content.querySelector(".sa-input-host");
     const portInput = content.querySelector(".sa-input-port");
 
@@ -100,7 +103,8 @@ export default async function ({ addon, console, msg }) {
     const progFill = content.querySelector(".sa-progress-fill");
     const progText = content.querySelector(".sa-progress-text");
 
-    const base = `http://${host}:${port}`;
+    const protocol = useHttps ? "https" : "http";
+    const base = `${protocol}://${host}:${port}`;
 
     btnRow.style.display = "none";
     progContainer.style.display = "block";
@@ -210,7 +214,7 @@ export default async function ({ addon, console, msg }) {
       textContent: "Send",
       className: addon.tab.scratchClass("prompt_ok-button"),
     });
-    sendBtn.onclick = () => startTransfer(content, remove);
+    sendBtn.onclick = () => startTransfer(content, remove, settings.useHttps);
 
     btnRow.appendChild(cancelBtn);
     btnRow.appendChild(sendBtn);
