@@ -204,7 +204,7 @@ export default async function ({ addon, console, msg }) {
     const cancelBtn = Object.assign(document.createElement("button"), {
       textContent: "Cancel",
     });
-    cancelBtn.onclick = () => remove;
+    cancelBtn.onclick = () => remove();
 
     const sendBtn = Object.assign(document.createElement("button"), {
       textContent: "Send",
@@ -216,8 +216,8 @@ export default async function ({ addon, console, msg }) {
     btnRow.appendChild(sendBtn);
     content.appendChild(btnRow);
 
-    backdrop.onclick = () => remove;
-    closeButton.onclick = () => remove;
+    backdrop.onclick = () => remove();
+    closeButton.onclick = () => remove();
 
     inputHost.focus();
   }
