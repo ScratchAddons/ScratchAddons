@@ -28,7 +28,18 @@
               >
                 <img class="icon-type" src="../../images/icons/close.svg" />
               </button>
-              <button :disabled="!addon._enabled" class="addon-buttons handle">
+              <button
+                v-if="addonSettings[setting.id].length > 1"
+                :disabled="!addon._enabled"
+                role="spinbutton"
+                class="addon-buttons handle"
+                :title="msg('dragRow')"
+                :aria-label="msg('moveRow')"
+                :aria-valuenow="i + 1"
+                aria-valuemin="1"
+                :aria-valuemax="addonSettings[setting.id].length"
+                @keydown="shiftTableRow($event, i)"
+              >
                 <img class="icon-type" src="../../images/icons/drag.svg" />
               </button>
             </div>
