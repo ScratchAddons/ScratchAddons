@@ -71,6 +71,10 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     },
     {
+      "url": "remixtree.css",
+      "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
+    },
+    {
       "url": "v_tabs.css",
       "matches": [
         "https://scratch.mit.edu/mystuff/*",
