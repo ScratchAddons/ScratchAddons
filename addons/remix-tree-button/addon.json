@@ -1,6 +1,6 @@
 {
   "name": "Remix tree button",
-  "description": "Brings back the remix tree button to project pages, next to the Copy Link button.",
+  "description": "Brings back the remix tree button to project pages, next to the Copy Link button. It uses the remix tree feature from https://retree.quuq.dev/",
   "tags": ["community", "featured", "projectPage"],
   "credits": [
     {
