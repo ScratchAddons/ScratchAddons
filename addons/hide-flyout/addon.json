@@ -86,25 +86,25 @@
       "default": "cathover"
     },
     {
-      "name": "Animation speed",
+      "name": "Animation",
       "id": "speed",
       "type": "select",
       "potentialValues": [
         {
           "id": "none",
-          "name": "Instant"
-        },
-        {
-          "id": "short",
-          "name": "Quick"
-        },
-        {
-          "id": "default",
-          "name": "Default"
+          "name": "Off"
         },
         {
           "id": "long",
           "name": "Slow"
+        },
+        {
+          "id": "default",
+          "name": "Normal"
+        },
+        {
+          "id": "short",
+          "name": "Fast"
         }
       ],
       "default": "default"
