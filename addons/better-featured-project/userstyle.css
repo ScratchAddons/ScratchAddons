@@ -28,6 +28,7 @@
 #profile-data .box-head .header-text {
   position: relative;
   z-index: 1;
+  width: 400px;
 }
 #profile-data .box-head h2,
 #profile-data .box-head h3 {
