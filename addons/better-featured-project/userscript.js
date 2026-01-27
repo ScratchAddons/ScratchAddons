@@ -2,16 +2,22 @@ export default async function ({ addon, console, msg }) {
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
     let boxHead = document.querySelector("#profile-data .box-head");
+    let headerText = boxHead.querySelector(".header-text");
     if (featuredLink !== "") {
       if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {
-        boxHead.appendChild(document.createElement("div")).setAttribute("id", "better-featured-project-name");
+        headerText
+          .insertAdjacentElement("afterend", document.createElement("div"))
+          .setAttribute("id", "better-featured-project-name");
         document.querySelector("#better-featured-project-name").appendChild(document.createElement("h2"));
         document.querySelector("#better-featured-project-name").appendChild(document.createElement("h3"));
         document.querySelector("#better-featured-project-name h2").innerText = featuredHeading;
         document.querySelector("#better-featured-project-name h3").innerText = featuredTitle;
       }
       if (document.querySelector('#featured-project [data-control="edit"]') !== null) {
-        boxHead.appendChild(document.createElement("div")).setAttribute("class", "buttons");
+        document
+          .querySelector("#better-featured-project-name")
+          .insertAdjacentElement("afterend", document.createElement("div"))
+          .setAttribute("class", "buttons");
         document
           .querySelector("#profile-data .box-head .buttons")
           .appendChild(document.createElement("button"))
@@ -54,9 +60,7 @@ export default async function ({ addon, console, msg }) {
         .setAttribute("id", "better-featured-project-overlay");
       document.querySelector("#better-featured-project-overlay").href = featuredLink;
     }
-    document
-      .querySelector(".profile-details .location")
-      .insertAdjacentText("beforebegin", `(${document.querySelector(".profile-details span:nth-child(2)").title})`);
+    document.querySelector(".profile-details .location");
   }
   if (document.querySelector(".user-content .stage") !== null) {
     createBetterProfilePage(
