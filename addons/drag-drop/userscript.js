@@ -114,9 +114,7 @@ export default async function ({ addon, console }) {
         // Simulate clicking on the "Import" option
         contextMenu.children[0].click();
       };
-    } else if (
-      (el = e.target.closest('div[class*="question_question-input"] > input[class*="input_input-form_"]'))
-    ) {
+    } else if ((el = e.target.closest('div[class*="question_question-input"] > input[class*="input_input-form_"]'))) {
       callback = async (files) => {
         const text = (await Promise.all(Array.from(files, (file) => file.text())))
           .join("")
