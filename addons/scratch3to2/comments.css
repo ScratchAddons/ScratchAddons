@@ -23,10 +23,13 @@
 .comments-root-reply:empty {
   padding: 0;
 }
-.comment .avatar {
+.comment .avatar-wrapper,
+.preview .comment .avatar-wrapper {
   margin-right: 10px;
-  width: 45px;
-  height: 45px;
+  --avatar-size: 45px;
+}
+.comment .avatar,
+.preview .comment img.avatar {
   border-radius: 0;
   box-shadow: none;
 }

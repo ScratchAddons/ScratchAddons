@@ -320,6 +320,7 @@ body:not(.sa-body-editor) .select select > option {
   background-size: auto;
 }
 .account-nav .user-info {
+  display: inline-block;
   height: 35px;
   padding: 0 10px;
   background-clip: padding-box;
@@ -327,9 +328,14 @@ body:not(.sa-body-editor) .select select > option {
   border-right: 1px solid transparent;
   line-height: 35px;
 }
-.account-nav .user-info .avatar {
+.account-nav .user-info .avatar-wrapper {
+  vertical-align: middle;
   margin-top: -3px;
   margin-right: 5px;
+  --avatar-size: 26px;
+}
+.account-nav .user-info .avatar {
+  box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 1px;
 }

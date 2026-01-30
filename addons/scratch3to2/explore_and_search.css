@@ -199,8 +199,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select {
   border-radius: 0;
 }
 .grid .thumbnail .thumbnail-info .creator-image img {
-  margin-left: -1px;
-  margin-right: 7px;
+  box-sizing: border-box;
   border: 1px solid var(--darkWww-border-15, #ddd);
   border-radius: 0;
 }
