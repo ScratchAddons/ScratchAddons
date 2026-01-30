@@ -48,8 +48,9 @@
 
 /* Title */
 .preview > .inner > .preview-row:first-child {
-  min-height: 45px;
-  padding: 7px 20px 2px;
+  min-height: 47px;
+  padding: 2px 20px;
+  align-items: center;
   background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
   border-top: 1px solid var(--darkWww-gray-boxHighlight, white);
   border-bottom: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
@@ -57,10 +58,12 @@
   color: var(--darkWww-gray-scratchr2Text, #322f31);
   text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
 }
-.preview .project-header img.avatar {
+.preview .project-header .avatar-wrapper {
   vertical-align: middle;
-  width: 40px;
-  height: 40px;
+  --avatar-size: 42px;
+}
+.preview .project-header img.avatar {
+  box-sizing: border-box;
   border: 1px solid var(--darkWww-border-15, #ccc);
   border-radius: 0;
 }
@@ -70,11 +73,13 @@
   line-height: 20px;
 }
 .preview .project-title {
-  margin-bottom: -3px;
   color: var(--darkWww-gray-scratchr2HeaderText, #554747);
   font-size: 22px;
   font-weight: bold;
   line-height: 26px;
+}
+.preview .project-title.no-edit {
+  margin-bottom: -3px;
 }
 .preview .project-header .inplace-input {
   height: 38px;
@@ -110,7 +115,6 @@
 
 /* Remix, See inside, turbowarp-player */
 .preview .project-buttons {
-  margin-top: 2px;
   margin-right: -2px;
 }
 .preview .remix-button,
@@ -396,10 +400,12 @@
   border-radius: 0;
   border-bottom: 1px solid var(--darkWww-border, #ddd);
 }
-.preview img.avatar.remix {
+.preview .remix-credit .avatar-wrapper {
   margin-right: 5px;
-  width: 30px;
-  height: 30px;
+  --avatar-size: 32px;
+}
+.preview img.avatar.remix {
+  box-sizing: border-box;
   border: 1px solid var(--darkWww-border-15, #ccc);
   border-radius: 0;
 }
@@ -788,11 +794,6 @@
 }
 .preview .comments-container .comments-allowed-input {
   margin-right: 0;
-}
-.preview .comment img.avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 0;
 }
 .compose-comment .compose-bottom-row .compose-limit {
   color: var(--darkWww-box-scratchr2ButtonText, #666);
