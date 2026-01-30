@@ -23,7 +23,7 @@
   margin-right: calc(0.5rem / 2);
   margin-left: 0;
 }
-[class^="gui_flex-wrapper"] {
+[class*="gui_flex-wrapper_"] {
   flex-direction: row-reverse;
   overflow-x: hidden;
 }
