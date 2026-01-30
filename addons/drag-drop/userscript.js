@@ -59,7 +59,7 @@ export default async function ({ addon, console }) {
     if (
       (el = e.target.closest('div[class*="sprite-selector_sprite-selector"]')) ||
       (el = e.target.closest('div[class*="stage-selector_stage-selector"]')) ||
-      (el = e.target.closest('div[class*="selector_wrapper"]'))
+      (el = e.target.closest('aside[class*="selector_wrapper_"]'))
     ) {
       callback = (files) => {
         const hdFilter = addon.settings.get("use-hd-upload") ? "" : ":not(.sa-better-img-uploads-input)";
@@ -115,7 +115,7 @@ export default async function ({ addon, console }) {
         contextMenu.children[0].click();
       };
     } else if (
-      (el = e.target.closest('div[class*="question_question-input"] > input[class*="input_input-form_l9eYg"]'))
+      (el = e.target.closest('div[class*="question_question-input"] > input[class*="input_input-form_"]'))
     ) {
       callback = async (files) => {
         const text = (await Promise.all(Array.from(files, (file) => file.text())))
