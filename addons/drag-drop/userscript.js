@@ -57,9 +57,9 @@ export default async function ({ addon, console }) {
     let el;
     let callback;
     if (
-      (el = e.target.closest('div[class*="sprite-selector_sprite-selector"]')) ||
-      (el = e.target.closest('div[class*="stage-selector_stage-selector"]')) ||
-      (el = e.target.closest('aside[class*="selector_wrapper_"]'))
+      (el = e.target.closest('[class*="sprite-selector_sprite-selector"]')) ||
+      (el = e.target.closest('[class*="stage-selector_stage-selector"]')) ||
+      (el = e.target.closest('[class*="selector_wrapper_"]'))
     ) {
       callback = (files) => {
         const hdFilter = addon.settings.get("use-hd-upload") ? "" : ":not(.sa-better-img-uploads-input)";
@@ -114,7 +114,7 @@ export default async function ({ addon, console }) {
         // Simulate clicking on the "Import" option
         contextMenu.children[0].click();
       };
-    } else if ((el = e.target.closest('div[class*="question_question-input"] > input[class*="input_input-form_"]'))) {
+    } else if ((el = e.target.closest('[class*="question_question-input"] > [class*="input_input-form_"]'))) {
       callback = async (files) => {
         const text = (await Promise.all(Array.from(files, (file) => file.text())))
           .join("")
