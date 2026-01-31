@@ -55,15 +55,8 @@
   border-radius: 5px;
   box-shadow: 0 0 0 1px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
 }
-#comments .comment img.avatar {
+#comments .comment .avatar-wrapper {
   margin-right: 8px;
-}
-#comments .comment .avatar-badge-wrapper {
-  margin-right: 8px;
-}
-#comments .comment .avatar-wrapper:not(.avatar-badge-wrapper) {
-  float: none;
-  margin-right: 0;
 }
 #comments .comments .info,
 #comments .comments li ul li .comment .info {
