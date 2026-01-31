@@ -6,7 +6,7 @@ export default async function ({ template }) {
       return {
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
         tableChild: this.settingPath.length > 1,
-        selectName: `${this.addon._addonId}-${this.settingPath.join("-")}`,
+        selectName: `${this.$parent.groupId}-${this.addon._addonId}-${this.settingPath.join("-")}`,
       };
     },
     computed: {
@@ -80,7 +80,7 @@ export default async function ({ template }) {
         });
       },
       selectOptionId(option) {
-        return `${this.selectName}-${option.id}`;
+        return `${this.$parent.groupId}-${this.selectName}-${option.id}`;
       },
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
