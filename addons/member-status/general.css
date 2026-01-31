@@ -13,8 +13,8 @@
 
 /* Username color: */
 #app .thumbnail-info:has(.avatar-badge-wrapper) .thumbnail-creator a,
+:is(#pagewrapper .owner, #app .thumbnail-creator):has(.membership-label-container) a,
 #djangobbindex td:has(.membership-label-container) .byuser,
-:is(.owner, .thumbnail-creator):has(.membership-label-container) a,
 .project-header:has(.avatar-badge-wrapper) > .title > a,
 .studio-project-bottom:has(.avatar-badge-wrapper) .studio-project-username,
 .postleft:has(.avatar-badge-wrapper) .username {
