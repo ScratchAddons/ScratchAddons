@@ -7,7 +7,7 @@ export default async function ({ addon, console }) {
   thumb.classList = "sa-project-thumb loading";
   thumb.draggable = false;
 
-  const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
+  const stageWrapper = await addon.tab.waitForElement('[class*="stage-wrapper_stage-wrapper_"]');
   addon.tab.redux.initialize();
 
   // It's possible this runs after the project loads even without dynamic enable
@@ -16,7 +16,7 @@ export default async function ({ addon, console }) {
   if (addon.tab.editorMode === "editor") return;
 
   const alerts = document.querySelector(".project-info-alerts");
-  const controls = stageWrapper.querySelector('div[class^="controls_controls-container_"]');
+  const controls = stageWrapper.querySelector('[class*="controls_controls-container_"]');
   controls.classList.add("sa-controls-disabled");
 
   const loaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
