@@ -49,7 +49,7 @@
   border: none;
 }
 #comments #comment-form .avatar,
-#comments .comment .avatar-wrapper:not(.avatar-badge-wrapper) > img {
+#comments .comment img.avatar:not(.avatar-badge) {
   margin-left: 1px;
   margin-top: 1px;
   border-radius: 5px;
