@@ -58,6 +58,10 @@
 #comments .comment img.avatar {
   margin-right: 8px;
 }
+#comments .comment .avatar-wrapper {
+  float: none;
+  margin-right: 0;
+}
 #comments .comments .info,
 #comments .comments li ul li .comment .info {
   width: calc(100% - 54px);
