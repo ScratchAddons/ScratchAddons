@@ -59,8 +59,10 @@
   margin-right: 8px;
 }
 #comments .comment .avatar-wrapper {
-  float: none;
   margin-right: 0;
+}
+#comments .comment .avatar-wrapper:not(.avatar-badge-wrapper) {
+  float: none;
 }
 #comments .comments .info,
 #comments .comments li ul li .comment .info {
