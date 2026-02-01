@@ -128,9 +128,6 @@ button > .small-icon {
     margin-inline-start: 10px;
   }
 }
-a.message-type-title-text {
-  color: var(--content-text);
-}
 .float-right {
   margin-inline-start: 6px;
   white-space: nowrap;
@@ -179,15 +176,15 @@ a.message-type-title-text {
   /* For multi-line comments */
   white-space: break-spaces;
 }
-.comment-author {
+a.comment-author {
   font-weight: 500;
   color: var(--dark-red-text);
 }
-.comment-me .comment-author {
+.comment-me a.comment-author {
   font-weight: 700;
   color: var(--green-text);
 }
-.unread .comment-author {
+.unread a.comment-author {
   font-weight: 700;
 }
 .comment-time {
