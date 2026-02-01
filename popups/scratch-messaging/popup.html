@@ -47,13 +47,7 @@
             />
           </a>
         </span>
-        <a
-          class="delete-btn"
-          rel="noopener noreferrer"
-          target="_blank"
-          :href="reportURL"
-          >{{ messages.reportMsg }}
-        </a>
+        <a class="delete-btn" rel="noopener noreferrer" target="_blank" :href="reportURL">{{ messages.reportMsg }} </a>
         <bdo dir="ltr">
           <!-- prevents LTR comments from being messed up in RTL layout - not ideal, but consistent with Scratch -->
           <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">

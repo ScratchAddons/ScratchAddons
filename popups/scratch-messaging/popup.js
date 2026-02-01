@@ -189,7 +189,7 @@ export default async ({ addon, msg, safeMsg }) => {
         const url = new URL(this.commentURL);
         url.searchParams.set("sa-action", "report");
         return url.href;
-      }
+      },
     },
     watch: {
       replying(newVal) {
