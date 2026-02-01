@@ -52,20 +52,13 @@ export default async ({ addon, msg, safeMsg }) => {
       return {
         replying: false,
         replyBoxValue: "",
-        deleted: false,
-        deleting: false,
-        deleteStep: 0,
         postingComment: false,
         messages: {
           openNewTabMsg: msg("open-new-tab"),
-          deleteMsg: msg("delete"),
-          deleteConfirmMsg: msg("delete-confirm"),
           replyMsg: msg("reply"),
           postingMsg: msg("posting"),
           postMsg: msg("post"),
           cancelMsg: msg("cancel"),
-          deletedMsg: msg("deleted"),
-          deletingMsg: msg("deleting"),
         },
       };
     },
@@ -157,46 +150,8 @@ export default async ({ addon, msg, safeMsg }) => {
             this.postingComment = false;
           });
       },
-      deleteComment() {
-        if (this.deleteStep === 0) {
-          setTimeout(() => (this.deleteStep = 1), 250);
-          setTimeout(() => {
-            if (this.deleteStep === 1) this.deleteStep = 0;
-          }, 5000);
-          return;
-        }
-        this.deleted = true;
-        this.deleting = true;
-        API.deleteComment(addon, {
-          resourceType: this.resourceType,
-          resourceId: this.resourceId,
-          commentId: Number(this.commentId.substring(2)),
-        })
-          .then(() => {
-            if (this.isParent) this.thisComment.children = [];
-          })
-          .catch((e) => {
-            console.error("Error while deleting a comment: ", e);
-            alert(msg("delete-error"));
-            this.deleteStep = 0;
-            this.deleted = false;
-          })
-          .finally(() => {
-            this.deleting = false;
-          });
-      },
     },
     computed: {
-      canDeleteComment() {
-        switch (this.resourceType) {
-          case "user":
-            return this.resourceId === this.username;
-          case "project":
-            return this.thisComment.projectAuthor === this.username;
-          default:
-            return true; // Studio comment deletion is complex, just assume we can
-        }
-      },
       thisComment() {
         return this.commentsObj[this.commentId];
       },

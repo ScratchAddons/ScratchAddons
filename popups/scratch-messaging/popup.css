@@ -213,10 +213,6 @@ a.message-type-title-text {
   padding-top: 2px;
   user-select: none;
 }
-.delete-confirm {
-  font-weight: bold;
-  color: var(--red);
-}
 .child-comment {
   margin-inline-start: 3em;
 }
