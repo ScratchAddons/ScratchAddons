@@ -60,7 +60,9 @@ export default async function ({ addon, console, msg }) {
         .setAttribute("id", "better-featured-project-overlay");
       document.querySelector("#better-featured-project-overlay").href = featuredLink;
     }
-    document.querySelector(".profile-details .location");
+    document
+      .querySelector(".profile-details .location")
+      .insertAdjacentText("beforebegin", `(${document.querySelector(".profile-details span:nth-child(2)").title})`);
   }
   if (document.querySelector(".user-content .stage") !== null) {
     createBetterProfilePage(
