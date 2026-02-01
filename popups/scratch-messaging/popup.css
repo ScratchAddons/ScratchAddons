@@ -205,11 +205,11 @@ a.message-type-title-text {
 [dir="rtl"] .popout-comment {
   transform: scaleX(-1);
 }
-.delete-btn {
+.comment a.delete-btn {
   float: right;
   opacity: 0;
   color: var(--gray-text);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   padding-top: 2px;
   user-select: none;
 }

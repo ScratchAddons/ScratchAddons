@@ -55,6 +55,7 @@ export default async ({ addon, msg, safeMsg }) => {
         postingComment: false,
         messages: {
           openNewTabMsg: msg("open-new-tab"),
+          reportMsg: msg("report"),
           replyMsg: msg("reply"),
           postingMsg: msg("posting"),
           postMsg: msg("post"),
@@ -184,6 +185,11 @@ export default async ({ addon, msg, safeMsg }) => {
           this.resourceId
         }/${commentPath}#comments-${this.commentId.substring(2)}`;
       },
+      reportURL() {
+        const url = new URL(this.commentURL);
+        url.searchParams.set("sa-action", "report");
+        return url.href;
+      }
     },
     watch: {
       replying(newVal) {
