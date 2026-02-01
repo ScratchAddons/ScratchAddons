@@ -80,7 +80,7 @@ export default async function ({ template }) {
         });
       },
       selectOptionId(option) {
-        return `${this.groupId}-${this.selectName}-${option.id}`;
+        return `${this.selectName}-${option.id}`;
       },
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
