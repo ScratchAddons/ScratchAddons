@@ -45,7 +45,6 @@ button {
 
 .message-type-title {
   font-size: 14px;
-  color: var(--content-text);
   padding: 6px;
   padding-inline-end: 9px;
   cursor: default;
@@ -176,15 +175,15 @@ button > .small-icon {
   /* For multi-line comments */
   white-space: break-spaces;
 }
-a.comment-author {
+.comment-author {
   font-weight: 500;
   color: var(--dark-red-text);
 }
-.comment-me a.comment-author {
+.comment-me .comment-author {
   font-weight: 700;
   color: var(--green-text);
 }
-.unread a.comment-author {
+.unread .comment-author {
   font-weight: 700;
 }
 .comment-time {

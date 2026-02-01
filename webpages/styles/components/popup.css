@@ -38,10 +38,10 @@ a {
   cursor: pointer;
   text-decoration: none;
 }
-a[href] {
+[href] {
   color: var(--blue-text);
 }
-a.nolink {
+.nolink {
   color: var(--content-text);
 }
 a:hover {

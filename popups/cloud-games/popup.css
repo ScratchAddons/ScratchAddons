@@ -85,10 +85,6 @@ body {
   box-shadow: var(--content-shadow);
 }
 
-.title a {
-  color: var(--content-text);
-}
-
 .title-placeholder {
   display: inline-block;
   vertical-align: middle;
