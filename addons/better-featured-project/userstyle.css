@@ -151,6 +151,6 @@
   color: white;
 }
 .location {
-  word-break: break-all;
+  word-break: break-word;
   width: auto;
 }
