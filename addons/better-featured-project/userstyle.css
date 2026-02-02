@@ -39,16 +39,16 @@
 #profile-data .box-head .profile-details .group {
   border-right-color: white;
 }
-#profile-data .box-head .profile-details .location {
-  display: block !important;
-}
 #profile-data .box-head .portrait img {
   border: none;
 }
 #profile-data .box-head .buttons {
-  top: auto !important;
-  bottom: 26px !important;
-  right: 20px !important;
+  z-index: 1;
+  flex-shrink: 0;
+}
+#profile-data .box-head .buttons + img {
+  /* membership badge */
+  position: relative;
   z-index: 1;
 }
 #better-featured-project-name {
@@ -65,8 +65,8 @@
   bottom: 0;
 }
 #profile-data .box-head .avatar [data-control="edit"] {
-  width: 100% !important;
-  height: calc(100% - 16px) !important;
+  width: 100%;
+  height: calc(100% - 16px);
   padding: 0;
   padding-top: 16px;
   margin: 0;
@@ -95,10 +95,10 @@
 .user-content .player .stage #featured-project,
 .user-content .player .title,
 .user-content .player .featured-project-heading {
-  display: none !important;
+  display: none;
 }
-#user-details {
-  width: 661px !important;
+#profile-box .about {
+  width: 661px;
   height: 158px;
   box-sizing: border-box;
   display: flex;
@@ -111,7 +111,7 @@
   left: 0;
 }
 #activity-feed .activity-stream {
-  height: 107px !important;
+  height: 107px;
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -119,7 +119,7 @@
   width: calc(100% - 24px);
 }
 #profile-box .inner {
-  height: 140px !important;
+  height: 140px;
   padding-bottom: 6px !important;
 }
 #profile-box .doing {
@@ -128,17 +128,13 @@
   box-sizing: border-box;
   overflow: hidden;
 }
-.profile-details span {
-  display: inline !important;
-  /* 2023: I'm not sure why !important is needed here */
-}
 #lfp-embed {
   position: absolute;
   bottom: 250px;
   right: 20px;
 }
-#lfp-change-featured {
-  display: none !important;
+#lfp-embed:hover #lfp-change-featured {
+  display: none;
 }
 #bio,
 #bio-readonly {
@@ -155,6 +151,5 @@
   color: white;
 }
 .location {
-  word-break: break-all;
-  width: 600px;
+  word-break: break-word;
 }
