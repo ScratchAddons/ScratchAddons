@@ -28,7 +28,6 @@
 #profile-data .box-head .header-text {
   position: relative;
   z-index: 1;
-  width: 400px;
 }
 #profile-data .box-head h2,
 #profile-data .box-head h3 {
@@ -45,6 +44,7 @@
 }
 #profile-data .box-head .buttons {
   z-index: 1;
+  flex-shrink: 0;
 }
 #profile-data .box-head .buttons + img {
   /* membership badge */
@@ -152,5 +152,5 @@
 }
 .location {
   word-break: break-all;
-  width: 600px;
+  width: auto;
 }
