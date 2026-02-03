@@ -267,7 +267,7 @@
             <button disabled v-show="searchInput === ''">
               <img src="../../images/icons/search.svg" class="search-icon" />
             </button>
-            <button v-else @click="clearAndFocusSearch()">
+            <button v-else :title="msg('clear')" @click="clearAndFocusSearch()">
               <img src="../../images/icons/x.svg" class="search-icon" />
             </button>
           </div>
@@ -321,7 +321,7 @@
       <div class="addon-block settings-block">
         <div class="addon-body">
           <div class="addon-topbar">
-            <img src="../../images/icons/theme.svg" class="icon-type addon-icon" draggable="false" />
+            <img src="../../images/icons/theme.svg" aria-hidden="true" class="icon-type addon-icon" draggable="false" />
             <span class="addon-name-and-tags">{{ msg("scratchAddonsTheme") }}</span>
           </div>
           <div class="addon-settings">
@@ -359,6 +359,7 @@
           <div class="addon-topbar">
             <img
               src="../../images/icons/import-export.svg"
+              aria-hidden="true"
               class="icon-type addon-icon"
               :class="{'dark': theme === false}"
               draggable="false"
@@ -382,7 +383,12 @@
         </div>
         <div class="addon-body">
           <div class="addon-topbar">
-            <img src="../../images/icons/translate.svg" class="icon-type addon-icon" draggable="false" />
+            <img
+              src="../../images/icons/translate.svg"
+              aria-hidden="true"
+              class="icon-type addon-icon"
+              draggable="false"
+            />
             <span class="addon-name-and-tags">{{ msg("language") }}</span>
           </div>
           <div class="addon-settings">
