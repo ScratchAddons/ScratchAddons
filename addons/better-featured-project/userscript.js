@@ -1,66 +1,69 @@
 export default async function ({ addon, console, msg }) {
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
+    document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
+
     const dateText = document.createElement("span");
     dateText.textContent = `(${document.querySelector(".profile-details span:nth-child(2)").title})`;
     document.querySelector(".profile-details .location").insertAdjacentElement("beforebegin", dateText);
     addon.tab.displayNoneWhileDisabled(dateText);
 
-    document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
+    if (featuredLink === "") return; // User does not have a featured project
+
     let boxHead = document.querySelector("#profile-data .box-head");
     let headerText = boxHead.querySelector(".header-text");
-    if (featuredLink === "") return;
-    if (true) {
-      if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {
-        headerText.insertAdjacentElement("afterend", document.createElement("div")).id = "fpb-name";
-        document.getElementById("fpb-name").append(document.createElement("h2"), document.createElement("h3"));
-        document.querySelector("#fpb-name h2").innerText = featuredHeading;
-        document.querySelector("#fpb-name h3").innerText = featuredTitle;
-      }
-      if (document.querySelector('#featured-project [data-control]')) {
-        document
-          .getElementById("fpb-name")
-          .insertAdjacentElement("afterend", document.createElement("div"))
-          .className = "buttons";
-        document
-          .querySelector("#profile-data .box-head .buttons")
-          .appendChild(document.createElement("button"))
-          .id = "fpb-change";
-        document.getElementById("fpb-change").innerText = document.querySelector(
-          '#featured-project [data-control]'
-        ).innerText;
-        document.getElementById("fpb-change").addEventListener("click", function () {
-          document.querySelector('#featured-project [data-control]').click();
-          let checkFeaturedProjectModalTimes = 0;
-          var checkFeaturedProjectModal = setInterval(function () {
-            checkFeaturedProjectModalTimes++;
-            if (document.getElementById("featured-project-modal")) {
-              clearInterval(checkFeaturedProjectModal);
-              document
-                .querySelector("#featured-project-modal .btn.blue.btn-primary")
-                .addEventListener("click", function () {
-                  let checkFeaturedProjectTimes = 0;
-                  const oldFeaturedProjectURL = document.getElementById("featured-project").href;
-                  const checkFeaturedProject = setInterval(function () {
-                    checkFeaturedProjectTimes++;
-                    if (checkFeaturedProjectTimes > 1000) {
-                      clearInterval(checkFeaturedProject);
-                    }
-                    if (oldFeaturedProjectURL !== document.getElementById("featured-project").href) {
-                      clearInterval(checkFeaturedProject);
-                      document.documentElement.style.setProperty("--featured-thumb", `url("")`);
-                      location.reload();
-                    }
-                  }, 10);
-                });
-            } else if (checkFeaturedProjectModalTimes > 1000) {
-              clearInterval(checkFeaturedProjectModal);
-            }
-          }, 10);
-        });
-      }
-      boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).id = "fpb-overlay";
-      document.getElementById("fpb-overlay").href = featuredLink;
+    if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {
+      headerText.insertAdjacentElement("afterend", document.createElement("div")).id = "fpb-name";
+      document.getElementById("fpb-name").append(document.createElement("h2"), document.createElement("h3"));
+      document.querySelector("#fpb-name h2").innerText = featuredHeading;
+      document.querySelector("#fpb-name h3").innerText = featuredTitle;
     }
+
+    // "Change featured project" button
+    if (document.querySelector('#featured-project [data-control]')) {
+      document
+        .getElementById("fpb-name")
+        .insertAdjacentElement("afterend", document.createElement("div"))
+        .className = "buttons";
+      document
+        .querySelector("#profile-data .box-head .buttons")
+        .appendChild(document.createElement("button"))
+        .id = "fpb-change";
+      document.getElementById("fpb-change").innerText = document.querySelector(
+        '#featured-project [data-control]'
+      ).innerText;
+      document.getElementById("fpb-change").addEventListener("click", function () {
+        document.querySelector('#featured-project [data-control]').click();
+        let checkFeaturedProjectModalTimes = 0;
+        var checkFeaturedProjectModal = setInterval(function () {
+          checkFeaturedProjectModalTimes++;
+          if (document.getElementById("featured-project-modal")) {
+            clearInterval(checkFeaturedProjectModal);
+            document
+              .querySelector("#featured-project-modal .btn.blue.btn-primary")
+              .addEventListener("click", function () {
+                // Featured project changed, reload page after it updates
+                let checkFeaturedProjectTimes = 0;
+                const oldFeaturedProjectURL = document.getElementById("featured-project").href;
+                const checkFeaturedProject = setInterval(function () {
+                  checkFeaturedProjectTimes++;
+                  if (checkFeaturedProjectTimes > 1000) {
+                    clearInterval(checkFeaturedProject);
+                  }
+                  if (oldFeaturedProjectURL !== document.getElementById("featured-project").href) {
+                    clearInterval(checkFeaturedProject);
+                    document.documentElement.style.setProperty("--featured-thumb", `url("")`);
+                    location.reload();
+                  }
+                }, 10);
+              });
+          } else if (checkFeaturedProjectModalTimes > 1000) {
+            clearInterval(checkFeaturedProjectModal);
+          }
+        }, 10);
+      });
+    }
+    boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).id = "fpb-overlay";
+    document.getElementById("fpb-overlay").href = featuredLink;
     addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-name"));
     addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-overlay"));
     addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-change"));
