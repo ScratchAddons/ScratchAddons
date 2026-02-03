@@ -3,46 +3,44 @@ export default async function ({ addon, console, msg }) {
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
     let boxHead = document.querySelector("#profile-data .box-head");
     let headerText = boxHead.querySelector(".header-text");
-    if (featuredLink !== "") {
+    if (featuredLink === "") return;
+    if (true) {
       if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {
-        headerText
-          .insertAdjacentElement("afterend", document.createElement("div"))
-          .setAttribute("id", "fpb-name");
-        document.querySelector("#fpb-name").appendChild(document.createElement("h2"));
-        document.querySelector("#fpb-name").appendChild(document.createElement("h3"));
+        headerText.insertAdjacentElement("afterend", document.createElement("div")).id = "fpb-name";
+        document.getElementById("fpb-name").append(document.createElement("h2"), document.createElement("h3"));
         document.querySelector("#fpb-name h2").innerText = featuredHeading;
         document.querySelector("#fpb-name h3").innerText = featuredTitle;
       }
-      if (document.querySelector('#featured-project [data-control="edit"]') !== null) {
+      if (document.querySelector('#featured-project [data-control]')) {
         document
-          .querySelector("#fpb-name")
+          .getElementById("fpb-name")
           .insertAdjacentElement("afterend", document.createElement("div"))
-          .setAttribute("class", "buttons");
+          .className = "buttons";
         document
           .querySelector("#profile-data .box-head .buttons")
           .appendChild(document.createElement("button"))
-          .setAttribute("id", "fpb-change");
-        document.querySelector("#fpb-change").innerText = document.querySelector(
-          '#featured-project [data-control="edit"]'
+          .id = "fpb-change";
+        document.getElementById("fpb-change").innerText = document.querySelector(
+          '#featured-project [data-control]'
         ).innerText;
-        document.querySelector("#fpb-change").addEventListener("click", function () {
-          document.querySelector('#featured-project [data-control="edit"]').click();
+        document.getElementById("fpb-change").addEventListener("click", function () {
+          document.querySelector('#featured-project [data-control]').click();
           let checkFeaturedProjectModalTimes = 0;
           var checkFeaturedProjectModal = setInterval(function () {
             checkFeaturedProjectModalTimes++;
-            if (document.querySelector("#featured-project-modal") !== null) {
+            if (document.getElementById("featured-project-modal")) {
               clearInterval(checkFeaturedProjectModal);
               document
                 .querySelector("#featured-project-modal .btn.blue.btn-primary")
                 .addEventListener("click", function () {
                   let checkFeaturedProjectTimes = 0;
-                  let checkFeaturedProjectLink = document.querySelector("#featured-project").href;
-                  var checkFeaturedProject = setInterval(function () {
+                  const oldFeaturedProjectURL = document.getElementById("featured-project").href;
+                  const checkFeaturedProject = setInterval(function () {
                     checkFeaturedProjectTimes++;
                     if (checkFeaturedProjectTimes > 1000) {
                       clearInterval(checkFeaturedProject);
                     }
-                    if (checkFeaturedProjectLink !== document.querySelector("#featured-project").href) {
+                    if (oldFeaturedProjectURL !== document.getElementById("featured-project").href) {
                       clearInterval(checkFeaturedProject);
                       document.documentElement.style.setProperty("--featured-thumb", `url("")`);
                       location.reload();
@@ -55,8 +53,8 @@ export default async function ({ addon, console, msg }) {
           }, 10);
         });
       }
-      boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).setAttribute("id", "fpb-overlay");
-      document.querySelector("#fpb-overlay").href = featuredLink;
+      boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).id = "fpb-overlay";
+      document.getElementById("fpb-overlay").href = featuredLink;
     }
     const dateText = document.createElement("span");
     dateText.textContent = `(${document.querySelector(".profile-details span:nth-child(2)").title})`;
@@ -71,14 +69,14 @@ export default async function ({ addon, console, msg }) {
   // By the time this element has loaded, the featured project will be there too
   await addon.tab.waitForElement("#profile-box-footer");
 
-  if (document.querySelector(".user-content .stage") !== null) {
+  if (document.querySelector(".user-content .stage")) {
     createBetterProfilePage(
-      document.querySelector(".user-content .stage img").src.replace(/[0-9]+x[0-9]+/, "480x360"),
+      document.querySelector(".user-content .stage img").src.replace(/\d+x\d+/, "480x360"),
       document.querySelector(".user-content .stage a").href,
       document.querySelector(".featured-project-heading").innerText,
       document.querySelector(".user-content .player .title a").innerText
     );
-  } else if (document.querySelector("#profile-avatar img") !== null) {
+  } else if (document.querySelector("#profile-avatar img")) {
     createBetterProfilePage(document.querySelector("#profile-avatar img").src, "", "", "");
   }
 }
