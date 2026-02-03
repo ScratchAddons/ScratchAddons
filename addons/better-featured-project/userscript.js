@@ -7,16 +7,21 @@ export default async function ({ addon, console, msg }) {
     document.querySelector(".profile-details .location").insertAdjacentElement("beforebegin", dateText);
     addon.tab.displayNoneWhileDisabled(dateText);
 
-    if (featuredLink === "") return; // User does not have a featured project
+    if (featuredLink === "") return; // If no featured project is set, stop here
 
     let boxHead = document.querySelector("#profile-data .box-head");
     let headerText = boxHead.querySelector(".header-text");
-    if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {
+    if (document.querySelector(".user-content .player .title a").innerText.trim().length) {
       headerText.insertAdjacentElement("afterend", document.createElement("div")).id = "fpb-name";
       document.getElementById("fpb-name").append(document.createElement("h2"), document.createElement("h3"));
       document.querySelector("#fpb-name h2").innerText = featuredHeading;
       document.querySelector("#fpb-name h3").innerText = featuredTitle;
+      addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-name"));
     }
+
+    boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).id = "fpb-overlay";
+    document.getElementById("fpb-overlay").href = featuredLink;
+    addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-overlay"));
 
     // "Change featured project" button
     if (document.querySelector('#featured-project [data-control]')) {
@@ -61,12 +66,8 @@ export default async function ({ addon, console, msg }) {
           }
         }, 10);
       });
+      addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-change"));
     }
-    boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).id = "fpb-overlay";
-    document.getElementById("fpb-overlay").href = featuredLink;
-    addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-name"));
-    addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-overlay"));
-    addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-change"));
   }
 
   // By the time this element has loaded, the featured project will be there too
