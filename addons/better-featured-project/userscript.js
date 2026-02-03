@@ -60,10 +60,19 @@ export default async function ({ addon, console, msg }) {
         .setAttribute("id", "better-featured-project-overlay");
       document.querySelector("#better-featured-project-overlay").href = featuredLink;
     }
-    document
-      .querySelector(".profile-details .location")
-      .insertAdjacentText("beforebegin", `(${document.querySelector(".profile-details span:nth-child(2)").title})`);
+    const dateText = document.createElement("span");
+    dateText.textContent = `(${document.querySelector(".profile-details span:nth-child(2)").title})`;
+    document.querySelector(".profile-details .location").insertAdjacentElement("beforebegin", dateText);
+
+    addon.tab.displayNoneWhileDisabled(document.getElementById("better-featured-project-name"));
+    addon.tab.displayNoneWhileDisabled(document.getElementById("better-featured-project-overlay"));
+    addon.tab.displayNoneWhileDisabled(document.getElementById("better-change-featured-project"));
+    addon.tab.displayNoneWhileDisabled(dateText);
   }
+
+  // By the time this element has loaded, the featured project will be there too
+  await addon.tab.waitForElement("#profile-box-footer");
+
   if (document.querySelector(".user-content .stage") !== null) {
     createBetterProfilePage(
       document.querySelector(".user-content .stage img").src.replace(/[0-9]+x[0-9]+/, "480x360"),
