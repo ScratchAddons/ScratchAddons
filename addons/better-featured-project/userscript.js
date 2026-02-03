@@ -1,5 +1,10 @@
 export default async function ({ addon, console, msg }) {
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
+    const dateText = document.createElement("span");
+    dateText.textContent = `(${document.querySelector(".profile-details span:nth-child(2)").title})`;
+    document.querySelector(".profile-details .location").insertAdjacentElement("beforebegin", dateText);
+    addon.tab.displayNoneWhileDisabled(dateText);
+
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
     let boxHead = document.querySelector("#profile-data .box-head");
     let headerText = boxHead.querySelector(".header-text");
@@ -56,14 +61,9 @@ export default async function ({ addon, console, msg }) {
       boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).id = "fpb-overlay";
       document.getElementById("fpb-overlay").href = featuredLink;
     }
-    const dateText = document.createElement("span");
-    dateText.textContent = `(${document.querySelector(".profile-details span:nth-child(2)").title})`;
-    document.querySelector(".profile-details .location").insertAdjacentElement("beforebegin", dateText);
-
     addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-name"));
     addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-overlay"));
     addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-change"));
-    addon.tab.displayNoneWhileDisabled(dateText);
   }
 
   // By the time this element has loaded, the featured project will be there too
