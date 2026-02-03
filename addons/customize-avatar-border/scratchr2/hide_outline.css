@@ -1,5 +1,5 @@
 #comments #comment-form .avatar,
 #comments .comment img.avatar:not(.avatar-badge),
-.postavatar img {
+.postavatar img:not(.avatar-badge) {
   box-shadow: none;
 }

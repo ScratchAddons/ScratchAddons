@@ -291,7 +291,7 @@ body > #pagewrapper {
 .searchposts .postleft a {
   font-size: 16px;
 }
-.postavatar img {
+.postavatar img:not(.avatar-badge) {
   margin: 1px;
   box-shadow: 0 0 0 1px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
   border-radius: 5px;
