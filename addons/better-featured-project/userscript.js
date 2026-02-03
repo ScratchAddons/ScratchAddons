@@ -7,25 +7,25 @@ export default async function ({ addon, console, msg }) {
       if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {
         headerText
           .insertAdjacentElement("afterend", document.createElement("div"))
-          .setAttribute("id", "better-featured-project-name");
-        document.querySelector("#better-featured-project-name").appendChild(document.createElement("h2"));
-        document.querySelector("#better-featured-project-name").appendChild(document.createElement("h3"));
-        document.querySelector("#better-featured-project-name h2").innerText = featuredHeading;
-        document.querySelector("#better-featured-project-name h3").innerText = featuredTitle;
+          .setAttribute("id", "fpb-name");
+        document.querySelector("#fpb-name").appendChild(document.createElement("h2"));
+        document.querySelector("#fpb-name").appendChild(document.createElement("h3"));
+        document.querySelector("#fpb-name h2").innerText = featuredHeading;
+        document.querySelector("#fpb-name h3").innerText = featuredTitle;
       }
       if (document.querySelector('#featured-project [data-control="edit"]') !== null) {
         document
-          .querySelector("#better-featured-project-name")
+          .querySelector("#fpb-name")
           .insertAdjacentElement("afterend", document.createElement("div"))
           .setAttribute("class", "buttons");
         document
           .querySelector("#profile-data .box-head .buttons")
           .appendChild(document.createElement("button"))
-          .setAttribute("id", "better-change-featured-project");
-        document.querySelector("#better-change-featured-project").innerText = document.querySelector(
+          .setAttribute("id", "fpb-change");
+        document.querySelector("#fpb-change").innerText = document.querySelector(
           '#featured-project [data-control="edit"]'
         ).innerText;
-        document.querySelector("#better-change-featured-project").addEventListener("click", function () {
+        document.querySelector("#fpb-change").addEventListener("click", function () {
           document.querySelector('#featured-project [data-control="edit"]').click();
           let checkFeaturedProjectModalTimes = 0;
           var checkFeaturedProjectModal = setInterval(function () {
@@ -55,18 +55,16 @@ export default async function ({ addon, console, msg }) {
           }, 10);
         });
       }
-      boxHead
-        .insertAdjacentElement("afterbegin", document.createElement("a"))
-        .setAttribute("id", "better-featured-project-overlay");
-      document.querySelector("#better-featured-project-overlay").href = featuredLink;
+      boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).setAttribute("id", "fpb-overlay");
+      document.querySelector("#fpb-overlay").href = featuredLink;
     }
     const dateText = document.createElement("span");
     dateText.textContent = `(${document.querySelector(".profile-details span:nth-child(2)").title})`;
     document.querySelector(".profile-details .location").insertAdjacentElement("beforebegin", dateText);
 
-    addon.tab.displayNoneWhileDisabled(document.getElementById("better-featured-project-name"));
-    addon.tab.displayNoneWhileDisabled(document.getElementById("better-featured-project-overlay"));
-    addon.tab.displayNoneWhileDisabled(document.getElementById("better-change-featured-project"));
+    addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-name"));
+    addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-overlay"));
+    addon.tab.displayNoneWhileDisabled(document.getElementById("fpb-change"));
     addon.tab.displayNoneWhileDisabled(dateText);
   }
 
