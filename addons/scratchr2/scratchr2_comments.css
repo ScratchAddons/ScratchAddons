@@ -48,8 +48,7 @@
   /* Remove separators */
   border: none;
 }
-#comments #comment-form .avatar,
-#comments .comment img.avatar:not(.avatar-badge) {
+#comments .avatar:not(.avatar-badge) {
   margin-left: 1px;
   margin-top: 1px;
   border-radius: 5px;
