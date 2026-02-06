@@ -1,4 +1,4 @@
-﻿export default async function ({ addon }) {
+﻿export default async function ({ addon, msg }) {
   const addonname = "editor-input-shadow";
 
   const ScratchBlocks = await addon.tab.traps.getBlockly();
@@ -9,14 +9,12 @@
     return;
   }
 
-  // --- 優化工具：徹底清除 XML 副本中的 ID ---
   const cleanXml = (node) => {
     if (node.nodeType !== 1) return;
     node.removeAttribute('id');
     node.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
   };
 
-  // --- 優化工具：執行精準彈出 ---
   const spawnAt = (xml, targetPos) => {
     const b = ScratchBlocks.Xml.domToBlock(xml, workspace);
     const myC = b.outputConnection || b.previousConnection;
@@ -44,7 +42,6 @@
       const spawnList = [];
       const connPosMap = new Map();
 
-      // --- 1. 紀錄所有連線點的絕對座標 (不抓左上角) ---
       const record = (b) => {
         if (!b) return;
         b.inputList.forEach(input => {
@@ -99,7 +96,6 @@
       const spawnList = [];
       const connPosMap = new Map();
 
-      // 1. 深度紀錄連線點位置
       const record = (b) => {
         if (!b) return;
         b.inputList.forEach(input => {
@@ -113,7 +109,6 @@
       };
       record(block);
 
-      // 2. 遞迴 XML 轉換 (處理 value, statement, next)
       const transform = (element, parentId) => {
         Array.from(element.querySelectorAll(':scope > value, :scope > statement, :scope > next')).forEach(container => {
           const tagName = container.tagName.toLowerCase();
@@ -161,18 +156,19 @@
     } catch (e) { console.error(`[${addonname}]` + e); } finally { ScratchBlocks.Events.setGroup(false); }
   };
 
-  // --- 右鍵選單掛載 ---
   addon.tab.createBlockContextMenu((items, block) => {
-    if (addon.self.disabled) return items;
-    items.push({
-      enabled: true, text: "切換輸入格鎖定",
-      callback: () => input_lock(block, { opcode: block.type, shadow: block.isShadow(), isNoop: false }),
-      separator: true,
-    });
-    if (addon.settings.get('full_shadow_lock')) {
-      items.push({ enabled: true, text: "將連接的所有積木影化", callback: () => process_all(block, 'LOCK') });
-      items.push({ enabled: true, text: "將連接的所有積木實化", callback: () => process_all(block, 'UNLOCK') });
+    if (!addon.self.disabled) {
+      items.push({
+        enabled: true,
+        text: msg("text-shadow-switch"),
+        callback: () => input_lock(block, { opcode: block.type, shadow: block.isShadow(), isNoop: false }),
+        separator: true,
+      });
+      if (addon.settings.get('full_shadow_lock')) {
+        items.push({ enabled: true, text: msg("text-all-to-shadow"), callback: () => process_all(block, 'LOCK') });
+        items.push({ enabled: true, text: msg("text-all-to-nonshadow"), callback: () => process_all(block, 'UNLOCK') });
+      }
+      return items;
     }
-    return items;
   }, { blocks: true });
 }

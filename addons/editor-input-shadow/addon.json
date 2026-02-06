@@ -1,6 +1,6 @@
 {
-  "name": "萬物拆卸",
-  "description": "新增\"鎖定\"按鈕到右鍵選單，用於分離或接合輸入格",
+  "name": "all Detache",
+  "description": "Adds a \"Toggle\" button to the context menu for separating and joining input slots.",
   "tags": [
     "danger",
     "editor",
@@ -10,8 +10,8 @@
   "info": [
     {
       "type": "notice",
-      "text": "使用未被Scratch官方明確允許的積木可能面臨後續版本不可用、專案被移除甚至封號的風險。\nScratch Addons並不為此負責，請謹慎使用此功能。",
-      "id": "paddingWarning"
+      "text": "Using blocks not explicitly allowed by Scratch may risk project unavailability in future versions, project deletion, or account bans.\nScratch Addons is not responsible for this; please use this feature with caution.",
+      "id": "Warning"
     }
   ],
   "credits": [
@@ -23,12 +23,12 @@
     {
       "id": "GarboMuffin",
       "name": "GarboMuffin",
-      "note": "參考了他們的 Block switching 程式"
+      "note": "Reference Their Block switching code"
     },
     {
       "id": "pufferfish101007",
       "name": "pufferfish101007",
-      "note": "參考了他們的 Block switching 程式"
+      "note": "Reference Their Block switching code"
     }
   ],
   "userscripts": [
@@ -45,7 +45,7 @@
   "settings": [
     {
       "id": "spawn_range_x",
-      "name": "積木噴灑 X 軸範圍",
+      "name": "Block Spawn X Range",
       "type": "integer",
       "default": 0,
       "min": 0,
@@ -53,7 +53,7 @@
     },
     {
       "id": "spawn_range_y",
-      "name": "積木噴灑 Y 軸範圍",
+      "name": "Block Spawn Y Range",
       "type": "integer",
       "default": 0,
       "min": 0,
@@ -61,7 +61,7 @@
     },
     {
       "id": "full_shadow_lock",
-      "name": "啟用範圍影化/實化功能",
+      "name": "Enable Recursive Shadow/Unshadow Functionality",
       "type": "boolean",
       "default": true
     }
