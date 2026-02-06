@@ -1,0 +1,25 @@
+/* :is(#...) increases specificity */
+
+#pagewrapper > #topnav .avatar-badge-wrapper {
+  display: unset;
+}
+:is(#pagewrapper, #pagewrapper > #topnav, #app) :is(.avatar-badge-wrapper, [class*="avatar-badge-wrapper_"]) {
+  height: auto;
+  background-image: none;
+  transform: none;
+}
+:is(#pagewrapper, #pagewrapper > #topnav, #app) :is(.avatar-badge, [class*="avatar-badge_"]) {
+  border: none;
+}
+:is(#pagewrapper, #pagewrapper > #topnav) .avatar-badge {
+  box-sizing: revert;
+  border-radius: 0;
+  transform: none;
+}
+
+#pagewrapper > #topnav .avatar-badge {
+  border: 1px solid #ccc;
+}
+#app :is(.avatar-badge, [class*="avatar-badge_"]) {
+  border-radius: 4px;
+}
