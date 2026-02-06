@@ -123,7 +123,7 @@
   color: var(--darkWww-link-hover, #7854c0);
 }
 #comments .comment .info .time {
-  color: var(--darkWww-box-transparentText, #b3b3b3);
+  color: var(--darkWww-box-transparentText, rgba(0, 0, 0, 0.3));
 }
 #comments .comment .info .reply {
   float: right;
@@ -144,6 +144,19 @@
   color: var(--darkWww-blue-text);
   filter: opacity(0.5);
 }
+
+/* Deleted or reported profile comments */
+#comments .comment.just_removed {
+  background-color: transparent;
+}
+#comments .comment.just_removed .info::before,
+#comments .comment.just_removed .info .content,
+#comments .comment.just_removed .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
+  background-color: var(--darkWww-blue-deletedComment, #eccedf);
+  border-color: #ff6680;
+}
+
+/* Replies */
 #comments ul.comments ul {
   margin-top: 0;
 }
