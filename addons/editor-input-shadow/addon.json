@@ -1,0 +1,62 @@
+{
+  "name": "萬物拆卸",
+  "description": "新增\"鎖定\"按鈕到右鍵選單，用於分離或接合輸入格",
+  "tags": [
+    "danger",
+    "editor",
+    "codeEditor",
+    "beta"
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "使用未被Scratch官方明確允許的積木可能面臨後續版本不可用、專案被移除甚至封號的風險。\nScratch Addons並不為此負責，請謹慎使用此功能。",
+      "id": "paddingWarning"
+    }
+  ],
+  "credits": [
+    {
+      "name": "entropy_lover_nagnto",
+      "link": "https://scratch.mit.edu/users/entropy_lover/"
+    },
+    {
+      "name": "GarboMuffin ,  pufferfish101007",
+      "note": "參考了他們的 Block switching 程式"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.44.4",
+  "settings": [
+    {
+      "id": "spawn_range_x",
+      "name": "積木噴灑 X 軸範圍",
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 200
+    },
+    {
+      "id": "spawn_range_y",
+      "name": "積木噴灑 Y 軸範圍",
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 200
+    },
+    {
+      "id": "full_shadow_lock",
+      "name": "啟用範圍影化/實化功能",
+      "type": "boolean",
+      "default": true
+    }
+  ]
+}
