@@ -16,11 +16,18 @@
   ],
   "credits": [
     {
+      "id": "entropy_lover",
       "name": "entropy_lover_nagnto",
       "link": "https://scratch.mit.edu/users/entropy_lover/"
     },
     {
-      "name": "GarboMuffin ,  pufferfish101007",
+      "id": "GarboMuffin",
+      "name": "GarboMuffin",
+      "note": "參考了他們的 Block switching 程式"
+    },
+    {
+      "id": "pufferfish101007",
+      "name": "pufferfish101007",
       "note": "參考了他們的 Block switching 程式"
     }
   ],
