@@ -693,7 +693,7 @@ input.link.black {
   color: var(--darkWww-page-forumErrorColor);
 }
 
-/* Deleted and reported profile comments */
+/* Deleted or reported profile comments */
 #comments .comment.just_removed {
   background-color: #f003;
 }

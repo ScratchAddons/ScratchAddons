@@ -145,7 +145,7 @@
   filter: opacity(0.5);
 }
 
-/* Deleted and reported profile comments */
+/* Deleted or reported profile comments */
 #comments .comment.just_removed {
   background-color: transparent;
 }
