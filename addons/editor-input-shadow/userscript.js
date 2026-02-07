@@ -82,8 +82,16 @@
       };
 
       Array.from(xml.childNodes).filter(n => n.tagName && n.tagName.toLowerCase() === 'value').forEach(v => process(v, true, block.id));
+      
+      const parent = block.getParent();
+      const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
+      const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
+
       block.dispose();
-      ScratchBlocks.Xml.domToBlock(xml, workspace).moveBy(mainPos.x, mainPos.y);
+      const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
+      newBlock.moveBy(mainPos.x, mainPos.y);
+      if (pConn) newBlock.getConnections_().find(c => c.type === bConnType).connect(pConn);
+      
       spawnList.forEach(item => spawnAt(item.xml, item.pos));
     } catch (e) { console.error(`[${addonname}]` + e); } finally { ScratchBlocks.Events.setGroup(false); }
   };
@@ -150,8 +158,15 @@
       };
       transform(xml, block.id);
 
+      const parent = block.getParent();
+      const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
+      const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
+
       block.dispose();
-      ScratchBlocks.Xml.domToBlock(xml, workspace).moveBy(mainPos.x, mainPos.y);
+      const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
+      newBlock.moveBy(mainPos.x, mainPos.y);
+      if (pConn) newBlock.getConnections_().find(c => c.type === bConnType).connect(pConn);
+
       spawnList.forEach(item => spawnAt(item.xml, item.pos));
     } catch (e) { console.error(`[${addonname}]` + e); } finally { ScratchBlocks.Events.setGroup(false); }
   };
