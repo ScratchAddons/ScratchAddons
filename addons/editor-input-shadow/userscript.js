@@ -9,6 +9,19 @@
     return;
   }
 
+  const getConnectionInfo = (block) => {
+    const parent = block.getParent();
+    const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
+    const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
+    return { pConn, bConnType };
+  };
+
+  const reconnectBlock = (newBlock, connInfo) => {
+    if (connInfo.pConn) {
+      newBlock.getConnections_().find(c => c.type === connInfo.bConnType).connect(connInfo.pConn);
+    }
+  };
+
   const cleanXml = (node) => {
     if (node.nodeType !== 1) return;
     node.removeAttribute('id');
@@ -84,14 +97,11 @@
 
       Array.from(xml.childNodes).filter(n => n.tagName && n.tagName.toLowerCase() === 'value').forEach(v => process(v, true, block.id));
       
-      const parent = block.getParent();
+      const connInfo = getConnectionInfo(block);
       block.dispose();
-      const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
-      const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
-
       const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
       newBlock.moveBy(mainPos.x, mainPos.y);
-      if (pConn) newBlock.getConnections_().find(c => c.type === bConnType).connect(pConn);
+      reconnectBlock(newBlock, connInfo);
       
       spawnList.forEach(item => spawnAt(item.xml, item.pos));
     } catch (e) { console.error(`[${addonname}]` + e); } finally { ScratchBlocks.Events.setGroup(false); }
@@ -161,14 +171,11 @@
       };
       transform(xml, block.id);
 
-      const parent = block.getParent();
-      const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
-      const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
-
+      const connInfo = getConnectionInfo(block);
       block.dispose();
       const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
       newBlock.moveBy(mainPos.x, mainPos.y);
-      if (pConn) newBlock.getConnections_().find(c => c.type === bConnType).connect(pConn);
+      reconnectBlock(newBlock, connInfo);
 
       spawnList.forEach(item => spawnAt(item.xml, item.pos));
     } catch (e) { console.error(`[${addonname}]` + e); } finally { ScratchBlocks.Events.setGroup(false); }
