@@ -1,26 +1,8 @@
 ﻿export default async function ({ addon, msg }) {
   const addonname = "editor-input-shadow";
-
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const workspace = await addon.tab.traps.getWorkspace();
-
-  if (!ScratchBlocks || !workspace) {
-    console.error(`[${addonname}] ScratchBlocks 未載入`);
-    return;
-  }
-
-  const getConnectionInfo = (block) => {
-    const parent = block.getParent();
-    const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
-    const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
-    return { pConn, bConnType };
-  };
-
-  const reconnectBlock = (newBlock, connInfo) => {
-    if (connInfo.pConn) {
-      newBlock.getConnections_().find(c => c.type === connInfo.bConnType).connect(connInfo.pConn);
-    }
-  };
+  if (!ScratchBlocks || !workspace) return console.error(`[${addonname}] ScratchBlocks 未載入`);
 
   const cleanXml = (node) => {
     if (node.nodeType !== 1) return;
@@ -70,7 +52,6 @@
         const sChild = vNode.querySelector(':scope > shadow');
         const bChild = vNode.querySelector(':scope > block');
         const name = vNode.getAttribute('name');
-
         if (bChild) {
           const bId = bChild.getAttribute('id');
           const targetConnPos = connPosMap.get(name + parentId);
@@ -84,8 +65,7 @@
           for (let a of bChild.attributes) nS.setAttribute(a.name, a.value);
           while (bChild.firstChild) nS.appendChild(bChild.firstChild);
           Array.from(nS.querySelectorAll('value')).forEach(v => process(v, false, bId));
-          vNode.innerHTML = '';
-          vNode.appendChild(nS);
+          vNode.innerHTML = ''; vNode.appendChild(nS);
         } else if (sChild && isFirst) {
           const nB = xml.ownerDocument.createElement('block');
           for (let a of sChild.attributes) nB.setAttribute(a.name, a.value);
@@ -94,15 +74,15 @@
           vNode.replaceChild(nB, sChild);
         }
       };
-
       Array.from(xml.childNodes).filter(n => n.tagName && n.tagName.toLowerCase() === 'value').forEach(v => process(v, true, block.id));
       
-      const connInfo = getConnectionInfo(block);
+      const parent = block.getParent();
+      const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
+      const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
       block.dispose();
       const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
       newBlock.moveBy(mainPos.x, mainPos.y);
-      reconnectBlock(newBlock, connInfo);
-      
+      if (pConn) newBlock.getConnections_().find(c => c.type === bConnType).connect(pConn);
       spawnList.forEach(item => spawnAt(item.xml, item.pos));
     } catch (e) { console.error(`[${addonname}]` + e); } finally { ScratchBlocks.Events.setGroup(false); }
   };
@@ -135,7 +115,6 @@
           const bChild = container.querySelector(':scope > block');
           const name = container.getAttribute('name') || (tagName === 'next' ? 'NEXT' : '');
           const targetPos = connPosMap.get(name + parentId);
-
           if (mode === 'LOCK' && bChild) {
             if (sChild && targetPos) {
               const sToB = xml.ownerDocument.createElement('block');
@@ -147,8 +126,7 @@
             for (let a of bChild.attributes) nS.setAttribute(a.name, a.value);
             while (bChild.firstChild) nS.appendChild(bChild.firstChild);
             transform(nS, bChild.getAttribute('id'));
-            container.innerHTML = ''; 
-            container.appendChild(nS);
+            container.innerHTML = ''; container.appendChild(nS);
           } else if (mode === 'UNLOCK' && (bChild || sChild)) {
             if (bChild && sChild && targetPos) {
               const sToB = xml.ownerDocument.createElement('block');
@@ -163,20 +141,20 @@
             for (let a of target.attributes) nB.setAttribute(a.name, a.value);
             while (target.firstChild) nB.appendChild(target.firstChild);
             const nextId = target.getAttribute('id');
-            container.innerHTML = '';
-            container.appendChild(nB);
+            container.innerHTML = ''; container.appendChild(nB);
             transform(nB, nextId);
           }
         });
       };
       transform(xml, block.id);
 
-      const connInfo = getConnectionInfo(block);
+      const parent = block.getParent();
+      const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
+      const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
       block.dispose();
       const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
       newBlock.moveBy(mainPos.x, mainPos.y);
-      reconnectBlock(newBlock, connInfo);
-
+      if (pConn) newBlock.getConnections_().find(c => c.type === bConnType).connect(pConn);
       spawnList.forEach(item => spawnAt(item.xml, item.pos));
     } catch (e) { console.error(`[${addonname}]` + e); } finally { ScratchBlocks.Events.setGroup(false); }
   };
