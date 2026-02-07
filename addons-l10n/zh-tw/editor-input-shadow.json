@@ -1,0 +1,13 @@
+{
+    "editor-input-shadow/@name": "萬物拆卸",
+    "editor-input-shadow/@description": "新增\"切換\"按鈕到右鍵選單，用於分離與接合輸入格",
+    "editor-input-shadow/@info-Warning": "使用未被Scratch官方明確允許的積木可能面臨後續版本不可用、專案被移除甚至封號的風險。\nScratch Addons並不為此負責，請謹慎使用此功能。",
+    "editor-input-shadow/@settings-name-spawn_range_x": "積木噴灑 X 軸範圍",
+    "editor-input-shadow/@settings-name-spawn_range_y": "積木噴灑 Y 軸範圍",
+    "editor-input-shadow/@settings-name-full_shadow_lock": "啟用範圍影化/實化功能",
+    "editor-input-shadow/@credits-GarboMuffin": "參考了他們的 程式積木切換 程式",
+    "editor-input-shadow/@credits-pufferfish101007": "參考了他們的 程式積木切換 程式",
+    "editor-input-shadow/text-shadow-switch": "切換輸入格鎖定",
+    "editor-input-shadow/text-all-to-shadow": "將連接的所有積木影化",
+    "editor-input-shadow/text-all-to-nonshadow": "將連接的所有積木實化"
+}
