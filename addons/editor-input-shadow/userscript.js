@@ -71,7 +71,7 @@
           for (let a of bChild.attributes) nS.setAttribute(a.name, a.value);
           while (bChild.firstChild) nS.appendChild(bChild.firstChild);
           Array.from(nS.querySelectorAll('value')).forEach(v => process(v, false, bId));
-          vNode.textContent = ''; 
+          vNode.innerHTML = '';
           vNode.appendChild(nS);
         } else if (sChild && isFirst) {
           const nB = xml.ownerDocument.createElement('block');
@@ -86,7 +86,7 @@
       
       const parent = block.getParent();
       const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
-      const bConnType = pConn ? pConn.targetConnection.type : null;
+      const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
 
       block.dispose();
       const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
@@ -137,7 +137,7 @@
             for (let a of bChild.attributes) nS.setAttribute(a.name, a.value);
             while (bChild.firstChild) nS.appendChild(bChild.firstChild);
             transform(nS, bChild.getAttribute('id'));
-            container.textContent = ''; 
+            container.innerHTML = ''; 
             container.appendChild(nS);
           } else if (mode === 'UNLOCK' && (bChild || sChild)) {
             if (bChild && sChild && targetPos) {
@@ -153,7 +153,7 @@
             for (let a of target.attributes) nB.setAttribute(a.name, a.value);
             while (target.firstChild) nB.appendChild(target.firstChild);
             const nextId = target.getAttribute('id');
-            container.textContent = ''; 
+            container.innerHTML = '';
             container.appendChild(nB);
             transform(nB, nextId);
           }
@@ -163,7 +163,7 @@
 
       const parent = block.getParent();
       const pConn = parent ? parent.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === block) : null;
-      const bConnType = pConn ? pConn.targetConnection.type : null;
+      const bConnType = pConn ? block.getConnections_().find(c => c.targetConnection && c.targetConnection.sourceBlock_ === parent).type : null;
 
       block.dispose();
       const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
