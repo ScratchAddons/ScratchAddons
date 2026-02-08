@@ -69,7 +69,7 @@ export default async function ({ addon, console }) {
       };
     } else if (
       !addon.tab.redux.state.scratchGui.mode.isPlayerOnly &&
-      (el = e.target.closest('div[class*="monitor_list-monitor"]'))
+      (el = e.target.closest('[class*="monitor_list-monitor_"]'))
     ) {
       callback = async (files) => {
         // Simulate a right click on the list monitor
@@ -136,9 +136,9 @@ export default async function ({ addon, console }) {
     /** @type {HTMLElement[]} */
     const elementsToAnimate = [
       el,
-      el.querySelector('div[class*="stage-selector_header_"]'),
-      el.querySelector('div[class*="sprite-info_sprite-info"]'),
-      el.querySelector('div[class*="monitor_list-body"]'),
+      el.querySelector('[class*="stage-selector_header_"]'),
+      el.querySelector('[class*="sprite-info_sprite-info_"]'),
+      el.querySelector('[class*="monitor_list-body_"]'),
     ].filter((i) => i);
     for (const el of elementsToAnimate) {
       animateElement(el, FORWARD);

@@ -546,7 +546,7 @@ export default async function ({ addon, msg, console }) {
             inline: "start",
           });
           // The wrapper seems to scroll when we use the function above.
-          let wrapper = assetPanel.closest("div[class*=gui_flex-wrapper]");
+          let wrapper = assetPanel.closest("[class*=gui_flex-wrapper_]");
           wrapper.scrollTop = 0;
         }
       } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {
