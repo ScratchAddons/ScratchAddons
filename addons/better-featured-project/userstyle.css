@@ -49,13 +49,13 @@
   position: relative;
   z-index: 1;
 }
-#fpb-name {
+#better-featured-project-name {
   color: white;
   position: absolute;
   top: 30px;
   left: 30px;
 }
-#fpb-overlay {
+#better-featured-project-overlay {
   position: absolute;
   top: 0;
   left: 0;
