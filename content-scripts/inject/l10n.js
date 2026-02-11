@@ -14,7 +14,7 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
     let addonMessages = {};
     for (const dir of this._urls) {
       let resp;
-      let messages = {};
+      let messages;
       const url = `${dir}/${addonId}.json`;
       try {
         resp = await fetch(url);
@@ -25,8 +25,8 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
         }
         continue;
       }
-      addonMessages = Object.assign(messages, addonMessages);
-      this.messages = Object.assign(messages, this.messages);
+      addonMessages = Object.assign(messages || {}, addonMessages);
+      this.messages = Object.assign(messages || {}, this.messages);
     }
     if (addonId === "_general") {
       this._reconfigure();

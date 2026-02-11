@@ -70,7 +70,7 @@ export default async function ({ addon, console, msg }) {
       return null;
     }
     const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
-    let storedSettingsMap = null;
+    let storedSettingsMap;
     try {
       const parsed = JSON.parse(jsonText);
       if (!parsed || typeof parsed !== "object") {
