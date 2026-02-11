@@ -178,7 +178,7 @@ export default async function ({ addon, console, msg }) {
           }
         }
 
-        let nameAlreadyUsed = false;
+        let nameAlreadyUsed;
         if (this.target.isStage) {
           // Global variables must not conflict with any global variables or local variables in any sprite.
           const existingNames = vm.runtime.getAllVarNamesOfType(this.scratchVariable.type);

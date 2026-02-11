@@ -53,7 +53,7 @@ class TableRows extends LogView {
     const root = document.createElement("div");
     root.className = "sa-timing-timer";
 
-    let labelElem = null;
+    let labelElem;
     if (timer.targetId !== null && timer.blockId !== null) {
       const preview = this.debug.createBlockPreview(timer.targetId, timer.blockId);
       labelElem = this.debug.createBlockLink(this.debug.getTargetInfoById(timer.targetId), timer.blockId);

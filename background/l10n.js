@@ -27,7 +27,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     localeLoop: for (const locale of locales) {
       for (const addonId of addonIds) {
         let resp;
-        let messages = {};
+        let messages;
         const url = `/addons-l10n/${locale}/${addonId}.json`;
         try {
           resp = await fetch(url);
@@ -36,7 +36,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
           if (addonId === "_general") continue localeLoop;
           continue;
         }
-        this.messages = Object.assign(messages, this.messages);
+        this.messages = Object.assign(messages || {}, this.messages);
       }
     }
     this._reconfigure();
