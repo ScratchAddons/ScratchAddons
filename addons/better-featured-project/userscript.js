@@ -14,16 +14,14 @@ export default async function ({ addon, console, msg }) {
     if (document.querySelector(".user-content .player .title a").innerText.trim().length) {
       var featuredProjectName = document.createElement("div");
       featuredProjectName.id = "better-featured-project-name";
-
-      const [h2, h3] = [document.createElement("h2"), document.createElement("h3")];
+      const h2 = document.createElement("h2");
+      const h3 = document.createElement("h3");
       h2.innerText = featuredHeading;
       h3.innerText = featuredTitle;
       featuredProjectName.append(h2, h3);
-
       headerText.insertAdjacentElement("afterend", featuredProjectName);
       addon.tab.displayNoneWhileDisabled(featuredProjectName);
     }
-
     boxHead.insertAdjacentElement("afterbegin", document.createElement("a")).id = "better-featured-project-overlay";
     document.getElementById("better-featured-project-overlay").href = featuredLink;
     addon.tab.displayNoneWhileDisabled(document.getElementById("better-featured-project-overlay"));
@@ -32,12 +30,10 @@ export default async function ({ addon, console, msg }) {
     const realChangeButton = document.querySelector("#featured-project [data-control='edit']");
     if (realChangeButton) {
       featuredProjectName.insertAdjacentElement("afterend", document.createElement("div")).className = "buttons";
-      boxHead.querySelector(".buttons").appendChild(document.createElement("button")).id =
-        "better-change-featured-project";
-      document.getElementById("better-change-featured-project").innerText = realChangeButton.innerText;
-      document.getElementById("better-change-featured-project").addEventListener("click", async function () {
+      const betterChangeButton = boxHead.querySelector(".buttons").appendChild(document.createElement("button"));
+      betterChangeButton.innerText = realChangeButton.innerText;
+      betterChangeButton.addEventListener("click", async function () {
         realChangeButton.click();
-
         const submitButton = await addon.tab.waitForElement("#featured-project-modal .btn.blue.btn-primary");
         submitButton.addEventListener("click", function () {
           // Featured project changed, reload page after it updates
@@ -56,7 +52,7 @@ export default async function ({ addon, console, msg }) {
           }, 50);
         });
       });
-      addon.tab.displayNoneWhileDisabled(document.getElementById("better-change-featured-project"));
+      addon.tab.displayNoneWhileDisabled(betterChangeButton);
     }
   }
 
