@@ -802,7 +802,7 @@ export default async function ({ addon, console, msg }) {
 
   let FieldNote;
   if (Blockly.registry) FieldNote = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_note");
-  FieldNote = Blockly.FieldNote;
+  else FieldNote = Blockly.FieldNote;
   const oldFieldNoteAddOctaveButton = FieldNote.prototype.addOctaveButton_;
   FieldNote.prototype.addOctaveButton_ = function (...args) {
     // Octave buttons in "play note" dropdown
