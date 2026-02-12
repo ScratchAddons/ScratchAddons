@@ -1,0 +1,20 @@
+{
+  "name": "Boolean Variable",
+  "description": "Adds support for boolean-type variables in the editor.",
+  "credits": [
+    {
+      "id": "entropy_lover",
+      "name": "entropy_lover_nagnto",
+      "link": "https://scratch.mit.edu/users/entropy_lover/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.45.0","enabledByDefault": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
