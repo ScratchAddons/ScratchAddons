@@ -1,0 +1,4 @@
+{
+    "bool-variable/@name":"Boolean Variable",
+    "bool-variable/@description":"Allow variables to be placed into the Boolean input just like list."
+}

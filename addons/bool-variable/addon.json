@@ -1,6 +1,6 @@
 {
   "name": "Boolean Variable",
-  "description": "Adds support for boolean-type variables in the editor.",
+  "description": "Allow variables to be placed into the Boolean input cell just like list.",
   "credits": [
     {
       "id": "entropy_lover",
@@ -14,7 +14,8 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.45.0","enabledByDefault": true,
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.45.0",
   "dynamicEnable": true,
   "dynamicDisable": true
 }

@@ -1,0 +1,4 @@
+{
+    "bool-variable/@name":"布林變數",
+    "bool-variable/@description":"讓變數能和清單一樣被放進布林值輸入格"
+}
