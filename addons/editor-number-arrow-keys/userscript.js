@@ -1,11 +1,4 @@
 export default async function ({ addon }) {
-  const settings = {
-    none: 0,
-    hundredth: 0.01,
-    tenth: 0.1,
-    one: 1,
-    ten: 10,
-  };
   const inputMap = new WeakMap();
 
   const amountOfDecimals = (numStr) => {
@@ -118,31 +111,12 @@ export default async function ({ addon }) {
     // If this is a number input, it will prevent the default browser behavior when pressing up/down in a
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
-    let changeBy = e.key === "ArrowUp" ? 1 : -1;
-    if (addon.settings.get("useCustom")) {
-      let settingValue = e.shiftKey
-        ? addon.settings.get("shiftCustom")
-        : e.altKey
-          ? addon.settings.get("altCustom")
-          : addon.settings.get("regularCustom");
-      if (settingValue === "") settingValue = 0;
-      let valueAsFloat = parseFloat(settingValue);
-      if (valueAsFloat < 0) valueAsFloat *= -1; // If user typed a negative number, we make it positive
-      if (Number.isNaN(valueAsFloat)) {
-        return;
-      } else if (valueAsFloat === 0 || (valueAsFloat < 100000000 && valueAsFloat > 0.00000099)) {
-        // This will exclude valid floats such as `1e20` that are less than 9 characters
-        changeBy *= valueAsFloat;
-      } else {
-        return;
-      }
-    } else {
-      changeBy *= e.shiftKey
-        ? settings[addon.settings.get("shift")]
-        : e.altKey
-          ? settings[addon.settings.get("alt")]
-          : settings[addon.settings.get("regular")];
-    }
+    let changeBy = e.shiftKey
+      ? addon.settings.get("shift")
+      : e.altKey
+        ? addon.settings.get("alt")
+        : addon.settings.get("regular");
+    if (e.key === "ArrowDown") changeBy *= -1;
 
     const decimalCount = Math.max(amountOfDecimals(e.target.value), amountOfDecimals(changeBy.toString()));
     const newValueAsBigInt =
