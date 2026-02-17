@@ -28,6 +28,6 @@ jobs:
 
       - name: Run ESLint
         run: |
-          npm i globals @eslint/js @eslint/eslintrc
+          npm i globals@^17.3.0 @eslint/js@^9.39.2 @eslint/eslintrc
           npx eslint . --config eslint.config.mjs
 
