@@ -174,9 +174,13 @@
   padding: 0;
   background-color: transparent;
   border: none;
+  border-radius: 0;
 }
 .comment.comment.highlighted-comment .comment-body .comment-bubble {
   color: var(--darkWww-gray-scratchr2Text, #322f31);
+}
+.comment .comment-body .comment-bubble.comment-bubble-reported {
+  background-color: #f003;
 }
 .comment .comment-body .comment-bubble::before {
   display: none;
