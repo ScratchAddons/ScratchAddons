@@ -186,7 +186,7 @@
 }
 :root:not(.sa-editor) [class*="stage-header_stage-header-wrapper_"],
 :root:not(.sa-editor) [class*="stage-header_stage-header-wrapper-overlay_"] /* embeds */ {
-  background-image: var(--darkWww-page, linear-gradient(white, #e6e8e8));
+  background-image: linear-gradient(var(--darkWww-page, white), var(--darkWww-page, #e6e8e8));
   border: 1px solid var(--darkWww-border-15, #d0d1d2);
   border-bottom: none;
   border-radius: 8px 8px 0 0;
