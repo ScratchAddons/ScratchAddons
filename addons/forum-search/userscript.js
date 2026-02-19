@@ -92,28 +92,6 @@ function parseFilterParams(filter) {
   return params;
 }
 
-/* Beginning of function below, but the old ScratchDB code just for reference.
-
-function appendSearch(box, query, filter, page, term, msg) {
-  if (!hasMoreResults && page > 0) return 0;
-  isCurrentlyProcessing = true;
-  let loading = document.createTextNode(msg("loading"));
-  currentPage = page;
-  box.appendChild(loading);
-  window
-    .fetch(
-      `https://scratchdb.lefty.one/search/indexes/forum_posts/search?attributesToSearchOn=content&hitsPerPage=50&q=${encodeURIComponent(
-        query
-      )}&filter=${encodeURIComponent(filter)}&page=${page + 1}${
-        term === "newest" ? "&sort=id:desc" : term === "oldest" ? "&sort=id:asc" : ""
-      }`,
-      {
-        headers: {
-          // Note: the following token is well-known and public.
-          authorization: "Bearer 3396f61ef5b02abf801096be5f0b0ee620de304dd92fc6045aeb99539cd0bec4",
-        },
-      }
-    )*/
 function appendSearch(box, query, filter, page, term, msg) {
   if (!hasMoreResults && page > 0) {
     return 0;
