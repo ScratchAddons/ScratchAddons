@@ -36,7 +36,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
           if (addonId === "_general") continue localeLoop;
           continue;
         }
-        this.messages = Object.assign(messages || {}, this.messages);
+        Object.assign(this.messages, messages);
       }
     }
     this._reconfigure();

@@ -25,8 +25,8 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
         }
         continue;
       }
-      addonMessages = Object.assign(messages || {}, addonMessages);
-      this.messages = Object.assign(messages || {}, this.messages);
+      Object.assign(addonMessages, messages);
+      Object.assign(this.messages, messages);
     }
     if (addonId === "_general") {
       this._reconfigure();
