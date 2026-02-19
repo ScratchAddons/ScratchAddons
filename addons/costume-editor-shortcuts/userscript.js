@@ -123,7 +123,7 @@ export default async function ({ addon, console }) {
     if (!toolName || addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== COSTUME_EDITOR_TAB_INDEX) return;
 
     try {
-      const modeSelector = document.querySelector("[class^='paint-editor_mode-selector']");
+      const modeSelector = document.querySelector("[class*='paint-editor_mode-selector_']");
       if (modeSelector) {
         modeSelector.querySelector(`span[title^='${toolName}']`)?.click();
       }
@@ -137,7 +137,7 @@ export default async function ({ addon, console }) {
    */
   function addShortcutsToTitles() {
     try {
-      const container = document.querySelector("[class^='paint-editor_mode-selector']");
+      const container = document.querySelector("[class*='paint-editor_mode-selector_']");
       container.querySelectorAll("span").forEach((span) => {
         updateTitle(span, span.getAttribute("title"));
       });

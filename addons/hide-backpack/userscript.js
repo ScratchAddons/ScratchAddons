@@ -21,7 +21,7 @@ export default async function ({ addon, console }) {
   });
 
   while (true) {
-    originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
+    originalBackpack = await addon.tab.waitForElement("[class*=backpack_backpack-header_]", {
       markAsSeen: true,
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
@@ -42,7 +42,7 @@ export default async function ({ addon, console }) {
 }
 
 function isBackpackOpen() {
-  return !!document.querySelector("[class^=backpack_backpack-list_]");
+  return !!document.querySelector("[class*=backpack_backpack-list_]");
 }
 
 // Create default backpack button
@@ -78,7 +78,7 @@ function toggleBackpack() {
     // Backpack is closed and will be opened
     document.body.classList.add("sa-backpack-open");
   }
-  document.querySelector("[class^=backpack_backpack-header_]").click();
+  document.querySelector("[class*=backpack_backpack-header_]").click();
   window.dispatchEvent(new Event("resize"));
 }
 

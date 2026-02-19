@@ -243,7 +243,7 @@ export default async ({ addon, console, msg }) => {
     saColorPicker.appendChild(saColorPickerHandle);
 
     const [colorSlider, saturationSlider, brightnessSlider] = [
-      ...element.parentElement.querySelectorAll('[class^="color-picker_row-header"]'),
+      ...element.parentElement.querySelectorAll('[class*="color-picker_row-header_"]'),
     ].map((i) => i.parentElement);
     saturationSlider.style.display = "none";
     brightnessSlider.style.display = "none";

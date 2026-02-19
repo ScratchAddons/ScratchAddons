@@ -40,7 +40,7 @@ export default async function ({ addon, console }) {
       addon.settings.get("toolbar") === "hover"
     ) {
       const canvas = await addon.tab.waitForElement('[class*="stage_full-screen"] canvas');
-      const header = await addon.tab.waitForElement('[class^="stage-header_stage-header-wrapper"]');
+      const header = await addon.tab.waitForElement('[class*="stage-header_stage-header-wrapper_"]');
       const phantom = header.parentElement.appendChild(document.createElement("div"));
       phantom.classList.add("phantom-header");
 

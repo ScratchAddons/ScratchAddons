@@ -1,7 +1,7 @@
 export default async function ({ addon }) {
   while (true) {
     // Profile account menu item
-    const menuItem = await addon.tab.waitForElement("[class^=account-nav_user-info_] + div > ul > :first-child", {
+    const menuItem = await addon.tab.waitForElement("[class*=account-nav_user-info_] + div > ul > :first-child", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/menus/OPEN_MENU"],
       reduxCondition: (state) => state.scratchGui.menus.accountMenu,

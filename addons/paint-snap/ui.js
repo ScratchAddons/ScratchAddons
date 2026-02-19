@@ -282,7 +282,7 @@ export function initUI({ addon, msg }) {
   const controlsLoop = async () => {
     let hasRunOnce = false;
     while (true) {
-      const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
+      const canvasControls = await addon.tab.waitForElement("[class*='paint-editor_canvas-controls_']", {
         markAsSeen: true,
         reduxEvents: [
           "scratch-gui/navigation/ACTIVATE_TAB",
@@ -294,7 +294,7 @@ export function initUI({ addon, msg }) {
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
-      const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
+      const zoomControlsContainer = canvasControls.querySelector("[class*='paint-editor_zoom-controls_']");
       addon.tab.appendToSharedSpace({
         space: "paintEditorZoomControls",
         element: controlsGroup,

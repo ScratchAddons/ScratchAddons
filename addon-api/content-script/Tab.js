@@ -447,7 +447,7 @@ export default class Tab extends Listenable {
       },
       fullscreenStageHeader: {
         // Fullscreen stage header only
-        element: () => q("[class^='stage-header_stage-menu-wrapper']"),
+        element: () => q("[class*='stage-header_stage-menu-wrapper_']"),
         from: function () {
           let emptyDiv = this.element().querySelector(".sa-spacer");
           if (!emptyDiv) {
@@ -458,16 +458,16 @@ export default class Tab extends Listenable {
           }
           return [emptyDiv];
         },
-        until: () => [q("[class^='stage-header_stage-menu-wrapper']").lastChild],
+        until: () => [q("[class*='stage-header_stage-menu-wrapper_']").lastChild],
       },
       afterGreenFlag: {
-        element: () => q("[class^='controls_controls-container']"),
+        element: () => q("[class*='controls_controls-container_']"),
         from: () => [],
-        until: () => [q("[class^='stop-all_stop-all']")],
+        until: () => [q("[class*='stop-all_stop-all-button_']")],
       },
       afterStopButton: {
-        element: () => q("[class^='controls_controls-container']"),
-        from: () => [q("[class^='stop-all_stop-all']")],
+        element: () => q("[class*='controls_controls-container_']"),
+        from: () => [q("[class*='stop-all_stop-all-button_']")],
         until: () => [],
       },
       beforeProjectActionButtons: {
@@ -501,8 +501,8 @@ export default class Tab extends Listenable {
         until: () => [],
       },
       afterSoundTab: {
-        element: () => q("[class^='react-tabs_react-tabs__tab-list']"),
-        from: () => [q("[class^='react-tabs_react-tabs__tab-list']").children[2]],
+        element: () => q("[class*='react-tabs_react-tabs__tab-list_']"),
+        from: () => [q("[class*='react-tabs_react-tabs__tab-list_']").children[2]],
         // Element used in find-bar addon
         until: () => [q(".sa-find-bar")],
       },
@@ -653,7 +653,7 @@ export default class Tab extends Listenable {
               wrapper.style.flexDirection = "row-reverse";
               wrapper.style.height = "calc(1.95rem + 2px)";
 
-              const zoomControls = q("[class^='paint-editor_zoom-controls']");
+              const zoomControls = q("[class*='paint-editor_zoom-controls_']");
 
               zoomControls.replaceWith(wrapper);
               wrapper.appendChild(zoomControls);

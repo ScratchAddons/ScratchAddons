@@ -77,8 +77,8 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
 
-    spritesContainer = document.querySelector('[class^="sprite-selector_items-wrapper"]');
-    spriteSelectorContainer = document.querySelector('[class^="sprite-selector_sprite-selector"]');
+    spritesContainer = document.querySelector('[class*="sprite-selector_items-wrapper_"]');
+    spriteSelectorContainer = document.querySelector('[class*="sprite-selector_sprite-selector_"]');
     spriteSelectorContainer.appendChild(container);
     reset(); // Clear search box after going outside then inside
   }

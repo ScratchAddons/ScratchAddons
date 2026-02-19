@@ -339,7 +339,7 @@ export default async function ({ addon, console, msg }) {
         addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
         addon.tab.scratchClass("gui_is-selected")
       );
-      const contentArea = document.querySelector("[class^=gui_tabs]");
+      const contentArea = document.querySelector("[class*=gui_tabs_]");
       contentArea.insertAdjacentElement("beforeend", manager);
       fullReload();
     } else {
@@ -405,7 +405,7 @@ export default async function ({ addon, console, msg }) {
   });
 
   while (true) {
-    await addon.tab.waitForElement("[class^='react-tabs_react-tabs__tab-list']", {
+    await addon.tab.waitForElement("[class*='react-tabs_react-tabs__tab-list_']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
