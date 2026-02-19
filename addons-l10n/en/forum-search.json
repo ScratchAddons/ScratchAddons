@@ -1,6 +1,6 @@
 {
-  "forum-search/loading": "Loading...",
-  "forum-search/error": "Error loading from ScratchDB!",
+  "forum-search/loading": "Loading more results...",
+  "forum-search/error": "Error loading from ScratchPost!",
   "forum-search/none": "Your search returned no results",
   "forum-search/username": "Username:",
   "forum-search/posts-here": "User Posts Here",
@@ -8,6 +8,7 @@
   "forum-search/last-edited-by": "Last edited by {username} ({datetime})",
   "forum-search/placeholder": "Search posts",
   "forum-search/relevance": "relevance",
+  "forum-search/popularity": "popularity",
   "forum-search/newest": "newest",
   "forum-search/oldest": "oldest",
   "forum-search/filter-placeholder": {

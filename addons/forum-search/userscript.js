@@ -3,19 +3,25 @@ let isCurrentlyProcessing = false;
 let currentPage = 0;
 let hits = 10000; // elastic default
 let currentQuery;
+let currentFilter;
 let currentSort = "relevance";
+let hasMoreResults = true;
 
 const ALLOWED_TAGS = {
   A: ["href"],
   BR: [],
   BLOCKQUOTE: [],
   DIV: ["class", "style"],
+  EM: ["class", "style"],
+  I: ["class", "style"],
   IMG: ["src"],
   LI: [],
   OL: ["style"],
   P: ["class"],
   PRE: ["class"],
   SPAN: ["class", "style"],
+  STRIKE: ["class", "style"],
+  STRONG: ["class", "style"],
   UL: [],
 };
 
@@ -62,11 +68,34 @@ function triggerNewSearch(searchContent, query, filter, sort, msg) {
     searchContent.removeChild(searchContent.firstChild);
   }
   currentQuery = query;
+  currentFilter = filter;
+  hasMoreResults = true;
   appendSearch(searchContent, query, filter, 0, sort, msg);
 }
 
+function parseFilterParams(filter) {
+  if (!filter) return {};
+
+  const params = {};
+  const usernameMatch = filter.match(/username\s*=\s*"([^"]+)"/i);
+  if (usernameMatch) params.author = usernameMatch[1];
+
+  const topicMatch = filter.match(/topic\.id\s*=\s*(\d+)/i);
+  if (topicMatch) params.topic = topicMatch[1];
+
+  const categoryMatch = filter.match(/topic\.category\s*=\s*"([^"]+)"/i);
+  if (categoryMatch) params.category = categoryMatch[1];
+
+  const postMatch = filter.match(/post\.id\s*=\s*(\d+)/i);
+  if (postMatch) params.post = postMatch[1];
+
+  return params;
+}
+
+/* Beginning of function below, but the old ScratchDB code just for reference.
+
 function appendSearch(box, query, filter, page, term, msg) {
-  if (page * 50 > hits) return 0;
+  if (!hasMoreResults && page > 0) return 0;
   isCurrentlyProcessing = true;
   let loading = document.createTextNode(msg("loading"));
   currentPage = page;
@@ -84,14 +113,57 @@ function appendSearch(box, query, filter, page, term, msg) {
           authorization: "Bearer 3396f61ef5b02abf801096be5f0b0ee620de304dd92fc6045aeb99539cd0bec4",
         },
       }
-    )
+    )*/
+function appendSearch(box, query, filter, page, term, msg) {
+  if (!hasMoreResults && page > 0) {
+    return 0;
+  }
+  isCurrentlyProcessing = true;
+  let loading = document.createTextNode(msg("loading"));
+  currentPage = page;
+  box.appendChild(loading);
+  const limit = 50;
+  const offset = page * limit;
+  let mode = "relevance";
+  let sortParam;
+  if (term === "popularity" || term === "relevance") {
+    mode = term;
+  }
+  if (term === "oldest" || term === "newest") {
+    mode = "sort";
+    sortParam = term;
+  }
+
+  const filterParams = parseFilterParams(filter);
+  const categoryParam = filterParams.category || "all";
+  delete filterParams.category;
+
+  const searchParams = new URLSearchParams({
+    q: query,
+    mode,
+    category: categoryParam,
+    limit: String(limit),
+    offset: String(offset),
+    detail: "3",
+    displayAuthor: "true",
+    ...filterParams,
+  });
+  if (sortParam) {
+    searchParams.set("sort", sortParam);
+  }
+
+  window
+    .fetch(`https://api.scratchpost.quuq.dev/search/posts?${searchParams.toString()}`)
     .catch((err) => {
       box.removeChild(box.lastChild);
       box.appendChild(document.createTextNode(msg("error")));
     })
     .then((res) => res.json())
     .then((data) => {
-      hits = data.hits.length;
+      const results = Array.isArray(data) ? data : data?.hits || [];
+      hits = results.length;
+      hasMoreResults = results.length === limit;
+
       if (hits === 0) {
         //there were no hits
         box.removeChild(box.lastChild);
@@ -100,7 +172,8 @@ function appendSearch(box, query, filter, page, term, msg) {
         return;
       }
       box.removeChild(box.lastChild);
-      for (let post of data.hits) {
+      currentPage = page;
+      for (let post of results) {
         function createTextBox(data, classes, times) {
           let element = document.createElement("span");
           element.classList = classes;
@@ -133,12 +206,12 @@ function appendSearch(box, query, filter, page, term, msg) {
 
         let boxLink = document.createElement("a");
         boxLink.setAttribute("href", `https://scratch.mit.edu/discuss/post/${post.id}`);
-        boxLink.appendChild(document.createTextNode(`${post.topic.category} » ${post.topic.title}`));
+        boxLink.appendChild(document.createTextNode(`${post.category_name} » ${post.topic_name}`));
         boxHead.appendChild(boxLink);
 
         let boxTime = document.createElement("span");
         boxTime.classList = "conr";
-        const localizedPostDate = scratchAddons.l10n.datetime(new Date(post.time_posted));
+        const localizedPostDate = scratchAddons.l10n.datetime(new Date(post.date));
         boxTime.appendChild(document.createTextNode(localizedPostDate));
         boxHead.appendChild(boxTime);
 
@@ -156,8 +229,8 @@ function appendSearch(box, query, filter, page, term, msg) {
 
         postLeftDl.appendChild(createLabel(msg("username")));
         let userLink = document.createElement("a"); // this one is an `a` and not a `span`, so it isnt in the createTextBox function
-        userLink.setAttribute("href", `https://scratch.mit.edu/users/${post.username}`);
-        userLink.appendChild(document.createTextNode(post.username));
+        userLink.setAttribute("href", `https://scratch.mit.edu/users/${post.author}`);
+        userLink.appendChild(document.createTextNode(post.author));
         postLeftDl.appendChild(userLink);
 
         postLeftDl.appendChild(document.createElement("br"));
@@ -168,7 +241,7 @@ function appendSearch(box, query, filter, page, term, msg) {
           userPostButton.appendChild(document.createTextNode(msg("posts-here")));
           userPostButton.addEventListener("click", () => {
             document.getElementById("forum-search-input").value = "";
-            filterBar.value = `username = "${post.username}" AND (${filterBar.value})`;
+            filterBar.value = `username = "${post.author}" AND (${filterBar.value})`;
             triggerNewSearch(
               document.getElementById("forum-search-list"),
               document.getElementById("forum-search-input").value,
@@ -187,7 +260,7 @@ function appendSearch(box, query, filter, page, term, msg) {
         userGlobalButton.appendChild(document.createTextNode(msg("posts-sitewide")));
         userGlobalButton.addEventListener("click", () => {
           document.getElementById("forum-search-input").value = "";
-          document.getElementById("forum-search-filter-input").value = `username = "${post.username}"`;
+          document.getElementById("forum-search-filter-input").value = `username = "${post.author}"`;
           triggerNewSearch(
             document.getElementById("forum-search-list"),
             document.getElementById("forum-search-input").value,
@@ -214,7 +287,7 @@ function appendSearch(box, query, filter, page, term, msg) {
         postHTML.append(...cleanPost(post.content));
         postMsg.appendChild(postHTML);
 
-        if (post.time_last_edited) {
+        if (post.time_last_edited && post.last_edited_by) {
           let postEdit = document.createElement("p");
           postEdit.classList = "postedit";
           let postEditMessage = document.createElement("em");
@@ -267,8 +340,7 @@ export default async function ({ addon, console, msg }) {
         break;
       }
       case 4: {
-        let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].textContent;
-        filterBar.value = ` topic.category = "${category}"`;
+        filterBar.value = ` topic.category = "${pathSplit[2]}"`;
         break;
       }
     }
@@ -281,7 +353,7 @@ export default async function ({ addon, console, msg }) {
 
   let searchDropdown = document.createElement("select");
   searchDropdown.id = "forum-search-dropdown";
-  let types = ["relevance", "newest", "oldest"];
+  let types = ["relevance", "popularity", "newest", "oldest"];
   for (let type of types) {
     let dropdownOption = document.createElement("option");
     dropdownOption.value = type;
@@ -300,9 +372,9 @@ export default async function ({ addon, console, msg }) {
   let searchContent = document.createElement("div");
   searchContent.addEventListener("scroll", (e) => {
     let et = e.target;
-    if (et.scrollHeight - et.scrollTop === et.clientHeight) {
+    if (et.scrollHeight - et.scrollTop - et.clientHeight < 10) {
       if (!isCurrentlyProcessing) {
-        appendSearch(searchContent, currentQuery, currentPage + 1, currentSort, msg);
+        appendSearch(searchContent, currentQuery, currentFilter, currentPage + 1, currentSort, msg);
       }
     }
   });
