@@ -83,6 +83,15 @@ export default async function ({ addon, console, msg }) {
         confirmationTitle = msg("removeproject-title");
         confirmationMessage = msg("removeproject");
       }
+      // Sign Out
+      if (
+        addon.settings.get("signingout") &&
+        (e.target.closest(".account-nav > .dropdown > .divider") ||
+          e.target.closest("form[action='/accounts/logout/']"))
+      ) {
+        confirmationTitle = msg("signout-title");
+        confirmationMessage = msg("signout");
+      }
 
       // If one of the actions above is being taken, prevent it and show confirmation prompt
       if (confirmationMessage !== null) {

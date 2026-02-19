@@ -59,11 +59,17 @@
       "id": "closingtopic",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Confirm signing out",
+      "id": "signingout",
+      "type": "boolean",
+      "default": false
     }
   ],
   "latestUpdate": {
-    "version": "1.28.0",
-    "newSettings": ["removingprojects"]
+    "version": "1.45.0",
+    "newSettings": ["signingout"]
   },
   "tags": ["community", "recommended"],
   "relatedAddons": ["no-sprite-confirm"],
