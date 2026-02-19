@@ -13,20 +13,17 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
     }
     let addonMessages = {};
     for (const dir of this._urls) {
-      let resp;
-      let messages;
       const url = `${dir}/${addonId}.json`;
       try {
-        resp = await fetch(url);
-        messages = await resp.json();
+        const resp = await fetch(url);
+        const messages = await resp.json();
+        addonMessages = Object.assign(messages, addonMessages);
+        this.messages = Object.assign(messages, this.messages);
       } catch (_) {
         if (addonId === "_general") {
           this._urls.delete(dir);
         }
-        continue;
       }
-      Object.assign(addonMessages, messages);
-      Object.assign(this.messages, messages);
     }
     if (addonId === "_general") {
       this._reconfigure();
