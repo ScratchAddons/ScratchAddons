@@ -66,6 +66,7 @@ export default [
       "no-loss-of-precision": 2,
       "no-nonoctal-decimal-escape": 2,
       "no-unsafe-optional-chaining": 2,
+      "no-useless-assignment": 2,
       "no-useless-backreference": 2,
       "no-unused-vars": 0,
       "no-useless-escape": 0,

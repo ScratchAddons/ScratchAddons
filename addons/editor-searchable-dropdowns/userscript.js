@@ -351,7 +351,7 @@ export default async function ({ addon, console, msg }) {
       }
 
       const lastIndex = items.length - 1;
-      let newIndex = 0;
+      let newIndex;
       if (event.key === "ArrowDown") {
         if (selectedIndex === -1 || selectedIndex === lastIndex) {
           newIndex = 0;
