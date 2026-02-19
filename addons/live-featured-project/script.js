@@ -61,8 +61,8 @@ export default async function ({ addon, msg }) {
         "load",
         function callback() {
           const observer = new MutationObserver(() => {
-            if (iframeElement.contentDocument.querySelector("[class^='loader_fullscreen']") === null) {
-              iframeElement.contentDocument.querySelector("[class^='green-flag_green-flag']").click();
+            if (iframeElement.contentDocument.querySelector("[class*='loader_fullscreen_']") === null) {
+              iframeElement.contentDocument.querySelector("[class*='green-flag_green-flag_']").click();
               observer.disconnect();
             }
           });

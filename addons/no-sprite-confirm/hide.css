@@ -1,3 +1,3 @@
-[class^="delete-confirmation-prompt_"] {
+[class*="delete-confirmation-prompt_"] {
   visibility: hidden;
 }

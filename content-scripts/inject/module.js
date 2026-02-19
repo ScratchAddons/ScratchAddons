@@ -327,7 +327,7 @@ const isProject =
   !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
 if (isScratchGui || isProject) {
   // Stylesheets are considered to have loaded if this element exists
-  const elementSelector = isScratchGui ? "div[class*=index_app_]" : ":root > body > .ReactModalPortal";
+  const elementSelector = isScratchGui ? "[class*=index_app_]" : ":root > body > .ReactModalPortal";
 
   if (document.querySelector(elementSelector)) loadClasses();
   else {

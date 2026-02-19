@@ -466,7 +466,7 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     const target = await addon.tab.waitForElement(
       // Full screen button
-      '[class^="stage-header_stage-size-row"] [class^="button_outlined-button"], [class*="stage-header_unselect-wrapper_"] > [class^="button_outlined-button"]',
+      '[class*="stage-header_stage-size-row_"] [class*="button_outlined-button_"], [class*="stage-header_unselect-wrapper_"] > [class*="button_outlined-button_"]',
       {
         markAsSeen: true,
         reduxEvents: [
@@ -478,13 +478,13 @@ export default async function ({ addon, console, msg }) {
       }
     );
     container.dataset.editorMode = addon.tab.editorMode;
-    if (target.closest('[class^="stage-header_stage-size-row"]')) {
+    if (target.closest('[class*="stage-header_stage-size-row_"]')) {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
     } else {
       addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });
     }
 
-    const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
+    const monitorListScaler = document.querySelector("[class*='monitor-list_monitor-list-scaler_']");
     monitorListScaler.appendChild(virtualCursorElement);
   }
 }
