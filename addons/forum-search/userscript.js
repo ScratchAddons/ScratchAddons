@@ -83,8 +83,13 @@ function parseFilterParams(filter) {
   const topicMatch = filter.match(/topic\.id\s*=\s*(\d+)/i);
   if (topicMatch) params.topic = topicMatch[1];
 
-  const categoryMatch = filter.match(/topic\.category\s*=\s*"([^"]+)"/i);
-  if (categoryMatch) params.category = categoryMatch[1];
+  const categoryMatch = filter.match(/topic\.category\s*=\s*(?:"([^"]+)"|(\d+))/i);
+  if (categoryMatch) {
+    const categoryValue = Number.parseInt(categoryMatch[1] ?? categoryMatch[2], 10);
+    if (!Number.isNaN(categoryValue)) {
+      params.category = categoryValue;
+    }
+  }
 
   const postMatch = filter.match(/post\.id\s*=\s*(\d+)/i);
   if (postMatch) params.post = postMatch[1];
@@ -113,13 +118,13 @@ function appendSearch(box, query, filter, page, term, msg) {
   }
 
   const filterParams = parseFilterParams(filter);
-  const categoryParam = filterParams.category || "all";
+  const categoryParam = Number.isInteger(filterParams.category) ? filterParams.category : 0;
   delete filterParams.category;
 
   const searchParams = new URLSearchParams({
     q: query,
     mode,
-    category: categoryParam,
+    category: String(categoryParam),
     limit: String(limit),
     offset: String(offset),
     detail: "3",
