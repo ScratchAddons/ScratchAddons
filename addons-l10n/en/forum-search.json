@@ -1,5 +1,5 @@
 {
-  "forum-search/loading": "Loading more results...",
+  "forum-search/loading": "Loading...",
   "forum-search/error": "Error loading from ScratchPost!",
   "forum-search/none": "Your search returned no results",
   "forum-search/username": "Username:",
