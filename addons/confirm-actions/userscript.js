@@ -84,11 +84,11 @@ export default async function ({ addon, console, msg }) {
         confirmationMessage = msg("removeproject");
       }
       // Sign Out
-      if (
-        addon.settings.get("signingout") &&
-        (e.target.closest(".account-nav > .dropdown > .divider") ||
-          e.target.closest("form[action='/accounts/logout/']"))
-      ) {
+      const isSigningOut =
+        e.target.closest(".account-nav > .dropdown > .divider") ||
+        e.target.closest("form[action='/accounts/logout/']") ||
+        e.target.closest("[class*='menu_left'] > [class*='menu_menu-section']");
+      if (addon.settings.get("signingout") && isSigningOut) {
         confirmationTitle = msg("signout-title");
         confirmationMessage = msg("signout");
       }
