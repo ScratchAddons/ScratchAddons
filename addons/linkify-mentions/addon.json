@@ -1,0 +1,44 @@
+{
+  "name": "Clickable forum mentions",
+  "description": "Turns @username mentions and quote authors on the forums into clickable links.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://github.com/Samq64"
+    },
+    {
+      "name": "just-a-hriday",
+      "link": "https://scratch.mit.edu/users/just-a-hriday"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["topics"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "plain-text.css",
+      "matches": ["topics"],
+      "if": {
+        "settings": {
+          "plainText": true
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Style quote authors as normal text",
+      "id": "plainText",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.39.0",
+  "tags": ["community", "forums"]
+}

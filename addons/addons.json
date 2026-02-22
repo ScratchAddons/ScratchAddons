@@ -151,6 +151,7 @@
   "reorder-custom-inputs",
   "place-backpack-code-at-cursor",
   "big-save-button",
+  "linkify-mentions",
   "workspace-dots",
   "asset-conflict-dialog",
   "editor-cleanup-plus",
