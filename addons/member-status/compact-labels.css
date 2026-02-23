@@ -1,0 +1,11 @@
+.membership-label-container {
+  padding: 1px 3px;
+}
+
+.membership-label-text {
+  font-size: 0;
+}
+
+.membership-label-text:first-letter {
+  font-size: 8px;
+}
