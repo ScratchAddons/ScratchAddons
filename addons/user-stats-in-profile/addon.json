@@ -1,0 +1,25 @@
+{
+  "name": "User Stats in Profile",
+  "description": "Displays project statistics inside user profiles using Scratch icons with real-time data.",
+  "credits": [
+    {
+      "name": "VIGARPAST_777",
+      "link": "https://scratch.mit.edu/users/VIGARPAST_777/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyles.css",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "enabledByDefault": false,
+  "versionAdded": "1.44.0",
+  "tags": ["community", "profiles"]
+}
