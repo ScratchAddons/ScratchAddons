@@ -29,14 +29,14 @@ export default class Trap extends Listenable {
    * @private
    */
   get REACT_INTERNAL_PREFIXES() {
-    return ["__reactFiber$"];
+    return ["__reactInternalInstance$", "__reactFiber$"];
   }
 
   /**
    * @private
    */
   get REACT_INTERNAL_CONTAINER_PREFIXES() {
-    return ["__reactContainer$"];
+    return ["__reactContainere$", "__reactContainer$"];
   }
 
   _getBlocksComponent(wrapper) {
@@ -153,7 +153,7 @@ export default class Trap extends Listenable {
     let toolState = internalState;
     let tool;
     while (toolState) {
-      const toolInstance = toolState.child.child.stateNode;
+      const toolInstance = toolState.child.stateNode || toolState.child.child.stateNode; // React 16 || React 18
       if (toolInstance.tool) {
         tool = toolInstance.tool;
         break;
