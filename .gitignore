@@ -35,3 +35,4 @@ ehthumbs_vista.db
 
 # Development files
 node_modules/
+.claude/
