@@ -1,0 +1,87 @@
+{
+  "name": "Hide membership",
+  "description": "Lets you hide the membership badges on other user profiles, 'member' flairs next to usernames and cat avatars around members.",
+  "credits": [
+    {
+      "name": "random-beta-tube"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "hide_badges.css",
+      "matches": ["profiles"],
+      "if": {
+        "settings": { "badges": true }
+      }
+    },
+    {
+      "url": "hide_flairs.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "flairs": true }
+      }
+    },
+    {
+      "url": "hide_cat_ears.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    },
+    {
+      "url": "hide_avatars_scratch2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    },
+    {
+      "url": "hide_avatars_scratch3.css",
+      "matches": ["https://scratch.mit.edu", "https://scratch.mit.edu/messages"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    },
+    {
+      "url": "hide_avatars_no_border_round_4px.css",
+      "matches": ["studios", "https://scratch.mit.edu/explore/*"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    },
+    {
+      "url": "hide_avatars_no_border_round_5px.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "avatars": true }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hide membership badges",
+      "default": true,
+      "id": "badges",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide member flairs",
+      "default": true,
+      "id": "flairs",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide cat avatars (POORLY IMPLEMENTED!)",
+      "default": true,
+      "id": "avatars",
+      "type": "boolean"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "injectAsStyleElt": true,
+  "tags": ["community", "profiles"],
+  "versionAdded": "1.45.0",
+  "updateUserstylesOnSettingsChange": true,
+  "enabledByDefault": false
+}

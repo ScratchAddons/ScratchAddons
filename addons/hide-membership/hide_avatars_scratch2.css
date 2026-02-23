@@ -1,0 +1,13 @@
+/* scratch 2 style pages handled here */
+.slider-carousel .avatar-badge-wrapper {
+  all: revert;
+}
+.slider-carousel img.avatar-badge {
+  border: 1px solid #ddd;
+  border-radius: 0px;
+  box-sizing: content-box;
+}
+img.avatar-badge {
+  border: none !important;
+  border-radius: 0px !important;
+}
