@@ -240,7 +240,7 @@ export default async function ({ addon, console }) {
   };
 
   const setCustomProcedureOptionsColor = (colors) => {
-    const optionsRowElement = document.querySelectorAll("[class^=custom-procedures_options-row_]")?.[0];
+    const optionsRowElement = document.querySelectorAll("[class*=custom-procedures_options-row_]")?.[0];
     if (optionsRowElement) {
       const imgElements = optionsRowElement.getElementsByTagName("img");
       for (const element of imgElements) {
@@ -408,8 +408,8 @@ export default async function ({ addon, console }) {
   };
 
   const addColorMenu = (block) => {
-    const proceduresBody = document.querySelectorAll("[class^=custom-procedures_body_]")?.[0];
-    const optionsRow = proceduresBody.querySelectorAll("[class^=custom-procedures_options-row_]")?.[0];
+    const proceduresBody = document.querySelectorAll("[class*=custom-procedures_body_]")?.[0];
+    const optionsRow = proceduresBody.querySelectorAll("[class*=custom-procedures_options-row_]")?.[0];
 
     const proceduresColorRow = document.createElement("div");
     proceduresColorRow.classList.add("sa-rcb-custom-procedures_colors-row");

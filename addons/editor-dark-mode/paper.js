@@ -78,7 +78,7 @@ export default async function ({ addon, console }) {
   addon.self.addEventListener("disabled", updateColors);
   addon.self.addEventListener("reenabled", updateColors);
   while (true) {
-    await addon.tab.waitForElement("[class^=paper-canvas_paper-canvas_]", {
+    await addon.tab.waitForElement("[class*=paper-canvas_paper-canvas_]", {
       markAsSeen: true,
       reduxEvents: [
         "scratch-gui/navigation/ACTIVATE_TAB",

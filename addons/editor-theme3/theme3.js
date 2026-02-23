@@ -1003,7 +1003,7 @@ export default async function ({ addon, console, msg }) {
     // Custom colors for "Add an input/label" block icons in the "Make a block" popup menu, by pumpkinhasapatch
     while (true) {
       // Wait until "Make a block" popup is opened and icon elements are created
-      const iconElement = await addon.tab.waitForElement("[class^=custom-procedures_option-icon_]", {
+      const iconElement = await addon.tab.waitForElement("[class*=custom-procedures_option-icon_]", {
         markAsSeen: true,
         reduxEvents: ["scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES"],
         reduxCondition: (state) =>
@@ -1024,7 +1024,6 @@ export default async function ({ addon, console, msg }) {
         .replace("%outline%", tertiaryColor(myBlocksCategory))
         .replace("%labeltext%", isColoredTextMode() ? tertiaryColor(myBlocksCategory) : uncoloredTextColor());
 
-      //console.log(svg);
       iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
     }
   })();

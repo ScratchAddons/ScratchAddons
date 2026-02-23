@@ -43,7 +43,7 @@ export default async function ({ addon, console }) {
       event.detail.action.type === "scratch-paint/formats/CHANGE_FORMAT" ||
       event.detail.action.type === "scratch-gui/locales/SELECT_LOCALE"
     ) {
-      setTimeout(addShortcutsToTitles, 0); // allow the DOM to update before calling addLettersToButtons.
+      setTimeout(addShortcutsToTitles, 0); // allow the DOM to update before calling addShortcutsToTitles.
       return;
     }
 
@@ -103,11 +103,11 @@ export default async function ({ addon, console }) {
 
   function switchCostume(up) {
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== COSTUME_EDITOR_TAB_INDEX) return;
-    const selected = document.querySelector("div[class*='sprite-selector-item_is-selected']").parentNode;
+    const selected = document.querySelector("[class*='sprite-selector-item_is-selected_']").parentNode;
     const node = up ? selected.previousSibling : selected.nextSibling;
     if (!node) return;
-    const wrapper = node.closest("div[class*=gui_flex-wrapper]");
-    node.querySelector("div[class^='sprite-selector-item_sprite-name']").click();
+    const wrapper = node.closest("[class*=gui_flex-wrapper_]");
+    node.querySelector("[class*='sprite-selector-item_sprite-name_']").click();
     node.scrollIntoView({
       behavior: "auto",
       block: "center",
@@ -123,7 +123,7 @@ export default async function ({ addon, console }) {
     if (!toolName || addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== COSTUME_EDITOR_TAB_INDEX) return;
 
     try {
-      const modeSelector = document.querySelector("[class^='paint-editor_mode-selector']");
+      const modeSelector = document.querySelector("[class*='paint-editor_mode-selector_']");
       if (modeSelector) {
         modeSelector.querySelector(`span[title^='${toolName}']`)?.click();
       }
@@ -137,7 +137,7 @@ export default async function ({ addon, console }) {
    */
   function addShortcutsToTitles() {
     try {
-      const container = document.querySelector("[class^='paint-editor_mode-selector']");
+      const container = document.querySelector("[class*='paint-editor_mode-selector_']");
       container.querySelectorAll("span").forEach((span) => {
         updateTitle(span, span.getAttribute("title"));
       });

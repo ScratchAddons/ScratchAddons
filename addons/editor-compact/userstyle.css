@@ -89,7 +89,7 @@
 }
 
 /* Sprites area */
-[class^="sprite-info_sprite-info_"] {
+[class*="sprite-info_sprite-info_"] {
   padding: 0.5rem;
   height: 4.75rem;
 }

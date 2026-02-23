@@ -48,7 +48,7 @@ export default async ({ addon, console, msg }) => {
 
   while (true) {
     const referenceElem = await addon.tab.waitForElement(
-      'div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)',
+      '[class*="menu-bar_file-group_"] > :last-child:not(.sa-record)',
       {
         markAsSeen: true,
         reduxEvents: [

@@ -1448,7 +1448,7 @@ export default async function ({ addon, console, msg }) {
         return;
       }
       setTimeout(() => {
-        const backpackContainer = document.querySelector("[class^='backpack_backpack-list_']");
+        const backpackContainer = document.querySelector("[class*='backpack_backpack-list_']");
         if (!backpackContainer) {
           return;
         }
@@ -1463,7 +1463,7 @@ export default async function ({ addon, console, msg }) {
 
   // Sprite list
   {
-    const spriteSelectorItemElement = await addon.tab.waitForElement("[class^='sprite-selector_sprite-wrapper']", {
+    const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper_']", {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     vm = addon.tab.traps.vm;

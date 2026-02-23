@@ -1,7 +1,7 @@
 export default async function ({ addon, console, msg }) {
   const paper = await addon.tab.traps.getPaper();
 
-  const paintEditorCanvasContainer = await addon.tab.waitForElement("[class^='paint-editor_canvas-container']");
+  const paintEditorCanvasContainer = await addon.tab.waitForElement("[class*='paint-editor_canvas-container_']");
   try {
     if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
       console.error("Detected new paint editor; this will be supported in future versions.");
@@ -768,7 +768,7 @@ export default async function ({ addon, console, msg }) {
   const controlsLoop = async () => {
     let hasRunOnce = false;
     while (true) {
-      const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
+      const canvasControls = await addon.tab.waitForElement("[class*='paint-editor_canvas-controls_']", {
         markAsSeen: true,
         reduxEvents: [
           "scratch-gui/navigation/ACTIVATE_TAB",
@@ -780,7 +780,7 @@ export default async function ({ addon, console, msg }) {
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
-      const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
+      const zoomControlsContainer = canvasControls.querySelector("[class*='paint-editor_zoom-controls_']");
 
       addon.tab.appendToSharedSpace({
         space: "paintEditorZoomControls",
