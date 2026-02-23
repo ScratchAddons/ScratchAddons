@@ -842,10 +842,46 @@ const handleBanner = async () => {
   }
 };
 
-if (document.readyState !== "loading") {
+const handleReport = async () => {
+  // If the user clicked a Report button in the Messaging popup,
+  // click the corresponding Report button on the website.
+  if (!location.search.includes("sa-action=report")) return;
+
+  // Remove the URL parameter
+  const url = new URL(location);
+  url.searchParams.delete("sa-action");
+  history.replaceState(null, "", url);
+
+  // Check up to 50 times
+  for (let i = 0; i < 50; i++) {
+    const openedComment = document.querySelector(location.hash);
+    if (!openedComment) {
+      // If button not found, check in 0.25s
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    } else {
+      const reportBtn = openedComment.querySelector("[data-control='report'], .comment-report");
+
+      const isProfile = pathArr[0] === "users" && pathArr[2] === "";
+      if (isProfile) {
+        // On profile pages, wait for the page to finish scrolling
+        await new Promise((resolve) => setTimeout(resolve, 750));
+      }
+
+      reportBtn.click();
+      return;
+    }
+  }
+};
+
+const onPageLoad = () => {
   handleBanner();
+  handleReport();
+};
+
+if (document.readyState !== "loading") {
+  onPageLoad();
 } else {
-  window.addEventListener("DOMContentLoaded", handleBanner, { once: true });
+  window.addEventListener("DOMContentLoaded", onPageLoad, { once: true });
 }
 
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";

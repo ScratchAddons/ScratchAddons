@@ -1,12 +1,8 @@
 {
   "scratch-messaging/send-error": "Error sending comment",
-  "scratch-messaging/deleting": "Deleting comment...",
-  "scratch-messaging/delete-error": "Error deleting comment - you might not have permission to do this.",
-  "scratch-messaging/deleted": "[deleted]",
   "scratch-messaging/popup-title": "Scratch Addons - Messaging",
   "scratch-messaging/open-new-tab": "Open comment in new tab",
-  "scratch-messaging/delete": "Delete",
-  "scratch-messaging/delete-confirm": "Click to confirm deletion",
+  "scratch-messaging/report": "Report",
   "scratch-messaging/reply": "Reply",
   "scratch-messaging/posting": "Posting...",
   "scratch-messaging/post": "Post",
