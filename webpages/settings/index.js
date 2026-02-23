@@ -112,7 +112,6 @@ let fuse;
         isIframe,
         addonGroups: addonGroups.filter((g) => (isIframe ? g.iframeShow : g.fullscreenShow)),
         categories,
-        searchMsg: this.msg("search"),
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs: [],

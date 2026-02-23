@@ -128,6 +128,24 @@
   "easterEggs": {
     "message": "Easter Eggs"
   },
+  "editorFeature": {
+    "message": "Editor feature"
+  },
+  "websiteFeature": {
+    "message": "Website feature"
+  },
+  "playerFeature": {
+    "message": "Project player feature"
+  },
+  "themeAddon": {
+    "message": "Theme"
+  },
+  "popupFeature": {
+    "message": "Extension popup feature"
+  },
+  "easterEgg": {
+    "message": "Easter egg"
+  },
   "theme": {
     "message": "Theme:"
   },
@@ -169,6 +187,24 @@
   },
   "viewLicenses": {
     "message": "View library licenses"
+  },
+  "infoBox": {
+    "message": "Information message"
+  },
+  "noticeBox": {
+    "message": "Notice message"
+  },
+  "warningBox": {
+    "message": "Warning message"
+  },
+  "infoMessage": {
+    "message": "Information"
+  },
+  "noticeMessage": {
+    "message": "Notice"
+  },
+  "warningMessage": {
+    "message": "Warning"
   },
   "back": {
     "message": "Go back"
@@ -259,6 +295,34 @@
   },
   "search": {
     "message": "Search"
+  },
+  "searchAddons": {
+    "message": "Search add-ons",
+    "description": "A label used by screen readers."
+  },
+  "clearSearch": {
+    "message": "Clear search query",
+    "description": "A label used by screen readers."
+  },
+  "expandedAddonGroup": {
+    "message": "$1 section, expanded",
+    "description": "A label used by screen readers."
+  },
+  "collapsedAddonGroup": {
+    "message": "$1 section, collapsed",
+    "description": "A label used by screen readers."
+  },
+  "enabledAddonBlock": {
+    "message": "$1, add-on, on",
+    "description": "A label used by screen readers."
+  },
+  "disabledAddonBlock": {
+    "message": "$1, add-on, off",
+    "description": "A label used by screen readers."
+  },
+  "addonSettingsBlock": {
+    "message": "Add-on settings",
+    "description": "A label used by screen readers."
   },
   "permissionsTitle": {
     "message": "Permissions - Scratch Addons"
