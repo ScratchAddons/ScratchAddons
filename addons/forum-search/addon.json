@@ -1,12 +1,20 @@
 {
   "name": "Forum search",
-  "description": "Adds a post search bar to the forums. Uses ScratchDB for information.",
+  "description": "Adds a post search bar to the forums. Posts fetched from ScratchPost.",
   "credits": [
     {
       "name": "DatOneLefty"
     },
     {
       "name": "Hans5958"
+    },
+    {
+      "name": "redspacecat",
+      "link": "https://scratch.mit.edu/users/redspacecat"
+    },
+    {
+      "name": "-gr",
+      "link": "https://scratch.mit.edu/users/-gr"
     }
   ],
   "dynamicEnable": true,
