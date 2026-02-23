@@ -83,7 +83,7 @@ export default async function ({ addon, console, msg }) {
         confirmationTitle = msg("removeproject-title");
         confirmationMessage = msg("removeproject");
       }
-      // Sign Out
+      // Sign out
       const isSigningOut =
         e.target.closest(".account-nav > .dropdown > .divider") ||
         e.target.closest("form[action='/accounts/logout/']") ||
