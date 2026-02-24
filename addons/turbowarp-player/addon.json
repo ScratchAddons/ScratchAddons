@@ -5,17 +5,26 @@
     {
       "type": "notice",
       "text": "\"Replace player\" mode changes the Scratch player to a TurboWarp embed, which doesn't support seeing inside projects.",
-      "id": "addonsWontWork"
+      "id": "addonsWontWork",
+      "if": {
+        "settings": { "action": "player" }
+      }
     },
     {
       "type": "notice",
       "text": "The \"Replace player\" mode will send your Scratch username to TurboWarp.org for use in cloud data. TurboWarp has separate cloud data servers, so the cloud variables will be different than the ones on the Scratch player.",
-      "id": "cloudData"
+      "id": "cloudData",
+      "if": {
+        "settings": { "action": "player" }
+      }
     },
     {
       "type": "info",
       "text": "If the \"Replace player\" mode is selected, you can Ctrl+Click (Cmd+Click on macOS) the button to open the project in a new TurboWarp tab.",
-      "id": "ctrlToOpen"
+      "id": "ctrlToOpen",
+      "if": {
+        "settings": { "action": "player" }
+      }
     }
   ],
   "credits": [
