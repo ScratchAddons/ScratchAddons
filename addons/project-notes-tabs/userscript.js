@@ -1,20 +1,20 @@
-import { eventTarget as disableSelfEventTarget } from "./disable-self.js";
+import { eventTarget, addPreviewToggle } from "./module.js";
 
 export default async function ({ addon, console }) {
-  addon.tab
-    .waitForElement(":root > body", {
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    })
-    .then(() => {
-      document.body.classList.add("sa-project-tabs-on");
-    });
-
-  function disableSelf() {
+  addon.self.addEventListener("disabled", () => {
     document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
     wrapper.remove();
-    document.body.classList.remove("sa-project-tabs-on");
-  }
-  disableSelfEventTarget.addEventListener("disable", disableSelf);
+    addPreviewToggle();
+  });
+
+  eventTarget.addEventListener("enable", injectTabs);
+  addon.self.addEventListener("reenabled", () => {
+    injectTabs();
+    addPreviewToggle();
+  });
+  addon.auth.addEventListener("change", () => {
+    if (wrapper) injectTabs();
+  });
 
   async function remixHandler() {
     while (true) {
@@ -30,14 +30,9 @@ export default async function ({ addon, console }) {
   let tabs;
   let wrapper;
 
-  while (true) {
-    projectNotes = await addon.tab.waitForElement(".project-notes", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    });
-
-    if (!document.body.classList.contains("sa-project-tabs-on")) continue; // We're disabled
-
+  function injectTabs() {
+    if (addon.self.disabled) return;
+    if (wrapper) wrapper.remove();
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
     const tabButtons = [];
@@ -75,5 +70,15 @@ export default async function ({ addon, console }) {
     }
 
     selectTab(0);
+  }
+
+  while (true) {
+    projectNotes = await addon.tab.waitForElement(".project-notes", {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
+
+    injectTabs();
+    addPreviewToggle();
   }
 }
