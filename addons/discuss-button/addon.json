@@ -34,6 +34,15 @@
       }
     },
     {
+      "url": "extend-nav.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": {
+          "full-width": true
+        }
+      }
+    },
+    {
       "url": "stick.css",
       "matches": ["https://scratch.mit.edu/*"],
       "if": {
@@ -107,6 +116,12 @@
       "default": false
     },
     {
+      "name": "Extend to page edges",
+      "id": "full-width",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Stick to",
       "id": "stick",
       "type": "select",
@@ -127,8 +142,8 @@
   "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "latestUpdate": {
-    "version": "1.32.0",
-    "newSettings": ["stick"],
+    "version": "1.37.0",
+    "newSettings": ["full-width"],
     "isMajor": false
   },
   "tags": ["community", "featured"],
