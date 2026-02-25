@@ -149,6 +149,49 @@ const arrowShadowPath =
   "M12.71,2.44A2.41,2.41,0,0,1,12,4.16L8.08,8.08a2.45,2.45,0,0,1-3.45,0L0.72,4.16A2.42,2.42,0,0,1,0,2.44,2.48,2.48,0,0,1,.71.71C1,0.47,1.43,0,6.36,0S11.75,0.46,12,.71A2.44,2.44,0,0,1,12.71,2.44Z";
 const arrowShadowColor = "#231f20";
 
+const bevelFilters = [
+  `<filter id="bevelFilter" x0="-50%" y0="-50%" width="200%" height="200%">
+	<feGaussianBlur in="SourceAlpha" stdDeviation="1 1" result="blur-1"></feGaussianBlur>
+	<feFlood flood-color="#fff" flood-opacity="0.15" result="flood-2"></feFlood>
+	<feOffset in="blur-1" dx="1" dy="1" result="offset-3"></feOffset>
+	<feComposite k2="1" k3="-1" operator="arithmetic" in="SourceAlpha" in2="offset-3" result="comp-4"></feComposite>
+	<feComposite operator="in" in="flood-2" in2="comp-4" result="comp-5"></feComposite>
+	<feFlood flood-color="#000" flood-opacity="0.7" result="flood-6"></feFlood>
+	<feOffset in="blur-1" dx="-1" dy="-1" result="offset-7"></feOffset>
+	<feComposite k2="1" k3="-1" operator="arithmetic" in="SourceAlpha" in2="offset-7" result="comp-8"></feComposite>
+	<feComposite operator="in" in="flood-6" in2="comp-8" result="comp-9"></feComposite>
+	<feMerge result="merge-10">
+		<feMergeNode in="SourceGraphic"></feMergeNode>
+		<feMergeNode in="comp-5"></feMergeNode>
+		<feMergeNode in="comp-9"></feMergeNode>
+	</feMerge>
+</filter>`,
+  `<filter id="inputBevelFilter" x0="-50%" y0="-50%" width="200%" height="200%">
+	<feGaussianBlur in="SourceAlpha" stdDeviation="1 1" result="blur-1"></feGaussianBlur>
+	<feFlood flood-color="#fff" flood-opacity="0.15" result="flood-2"></feFlood>
+	<feOffset in="blur-1" dx="-1" dy="-1" result="offset-3"></feOffset>
+	<feComposite k2="1" k3="-1" operator="arithmetic" in="SourceAlpha" in2="offset-3" result="comp-4"></feComposite>
+	<feComposite operator="in" in="flood-2" in2="comp-4" result="comp-5"></feComposite>
+	<feFlood flood-color="#000" flood-opacity="0.7" result="flood-6"></feFlood>
+	<feOffset in="blur-1" dx="1" dy="1" result="offset-7"></feOffset>
+	<feComposite k2="1" k3="-1" operator="arithmetic" in="SourceAlpha" in2="offset-7" result="comp-8"></feComposite>
+	<feComposite operator="in" in="flood-6" in2="comp-8" result="comp-9"></feComposite>
+	<feMerge result="merge-10">
+		<feMergeNode in="SourceGraphic"></feMergeNode>
+		<feMergeNode in="comp-5"></feMergeNode>
+		<feMergeNode in="comp-9"></feMergeNode>
+	</feMerge>
+</filter>`,
+  `<filter id="inputDarkFilter" x0="-50%" y0="-50%" width="200%" height="200%">
+	<feFlood flood-color="#000" flood-opacity="0.2" result="flood-1"></feFlood>
+	<feComposite operator="in" in="flood-1" in2="SourceAlpha" result="comp-2"></feComposite>
+	<feMerge result="merge-3">
+		<feMergeNode in="SourceGraphic"></feMergeNode>
+		<feMergeNode in="comp-2"></feMergeNode>
+	</feMerge>
+</filter>`,
+];
+
 export default async function ({ addon, console, msg }) {
   // Register the addon to share information through the module
   registerAddon(addon, "editor-theme3");
@@ -1028,6 +1071,13 @@ export default async function ({ addon, console, msg }) {
       iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
     }
   })();
+
+  bevelFilters.forEach((filter) => {
+    const filterElement = document.createElement("filter");
+    document.querySelector(".injectionDiv > svg > defs").appendChild(filterElement);
+    filterElement.outerHTML = filter;
+    console.log(filter);
+  });
 
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(
