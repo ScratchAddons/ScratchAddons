@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: 'bool-variable'
+          ref: refs/heads/bool-variable
           fetch-depth: 1
       - name: Generate token
         uses: tibdex/github-app-token@v2
