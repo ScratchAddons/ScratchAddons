@@ -18,16 +18,10 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
-  "tags": [
-    "editor",
-    "codeEditor",
-    "danger"
-  ],
+  "tags": ["editor", "codeEditor", "danger"],
   "versionAdded": "1.45.0",
   "dynamicEnable": true,
   "dynamicDisable": true

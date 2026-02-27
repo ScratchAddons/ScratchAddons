@@ -1,5 +1,5 @@
 {
-    "bool-variable/@name": "Boolean Variable",
-    "bool-variable/@description": "Allow variables to be placed into the Boolean input slot just like list.",
-    "bool-variable/@info-warning": "Once any variable block is placed into a Boolean slot, Scratch's native program editor will no longer support displaying parts of that project's blocks; they can only be edit normaly if this addon is enabled."
+  "bool-variable/@name": "Boolean Variable",
+  "bool-variable/@description": "Allow variables to be placed into the Boolean input slot just like list.",
+  "bool-variable/@info-warning": "Once any variable block is placed into a Boolean slot, Scratch's native program editor will no longer support displaying parts of that project's blocks; they can only be edit normaly if this addon is enabled."
 }
