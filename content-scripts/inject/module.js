@@ -216,14 +216,15 @@ function editorClassCheck() {
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!isScratchGui && split[0] !== "projects") return;
-  let isInEditor = false;
-  let isFullScreen = false;
+  let isInEditor;
+  let isFullScreen;
   const state = __scratchAddonsRedux.state;
   if (state) {
     isInEditor = !state.scratchGui.mode.isPlayerOnly;
     isFullScreen = state.scratchGui.mode.isFullScreen;
   } else if (isScratchGui) {
     isInEditor = true;
+    isFullScreen = false;
   } else {
     isInEditor = split.includes("editor");
     isFullScreen = split.includes("fullscreen");

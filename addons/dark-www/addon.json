@@ -1590,6 +1590,17 @@
       }
     },
     {
+      "name": "blue-deletedComment",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "transparentSource": "#ff668040"
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
