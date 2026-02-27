@@ -1,4 +1,5 @@
 {
     "bool-variable/@name":"布林變數",
-    "bool-variable/@description":"讓變數能和清單一樣被放進布林值輸入格"
+    "bool-variable/@description":"讓變數能和清單一樣被放進布林值輸入格",
+    "bool-variable/@info-Warning": "將任何變數積木放入布林輸入格後，scratch的原生程式編輯器將不再支援顯示專案中的部分積木，只能在開啟此addon的情況下正常編輯它們。"
 }
