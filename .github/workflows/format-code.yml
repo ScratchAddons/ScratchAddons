@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with: 
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.head_ref || github.ref_name }}
         
       - name: Generate token
         uses: tibdex/github-app-token@v2
