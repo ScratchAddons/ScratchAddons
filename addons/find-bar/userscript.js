@@ -178,7 +178,7 @@ export default async function ({ addon, msg, console }) {
       // https://github.com/google/blockly/blob/089179b/core/inject.ts#L294
       // KeyboardShortcutsHOC.handleKeyPress:
       // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
-      let isTargetInput = false;
+      let isTargetInput;
       if (Blockly.registry)
         isTargetInput = Blockly.browserEvents.isTargetInput(e); // new Blockly
       else isTargetInput = Blockly.utils.isTargetInput(e);
@@ -408,7 +408,7 @@ export default async function ({ addon, msg, console }) {
           continue;
         }
 
-        let eventName = "";
+        let eventName;
         if (broadcastInput.type === "event_broadcast_menu") {
           eventName = broadcastInput.inputList[0].fieldRow[0].getText();
         } else {
