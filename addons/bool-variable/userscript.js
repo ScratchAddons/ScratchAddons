@@ -30,7 +30,7 @@ export default async function ({ addon }) {
   ConnectionProto.checkType_ = function (otherConnection) {
     const sourceVar = isVarBlock(this);
     const targetBool = otherConnection.check_ && otherConnection.check_.includes('Boolean');
-    
+
     const targetVar = isVarBlock(otherConnection);
     const sourceBool = this.check_ && this.check_.includes('Boolean');
 
