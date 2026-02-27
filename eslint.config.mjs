@@ -71,7 +71,6 @@ export default [
       "no-unused-vars": 0,
       "no-useless-escape": 0,
       "no-inner-declarations": 0,
-      "no-useless-assignment": 0,
 
       "no-constant-condition": [
         2,
