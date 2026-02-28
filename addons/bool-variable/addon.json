@@ -1,0 +1,28 @@
+{
+  "name": "Boolean Variable",
+  "description": "Allow variables to be placed into the Boolean input slot just like list.",
+  "credits": [
+    {
+      "id": "entropy_lover",
+      "name": "entropy_lover_nagnto",
+      "link": "https://scratch.mit.edu/users/entropy_lover/"
+    }
+  ],
+  "info": [
+    {
+      "type": "warning",
+      "text": "Once any variable block is placed into a Boolean slot, Scratch's native program editor will no longer support displaying parts of that project's blocks; they can only be edit normaly if this addon is enabled.",
+      "id": "warning"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "codeEditor", "danger"],
+  "versionAdded": "1.45.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
