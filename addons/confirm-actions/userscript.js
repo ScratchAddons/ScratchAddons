@@ -1,11 +1,11 @@
 export default async function ({ addon, console, msg }) {
-  let override = false;
+  let override = 0;
 
   document.addEventListener(
     "click",
     (e) => {
       if (override) {
-        override = false;
+        override--;
         return;
       }
 
@@ -106,7 +106,21 @@ export default async function ({ addon, console, msg }) {
             })
             .then((confirmed) => {
               if (confirmed) {
-                override = true;
+                override = 1;
+                if (addon.tab.editorMode === "editor" && confirmationTitle === msg("signout-title")) {
+                  document.querySelector("[class*='account-nav_user-info_']:not([class*='menu-bar_active'])")?.click();
+                  // Since there is one additional click required to open the menu and another to click the sign out button, set override to 2 so that both of those clicks are not blocked by the confirmation dialog
+                  override = 2;
+                  setTimeout(() => {
+                    // Give the menu time to open before clicking the sign out button, otherwise it won't work
+                    document
+                      .querySelector(
+                        "ul > li[class*='menu_menu-item'][class*='menu_hoverable'][class*='menu_menu-section']"
+                      )
+                      ?.click();
+                  }, 1);
+                  return;
+                }
                 e.target.click();
               }
             });
