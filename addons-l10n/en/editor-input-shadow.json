@@ -1,13 +1,13 @@
 {
-    "editor-input-shadow/@name": "all Detache",
-    "editor-input-shadow/@description": "Adds a \"Toggle\" button to the context menu for separating and joining input slots.",
-    "editor-input-shadow/@info-Warning": "Using blocks not explicitly allowed by Scratch may risk project unavailability in future versions, project deletion, or account bans.\nScratch Addons is not responsible for this; please use this feature with caution.",
-    "editor-input-shadow/@settings-name-spawn_range_x": "Block Spawn X Range",
-    "editor-input-shadow/@settings-name-spawn_range_y": "Block Spawn Y Range",
-    "editor-input-shadow/@settings-name-full_shadow_lock": "Enable Recursive Shadow/Unshadow Functionality",
-    "editor-input-shadow/@credits-GarboMuffin": "Reference Their Block switching code",
-    "editor-input-shadow/@credits-pufferfish101007": "Reference Their Block switching code",
-    "editor-input-shadow/text-shadow-switch": "Toggle Input Slot Lock",
-    "editor-input-shadow/text-all-to-shadow": "Shadow All Connected Blocks",
-    "editor-input-shadow/text-all-to-nonshadow": "Unshadow All Connected Blocks"
+  "editor-input-shadow/@name": "all Detache",
+  "editor-input-shadow/@description": "Adds a \"Toggle\" button to the context menu for separating and joining input slots.",
+  "editor-input-shadow/@info-Warning": "Using blocks not explicitly allowed by Scratch may risk project unavailability in future versions, project deletion, or account bans.\nScratch Addons is not responsible for this; please use this feature with caution.",
+  "editor-input-shadow/@settings-name-spawn_range_x": "Block Spawn X Range",
+  "editor-input-shadow/@settings-name-spawn_range_y": "Block Spawn Y Range",
+  "editor-input-shadow/@settings-name-full_shadow_lock": "Enable Recursive Shadow/Unshadow Functionality",
+  "editor-input-shadow/@credits-GarboMuffin": "Reference Their Block switching code",
+  "editor-input-shadow/@credits-pufferfish101007": "Reference Their Block switching code",
+  "editor-input-shadow/text-shadow-switch": "Toggle Input Slot Lock",
+  "editor-input-shadow/text-all-to-shadow": "Shadow All Connected Blocks",
+  "editor-input-shadow/text-all-to-nonshadow": "Unshadow All Connected Blocks"
 }

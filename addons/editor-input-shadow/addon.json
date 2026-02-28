@@ -1,17 +1,12 @@
 {
   "name": "all Detache",
   "description": "Adds a \"Toggle\" button to the context menu for separating and joining input slots.",
-  "tags": [
-    "danger",
-    "editor",
-    "codeEditor",
-    "beta"
-  ],
+  "tags": ["danger", "editor", "codeEditor", "beta"],
   "info": [
     {
       "type": "notice",
       "text": "Using blocks not explicitly allowed by Scratch may risk project unavailability in future versions, project deletion, or account bans.\nScratch Addons is not responsible for this; please use this feature with caution.",
-      "id": "Warning"
+      "id": "warning"
     }
   ],
   "credits": [
@@ -34,14 +29,12 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.44.4",
+  "versionAdded": "1.45.0",
   "settings": [
     {
       "id": "spawn_range_x",
