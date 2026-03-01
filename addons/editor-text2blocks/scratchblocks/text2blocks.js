@@ -891,7 +891,7 @@ export class Text2Blocks {
             // When OBJECT is _stage_, PROPERTY only allows backdrop #, backdrop name, volume, or stage variables
             const allowedForStage = ["backdrop #", "backdrop name", "volume"];
             if (!allowedForStage.includes(propertyValue)) {
-                // Check if it's a stage variable
+              // Check if it's a stage variable
               if (!validateTargetVariable(propertyValue, "_stage_")) {
                 self.warnings.push({
                   code: ErrorCodes.SENSING_OF_STAGE_INVALID_PROPERTY,
