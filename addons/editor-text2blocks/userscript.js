@@ -9,7 +9,6 @@ export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
   const redux = addon.tab.redux;
   const userLang = redux.state.locales.locale;
-  const smsg = addon.tab.scratchMessage;
 
   loadLanguages({
     en: getLocale("en", redux.state, Blockly),
@@ -39,68 +38,68 @@ export default async function ({ addon, console, msg }) {
     container.classList.add("sa-text2blocks-modal-container");
     content.style.height = "100%";
 
-    // 初始化TabManager
+    // Initialize TabManager
     const tabManager = new TabManager(addon, content, "sa-text2blocks-tabs-container");
 
-    // 创建Code tab
+    // Create Code tab
     const textarea = document.createElement("textarea");
     textarea.className = addon.tab.scratchClass("prompt_variable-name-text-input", {
       others: "sa-text2blocks-textarea",
     });
     tabManager.createTab(msg("code"), "code-tab", textarea);
 
-    // 创建Variables tab
+    // Create Variables tab
     const variablesPanel = document.createElement("div");
     variablesPanel.className = addon.tab.scratchClass("sa-text2blocks-variables-panel", {
       others: "sa-text2blocks-variables-content",
     });
     tabManager.createTab(msg("variables"), "variables-tab", variablesPanel);
 
-    // 创建Issues tab
+    // Create Issues tab
     const issuesPanel = document.createElement("div");
     issuesPanel.className = addon.tab.scratchClass("sa-text2blocks-issues-panel", {
       others: "sa-text2blocks-issues-content",
     });
     tabManager.createTab(msg("issues"), "issues-tab", issuesPanel);
 
-    // 切换到code-tab
+    // Switch to code tab
     tabManager.switchTab("code-tab");
 
-    // 用于记录变量映射选择
+    // Used to record variable mapping selections
     const variableMappings = new Map(); // key: variableName, value: { type: 'new' | 'existing', data: {...} }
 
-    // 创建按钮行
+    // Create button row
     const buttonRow = document.createElement("div");
     buttonRow.className = addon.tab.scratchClass("prompt_button-row");
 
-    // 解析按钮
+    // Parse button
     const parseButton = document.createElement("button");
     parseButton.textContent = msg("parse-button");
     parseButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-text2blocks-button" });
 
-    // 应用按钮
+    // Apply button
     const applyButton = document.createElement("button");
     applyButton.textContent = msg("apply-button");
     applyButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-text2blocks-button" });
-    applyButton.disabled = true; // 初始禁用，直到解析成功
+    applyButton.disabled = true; // Initially disabled until parse succeeds
 
     buttonRow.append(parseButton, applyButton);
     content.append(buttonRow);
 
-    // 监听textarea文本变化
+    // Listen for textarea input changes
     textarea.addEventListener("input", () => {
-      // 文本变化时禁用应用按钮
+      // Disable apply button on text change
       applyButton.disabled = true;
-      // 允许重新解析
+      // Allow re-parse
       parseButton.disabled = false;
     });
 
     const target = vm.runtime.getEditingTarget();
     const text2blocks = new Text2Blocks(target, vm.runtime, Blockly.utils.genUid, workspace);
 
-    // 更新Variables Panel的函数
+    // Function to update Variables panel
     function updateVariablesPanel() {
-      // 清空现有内容
+      // Clear existing content
       variablesPanel.innerHTML = "";
 
       if (text2blocks.variableNames.size === 0 && text2blocks.listNames.size === 0) {
@@ -111,7 +110,7 @@ export default async function ({ addon, console, msg }) {
         return;
       }
 
-      // 显示Variables
+      // Show Variables
       if (text2blocks.variableNames.size > 0) {
         const varTitle = document.createElement("h3");
         varTitle.textContent = msg("variables");
@@ -123,7 +122,7 @@ export default async function ({ addon, console, msg }) {
         variablesPanel.appendChild(varTable);
       }
 
-      // 显示Lists
+      // Show Lists
       if (text2blocks.listNames.size > 0) {
         const listTitle = document.createElement("h3");
         listTitle.textContent = msg("lists");
@@ -137,9 +136,9 @@ export default async function ({ addon, console, msg }) {
       }
     }
 
-    // 更新Issues Panel的函数
+    // Function to update Issues panel
     function updateIssuesPanel() {
-      // 清空现有内容
+      // Clear existing content
       issuesPanel.innerHTML = "";
 
       const hasErrors = text2blocks.errors.length > 0;
@@ -153,7 +152,7 @@ export default async function ({ addon, console, msg }) {
         return;
       }
 
-      // 错误消息生成函数
+      // Function to format error messages
       function formatErrorMessage(error) {
         const { code, params } = error;
         const p = params || {};
@@ -206,7 +205,7 @@ export default async function ({ addon, console, msg }) {
         }
       }
 
-      // 显示Errors
+      // Show Errors
       if (hasErrors) {
         const errorTitle = document.createElement("h3");
         errorTitle.textContent = msg("errors");
@@ -226,7 +225,7 @@ export default async function ({ addon, console, msg }) {
         issuesPanel.appendChild(errorList);
       }
 
-      // 显示Warnings
+      // Show Warnings
       if (hasWarnings) {
         const warningTitle = document.createElement("h3");
         warningTitle.textContent = msg("warnings");
@@ -246,12 +245,12 @@ export default async function ({ addon, console, msg }) {
       }
     }
 
-    // 创建表格的函数
+    // Function to create variables/lists table
     function createVariablesTable(names, type) {
       const table = document.createElement("table");
       table.className = "sa-text2blocks-table";
 
-      // 创建表头
+      // Create table header
       const thead = document.createElement("thead");
       const headerRow = document.createElement("tr");
 
@@ -273,7 +272,7 @@ export default async function ({ addon, console, msg }) {
       thead.appendChild(headerRow);
       table.appendChild(thead);
 
-      // 创建表体
+      // Create table body
       const tbody = document.createElement("tbody");
       for (const name of names) {
         const row = createVariableRow(name, type);
@@ -284,11 +283,11 @@ export default async function ({ addon, console, msg }) {
       return table;
     }
 
-    // 创建表格行的函数
+    // Function to create a table row
     function createVariableRow(name, type) {
       const row = document.createElement("tr");
 
-      // 第一列：变量/列表名称
+      // Column 1: variable/list name
       const nameCell = document.createElement("td");
       nameCell.className = "sa-text2blocks-table-name-col";
       const nameLabel = document.createElement("span");
@@ -296,7 +295,7 @@ export default async function ({ addon, console, msg }) {
       nameCell.appendChild(nameLabel);
       row.appendChild(nameCell);
 
-      // 第二列：操作选择
+      // Column 2: action selection
       const actionCell = document.createElement("td");
       actionCell.className = "sa-text2blocks-table-action-col";
       const actionSelect = document.createElement("select");
@@ -312,23 +311,23 @@ export default async function ({ addon, console, msg }) {
       optionExisting.textContent = msg("use-existing");
       actionSelect.appendChild(optionExisting);
 
-      actionSelect.value = "new"; // 默认选择"Create new"
+      actionSelect.value = "new"; // Default to "Create new"
       actionCell.appendChild(actionSelect);
       row.appendChild(actionCell);
 
-      // 第三列：配置
+      // Column 3: configuration
       const configCell = document.createElement("td");
       configCell.className = "sa-text2blocks-table-config-col";
       const configContainer = document.createElement("div");
       configContainer.className = "sa-text2blocks-config-container";
 
-      // 初始显示创建新变量的配置
+      // Initially show create-new-variable config
       const initialConfigContent = createNewVarConfig(name, type);
       configContainer.appendChild(initialConfigContent);
       configCell.appendChild(configContainer);
       row.appendChild(configCell);
 
-      // 操作下拉菜单变化事件
+      // Action dropdown change event
       actionSelect.addEventListener("change", () => {
         configContainer.innerHTML = "";
         if (actionSelect.value === "new") {
@@ -343,37 +342,37 @@ export default async function ({ addon, console, msg }) {
       return row;
     }
 
-    // 创建新变量配置的UI
+    // Create UI for new variable configuration
     function createNewVarConfig(name, type) {
       const container = document.createElement("div");
       container.className = "sa-text2blocks-config-container";
 
-      // 输入框：自定义新名称
+      // Input: custom new name
       const input = document.createElement("input");
       input.type = "text";
       input.className = "sa-text2blocks-input";
       input.placeholder = msg("new-name-placeholder", { name });
       input.value = "";
 
-      // 作用域选择
+      // Scope selection
       const scopeSelect = document.createElement("select");
       scopeSelect.className = "sa-text2blocks-select";
 
       const optionSprite = document.createElement("option");
       optionSprite.value = "sprite";
-      optionSprite.textContent = smsg("gui.gui.variableScopeOptionSpriteOnly");
+      optionSprite.textContent = addon.tab.scratchMessage("gui.gui.variableScopeOptionSpriteOnly");
       scopeSelect.appendChild(optionSprite);
 
       const optionGlobal = document.createElement("option");
       optionGlobal.value = "global";
-      optionGlobal.textContent = smsg("gui.gui.variableScopeOptionAllSprites");
+      optionGlobal.textContent = addon.tab.scratchMessage("gui.gui.variableScopeOptionAllSprites");
       scopeSelect.appendChild(optionGlobal);
 
-      scopeSelect.value = "sprite"; // 默认选择"For this sprite"
+      scopeSelect.value = "sprite"; // Default to "For this sprite"
 
-      // 监听变化
+      // Listen for changes
       function updateMapping() {
-        const customName = input.value.trim() || name; // 留空则使用原名
+        const customName = input.value.trim() || name; // Use original name if left empty
         const scope = scopeSelect.value;
         console.log(`[TODO] Create new ${type} "${customName}" with scope: ${scope}`);
         variableMappings.set(name, {
@@ -391,7 +390,7 @@ export default async function ({ addon, console, msg }) {
       input.addEventListener("input", updateMapping);
       scopeSelect.addEventListener("change", updateMapping);
 
-      // 初始化映射
+      // Initialize mapping
       updateMapping();
 
       container.appendChild(input);
@@ -399,7 +398,7 @@ export default async function ({ addon, console, msg }) {
       return container;
     }
 
-    // 创建使用已有变量配置的UI
+    // Create UI for mapping to existing variable
     function createExistingVarConfig(name, type) {
       const container = document.createElement("div");
       container.className = "sa-text2blocks-config-container";
@@ -412,11 +411,11 @@ export default async function ({ addon, console, msg }) {
         const option = document.createElement("option");
         option.value = varObj.name;
         option.textContent = varObj.name;
-        option.dataset.variableId = varObj.id; // 存储变量ID
+        option.dataset.variableId = varObj.id; // store variable ID
         existingSelect.appendChild(option);
       }
 
-      // 初始化映射（使用第一个已有变量）
+      // Initialize mapping (use first existing variable)
       function updateMapping() {
         const selectedVar = existingSelect.value;
         const selectedOption = existingSelect.options[existingSelect.selectedIndex];
@@ -436,7 +435,7 @@ export default async function ({ addon, console, msg }) {
 
       existingSelect.addEventListener("change", updateMapping);
 
-      // 初始化映射
+      // Initialize mapping (use first existing variable)
       if (existingVariables.length > 0) {
         updateMapping();
       }
@@ -445,7 +444,7 @@ export default async function ({ addon, console, msg }) {
       return container;
     }
 
-    // 解析按钮事件
+    // Parse button event
     parseButton.addEventListener("click", async () => {
       try {
         const text = textarea.value;
@@ -458,14 +457,14 @@ export default async function ({ addon, console, msg }) {
         updateVariablesPanel();
         updateIssuesPanel();
 
-        // 如果有errors，禁用apply按钮；否则启用
+        // Disable apply if errors exist; otherwise enable
         if (text2blocks.errors.length > 0) {
           applyButton.disabled = true;
         } else {
           applyButton.disabled = false;
         }
 
-        // 自动切换到Issues tab如果有问题，否则切换到Variables tab如果有变量
+        // Auto-switch to Issues tab if issues exist, else Variables tab if variables exist
         if (text2blocks.errors.length > 0 || text2blocks.warnings.length > 0) {
           tabManager.switchTab("issues-tab");
         } else if (text2blocks.variableNames.size > 0 || text2blocks.listNames.size > 0) {
@@ -473,12 +472,12 @@ export default async function ({ addon, console, msg }) {
         }
       } catch (error) {
         console.log("Error parsing text:", error);
-        applyButton.disabled = true; // 禁用应用按钮
+        applyButton.disabled = true; // Disable apply button
         alert("Parse failed: " + error.message);
       }
     });
 
-    // 应用按钮事件
+    // Apply button event
     applyButton.addEventListener("click", async () => {
       if (text2blocks.warnings.length > 0) {
         if (
@@ -489,37 +488,37 @@ export default async function ({ addon, console, msg }) {
       }
 
       try {
-        // 准备最终的变量映射表：原始名称 -> {name, id}
+        // Prepare final variable mapping: originalName -> {name, id}
         const finalVariableMappings = new Map();
         const stage = vm.runtime.getTargetForStage();
 
-        // 首先，为所有新建变量创建它们，获得ID后再记录映射
+        // First create all new variables to obtain IDs before recording mappings
         for (const [originalName, mapping] of variableMappings) {
           if (mapping.type === "new") {
             const { name: newName, varType, scope } = mapping.data;
-            const variableType = varType === "list" ? "list" : ""; // "" 为普通变量
+            const variableType = varType === "list" ? "list" : ""; // "" indicates a normal variable
 
-            // 生成唯一的变量ID
+            // Generate a unique variable ID
             const variableId = Blockly.utils.genUid();
 
             let targetForVar;
             let isCloud = false;
 
             if (scope === "sprite") {
-              // 角色变量：在当前sprite上创建
+              // Sprite-scoped variable: create on current sprite
               targetForVar = target;
               isCloud = false;
             } else if (scope === "global") {
-              // 全局变量：在stage上创建
+              // Global variable: create on stage
               targetForVar = stage;
               isCloud = false;
             } else if (scope === "cloud") {
-              // TODO: 云变量暂未实现
+              // TODO: cloud variables not implemented yet
               console.warn(`[TODO] Cloud variable "${newName}" is not yet supported`);
               continue;
             }
 
-            // 创建变量/列表
+            // Create variable/list
             targetForVar.createVariable(variableId, newName, variableType, isCloud);
 
             finalVariableMappings.set(originalName, {
@@ -527,7 +526,7 @@ export default async function ({ addon, console, msg }) {
               id: variableId,
             });
           } else if (mapping.type === "existing") {
-            // 直接记录已有变量的映射
+            // Directly record mapping for existing variable
             finalVariableMappings.set(originalName, {
               name: mapping.data.mappedTo,
               id: mapping.data.mappedToId,
@@ -535,7 +534,7 @@ export default async function ({ addon, console, msg }) {
           }
         }
 
-        // 应用变量映射，替换块中的变量引用
+        // Apply variable mappings, replace variable references in blocks
         text2blocks.applyVariableMappings(finalVariableMappings);
 
         await vm.shareBlocksToTarget(text2blocks.blockJson, target.id);

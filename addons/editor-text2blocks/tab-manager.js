@@ -1,6 +1,6 @@
 /**
- * Tab管理工具类
- * 用于创建和管理Modal中的Tabs
+ * Tab manager utility class
+ * Used to create and manage tabs inside a modal
  */
 export class TabManager {
   constructor(addon, content, containerClassName = "") {
@@ -8,12 +8,12 @@ export class TabManager {
     this.tabs = [];
     this.currentTabIndex = 0;
 
-    // 初始化容器
+    // Initialize containers
     this.#initTabsContainer(content, containerClassName);
   }
 
   /**
-   * 初始化Tab容器和标题栏 (私有方法)
+   * Initialize the tabs container and header (private)
    * @private
    */
   #initTabsContainer(content, containerClassName) {
@@ -29,10 +29,10 @@ export class TabManager {
   }
 
   /**
-   * 创建一个新的Tab
-   * @param {string} tabName - tab的显示名称
-   * @param {string} tabId - tab的唯一标识符
-   * @param {HTMLElement} panelContent - tab面板的内容元素
+   * Create a new tab
+   * @param {string} tabName - display name for the tab
+   * @param {string} tabId - unique identifier for the tab
+   * @param {HTMLElement} panelContent - content element for the tab panel
    */
   createTab(tabName, tabId, panelContent) {
     const tabHeader = document.createElement("div");
@@ -61,23 +61,23 @@ export class TabManager {
 
     this.tabs.push(tab);
 
-    // 直接追加到DOM
+    // Append directly to the DOM
     this.tabsHeader.append(tabHeader);
     this.tabsContainer.append(tabPanel);
 
-    // 添加点击事件处理
+    // Add click event handler
     const tabIndex = this.tabs.length - 1;
     tabHeader.addEventListener("click", () => this.switchTab(tabIndex));
   }
 
   /**
-   * 切换到指定的Tab
-   * @param {string|number} tabIdOrIndex - tab的唯一标识符或索引
+   * Switch to a specified tab
+   * @param {string|number} tabIdOrIndex - tab id or index
    */
   switchTab(tabIdOrIndex) {
     let tabIndex;
 
-    // 支持通过ID或索引切换
+    // Support switching by ID or index
     if (typeof tabIdOrIndex === "string") {
       tabIndex = this.tabs.findIndex((tab) => tab.id === tabIdOrIndex);
       if (tabIndex === -1) {
@@ -93,7 +93,7 @@ export class TabManager {
       return;
     }
 
-    // 隐藏当前tab
+    // Hide the current tab
     const currentTab = this.tabs[this.currentTabIndex];
     currentTab.header.classList.remove(
       this.addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
@@ -104,7 +104,7 @@ export class TabManager {
       this.addon.tab.scratchClass("gui_is-selected")
     );
 
-    // 显示新的tab
+    // Show the new tab
     const newTab = this.tabs[tabIndex];
     newTab.header.classList.add(
       this.addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),

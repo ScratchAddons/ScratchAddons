@@ -3,7 +3,7 @@ import { DROPDOWN, FIELD_DROPDOWN, BOOLEAN, SCRIPT } from "./type-enum.js";
 import { blockName, hashSpec } from "./blocks.js";
 import { parse } from "./syntax.js";
 
-// 错误代码常量
+// Error code constants
 export const ErrorCodes = {
   // Procedure errors
   INVALID_PROCCODE: "INVALID_PROCCODE",
@@ -48,16 +48,16 @@ export class Text2Blocks {
     this.warnings = [];
   }
 
-  // 检查块对当前目标是否可用
+  // Check if a block is available for the current target
   checkBlockAvailability(opcode) {
-    // 获取目标是否为舞台
+    // Determine if the target is the stage
     const isStage = this.target.isStage;
 
     if (isStage && opcode.startsWith("motion_")) {
       return false;
     }
 
-    // 仅角色可用的块
+    // Blocks available only to sprites
     const spriteOnlyBlocks = new Set([
       "control_deletethisclone",
       "control_startasclone",
@@ -92,26 +92,26 @@ export class Text2Blocks {
       "sensing_setdragmode",
       "sensing_touchingcolor",
       "sensing_touchingobject",
-      // "event_whenthisspriteclicked", // Scratch 会根据目标类型自动处理
+      // "event_whenthisspriteclicked", // Scratch handles this based on target type
     ]);
 
-    // 仅舞台可用的块
+    // Blocks available only to the stage
     const stageOnlyBlocks = new Set([
       "looks_switchbackdroptoandwait",
-      // "event_whenstageclicked" // Scratch 会根据目标类型自动处理
+      // "event_whenstageclicked" // Scratch handles this based on target type
     ]);
 
-    // 检查仅角色可用的块
+    // Check sprite-only blocks
     if (spriteOnlyBlocks.has(opcode)) {
       return !isStage;
     }
 
-    // 检查仅舞台可用的块
+    // Check stage-only blocks
     if (stageOnlyBlocks.has(opcode)) {
       return isStage;
     }
 
-    // 其他块默认可用
+    // Other blocks are available by default
     return true;
   }
 
@@ -120,9 +120,9 @@ export class Text2Blocks {
       return this.blockJson;
     }
 
-    // 遍历所有块，替换变量引用
+    // Iterate all blocks and replace variable references
     for (const block of this.blockJson) {
-      // 处理 data_variable 块的变量名
+      // Handle variable name for data_variable block
       if (block.opcode === "data_variable") {
         const currentVarName = block.fields.VARIABLE?.value;
         if (currentVarName && variableMappings.has(currentVarName)) {
@@ -135,7 +135,7 @@ export class Text2Blocks {
         continue;
       }
 
-      // 处理 data_listcontents 块的列表名
+      // Handle list name for data_listcontents block
       if (block.opcode === "data_listcontents") {
         const currentListName = block.fields.LIST?.value;
         if (currentListName && variableMappings.has(currentListName)) {
@@ -174,13 +174,13 @@ export class Text2Blocks {
 
     const self = this;
     const blocks_json = [];
-    const blockMap = new Map(); // id → block 映射，用于快速查找
-    const procDefinitions = new Map(); // proccode → {argumentids, argumentnames, argumentdefaults, warp} 映射，存储自定义块定义
+    const blockMap = new Map(); // id -> block mapping for fast lookup
+    const procDefinitions = new Map(); // proccode -> {argumentids, argumentnames, argumentdefaults, warp} mapping to store custom block definitions
 
     const workspaceCustomBlocks = collectWorkspaceProcedureDefinitions();
 
     const doc = parse(text, languages, workspaceCustomBlocks);
-    // TODO: 删除 --- DEBUG ---
+    // TODO: remove --- DEBUG ---
     console.log("Parsed document:", doc);
 
     for (const script of doc.scripts) {
@@ -193,18 +193,18 @@ export class Text2Blocks {
 
     this.blockJson = blocks_json;
 
-    // 添加块到 JSON 和 Map 中
+    // Add block to JSON and Map
     function addBlock(block) {
       blocks_json.push(block);
       blockMap.set(block.id, block);
     }
 
-    // 根据 ID 查找块
+    // Find block by ID
     function findBlockById(blockId) {
       return blockMap.get(blockId);
     }
 
-    // 验证动态值是否合法（根据类型）
+    // Validate whether a dynamic value is valid (by type)
     function validateDynamicValue(value, type) {
       const target = self.target;
       const stage = self.stage;
@@ -241,32 +241,32 @@ export class Text2Blocks {
             return value === "enter" || value.length === 1;
           }
 
-          // 变量和列表在其他地方处理，这里默认通过
+          // Variables and lists are handled elsewhere; allow by default here
           case "variables":
           case "lists":
           case "targetVariables":
           default:
-            return true; // 未知类型默认通过
+            return true; // Unknown types allowed by default
         }
       } catch (error) {
         console.error(`Error validating dynamic value "${value}" for type "${type}":`, error);
-        return true; // 出错时默认通过
+        return true; // On error, allow by default
       }
     }
 
-    // 验证目标变量（用于 sensing_of 块）
+    // Validate target variable (used by sensing_of blocks)
     function validateTargetVariable(value, targetName) {
       const stage = self.stage;
 
       try {
-        // 如果是 _stage_，检查舞台的变量
+        // If targetName is _stage_, check stage variables
         if (targetName === "_stage_") {
           return Object.values(stage.variables || {}).some(
             (variable) => variable.type === "" && variable.name === value
           );
         }
 
-        // 否则，查找指定的精灵
+        // Otherwise, find the specified sprite
         if (self.runtime.getSpriteTargetByName(targetName)) {
           return Object.values(self.runtime.getSpriteTargetByName(targetName).variables || {}).some(
             (variable) => variable.type === "" && variable.name === value
@@ -276,20 +276,20 @@ export class Text2Blocks {
         return false;
       } catch (error) {
         console.error(`Error validating target variable "${value}" for target "${targetName}":`, error);
-        return true; // 出错时默认通过
+        return true; // On error, allow by default
       }
     }
 
-    // 收集所有 procedures_prototype 定义
+    // Collect all procedures_prototype definitions
     function collectProcedureDefinitions(blocks) {
       for (const block of blocks) {
-        // 找到 procedures_definition 块
+        // Find procedures_definition blocks
         if (block.info?.opcode === "procedures_definition") {
-          // procedures_prototype 在 parameters[0] 中
+          // procedures_prototype is in parameters[0]
           const prototypeBlock = block.parameters?.[0];
 
           if (prototypeBlock && prototypeBlock.info?.opcode === "procedures_prototype") {
-            // 生成 proccode 和相关信息
+            // Generate proccode and related info
             const proccode_parts = [];
             const argument_ids = [];
             const argument_names = [];
@@ -365,7 +365,7 @@ export class Text2Blocks {
       }
     }
 
-    // 从 Blockly 工作区收集所有 procedures_definition，返回 customBlocksByHash 格式
+    // Collect procedures_definition from the Blockly workspace, return in customBlocksByHash format
     function collectWorkspaceProcedureDefinitions() {
       const customBlocksByHash = {};
 
@@ -397,21 +397,21 @@ export class Text2Blocks {
           continue;
         }
 
-        // 计算 hash，与 recogniseStuff 中的计算方式一致
+        // Compute hash, same method as in recogniseStuff
         const hash = hashSpec(proccode);
 
-        // 检查是否已经定义（避免重复）
+        // Check if already defined (avoid duplicates)
         if (customBlocksByHash[hash]) {
           continue;
         }
 
-        // 存储为 recogniseStuff 期望的格式
+        // Store in the format expected by recogniseStuff
         customBlocksByHash[hash] = {
           spec: proccode,
           names: argumentnames,
         };
 
-        // 同时存储到 procDefinitions 中供后续 text2blocks 处理使用
+        // Also store into procDefinitions for later text2blocks processing
         const argumentids = JSON.parse(mutationDom.getAttribute("argumentids") || "[]");
         const argumentdefaults = JSON.parse(mutationDom.getAttribute("argumentdefaults") || "[]");
         const warp = mutationDom.getAttribute("warp") || "false";
@@ -447,9 +447,9 @@ export class Text2Blocks {
       return customBlocksByHash;
     }
 
-    // 验证参数类型是否与输入类型兼容
+    // Validate whether parameter type is compatible with input type
     function validateParameterType(param, info, parentOpcode) {
-      // procedures_call 的参数总是块类型，不需要特殊验证
+      // Parameters of procedures_call are always blocks, no special validation needed
       if (parentOpcode === "procedures_call") {
         return true;
       }
@@ -518,9 +518,9 @@ export class Text2Blocks {
       return true;
     }
 
-    // 递归处理块参数
+    // Recursively process block parameters
     function processParameter(param, info, parentBlockId, parentOpcode) {
-      // 验证参数类型
+      // Validate parameter type
       if (!validateParameterType(param, info, parentOpcode)) {
         return null;
       }
@@ -529,16 +529,19 @@ export class Text2Blocks {
       let input_block_id = null;
       let variableType = null;
 
-      // 处理嵌套块，包括布尔块、报告块、脚本
+      // Handle nested blocks, including boolean, reporter blocks, and scripts
       if (param.isBlock) {
         const nestedBlockId = processBlock(param, parentBlockId, false);
         input_block_id = nestedBlockId;
+      } else if (param.isScript) {
+        const nestedScriptId = processScript(param.blocks, parentBlockId, false);
+        input_block_id = nestedScriptId;
       }
 
       if (info.type === FIELD_DROPDOWN) {
         let value = param.value;
 
-        // 如果 menu 存在，说明是静态下拉菜单（在 paintBlock 中已识别）
+        // If menu exists, it's a static dropdown (identified in paintBlock)
         if (param.menu) {
           const staticValue = info.options?.[param.menu];
           if (staticValue !== undefined) {
@@ -550,8 +553,8 @@ export class Text2Blocks {
             });
           }
         } else if (info.dynamicOptions) {
-          // menu 为 null，说明是动态菜单，直接使用 param.value
-          // 验证值的合法性
+          // menu null means dynamic menu, use param.value directly
+          // Validate the value
           if (!validateDynamicValue(param.value, info.dynamicOptions)) {
             self.warnings.push({
               code: ErrorCodes.VALUE_NOT_FOUND,
@@ -579,12 +582,12 @@ export class Text2Blocks {
 
         let value = param.value;
         if (param.isBlock) {
-          value = Object.values(info.options || {})[0] || ""; // TODO: 这样处理是否合理？
+          value = Object.values(info.options || {})[0] || ""; // TODO: Is this handling reasonable?
           if (info.opcode === "control_create_clone_of_menu" && self.target.isStage) {
-            value = self.runtime.targets.find((t) => !t.isStage)?.getName() || ""; // 舞台不允许使用 _myself_
+            value = self.runtime.targets.find((t) => !t.isStage)?.getName() || ""; // Stage cannot use _myself_
           }
         } else {
-          // 如果 menu 存在，说明是静态下拉菜单（在 paintBlock 中已识别）
+          // If menu exists, it's a static dropdown (identified in paintBlock)
           if (param.menu) {
             const staticValue = info.options?.[param.menu];
             if (staticValue !== undefined) {
@@ -596,8 +599,8 @@ export class Text2Blocks {
               });
             }
           } else if (info.dynamicOptions) {
-            // menu 为 null，说明是动态菜单，直接使用 param.value
-            // 验证值的合法性
+            // menu null means dynamic menu, use param.value directly
+            // Validate the value
             if (!validateDynamicValue(param.value, info.dynamicOptions)) {
               self.warnings.push({
                 code: ErrorCodes.VALUE_NOT_FOUND,
@@ -630,7 +633,7 @@ export class Text2Blocks {
         });
       } else if (info.opcode === "procedures_prototype") {
       } else if (info.type !== BOOLEAN && info.type !== SCRIPT) {
-        // Reporter 类型的圆形输入
+        // Reporter-type round input
         const input_id = self.genId();
         shadow_block_id = input_id;
         const field_name =
@@ -654,7 +657,7 @@ export class Text2Blocks {
           } else if (info.opcode === "colour_picker") {
             if (param.isColor) {
               if (value.length === 4) {
-                // 短格式 #RGB 转换为 #RRGGBB
+                // Convert short format #RGB to #RRGGBB
                 value = "#" + value[1] + value[1] + value[2] + value[2] + value[3] + value[3];
               }
             } else {
@@ -690,7 +693,7 @@ export class Text2Blocks {
       };
     }
 
-    // 递归处理单个块
+    // Recursively process a single block
     function processBlock(block, parentBlockId = null, isTopLevel = false) {
       if (block.isComment) {
         return null;
@@ -715,7 +718,7 @@ export class Text2Blocks {
         return null;
       }
 
-      // 检查块是否对当前目标可用
+      // Check whether the block is available for the current target
       if (!self.checkBlockAvailability(opcode)) {
         const targetType = self.target.isStage ? "stage" : "sprite";
         self.errors.push({ code: ErrorCodes.BLOCK_NOT_AVAILABLE, params: { opcode, targetType } });
@@ -736,7 +739,7 @@ export class Text2Blocks {
       };
 
       if (opcode === "procedures_prototype") {
-        // 重新生成 proccode 以进行查找
+        // Regenerate proccode for lookup
         const proccode_parts = [];
         let argIndex = 0;
         for (const child of block.children) {
@@ -750,10 +753,10 @@ export class Text2Blocks {
         const procDef = procDefinitions.get(proccode);
 
         if (procDef) {
-          // 使用 procDefinitions 中的 prototypeMutation
+          // Use prototypeMutation from procDefinitions
           block_json.mutation = procDef.prototypeMutation;
 
-          // 处理 inputs，使用 procDef 中的 argumentids
+          // Process inputs using argumentids from procDef
           argIndex = 0;
           for (const child of block.children) {
             if (child.isBlock) {
@@ -771,7 +774,7 @@ export class Text2Blocks {
           self.errors.push({ code: ErrorCodes.PROC_PROTOTYPE_NOT_FOUND, params: { proccode } });
         }
       } else if (opcode === "argument_reporter_string_number" || opcode === "argument_reporter_boolean") {
-        // 根据父块类型设置 shadow：当父块为 procedures_prototype 时为 true，否则为 false
+        // Set shadow based on parent block type: true if parent is procedures_prototype, else false
         const parentBlock = findBlockById(parentBlockId);
         block_json.shadow = parentBlock && parentBlock.opcode === "procedures_prototype";
         block_json.fields["VALUE"] = {
@@ -779,7 +782,7 @@ export class Text2Blocks {
           value: blockName(block),
         };
       } else if (opcode === "procedures_call") {
-        // 处理自定义块调用
+        // Handle custom block calls
         const proccode = block.info.call;
         const procDef = procDefinitions.get(proccode);
 
@@ -788,7 +791,7 @@ export class Text2Blocks {
           return null;
         }
 
-        // 验证参数数量
+        // Validate parameter count
         if (procDef.argumentids.length !== block.parameters.length) {
           self.errors.push({
             code: ErrorCodes.PARAM_COUNT_MISMATCH,
@@ -797,18 +800,18 @@ export class Text2Blocks {
           return null;
         }
 
-        // 使用 procDefinitions 中的 callMutation
+        // Use callMutation from procDefinitions
         block_json.mutation = procDef.callMutation;
 
-        // 处理参数
+        // Process parameters
         for (let i = 0; i < procDef.argumentids.length; i++) {
           const param = block.parameters[i];
           const argId = procDef.argumentids[i];
           const argName = procDef.argumentnames[i];
 
-          // TODO: 校验参数类型
+          // TODO: Validate parameter types
 
-          // 获取参数类型（从 procDef.argumentdefaults 推断）
+          // Infer parameter type (from procDef.argumentdefaults)
           const isBoolean = procDef.argumentdefaults[i] === "false";
           const paramInfo = {
             name: argName,
@@ -839,7 +842,7 @@ export class Text2Blocks {
 
           const result = processParameter(param, param_info, block_id, opcode);
 
-          // 如果参数验证失败，返回 null
+          // If parameter validation fails, return null
           if (result === null) {
             return null;
           }
@@ -862,8 +865,8 @@ export class Text2Blocks {
         }
       }
 
-      // 特殊块校验
-      // control_create_clone_of: 当 target 为 stage 时，不允许 _myself_
+      // Special block checks
+      // control_create_clone_of: when target is stage, _myself_ is not allowed
       if (opcode === "control_create_clone_of") {
         const isStage = self.target.isStage || false;
         const cloneOption = block_json.inputs["CLONE_OPTION"]?.shadow;
@@ -875,7 +878,7 @@ export class Text2Blocks {
         }
       }
 
-      // sensing_of: 校验 OBJECT 和 PROPERTY 的组合
+      // sensing_of: validate OBJECT and PROPERTY combinations
       if (opcode === "sensing_of") {
         const propertyValue = block_json.fields["PROPERTY"]?.value;
         const objectInput = block_json.inputs["OBJECT"]?.shadow;
@@ -885,10 +888,10 @@ export class Text2Blocks {
           const objectValue = objectBlock?.fields?.OBJECT?.value;
 
           if (objectValue === "_stage_") {
-            // 当 OBJECT 为 _stage_ 时，PROPERTY 仅允许 backdrop #, backdrop name, volume 或舞台变量
+            // When OBJECT is _stage_, PROPERTY only allows backdrop #, backdrop name, volume, or stage variables
             const allowedForStage = ["backdrop #", "backdrop name", "volume"];
             if (!allowedForStage.includes(propertyValue)) {
-              // 检查是否是舞台的变量
+                // Check if it's a stage variable
               if (!validateTargetVariable(propertyValue, "_stage_")) {
                 self.warnings.push({
                   code: ErrorCodes.SENSING_OF_STAGE_INVALID_PROPERTY,
@@ -897,7 +900,7 @@ export class Text2Blocks {
               }
             }
           } else {
-            // 当 OBJECT 不为 _stage_ 时，不允许 backdrop #, backdrop name
+            // When OBJECT is not _stage_, backdrop # and backdrop name are not allowed
             const disallowedForSprite = ["backdrop #", "backdrop name"];
             if (disallowedForSprite.includes(propertyValue)) {
               self.warnings.push({
@@ -905,7 +908,7 @@ export class Text2Blocks {
                 params: { property: propertyValue, objectValue },
               });
             } else if (objectValue) {
-              // 检查是否是目标精灵的变量
+              // Check if it's a target sprite's variable
               if (!validateTargetVariable(propertyValue, objectValue)) {
                 self.warnings.push({
                   code: ErrorCodes.VARIABLE_NOT_FOUND,
@@ -940,7 +943,7 @@ export class Text2Blocks {
       return block_id;
     }
 
-    // 递归处理脚本（多个块组成的序列）
+    // Recursively process a script (a sequence of blocks)
     function processScript(blocksList, parentBlockId = null, isTopLevel = true) {
       let firstBlockId = null;
       let previousBlockId = null;
@@ -953,7 +956,7 @@ export class Text2Blocks {
 
         const blockId = processBlock(block, parentBlockId, isTopLevel && i === 0);
 
-        // 如果块处理失败，跳过此块
+        // If block processing fails, skip this block
         if (!blockId) {
           continue;
         }
@@ -969,7 +972,7 @@ export class Text2Blocks {
           }
         }
 
-        // 检查当前块是否为最后一个，且不是脚本中的最后一个块
+        // Check if the current block is final but not the last in the script
         if (i < blocksList.length - 1) {
           if (block.isFinal) {
             self.errors.push({

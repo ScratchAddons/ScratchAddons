@@ -246,11 +246,4 @@ export default {
     みどりのはたがおされたとき: "EVENT_WHENFLAGCLICKED",
     みどりのはたがクリックされたとき: "EVENT_WHENFLAGCLICKED",
   },
-
-  // : { // template
-  //   '': 'MOTION_TURNLEFT',
-  //   '': 'MOTION_TURNRIGHT',
-  //   '': 'EVENT_WHENFLAGCLICKED',
-  //   '': 'scratchblocks:end',
-  // },
 };
