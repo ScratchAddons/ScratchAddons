@@ -481,7 +481,12 @@ export class Text2Blocks {
         if (!param.isBoolean) {
           self.errors.push({
             code: ErrorCodes.TYPE_MISMATCH,
-            params: { parentOpcode, inputName: info.name, expected: "boolean block", got: param.info?.shape || "unknown" },
+            params: {
+              parentOpcode,
+              inputName: info.name,
+              expected: "boolean block",
+              got: param.info?.shape || "unknown",
+            },
           });
           return false;
         }
@@ -539,7 +544,10 @@ export class Text2Blocks {
           if (staticValue !== undefined) {
             value = staticValue;
           } else if (!info.dynamicOptions) {
-            self.warnings.push({ code: ErrorCodes.MENU_NOT_FOUND, params: { menu: param.menu, parentOpcode, inputName: info.name } });
+            self.warnings.push({
+              code: ErrorCodes.MENU_NOT_FOUND,
+              params: { menu: param.menu, parentOpcode, inputName: info.name },
+            });
           }
         } else if (info.dynamicOptions) {
           // menu 为 null，说明是动态菜单，直接使用 param.value
@@ -582,7 +590,10 @@ export class Text2Blocks {
             if (staticValue !== undefined) {
               value = staticValue;
             } else if (!info.dynamicOptions) {
-              self.warnings.push({ code: ErrorCodes.MENU_NOT_FOUND, params: { menu: param.menu, parentOpcode, inputName: info.name } });
+              self.warnings.push({
+                code: ErrorCodes.MENU_NOT_FOUND,
+                params: { menu: param.menu, parentOpcode, inputName: info.name },
+              });
             }
           } else if (info.dynamicOptions) {
             // menu 为 null，说明是动态菜单，直接使用 param.value
@@ -626,10 +637,10 @@ export class Text2Blocks {
           info.opcode === "text"
             ? "TEXT"
             : info.opcode === "colour_picker"
-            ? "COLOUR"
-            : info.opcode === "note"
-            ? "NOTE"
-            : "NUM";
+              ? "COLOUR"
+              : info.opcode === "note"
+                ? "NOTE"
+                : "NUM";
         let value;
         if (param.isBlock) {
           value = info.opcode === "text" ? "" : info.opcode === "colour_picker" ? "#000000" : 0;

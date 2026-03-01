@@ -47,7 +47,7 @@ export class Input {
 
     this.isBoolean = shape === "boolean";
     this.isStack = shape === "stack";
-    this.isColor = shape === "color"
+    this.isColor = shape === "color";
   }
   get isInput() {
     return true;

@@ -89,7 +89,9 @@
   font-family: inherit;
   cursor: pointer;
   min-width: 100px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .sa-text2blocks-select:hover {
@@ -111,7 +113,9 @@
   font-size: 12px;
   font-family: inherit;
   min-width: 80px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .sa-text2blocks-input::placeholder {
