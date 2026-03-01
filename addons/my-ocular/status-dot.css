@@ -7,11 +7,11 @@
   margin-left: 5px;
   background-color: #bbb;
   border-radius: 50%;
-  display: inline-block !important;
+  display: inline-block;
 }
 
 .profile-details span.sa-ocular-status {
-  display: inline-block !important;
+  display: inline-block;
   border-left: 1px solid rgb(204, 204, 204);
   margin-left: 5px;
   padding-left: 5px;

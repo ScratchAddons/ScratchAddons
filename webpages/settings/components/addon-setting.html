@@ -36,6 +36,7 @@
               <addon-setting
                 v-for="(id, val) of row"
                 :addon="addon"
+                :group-id="groupId"
                 :setting="getTableSetting(id)"
                 :setting-path="settingPath.concat([i, id])"
                 :addon-settings="row"

@@ -131,6 +131,18 @@
       }
     },
     {
+      "name": "page-greenText",
+      "value": {
+        "type": "textColor",
+        "black": "#328554",
+        "white": "#13ecaf",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "page-colorScheme",
       "value": {
         "type": "textColor",
@@ -556,6 +568,18 @@
         "type": "textColor",
         "black": "#328554",
         "white": "#13ecaf",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-redText",
+      "value": {
+        "type": "textColor",
+        "black": "#cc4400",
+        "white": "#ff9966",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1563,6 +1587,17 @@
           "settingId": "blue"
         },
         "transparentSource": "#4d97ff80"
+      }
+    },
+    {
+      "name": "blue-deletedComment",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "transparentSource": "#ff668040"
       }
     },
     {

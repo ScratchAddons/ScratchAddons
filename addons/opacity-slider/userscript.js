@@ -128,7 +128,6 @@ export default async function ({ addon, console, msg }) {
     addon.tab.redux.initialize();
     if (typeof prevEventHandler === "function") {
       addon.tab.redux.removeEventListener("statechanged", prevEventHandler);
-      prevEventHandler = null;
     }
 
     const containerWrapper = document.createElement("div");

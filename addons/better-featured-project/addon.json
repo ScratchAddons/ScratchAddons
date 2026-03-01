@@ -10,7 +10,8 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/"]
+      "matches": ["https://scratch.mit.edu/users/*/"],
+      "runAtComplete": false
     }
   ],
   "userstyles": [
@@ -19,7 +20,7 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     },
     {
-      "url": "statuslength.css",
+      "url": "scratchr2.css",
       "matches": ["https://scratch.mit.edu/users/*/"],
       "if": {
         "addonEnabled": ["scratchr2"]
@@ -37,5 +38,7 @@
     }
   ],
   "versionAdded": "1.5.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "tags": ["community", "featured", "profiles"]
 }

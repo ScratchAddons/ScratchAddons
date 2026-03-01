@@ -83,6 +83,7 @@
           v-for="setting of addon.settings"
           :class="{'setting-highlighted': highlightedSettingId === setting.id}"
           :addon="addon"
+          :group-id="groupId"
           :setting="setting"
           :setting-path="[setting.id]"
           :addon-settings="addonSettings"

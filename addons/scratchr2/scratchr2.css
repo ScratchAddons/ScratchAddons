@@ -273,7 +273,7 @@ select:focus {
   padding: 0;
 }
 .control-group.tooltip textarea:focus {
-  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(133, 92, 214, 0.25));
 }
 #topnav {
   height: 50px;

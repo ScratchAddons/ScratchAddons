@@ -155,7 +155,7 @@ class GamepadData {
   }
 
   resetMappings() {
-    this.hints = this.gamepadLib.getHints();
+    this.hints = this.gamepadLib.getHints(this.gamepad.id, this.gamepad.index);
     this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
     this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
   }
@@ -452,11 +452,11 @@ class GamepadLib extends EventTarget {
     });
   }
 
-  getHints() {
-    return Object.assign(defaultHints(), this.getUserHints());
+  getHints(gamepadId, gamepadIndex) {
+    return Object.assign(defaultHints(), this.getUserHints(gamepadId, gamepadIndex));
   }
 
-  getUserHints() {
+  getUserHints(gamepadId, gamepadIndex) {
     // to be overridden by users
     return {};
   }
@@ -1085,19 +1085,21 @@ class GamepadEditor extends EventTarget {
     }
   }
 
-  export() {
-    const selectedId = this.selector.value;
-    if (!selectedId) {
-      return null;
-    }
-    const gamepadData = this.gamepadLib.gamepads.get(selectedId);
-    if (!gamepadData) {
-      return null;
-    }
-    return {
-      axes: gamepadData.axesMappings.map(prepareAxisMappingForExport),
-      buttons: gamepadData.buttonMappings.map(prepareButtonMappingForExport),
-    };
+  exportSettings() {
+    const settingsMap = new Map();
+    // Add information about each gamepad to gamepadArray
+    this.gamepadLib.gamepads.forEach((gamepadData, gamepadKey, map) => {
+      // Add the gamepad's id (type), index, and current mappings to gamepadArray
+      settingsMap.set(gamepadKey, {
+        id: gamepadData.gamepad.id,
+        index: gamepadData.gamepad.index,
+        settings: {
+          axes: gamepadData.axesMappings.map(prepareAxisMappingForExport),
+          buttons: gamepadData.buttonMappings.map(prepareButtonMappingForExport),
+        },
+      });
+    });
+    return settingsMap;
   }
 
   changed() {
