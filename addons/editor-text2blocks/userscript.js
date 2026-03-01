@@ -311,7 +311,13 @@ export default async function ({ addon, console, msg }) {
       optionExisting.textContent = msg("use-existing");
       actionSelect.appendChild(optionExisting);
 
-      actionSelect.value = "new"; // Default to "Create new"
+      // Check if a variable with the same name already exists
+      const existingVars = getVariablesOfTarget(target, type);
+      const sameNameExists = existingVars.some((v) => v.name === name);
+
+      // Default to "existing" if same-named variable exists, otherwise "new"
+      const defaultAction = sameNameExists ? "existing" : "new";
+      actionSelect.value = defaultAction;
       actionCell.appendChild(actionSelect);
       row.appendChild(actionCell);
 
@@ -321,8 +327,9 @@ export default async function ({ addon, console, msg }) {
       const configContainer = document.createElement("div");
       configContainer.className = "sa-text2blocks-config-container";
 
-      // Initially show create-new-variable config
-      const initialConfigContent = createNewVarConfig(name, type);
+      // Initially show config based on default action
+      const initialConfigContent =
+        defaultAction === "new" ? createNewVarConfig(name, type) : createExistingVarConfig(name, type);
       configContainer.appendChild(initialConfigContent);
       configCell.appendChild(configContainer);
       row.appendChild(configCell);
@@ -415,7 +422,13 @@ export default async function ({ addon, console, msg }) {
         existingSelect.appendChild(option);
       }
 
-      // Initialize mapping (use first existing variable)
+      // If a variable with the same name exists, select it by default; otherwise use first
+      const sameNameVar = existingVariables.find((v) => v.name === name);
+      if (sameNameVar) {
+        existingSelect.value = name;
+      }
+
+      // Initialize mapping (use same-named variable if exists, otherwise first existing variable)
       function updateMapping() {
         const selectedVar = existingSelect.value;
         const selectedOption = existingSelect.options[existingSelect.selectedIndex];
@@ -488,9 +501,40 @@ export default async function ({ addon, console, msg }) {
       }
 
       try {
+        // Validation: Check for duplicate variable names when creating new variables
+        const stage = vm.runtime.getTargetForStage();
+        const duplicates = [];
+
+        for (const [originalName, mapping] of variableMappings) {
+          if (mapping.type === "new") {
+            const { name: newName, varType, scope } = mapping.data;
+            const variableType = varType === "list" ? "list" : "";
+
+            // Determine which targets to check based on scope
+            const targetList = scope === "global" ? [stage] : [target, stage];
+
+            // Check if variable with same name already exists
+            for (const targetToCheck of targetList) {
+              const existingVars = Object.values(targetToCheck.variables).filter((v) => v.type === variableType);
+              const conflictVar = existingVars.find((v) => v.name === newName);
+
+              if (conflictVar) {
+                duplicates.push(`${varType === "list" ? msg("list") : msg("variable")}: "${newName}"`);
+                break;
+              }
+            }
+          }
+        }
+
+        // If duplicates found, show error and prevent apply
+        if (duplicates.length > 0) {
+          const duplicateList = duplicates.join("\n");
+          alert(msg("duplicate-name-error", { names: duplicateList }));
+          return;
+        }
+
         // Prepare final variable mapping: originalName -> {name, id}
         const finalVariableMappings = new Map();
-        const stage = vm.runtime.getTargetForStage();
 
         // First create all new variables to obtain IDs before recording mappings
         for (const [originalName, mapping] of variableMappings) {

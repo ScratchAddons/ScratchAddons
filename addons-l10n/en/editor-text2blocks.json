@@ -16,5 +16,8 @@
   "editor-text2blocks/warnings": "Warnings",
   "editor-text2blocks/warnings-confirm-content": "There are warnings. They might cause unexpected behavior or even break your project. Do you want to proceed? If you don't know, please click \"Cancel\".",
   "editor-text2blocks/no-variables-lists": "No variables or lists found.",
-  "editor-text2blocks/no-issues": "No issues found."
+  "editor-text2blocks/no-issues": "No issues found.",
+  "editor-text2blocks/duplicate-name-error": "Already exists:\n{names}",
+  "editor-text2blocks/variable": "Variable",
+  "editor-text2blocks/list": "List"
 }
