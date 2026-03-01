@@ -1,0 +1,11 @@
+{
+  "editor-text2blocks/main": "Convert Text to Blocks",
+  "editor-text2blocks/parse-button": "Parse",
+  "editor-text2blocks/apply-button": "Apply",
+  "editor-text2blocks/variables-tab": "Variables",
+  "editor-text2blocks/lists-tab": "Lists",
+  "editor-text2blocks/errors": "Errors",
+  "editor-text2blocks/warnings": "Warnings",
+  "editor-text2blocks/warnings-confirm-content": "There are warnings. They might cause unexpected behavior or even break your project. Do you want to proceed? If you don't know, please click \"Cancel\".",
+  "editor-text2blocks/no-variables-lists": "No variables or lists found."
+}

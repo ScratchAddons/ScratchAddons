@@ -87,5 +87,10 @@
   },
   "scratch-flash": {
     "license": "GPL-2.0"
+  },
+  "scratchblocks": {
+    "license": "MIT",
+    "year": "2013-2021",
+    "fullname": "Tim Radvan"
   }
 }
