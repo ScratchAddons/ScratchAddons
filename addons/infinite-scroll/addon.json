@@ -11,12 +11,6 @@
   ],
   "settings": [
     {
-      "name": "Forums",
-      "id": "forumScroll",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Profile Comments",
       "id": "profileCommentScroll",
       "type": "boolean",
@@ -41,7 +35,7 @@
       "default": true
     },
     {
-      "name": "Add to Studio Menu",
+      "name": "Browse Projects Popup",
       "id": "studioBrowseProjectScroll",
       "type": "boolean",
       "default": true
@@ -67,6 +61,12 @@
     {
       "name": "Search and Explore",
       "id": "searchExploreScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Forums",
+      "id": "forumScroll",
       "type": "boolean",
       "default": true
     }

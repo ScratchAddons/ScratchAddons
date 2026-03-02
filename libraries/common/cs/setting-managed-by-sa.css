@@ -1,0 +1,23 @@
+.sa-managed-submenu .sa-managed-item {
+  filter: opacity(0.5);
+  cursor: default;
+}
+.sa-addon-settings-link [class*="settings-menu_check_"] {
+  visibility: hidden;
+}
+.sa-addon-settings-link [class*="settings-menu_icon_"]:first-child {
+  /* align with checkbox */
+  margin-inline-start: -4px;
+  margin-inline-end: -1px;
+}
+.sa-addon-settings-link .sa-new-tab-icon {
+  margin-left: auto;
+  height: 1.25rem;
+  width: 1.25rem;
+  filter: var(--editorDarkMode-menuBar-filter, none);
+}
+[dir="rtl"] .sa-addon-settings-link .sa-new-tab-icon {
+  margin-left: 0;
+  margin-right: auto;
+  transform: rotate(-90deg);
+}

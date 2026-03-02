@@ -9,6 +9,7 @@ import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
+import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 import {
   checkAndOpenUnsupportedPage,
   getForceEnglish,
@@ -26,6 +27,9 @@ import {
   versionName,
 } from "../../libraries/common/settings-page-apis.js";
 
+const MORE_SETTINGS_HASH = "#moresettings";
+const ADDON_HASH_PREFIX = "#addon-";
+
 let isIframe = false;
 if (window.parent !== window) {
   // We're in a popup!
@@ -41,6 +45,7 @@ let fuse;
 
   await loadVueComponent([
     "webpages/settings/components/picker-component",
+    "webpages/settings/components/dropdown",
     "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-setting",
     "webpages/settings/components/addon-tag",
@@ -79,8 +84,7 @@ let fuse;
 
   // REMINDER: update similar code at /background/imports/util.js
   const browserLevelPermissions = ["notifications"];
-  if (typeof browser !== "undefined") {
-    // Firefox only
+  if (isFirefox()) {
     if (typeof Clipboard.prototype.write !== "function") {
       // Firefox 109-126 only
       browserLevelPermissions.push("clipboardWrite");
@@ -189,7 +193,7 @@ let fuse;
     methods: {
       openMoreSettings: function () {
         this.closePickers();
-        this.moreSettingsOpen = true;
+        this.$els.moresettings.showModal();
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
@@ -323,7 +327,7 @@ let fuse;
         reload();
       },
       openFullSettings() {
-        window.open(`${settingsPageURL}#addon-${this.addonToEnable && this.addonToEnable._addonId}`);
+        window.open(`${settingsPageURL}${ADDON_HASH_PREFIX}${this.addonToEnable && this.addonToEnable._addonId}`);
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
@@ -351,7 +355,7 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target.id === "sidebar-toggle") return;
+        if (event?.target?.closest("#sidebar-toggle")) return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
@@ -383,8 +387,7 @@ let fuse;
       // Autofocus search bar in iframe mode for both browsers
       // autofocus attribute only works in Chrome for us, so
       // we also manually focus on Firefox, even in fullscreen
-      if (isIframe || typeof browser !== "undefined")
-        setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
+      if (isIframe || isFirefox()) setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
 
       const exampleAddonListItem = {
         // Need to specify all used properties for reactivity!
@@ -414,10 +417,10 @@ let fuse;
       window.addEventListener(
         "hashchange",
         (e) => {
-          if (location.hash === "#moresettings") {
+          if (location.hash === MORE_SETTINGS_HASH) {
             vue.openMoreSettings();
-          } else {
-            const addonId = location.hash.replace(/^#addon-/, "");
+          } else if (location.hash.startsWith(ADDON_HASH_PREFIX)) {
+            const addonId = location.hash.substring(ADDON_HASH_PREFIX.length);
             const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
             if (!groupWithAddon) return; //Don't run if hash is invalid
             const addon = this.manifestsById[addonId];
@@ -628,17 +631,17 @@ let fuse;
     vue.loaded = true;
     setTimeout(() => {
       const hash = window.location.hash;
-      if (location.hash === "#moresettings") {
+      if (location.hash === MORE_SETTINGS_HASH) {
         vue.openMoreSettings();
-      } else if (hash.startsWith("#addon-")) {
-        const addonId = hash.substring(7);
+      } else if (hash.startsWith(ADDON_HASH_PREFIX)) {
+        const addonId = hash.substring(ADDON_HASH_PREFIX.length);
         const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
         groupWithAddon.expanded = true;
 
         const addon = vue.manifestsById[addonId];
         vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-        this.blinkAddon(addonId);
+        vue.blinkAddon(addonId);
       }
     }, 0);
 
@@ -652,9 +655,16 @@ let fuse;
     if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
       document.querySelector("#searchBox").focus();
-    } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
-      e.preventDefault();
-      vue.searchInputReal = "";
+    } else if (e.key === "Escape") {
+      if (document.activeElement === document.querySelector("#searchBox")) {
+        e.preventDefault();
+        vue.searchInputReal = "";
+      } else if (vue.categoryOpen && vue.smallMode) {
+        vue.categoryOpen = false;
+      } else {
+        vue.closeDropdowns();
+        vue.closePickers();
+      }
     }
   });
 

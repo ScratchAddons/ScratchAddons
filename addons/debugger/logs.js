@@ -133,7 +133,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
 
   const addLog = (text, thread, type) => {
     const log = {
-      text,
+      text: Object.is(text, -0) ? "-0" : text, // Preserve -0 in stringification
       type,
       count: 1,
       preview: true,

@@ -47,6 +47,20 @@ class LogView {
     this.innerElement.addEventListener("scroll", this._handleScroll.bind(this), { passive: true });
     this.innerElement.addEventListener("wheel", this._handleWheel.bind(this), { passive: true });
 
+    // Add ResizeObserver to update height when debugger is resized
+    if (window.ResizeObserver) {
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.visible) {
+          const newHeight = this.innerElement.offsetHeight;
+          if (newHeight !== this.height) {
+            this.height = newHeight;
+            this.queueUpdateContent();
+          }
+        }
+      });
+      this.resizeObserver.observe(this.innerElement);
+    }
+
     this.endElement = document.createElement("div");
     this.endElement.className = "sa-debugger-log-end";
     this.endElement.dataset.index = "-1";

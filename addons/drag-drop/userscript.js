@@ -57,9 +57,9 @@ export default async function ({ addon, console }) {
     let el;
     let callback;
     if (
-      (el = e.target.closest('div[class*="sprite-selector_sprite-selector"]')) ||
-      (el = e.target.closest('div[class*="stage-selector_stage-selector"]')) ||
-      (el = e.target.closest('div[class*="selector_wrapper"]'))
+      (el = e.target.closest('[class*="sprite-selector_sprite-selector"]')) ||
+      (el = e.target.closest('[class*="stage-selector_stage-selector"]')) ||
+      (el = e.target.closest('[class*="selector_wrapper_"]'))
     ) {
       callback = (files) => {
         const hdFilter = addon.settings.get("use-hd-upload") ? "" : ":not(.sa-better-img-uploads-input)";
@@ -71,17 +71,13 @@ export default async function ({ addon, console }) {
       !addon.tab.redux.state.scratchGui.mode.isPlayerOnly &&
       (el = e.target.closest('div[class*="monitor_list-monitor"]'))
     ) {
-      callback = (files) => {
-        const contextMenuBefore = document.querySelector("body > .react-contextmenu.react-contextmenu--visible");
+      callback = async (files) => {
         // Simulate a right click on the list monitor
         el.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
-        // Get the right click menu that opened (monitor context menus are
-        // children of <body>)
-        const contextMenuAfter = document.querySelector("body > .react-contextmenu.react-contextmenu--visible");
-        // `contextMenuAfter` is only null if the context menu was already open
-        // for the list monitor, in which case we can use the context menu from
-        // before the simulated right click
-        const contextMenu = contextMenuAfter === null ? contextMenuBefore : contextMenuAfter;
+        // Wait for menu to render
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        // Get the right click menu that opened
+        const contextMenu = document.querySelector("[class*='context-menu_context-menu-content_']");
         // Sometimes the menu flashes open, so force hide it.
         contextMenu.style.display = "none";
         // Override DOM methods to import the text file directly
@@ -114,9 +110,7 @@ export default async function ({ addon, console }) {
         // Simulate clicking on the "Import" option
         contextMenu.children[0].click();
       };
-    } else if (
-      (el = e.target.closest('div[class*="question_question-input"] > input[class*="input_input-form_l9eYg"]'))
-    ) {
+    } else if ((el = e.target.closest('[class*="question_question-input"] > [class*="input_input-form_"]'))) {
       callback = async (files) => {
         const text = (await Promise.all(Array.from(files, (file) => file.text())))
           .join("")

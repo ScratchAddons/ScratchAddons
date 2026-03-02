@@ -289,6 +289,7 @@
   line-height: 0;
 }
 .studio-project-tile .studio-project-avatar {
+  box-sizing: border-box;
   border: 1px solid var(--darkWww-border-15, #ddd);
   border-radius: 0;
 }
@@ -298,7 +299,6 @@
 }
 .studio-project-tile .studio-project-title {
   color: var(--darkWww-link-scratchr2, #855cd6);
-  font-weight: 800;
 }
 .studio-project-tile .studio-project-username {
   color: var(--darkWww-page-scratchr2Text, #322f31);
@@ -336,6 +336,7 @@
   line-height: 0;
 }
 .studio-member-tile .studio-member-image {
+  box-sizing: border-box;
   border: 1px solid var(--darkWww-border-20, #ccc);
   border-radius: 0;
 }

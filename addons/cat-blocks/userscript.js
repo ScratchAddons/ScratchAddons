@@ -4,8 +4,9 @@
  */
 
 import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+import { managedBySa } from "../../libraries/common/cs/setting-managed-by-sa.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   let createSvgElement;
@@ -358,26 +359,20 @@ export default async function ({ addon, console }) {
       }
     };
   } else {
-    const oldLayout = Blockly.VerticalFlyout.prototype.layout_;
-    Blockly.VerticalFlyout.prototype.layout_ = function (contents, gaps) {
-      const oldStartHeight = Blockly.BlockSvg.START_HAT_HEIGHT;
-      if (!addon.self.disabled) Blockly.BlockSvg.START_HAT_HEIGHT = 31;
-      oldLayout.call(this, contents, gaps);
-      Blockly.BlockSvg.START_HAT_HEIGHT = oldStartHeight;
+    const patchProperty = (object, name, newValue) => {
+      const oldProperty = Object.getOwnPropertyDescriptor(object, name);
+      Object.defineProperty(object, name, {
+        ...oldProperty,
+        get() {
+          if (addon.self.disabled) return oldProperty.get();
+          return newValue;
+        },
+      });
     };
 
-    const oldRenderDrawTop = Blockly.BlockSvg.prototype.renderDrawTop_;
-    Blockly.BlockSvg.prototype.renderDrawTop_ = function (steps, rightEdge) {
-      const oldStartHatPath = Blockly.BlockSvg.START_HAT_PATH;
-      const oldTopCorner = Blockly.BlockSvg.TOP_LEFT_CORNER_DEFINE_HAT;
-      if (!addon.self.disabled) {
-        Blockly.BlockSvg.START_HAT_PATH = CAT_PATH;
-        Blockly.BlockSvg.TOP_LEFT_CORNER_DEFINE_HAT = TOP_LEFT_CORNER_DEFINE_CAT;
-      }
-      oldRenderDrawTop.call(this, steps, rightEdge);
-      Blockly.BlockSvg.START_HAT_PATH = oldStartHatPath;
-      Blockly.BlockSvg.TOP_LEFT_CORNER_DEFINE_HAT = oldTopCorner;
-    };
+    patchProperty(Blockly.BlockSvg, "START_HAT_PATH", CAT_PATH);
+    patchProperty(Blockly.BlockSvg, "TOP_LEFT_CORNER_DEFINE_HAT", TOP_LEFT_CORNER_DEFINE_CAT);
+    patchProperty(Blockly.BlockSvg, "START_HAT_HEIGHT", 31);
 
     const originalRenderDraw = Blockly.BlockSvg.prototype.renderDraw_;
     Blockly.BlockSvg.prototype.renderDraw_ = function (...args) {
@@ -434,7 +429,37 @@ export default async function ({ addon, console }) {
     attachMouseMoveListener(block);
   });
 
-  const update = () => {
+  const getTheme = () => (addon.tab.redux.state ? addon.tab.redux.state.scratchGui.settings.theme : "default");
+  const setTheme = async (newTheme) => {
+    if (!addon.tab.redux.state) return;
+    const currentTheme = getTheme();
+    if (newTheme !== currentTheme) {
+      addon.tab.redux.dispatch({
+        type: "scratch-gui/settings/SET_THEME",
+        theme: newTheme,
+      });
+      // wait for new workspace to render
+      await new Promise((resolve) => {
+        const oldInject = Blockly.inject;
+        Blockly.inject = function (...args) {
+          Blockly.inject = oldInject;
+          setTimeout(() => resolve(), 0);
+          return oldInject.call(this, ...args);
+        };
+      });
+    }
+  };
+  let scratchTheme = getTheme();
+
+  const update = async () => {
+    if (!addon.self.disabled) {
+      // disable Scratch's cat blocks theme to avoid conflicts
+      scratchTheme = getTheme();
+      await setTheme("default");
+    } else {
+      await setTheme(scratchTheme);
+    }
+
     if (Blockly.registry) {
       // new Blockly
       const workspace = addon.tab.traps.getWorkspace();
@@ -452,7 +477,51 @@ export default async function ({ addon, console }) {
 
   update();
 
-  addon.self.addEventListener("disabled", update);
+  addon.self.addEventListener("disabled", async () => {
+    await update();
+
+    if (getTheme() === "cat-blocks") {
+      const alertContainer = document.querySelector("[class*=alerts_alerts-inner-container_]");
+      const alert = Object.assign(document.createElement("div"), {
+        className: addon.tab.scratchClass("alert_alert", "alert_success", "box_box"),
+      });
+      alertContainer.appendChild(alert);
+      const message = Object.assign(document.createElement("div"), {
+        className: addon.tab.scratchClass("alert_alert-message"),
+        textContent: msg("disable-message"),
+      });
+      alert.appendChild(message);
+      const buttons = Object.assign(document.createElement("div"), {
+        className: addon.tab.scratchClass("alert_alert-buttons"),
+        style: "margin-inline-start: auto;",
+      });
+      alert.appendChild(buttons);
+      const closeContainer = Object.assign(document.createElement("div"), {
+        className: addon.tab.scratchClass("alert_alert-close-button-container", "box_box"),
+      });
+      buttons.appendChild(closeContainer);
+      const closeButton = Object.assign(document.createElement("button"), {
+        className: addon.tab.scratchClass(
+          "alert_alert-close-button",
+          "close-button_close-button",
+          "close-button_large"
+        ),
+        ariaLabel: addon.tab.scratchMessage("gui.cards.close"),
+        style: "border: none;",
+      });
+      closeContainer.appendChild(closeButton);
+      const closeIcon = Object.assign(document.createElement("img"), {
+        className: addon.tab.scratchClass("close-button_close-icon"),
+        src: addon.self.dir + "/../../images/cs/close-s3.svg",
+        draggable: false,
+      });
+      closeButton.appendChild(closeIcon);
+
+      const close = () => alert.remove();
+      closeButton.addEventListener("click", close);
+      setTimeout(close, 15000);
+    }
+  });
   addon.self.addEventListener("reenabled", update);
   addon.settings.addEventListener("change", () => {
     const workspace = addon.tab.traps.getWorkspace();
@@ -469,4 +538,16 @@ export default async function ({ addon, console }) {
       }
     }
   });
+
+  while (true) {
+    const themeSubmenu = await addon.tab.waitForElement(
+      "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2):not(:last-child) ul",
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      }
+    );
+    themeSubmenu.classList.add("sa-theme-submenu");
+    managedBySa(addon, themeSubmenu);
+  }
 }

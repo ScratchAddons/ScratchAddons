@@ -37,8 +37,8 @@
 .u-progress-bar-top .u-progress-bar-inner {
   background-color: var(--darkWww-navbar-text, white);
 }
-.sa-body-editor .u-progress-bar-top .u-progress-bar-background,
-.sa-body-editor .u-progress-bar-top .u-progress-bar-inner {
+.sa-editor .u-progress-bar-top .u-progress-bar-background,
+.sa-editor .u-progress-bar-top .u-progress-bar-inner {
   background-color: var(--editorDarkMode-menuBar-text, white);
 }
 

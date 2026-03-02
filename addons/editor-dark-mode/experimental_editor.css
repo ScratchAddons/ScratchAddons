@@ -159,9 +159,9 @@
 
 /* Accent background */
 [class*="backpack_backpack-header_"],
-.sa-body-editor [class*="stage-header_stage-button_"],
-.sa-body-editor [class*="stage-header_stage-size-row_"] > *,
-.sa-body-editor [class*="stage-header_unselect-wrapper_"],
+.sa-editor [class*="stage-header_stage-button_"],
+.sa-editor [class*="stage-header_stage-size-row_"] > *,
+.sa-editor [class*="stage-header_unselect-wrapper_"],
 [class*="sprite-info_sprite-info_"],
 div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="stage-selector_stage-selector_"],
@@ -228,7 +228,7 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
-.sa-body-editor [class*="stage-header_stage-button_"] [class*="stage-header_stage-button-icon_"],
+.sa-editor [class*="stage-header_stage-button_"] [class*="stage-header_stage-button-icon_"],
 [class*="sprite-info_icon-wrapper_"],
 img[class*="tool-select-base_tool-select-icon_"],
 [class*="paint-editor_button-group-button-icon_"],
@@ -288,7 +288,6 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="project-title-input_title-field_"]:focus,
 [class*="input_input-form_"],
 [class*="input_input-form_"],
-[class*="context-menu_context-menu_"],
 [class*="context-menu_context-menu-content_"],
 .blocklyWidgetDiv .goog-menu,
 .blocklyWidgetDiv .blocklyMenu,
@@ -455,7 +454,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="audio-trimmer_selection-background_"],
 [class*="tag-button_tag-button_"]:not([class*="tag-button_active_"]),
 [class*="action-menu_button_"],
-[class*="context-menu_menu-item_"]:hover {
+[class*="context-menu_menu-item_"]:hover,
+.driver-popover[class*="tooltip-face-sensing"] {
   background-color: var(--editorDarkMode-primary);
   color: var(--editorDarkMode-primary-text);
 }
@@ -463,7 +463,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="context-menu_menu-item-danger_"]:hover {
   background-color: hsla(30, 100%, 55%, 1);
 }
-[class*="gui_extension-button-container_"],
+[class*="extension-button_extension-button-container_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="custom-procedures_button-row_"] button[class*="custom-procedures_ok-button_"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"],
@@ -478,10 +478,17 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="stage-selector_stage-selector_"]:hover,
 [class*="drag-layer_image_"],
 [class*="sound-editor_button_"]:focus::before,
-[class*="library-item_library-item_"]:hover {
+[class*="library-item_library-item_"]:hover,
+.driver-popover[class*="tooltip-face-sensing"] {
   border-color: var(--editorDarkMode-primary);
 }
-.sa-body-editor input {
+.driver-popover-arrow.driver-popover-arrow-side-right[class*="driver-popover-arrow-align-"] {
+  border-right-color: var(--editorDarkMode-primary);
+}
+.driver-popover-arrow.driver-popover-arrow-side-left.driver-popover-arrow-align-start {
+  border-left-color: var(--editorDarkMode-primary);
+}
+.sa-editor input {
   outline-color: var(--editorDarkMode-primary);
 }
 [class*="green-flag_green-flag_"]:hover,
@@ -497,7 +504,7 @@ img[class*="tool-select-base_tool-select-icon_"],
   --colour-contextualMenuHover: var(--editorDarkMode-primary-transparent15);
 }
 [class*="library_filter-bar_"],
-.sa-body-editor [class*="stage-header_stage-button_"]:active,
+.sa-editor [class*="stage-header_stage-button_"]:active,
 [class*="stage_frame_"],
 [class*="toggle-buttons_button_"]:active,
 [class*="button_button_"]:active,
@@ -540,6 +547,22 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="action-menu_main-button_"]:hover {
   box-shadow: 0 0 0 6px var(--editorDarkMode-primary-transparent35);
 }
+[class*="extension-button_radiate_"]::before,
+[class*="extension-button_radiate_"]::after,
+[class*="library-item_radiate_"]::before,
+[class*="library-item_radiate_"]::after {
+  animation-name: sa-radiate;
+  --radiate-color: var(--editorDarkMode-primary);
+}
+@keyframes sa-radiate {
+  0% {
+    box-shadow: 0 0 0 0 var(--radiate-color); /* for browsers that don't support color-mix */
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--radiate-color) 70%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 20px transparent;
+  }
+}
 [class*="dial_gauge-path_"] {
   fill: var(--editorDarkMode-primary-transparent35);
   stroke: var(--editorDarkMode-primary);
@@ -550,7 +573,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
   color: var(--editorDarkMode-primary-text);
 }
-[class*="gui_extension-button-icon_"],
+[class*="extension-button_extension-button-icon_"],
 [class*="delete-button_delete-icon_"],
 [class*="action-menu_main-button_"]:not(:hover) [class*="action-menu_main-icon_"],
 [class*="action-menu_more-button_"]:not(:hover) [class*="action-menu_more-icon_"],
@@ -583,7 +606,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 }
 
 /* Text and icon highlight color */
-.sa-body-editor a:link,
+.sa-editor a:link,
 [class*="gui_tab_"][class*="gui_is-selected_"],
 div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="delete-confirmation-prompt_button-row_"] button,
 [class*="dropdown_dropdown_"],
@@ -623,8 +646,8 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [dir="rtl"] [class*="blocks_blocks_"] .blocklyFlyout,
 [class*="backpack_backpack-header_"],
 [class*="backpack_backpack-list_"],
-.sa-body-editor [class*="stage_stage_"],
-.sa-body-editor [class*="stage-header_stage-button_"],
+.sa-editor [class*="stage_stage_"],
+.sa-editor [class*="stage-header_stage-button_"],
 [class*="toggle-buttons_button_"],
 [dir="rtl"] [class*="toggle-buttons_button_"]:not(:last-child),
 [class*="sprite-selector_sprite-selector_"],
@@ -659,7 +682,6 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 [dir="rtl"] [class*="sound-editor_button-group_"] [class*="sound-editor_button_"]:first-of-type,
 .sa-var-manager td,
 [class*="library-item_library-item_"],
-[class*="context-menu_context-menu_"],
 [class*="context-menu_context-menu-content_"],
 .blocklyWidgetDiv .goog-menu,
 .blocklyWidgetDiv .blocklyMenu,

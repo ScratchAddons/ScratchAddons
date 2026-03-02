@@ -1,12 +1,8 @@
-body:not(.sa-body-editor) [class*="stage-wrapper_stage-wrapper"] {
+:root:not(.sa-editor) [class*="stage-wrapper_stage-wrapper"] {
   position: relative;
 }
-body:not(.sa-body-editor) div[class*="loader_background_"],
-body:not(.sa-body-editor) .sa-project-thumb {
+:root:not(.sa-editor) .sa-loader-background {
   border-radius: 0;
-}
-body:not(.sa-body-editor) :not([class*="stage-wrapper_full-screen_"]) > div[class*="loader_background_"],
-body:not(.sa-body-editor) .sa-project-thumb.loading {
-  top: 38px;
-  height: calc(100% - 39px);
+  top: 40px;
+  height: calc(100% - 41px);
 }

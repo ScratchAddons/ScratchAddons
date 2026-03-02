@@ -48,14 +48,13 @@
   /* Remove separators */
   border: none;
 }
-#comments #comment-form .avatar,
-#comments .comment img.avatar {
+#comments .avatar:not(.avatar-badge) {
   margin-left: 1px;
   margin-top: 1px;
   border-radius: 5px;
   box-shadow: 0 0 0 1px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
 }
-#comments .comment img.avatar {
+#comments .comment .avatar-wrapper {
   margin-right: 8px;
 }
 #comments .comments .info,
@@ -124,7 +123,7 @@
   color: var(--darkWww-link-hover, #7854c0);
 }
 #comments .comment .info .time {
-  color: var(--darkWww-box-transparentText, #b3b3b3);
+  color: var(--darkWww-box-transparentText, rgba(0, 0, 0, 0.3));
 }
 #comments .comment .info .reply {
   float: right;
@@ -145,6 +144,19 @@
   color: var(--darkWww-blue-text);
   filter: opacity(0.5);
 }
+
+/* Deleted or reported profile comments */
+#comments .comment.just_removed {
+  background-color: transparent;
+}
+#comments .comment.just_removed .info::before,
+#comments .comment.just_removed .info .content,
+#comments .comment.just_removed .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
+  background-color: var(--darkWww-blue-deletedComment, #eccedf);
+  border-color: #ff6680;
+}
+
+/* Replies */
 #comments ul.comments ul {
   margin-top: 0;
 }

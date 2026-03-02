@@ -9,7 +9,7 @@
   transition: transform 0.3s;
 }
 
-[class*="stage-wrapper_full-screen"] .sa-loader-background {
+.sa-fullscreen .sa-loader-background {
   height: 100%;
   top: 0;
 }
