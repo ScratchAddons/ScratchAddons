@@ -4,7 +4,7 @@ export default async function ({ addon, console }) {
 
   let collapseTimeout;
 
-  function collapseFooter() {
+  function collapseFooter(footer) {
     collapseTimeout = setTimeout(() => {
       footer.classList.remove("expanded");
     }, 200);
@@ -15,7 +15,7 @@ export default async function ({ addon, console }) {
     if (!footer.contains(event.target)) footer.classList.remove("expanded");
   }
 
-  function expandFooter() {
+  function expandFooter(footer) {
     footer.classList.add("transition", "expanded");
     if (collapseTimeout) {
       clearTimeout(collapseTimeout);
@@ -48,11 +48,11 @@ export default async function ({ addon, console }) {
     addon.tab.displayNoneWhileDisabled(icon);
 
     if (addon.settings.get("mode") === "click") {
-      footer.addEventListener("click", expandFooter);
-      document.addEventListener("mousedown", instantCollapseFooter);
+      footer.addEventListener("click", () => expandFooter(footer));
+      document.addEventListener("mousedown", (event) => instantCollapseFooter(event, footer));
     } else {
-      footer.addEventListener("mouseover", expandFooter);
-      footer.addEventListener("mouseout", collapseFooter);
+      footer.addEventListener("mouseover", () => expandFooter(footer));
+      footer.addEventListener("mouseout", () => collapseFooter(footer));
     }
   }
 }
