@@ -83,14 +83,17 @@ export default async function ({ addon, console, msg }) {
         confirmationTitle = msg("removeproject-title");
         confirmationMessage = msg("removeproject");
       }
-      // Sign out
+      // Sign out (website)
       const isSigningOut =
-        e.target.closest(".account-nav > .dropdown > .divider") ||
-        e.target.closest("form[action='/accounts/logout/']") ||
-        e.target.closest("[class*='menu_left'] > [class*='menu_menu-section']");
+        e.target.closest(".account-nav > .dropdown > .divider") || e.target.closest("form[action='/accounts/logout/']");
       if (addon.settings.get("signingout") && isSigningOut) {
         confirmationTitle = msg("signout-title");
         confirmationMessage = msg("signout");
+      }
+      // Sign out (editor)
+      if (addon.settings.get("signingout") && e.target.closest("[class*='menu_left'] > [class*='menu_menu-section']")) {
+        confirmationTitle = msg("signout-title");
+        confirmationMessage = msg("signout-editor");
       }
 
       // If one of the actions above is being taken, prevent it and show confirmation prompt
@@ -108,6 +111,8 @@ export default async function ({ addon, console, msg }) {
               if (confirmed) {
                 override = 1;
                 if (addon.tab.editorMode === "editor" && confirmationTitle === msg("signout-title")) {
+                  // Discard unsaved changes to suppress the "Leave site?" dialog
+                  setProjectChanged(false);
                   document.querySelector("[class*='account-nav_user-info_']:not([class*='menu-bar_active'])")?.click();
                   // Since there is one additional click required to open the menu and another to click the sign out button, set override to 2 so that both of those clicks are not blocked by the confirmation dialog
                   override = 2;
@@ -129,4 +134,11 @@ export default async function ({ addon, console, msg }) {
     },
     { capture: true }
   );
+
+  function setProjectChanged(changed) {
+    addon.tab.redux.dispatch({
+      type: "scratch-gui/project-changed/SET_PROJECT_CHANGED",
+      changed,
+    });
+  }
 }
