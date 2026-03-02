@@ -1,0 +1,8 @@
+{
+  "asset-conflict-dialog/rename": "Import and Rename",
+  "asset-conflict-dialog/replace": "Import and Replace",
+  "asset-conflict-dialog/skip": "Skip and Don't Import",
+  "asset-conflict-dialog/applyToAll": "Do this for all conflicts",
+  "asset-conflict-dialog/dialogText": "An asset named {fileName} already exists.",
+  "asset-conflict-dialog/title": "Rename, Replace or Skip Assets"
+}

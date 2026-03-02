@@ -1,35 +1,5 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- Transition from Scratch Messaging Extension -->
-  <script src="transition.js" type="module"></script>
-
-  <!-- Load idb -->
-  <script src="../libraries/thirdparty/idb.js" defer></script>
-
-  <!-- Declare scratchAddons object, create global and local state -->
-  <script src="declare-scratchaddons-object.js" type="module"></script>
-
-  <!-- Load manifests into memory -->
-  <script src="load-addon-manifests.js" type="module"></script>
-
-  <!-- When manifests are ready, check addon settings -->
-  <script src="get-addon-settings.js" type="module"></script>
-
-  <!-- Load handlers. Some expose methods through scratchAddons.methods -->
-  <script src="handle-fetch.js" type="module"></script>
-  <script src="handle-auth.js" type="module"></script>
-  <script src="handle-l10n.js" type="module"></script>
-  <script src="handle-clipboard.js" type="module"></script>
-  <script src="handle-notifications.js" type="module"></script>
-  <script src="handle-permissions.js" type="module"></script>
-
-  <!-- When everything is ready, run scripts and communicate with content scripts -->
-  <script src="get-userscripts.js" type="module"></script>
-  <script src="get-popups.js" type="module"></script>
-
-  <!-- Respond to requests by the settings page and others -->
-  <script src="handle-settings-page.js" type="module"></script>
-  <script src="handle-licenses.js" type="module"></script>
-  <script src="handle-unsupported-version.js" type="module"></script>
+  <script src="background.js" type="module"></script>
 </head>

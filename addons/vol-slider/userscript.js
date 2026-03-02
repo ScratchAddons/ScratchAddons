@@ -55,9 +55,7 @@ export default async function ({ addon, console }) {
   innerContainer.appendChild(icon);
   innerContainer.appendChild(slider);
   container.appendChild(innerContainer);
-  addon.tab.displayNoneWhileDisabled(container, {
-    display: "flex",
-  });
+  addon.tab.displayNoneWhileDisabled(container);
 
   addSmallStageClass();
 
@@ -74,7 +72,7 @@ export default async function ({ addon, console }) {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    addon.tab.displayNoneWhileDisabled(container, { display: "flex" });
+    addon.tab.displayNoneWhileDisabled(container);
     addon.tab.appendToSharedSpace({ space: "afterStopButton", element: container, order: 0 });
   }
 }

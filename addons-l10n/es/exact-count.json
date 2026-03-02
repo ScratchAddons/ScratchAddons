@@ -1,1 +1,1 @@
-{"exact-count/@name":"Mostrar cantidad exacta","exact-count/@description":"Muestra el número exacto en la información de usuarios y estudios. Usa ScratchDB para información de los foros.","exact-count/@settings-name-user":"Cuenta exacta en perfiles","exact-count/@settings-name-studio":"Cuenta exacta en estudios","exact-count/@settings-name-forumuser":"Cuenta exacta en usuarios del foro"}
+{"exact-count/studio-tooltip":"Hacer click para mostrar cantidad exacta","exact-count/@name":"Mostrar cantidad exacta","exact-count/@settings-name-user":"Cuenta exacta en perfiles"}

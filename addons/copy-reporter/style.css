@@ -4,6 +4,7 @@
   display: block;
   user-select: none;
   filter: var(--editorDarkMode-accent-filter, none);
+  margin-inline-start: 2px;
   width: 14px;
   height: 14px;
 }

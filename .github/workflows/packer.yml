@@ -5,11 +5,11 @@ jobs:
   pack:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 20.x
       - name: Pack extensions for Firefox
         uses: ScratchAddons/packer-script@main
         env:
@@ -19,7 +19,7 @@ jobs:
         env:
           ENVIRONMENT: chrome
       - name: Upload packed extensions
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Packed Extensions (zip)
-          path: .dist/*.zip
+          path: dist/*.zip

@@ -1,0 +1,6 @@
+{
+  "remaining-replies/remaining": {
+    "string": "({replies} left)",
+    "developer_comment": "Next to the Reply button of studio comments. For example (5 left)."
+  }
+}

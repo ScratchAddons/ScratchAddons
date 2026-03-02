@@ -13,7 +13,7 @@
   "scratch-notifier/notif-fav": "{actor} favorited your project \"{title}\"",
   "scratch-notifier/notif-follow": "{actor} is now following you",
   "scratch-notifier/notif-invite": "{actor} invited you to curate the studio \"{title}\"",
-  "scratch-notifier/notif-remix": "{actor} remixed your project \"{parent_title}\" as \"{title}\"",
+  "scratch-notifier/notif-remix": "{actor} remixed your project \"{parent_title}\"",
   "scratch-notifier/notif-studio": "There was new activity in studio \"{title}\" today",
   "scratch-notifier/notif-generic": "New Scratch message",
   "scratch-notifier/open": "Open messages page",

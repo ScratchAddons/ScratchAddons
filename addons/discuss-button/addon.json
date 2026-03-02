@@ -3,25 +3,30 @@
   "description": "Choose a list of links to be displayed in the navigation bar.",
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"],
-      "runAtComplete": false
-    },
-    {
-      "url": "www.js",
+      "url": "items_scratchwww.js",
       "matches": ["scratchWWWNoProject", "projects"],
       "runAtComplete": false
     },
     {
-      "url": "r2.js",
-      "matches": ["isNotScratchWWW"],
+      "url": "items_scratchr2.js",
+      "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
+      "runAtComplete": false
+    },
+    {
+      "url": "compact_scratchwww.js",
+      "matches": ["scratchWWWNoProject", "projects"],
+      "runAtComplete": false
+    },
+    {
+      "url": "compact_scratchr2.js",
+      "matches": ["isNotScratchWWW", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "compact-nav.css",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["https://scratch.mit.edu/*", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "if": {
         "settings": {
           "compact-nav": true
@@ -46,8 +51,7 @@
       "default": [
         { "name": "Create", "url": "/projects/editor/" },
         { "name": "Explore", "url": "/explore/projects/all" },
-        { "name": "Ideas", "url": "/ideas" },
-        { "name": "About", "url": "/about" }
+        { "name": "Ideas", "url": "/ideas" }
       ],
       "row": [
         {
@@ -91,6 +95,12 @@
       ]
     },
     {
+      "name": "Show Membership link when logged out",
+      "id": "showMembership",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Compact user dropdown",
       "id": "compact-nav",
       "type": "boolean",
@@ -122,6 +132,7 @@
     "isMajor": false
   },
   "tags": ["community", "featured"],
+  "relatedAddons": ["custom-menu-bar", "expanding-search-bar"],
   "enabledByDefault": false,
   "updateUserstylesOnSettingsChange": true
 }

@@ -1,7 +1,7 @@
 {
   "name": "Customizable block text style",
   "description": "Lets you customize the style of text on blocks, including adjusting the size, using bold text, or adding a shadow.",
-  "tags": ["editor", "codeEditor", "featured"],
+  "tags": ["editor", "codeEditor", "featured", "theme"],
   "credits": [
     {
       "name": "Secret-chest",
@@ -16,6 +16,7 @@
       "link": "https://github.com/DNin01"
     }
   ],
+  "relatedAddons": ["editor-theme3", "custom-block-shape"],
   "userscripts": [
     {
       "url": "userscript.js",

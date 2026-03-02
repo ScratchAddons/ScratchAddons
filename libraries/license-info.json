@@ -1,16 +1,91 @@
 {
-  "spark-md5": "MIT",
-  "text-field-edit": "MIT",
-  "scratchblocks": "MIT",
-  "scratch-blocks": "Apache-2.0",
-  "icu-message-formatter": "Apache-2.0",
-  "vue": "MIT",
-  "tinycolor2": "MIT",
-  "chartjs": "MIT",
-  "color-picker-web-component": "MIT",
-  "comlink": "Apache-2.0",
-  "Sora": "OFL",
-  "sortable": "MIT",
-  "fuse": "Apache-2.0",
-  "idb": "ISC"
+  "spark-md5": {
+    "license": "MIT",
+    "year": "2015",
+    "fullname": "André Cruz <amdfcruz@gmail.com>"
+  },
+  "text-field-edit": {
+    "license": "MIT",
+    "year": "",
+    "fullname": "Federico Brigante <me@fregante.com> (https://fregante.com)"
+  },
+  "scratch-blocks": {
+    "license": "Apache-2.0"
+  },
+  "icu-message-formatter": {
+    "license": "Apache-2.0"
+  },
+  "vue": {
+    "license": "MIT",
+    "year": "2013-2016",
+    "fullname": "Yuxi Evan You"
+  },
+  "tinycolor2": {
+    "license": "MIT",
+    "year": "",
+    "fullname": "Brian Grinstead, http://briangrinstead.com"
+  },
+  "chartjs": {
+    "license": "MIT",
+    "year": "2014-2022",
+    "fullname": "Chart.js Contributors"
+  },
+  "color-picker-web-component": {
+    "license": "MIT",
+    "year": "2020",
+    "fullname": "Wouter Vroege <wouter@woutervroege.nl>"
+  },
+  "comlink": {
+    "license": "Apache-2.0"
+  },
+  "Sora": {
+    "license": "OFL",
+    "year": "2019",
+    "fullname": "The Sora Project Authors",
+    "email": "https://github.com/sora-xor/sora-font"
+  },
+  "sortable": {
+    "license": "MIT",
+    "year": "2019",
+    "fullname": "All contributors to Sortable"
+  },
+  "fuse": {
+    "license": "Apache-2.0"
+  },
+  "idb": {
+    "license": "ISC",
+    "year": "2016,",
+    "fullname": "Jake Archibald <jaffathecake@gmail.com>"
+  },
+  "Roboto": {
+    "license": "Apache-2.0"
+  },
+  "scratch-www": {
+    "license": "BSD-3-Clause",
+    "year": "2021",
+    "fullname": "Scratch Foundation"
+  },
+  "scratch-gui": {
+    "license": "BSD-3-Clause",
+    "year": "2016",
+    "fullname": "Massachusetts Institute of Technology"
+  },
+  "scratch-paint": {
+    "license": "BSD-3-Clause",
+    "year": "2016",
+    "fullname": "Massachusetts Institute of Technology"
+  },
+  "scratch-vm": {
+    "license": "BSD-3-Clause",
+    "year": "2016",
+    "fullname": "Massachusetts Institute of Technology"
+  },
+  "scratch-render": {
+    "license": "BSD-3-Clause",
+    "year": "2016",
+    "fullname": "Massachusetts Institute of Technology"
+  },
+  "scratch-flash": {
+    "license": "GPL-2.0"
+  }
 }

@@ -1,0 +1,39 @@
+{
+  "name": "Enhanced clean up tool",
+  "description": "Improves the clean up feature in the code area's right click context menu with multiple columns and suggestions of removing unused variables and lists.",
+  "credits": [
+    {
+      "name": "griffpatch"
+    },
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    }
+  ],
+  "info": [
+    {
+      "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
+      "id": "developer-tools"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Find unused variables",
+      "description": "Find unused reporters, variables and lists for this sprite only and ask to delete them.",
+      "id": "promptUnused",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.43.0",
+  "tags": ["editor", "codeEditor", "recommended"],
+  "enabledByDefault": true
+}

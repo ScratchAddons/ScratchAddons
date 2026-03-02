@@ -1,0 +1,35 @@
+{
+  "name": "Replace backpack bar with button",
+  "description": "Replaces the backpack bar along the bottom of the editor with a button next to the zoom controls.",
+  "credits": [
+    {
+      "name": "Norbiros",
+      "link": "https://scratch.mit.edu/users/norbir/"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "border.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "button.css",
+      "matches": ["projects"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.37.0",
+  "enabledByDefault": false
+}

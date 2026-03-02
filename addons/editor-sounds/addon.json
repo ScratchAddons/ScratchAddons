@@ -16,5 +16,6 @@
   ],
   "tags": ["editor", "codeEditor"],
   "enabledByDefault": false,
-  "versionAdded": "1.14.0"
+  "versionAdded": "1.14.0",
+  "libraries": ["scratch-blocks"]
 }

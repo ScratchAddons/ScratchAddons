@@ -11,7 +11,7 @@ export default async function ({ addon, console, msg }) {
         return state.scratchGui.mode.isPlayerOnly;
       },
     });
-    var button;
+    let button;
     if (isScratchR2) {
       button = textbox.parentNode.parentNode.querySelector(".control-group:not(.tooltip) div[data-control='post'] a");
     } else {
@@ -19,7 +19,7 @@ export default async function ({ addon, console, msg }) {
     }
 
     textbox.addEventListener("keydown", (e) => {
-      if (!addon.self.disabled && (e.ctrlKey || e.metaKey) && (e.code === "Enter" || e.code === "NumpadEnter")) {
+      if (!addon.self.disabled && (e.ctrlKey || e.metaKey) && e.key === "Enter") {
         button.click();
       }
     });

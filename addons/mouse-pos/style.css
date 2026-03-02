@@ -3,16 +3,24 @@
   align-items: center;
   padding: 0.25rem;
   user-select: none;
-  width: 45px;
-  justify-content: center;
+  width: 50px;
 }
 
 .pos-container {
+  width: 100%;
+  display: flex;
+  gap: 0.25rem;
   font-size: 0.6rem;
   font-weight: bold;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #5cb1d6;
+  font-variant: tabular-nums;
+  color: var(--editorDarkMode-page-lightBlueText, #2e8eb8);
+  text-align: right;
   white-space: nowrap;
+}
+
+.pos-container > span {
+  width: 100%;
 }
 
 /* Use pseudo elements to avoid firing mutation observers by just moving the cursor */

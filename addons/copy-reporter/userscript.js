@@ -21,8 +21,14 @@ export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/workspace_svg.js#L979
-  ScratchBlocks.WorkspaceSvg.prototype.reportValue = function (id, value) {
-    let block = this.getBlockById(id);
+  // https://github.com/scratchfoundation/scratch-blocks/blob/2884131/src/block_reporting.ts
+  function reportValue(id, value) {
+    let workspace;
+    if (ScratchBlocks.registry)
+      workspace = addon.tab.traps.getWorkspace(); // new Blockly
+    else workspace = this;
+
+    let block = workspace.getBlockById(id) || workspace.getFlyout()?.getWorkspace().getBlockById(id);
     if (!block) {
       throw "Tried to report value on block that does not exist.";
     }
@@ -49,6 +55,7 @@ export default async function ({ addon, console, msg }) {
         const copyButton = document.createElement("img");
         copyButton.setAttribute("role", "button");
         copyButton.setAttribute("tabindex", "0");
+        copyButton.setAttribute("draggable", false);
         copyButton.setAttribute("alt", msg("copy-to-clipboard"));
         copyButton.setAttribute("src", addon.self.dir + "/copy.svg");
 
@@ -63,9 +70,47 @@ export default async function ({ addon, console, msg }) {
     contentDiv.appendChild(valueReportBox);
 
     ScratchBlocks.DropDownDiv.setColour(
-      ScratchBlocks.Colours.valueReportBackground,
-      ScratchBlocks.Colours.valueReportBorder
+      ScratchBlocks.Colours?.valueReportBackground || "#FFFFFF",
+      ScratchBlocks.Colours?.valueReportBorder || "#AAAAAA"
     );
-    ScratchBlocks.DropDownDiv.showPositionedByBlock(this, block);
-  };
+
+    if (ScratchBlocks.registry) {
+      // new Blockly
+      let field;
+      for (const input of block.inputList) {
+        for (const f of input.fieldRow) {
+          field = f;
+          break;
+        }
+      }
+      if (!field) return;
+      ScratchBlocks.DropDownDiv.showPositionedByBlock(field, block);
+    } else {
+      ScratchBlocks.DropDownDiv.showPositionedByBlock(workspace, block);
+    }
+  }
+
+  if (ScratchBlocks.registry) {
+    // new Blockly
+    const onVisualReport = (data) => {
+      reportValue(data.id, data.value);
+    };
+
+    const vm = addon.tab.traps.vm;
+    for (const existingListener of vm.listeners("VISUAL_REPORT")) {
+      vm.removeListener("VISUAL_REPORT", existingListener);
+    }
+    vm.on("VISUAL_REPORT", onVisualReport);
+
+    const blocksWrapper = document.querySelector("[class*='gui_blocks-wrapper_']");
+    let reactInternalInstance = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
+    while (!reactInternalInstance.stateNode?.ScratchBlocks) {
+      reactInternalInstance = reactInternalInstance.child;
+    }
+    const blocksComponent = reactInternalInstance.stateNode;
+    const Blocks = blocksComponent.constructor;
+    Blocks.prototype.onVisualReport = onVisualReport;
+  } else {
+    ScratchBlocks.WorkspaceSvg.prototype.reportValue = reportValue;
+  }
 }

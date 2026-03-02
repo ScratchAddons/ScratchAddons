@@ -1,14 +1,6 @@
 export default async function ({ addon, console }) {
   const enabledAddons = await addon.self.getEnabledAddons("community");
-  const footer = await addon.tab.waitForElement("#footer");
   const root = document.documentElement;
-
-  const icon = document.createElement("img");
-  icon.src = addon.self.dir + "/icon.svg";
-  icon.height = 16;
-  icon.width = 16;
-  icon.className = "sa-footer-arrow";
-  footer.insertBefore(icon, footer.firstChild);
 
   let collapseTimeout;
 
@@ -36,33 +28,31 @@ export default async function ({ addon, console }) {
     document.body.classList.add("sa-collapse-footer");
   }
 
-  if (addon.tab.clientVersion === "scratchr2" && !enabledAddons.includes("scratchr2")) {
+  if (addon.tab.clientVersion === "scratchr2") {
     root.style.setProperty("--footer-hover-height", "250px");
   }
 
-  if (location.pathname.split("/")[1] === "") {
-    // Moves the donor text into the footer on the front page
-    const donor = document.getElementById("donor");
-    footer.appendChild(donor);
-    root.style.setProperty("--footer-hover-height", "410px");
-  }
+  while (true) {
+    const footer = await addon.tab.waitForElement("#footer", {
+      markAsSeen: true,
+      reduxCondition: (state) => (state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true),
+    });
 
-  function setup() {
-    footer.addEventListener(addon.settings.get("mode") === "click" ? "click" : "mouseover", expandFooter);
+    const icon = document.createElement("img");
+    icon.src = addon.self.dir + "/icon.svg";
+    icon.height = 16;
+    icon.width = 16;
+    icon.className = "sa-footer-arrow";
+    icon.draggable = false;
+    footer.insertBefore(icon, footer.firstChild);
+    addon.tab.displayNoneWhileDisabled(icon);
 
     if (addon.settings.get("mode") === "click") {
-      document.addEventListener("mousedown", instantCollapseFooter);
+      footer.addEventListener("click", expandFooter);
+      document.addEventListener("mousedown", collapseFooter);
     } else {
+      footer.addEventListener("mouseover", expandFooter);
       footer.addEventListener("mouseout", collapseFooter);
     }
   }
-  setup();
-
-  addon.settings.addEventListener("change", () => {
-    document.removeEventListener("mousedown", instantCollapseFooter);
-    footer.removeEventListener("mouseout", collapseFooter);
-    footer.removeEventListener("click", expandFooter);
-    footer.removeEventListener("mouseover", expandFooter);
-    setup();
-  });
 }

@@ -7,11 +7,15 @@
   --zebraStriping-replacementGlow: url(#blocklyReplacementGlowFilter);
 }
 
-.sa-zebra-stripe {
+.sa-zebra-stripe,
+.scratch-renderer.default-theme .blocklySelected > .blocklyPathSelected.sa-zebra-stripe,
+.scratch-renderer.high-contrast-theme .blocklySelected > .blocklyPathSelected.sa-zebra-stripe {
   filter: var(--zebraStriping-filter);
 }
 
-.sa-zebra-stripe[filter*="#blocklyReplacementGlowFilter"] {
+.sa-zebra-stripe[filter*="#blocklyReplacementGlowFilter"],
+.scratch-renderer.default-theme .blocklyReplaceable > .blocklyPath.sa-zebra-stripe,
+.scratch-renderer.high-contrast-theme .blocklyReplaceable > .blocklyPath.sa-zebra-stripe {
   filter: var(--zebraStriping-filter) var(--zebraStriping-replacementGlow);
 }
 

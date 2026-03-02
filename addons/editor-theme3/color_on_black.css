@@ -4,7 +4,7 @@
 .u-dropdown-searchbar:focus {
   background-color: var(--editorTheme3-hoveredItem);
 }
-.blocklyDropDownDiv .goog-menuitem-checkbox {
+.blocklyMenuItemSelected .blocklyMenuItemCheckbox {
   filter: brightness(0) invert(1);
 }
 
@@ -12,18 +12,32 @@
   fill: #282828;
 }
 .scratchCommentBody,
-.scratchCommentTextarea {
+.scratchCommentTextarea,
+.blocklyComment .blocklyTextarea {
   background-color: #282828;
 }
 .scratchWorkspaceCommentBorder {
   stroke: var(--editorTheme3-commentColor);
 }
-.scratchCommentTextarea::placeholder {
+.blocklyComment {
+  --colour-commentBorder: var(--editorTheme3-commentColor);
+}
+.blocklyCommentTopbarBackground {
+  fill: #202020;
+}
+.scratchCommentTextarea::placeholder,
+.blocklyCommentText::placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
-.scratchCommentText {
+.scratchCommentText,
+.scratch-renderer.default-theme .blocklyComment .blocklyTextarea {
   fill: #ffffff;
   color: #ffffff;
+}
+
+.blocklyCommentTopbar > image,
+.scratchCommentTopBar ~ image {
+  filter: brightness(0) invert(1);
 }
 
 /* Compatibility */

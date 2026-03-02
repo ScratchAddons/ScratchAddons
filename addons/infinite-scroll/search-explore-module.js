@@ -25,5 +25,5 @@ XMLHttpRequest.prototype.open = function (method, path, ...args) {
 };
 
 export function currentlyFetchingProjects() {
-  return currentRequests != 0;
+  return currentRequests !== 0;
 }

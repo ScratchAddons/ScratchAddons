@@ -116,6 +116,12 @@ export default async function ({ addon, console, msg }) {
           //message.style.display = "none";
         }
       }
+      // Message types without a specific filter are always visible
+      // https://github.com/ScratchAddons/ScratchAddons/issues/2853#issuecomment-1724115504
+      if (!Object.values(filter).some((className) => message.classList.contains(className))) {
+        count++;
+        message.style.display = "list-item";
+      }
     }
     // Set the localStorage item.
     localStorage.setItem("scratchAddonsMessageFiltersSettings", JSON.stringify(active));

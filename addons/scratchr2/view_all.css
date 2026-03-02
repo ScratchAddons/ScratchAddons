@@ -50,6 +50,10 @@ body,
   width: 100%;
   border: none;
 }
+.media-grid .user.thumb img {
+  height: auto;
+  aspect-ratio: 1/1;
+}
 .gallery.thumb span.image {
   vertical-align: middle;
   border: none;

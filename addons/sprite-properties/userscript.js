@@ -71,7 +71,7 @@ export default async function ({ addon, console, msg }) {
     button.title = tooltip;
     button.addEventListener("click", () => togglePropertiesPanel());
     button.appendChild(buttonIcon);
-    addon.tab.displayNoneWhileDisabled(button, { display: "flex" });
+    addon.tab.displayNoneWhileDisabled(button);
     return button;
   }
 

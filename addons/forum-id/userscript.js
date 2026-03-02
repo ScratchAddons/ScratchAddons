@@ -11,7 +11,7 @@ export default async function ({ addon, console, msg }) {
     addBtn.appendChild(addBtnAElement);
     addBtn.addEventListener("click", (e) => setTimeout(() => addIDLink(e), 0));
     addon.tab.appendToSharedSpace({ space: "forumsBeforePostReport", element: addBtn, scope: elm, order: 10 });
-    addon.tab.displayNoneWhileDisabled(addBtn, { display: "inline" });
+    addon.tab.displayNoneWhileDisabled(addBtn);
   });
   function addIDLink(e) {
     let idName = e.target.closest(".blockpost").querySelector(".box-head > .conr").textContent;

@@ -1,5 +1,5 @@
 {
-  "name": "Name scripts before placing in backpack",
+  "name": "Name scripts before backpacking",
   "description": "Asks you to name scripts after you drag them into the backpack, instead of using the default name \"code\".",
   "credits": [
     {

@@ -19,6 +19,8 @@ export default async function ({ addon, console }) {
     const updateFlag = () => {
       if (!vanillaFlag) vanillaFlag = button.src;
       button.src = mode ? fastFlag : vanillaFlag;
+      if (mode) button.setAttribute("data-sa-60fps", "");
+      else button.removeAttribute("data-sa-60fps");
     };
 
     const changeMode = (_mode = !mode) => {

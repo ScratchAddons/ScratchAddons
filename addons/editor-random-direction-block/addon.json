@@ -8,7 +8,7 @@
     }
   ],
   "versionAdded": "1.35.0",
-  "tags": ["editor"],
+  "tags": ["editor", "codeEditor"],
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true,

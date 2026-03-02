@@ -8,6 +8,7 @@
     <link rel="icon" href="../../images/icon.png" id="favicon" />
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
+    <link href="../../libraries/thirdparty/Roboto.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="permissions.js" type="module"></script>
     <style>
@@ -20,7 +21,9 @@
   </head>
   <body class="permissions">
     <div class="navbar">
-      <a href="./index.html"><img src="../../images/icon-transparent.svg" class="logo" alt="Logo" /></a>
+      <a href="./index.html"
+        ><img src="../../images/icon-transparent.svg" class="logo header-button" alt="Logo" draggable="false"
+      /></a>
       <h1 v-cloak>{{ msg("permissions") }}</h1>
     </div>
     <div v-cloak class="main">

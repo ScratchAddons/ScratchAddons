@@ -1,0 +1,16 @@
+.__react_component_tooltip {
+  padding: 8px 21px;
+  color: white;
+}
+
+.__react_component_tooltip.place-left {
+  margin-left: -10px;
+}
+
+.__react_component_tooltip.place-right {
+  margin-left: 10px;
+}
+
+.__react_component_tooltip::after {
+  top: 50%;
+}

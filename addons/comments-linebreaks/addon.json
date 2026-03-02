@@ -12,6 +12,11 @@
       "type": "notice",
       "text": "Line breaks are only visible to users with this addon enabled. They will appear as spaces for others.",
       "id": "ownLineBreaks"
+    },
+    {
+      "type": "info",
+      "text": "On profile pages, line breaks at the beginning or end of a comment do not appear.",
+      "id": "scratchr2Linebreaks"
     }
   ],
   "userscripts": [

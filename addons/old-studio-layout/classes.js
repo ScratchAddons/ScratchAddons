@@ -23,10 +23,10 @@ export default async function ({ addon, console }) {
     button.appendChild(span);
     button.onclick = () => setTimeout(() => realButton.click(), 0);
     addon.tab.displayNoneWhileDisabled(button);
-    addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: button, order: 0.5 });
+    document.querySelector(".sa-oldstudio-browse-followers").appendChild(button);
     addon.tab.addEventListener("urlChange", (e) => {
       if (location.pathname.split("/")[3] === "curators") {
-        addon.tab.displayNoneWhileDisabled(button);
+        button.style.display = "";
       } else {
         button.style.display = "none";
       }

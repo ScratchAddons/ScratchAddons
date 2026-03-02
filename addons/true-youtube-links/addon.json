@@ -17,5 +17,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "tags": ["community", "forums"],
+  "relatedAddons": ["youtube-fullscreen"],
   "enabledByDefault": false
 }

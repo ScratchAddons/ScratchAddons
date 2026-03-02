@@ -1,4 +1,4 @@
-import { updateBadge } from "../message-cache.js";
+import { updateBadge, handleBadgeAlarm } from "../message-cache.js";
 
 /**
  * Changes addon state (enabled/disabled), and executes the addons if enabled,
@@ -24,7 +24,10 @@ export default (addonId, newState) => {
       );
     }
   }
-  if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
+  if (addonId === "msg-count-badge") {
+    updateBadge(scratchAddons.cookieStoreId);
+    handleBadgeAlarm();
+  }
   // Partial dynamicEnable (PDE)/Partial dynamicDisable (PDD)
   // See #4188 - for now, userstyles only.
   if (scratchAddons.dependents[addonId]?.size) {

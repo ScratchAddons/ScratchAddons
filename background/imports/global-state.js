@@ -30,10 +30,15 @@ class StateProxy {
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
-    messageForAllTabs({ newGlobalState: _globalState });
 
-    if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
-      stateChange(this.name, key, value);
+    // We should only notify other contexts of this change if basic information,
+    // such as addon settings, is already available in the global state object.
+    if (scratchAddons.localState.allReady) {
+      messageForAllTabs({ newGlobalState: _globalState });
+
+      if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
+        stateChange(this.name, key, value);
+      }
     }
 
     return true;

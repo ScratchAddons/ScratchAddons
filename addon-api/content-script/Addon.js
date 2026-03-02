@@ -13,7 +13,7 @@ export default class UserscriptAddon extends Addon {
     super(info);
     this._addonId = info.id;
     this.__path = `${new URL(import.meta.url).origin}/`;
-    this.tab = new Tab(info);
+    this.tab = new Tab(this, info);
     this.auth.dispose();
     this.auth = new Auth(this);
     this.self.disabled = false;

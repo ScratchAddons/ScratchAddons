@@ -1,10 +1,11 @@
 name: ✨ Feature
 description: Suggest a feature or improvement!
+type: Enhancement
 labels: ["status: needs triage", "type: enhancement"]
 body:
   - type: markdown
     attributes:
-      value: | 
+      value: |
         ### Read before creating!
 
         - Avoid creating duplicates! Read the FAQ page and search through issues and discussions before creating one.

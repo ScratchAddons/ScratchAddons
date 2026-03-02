@@ -21,9 +21,11 @@ export default async function ({ addon, console, msg }) {
     });
 
     if (isLoggedIn) {
-      let reactionMenuContainer = document.createElement("li");
-      addon.tab.displayNoneWhileDisabled(reactionMenuContainer);
+      let reactionMenuContainerOuter = document.createElement("li");
+      addon.tab.displayNoneWhileDisabled(reactionMenuContainerOuter);
+      let reactionMenuContainer = document.createElement("span");
       reactionMenuContainer.className = "my-ocular-reaction-menu";
+      reactionMenuContainerOuter.appendChild(reactionMenuContainer);
       let reactionMenuButton = document.createElement("a");
       reactionMenuButton.href = "";
       reactionMenuButton.className = "my-ocular-reaction-menu-button";
@@ -67,6 +69,7 @@ export default async function ({ addon, console, msg }) {
 
             let img = document.createElement("img");
             img.src = url;
+            img.draggable = false;
 
             reactionButton.innerText = "";
             reactionButton.appendChild(img);
@@ -89,6 +92,7 @@ export default async function ({ addon, console, msg }) {
 
             let img = document.createElement("img");
             img.src = url;
+            img.draggable = false;
 
             reactionMenuItem.innerText = "";
             reactionMenuItem.appendChild(img);
@@ -144,7 +148,7 @@ export default async function ({ addon, console, msg }) {
       addon.tab.appendToSharedSpace({
         space: "forumsBeforePostReport",
         scope: i,
-        element: reactionMenuContainer,
+        element: reactionMenuContainerOuter,
         order: 1,
       });
       addon.tab.appendToSharedSpace({ space: "forumsBeforePostReport", scope: i, element: reactionList, order: 0 });

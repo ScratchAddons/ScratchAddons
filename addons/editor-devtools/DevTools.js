@@ -1,15 +1,12 @@
-// import ShowBroadcast from "./show-broadcast.js";
 import DomHelpers from "./DomHelpers.js";
-import UndoGroup from "./UndoGroup.js";
+import UndoGroup from "../../libraries/common/cs/UndoGroup.js";
+import { getVariableUsesById } from "../../libraries/common/cs/devtools-utils.js";
 
 export default class DevTools {
   constructor(addon, msg, m) {
     this.addon = addon;
     this.msg = msg;
     this.m = m;
-    /**
-     * @type {VirtualMachine}
-     */
     this.domHelpers = new DomHelpers(addon);
 
     this.codeTab = null;
@@ -19,10 +16,20 @@ export default class DevTools {
     this.canShare = false;
 
     this.mouseXY = { x: 0, y: 0 };
+
+    // On new Blockly, we can't access the clipboard data directly because it's
+    // a global variable in a module. Instead, we set this to true when something
+    // is copied. If the addon is enabled late, something might already be on the
+    // clipboard, so we initialize it to true.
+    this.clipboardHasData = addon.self.enabledLate;
+
+    this.copyAll = false;
   }
 
   async init() {
     this.addContextMenus();
+    this.patchPaste();
+    this.patchCopyShortcuts();
     while (true) {
       const root = await this.addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
         markAsSeen: true,
@@ -36,125 +43,146 @@ export default class DevTools {
       this.initInner(root);
     }
   }
+
+  async patchPaste() {
+    const devtools = this;
+    const blockly = await this.addon.tab.traps.getBlockly();
+    // Support for new blockly.
+    if (blockly.registry) {
+      const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, "block").constructor;
+      const oldPasteFunc = BlockPaster.prototype.paste;
+      BlockPaster.prototype.paste = function (copyData, workspace, coords) {
+        if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
+          if (!devtools._canPaste()) return;
+        }
+        return oldPasteFunc.call(this, copyData, workspace, coords);
+      };
+    } else {
+      const oldPasteFunc = blockly.WorkspaceSvg.prototype.paste;
+      blockly.WorkspaceSvg.prototype.paste = function (data) {
+        if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
+          if (data.tagName.toLowerCase() !== "comment" && !devtools._canPaste()) {
+            return;
+          }
+        }
+        return oldPasteFunc.call(this, data);
+      };
+    }
+  }
+
   async addContextMenus() {
     const blockly = await this.addon.tab.traps.getBlockly();
-    const oldCleanUpFunc = blockly.WorkspaceSvg.prototype.cleanUp;
-    const self = this;
-    blockly.WorkspaceSvg.prototype.cleanUp = function () {
-      if (self.addon.settings.get("enableCleanUpPlus")) {
-        self.doCleanUp();
-      } else {
-        oldCleanUpFunc.call(this);
-      }
+
+    const pasteCallback = () => {
+      let target;
+      if (blockly.registry)
+        target = document.querySelector(".injectionDiv"); // new Blockly
+      else target = document;
+      target.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          keyCode: 86,
+          ctrlKey: true,
+        })
+      );
     };
 
-    let originalMsg = blockly.Msg.CLEAN_UP;
-    if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
-    this.addon.settings.addEventListener("change", () => {
-      if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
-      else blockly.Msg.CLEAN_UP = originalMsg;
-    });
+    if (blockly.registry) {
+      // new Blockly
+      blockly.ContextMenuRegistry.registry.register({
+        separator: true,
+        scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+        id: "saPasteSeparator",
+        weight: 11, // after Save All as Image
+      });
+      blockly.ContextMenuRegistry.registry.register({
+        displayText: this.m("paste"),
+        preconditionFn: () => (this.clipboardHasData ? "enabled" : "disabled"),
+        callback: pasteCallback,
+        scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+        id: "saPaste",
+        weight: 12, // after separator
+      });
+    } else {
+      this.addon.tab.createBlockContextMenu(
+        (items, block) => {
+          items.push(
+            {
+              separator: true,
+              _isDevtoolsFirstItem: true,
+            },
+            {
+              enabled: blockly.clipboardXml_,
+              text: this.m("paste"),
+              callback: pasteCallback,
+            }
+          );
+          return items;
+        },
+        { workspace: true }
+      );
+    }
 
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
-        items.push({
-          enabled: blockly.clipboardXml_,
-          text: this.m("paste"),
-          separator: true,
-          _isDevtoolsFirstItem: true,
-          callback: () => {
-            let ids = this.getTopBlockIDs();
-
-            document.dispatchEvent(
-              new KeyboardEvent("keydown", {
-                keyCode: 86,
-                ctrlKey: true,
-                griff: true,
-              })
-            );
-
-            setTimeout(() => {
-              this.beginDragOfNewBlocksNotInIDs(ids);
-            }, 10);
-          },
-        });
-        return items;
-      },
-      { workspace: true }
-    );
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         items.push(
           {
+            separator: true,
+            _isDevtoolsFirstItem: true,
+          },
+          {
             enabled: true,
             text: this.m("make-space"),
-            _isDevtoolsFirstItem: true,
             callback: () => {
-              this.doCleanUp(block);
+              this.makeSpace(block);
             },
-            separator: true,
           },
+          { separator: true },
           {
             enabled: true,
             text: this.m("copy-all"),
             callback: () => {
-              this.eventCopyClick(block);
+              this.eventCopyClick(blockly, block);
             },
-            separator: true,
           },
           {
             enabled: true,
             text: this.m("copy-block"),
             callback: () => {
-              this.eventCopyClick(block, 1);
+              this.eventCopyClick(blockly, block, 1);
             },
           },
           {
             enabled: true,
             text: this.m("cut-block"),
             callback: () => {
-              this.eventCopyClick(block, 2);
+              this.eventCopyClick(blockly, block, 2);
             },
           }
         );
-        // const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
-        // if (BROADCAST_BLOCKS.includes(block.type)) {
-        //   // Show Broadcast
-        //   const broadcastId = this.showBroadcastSingleton.getAssociatedBroadcastId(block.id);
-        //   if (broadcastId) {
-        //     ["Senders", "Receivers"].forEach((showKey, i) => {
-        //       items.push({
-        //         enabled: true,
-        //         text: this.msg(`show-${showKey}`.toLowerCase()),
-        //         callback: () => {
-        //           this.showBroadcastSingleton[`show${showKey}`](broadcastId);
-        //         },
-        //         separator: i == 0,
-        //       });
-        //     });
-        //   }
-        // }
         return items;
       },
       { blocks: true }
     );
+
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
-        if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
+        if (block.type.startsWith("data_")) {
           this.selVarID = block.getVars()[0];
-          items.push({
-            enabled: true,
-            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
-            callback: () => {
-              let wksp = this.getWorkspace();
-              let v = wksp.getVariableById(this.selVarID);
-              let varName = window.prompt(this.msg("replace", { name: v.name }));
-              if (varName) {
-                this.doReplaceVariable(this.selVarID, varName, v.type);
-              }
-            },
-            separator: true,
-          });
+          items.push(
+            { separator: true },
+            {
+              enabled: true,
+              text: this.m("swap", { var: block.type.includes("list") ? this.m("lists") : this.m("variables") }),
+              callback: () => {
+                let wksp = this.getWorkspace();
+                let v = wksp.getVariableMap().getVariableById(this.selVarID);
+                let varName = window.prompt(this.msg("replace", { name: v.name }));
+                if (varName) {
+                  this.doReplaceVariable(this.selVarID, varName, v.type);
+                }
+              },
+            }
+          );
         }
         return items;
       },
@@ -162,8 +190,42 @@ export default class DevTools {
     );
   }
 
+  async patchCopyShortcuts() {
+    const devtools = this;
+    const blockly = await this.addon.tab.traps.getBlockly();
+    if (!blockly.registry) return;
+    const shortcuts = blockly.ShortcutRegistry.registry.getRegistry();
+
+    // Set this.clipboardHasData to true when something is copied on new Blockly
+
+    const newCallback = (oldCallback) =>
+      function (...args) {
+        const success = oldCallback.call(this, ...args);
+        if (success) devtools.clipboardHasData = true;
+        return success;
+      };
+
+    const copyShortcut = shortcuts[blockly.ShortcutItems.names.COPY];
+    const oldCopyCallback = copyShortcut.callback;
+    copyShortcut.callback = newCallback(oldCopyCallback);
+    blockly.ShortcutRegistry.registry.unregister(copyShortcut.name);
+    blockly.ShortcutRegistry.registry.register(copyShortcut);
+
+    const cutShortcut = shortcuts[blockly.ShortcutItems.names.CUT];
+    const oldCutCallback = cutShortcut.callback;
+    cutShortcut.callback = newCallback(oldCutCallback);
+    blockly.ShortcutRegistry.registry.unregister(cutShortcut.name);
+    blockly.ShortcutRegistry.registry.register(cutShortcut);
+
+    // New Blockly copies a single block by default, so this is needed to make Copy All work
+    const oldBlockToCopyData = blockly.BlockSvg.prototype.toCopyData;
+    blockly.BlockSvg.prototype.toCopyData = function () {
+      return oldBlockToCopyData.call(this, devtools.copyAll);
+    };
+  }
+
   getWorkspace() {
-    return Blockly.getMainWorkspace();
+    return this.addon.tab.traps.getWorkspace();
   }
 
   isCostumeEditor() {
@@ -171,274 +233,59 @@ export default class DevTools {
   }
 
   /**
-   * A nicely ordered version of the top blocks
-   * @returns {[Blockly.Block]}
+   * Pushes everything below the blocks scripts column down, and everything on it's right to the right.
+   * If the workspace is in RTL mode, then we shift everything on it's left to the left instead
+   * @param targetBlock the block that we are adding space around
    */
-  getTopBlocks() {
-    let result = this.getOrderedTopBlockColumns();
-    let columns = result.cols;
-    /**
-     * @type {[[Blockly.Block]]}
-     */
-    let topBlocks = [];
-    for (const col of columns) {
-      topBlocks = topBlocks.concat(col.blocks);
-    }
-    return topBlocks;
-  }
 
-  /**
-   * A much nicer way of laying out the blocks into columns
-   */
-  doCleanUp(block) {
-    let workspace = this.getWorkspace();
-    let makeSpaceForBlock = block && block.getRootBlock();
+  makeSpace(targetBlock) {
+    const wksp = this.getWorkspace();
 
-    UndoGroup.startUndoGroup(workspace);
+    // ensure that all events are grouped together in the undo stack
+    UndoGroup.startUndoGroup(wksp);
 
-    let result = this.getOrderedTopBlockColumns(true);
-    let columns = result.cols;
-    let orphanCount = result.orphans.blocks.length;
-    if (orphanCount > 0 && !block) {
-      let message = this.msg("orphaned", {
-        count: orphanCount,
-      });
-      if (confirm(message)) {
-        for (const block of result.orphans.blocks) {
-          block.dispose();
-        }
-      } else {
-        columns.unshift(result.orphans);
-      }
-    }
+    const topBlocks = wksp.getTopBlocks();
+    const { pos: tPos, xMax: tXMax } = this.getBlockPosAndXMax(targetBlock);
+    const targetRoot = targetBlock.getRootBlock();
+    const isRTL = targetBlock.RTL;
 
-    let cursorX = 48;
+    // TODO: move shift distances to a setting option defined in multiples of grid spacing
+    const maxXShift = 380,
+      maxYShift = 410;
+    let minXShift = maxXShift,
+      minYShift = maxYShift;
 
-    let maxWidths = result.maxWidths;
-
-    for (const column of columns) {
-      let cursorY = 64;
-      let maxWidth = 0;
-
-      for (const block of column.blocks) {
-        let extraWidth = block === makeSpaceForBlock ? 380 : 0;
-        let extraHeight = block === makeSpaceForBlock ? 480 : 72;
-        let xy = block.getRelativeToSurfaceXY();
-        if (cursorX - xy.x !== 0 || cursorY - xy.y !== 0) {
-          block.moveBy(cursorX - xy.x, cursorY - xy.y);
-        }
-        let heightWidth = block.getHeightWidth();
-        cursorY += heightWidth.height + extraHeight;
-
-        let maxWidthWithComments = maxWidths[block.id] || 0;
-        maxWidth = Math.max(maxWidth, Math.max(heightWidth.width + extraWidth, maxWidthWithComments));
-      }
-
-      cursorX += maxWidth + 96;
-    }
-
-    let topComments = workspace.getTopComments();
-    for (const comment of topComments) {
-      if (comment.setVisible) {
-        comment.setVisible(false);
-        comment.needsAutoPositioning_ = true;
-        comment.setVisible(true);
-      }
-    }
-
-    setTimeout(() => {
-      // Locate unused local variables...
-      let workspace = this.getWorkspace();
-      let map = workspace.getVariableMap();
-      let vars = map.getVariablesOfType("");
-      let unusedLocals = [];
-
-      for (const row of vars) {
-        if (row.isLocal) {
-          let usages = map.getVariableUsesById(row.getId());
-          if (!usages || usages.length === 0) {
-            unusedLocals.push(row);
-          }
-        }
-      }
-
-      if (unusedLocals.length > 0) {
-        const unusedCount = unusedLocals.length;
-        let message = this.msg("unused-var", {
-          count: unusedCount,
-        });
-        for (let i = 0; i < unusedLocals.length; i++) {
-          let orphan = unusedLocals[i];
-          if (i > 0) {
-            message += ", ";
-          }
-          message += orphan.name;
-        }
-        if (confirm(message)) {
-          for (const orphan of unusedLocals) {
-            workspace.deleteVariableById(orphan.getId());
-          }
-        }
-      }
-
-      // Locate unused local lists...
-      let lists = map.getVariablesOfType("list");
-      let unusedLists = [];
-
-      for (const row of lists) {
-        if (row.isLocal) {
-          let usages = map.getVariableUsesById(row.getId());
-          if (!usages || usages.length === 0) {
-            unusedLists.push(row);
-          }
-        }
-      }
-      if (unusedLists.length > 0) {
-        const unusedCount = unusedLists.length;
-        let message = this.msg("unused-list", {
-          count: unusedCount,
-        });
-        for (let i = 0; i < unusedLists.length; i++) {
-          let orphan = unusedLists[i];
-          if (i > 0) {
-            message += ", ";
-          }
-          message += orphan.name;
-        }
-        if (confirm(message)) {
-          for (const orphan of unusedLists) {
-            workspace.deleteVariableById(orphan.getId());
-          }
-        }
-      }
-
-      UndoGroup.endUndoGroup(workspace);
-    }, 100);
-  }
-
-  /**
-   * Badly Orphaned - might want to delete these!
-   * @param topBlock
-   * @returns {boolean}
-   */
-  isBlockAnOrphan(topBlock) {
-    return !!topBlock.outputConnection;
-  }
-
-  /**
-   * Split the top blocks into ordered columns
-   * @param separateOrphans true to keep all orphans separate
-   * @returns {{orphans: {blocks: [Block], x: number, count: number}, cols: [Col]}}
-   */
-  getOrderedTopBlockColumns(separateOrphans) {
-    let w = this.getWorkspace();
-    let topBlocks = w.getTopBlocks();
-    let maxWidths = {};
-
-    if (separateOrphans) {
-      let topComments = w.getTopComments();
-
-      // todo: tie comments to blocks... find widths and width of block stack row...
-      for (const comment of topComments) {
-        // comment.autoPosition_();
-        // Hiding and showing repositions the comment right next to it's block - nice!
-        if (comment.setVisible) {
-          comment.setVisible(false);
-          comment.needsAutoPositioning_ = true;
-          comment.setVisible(true);
-
-          // let bb = comment.block_.svgPath_.getBBox();
-          let right = comment.getBoundingRectangle().bottomRight.x;
-
-          // Get top block for stack...
-          let root = comment.block_.getRootBlock();
-          let left = root.getBoundingRectangle().topLeft.x;
-          maxWidths[root.id] = Math.max(right - left, maxWidths[root.id] || 0);
-        }
-      }
-    }
-
-    // Default scratch ordering is horrid... Lets try something more clever.
-
-    /**
-     * @type {Col[]}
-     */
-    let cols = [];
-    const TOLERANCE = 256;
-    let orphans = { x: -999999, count: 0, blocks: [] };
-
+    // first pass we determine if a block stack should be shifted
+    // and if it should be shifted and is closer than maxShift we update the min shift distance
+    const shouldShift = [];
     for (const topBlock of topBlocks) {
-      // let r = b.getBoundingRectangle();
-      let position = topBlock.getRelativeToSurfaceXY();
-      /**
-       * @type {Col}
-       */
-      let bestCol = null;
-      let bestError = TOLERANCE;
+      if (topBlock === targetRoot) continue;
+      const { pos, xMax } = this.getBlockPosAndXMax(topBlock);
 
-      if (separateOrphans && this.isBlockAnOrphan(topBlock)) {
-        orphans.blocks.push(topBlock);
-        continue;
-      }
+      const withinColumn = isRTL ? tPos.x >= xMax && pos.x >= tXMax : tPos.x <= xMax && pos.x <= tXMax;
 
-      // Find best columns
-      for (const col of cols) {
-        let err = Math.abs(position.x - col.x);
-        if (err < bestError) {
-          bestError = err;
-          bestCol = col;
-        }
-      }
+      const shouldShiftX = pos.x < tXMax === isRTL;
+      const shouldShiftY = pos.y > tPos.y && withinColumn;
+      shouldShift.push([topBlock, shouldShiftX, shouldShiftY]);
 
-      if (bestCol) {
-        // We found a column that we fitted into
-        bestCol.x = (bestCol.x * bestCol.count + position.x) / ++bestCol.count; // re-average the columns as more items get added...
-        bestCol.blocks.push(topBlock);
-      } else {
-        // Create a new column
-        cols.push(new Col(position.x, 1, [topBlock]));
-      }
+      if (shouldShiftX && Math.abs(pos.x - tXMax) < minXShift) minXShift = Math.abs(pos.x - tXMax);
+      if (shouldShiftY && pos.y - tPos.y < minYShift) minYShift = pos.y - tPos.y;
     }
 
-    // if (orphans.blocks.length > 0) {
-    //     cols.push(orphans);
-    // }
+    // in the second pass we apply a shift based on the min shift to all the blocks we found should be shifted in the first pass
+    const shiftX = (isRTL ? -1 : 1) * (maxXShift - minXShift);
+    const shiftY = maxYShift - minYShift;
+    for (const [block, shldShiftX, shldShiftY] of shouldShift) block.moveBy(shiftX * shldShiftX, shiftY * shldShiftY);
 
-    // Sort columns, then blocks inside the columns
-    cols.sort((a, b) => a.x - b.x);
-    for (const col of cols) {
-      col.blocks.sort((a, b) => a.getRelativeToSurfaceXY().y - b.getRelativeToSurfaceXY().y);
-    }
-
-    return { cols: cols, orphans: orphans, maxWidths: maxWidths };
+    UndoGroup.endUndoGroup(wksp);
   }
 
-  /**
-   * Find all the uses of a named variable.
-   * @param {string} id ID of the variable to find.
-   * @return {!Array.<!Blockly.Block>} Array of block usages.
-   */
-  getVariableUsesById(id) {
-    let uses = [];
-
-    let topBlocks = this.getTopBlocks(true); // todo: Confirm this was the right getTopBlocks?
-    for (const topBlock of topBlocks) {
-      /** @type {!Array<!Blockly.Block>} */
-      let kids = topBlock.getDescendants();
-      for (const block of kids) {
-        /** @type {!Array<!Blockly.VariableModel>} */
-        let blockVariables = block.getVarModels();
-        if (blockVariables) {
-          for (const blockVar of blockVariables) {
-            if (blockVar.getId() === id) {
-              uses.push(block);
-            }
-          }
-        }
-      }
-    }
-
-    return uses;
+  // in non-RTL mode this function returns the top left corner of the block and the right most x value of the stack
+  // in RTL mode it returns the top right corner and the left most x value of the stack
+  getBlockPosAndXMax(block) {
+    const { x, y } = block.getRelativeToSurfaceXY();
+    const width = block.getRootBlock().getHeightWidth().width;
+    return block.RTL ? { pos: { x: x + width, y }, xMax: x } : { pos: { x, y }, xMax: x + width };
   }
 
   /**
@@ -449,7 +296,7 @@ export default class DevTools {
    */
   doReplaceVariable(varId, newVarName, type) {
     let wksp = this.getWorkspace();
-    let v = wksp.getVariable(newVarName, type);
+    let v = wksp.getVariableMap().getVariable(newVarName, type);
     if (!v) {
       alert(this.msg("var-not-exist"));
       return;
@@ -457,7 +304,7 @@ export default class DevTools {
     let newVId = v.getId();
 
     UndoGroup.startUndoGroup(wksp);
-    let blocks = this.getVariableUsesById(varId);
+    let blocks = getVariableUsesById(varId, wksp);
     for (const block of blocks) {
       try {
         if (type === "") {
@@ -471,98 +318,6 @@ export default class DevTools {
     }
     UndoGroup.endUndoGroup(wksp);
   }
-
-  /*
-    function doInjectScripts(codeString) {
-      let w = getWorkspace();
-      let xml = new XML(); // document.implementation.createDocument(null, "xml");
-      let x = xml.xmlDoc.firstChild;
-
-      let tree = math.parse(codeString);
-      console.log(tree);
-
-      const binaryOperatorTypes = {
-        add: "operator_add",
-        subtract: "operator_subtract",
-        this.multiply: "operator_multiply",
-        divide: "operator_divide",
-      };
-
-      const BLOCK_TYPE = {
-        number: "math_number",
-        text: "text",
-      };
-
-      function translateMathToXml(x, tree, shadowType) {
-        let xShadowField = null;
-        if (shadowType) {
-          let xShadow = xml.newXml(x, "shadow", { type: shadowType });
-          if (shadowType === BLOCK_TYPE.number) {
-            xShadowField = xml.newXml(xShadow, "field", { name: "NUM" });
-          } else if (shadowType === BLOCK_TYPE.text) {
-            xShadowField = xml.newXml(xShadow, "field", { name: "TEXT" });
-          }
-        }
-
-        if (!tree || !tree.type) {
-          return;
-        }
-
-        if (tree.type === "OperatorNode") {
-          let operatorType = binaryOperatorTypes[tree.fn];
-          if (operatorType) {
-            let xOp = newXml(x, "block", { type: operatorType });
-            translateMathToXml(xml.newXml(xOp, "value", { name: "NUM1" }), tree.args[0], BLOCK_TYPE.number);
-            translateMathToXml(xml.newXml(xOp, "value", { name: "NUM2" }), tree.args[1], BLOCK_TYPE.number);
-            return;
-          }
-
-          return;
-        }
-
-        if (tree.type === "ConstantNode") {
-          // number or text in quotes
-          if (xShadowField) {
-            xml.setAttr(xShadowField, { text: tree.value });
-          }
-          return;
-        }
-
-        if (tree.type === "SymbolNode") {
-          // variable
-          let xVar = xml.newXml(x, "block", { type: "data_variable" });
-          xml.newXml(xVar, "field", { name: "VARIABLE", text: tree.name });
-          return;
-        }
-
-        if (tree.type === "FunctionNode") {
-          // Method Call
-          if (tree.fn.name === "join") {
-            let xOp = newXml(x, "block", { type: "operator_join" });
-            translateMathToXml(xml.newXml(xOp, "value", { name: "STRING1" }), tree.args[0], BLOCK_TYPE.text);
-            translateMathToXml(xml.newXml(xOp, "value", { name: "STRING2" }), tree.args[1], BLOCK_TYPE.text);
-            return;
-          }
-        }
-      }
-
-      translateMathToXml(x, tree);
-      console.log(x);
-
-      let ids = Blockly.Xml.domToWorkspace(x, w);
-      console.log(ids);
-    }
-     */
-  /*
-    function clickInject(e) {
-      let codeString = window.prompt("Griffpatch: Enter an expression (i.e. a+2*3)");
-      if (codeString) {
-        doInjectScripts(codeString);
-      }
-      e.preventDefault();
-      return false;
-    }
-    */
 
   /**
    * Returns a Set of the top blocks in this workspace / sprite
@@ -590,12 +345,26 @@ export default class DevTools {
     }
     let wksp = this.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
+
+    // handle grouping the undo events
+    // we set the endUndoGroup to happen after the user has placed the block somewhere
+    UndoGroup.startUndoGroup(wksp, true);
+    const onEndDrag = (e) => {
+      if (e.type === "endDrag") {
+        UndoGroup.endUndoGroup(wksp);
+        wksp.removeChangeListener(onEndDrag);
+      }
+    };
+    wksp.addChangeListener(onEndDrag);
+
     for (const block of topBlocks) {
       if (!ids.has(block.id)) {
-        // console.log("I found a new block!!! - " + block.id);
-        // todo: move the block to the mouse pointer?
         let mouseXYClone = { x: this.mouseXY.x, y: this.mouseXY.y };
-        this.domHelpers.triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
+        let svgPath;
+        if (block.pathObject)
+          svgPath = block.pathObject.svgPath; // new Blockly
+        else svgPath = block.svgPath_;
+        this.domHelpers.triggerDragAndDrop(svgPath, null, mouseXYClone);
       }
     }
   }
@@ -609,94 +378,70 @@ export default class DevTools {
     this.updateMousePosition(e);
   }
 
-  eventKeyDown(e) {
-    const switchCostume = (up) => {
-      // todo: select previous costume
-      let selected = this.costTabBody.querySelector("div[class*='sprite-selector-item_is-selected']");
-      let node = up ? selected.parentNode.previousSibling : selected.parentNode.nextSibling;
-      if (node) {
-        let wrapper = node.closest("div[class*=gui_flex-wrapper]");
-        node.querySelector("div[class^='sprite-selector-item_sprite-name']").click();
-        node.scrollIntoView({
-          behavior: "auto",
-          block: "center",
-          inline: "start",
-        });
-        wrapper.scrollTop = 0;
-      }
-    };
+  _canPaste() {
+    // Don't paste if the mouse is outside the blockly SVG
+    const bounds = document.querySelector("svg.blocklySvg").getBoundingClientRect();
+    const { x, y } = this.mouseXY;
+    if (x < bounds.x) return false;
+    if (y < bounds.y) return false;
+    if (x > bounds.x + bounds.width) return false;
+    if (y > bounds.y + bounds.height) return false;
+    return true;
+  }
 
-    if (document.URL.indexOf("editor") <= 0) {
+  eventKeyDownBlockly(e) {
+    if (this.addon.tab.editorMode !== "editor") {
       return;
     }
 
     let ctrlKey = e.ctrlKey || e.metaKey;
 
-    if (e.keyCode === 37 && ctrlKey) {
-      // Ctrl + Left Arrow Key
-      if (document.activeElement.tagName === "INPUT") {
-        return;
-      }
-
-      if (this.isCostumeEditor()) {
-        switchCostume(true);
-        e.cancelBubble = true;
-        e.preventDefault();
-        return true;
-      }
-    }
-
-    if (e.keyCode === 39 && ctrlKey) {
-      // Ctrl + Right Arrow Key
-      if (document.activeElement.tagName === "INPUT") {
-        return;
-      }
-
-      if (this.isCostumeEditor()) {
-        switchCostume(false);
-        e.cancelBubble = true;
-        e.preventDefault();
-        return true;
-      }
-    }
-
-    if (e.keyCode === 86 && ctrlKey && !e.griff) {
+    if (e.keyCode === 86 && ctrlKey) {
       // Ctrl + V
+      if (!this._canPaste()) return;
       // Set a timeout so we can take control of the paste after the event
       let ids = this.getTopBlockIDs();
       setTimeout(() => {
         this.beginDragOfNewBlocksNotInIDs(ids);
       }, 10);
     }
-
-    // if (e.keyCode === 220 && (!document.activeElement || document.activeElement.tagName === 'INPUT')) {
-    //
-    // }
   }
 
-  eventCopyClick(block, blockOnly) {
+  eventCopyClick(blockly, block, blockOnly) {
     let wksp = this.getWorkspace();
 
     if (block) {
       block.select();
       let next = blockOnly ? block.getNextBlock() : null;
-      if (next) {
+      if (blockly.registry) {
+        // new Blockly
+        this.copyAll = !blockOnly;
+      } else if (next) {
+        blockly.Events.setGroup(false);
         next.unplug(false); // setParent(null);
       }
 
       // separate child temporarily
-      document.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
+      let target;
+      if (blockly.registry)
+        target = document.querySelector(".injectionDiv"); // new Blockly
+      else target = document;
+      target.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
       if (next || blockOnly === 2) {
-        setTimeout(() => {
-          if (next) {
-            wksp.undo(); // undo the unplug above...
-          }
-          if (blockOnly === 2) {
-            UndoGroup.startUndoGroup(wksp);
-            block.dispose(true);
-            UndoGroup.endUndoGroup(wksp);
-          }
-        }, 0);
+        // wait until the event has been fired
+        // see https://github.com/google/blockly/blob/fa4fce5/core/events/utils.ts#L113-L115
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            if (!blockly.registry && next) {
+              wksp.undo(); // old Blockly: undo the unplug above...
+            }
+            if (blockOnly === 2) {
+              UndoGroup.startUndoGroup(wksp);
+              block.dispose(true);
+              UndoGroup.endUndoGroup(wksp);
+            }
+          }, 0);
+        });
       }
     }
   }
@@ -709,7 +454,7 @@ export default class DevTools {
     this.updateMousePosition(e);
   }
 
-  initInner(root) {
+  async initInner(root) {
     let guiTabs = root.childNodes;
 
     if (this.codeTab && guiTabs[0] !== this.codeTab) {
@@ -719,34 +464,17 @@ export default class DevTools {
 
     this.codeTab = guiTabs[0];
     this.costTab = guiTabs[1];
-    this.costTabBody = document.querySelector("div[aria-labelledby=" + this.costTab.id + "]");
+    this.costTabBody = document.querySelector("div[aria-labelledby='" + this.costTab.id + "']");
 
-    this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
+    const blockly = await this.addon.tab.traps.getBlockly();
+    let keyEventTarget;
+    if (blockly.registry)
+      keyEventTarget = document.querySelector(".injectionDiv"); // new Blockly
+    else keyEventTarget = document;
+    this.domHelpers.bindOnce(keyEventTarget, "keydown", (...e) => this.eventKeyDownBlockly(...e), true);
+
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
     this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them
     this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
-  }
-}
-
-class Col {
-  /**
-   * @param x {Number} x position (for ordering)
-   * @param count {Number}
-   * @param blocks {[Block]}
-   */
-  constructor(x, count, blocks) {
-    /**
-     * x position (for ordering)
-     * @type {Number}
-     */
-    this.x = x;
-    /**
-     * @type {Number}
-     */
-    this.count = count;
-    /**
-     * @type {[Blockly.Block]}
-     */
-    this.blocks = blocks;
   }
 }

@@ -1,0 +1,1 @@
+{"disable-stage-drag-select/@name":"编辑器内不可拖拽的角色","disable-stage-drag-select/@description":"禁止在编辑器中在舞台上拖动角色，那些明确设置为可拖动的角色除外。需要按住 Shift 才能在编辑器中正常拖动不可拖动的角色。","disable-stage-drag-select/@settings-name-drag_while_stopped":"在作品停止时允许拖动"}

@@ -30,9 +30,10 @@
       "id": "hide"
     }
   ],
-  "tags": ["editor", "projectPlayer", "featured"],
+  "tags": ["player", "featured"],
   "enabledByDefault": false,
   "versionAdded": "1.14.0",
   "dynamicEnable": true,
-  "dynamicDisable": true
+  "dynamicDisable": true,
+  "libraries": ["scratch-gui"]
 }

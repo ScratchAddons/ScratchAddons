@@ -204,7 +204,13 @@ export default async function ({ addon, console, msg }) {
         }
       });
 
+      // old-studio-layout adds a second button, which should be hidden if this addon is disabled
+      const oldStudioButtonContainer = document.createElement("div");
+      oldStudioButtonContainer.className = "sa-oldstudio-browse-followers";
+      addon.tab.displayNoneWhileDisabled(oldStudioButtonContainer);
+
       addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: button, order: 0 });
+      addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: oldStudioButtonContainer, order: 0.5 });
     }
   }
   async function addCurator(username) {

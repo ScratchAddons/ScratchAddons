@@ -3,7 +3,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     className: tab.scratchClass("modal_modal-overlay"),
     dir: tab.direction,
   });
-  container.style.display = isOpen ? "" : "none";
+  container.style.display = "none";
   document.body.appendChild(container);
   const modal = Object.assign(document.createElement("div"), {
     className: tab.scratchClass("modal_modal-content"),
@@ -32,6 +32,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     Object.assign(document.createElement("img"), {
       className: tab.scratchClass("close-button_close-icon"),
       src: import.meta.url + "/../../../images/cs/close-s3.svg",
+      draggable: false,
     })
   );
   const content = Object.assign(document.createElement("div"), {
@@ -42,14 +43,19 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     `,
   });
   modal.appendChild(content);
+  const open = () => {
+    container.style.display = "";
+    if (tab.editorMode === "editor") {
+      tab.traps.getBlockly().then((Blockly) => Blockly.hideChaff());
+    }
+  };
+  if (isOpen) open();
   return {
     container: modal,
     content,
     backdrop: container,
     closeButton,
-    open: () => {
-      container.style.display = "";
-    },
+    open,
     close: () => {
       container.style.display = "none";
     },
@@ -81,10 +87,11 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
     Object.assign(document.createElement("img"), {
       className: "modal-content-close-img",
       src: "/svgs/modal/close-x.svg",
+      draggable: false,
     })
   );
   const header = Object.assign(document.createElement("div"), {
-    className: "modal-header modal-title",
+    className: "modal-header modal-title sa-modal-title",
     style: `
       height: 3rem;
       box-sizing: border-box;
@@ -238,7 +245,11 @@ export const confirm = (tab, title, message, { useEditorClasses = false, okButto
   }
   content.appendChild(
     Object.assign(document.createElement("div"), {
-      className: { editor: tab.scratchClass("prompt_label") }[mode] || "",
+      className:
+        {
+          editor: tab.scratchClass("prompt_label"),
+          "scratch-www": "sa-confirm-text",
+        }[mode] || "",
       style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
       innerText: message,
     })

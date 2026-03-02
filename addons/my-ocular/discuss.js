@@ -23,7 +23,7 @@ export default async function ({ addon, console, msg }) {
 
     // Create my-ocular dot
     let dot = document.createElement("span");
-    addon.tab.displayNoneWhileDisabled(dot, { display: "inline-block" });
+    addon.tab.displayNoneWhileDisabled(dot);
     dot.title = msg("status-hover");
     dot.className = "my-ocular-dot";
     dot.style.backgroundColor = color;

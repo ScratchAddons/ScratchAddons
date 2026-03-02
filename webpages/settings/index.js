@@ -8,7 +8,11 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
-import minifySettings from "../../libraries/common/minify-settings.js";
+import { deserializeSettings, serializeSettings } from "./settings-utils.js";
+import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
+
+const MORE_SETTINGS_HASH = "#moresettings";
+const ADDON_HASH_PREFIX = "#addon-";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -25,6 +29,7 @@ let fuse;
 
   await loadVueComponent([
     "webpages/settings/components/picker-component",
+    "webpages/settings/components/dropdown",
     "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-setting",
     "webpages/settings/components/addon-tag",
@@ -32,8 +37,13 @@ let fuse;
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
     "webpages/settings/components/modal",
+    "webpages/settings/components/previews/compact-messages",
+    "webpages/settings/components/previews/dark-www",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
+    "webpages/settings/components/previews/stage-monitor",
+    "webpages/settings/components/previews/stage-monitor-preset",
+    "webpages/settings/components/previews/workspace-dots",
   ]);
 
   Vue.directive("click-outside", {
@@ -56,8 +66,14 @@ let fuse;
     },
   });
 
+  // REMINDER: update similar code at /background/imports/util.js
   const browserLevelPermissions = ["notifications"];
-  if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
+  if (isFirefox()) {
+    if (typeof Clipboard.prototype.write !== "function") {
+      // Firefox 109-126 only
+      browserLevelPermissions.push("clipboardWrite");
+    }
+  }
   let grantedOptionalPermissions = [];
   const updateGrantedPermissions = () =>
     chrome.permissions.getAll(({ permissions }) => {
@@ -66,102 +82,6 @@ let fuse;
   updateGrantedPermissions();
   chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
   chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
-
-  const promisify =
-    (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
-
-  let handleConfirmClicked = null;
-
-  const serializeSettings = async () => {
-    const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-    const storedSettings = await syncGet([
-      "globalTheme",
-      "addonSettings1",
-      "addonSettings2",
-      "addonSettings3",
-      "addonsEnabled",
-    ]);
-    const addonSettings = {
-      ...storedSettings.addonSettings1,
-      ...storedSettings.addonSettings2,
-      ...storedSettings.addonSettings3,
-    };
-    const serialized = {
-      core: {
-        lightTheme: storedSettings.globalTheme,
-        version: chrome.runtime.getManifest().version_name,
-      },
-      addons: {},
-    };
-    for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
-      serialized.addons[addonId] = {
-        enabled: storedSettings.addonsEnabled[addonId],
-        settings: addonSettings[addonId] || {},
-      };
-    }
-    return JSON.stringify(serialized);
-  };
-
-  const deserializeSettings = async (str, manifests, confirmElem) => {
-    const obj = JSON.parse(str);
-    const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-    const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-    const { addonsEnabled, ...storageItems } = await syncGet([
-      "addonSettings1",
-      "addonSettings2",
-      "addonSettings3",
-      "addonsEnabled",
-    ]);
-    const addonSettings = {
-      ...storageItems.addonSettings1,
-      ...storageItems.addonSettings2,
-      ...storageItems.addonSettings3,
-    };
-    const pendingPermissions = {};
-    for (const addonId of Object.keys(obj.addons)) {
-      const addonValue = obj.addons[addonId];
-      const addonManifest = manifests.find((m) => m._addonId === addonId);
-      if (!addonManifest) continue;
-      const permissionsRequired = addonManifest.permissions || [];
-      const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-      if (addonValue.enabled && browserPermissionsRequired.length) {
-        pendingPermissions[addonId] = browserPermissionsRequired;
-      } else {
-        addonsEnabled[addonId] = addonValue.enabled;
-      }
-      addonSettings[addonId] = Object.assign({}, addonSettings[addonId]);
-      delete addonSettings[addonId]._version;
-      Object.assign(addonSettings[addonId], addonValue.settings);
-    }
-    if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
-    let resolvePromise = null;
-    const resolveOnConfirmPromise = new Promise((resolve) => {
-      resolvePromise = resolve;
-    });
-    handleConfirmClicked = async () => {
-      handleConfirmClicked = null;
-      if (Object.keys(pendingPermissions).length) {
-        const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
-          permissions: Object.values(pendingPermissions).flat(),
-        });
-        Object.keys(pendingPermissions).forEach((addonId) => {
-          addonsEnabled[addonId] = granted;
-        });
-      }
-      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
-      await syncSet({
-        globalTheme: !!obj.core.lightTheme,
-        addonsEnabled,
-        ...minifySettings(addonSettings, prerelease ? null : manifests),
-      });
-      resolvePromise();
-    };
-    confirmElem.classList.remove("hidden-button");
-    confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
-    return resolveOnConfirmPromise;
-  };
 
   vue = window.vue = new Vue({
     el: "body",
@@ -172,14 +92,18 @@ let fuse;
         theme: initialTheme,
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
-        switchPath: "../../images/icons/switch.svg",
         moreSettingsOpen: false,
+        relatedAddonsOpen: false,
+        relatedToAddonName: null,
+        relatedAddons: [],
+        relatedAddonsHistory: [],
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
         manifests: [],
         manifestsById: {},
         selectedCategory: "all",
+        previousCategory: "all",
         searchInput: "",
         searchInputReal: "",
         addonSettings: {},
@@ -264,18 +188,49 @@ let fuse;
     methods: {
       openMoreSettings: function () {
         this.closePickers();
-        this.moreSettingsOpen = true;
+        this.$els.moresettings.showModal();
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
+        location.hash = "";
+      },
+      openRelatedAddons(addonManifest, log = true) {
+        this.relatedToAddonName = addonManifest.name;
+        this.relatedAddons.length = 0;
+        if (this.relatedAddonsHistory.length === 0) {
+          this.previousCategory = this.selectedCategory;
+          this.selectedCategory = "all";
+          this.relatedAddonsOpen = true;
+        }
+        if (log) this.relatedAddonsHistory.push(addonManifest);
+        for (const relatedManifest of addonManifest._relatedAddons) {
+          this.relatedAddons.push(relatedManifest);
+        }
+      },
+      backRelatedAddon() {
+        const addon = this.relatedAddonsHistory.pop();
+        if (this.relatedAddonsHistory.length === 0) {
+          this.relatedAddonsOpen = false;
+          this.selectedCategory = this.previousCategory;
+        } else {
+          this.openRelatedAddons(this.relatedAddonsHistory.at(-1), false);
+        }
+        this.blinkAddon(addon._addonId);
+      },
+      blinkAddon(addonId) {
+        setTimeout(() => {
+          const addonElem = document.getElementById("addon-" + addonId);
+          if (!addonElem) return;
+          addonElem.scrollIntoView();
+          // Browsers sometimes ignore :target for the elements dynamically appended.
+          // Use CSS class to initiate the blink animation.
+          addonElem.classList.add("addon-blink");
+          // 2s (animation length) + 1ms
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
-        if (this.categoryOpen) {
-          vue.switchPath = "../../images/icons/close.svg";
-        } else {
-          vue.switchPath = "../../images/icons/switch.svg";
-        }
       },
       msg(message, ...params) {
         return chrome.i18n.getMessage(message, ...params);
@@ -283,17 +238,12 @@ let fuse;
       direction() {
         return getDirection(chrome.i18n.getUILanguage());
       },
-      openReview() {
-        if (typeof browser !== "undefined") {
-          window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
-        } else {
-          window.open(
-            `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
-          );
-        }
-      },
       clearSearch() {
         this.searchInputReal = "";
+      },
+      clearAndFocusSearch() {
+        this.clearSearch();
+        document.querySelector("#searchBox").focus();
       },
       setTheme(mode) {
         setGlobalTheme(mode);
@@ -315,16 +265,17 @@ let fuse;
       },
       closePickers(e, leaveOpen, { callCloseDropdowns = true } = {}) {
         this.$emit("close-pickers", leaveOpen);
-        if (callCloseDropdowns) this.closeResetDropdowns();
+        if (callCloseDropdowns) this.closeDropdowns();
       },
-      closeResetDropdowns(e, leaveOpen) {
-        this.$emit("close-reset-dropdowns", leaveOpen);
+      closeDropdowns(e, leaveOpen) {
+        this.$emit("close-dropdowns", leaveOpen);
       },
       exportSettings() {
         serializeSettings().then((serialized) => {
           const blob = new Blob([serialized], { type: "application/json" });
           downloadBlob("scratch-addons-settings.json", blob);
         });
+        // See also unsupported-browser.js
       },
       viewSettings() {
         const openedWindow = window.open("about:blank");
@@ -332,6 +283,7 @@ let fuse;
           const blob = new Blob([serialized], { type: "text/plain" });
           openedWindow.location.replace(URL.createObjectURL(blob));
         });
+        // See also unsupported-browser.js
       },
       importSettings() {
         const inputElem = Object.assign(document.createElement("input"), {
@@ -352,7 +304,7 @@ let fuse;
             inputElem.remove();
             const confirmElem = document.getElementById("confirmImport");
             try {
-              await deserializeSettings(text, vue.manifests, confirmElem);
+              await deserializeSettings(text, vue.manifests, confirmElem, { browserLevelPermissions });
             } catch (e) {
               console.warn("Error when importing settings:", e);
               confirmElem.classList.add("hidden-button");
@@ -373,7 +325,7 @@ let fuse;
       },
       openFullSettings() {
         window.open(
-          `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
+          `${chrome.runtime.getURL("webpages/settings/index.html")}${ADDON_HASH_PREFIX}${
             this.addonToEnable && this.addonToEnable._addonId
           }`
         );
@@ -404,7 +356,7 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target.classList[0] === "toggle") return;
+        if (event?.target?.closest("#sidebar-toggle")) return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
@@ -436,8 +388,7 @@ let fuse;
       // Autofocus search bar in iframe mode for both browsers
       // autofocus attribute only works in Chrome for us, so
       // we also manually focus on Firefox, even in fullscreen
-      if (isIframe || typeof browser !== "undefined")
-        setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
+      if (isIframe || isFirefox()) setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
 
       const exampleAddonListItem = {
         // Need to specify all used properties for reactivity!
@@ -467,15 +418,19 @@ let fuse;
       window.addEventListener(
         "hashchange",
         (e) => {
-          const addonId = location.hash.replace(/^#addon-/, "");
-          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
-          if (!groupWithAddon) return; //Don't run if hash is invalid
-          const addon = this.manifestsById[addonId];
+          if (location.hash === MORE_SETTINGS_HASH) {
+            vue.openMoreSettings();
+          } else if (location.hash.startsWith(ADDON_HASH_PREFIX)) {
+            const addonId = location.hash.substring(ADDON_HASH_PREFIX.length);
+            const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+            if (!groupWithAddon) return; //Don't run if hash is invalid
+            const addon = this.manifestsById[addonId];
 
-          groupWithAddon.expanded = true;
-          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-          this.clearSearch();
-          setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+            groupWithAddon.expanded = true;
+            this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+            this.clearSearch();
+            setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+          }
         },
         { capture: false }
       );
@@ -515,7 +470,9 @@ let fuse;
             ? "theme"
             : manifest.tags.includes("community")
               ? "community"
-              : "editor";
+              : manifest.tags.includes("player")
+                ? "player"
+                : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -530,7 +487,7 @@ let fuse;
         return count;
       };
       if (manifest._categories[0] === "theme") {
-        // All themes should have either "editor" or "community" tag
+        // All themes should have either the "editor", "community" or "player" tag
         addCategoryIfTag([
           {
             tag: "editor",
@@ -542,9 +499,15 @@ let fuse;
               tag: "community",
               category: "themesForWebsite",
             },
+          ]) ||
+          addCategoryIfTag([
+            {
+              tag: "player",
+              category: "themesForPlayer",
+            },
           ]);
       } else if (manifest._categories[0] === "editor") {
-        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor", "projectPlayer"]);
+        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor"]);
         if (addedCategories === 0) manifest._categories.push("editorOthers");
       } else if (manifest._categories[0] === "community") {
         const addedCategories = addCategoryIfTag(["profiles", "projectPage", "forums"]);
@@ -606,6 +569,16 @@ let fuse;
       cleanManifests.push(deepClone(manifest));
     }
 
+    for (const { manifest } of manifests) {
+      if (manifest.relatedAddons) {
+        manifest._relatedAddons = manifest.relatedAddons.map(
+          (relatedAddonId) =>
+            manifests.find(({ addonId }) => addonId === relatedAddonId)?.manifest ??
+            console.warn("Invalid related addon:", relatedAddonId, "found on addon manifest of:", manifest._addonId)
+        );
+      }
+    }
+
     // Manifest objects will now be owned by Vue
     for (const { manifest } of manifests) {
       Vue.set(vue.manifestsById, manifest._addonId, manifest);
@@ -624,7 +597,7 @@ let fuse;
       } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
       else return null;
     };
-    const order = [["danger", "beta"], "editor", "community", "popup"];
+    const order = [["danger", "beta"], "editor", "player", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
       group.addonIds = group.addonIds
@@ -674,24 +647,17 @@ let fuse;
     vue.loaded = true;
     setTimeout(() => {
       const hash = window.location.hash;
-      if (hash.startsWith("#addon-")) {
-        const addonId = hash.substring(7);
+      if (location.hash === MORE_SETTINGS_HASH) {
+        vue.openMoreSettings();
+      } else if (hash.startsWith(ADDON_HASH_PREFIX)) {
+        const addonId = hash.substring(ADDON_HASH_PREFIX.length);
         const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
         groupWithAddon.expanded = true;
 
         const addon = vue.manifestsById[addonId];
         vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-        setTimeout(() => {
-          const addonElem = document.getElementById("addon-" + addonId);
-          if (!addonElem) return;
-          addonElem.scrollIntoView();
-          // Browsers sometimes ignore :target for the elements dynamically appended.
-          // Use CSS class to initiate the blink animation.
-          addonElem.classList.add("addon-blink");
-          // 2s (animation length) + 1ms
-          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
-        }, 0);
+        vue.blinkAddon(addonId);
       }
     }, 0);
 
@@ -705,9 +671,16 @@ let fuse;
     if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
       document.querySelector("#searchBox").focus();
-    } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
-      e.preventDefault();
-      vue.searchInputReal = "";
+    } else if (e.key === "Escape") {
+      if (document.activeElement === document.querySelector("#searchBox")) {
+        e.preventDefault();
+        vue.searchInputReal = "";
+      } else if (vue.categoryOpen && vue.smallMode) {
+        vue.categoryOpen = false;
+      } else {
+        vue.closeDropdowns();
+        vue.closePickers();
+      }
     }
   });
 
@@ -716,11 +689,9 @@ let fuse;
     if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
-      vue.switchPath = "../../images/icons/switch.svg";
     } else if (vue.smallMode !== false) {
       vue.smallMode = false;
       vue.categoryOpen = true;
-      vue.switchPath = "../../images/icons/close.svg";
     }
   }
   window.onresize = resize;
@@ -752,5 +723,7 @@ let fuse;
     }
   });
 
-  chrome.runtime.sendMessage("checkPermissions");
+  if (!isIframe) {
+    chrome.runtime.sendMessage("checkPermissions");
+  }
 })();

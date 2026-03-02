@@ -1,7 +1,7 @@
 {
   "confirm-actions/yes": "Yes",
   "confirm-actions/no": "No",
-  "confirm-actions/share": "Are you sure you want to share?",
+  "confirm-actions/share": "Are you ready to share your project?",
   "confirm-actions/unshare": "Are you sure you want to unshare?",
   "confirm-actions/follow": "Are you sure you want to follow this user?",
   "confirm-actions/unfollow": "Are you sure you want to unfollow this user?",

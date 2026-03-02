@@ -1,7 +1,7 @@
 export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const resize = () => {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     if (workspace) window.dispatchEvent(new Event("resize"));
   };
   addon.self.addEventListener("disabled", resize);

@@ -1,6 +1,6 @@
 .mediaRecorderPopup {
   box-sizing: border-box;
-  width: 700px;
+  width: 600px;
   max-height: min(800px, 80vh);
   max-width: 85%;
   margin-top: 12vh;
@@ -13,16 +13,27 @@
   padding: 1.5rem 2.25rem;
 }
 
+.mediaRecorderPopup p.recordOptionDescription {
+  margin-bottom: 1.5rem;
+}
+
+.recordOptionNote {
+  border: 1px solid var(--editorDarkMode-primary, #855cd6);
+  background-color: var(--editorDarkMode-primary-transparent15, #855cd626);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
 .mediaRecorderPopup p {
   font-size: 1rem;
   margin: 0.5rem auto;
 }
 
-.mediaRecorderPopup p :last-child {
+.mediaRecorderPopup p :not(:first-child) {
   margin-left: 1rem;
 }
 
-.mediaRecorderPopup[dir="rtl"] p :last-child {
+.mediaRecorderPopup[dir="rtl"] p :not(:first-child) {
   margin-left: 0;
   margin-right: 1rem;
 }
@@ -34,11 +45,18 @@ p.mediaRecorderPopupOption {
 
 .mediaRecorderPopupOption input[type="checkbox"] {
   height: 1.5rem;
+  margin-right: -0.25rem;
+  accent-color: var(--editorDarkMode-primary, #855cd6);
 }
 
 #recordOptionSecondsInput,
 #recordOptionDelayInput {
-  width: 6rem;
+  width: 5rem;
+  margin-bottom: 0.25rem;
+}
+
+.mediaRecorderSeparator {
+  height: 1.25rem;
 }
 
 .mediaRecorderPopupButtons {

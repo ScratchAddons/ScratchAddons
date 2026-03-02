@@ -1,6 +1,8 @@
 <template>
   <div class="addon-group" v-show="shouldShow" @click="toggle" :class="{  'margin-above': marginAbove }">
-    <img src="../../images/icons/expand.svg" alt="v" :class="{ 'reverted': group.expanded }" />
+    <button class="arrow-button" :title="msg(group.expanded ? 'collapse' : 'expand')">
+      <img src="../../images/icons/expand.svg" :class="{ 'reverted': group.expanded }" draggable="false" />
+    </button>
     {{ group.name }} ({{ shownCount }})
   </div>
 </template>
@@ -16,20 +18,7 @@
     cursor: pointer;
     margin: 0px 11px;
     padding: 0px 10px;
-  }
-
-  .addon-group > img {
-    height: 24px;
-    width: 24px;
-    margin-inline-end: 9px;
-    padding: 4px;
-    border-radius: 4px;
-    filter: var(--content-icon-filter);
-    transition: background-color 0.2s ease;
-  }
-
-  .addon-group:hover > img {
-    background-color: var(--hover-highlight);
+    user-select: none;
   }
 
   .addon-group::after {
@@ -39,5 +28,15 @@
     margin-inline-start: 20px;
     margin-inline-end: 5px;
     flex: 1;
+  }
+
+  @media (max-width: 700px) {
+    .addon-group {
+      padding-inline: 6px;
+    }
+
+    .addon-group > img {
+      margin-inline-end: 5px;
+    }
   }
 </style>

@@ -15,7 +15,7 @@ export default async function ({ addon, console }) {
       const skin = renderer._allSkins[skinId];
       const oldRenderTextBubble = skin._renderTextBubble.bind(skin);
       skin._renderTextBubble = (scale) => {
-        // Based on code from scratch-render/src/TextBubbleSkin.js
+        // Based on code from https://github.com/scratchfoundation/scratch-render/blob/4b9f1de/src/TextBubbleSkin.js
         if (addon.self.disabled || !addon.settings.get("affectStage")) return oldRenderTextBubble(scale);
 
         const BubbleStyle = {

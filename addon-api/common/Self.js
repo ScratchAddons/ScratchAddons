@@ -1,4 +1,5 @@
 import Listenable from "./Listenable.js";
+import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 
 /**
  * Represents information about the addon.
@@ -13,8 +14,7 @@ export default class Self extends Listenable {
     this._addonId = info.id; // In order to receive fireEvent messages from background
     this.id = info.id;
     this._addonObj = addonObj;
-    // catches both Chrome and Chromium
-    this.browser = /Chrom/.test(navigator.userAgent) ? "chrome" : "firefox";
+    this.browser = isFirefox() ? "firefox" : "chrome";
     this.disabled = false;
     this.addEventListener("disabled", () => (this.disabled = true));
     this.addEventListener("reenabled", () => (this.disabled = false));
@@ -26,14 +26,6 @@ export default class Self extends Listenable {
    */
   get dir() {
     return `${this._addonObj._path}addons/${this.id}`;
-  }
-
-  /**
-   * path to libraries directory.
-   * @type {string}
-   */
-  get lib() {
-    return `${this._addonObj._path}libraries`;
   }
 
   /**

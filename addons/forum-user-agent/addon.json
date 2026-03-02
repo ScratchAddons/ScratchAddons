@@ -1,0 +1,24 @@
+{
+  "name": "Modify version information on forums",
+  "description": "Changes the text \"Flash version\" to \"Flash versions\" when clicking the globe icon on the forums.",
+  "info": [
+    {
+      "text": "This is useful for Scratch Addons developers to see if a bug that was reported on the forums was possibly caused by the extension.",
+      "id": "usefulness"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "tags": ["community", "forums"],
+  "versionAdded": "1.13.0",
+  "latestUpdate": {
+    "version": "1.40.0",
+    "temporaryNotice": "This is not new, but it can now be disabled."
+  },
+  "dynamicEnable": false,
+  "enabledByDefault": true
+}

@@ -1,4 +1,4 @@
-.project-favorites {
+.stats /* <-- specificity */ .project-favorites {
   font-size: 0;
   padding-right: 1rem;
 }

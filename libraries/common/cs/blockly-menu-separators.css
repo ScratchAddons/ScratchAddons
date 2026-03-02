@@ -1,0 +1,13 @@
+/* Overrides Blockly's default styles for menu separators
+   to better match Scratch's UI. */
+
+.blocklyContextMenu > .blocklyMenuSeparator {
+  margin: 0;
+  height: 0;
+  background-color: transparent;
+  border-top: 1px solid var(--editorDarkMode-input-divider, hsla(0, 0%, 0%, 0.15));
+}
+
+.blocklyContextMenu > .blocklyMenuSeparator:first-child {
+  display: none;
+}

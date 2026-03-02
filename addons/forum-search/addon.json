@@ -23,7 +23,7 @@
       "matches": ["forums"]
     }
   ],
-  "tags": ["forums", "community"],
+  "tags": ["forums", "community", "beta"],
   "enabledByDefault": false,
   "versionAdded": "1.1.0",
   "libraries": ["scratchblocks"]

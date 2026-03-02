@@ -1,10 +1,11 @@
 name: ➕ New addon
 description: Suggest a new addon!
+type: Enhancement
 labels: ["new addon", "scope: addon", "type: enhancement"]
 body:
   - type: markdown
     attributes:
-      value: | 
+      value: |
         ### Read before creating!
 
         - Avoid creating duplicates! Read the FAQ page and search through issues and discussions before creating one.

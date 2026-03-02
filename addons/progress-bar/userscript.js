@@ -1,3 +1,5 @@
+import { isBadRequest } from "../faster-project-loading/module.js";
+
 export default async function ({ addon, console, msg }) {
   const useTopBar = addon.settings.get("topbar");
 
@@ -17,7 +19,7 @@ export default async function ({ addon, console, msg }) {
   } else {
     barOuter.classList.add("u-progress-bar-integrated");
   }
-  addon.tab.displayNoneWhileDisabled(barOuter, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(barOuter);
 
   // We track the loading phase so that we can detect when the phase changed to reset and move the progress bar accordingly.
   const NONE = "none";
@@ -33,6 +35,9 @@ export default async function ({ addon, console, msg }) {
   let finishedTasks = 0;
 
   let resetTimeout;
+
+  // A boolean indicating if the bug scratch-gui#8805 has happened.
+  let hasBadRequests = false;
 
   function setProgress(progress) {
     if (progress < 0) progress = 0;
@@ -74,6 +79,7 @@ export default async function ({ addon, console, msg }) {
     startObserver();
     totalTasks = 0;
     finishedTasks = 0;
+    hasBadRequests = false;
   }
 
   function updateTasks() {
@@ -173,24 +179,36 @@ export default async function ({ addon, console, msg }) {
   // Scratch uses a Worker to fetch project assets.
   // As the worker may be constructed before we run, we have to patch postMessage to monitor message passing.
   let foundWorker = false;
+
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
     if (!addon.self.disabled && message && typeof message.id === "string" && typeof message.url === "string") {
       // This is a message passed to the worker to start an asset download.
       setLoadingPhase(LOAD_ASSETS);
-      totalTasks++;
-      updateTasks();
 
-      // Add our own message handler once for this worker to monitor when assets have finished loading.
-      if (!foundWorker) {
-        foundWorker = true;
-        this.addEventListener("message", (e) => {
-          const data = e.data;
-          if (Array.isArray(data)) {
-            finishedTasks += data.length;
-            updateTasks();
-          }
-        });
+      function addTask() {
+        ++totalTasks;
+        updateTasks();
+      }
+
+      if (isBadRequest(message)) {
+        addTask();
+        hasBadRequests |= true;
+      } else {
+        // Only add the task if a bad request hasn't already added it
+        if (!hasBadRequests) addTask();
+
+        // Add our own message handler once for this worker to monitor when assets have finished loading.
+        if (!foundWorker) {
+          foundWorker = true;
+          this.addEventListener("message", (e) => {
+            const data = e.data;
+            if (Array.isArray(data)) {
+              finishedTasks += data.length;
+              updateTasks();
+            }
+          });
+        }
       }
     }
 
