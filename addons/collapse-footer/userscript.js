@@ -10,7 +10,7 @@ export default async function ({ addon, console }) {
     }, 200);
   }
 
-  function instantCollapseFooter(event) {
+  function instantCollapseFooter(event, footer) {
     // Only hide if the click is outside the footer
     if (!footer.contains(event.target)) footer.classList.remove("expanded");
   }
