@@ -49,7 +49,7 @@ export default async function ({ addon, console }) {
 
     if (addon.settings.get("mode") === "click") {
       footer.addEventListener("click", expandFooter);
-      document.addEventListener("mousedown", collapseFooter);
+      document.addEventListener("mousedown", instantCollapseFooter);
     } else {
       footer.addEventListener("mouseover", expandFooter);
       footer.addEventListener("mouseout", collapseFooter);
