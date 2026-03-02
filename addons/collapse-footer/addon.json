@@ -99,6 +99,6 @@
   "latestUpdate": {
     "version": "1.45.0",
     "isMajor": false,
-    "newSettings": ["openOnClick"]
+    "newSettings": ["mode"]
   }
 }
