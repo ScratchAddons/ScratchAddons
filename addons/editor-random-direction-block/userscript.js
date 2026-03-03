@@ -11,7 +11,7 @@ export default async function ({ addon, global, cons, msg }) {
   function appendPreviousOption(menuOptions) {
     if (!addon.self.disabled && addon.settings.get("previousCostume")) {
       if (!menuOptions.find((option) => option[1] === "previous costume"))
-        menuOptions.push(["previous costume", "previous costume"]);
+        menuOptions.push([msg("previous costume") || "previous costume", "previous costume"]);
     }
     return menuOptions;
   }
