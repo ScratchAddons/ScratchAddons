@@ -1,6 +1,6 @@
 {
   "name": "Extra block menus",
-  "description": "Adds more options to the \"Point towards ()\" and \"Switch costume to ()\" block. These will work for everyone using the project.",
+  "description": "Adds more options to the \"point towards ()\" and \"switch costume to ()\" block. These will work for everyone using the project.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -8,6 +8,12 @@
     }
   ],
   "versionAdded": "1.35.0",
+  "latestUpdate": {
+    "version": "1.45.0",
+    "temporaryNotice": "New \"previous costume\" option in the \"switch costume to ()\" block.",
+    "newSettings": ["previousCostume", "randomDirection"],
+    "isMajor": true
+  },
   "tags": ["editor", "codeEditor"],
   "settings": [
     {
