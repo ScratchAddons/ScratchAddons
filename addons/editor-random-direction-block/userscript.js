@@ -53,7 +53,7 @@ export default async function ({ addon, global, cons, msg }) {
         }
         const originalMenuGenerator = field.menuGenerator_;
 
-        if (block.tyle === "motion_pointtowards_menu") {
+        if (block.type === "motion_pointtowards_menu") {
           field.menuGenerator_ = function (...args) {
             return appendRandomOption(originalMenuGenerator.call(this, ...args));
           };
