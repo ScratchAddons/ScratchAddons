@@ -12,6 +12,10 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/thecolaber"
+    },
+    {
+      "name": "d016",
+      "link": "https://scratch.mit.edu/users/d016/"
     }
   ],
   "relatedAddons": ["editor-theme3"],
@@ -52,6 +56,13 @@
       "min": 0,
       "default": 20,
       "max": 100
+    },
+    {
+      "name": "Change Saturation",
+      "id": "saturation",
+      "type": "boolean",
+      "description": "Changes the saturation with the brightness.",
+      "default": true
     }
   ],
   "customCssVariables": [
@@ -66,6 +77,20 @@
         "options": {
           "lighter": "1",
           "darker": "-1"
+        }
+      }
+    },
+    {
+      "name": "saturationNumber",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "saturation"
+        },
+        "options": {
+          "true": "1",
+          "false": "0"
         }
       }
     }
