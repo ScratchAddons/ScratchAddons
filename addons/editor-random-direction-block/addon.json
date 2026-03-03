@@ -4,11 +4,16 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"]
+      "matches": [
+        "projects"
+      ]
     }
   ],
   "versionAdded": "1.35.0",
-  "tags": ["editor", "codeEditor"],
+  "tags": [
+    "editor",
+    "codeEditor"
+  ],
   "settings": [
     {
       "name": "Switch costume to (previous costume)",

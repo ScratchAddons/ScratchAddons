@@ -18,18 +18,28 @@
       "link": "https://scratch.mit.edu/users/d016/"
     }
   ],
-  "relatedAddons": ["editor-theme3"],
-  "tags": ["editor", "codeEditor", "featured"],
+  "relatedAddons": [
+    "editor-theme3"
+  ],
+  "tags": [
+    "editor",
+    "codeEditor",
+    "featured"
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"]
+      "matches": [
+        "projects"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects"]
+      "matches": [
+        "projects"
+      ]
     }
   ],
   "settings": [

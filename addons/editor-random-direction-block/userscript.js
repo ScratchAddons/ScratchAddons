@@ -4,10 +4,7 @@ export default async function ({ addon, global, cons, msg }) {
   function appendRandomOption(menuOptions) {
     if (!addon.self.disabled && addon.settings.get("randomDirection")) {
       if (!menuOptions.find((option) => option[1] === "_random_"))
-        menuOptions.push([
-          ScratchBlocks.Msg.MOTION_POINTTOWARDS_RANDOM,
-          "_random_",
-        ]);
+        menuOptions.push([ScratchBlocks.Msg.MOTION_POINTTOWARDS_RANDOM, "_random_"]);
     }
     return menuOptions;
   }
@@ -41,24 +38,16 @@ export default async function ({ addon, global, cons, msg }) {
     const workspace = addon.tab.traps.getWorkspace();
     const flyout = workspace && workspace.getFlyout();
     if (workspace && flyout) {
-      const allBlocks = [
-        ...workspace.getAllBlocks(),
-        ...flyout.getWorkspace().getAllBlocks(),
-      ];
+      const allBlocks = [...workspace.getAllBlocks(), ...flyout.getWorkspace().getAllBlocks()];
       for (const block of allBlocks) {
-        if (
-          block.type !== "motion_pointtowards_menu" ||
-          block.type !== "looks_costume"
-        ) {
+        if (block.type !== "motion_pointtowards_menu" || block.type !== "looks_costume") {
           continue;
         }
         const input = block.inputList[0];
         if (!input) {
           continue;
         }
-        const field = input.fieldRow.find(
-          (i) => i && typeof i.menuGenerator_ === "function",
-        );
+        const field = input.fieldRow.find((i) => i && typeof i.menuGenerator_ === "function");
         if (!field) {
           continue;
         }
@@ -66,15 +55,11 @@ export default async function ({ addon, global, cons, msg }) {
 
         if (block.tyle === "motion_pointtowards_menu") {
           field.menuGenerator_ = function (...args) {
-            return appendRandomOption(
-              originalMenuGenerator.call(this, ...args),
-            );
+            return appendRandomOption(originalMenuGenerator.call(this, ...args));
           };
         } else {
           field.menuGenerator_ = function (...args) {
-            return appendPreviousOption(
-              originalMenuGenerator.call(this, ...args),
-            );
+            return appendPreviousOption(originalMenuGenerator.call(this, ...args));
           };
         }
       }
