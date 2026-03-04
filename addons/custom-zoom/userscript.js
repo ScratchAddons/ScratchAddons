@@ -49,7 +49,7 @@ export default async function ({ addon, console }) {
     }
   }
 
-  if (document.querySelector('[class^="backpack_backpack-container"]')) {
+  if (document.querySelector('[class*="backpack_backpack-container_"]')) {
     window.dispatchEvent(new Event("resize"));
   }
 
