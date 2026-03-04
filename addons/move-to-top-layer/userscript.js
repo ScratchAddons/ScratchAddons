@@ -11,10 +11,10 @@ export default async function ({ addon, console, msg }) {
 
   document.body.addEventListener("click", (e) => {
     if (e.shiftKey && !addon.self.disabled) {
-      const parentDiv = e.target.closest("div[class^='sprite-selector_sprite-wrapper']");
+      const parentDiv = e.target.closest("[class*='sprite-selector_sprite-wrapper_']");
       if (
         parentDiv &&
-        !e.target.closest("div[class^='delete-button_delete-button_']") &&
+        !e.target.closest("[class*='delete-button_delete-button_']") &&
         !e.target.closest(".sa-sprite-properties-info-btn")
       ) {
         const reactInternalKey = addon.tab.traps.getInternalKey(parentDiv);

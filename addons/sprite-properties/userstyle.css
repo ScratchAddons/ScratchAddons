@@ -1,4 +1,4 @@
-[class^="sprite-info_sprite-info_"] {
+[class*="sprite-info_sprite-info_"] {
   height: 0;
   padding: 0 0.75rem;
   overflow: hidden;
@@ -6,19 +6,19 @@
   transition-duration: var(--spriteProperties-transitionDuration);
 }
 
-.sa-hide-sprite-properties [class^="sprite-info_sprite-info_"] {
+.sa-hide-sprite-properties [class*="sprite-info_sprite-info_"] {
   border: none;
 }
 
-[class^="sprite-selector_scroll-wrapper_"],
+[class*="sprite-selector_scroll-wrapper_"],
 /* Also take full height if `sprite-properties` is hiding the properties (specificity) */
-.sa-hide-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
+.sa-hide-sprite-properties [class*="sprite-selector_scroll-wrapper_"] {
   height: 100%;
   transition-property: height;
   transition-duration: var(--spriteProperties-transitionDuration);
 }
 
-.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
+.sa-show-sprite-properties [class*="sprite-info_sprite-info_"] {
   /* The height needs to be known for the animation to work.
      6.5rem + 5px is the exact height of sprite info when
      this addon is enabled:
@@ -32,22 +32,22 @@
   padding: 0.75rem;
   padding-bottom: 0;
 }
-.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
+.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class*="sprite-info_sprite-info_"] {
   /* In wide languages, add in addition to the previous:
      + 2 * 0.625rem * 1.2 (each row's text label now uses vertical space)
      + 2 * 0.25rem (each row has extra padding) */
   height: calc(6.5rem + 5px + 2rem);
 }
-[class^="label_input-group-column_"] {
+[class*="label_input-group-column_"] {
   /* Default line-height: normal is inconsistent across browsers, but above style needs constant line-height. */
   line-height: 1.2;
 }
 
 /* see heights in above selectors */
-.sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
+.sa-show-sprite-properties [class*="sprite-selector_scroll-wrapper_"] {
   height: calc(100% - 6.5rem - 5px);
 }
-.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
+.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class*="sprite-selector_scroll-wrapper_"] {
   height: calc(100% - 6.5rem - 5px - 2rem);
 }
 

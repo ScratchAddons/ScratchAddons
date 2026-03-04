@@ -23,7 +23,7 @@
   margin-bottom: 1rem;
 }
 
-.conflictDialog-actions > button:not([class^="prompt_ok-button_"]):hover {
+.conflictDialog-actions > button:not([class*="prompt_ok-button_"]):hover {
   background-color: var(--editorDarkMode-primary-transparent15, hsla(260, 60%, 60%, 0.15));
 }
 
