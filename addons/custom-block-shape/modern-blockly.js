@@ -4,7 +4,7 @@ export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   if (!Blockly.registry) return;
 
-  const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch");
+  const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch_classic");
   const oldScratchRendererMakeConstants = ScratchRenderer.prototype.makeConstants_;
   ScratchRenderer.prototype.makeConstants_ = function () {
     const constants = oldScratchRendererMakeConstants.call(this);

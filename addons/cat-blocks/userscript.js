@@ -323,7 +323,7 @@ export default async function ({ addon, console, msg }) {
       return hat;
     };
 
-    const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch");
+    const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch_classic");
     const oldMakeDrawer = ScratchRenderer.prototype.makeDrawer_;
     ScratchRenderer.prototype.makeDrawer_ = function (...args) {
       const drawer = oldMakeDrawer.call(this, ...args);
