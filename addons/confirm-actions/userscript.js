@@ -1,11 +1,11 @@
 export default async function ({ addon, console, msg }) {
-  let override = 0;
+  let override = false;
 
   document.addEventListener(
     "click",
     (e) => {
       if (override) {
-        override--;
+        override = false;
         return;
       }
 
@@ -83,17 +83,24 @@ export default async function ({ addon, console, msg }) {
         confirmationTitle = msg("removeproject-title");
         confirmationMessage = msg("removeproject");
       }
-      // Sign out (website)
-      const isSigningOut =
-        e.target.closest(".account-nav > .dropdown > .divider") || e.target.closest("form[action='/accounts/logout/']");
-      if (addon.settings.get("signingout") && isSigningOut) {
-        confirmationTitle = msg("signout-title");
-        confirmationMessage = msg("signout");
-      }
-      // Sign out (editor)
-      if (addon.settings.get("signingout") && e.target.closest("[class*='menu_left'] > [class*='menu_menu-section']")) {
-        confirmationTitle = msg("signout-title");
-        confirmationMessage = msg("signout-editor");
+      let isSigningOutFromEditor = false;
+      // Sign out
+      if (addon.settings.get("signingout")) {
+        if (
+          // Website (3.0)
+          e.target.closest(".account-nav > .dropdown > .divider") ||
+          // Website (2.0)
+          e.target.closest("form[action='/accounts/logout/']")
+        ) {
+          confirmationTitle = msg("signout-title");
+          confirmationMessage = msg("signout");
+        }
+        // Editor
+        if (e.target.closest("[class*='menu_left'] > [class*='menu_menu-section']")) {
+          isSigningOutFromEditor = true;
+          confirmationTitle = msg("signout-title");
+          confirmationMessage = msg("signout-editor");
+        }
       }
 
       // If one of the actions above is being taken, prevent it and show confirmation prompt
@@ -109,15 +116,14 @@ export default async function ({ addon, console, msg }) {
             })
             .then((confirmed) => {
               if (confirmed) {
-                override = 1;
-                if (addon.tab.editorMode === "editor" && confirmationTitle === msg("signout-title")) {
+                override = true;
+                if (isSigningOutFromEditor) {
                   // Discard unsaved changes to suppress the "Leave site?" dialog
                   setProjectChanged(false);
                   document.querySelector("[class*='account-nav_user-info_']:not([class*='menu-bar_active'])")?.click();
-                  // Since there is one additional click required to open the menu and another to click the sign out button, set override to 2 so that both of those clicks are not blocked by the confirmation dialog
-                  override = 2;
                   setTimeout(() => {
                     // Give the menu time to open before clicking the sign out button, otherwise it won't work
+                    override = true;
                     document
                       .querySelector(
                         "ul > li[class*='menu_menu-item'][class*='menu_hoverable'][class*='menu_menu-section']"
