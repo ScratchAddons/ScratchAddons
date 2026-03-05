@@ -51,7 +51,7 @@ export default async function ({ addon, msg, console }) {
     }
     if (ScratchBlocks.registry) {
       // new Blockly: can't use deleteVariable() because it also deletes references
-      // https://github.com/google/blockly/blob/fa4fce5/core/variable_map.ts#L288-L294
+      // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/variable_map.ts#L322-L330
       const variableMap = workspace.getVariableMap().variableMap;
       const variablesOfType = variableMap.get(variable.getType());
       if (variablesOfType && variablesOfType.has(variable.getId())) {
@@ -109,7 +109,7 @@ export default async function ({ addon, msg, console }) {
     if (ScratchBlocks.registry) {
       // new Blockly: we can't call fireNow() because it isn't exported,
       // but we can wait until the events have been fired
-      // see https://github.com/google/blockly/blob/fa4fce5/core/events/utils.ts#L113-L115
+      // see https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/events/utils.ts#L112-L114
       return new Promise((resolve) => {
         requestAnimationFrame(() => {
           setTimeout(resolve, 0);

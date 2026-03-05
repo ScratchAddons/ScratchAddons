@@ -429,7 +429,7 @@ export default class DevTools {
       target.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
       if (next || blockOnly === 2) {
         // wait until the event has been fired
-        // see https://github.com/google/blockly/blob/fa4fce5/core/events/utils.ts#L113-L115
+        // see https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/events/utils.ts#L112-L114
         requestAnimationFrame(() => {
           setTimeout(() => {
             if (!blockly.registry && next) {
