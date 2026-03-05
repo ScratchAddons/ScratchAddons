@@ -1,0 +1,22 @@
+/* :is(#...) increases specificity */
+
+/* Member badge: */
+#profile-avatar ~ img {
+  display: var(--memberStatus-badgeDisplay);
+}
+
+/* Membership label: */
+.membership-label-container {
+  background-color: var(--memberStatus-labelColor);
+  display: var(--memberStatus-labelDisplay);
+}
+
+/* Username color: */
+#app .thumbnail-info:has(.avatar-badge-wrapper) .thumbnail-creator a,
+:is(#pagewrapper .owner, #app .thumbnail-creator):has(.membership-label-container) a,
+#djangobbindex td:has(.membership-label-container) .byuser,
+.project-header:has(.avatar-badge-wrapper) > .title > a,
+.studio-project-bottom:has(.avatar-badge-wrapper) .studio-project-username,
+.postleft:has(.avatar-badge-wrapper) .username {
+  color: var(--memberStatus-usernameColor);
+}
