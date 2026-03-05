@@ -174,8 +174,8 @@ export default async function ({ addon, msg, console }) {
       // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
       // Blockly.onKeyDown_:
       // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
-      // onKeyDown() in Blockly.inject module:
-      // https://github.com/google/blockly/blob/089179b/core/inject.ts#L294
+      // globalShortcutHandler() in Blockly:
+      // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/common.ts#L322
       // KeyboardShortcutsHOC.handleKeyPress:
       // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
       let isTargetInput;
