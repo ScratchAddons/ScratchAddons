@@ -44,11 +44,11 @@ export default async function ({ addon, console, msg }) {
 
   addon.tab.displayNoneWhileDisabled(messages);
   while (true) {
-    let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
+    let nav = await addon.tab.waitForElement("[class*='menu-bar_account-info-group_'] > [href^='/mystuff']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    document.querySelector("[class^='menu-bar_account-info-group']").insertBefore(messages, nav);
+    document.querySelector("[class*='menu-bar_account-info-group_']").insertBefore(messages, nav);
   }
 }

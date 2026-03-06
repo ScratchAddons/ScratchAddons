@@ -49,7 +49,7 @@ export default async function ({ addon, console }) {
    */
   if (Blockly.registry) {
     // new Blockly
-    // https://github.com/google/blockly/blob/e6e57dd/core/dragging/dragger.ts#L99
+    // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/dragging/dragger.ts#L104
     const originalOnDragEnd = Blockly.dragging.Dragger.prototype.onDragEnd;
     Blockly.dragging.Dragger.prototype.onDragEnd = function (...args) {
       if (!addon.self.disabled && addon.settings.get("straighten") && this.draggable.dropAnchor) {

@@ -58,7 +58,7 @@
   display: none !important;
 }
 
-.sa-gamepad-hide-cursor [class^="stage_stage_"] {
+.sa-gamepad-hide-cursor [class*="stage_stage_"] {
   cursor: none;
 }
 

@@ -118,7 +118,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   while (true) {
-    element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
+    element = await addon.tab.waitForElement('[class*="color-picker_swatch-row_"]', {
       markAsSeen: true,
       reduxCondition: (state) =>
         state.scratchGui.editorTab.activeTabIndex === 1 &&
@@ -194,7 +194,7 @@ export default async function ({ addon, console, msg }) {
     saOpacitySlider.appendChild(saOpacitySliderBg);
     saOpacitySlider.appendChild(saOpacityHandle);
     const brightnessSlider = Array.from(element.parentElement.children).filter(
-      (e) => !e.querySelector("div[class*=color-picker_gradient-picker-row]")
+      (e) => !e.querySelector("[class*=color-picker_gradient-picker-row_]")
     )[2];
     brightnessSlider.after(containerWrapper);
   }

@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-[class^="paint-editor_zoom-controls_"] {
+[class*="paint-editor_zoom-controls_"] {
   margin-inline-end: 45px;
 }
 
