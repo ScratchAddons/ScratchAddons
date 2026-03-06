@@ -84,9 +84,8 @@ function paintBlock(info, children, languages) {
           if (child.isInput && (child.shape === "dropdown" || child.shape === "number-dropdown")) {
             if (param.options && child.menu === null) {
               // Match dropdown value against this param's options
-              for (const optionKey in param.options) {
-                const translatedText = lang.dropdowns[optionKey];
-                if (translatedText === child.value) {
+              for (const [optionKey, translatedText] of Object.entries(lang.dropdowns)) {
+                if (translatedText === child.value && param.options[optionKey]) {
                   child.menu = optionKey;
                   break;
                 }
@@ -230,7 +229,7 @@ function parseLines(code, languages) {
   let sawNL;
 
   let define = [];
-  languages.map((lang) => {
+  languages.forEach((lang) => {
     define = define.concat(lang.define);
   });
 

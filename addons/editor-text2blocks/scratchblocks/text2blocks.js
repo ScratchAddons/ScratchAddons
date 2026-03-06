@@ -148,8 +148,7 @@ export class Text2Blocks {
         continue;
       }
 
-      for (const fieldName in block.fields) {
-        const field = block.fields[fieldName];
+      for (const [fieldName, field] of Object.entries(block.fields)) {
         if (field.variableType === "list" || field.variableType === "broadcast_msg" || field.variableType === "") {
           const currentName = field.value;
           if (currentName && variableMappings.has(currentName)) {
@@ -325,7 +324,7 @@ export class Text2Blocks {
               self.errors.push(`Invalid proccode: "${proccode}"`);
             }
             // https://en.scratch-wiki.info/wiki/Undefined_Hat_Block
-            if (/[\x00-\x1F]/.test(proccode)) {
+            if (/[\x00-\x1F]/.test(proccode)) { // eslint-disable-line no-control-regex
               self.errors.push(`Invalid proccode (contains control characters): "${proccode}"`);
             }
 
@@ -632,6 +631,7 @@ export class Text2Blocks {
           topLevel: false,
         });
       } else if (info.opcode === "procedures_prototype") {
+        // No input block needed for procedures_prototype
       } else if (info.type !== BOOLEAN && info.type !== SCRIPT) {
         // Reporter-type round input
         const input_id = self.genId();
@@ -741,7 +741,6 @@ export class Text2Blocks {
       if (opcode === "procedures_prototype") {
         // Regenerate proccode for lookup
         const proccode_parts = [];
-        let argIndex = 0;
         for (const child of block.children) {
           if (child.isLabel) {
             proccode_parts.push(child.value.replace("%", "\\%"));
@@ -757,7 +756,7 @@ export class Text2Blocks {
           block_json.mutation = procDef.prototypeMutation;
 
           // Process inputs using argumentids from procDef
-          argIndex = 0;
+          let argIndex = 0;
           for (const child of block.children) {
             if (child.isBlock) {
               const param_id = processBlock(child, block_id, false);

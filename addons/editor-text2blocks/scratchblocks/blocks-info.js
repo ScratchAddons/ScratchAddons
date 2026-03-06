@@ -2596,8 +2596,7 @@ export const blocks_info = {
 };
 
 const specialOpcodesMap = {};
-for (const opcode in blocks_info) {
-  const block = blocks_info[opcode];
+for (const [opcode, block] of Object.entries(blocks_info)) {
   if (block.id) {
     specialOpcodesMap[block.id] = opcode;
   }

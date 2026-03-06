@@ -54,8 +54,7 @@ export function minifyHash(hash) {
 }
 
 export const blocksById = {};
-for (const opcode in blocks_info) {
-  const def = blocks_info[opcode];
+for (const [opcode, def] of Object.entries(blocks_info)) {
   if (def.skipLocaleBuild) {
     continue;
   }

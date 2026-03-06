@@ -53,8 +53,7 @@ const buildLocale = (code, rawLocale) => {
     aliases: aliases || {},
   };
 
-  for (const opcode in blocks_info) {
-    const command = blocks_info[opcode];
+  for (const [opcode, command] of Object.entries(blocks_info)) {
     if (command.skipLocaleBuild || command.id?.startsWith("scratchblocks:")) {
       continue;
     }
