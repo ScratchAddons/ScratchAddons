@@ -38,8 +38,11 @@ a {
   cursor: pointer;
   text-decoration: none;
 }
-a[href]:not(.nolink) {
+[href] {
   color: var(--blue-text);
+}
+.nolink {
+  color: var(--content-text);
 }
 a:hover {
   text-decoration: underline;
