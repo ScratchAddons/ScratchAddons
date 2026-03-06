@@ -324,7 +324,8 @@ export class Text2Blocks {
               self.errors.push(`Invalid proccode: "${proccode}"`);
             }
             // https://en.scratch-wiki.info/wiki/Undefined_Hat_Block
-            if (/[\x00-\x1F]/.test(proccode)) { // eslint-disable-line no-control-regex
+            if (/[\x00-\x1F]/.test(proccode)) {
+              // eslint-disable-line no-control-regex
               self.errors.push(`Invalid proccode (contains control characters): "${proccode}"`);
             }
 
