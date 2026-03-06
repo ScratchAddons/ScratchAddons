@@ -1351,6 +1351,11 @@ export const blocks_info = {
     category: "sensing",
     params: [],
   },
+  sensing_online: {
+    shape: "boolean",
+    category: "sensing",
+    params: [],
+  },
   sensing_username: {
     shape: "reporter",
     category: "sensing",
