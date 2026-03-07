@@ -88,7 +88,8 @@ function moveResizeButtons(addon, distance) {
   if (document.querySelector(".blocklyToolboxCategoryGroup")) {
     // new Blockly
     const workspace = addon.tab.traps.getWorkspace();
-    workspace.zoomControls_.MARGIN_VERTICAL = 20 + distance;
+    const zoomControls = workspace.getComponentManager().getComponent("zoomControls");
+    zoomControls.MARGIN_VERTICAL = 20 + distance;
   } else {
     resizeElements[0].setAttribute("y", (44 - distance).toString());
     resizeElements[1].setAttribute("y", (0 - distance).toString());
