@@ -38,6 +38,15 @@ export default async function ({ addon }) {
       return true;
     }
 
-    return originalCheckType.call(this, otherConnection);
+    // B. 修復顯示報錯邏輯：處理原本會崩潰的 String/Boolean 衝突
+    const result = originalCheckType.call(this, otherConnection);
+    if (!result) {
+      const isThisBool = this.check_ && this.check_.includes("Boolean");
+      const isOtherBool = otherConnection.check_ && otherConnection.check_.includes("Boolean");
+      if (isThisBool || isOtherBool) {
+        return true;
+      }
+    }
+    return result;
   };
 }
