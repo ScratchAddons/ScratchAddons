@@ -296,11 +296,11 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateImageAlt_v1_44": {
-    "message": "Screenshot of the \"recolor custom blocks\" addon in action"
+  "extensionUpdateImageAlt_v1_45": {
+    "message": "Screenshot of dragging a costume in the costume list"
   },
-  "extensionUpdateInfo1_v1_44": {
-    "message": "The new \"recolor custom blocks\" addon adds an option to choose a custom color when creating a block. Go to $1 to enable it.",
+  "extensionUpdateInfo1_v1_45": {
+    "message": "The \"Improved dragging of costumes and sounds\" addon, new and enabled by default, makes the costume and sound lists scroll automatically when reordering items. Check it out in $1.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
@@ -309,8 +309,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_44": {
-    "message": "This update also adds timing blocks and line-by-line profiling to the \"debugger\" addon."
+  "extensionUpdateInfo2_v1_45": {
+    "message": "This update also adds an optional confirmation for signing out of the Scratch website, in the \"Confirmations\" addon."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
