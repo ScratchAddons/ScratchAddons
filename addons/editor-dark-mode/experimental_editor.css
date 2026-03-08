@@ -25,14 +25,10 @@
 /* Menu bar background */
 [class*="menu-bar_menu-bar_"],
 [class*="menu_menu_"],
-[class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-track,
 [class*="modal_header_"],
 [class*="webgl-modal_illustration"] {
   background-color: var(--editorDarkMode-menuBar);
   color: var(--editorDarkMode-menuBar-text);
-}
-[class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-thumb {
-  border-color: var(--editorDarkMode-menuBar);
 }
 [class*="menu-bar_menu-bar-item_"],
 [class*="input_input-form_"][class*="project-title-input_title-field_"],
@@ -91,9 +87,11 @@
 [class*="menu-bar_menu-bar-item_"][class*="menu-bar_hoverable_"]:hover,
 [class*="menu_menu-item_"][class*="menu_active_"],
 [class*="menu_menu-item_"]:hover,
-[class*="menu_menu-item_"][class*="menu_expanded_"],
-[class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-thumb {
+[class*="menu_menu-item_"][class*="menu_expanded_"] {
   background-color: var(--editorDarkMode-menuBar-border);
+}
+[class*="menu_submenu_"] > [class*="menu_menu_"] {
+  scrollbar-color: var(--editorDarkMode-menuBar-border) var(--editorDarkMode-menuBar);
 }
 
 /* Active tab background */
