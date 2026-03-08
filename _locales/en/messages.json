@@ -300,7 +300,7 @@
     "message": "Screenshot of dragging a costume in the costume list"
   },
   "extensionUpdateInfo1_v1_45": {
-    "message": "The \"Improved dragging of costumes and sounds\" addon, new and enabled by default, makes the costume and sound lists scroll automatically when reordering items. Check it out in $1.",
+    "message": "The new \"Improved dragging of costumes and sounds\" addon, which is enabled by default, makes the costume and sound lists scroll automatically when reordering items. Check it out in $1.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
