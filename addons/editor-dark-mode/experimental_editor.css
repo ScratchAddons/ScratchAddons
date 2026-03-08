@@ -736,3 +736,10 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
   /* The <object> gets a white background if color-scheme is dark. */
   color-scheme: light;
 }
+
+[class*="react-tabs_react-tabs__tab_"]:focus {
+  outline: revert;
+}
+[class*="react-tabs_react-tabs__tab_"]:focus::after {
+  display: none;
+}
