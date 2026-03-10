@@ -319,6 +319,9 @@
   "blogPost": {
     "message": "blog post"
   },
+  "watchUpdateVideo": {
+    "message": "Watch update video"
+  },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
