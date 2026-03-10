@@ -113,6 +113,7 @@
 #comments .highlighted {
   background: var(--darkWww-blue-20, rgba(77, 151, 255, 0.1));
   color: var(--darkWww-box-text, #575e75);
+  text-shadow: none;
   box-shadow: 0 0 0 8px var(--darkWww-blue-20, rgba(77, 151, 255, 0.1));
   border-radius: 8px;
 }
