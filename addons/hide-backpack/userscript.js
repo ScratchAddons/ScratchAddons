@@ -1,4 +1,13 @@
+let RESIZE_BUTTON_OFFSET;
+
 export default async function ({ addon, console }) {
+  if (document.querySelector(".blocklyToolboxCategoryGroup")) {
+    // new Blockly
+    RESIZE_BUTTON_OFFSET = 31;
+  } else {
+    RESIZE_BUTTON_OFFSET = 36;
+  }
+
   let originalBackpack;
 
   // Event listeners that add dynamic enable/disable
@@ -32,7 +41,7 @@ export default async function ({ addon, console }) {
     originalBackpack.style.display = "none";
     let backpackEl = document.querySelector(".sa-backpack-button");
     if (backpackEl) {
-      moveResizeButtons(addon, 36);
+      moveResizeButtons(addon, RESIZE_BUTTON_OFFSET);
     } else {
       createBackpackButton(addon);
     }
@@ -64,7 +73,7 @@ function createBackpackButton(addon) {
       draggable: false,
     })
   );
-  moveResizeButtons(addon, 36);
+  moveResizeButtons(addon, RESIZE_BUTTON_OFFSET);
 
   document.querySelector("[class*='gui_tabs_']").appendChild(backpackButton);
 }
