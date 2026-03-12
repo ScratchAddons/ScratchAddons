@@ -631,10 +631,8 @@ const showBanner = () => {
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
-  //
-  const _uiLanguage = chrome.i18n.getUILanguage();
-  const _localeSlash = _uiLanguage.startsWith("en") ? "" : `${_uiLanguage.split("-")[0]}/`;
-  //
+  const uiLanguage = chrome.i18n.getUILanguage();
+  const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     className: "sa-notification-subtitle",
@@ -659,8 +657,6 @@ const showBanner = () => {
     textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_45"),
   });
   const notifFooter = document.createElement("span");
-  const uiLanguage = chrome.i18n.getUILanguage();
-  const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
   const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
     chrome.runtime.getManifest().version
   }`;
