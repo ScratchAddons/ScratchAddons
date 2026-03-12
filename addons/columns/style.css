@@ -111,12 +111,6 @@
   font-size: 0.65rem;
 }
 
-[class*="extension-button_radiate_"]::before,
-[class*="extension-button_radiate_"]::after {
-  border-radius: 0.25rem;
-  clip-path: none;
-}
-
 /* hide-flyout compatibility */
 
 [class*="gui_tabs_"] {
