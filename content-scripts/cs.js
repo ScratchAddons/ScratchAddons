@@ -656,7 +656,24 @@ const showBanner = () => {
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_45"),
   });
-  const notifFooter = document.createElement("span");
+  const notifFooter = Object.assign(document.createElement("span"), {
+    className: "sa-notification-footer",
+  });
+  const videoButton = Object.assign(document.createElement("a"), {
+    className: "sa-notification-video-button",
+    href: "https://www.youtube.com/@ScratchAddons",
+    target: "_blank",
+    textContent: chrome.i18n.getMessage("watchUpdateVideo"),
+  });
+  videoButton.insertBefore(
+    Object.assign(document.createElement("img"), {
+      alt: "",
+      src: chrome.runtime.getURL("/images/cs/play.svg"),
+      draggable: false,
+    }),
+    videoButton.firstChild
+  );
+  const notifFooterLinks = document.createElement("span");
   const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
     chrome.runtime.getManifest().version
   }`;
@@ -681,13 +698,16 @@ const showBanner = () => {
     className: "sa-notification-legal",
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
-  notifFooter.appendChild(notifFooterChangelog);
-  notifFooter.appendChild(document.createTextNode(" | "));
-  notifFooter.appendChild(notifFooterFeedback);
-  notifFooter.appendChild(document.createTextNode(" | "));
-  notifFooter.appendChild(notifFooterTranslate);
-  notifFooter.appendChild(makeBr());
-  notifFooter.appendChild(notifFooterLegal);
+  notifFooterLinks.appendChild(notifFooterChangelog);
+  notifFooterLinks.appendChild(document.createTextNode(" | "));
+  notifFooterLinks.appendChild(notifFooterFeedback);
+  notifFooterLinks.appendChild(document.createTextNode(" | "));
+  notifFooterLinks.appendChild(notifFooterTranslate);
+  notifFooterLinks.appendChild(makeBr());
+  notifFooterLinks.appendChild(notifFooterLegal);
+
+  notifFooter.appendChild(videoButton);
+  notifFooter.appendChild(notifFooterLinks);
 
   notifText.appendChild(notifClose);
   notifText.appendChild(notifTitle);
@@ -775,6 +795,35 @@ const showBanner = () => {
           color: #1aa0d8;
           font-weight: normal;
           text-decoration: underline;
+        }
+
+        #sa-notification-text .sa-notification-footer {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 16px;
+        }
+
+        #sa-notification-text .sa-notification-video-button {
+          display: flex;
+          align-items: center;
+          padding: 7px 12px;
+          background-color: #175ef8;
+          border: 1px solid black;
+          border-radius: 4px;
+          color: white;
+          text-decoration: none;
+          transition: 0.2s ease;
+        }
+
+        #sa-notification-text .sa-notification-video-button:hover {
+          border-color: #0e44b8;
+        }
+
+        .sa-notification-video-button > img {
+          margin-inline-end: 8px;
+          width: 16px;
+          height: 16px;
         }
 
         .sa-notification-legal {
