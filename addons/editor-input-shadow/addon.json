@@ -1,0 +1,62 @@
+{
+  "name": "all Detache",
+  "description": "Adds a \"Toggle\" button to the context menu for separating and joining input slots.",
+  "tags": ["danger", "editor", "codeEditor", "beta"],
+  "info": [
+    {
+      "type": "notice",
+      "text": "Using blocks not explicitly allowed by Scratch may risk project unavailability in future versions, project deletion, or account bans.\nScratch Addons is not responsible for this; please use this feature with caution.",
+      "id": "warning"
+    }
+  ],
+  "credits": [
+    {
+      "id": "entropy_lover",
+      "name": "entropy_lover_nagnto",
+      "link": "https://scratch.mit.edu/users/entropy_lover/"
+    },
+    {
+      "id": "GarboMuffin",
+      "name": "GarboMuffin",
+      "note": "Reference Their Block switching code"
+    },
+    {
+      "id": "pufferfish101007",
+      "name": "pufferfish101007",
+      "note": "Reference Their Block switching code"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.45.0",
+  "settings": [
+    {
+      "id": "spawn_range_x",
+      "name": "Block Spawn X Range",
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 200
+    },
+    {
+      "id": "spawn_range_y",
+      "name": "Block Spawn Y Range",
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 200
+    },
+    {
+      "id": "full_shadow_lock",
+      "name": "Enable Recursive Shadow/Unshadow Functionality",
+      "type": "boolean",
+      "default": true
+    }
+  ]
+}
