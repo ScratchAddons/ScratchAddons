@@ -1,0 +1,23 @@
+{
+  "name": "Scratchblocks Text to Blocks",
+  "description": "Convert Scratchblocks-formatted text into Scratch blocks in the editor.",
+  "tags": ["editor", "codeEditor"],
+  "credits": [
+    {
+      "name": "LuYifei2011",
+      "link": "https://github.com/LuYifei2011"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [{ "url": "style.css", "matches": ["projects"] }],
+  "versionAdded": "1.45.0",
+  "enabledByDefault": false,
+  "libraries": ["scratchblocks"]
+}

@@ -90,5 +90,10 @@
   },
   "blockly": {
     "license": "Apache-2.0"
+  },
+  "scratchblocks": {
+    "license": "MIT",
+    "year": "2013-2021",
+    "fullname": "Tim Radvan"
   }
 }
