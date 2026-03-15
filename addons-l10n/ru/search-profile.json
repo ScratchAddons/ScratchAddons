@@ -1,1 +1,1 @@
-{"search-profile/profile":"Профиль","search-profile/@description":"Позволяет перейти к профилю пользователя при поиске его имени пользователя."}
+{"search-profile/profile":"Профиль","search-profile/invalid-username":"\"{username}\" — недействительное имя пользователя или аккаунт не существует","search-profile/@name":"Поиск по имени пользователя","search-profile/@description":"Позволяет перейти к профилю пользователя при поиске его имени пользователя."}
