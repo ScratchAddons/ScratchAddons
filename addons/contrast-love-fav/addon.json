@@ -1,0 +1,21 @@
+{
+  "name": "High contrast love/favorite icons",
+  "description": "Increases the contrast between the loved/favorited icons and the background to make them easier to see.",
+  "tags": ["community", "projectPage"],
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.35.0",
+  "enabledByDefault": false
+}
