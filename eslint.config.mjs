@@ -51,6 +51,7 @@ export default [
       "default-case-last": 2,
       eqeqeq: 2,
       "guard-for-in": 2,
+      curly: [2, "multi-line"],
 
       "no-empty": [
         2,
