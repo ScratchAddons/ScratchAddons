@@ -1,0 +1,187 @@
+{
+  "name": "Customizable membership decorations",
+  "description": "Lets you customize the appearance of the membership status marks and avatar frames of all users.",
+  "info": [
+    {
+      "id": "your-settings",
+      "text": "Tip: You can change what decorations your own profile displays to other users in your Scratch account settings."
+    }
+  ],
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "general.css",
+      "matches": ["isNotScratchWWW", "scratchWWWNoProject", "projects"]
+    },
+    {
+      "url": "compact-labels.css",
+      "matches": ["isNotScratchWWW", "scratchWWWNoProject"],
+      "if": {
+        "settings": { "labels": "compact" }
+      }
+    },
+    {
+      "url": "hide-ears.css",
+      "matches": ["isNotScratchWWW", "scratchWWWNoProject", "projects"],
+      "if": {
+        "settings": { "frames": false }
+      }
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "badgeDisplay",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "badge"
+        },
+        "options": {
+          "false": "none"
+        }
+      }
+    },
+    {
+      "name": "labelDisplay",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "labels"
+        },
+        "options": {
+          "hide": "none"
+        },
+        "default": "inline-flex"
+      }
+    },
+    {
+      "name": "labelColor",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "color-targets"
+        },
+        "options": {
+          "labels": "var(--memberStatus-membershipColor)",
+          "usernames": "var(--memberStatus-membershipColor)"
+        },
+        "default": "var(--darkWww-button-scratchr2, #855cd6)"
+      }
+    },
+    {
+      "name": "usernameColor",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "color-targets"
+        },
+        "options": {
+          "usernames": "color-mix(in srgb, 100% var(--memberStatus-membershipColor), 10% #000)"
+        },
+        "default": "currentColor"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show avatar frames",
+      "id": "frames",
+      "description": "Changes the visibility of the cat-ear frame around the profile pictures of members who choose to show it.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show membership badges",
+      "id": "badge",
+      "description": "Changes the visibility of the Scratch Cat badge on the profile pages of members who choose to show it.",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Membership labels",
+      "id": "labels",
+      "description": "Changes the small \"Member\" status labels placed next to members' usernames.",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "hide",
+          "name": "Hidden"
+        },
+        {
+          "id": "compact",
+          "name": "Compact"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "name": "Colored elements",
+      "id": "color-targets",
+      "description": "Change the color of members' status labels or usernames.",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "labels",
+          "name": "Labels"
+        },
+        {
+          "id": "usernames",
+          "name": "Labels and usernames"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "name": "Color",
+      "id": "membership-color",
+      "type": "color",
+      "default": "#faa51d",
+      "if": {
+        "settings": { "color-targets": ["labels", "usernames"] }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hide all decorations",
+      "id": "hide-all",
+      "values": {
+        "frames": false,
+        "badge": false,
+        "labels": "hide",
+        "color-targets": "none"
+      }
+    },
+    {
+      "name": "Colors instead of labels",
+      "id": "colored-usernames",
+      "values": {
+        "labels": "hide",
+        "color-targets": "usernames"
+      }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.45.0",
+  "tags": ["community", "theme", "featured", "beta"]
+}
