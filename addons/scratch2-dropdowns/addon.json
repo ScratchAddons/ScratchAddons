@@ -1,0 +1,40 @@
+{
+  "name": "Compact dropdowns",
+  "description": "Removes padding and animations on block dropdowns to make them look like Scratch 2.0's.",
+  "tags": ["editor", "theme"],
+  "relatedAddons": ["scratch3to2", "editor-compact", "editor-searchable-dropdowns"],
+  "versionAdded": "1.44.3",
+  "credits": [
+    {
+      "name": "Coshnaut",
+      "link": "https://scratch.mit.edu/users/coshnaut/"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Enable shadows",
+      "id": "shadow",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Enable check-marks",
+      "id": "checkmark",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "scroll.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "dropdowns.css",
+      "matches": ["projects"]
+    }
+  ]
+}
