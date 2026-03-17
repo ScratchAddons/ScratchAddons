@@ -3,9 +3,8 @@ body {
   overflow: hidden;
 }
 body {
-  width: var(--width, 400px);
-  height: var(--height, 599px);
-  overflow: hidden;
+  width: 400px;
+  height: 600px;
   margin: 0;
   background-color: var(--page-background);
   font-family: "Roboto", sans-serif;
