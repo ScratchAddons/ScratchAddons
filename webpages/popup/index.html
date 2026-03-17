@@ -30,9 +30,7 @@
         <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" draggable="false" />
       </a>
     </div>
-    <div id="popups">
-      <div id="popup-bar" v-cloak>
-        <div id="popup-chooser">
+        <div id="popup-bar" v-cloak>
           <button
             v-for="popup of popups"
             class="popup-name"
@@ -51,7 +49,6 @@
             </span>
           </button>
         </div>
-      </div>
       <iframe
         v-cloak
         v-for="popup in popupsWithIframes"
@@ -59,6 +56,5 @@
         :src="iframeSrc(popup._addonId)"
         :key="popup._addonId"
       ></iframe>
-    </div>
   </body>
 </html>
