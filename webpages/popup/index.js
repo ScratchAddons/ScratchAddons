@@ -18,10 +18,12 @@ window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
 const vue = new Vue({
   el: "body",
-  data: {
-    popups: [],
-    currentPopup: null,
-    popupsWithIframes: [],
+  data() {
+    return {
+      popups: [],
+      currentPopup: null,
+      popupsWithIframes: [],
+    };
   },
   methods: {
     msg(message, ...params) {
