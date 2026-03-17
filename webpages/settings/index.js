@@ -673,7 +673,7 @@ let fuse;
       document.querySelector("#searchBox").focus();
     } else if (e.key === "Escape") {
       if (document.activeElement === document.querySelector("#searchBox")) {
-        e.preventDefault();
+        if (vue.searchInputReal.length) e.preventDefault();
         vue.searchInputReal = "";
       } else if (vue.categoryOpen && vue.smallMode) {
         vue.categoryOpen = false;
