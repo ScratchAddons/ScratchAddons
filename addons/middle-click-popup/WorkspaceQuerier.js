@@ -1274,13 +1274,9 @@ export default class WorkspaceQuerier {
     function searchToken(token) {
       const subtokens = token.type.getSubtokens(token, query);
       if (subtokens) {
-        for (const subtoken of subtokens) {
-          searchToken(subtoken);
-        }
+        for (const subtoken of subtokens) searchToken(subtoken);
       } else if (!(token.type instanceof TokenTypeStringLiteral) && token.isProper && !token.isTruncated) {
-        for (let i = token.start; i < token.end; i++) {
-          canBeString[i] = false;
-        }
+        for (let i = token.start; i < token.end; i++) canBeString[i] = false;
       }
     }
     for (const result of results) searchToken(result.token);
