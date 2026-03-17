@@ -29,7 +29,7 @@ export default async function ({ addon, console, msg }) {
     // "Change featured project" button
     const realChangeButton = document.querySelector("#featured-project [data-control='edit']");
     if (realChangeButton) {
-      featuredProjectName.insertAdjacentElement("afterend", document.createElement("div")).className = "buttons";
+      headerText.insertAdjacentElement("afterend", document.createElement("div")).className = "buttons";
       const betterChangeButton = boxHead.querySelector(".buttons").appendChild(document.createElement("button"));
       betterChangeButton.innerText = realChangeButton.innerText;
       betterChangeButton.addEventListener("click", async function () {
