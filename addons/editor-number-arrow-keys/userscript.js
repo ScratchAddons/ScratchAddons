@@ -79,8 +79,7 @@ export default async function ({ addon }) {
     if (el.classList.contains("blocklyHtmlInput")) {
       // Block inputs do not have a type attribute
       return true;
-    }
-    else if (el.matches("[class*=mediaRecorderPopupContent]" + inputSelector)) {
+    } else if (el.matches("[class*=mediaRecorderPopupContent]" + inputSelector)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
     } else if (el.matches("[class*=input_input-form_]")) {
