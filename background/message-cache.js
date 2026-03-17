@@ -102,10 +102,11 @@ export function handleBadgeAlarm() {
       const badgeAddonEnabled = scratchAddons.localState.addonsEnabled["msg-count-badge"];
       if (badgeAddonEnabled) {
         calculateBadgeAlarmInterval().then((newPeriod) => {
-          if (!alarmExists || currentAlarm.periodInMinutes !== newPeriod)
+          if (!alarmExists || currentAlarm.periodInMinutes !== newPeriod) {
             chrome.alarms.create(BADGE_ALARM_NAME, {
               periodInMinutes: newPeriod,
             });
+          }
         });
       }
       if (!badgeAddonEnabled && alarmExists) {

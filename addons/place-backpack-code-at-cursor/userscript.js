@@ -16,8 +16,9 @@ export default async function ({ addon, console }) {
     const workspace = addon.tab.traps.getWorkspace();
 
     // Fall back to original function if: addon is disabled or target ID mismatches or Workspace/Redux are unavailable
-    if (addon.self.disabled || vm.editingTarget.id !== targetId || !redux.state?.scratchGui || !workspace)
+    if (addon.self.disabled || vm.editingTarget.id !== targetId || !redux.state?.scratchGui || !workspace) {
       return originalShareBlocksToTarget.apply(this, arguments);
+    }
 
     const BLOCKS_DEFAULT_SCALE = 0.675; // would be better if we could get this from lib/layout-constants.js
     const { targets } = redux.state.scratchGui.workspaceMetrics;

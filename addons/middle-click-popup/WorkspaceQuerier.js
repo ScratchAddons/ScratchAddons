@@ -263,13 +263,14 @@ class TokenProviderGroup extends TokenProvider {
    * @param {boolean} legal Are the results of this provider legal in the current context?
    */
   pushProviders(providers, legal = true) {
-    if (!this.hasCacheable)
+    if (!this.hasCacheable) {
       for (const provider of providers) {
         if (provider.shouldCache) {
           this.hasCacheable = true;
           break;
         }
       }
+    }
     if (legal) this.providers.push(...providers);
     else this.illegalProviders.push(...providers);
   }
@@ -816,8 +817,9 @@ class TokenTypeBlock extends TokenType {
         }
 
         if (wordEnd === i) {
-          if (hasDefiningFeature)
+          if (hasDefiningFeature) {
             yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, { isProper: false });
+          }
           break;
         } else {
           const word = query.lowercase.substring(i, wordEnd);
@@ -838,8 +840,9 @@ class TokenTypeBlock extends TokenType {
           hasDefiningFeature ||= !TokenTypeNumberLiteral.isValidNumber(word);
 
           if (query.skipIgnorable(wordEnd) < query.length) {
-            if (hasDefiningFeature)
+            if (hasDefiningFeature) {
               yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, { isProper: false });
+            }
           }
           i = wordEnd;
         }
@@ -911,8 +914,9 @@ class TokenTypeBlock extends TokenType {
           token.precedence > this.block.precedence &&
           // See https://github.com/ScratchAddons/ScratchAddons/issues/5981
           (tokenProviderIdx === 0 || !(token.type instanceof TokenTypeBlock) || token.type.block.id !== "operator_not")
-        )
+        ) {
           continue;
+        }
         /**
          * This check eliminates thousands of results by making sure blocks with equal precedence
          * can only contain themselves as their own first input. Without this, the query '1 + 2 + 3'
@@ -1001,8 +1005,9 @@ class TokenTypeBlock extends TokenType {
             (!endOnly || nextStart >= query.length) &&
             subtokenText.length !== 0 &&
             QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1
-          )
+          ) {
             text += " ";
+          }
         }
       }
     }
@@ -1268,11 +1273,11 @@ export default class WorkspaceQuerier {
 
     function searchToken(token) {
       const subtokens = token.type.getSubtokens(token, query);
-      if (subtokens) for (const subtoken of subtokens) searchToken(subtoken);
-      else if (!(token.type instanceof TokenTypeStringLiteral) && token.isProper && !token.isTruncated)
-        for (let i = token.start; i < token.end; i++) {
-          canBeString[i] = false;
-        }
+      if (subtokens) {
+        for (const subtoken of subtokens) { searchToken(subtoken); }
+      } else if (!(token.type instanceof TokenTypeStringLiteral) && token.isProper && !token.isTruncated) {
+        for (let i = token.start; i < token.end; i++) { canBeString[i] = false; }
+      }
     }
     for (const result of results) searchToken(result.token);
 
@@ -1286,7 +1291,9 @@ export default class WorkspaceQuerier {
       return true;
     }
     let validResults = [];
-    for (const result of results) if (checkValidity(result.token)) validResults.push(result);
+    for (const result of results) {
+      if (checkValidity(result.token)) validResults.push(result);
+    }
 
     validResults = validResults.sort((a, b) => {
       const aLengths = a.getLengths();

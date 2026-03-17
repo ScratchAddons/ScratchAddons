@@ -138,19 +138,26 @@ export const updateSelectTool = (paper, tool) => {
       const toPoints = snapPoints.to;
 
       const configDefFn = (pointDef) => {
-        if (!pointDef.clamp)
+        if (!pointDef.clamp) {
           pointDef.clamp = {
             min: -Infinity,
             max: Infinity,
           };
-        if (pointDef.type === "point") return () => pointDef.value;
-        if (pointDef.type === "xcoord" || pointDef.type === "itemSideVert")
+        }
+        if (pointDef.type === "point") {
+          return () => pointDef.value;
+        }
+        if (pointDef.type === "xcoord" || pointDef.type === "itemSideVert") {
           return (point) =>
             new paper.Point(pointDef.value, Math.min(Math.max(point.y, pointDef.clamp.min), pointDef.clamp.max));
-        if (pointDef.type === "ycoord" || pointDef.type === "itemSideHoriz")
+        }
+        if (pointDef.type === "ycoord" || pointDef.type === "itemSideHoriz") {
           return (point) =>
             new paper.Point(Math.min(Math.max(point.x, pointDef.clamp.min), pointDef.clamp.max), pointDef.value);
-        if (pointDef.type === "generator") return pointDef.value;
+        }
+        if (pointDef.type === "generator") {
+          return pointDef.value;
+        }
       };
       const generateSnapPointsFor = (point) =>
         Object.fromEntries(

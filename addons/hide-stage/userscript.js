@@ -26,9 +26,11 @@ export default async function ({ addon, console, msg }) {
       const clickedButton = e.target.closest("button");
       if (clickedButton) clickedButton.setAttribute("aria-pressed", true);
     } else if (addon.tab.redux.state) {
-      if (addon.tab.redux.state.scratchGui.stageSize.stageSize === "small")
+      if (addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
         smallStageButton.setAttribute("aria-pressed", true);
-      else largeStageButton.setAttribute("aria-pressed", true);
+      } else {
+        largeStageButton.setAttribute("aria-pressed", true);
+      }
     }
     window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
   }

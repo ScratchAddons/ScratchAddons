@@ -24,9 +24,11 @@ export default async function ({ addon, console, msg }) {
   // https://github.com/scratchfoundation/scratch-blocks/blob/2884131/src/block_reporting.ts
   function reportValue(id, value) {
     let workspace;
-    if (ScratchBlocks.registry)
+    if (ScratchBlocks.registry) {
       workspace = addon.tab.traps.getWorkspace(); // new Blockly
-    else workspace = this;
+    } else {
+      workspace = this;
+    }
 
     let block = workspace.getBlockById(id) || workspace.getFlyout()?.getWorkspace().getBlockById(id);
     if (!block) {

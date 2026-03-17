@@ -159,7 +159,7 @@ export default async function ({ template }) {
               this.$root.addonToEnable = this.addon;
               document.querySelector(".popup").style.animation = "dropDown 0.35s 1";
               this.$root.showPopupModal = true;
-            } else
+            } else {
               chrome.permissions.request(
                 {
                   permissions: requiredPermissions,
@@ -171,6 +171,7 @@ export default async function ({ template }) {
                   }
                 }
               );
+            }
           } else toggle();
         } else toggle();
       },

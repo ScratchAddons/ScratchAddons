@@ -36,8 +36,9 @@ async function commentLoader(
 }
 
 export default async function ({ addon, console }) {
-  if (window.location.pathname.split("/")[1] === "users" && addon.settings.get("profileCommentScroll"))
+  if (window.location.pathname.split("/")[1] === "users" && addon.settings.get("profileCommentScroll")) {
     commentLoader(addon, "#content", "[data-control=load-more]");
+  }
   const isStudio = window.location.pathname.split("/")[1] === "studios";
   const isStudioComments = isStudio && addon.settings.get("studioScroll");
   const isProjectComments =
@@ -60,11 +61,13 @@ export default async function ({ addon, console }) {
       document.addEventListener("click", listener, true);
     } else run();
   }
-  if (window.location.pathname.split("/")[1] === "messages" && addon.settings.get("messageScroll"))
+  if (window.location.pathname.split("/")[1] === "messages" && addon.settings.get("messageScroll")) {
     commentLoader(addon, "#view", "#view > div > div.messages-details.inner > section.messages-social > button");
-  if (isStudio && addon.settings.get("studioProjectScroll"))
+  }
+  if (isStudio && addon.settings.get("studioProjectScroll")) {
     commentLoader(addon, "#view", ".studio-projects-grid .studio-grid-load-more > button", "");
-  if (isStudio && addon.settings.get("studioBrowseProjectScroll"))
+  }
+  if (isStudio && addon.settings.get("studioBrowseProjectScroll")) {
     commentLoader(
       addon,
       ".user-projects-modal-grid",
@@ -72,10 +75,13 @@ export default async function ({ addon, console }) {
       "",
       { yProvider: ".user-projects-modal-content" }
     );
-  if (isStudio && addon.settings.get("studioCuratorScroll"))
+  }
+  if (isStudio && addon.settings.get("studioCuratorScroll")) {
     commentLoader(addon, "#view", "div > .studio-members:last-child .studio-grid-load-more > button", "curators"); // Only scrolling curators for now
-  if (isStudio && addon.settings.get("studioActivityScroll"))
+  }
+  if (isStudio && addon.settings.get("studioActivityScroll")) {
     commentLoader(addon, "#view", ".studio-activity .studio-grid-load-more > button", "activity");
+  }
   if (isSearchOrExplore && addon.settings.get("searchExploreScroll")) {
     import("./search-explore-module.js").then((m) => {
       const canClick = () => !m.currentlyFetchingProjects();

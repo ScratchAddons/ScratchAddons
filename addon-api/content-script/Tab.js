@@ -51,12 +51,13 @@ export default class Tab extends Listenable {
    */
   get clientVersion() {
     if (location.origin !== "https://scratch.mit.edu") return "scratch-www"; // scratchr2 cannot be self-hosted
-    if (!this._clientVersion)
+    if (!this._clientVersion) {
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
           ? "scratchr2"
           : null;
+    }
     return this._clientVersion;
   }
   /**
@@ -329,8 +330,9 @@ export default class Tab extends Listenable {
       return "";
     }
 
-    if (!this._calledScratchClassReady)
+    if (!this._calledScratchClassReady) {
       throw new Error("Wait until addon.tab.scratchClassReady() resolves before using addon.tab.scratchClass");
+    }
 
     let res = "";
     args
