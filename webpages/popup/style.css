@@ -3,10 +3,11 @@ body {
   overflow: hidden;
 }
 body {
-  width: 400px;
-  height: 600px;
+  width: var(--width, 400px);
+  height: var(--height, 599px);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   margin: 0;
   background-color: var(--page-background);
   font-family: "Roboto", sans-serif;
