@@ -3,6 +3,7 @@ import globalTheme from "../../libraries/common/global-theme.js";
 globalTheme();
 
 function calculatePopupSize() {
+  /* Needed for mobile or when the default browser zoom is not 100% */
   if (!window.innerWidth || !window.innerHeight) {
     setTimeout(calculatePopupSize, 0);
     return;
