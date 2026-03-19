@@ -1,7 +1,6 @@
 name: Format code using Prettier
 on:
   push:
-    # Please also update the paths listed on .prettierignore.
     paths-ignore:
       - libraries/thirdparty/*
       - '*.md'
@@ -31,6 +30,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # 修改這裡：讓機器人明確知道要把改好的程式碼推回哪個分支
+          ref: ${{ github.head_ref || github.ref }}
         
       - name: Generate token
         uses: tibdex/github-app-token@v2
@@ -55,8 +57,10 @@ jobs:
         if: steps.generate-token.outcome != 'success'
         uses: ScratchAddons/prettier_action@master
         with:
+          # 這裡我幫你把 push 選項補得更穩一點
           prettier_options: --write .
           prettier_version: 3.2.5
           commit_message: Format code
+          only_changed: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
