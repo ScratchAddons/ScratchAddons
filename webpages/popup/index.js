@@ -3,15 +3,13 @@ import globalTheme from "../../libraries/common/global-theme.js";
 globalTheme();
 
 function calculatePopupSize() {
-  /* Needed for mobile or when the default browser zoom is not 100% */
+  /* For mobile or when the default browser zoom is over 100% */
   if (!window.innerWidth || !window.innerHeight) {
     setTimeout(calculatePopupSize, 0);
     return;
   }
-  let width = window.innerWidth;
-  document.documentElement.style.setProperty("--width", `${width}px`);
-  let height = window.innerHeight - 3;
-  document.documentElement.style.setProperty("--height", `${height}px`);
+  document.documentElement.style.setProperty("--width", `${window.innerWidth}px`);
+  document.documentElement.style.setProperty("--height", `${window.innerHeight}px`);
   document.body.classList.remove("loading");
 }
 

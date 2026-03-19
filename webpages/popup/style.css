@@ -1,13 +1,8 @@
-html,
-body {
-  overflow: hidden;
-}
 body {
   width: var(--width, 400px);
-  height: var(--height, 599px);
+  height: var(--height, 600px);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   margin: 0;
   background-color: var(--page-background);
   font-family: "Roboto", sans-serif;
