@@ -40,8 +40,9 @@ export default async function ({ addon, msg }) {
   });
 
   wrapperElement.appendChild(iframeElement);
-  if (document.querySelector('#profile-box .player [data-control="edit"]'))
+  if (document.querySelector('#profile-box .player [data-control="edit"]')) {
     wrapperElement.appendChild(changeFeaturedElement);
+  }
   stageElement.prepend(wrapperElement);
 
   if (showMenu) wrapperElement.classList.add("lfp-show-menu");
@@ -56,7 +57,7 @@ export default async function ({ addon, msg }) {
 
     // Auto-start Scratch players (sadly need to be done automatically)
 
-    if (autoPlay)
+    if (autoPlay) {
       iframeElement.addEventListener(
         "load",
         function callback() {
@@ -75,6 +76,7 @@ export default async function ({ addon, msg }) {
           once: true,
         }
       );
+    }
   };
 
   const loadTurboWarp = () => {

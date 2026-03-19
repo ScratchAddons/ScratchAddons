@@ -677,11 +677,13 @@ export default async ({ addon, msg, safeMsg }) => {
             }
             location.commentMessages.push(message);
             let resourceObject;
-            if (message.comment_type === 0)
+            if (message.comment_type === 0) {
               resourceObject = this.getProjectObject(resourceId, message.comment_obj_title);
-            else if (message.comment_type === 1) resourceObject = this.getProfileObject(resourceId);
-            else if (message.comment_type === 2)
+            } else if (message.comment_type === 1) {
+              resourceObject = this.getProfileObject(resourceId);
+            } else if (message.comment_type === 2) {
               resourceObject = this.getStudioObject(resourceId, message.comment_obj_title);
+            }
             resourceObject.unreadComments++;
           } else if (message.type === "userjoin") {
             this.welcomeToScratch = true;

@@ -2,9 +2,8 @@ export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   function appendRandomOption(menuOptions) {
-    if (!addon.self.disabled) {
-      if (!menuOptions.find((option) => option[1] === "_random_"))
-        menuOptions.push([ScratchBlocks.Msg.MOTION_POINTTOWARDS_RANDOM, "_random_"]);
+    if (!addon.self.disabled && !menuOptions.find((option) => option[1] === "_random_")) {
+      menuOptions.push([ScratchBlocks.Msg.MOTION_POINTTOWARDS_RANDOM, "_random_"]);
     }
     return menuOptions;
   }

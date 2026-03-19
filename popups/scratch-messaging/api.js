@@ -26,8 +26,9 @@ export async function deleteComment(addon, { resourceType, resourceId, commentId
       method: "DELETE",
     }
   ).then((resp) => {
-    if (!resp.ok)
+    if (!resp.ok) {
       throw HTTPError.fromResponse(`Deleting ${resourceTypeUrl} comment ${commentId} of ${resourceId} failed`, resp);
+    }
   });
 }
 
@@ -41,8 +42,9 @@ const deleteLegacyComment = async (addon, { resourceType, resourceId, commentId 
     body: JSON.stringify({ id: String(commentId) }),
     method: "POST",
   }).then((resp) => {
-    if (!resp.ok)
+    if (!resp.ok) {
       throw HTTPError.fromResponse(`Deleting ${resourceType} comment ${commentId} of ${resourceId} failed`, resp);
+    }
   });
 };
 
@@ -61,8 +63,9 @@ export async function dismissAlert(addon, alertId) {
 }
 
 export async function sendComment(addon, { resourceType, resourceId, content, parentId, commenteeId }) {
-  if (resourceType === "user")
+  if (resourceType === "user") {
     return sendLegacyComment(addon, { resourceType, resourceId, content, parentId, commenteeId });
+  }
   return sendMigratedComment(addon, { resourceType, resourceId, content, parentId, commenteeId });
 }
 
@@ -351,9 +354,9 @@ export async function fetchLegacyComments(addon, { resourceType, resourceId, com
     }
   }
   // We haven't found some comments
-  if (page < 3)
+  if (page < 3) {
     return await fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page: page + 1, commentsObj });
-  else {
+  } else {
     console.log(
       "Could not find all comments for ",
       resourceType,

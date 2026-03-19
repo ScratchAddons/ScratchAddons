@@ -130,17 +130,18 @@ async function getAddonData({ addonId, manifest, url }) {
 
   const userscripts = [];
   for (const script of manifest.userscripts || []) {
-    if (userscriptMatches({ url }, script, addonId))
+    if (userscriptMatches({ url }, script, addonId)) {
       userscripts.push({
         url: script.url,
         runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
       });
+    }
   }
   const userstyles = [];
   for (let i = 0; i < manifest.userstyles?.length; i++) {
     const style = manifest.userstyles[i];
     const styleHref = chrome.runtime.getURL(`/addons/${addonId}/${style.url}`);
-    if (userscriptMatches({ url }, style, addonId))
+    if (userscriptMatches({ url }, style, addonId)) {
       if (manifest.injectAsStyleElt) {
         // Reserve index in array to avoid race conditions (#700)
         const arrLength = userstyles.push(null);
@@ -168,6 +169,7 @@ async function getAddonData({ addonId, manifest, url }) {
           addonEnabled: style.if?.addonEnabled,
         });
       }
+    }
   }
   await Promise.all(promises);
 
@@ -195,7 +197,7 @@ async function getContentScriptInfo(url) {
     const { userscripts, userstyles, cssVariables } = await promise;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
-    if (userstyles.length)
+    if (userstyles.length) {
       data.addonsWithUserstyles.push({
         addonId,
         styles: userstyles,
@@ -203,6 +205,7 @@ async function getContentScriptInfo(url) {
         injectAsStyleElt: manifest.injectAsStyleElt,
         index: i,
       });
+    }
   });
 
   await Promise.all(promises);

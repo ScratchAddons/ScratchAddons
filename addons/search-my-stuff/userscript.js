@@ -33,8 +33,9 @@ export default async function ({ addon, console, msg }) {
       e.altKey ||
       e.metaKey ||
       !/^\w$/.test(e.key)
-    )
+    ) {
       return;
+    }
     searchBar.focus();
   });
 
@@ -45,8 +46,9 @@ export default async function ({ addon, console, msg }) {
       e.key === "Enter" &&
       searchBar.value !== "" &&
       resultsContainer.childNodes.length > 0
-    )
+    ) {
       window.location.href = resultsContainer.childNodes[0].querySelector("a").href;
+    }
   });
   search.addEventListener("submit", (e) => {
     e.preventDefault();

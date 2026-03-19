@@ -73,9 +73,11 @@ export default class DevTools {
 
     const pasteCallback = () => {
       let target;
-      if (blockly.registry)
+      if (blockly.registry) {
         target = document.querySelector(".injectionDiv"); // new Blockly
-      else target = document;
+      } else {
+        target = document;
+      }
       target.dispatchEvent(
         new KeyboardEvent("keydown", {
           keyCode: 86,
@@ -353,9 +355,11 @@ export default class DevTools {
       if (!ids.has(block.id)) {
         let mouseXYClone = { x: this.mouseXY.x, y: this.mouseXY.y };
         let svgPath;
-        if (block.pathObject)
+        if (block.pathObject) {
           svgPath = block.pathObject.svgPath; // new Blockly
-        else svgPath = block.svgPath_;
+        } else {
+          svgPath = block.svgPath_;
+        }
         this.domHelpers.triggerDragAndDrop(svgPath, null, mouseXYClone);
       }
     }
@@ -412,9 +416,11 @@ export default class DevTools {
 
       // separate child temporarily
       let target;
-      if (blockly.registry)
+      if (blockly.registry) {
         target = document.querySelector(".injectionDiv"); // new Blockly
-      else target = document;
+      } else {
+        target = document;
+      }
       target.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
       if (next || blockOnly === 2) {
         // wait until the event has been fired
@@ -457,9 +463,11 @@ export default class DevTools {
 
     const blockly = await this.addon.tab.traps.getBlockly();
     let keyEventTarget;
-    if (blockly.registry)
+    if (blockly.registry) {
       keyEventTarget = document.querySelector(".injectionDiv"); // new Blockly
-    else keyEventTarget = document;
+    } else {
+      keyEventTarget = document;
+    }
     this.domHelpers.bindOnce(keyEventTarget, "keydown", (...e) => this.eventKeyDownBlockly(...e), true);
 
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);

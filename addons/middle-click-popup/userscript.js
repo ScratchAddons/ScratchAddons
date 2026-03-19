@@ -187,12 +187,13 @@ export default async function ({ addon, msg, console }) {
 
     if (popupInput.value.trim().length === 0) {
       queryIllegalResult = null;
-      if (blockTypes)
+      if (blockTypes) {
         for (const blockType of blockTypes) {
           blockList.push({
             block: blockType.createBlock(),
           });
         }
+      }
       limited = false;
     } else {
       // Get the list of blocks to display using the input content
@@ -243,15 +244,19 @@ export default async function ({ addon, msg, console }) {
       svgBackground.setAttribute("height", height * previewScale + "px");
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
-      if (Blockly.registry)
+      if (Blockly.registry) {
         svgBackground.addEventListener("pointerdown", mouseDownListener); // new Blockly
-      else svgBackground.addEventListener("mousedown", mouseDownListener);
+      } else {
+        svgBackground.addEventListener("mousedown", mouseDownListener);
+      }
 
       const svgBlock = popupPreviewBlocks.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
       svgBlock.addEventListener("mousemove", mouseMoveListener);
-      if (Blockly.registry)
+      if (Blockly.registry) {
         svgBlock.addEventListener("pointerdown", mouseDownListener); // new Blockly
-      else svgBlock.addEventListener("mousedown", mouseDownListener);
+      } else {
+        svgBlock.addEventListener("mousedown", mouseDownListener);
+      }
       svgBlock.classList.add("sa-mcp-preview-block");
 
       const renderedBlock = renderBlock(result.block, svgBlock);
@@ -348,8 +353,9 @@ export default async function ({ addon, msg, console }) {
       const preview = queryPreviews[previewIdx];
 
       var blockX = 5;
-      if (blockX + preview.renderedBlock.width > previewWidth / previewScale)
+      if (blockX + preview.renderedBlock.width > previewWidth / previewScale) {
         blockX += (previewWidth / previewScale - blockX - preview.renderedBlock.width) * previewScale * cursorPosRel;
+      }
       var blockY = (y + 30) * previewScale;
 
       preview.svgBlock.setAttribute("transform", `translate(${blockX}, ${blockY}) scale(${previewScale})`);
@@ -404,9 +410,11 @@ export default async function ({ addon, msg, console }) {
       }
 
       let svgPath;
-      if (newBlock.pathObject)
+      if (newBlock.pathObject) {
         svgPath = newBlock.pathObject.svgPath; // new Blockly
-      else svgPath = newBlock.svgPath_;
+      } else {
+        svgPath = newBlock.svgPath_;
+      }
       let blockBounds = svgPath.getBoundingClientRect();
       let newBlockX = Math.floor((mousePosition.x - (blockBounds.left + blockBounds.right) / 2) / workspace.scale);
       let newBlockY = Math.floor((mousePosition.y - (blockBounds.top + blockBounds.bottom) / 2) / workspace.scale);

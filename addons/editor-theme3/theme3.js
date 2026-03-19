@@ -179,8 +179,9 @@ export default async function ({ addon, console, msg }) {
   };
   const secondaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].secondary;
-    if (isColoredTextMode())
+    if (isColoredTextMode()) {
       return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.15 }));
+    }
     if (textMode() === "black") return brighten(addon.settings.get(category.settingId), { r: 0.6, g: 0.6, b: 0.6 });
     return multiply(addon.settings.get(category.settingId), { r: 0.9, g: 0.9, b: 0.9 });
   };
@@ -315,8 +316,9 @@ export default async function ({ addon, console, msg }) {
       }
       return block.getColourTertiary();
     }
-    if (isColoredTextMode())
+    if (isColoredTextMode()) {
       return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.25 }));
+    }
     if (textMode() === "black") return brighten(primaryColor(category), { r: 0.4, g: 0.4, b: 0.4 });
     return tertiaryColor(category);
   };
@@ -535,9 +537,11 @@ export default async function ({ addon, console, msg }) {
       const strokeStyle = addon.settings.get("strokeStyle");
 
       let svgPath;
-      if (Blockly.registry)
+      if (Blockly.registry) {
         svgPath = markerBlock.pathObject.svgPath; // new Blockly
-      else svgPath = markerBlock.svgPath_;
+      } else {
+        svgPath = markerBlock.svgPath_;
+      }
       svgPath.style.fill = {
         none: "transparent",
         gray: "",
@@ -771,9 +775,11 @@ export default async function ({ addon, console, msg }) {
 
       // Dropdown menus
       let primaryColor;
-      if (this.sourceBlock_.isShadow() && this.sourceBlock_.getParent())
+      if (this.sourceBlock_.isShadow() && this.sourceBlock_.getParent()) {
         primaryColor = this.sourceBlock_.getParent().getColour();
-      else primaryColor = this.sourceBlock_.getColour();
+      } else {
+        primaryColor = this.sourceBlock_.getColour();
+      }
       Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
     }
     if (isColoredTextMode()) {
@@ -835,9 +841,11 @@ export default async function ({ addon, console, msg }) {
     Blockly.FieldMatrix.prototype.showEditor_ = function () {
       oldFieldMatrixShowEditor.call(this);
       let primaryColor;
-      if (this.sourceBlock_.isShadow() && this.sourceBlock_.getParent())
+      if (this.sourceBlock_.isShadow() && this.sourceBlock_.getParent()) {
         primaryColor = this.sourceBlock_.getParent().getColour();
-      else primaryColor = this.sourceBlock_.getColour();
+      } else {
+        primaryColor = this.sourceBlock_.getColour();
+      }
       Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
     };
     const oldFieldMatrixUpdateMatrix = FieldMatrix.prototype.updateMatrix_;
@@ -859,18 +867,22 @@ export default async function ({ addon, console, msg }) {
   }
 
   let FieldVerticalSeparator;
-  if (Blockly.registry)
+  if (Blockly.registry) {
     FieldVerticalSeparator = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_vertical_separator");
-  else FieldVerticalSeparator = Blockly.FieldVerticalSeparator;
+  } else {
+    FieldVerticalSeparator = Blockly.FieldVerticalSeparator;
+  }
   const oldFieldVerticalSeparatorInit = FieldVerticalSeparator.prototype[fieldMethodName];
   FieldVerticalSeparator.prototype[fieldMethodName] = function () {
     // Vertical line between extension icon and block label
     oldFieldVerticalSeparatorInit.call(this);
     const lineElement = this.lineElement || this.lineElement_; // new Blockly || old Blockly
     if (lineElement) {
-      if (isColoredTextMode() || textMode() === "black")
+      if (isColoredTextMode() || textMode() === "black") {
         lineElement.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
-      else lineElement.setAttribute("stroke", this.sourceBlock_.getColourSecondary());
+      } else {
+        lineElement.setAttribute("stroke", this.sourceBlock_.getColourSecondary());
+      }
     }
   };
 
