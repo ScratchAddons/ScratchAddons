@@ -1,27 +1,4 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
-    <script src="../set-lang.js" type="module"></script>
-    <style>
-      /* Imports are here to attempt to speed up load */
-      @import url("../styles/colors.css");
-      @import url("../styles/components/licenses.css");
-
-      .licenses-body pre {
-        /* Workaround for a Firefox bug. Doesn't work if it's in licenses.css. */
-        width: calc(100vw - 4rem);
-      }
-    </style>
-    <link rel="icon" href="../../images/icon.png" id="favicon" />
-    <link rel="stylesheet" href="style.css" />
-    <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
-    <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="licenses.js" type="module"></script>
-  </head>
-  <body class="licenses">
+<template>
     <div class="navbar">
       <a href="./index.html"
         ><img src="../../images/icon-transparent.svg" class="logo header-button" alt="Logo" draggable="false"
@@ -39,5 +16,4 @@
         </div>
       </div>
     </div>
-  </body>
-</html>
+</template>

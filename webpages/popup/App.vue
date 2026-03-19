@@ -1,23 +1,4 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="../set-lang.js" type="module"></script>
-    <script src="../check-unsupported.js" defer></script>
-    <style>
-      @import url("../styles/components/tooltips.css");
-      @import url("../styles/colors.css");
-    </style>
-    <link rel="icon" href="../../images/icon.png" id="favicon" />
-    <link rel="stylesheet" href="style.css" />
-    <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
-    <link href="../../libraries/thirdparty/Roboto.css" rel="stylesheet" />
-    <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="./index.js" type="module"></script>
-    <link rel="preload" href="../styles/colors-light.css" as="style" />
-  </head>
-  <body class="loading">
+<template>
     <div id="header">
       <div id="title">
         <img src="../../images/icon-transparent.svg" id="logo" alt="Logo" draggable="false" />
@@ -56,5 +37,4 @@
       :src="iframeSrc(popup._addonId)"
       :key="popup._addonId"
     ></iframe>
-  </body>
-</html>
+</template>
