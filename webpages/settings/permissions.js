@@ -2,8 +2,10 @@ import globalTheme from "../../libraries/common/global-theme.js";
 
 const vue = new Vue({
   el: "body",
-  data: {
-    screenshotPath: "../../images/screenshots/permissions-dark.png",
+  data() {
+    return {
+      screenshotPath: "../../images/screenshots/permissions-dark.png",
+    };
   },
   methods: {
     msg(message, ...param) {
