@@ -673,8 +673,11 @@ let fuse;
       document.querySelector("#searchBox").focus();
     } else if (e.key === "Escape") {
       if (document.activeElement === document.querySelector("#searchBox")) {
-        e.preventDefault();
-        vue.searchInputReal = "";
+        if (vue.searchInputReal.length > 0) {
+          // Escape is used to close extension popups, so we should only prevent it if there's input text to clear
+          e.preventDefault();
+          vue.searchInputReal = "";
+        }
       } else if (vue.categoryOpen && vue.smallMode) {
         vue.categoryOpen = false;
       } else {

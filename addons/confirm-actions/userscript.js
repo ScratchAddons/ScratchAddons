@@ -25,7 +25,7 @@ export default async function ({ addon, console, msg }) {
         confirmationMessage = msg("share");
       }
       // Unshare Project
-      else if (
+      if (
         addon.settings.get("projectunsharing") &&
         e.target.closest(".media-stats a.unshare") &&
         location.hash !== "#galleries"
@@ -34,7 +34,7 @@ export default async function ({ addon, console, msg }) {
         confirmationMessage = msg("unshare");
       }
       // Follow/Unfollow User
-      else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
+      if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
         const button = e.target.closest("#profile-data .follow-button");
         if (button.classList.contains("notfollowing")) {
           confirmationTitle = button.querySelector("span.follow").textContent;
@@ -45,7 +45,7 @@ export default async function ({ addon, console, msg }) {
         }
       }
       // Accept Studio Invite
-      else if (
+      if (
         ((/^\/studios\/\d+\/curators/g.test(location.pathname) &&
           e.target.closest("button.studio-invitation-button")) ||
           (location.pathname.startsWith("/messages") && e.target.closest(".sa-curator-invite-button"))) &&
@@ -57,12 +57,12 @@ export default async function ({ addon, console, msg }) {
         confirmationMessage = msg("joinstudio");
       }
       // Close Forum Topic
-      else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
+      if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
         confirmationTitle = msg("closetopic-title");
         confirmationMessage = msg("closetopic");
       }
       // Cancel Pending Comment
-      else if (addon.settings.get("cancelcomment")) {
+      if (addon.settings.get("cancelcomment")) {
         if (e.target.closest("div[data-control='cancel'] > a, .compose-cancel")) {
           // Do not ask to confirm canceling empty comments
           if (e.target.closest("form").querySelector("textarea").value === "") return;
@@ -79,9 +79,28 @@ export default async function ({ addon, console, msg }) {
         }
       }
       // Send Project to Trash
-      else if (addon.settings.get("removingprojects") && e.target.closest(".media-trash")) {
+      if (addon.settings.get("removingprojects") && e.target.closest(".media-trash")) {
         confirmationTitle = msg("removeproject-title");
         confirmationMessage = msg("removeproject");
+      }
+      let isSigningOutFromEditor = false;
+      // Sign out
+      if (addon.settings.get("signingout")) {
+        if (
+          // Website (3.0)
+          e.target.closest(".account-nav > .dropdown > .divider") ||
+          // Website (2.0)
+          e.target.closest("form[action='/accounts/logout/']")
+        ) {
+          confirmationTitle = msg("signout-title");
+          confirmationMessage = msg("signout");
+        }
+        // Editor
+        if (e.target.closest("[class*='menu_left'] > [class*='menu_menu-section']")) {
+          isSigningOutFromEditor = true;
+          confirmationTitle = msg("signout-title");
+          confirmationMessage = msg("signout-editor");
+        }
       }
 
       // If one of the actions above is being taken, prevent it and show confirmation prompt
@@ -98,6 +117,21 @@ export default async function ({ addon, console, msg }) {
             .then((confirmed) => {
               if (confirmed) {
                 override = true;
+                if (isSigningOutFromEditor) {
+                  // Discard unsaved changes to suppress the "Leave site?" dialog
+                  setProjectChanged(false);
+                  document.querySelector("[class*='account-nav_user-info_']:not([class*='menu-bar_active'])")?.click();
+                  setTimeout(() => {
+                    // Give the menu time to open before clicking the sign out button, otherwise it won't work
+                    override = true;
+                    document
+                      .querySelector(
+                        "ul > li[class*='menu_menu-item'][class*='menu_hoverable'][class*='menu_menu-section']"
+                      )
+                      ?.click();
+                  }, 1);
+                  return;
+                }
                 e.target.click();
               }
             });
@@ -106,4 +140,11 @@ export default async function ({ addon, console, msg }) {
     },
     { capture: true }
   );
+
+  function setProjectChanged(changed) {
+    addon.tab.redux.dispatch({
+      type: "scratch-gui/project-changed/SET_PROJECT_CHANGED",
+      changed,
+    });
+  }
 }

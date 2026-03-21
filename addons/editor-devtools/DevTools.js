@@ -22,8 +22,6 @@ export default class DevTools {
     // is copied. If the addon is enabled late, something might already be on the
     // clipboard, so we initialize it to true.
     this.clipboardHasData = addon.self.enabledLate;
-
-    this.copyAll = false;
   }
 
   async init() {
@@ -216,12 +214,6 @@ export default class DevTools {
     cutShortcut.callback = newCallback(oldCutCallback);
     blockly.ShortcutRegistry.registry.unregister(cutShortcut.name);
     blockly.ShortcutRegistry.registry.register(cutShortcut);
-
-    // New Blockly copies a single block by default, so this is needed to make Copy All work
-    const oldBlockToCopyData = blockly.BlockSvg.prototype.toCopyData;
-    blockly.BlockSvg.prototype.toCopyData = function () {
-      return oldBlockToCopyData.call(this, devtools.copyAll);
-    };
   }
 
   getWorkspace() {
@@ -413,10 +405,7 @@ export default class DevTools {
     if (block) {
       block.select();
       let next = blockOnly ? block.getNextBlock() : null;
-      if (blockly.registry) {
-        // new Blockly
-        this.copyAll = !blockOnly;
-      } else if (next) {
+      if (next) {
         blockly.Events.setGroup(false);
         next.unplug(false); // setParent(null);
       }
@@ -432,8 +421,8 @@ export default class DevTools {
         // see https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/events/utils.ts#L112-L114
         requestAnimationFrame(() => {
           setTimeout(() => {
-            if (!blockly.registry && next) {
-              wksp.undo(); // old Blockly: undo the unplug above...
+            if (next) {
+              wksp.undo(); // undo the unplug above...
             }
             if (blockOnly === 2) {
               UndoGroup.startUndoGroup(wksp);
