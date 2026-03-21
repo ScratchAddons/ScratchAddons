@@ -165,17 +165,6 @@ function paintBlock(info, children, languages) {
   // Apply overrides.
   applyOverrides(info, overrides);
 
-  if (
-    (info.category === "variables" || info.category === "list") &&
-    !info.categoryIsDefault &&
-    info.shapeIsDefault &&
-    info.shape === "reporter" &&
-    children.length === 1 &&
-    children[0].isLabel
-  ) {
-    info.categoryIsDefault = true;
-  }
-
   const block = new Block(info, children);
 
   block.diff = info.diff;
@@ -784,11 +773,11 @@ function recogniseStuff(scripts, workspaceCustomBlocks) {
         block.info.category = "custom";
 
         // custom arguments
-      } else if (block.info.categoryIsDefault && (block.isReporter || block.isBoolean)) {
+      } else if ((block.info.categoryIsDefault || block.info.category === "custom-arg") && block.isReporter || block.isBoolean) {
         const name = blockName(block);
         if (customArgs.has(name)) {
           block.info.category = "custom-arg";
-          // block.info.categoryIsDefault = false;
+          block.info.categoryIsDefault = false;
           block.info.opcode = block.isBoolean ? "argument_reporter_boolean" : "argument_reporter_string_number";
         }
 
@@ -820,11 +809,11 @@ function recogniseStuff(scripts, workspaceCustomBlocks) {
       }
 
       let name, info;
-      if (block.isReporter && block.info.category === "variables" && block.info.categoryIsDefault) {
+      if (block.isReporter && block.info.category === "variables" /*&& block.info.categoryIsDefault*/) {
         block.info.opcode = "data_variable";
         name = blockName(block);
         info = block.info;
-      } else if (block.isReporter && block.info.category === "list" && block.info.categoryIsDefault) {
+      } else if (block.isReporter && block.info.category === "list" /*&& block.info.categoryIsDefault*/) {
         block.info.opcode = "data_listcontents";
         name = blockName(block);
         info = block.info;

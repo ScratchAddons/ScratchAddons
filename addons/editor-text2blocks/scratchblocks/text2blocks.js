@@ -707,7 +707,8 @@ export class Text2Blocks {
       if (
         block.info.categoryIsDefault === false &&
         block.info.category !== "variables" &&
-        block.info.category !== "list"
+        block.info.category !== "list" &&
+        block.info.category !== "custom-arg"
       ) {
         self.errors.push({ code: ErrorCodes.CATEGORY_OVERRIDE_NOT_ALLOWED, params: { hash: block.info.hash } });
         return null;
