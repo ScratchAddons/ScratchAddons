@@ -773,7 +773,10 @@ function recogniseStuff(scripts, workspaceCustomBlocks) {
         block.info.category = "custom";
 
         // custom arguments
-      } else if ((block.info.categoryIsDefault || block.info.category === "custom-arg") && block.isReporter || block.isBoolean) {
+      } else if (
+        ((block.info.categoryIsDefault || block.info.category === "custom-arg") && block.isReporter) ||
+        block.isBoolean
+      ) {
         const name = blockName(block);
         if (customArgs.has(name)) {
           block.info.category = "custom-arg";
