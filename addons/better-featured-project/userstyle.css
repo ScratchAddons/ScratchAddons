@@ -44,7 +44,7 @@
   z-index: 1;
   flex-shrink: 0;
 }
-#profile-data .box-head .buttons + img {
+#profile-data .box-head .buttons ~ img {
   /* membership badge */
   position: relative;
   z-index: 1;
