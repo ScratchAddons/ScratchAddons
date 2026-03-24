@@ -3,14 +3,13 @@ import globalTheme from "../../libraries/common/global-theme.js";
 globalTheme();
 
 function calculatePopupSize() {
+  /* For mobile or when there isn't enough space for the full popup size */
   if (!window.innerWidth || !window.innerHeight) {
     setTimeout(calculatePopupSize, 0);
     return;
   }
-  let width = window.innerWidth;
-  document.documentElement.style.setProperty("--width", `${width}px`);
-  let height = window.innerHeight - 3;
-  document.documentElement.style.setProperty("--height", `${height}px`);
+  document.documentElement.style.setProperty("--width", `${window.innerWidth}px`);
+  document.documentElement.style.setProperty("--height", `${window.innerHeight}px`);
   document.body.classList.remove("loading");
 }
 
@@ -18,10 +17,12 @@ window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
 const vue = new Vue({
   el: "body",
-  data: {
-    popups: [],
-    currentPopup: null,
-    popupsWithIframes: [],
+  data() {
+    return {
+      popups: [],
+      currentPopup: null,
+      popupsWithIframes: [],
+    };
   },
   methods: {
     msg(message, ...params) {
