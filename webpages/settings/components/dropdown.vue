@@ -9,7 +9,7 @@
       v-el:button
       @click="toggle"
     >
-      <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
+      <img src="../../../images/icons/expand.svg" class="icon-type" draggable="false" />
     </button>
     <ul class="dropdown-list" :class="{'align-start': alignStart}" @click="listClick" role="menu" v-el:list>
       <slot></slot>

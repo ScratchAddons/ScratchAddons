@@ -87,7 +87,7 @@
           </div>
           <div v-cloak class="search-box" v-if="!relatedAddonsOpen" :class="{smallMode: smallMode === true}">
             <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
-            <button disabled v-show="searchInput === ''">
+            <button disabled v-if="searchInput === ''">
               <img src="../../images/icons/search.svg" class="search-icon" />
             </button>
             <button v-else @click="clearAndFocusSearch()">

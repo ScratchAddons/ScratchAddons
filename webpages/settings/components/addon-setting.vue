@@ -10,7 +10,7 @@
     <div class="setting-label-container">
       <div class="setting-label" v-html="settingsName(addon)"></div>
       <div v-if="setting.description" :class="{tooltip: addon._enabled}" :tabindex="addon._enabled ? '0' : '-1' ">
-        <img src="../../images/icons/help.svg" class="icon-type setting-help-icon" />
+        <img src="../../../images/icons/help.svg" class="icon-type setting-help-icon" />
         <span class="tooltiptext tooltiptexttop">{{setting.description}}</span>
       </div>
       <addon-tag v-if="isNewOption" tag="new"></addon-tag>
@@ -26,10 +26,10 @@
                 @click="deleteTableRow(i)"
                 :title="msg('deleteRow')"
               >
-                <img class="icon-type" src="../../images/icons/close.svg" />
+                <img class="icon-type" src="../../../images/icons/close.svg" />
               </button>
               <button :disabled="!addon._enabled" class="addon-buttons handle">
-                <img class="icon-type" src="../../images/icons/drag.svg" />
+                <img class="icon-type" src="../../../images/icons/drag.svg" />
               </button>
             </div>
             <div class="setting-table-row-settings">
@@ -51,7 +51,7 @@
             @click="addTableRow()"
             :title="msg('addRow')"
           >
-            <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
+            <img class="icon-type" src="../../../images/icons/plus.svg" draggable="false" />
           </button>
           <dropdown
             button-class="addon-buttons addon-split-button-dropdown"
@@ -146,7 +146,7 @@
           :title="msg('reset')"
           @click="updateOption(setting.default || '')"
         >
-          <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" /></button
+          <img src="../../../images/icons/undo.svg" class="icon-type" draggable="false" /></button
       ></template>
     </div>
   </div>

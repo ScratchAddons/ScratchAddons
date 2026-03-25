@@ -1,7 +1,7 @@
 <template>
   <div class="addon-group" v-show="shouldShow" @click="toggle" :class="{  'margin-above': marginAbove }">
     <button class="arrow-button" :title="msg(group.expanded ? 'collapse' : 'expand')">
-      <img src="../../images/icons/expand.svg" :class="{ 'reverted': group.expanded }" draggable="false" />
+      <img src="../../../images/icons/expand.svg" :class="{ 'reverted': group.expanded }" draggable="false" />
     </button>
     {{ group.name }} ({{ shownCount }})
   </div>

@@ -94,7 +94,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
     icon: "../../images/icons/wrench.svg",
-    html: "../settings/index.html",
+    html: "./settings.html",
     _addonId: "__settings__",
   });
   popupObjects = popupObjects.sort(

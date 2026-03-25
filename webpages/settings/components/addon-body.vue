@@ -3,7 +3,7 @@
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
         <button class="arrow-button" :title="msg(expanded ? 'collapse' : 'expand')">
-          <img src="../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
+          <img src="../../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
         </button>
         <img :src="addonIconSrc" class="icon-type addon-icon" draggable="false" />
         <!-- prettier-ignore -->
@@ -22,7 +22,7 @@
             title="{{ msg('resetToDefault') }}"
             @click="loadDefaults"
           >
-            <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
+            <img src="../../../images/icons/undo.svg" class="icon-type" draggable="false" />
           </button>
           <dropdown button-class="addon-buttons addon-split-button-dropdown" :button-title="msg('importExport')">
             <li role="menuitem" tabindex="0" @click="exportPreset">{{ msg('export') }}</li>
@@ -41,7 +41,7 @@
       <div id="info" v-for="info of addon.info">
         <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
           <img
-            :src="'../../images/icons/' + {
+            :src="'../../../images/icons/' + {
               'warning': 'warning.svg',
               'notice': 'notice.svg',
               'info': 'help.svg',
