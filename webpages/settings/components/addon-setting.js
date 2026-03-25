@@ -1,4 +1,11 @@
+import AddonSetting from "./addon-setting.vue";
+import AddonTag from "./addon-tag.vue";
+import Dropdown from "./dropdown.vue";
+import Picker from "./picker-component.vue";
+import ResetDropdown from "./reset-dropdown.vue";
+
 export default {
+  components: { AddonSetting, AddonTag, Dropdown, Picker, ResetDropdown },
     props: ["addon", "groupId", "setting", "settingPath", "addon-settings"],
     data() {
       return {

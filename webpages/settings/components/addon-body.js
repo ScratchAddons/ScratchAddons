@@ -1,7 +1,32 @@
 import downloadBlob from "../../../libraries/common/cs/download-blob.js";
+
+import AddonSetting from "./addon-setting.vue";
+import AddonTag from "./addon-tag.vue";
+import Dropdown from "./dropdown.vue";
+
+import PreviewCompactMessages from "./previews/compact-messages.vue";
+import PreviewDarkWww from "./previews/dark-www.vue";
+import PreviewEditorDarkMode from "./previews/editor-dark-mode.vue";
+import PreviewPalette from "./previews/palette.vue";
+import PreviewStageMonitorPreset from "./previews/stage-monitor-preset.vue";
+import PreviewStageMonitor from "./previews/stage-monitor.vue";
+import PreviewWorkspaceDots from "./previews/workspace-dots.vue";
+
 const isIframe = window.parent !== window;
 
 export default {
+    components: {
+      AddonTag,
+      Dropdown,
+      AddonSetting,
+      PreviewCompactMessages,
+      PreviewDarkWww,
+      PreviewEditorDarkMode,
+      PreviewPalette,
+      PreviewStageMonitorPreset,
+      PreviewStageMonitor,
+      PreviewWorkspaceDots
+    },
     props: ["addon", "groupId", "groupExpanded", "visible"],
     data() {
       return {

@@ -1,4 +1,7 @@
+import Dropdown from "./dropdown.vue";
+
 export default {
+    components: { Dropdown },
     props: ["disabled", "setting", "presets"],
     methods: {
       resetToDefault() {
