@@ -85,13 +85,13 @@ export function initUI({ addon, msg }) {
   const setSettingsOpen = (open) => {
     settingButton.dataset.enabled = open;
     settingsPage.dataset.visible = open;
-    if (open)
+    if (open) {
       settingsOpenUpdaters.forEach((f) => {
         try {
           f?.();
         } catch {}
       });
-    else if (Object.values(snapFrom).every((e) => !e) || Object.values(snapTo).every((e) => !e)) {
+    } else if (Object.values(snapFrom).every((e) => !e) || Object.values(snapTo).every((e) => !e)) {
       toggle(false);
       toggleButton.dataset.enabled = false;
     }

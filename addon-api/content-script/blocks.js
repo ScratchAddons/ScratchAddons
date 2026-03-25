@@ -142,9 +142,11 @@ const generateBlockXML = () => {
 
 const injectWorkspace = (ScratchBlocks) => {
   const isHighContrast = (workspace) => {
-    if (ScratchBlocks.registry)
+    if (ScratchBlocks.registry) {
       return workspace.getTheme().name === "high-contrast"; // new Blockly
-    else return ScratchBlocks.Colours.text === "#000000";
+    } else {
+      return ScratchBlocks.Colours.text === "#000000";
+    }
   };
 
   const BlockSvg = ScratchBlocks.BlockSvg;

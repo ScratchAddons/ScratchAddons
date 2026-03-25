@@ -19,9 +19,11 @@ export default async function ({ addon, msg, console }) {
     const options = _dropdownCreate.call(this);
     const workspace = this.sourceBlock_.workspace;
     let variableTypes;
-    if (Blockly.registry)
+    if (Blockly.registry) {
       variableTypes = workspace.getVariableMap().getTypes(); // new Blockly
-    else variableTypes = workspace.getVariableTypes();
+    } else {
+      variableTypes = workspace.getVariableTypes();
+    }
     if (
       !addon.self.disabled &&
       (this.defaultType_ ?? this.getDefaultType()) === BROADCAST_MESSAGE_TYPE &&
@@ -34,9 +36,11 @@ export default async function ({ addon, msg, console }) {
   };
 
   let onItemSelectedMethodName;
-  if (Blockly.registry)
+  if (Blockly.registry) {
     onItemSelectedMethodName = "onItemSelected_"; // new Blockly
-  else onItemSelectedMethodName = "onItemSelected";
+  } else {
+    onItemSelectedMethodName = "onItemSelected";
+  }
   const _onItemSelected = FieldVariable.prototype[onItemSelectedMethodName];
   FieldVariable.prototype[onItemSelectedMethodName] = function (menu, menuItem) {
     const workspace = this.sourceBlock_.workspace;

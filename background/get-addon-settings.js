@@ -764,11 +764,12 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
 
     // Finally, minify the settings and store them in the scratchAddons object
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
-    if (madeAnyChanges)
+    if (madeAnyChanges) {
       chrome.storage.sync.set({
         ...minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
         addonsEnabled,
       });
+    }
     scratchAddons.globalState.addonSettings = addonSettings;
     scratchAddons.localState.addonsEnabled = addonsEnabled;
     scratchAddons.localState.ready.addonSettings = true;

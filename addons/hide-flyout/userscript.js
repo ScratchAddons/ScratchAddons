@@ -21,9 +21,11 @@ export default async function ({ addon, console, msg }) {
   function recordDragTargets() {
     const workspace = addon.tab.traps.getWorkspace();
     if (workspace) {
-      if (Blockly.registry)
+      if (Blockly.registry) {
         workspace.recordDragTargets(); // new Blockly
-      else workspace.recordCachedAreas();
+      } else {
+        workspace.recordCachedAreas();
+      }
     }
   }
 
@@ -129,8 +131,9 @@ export default async function ({ addon, console, msg }) {
     if (
       flyoutLocked ||
       ((Blockly.WidgetDiv.isVisible() || Blockly.DropDownDiv.isVisible()) && widgetOrDropdownOpenedFromFlyout) // If the dropdown or input came outside of the flyout, do not keep open the flyout when cursor leaves
-    )
+    ) {
       return;
+    }
     if (e && e.buttons) {
       // dragging a block or scrollbar
       closeOnPointerUp = true;
@@ -249,9 +252,11 @@ export default async function ({ addon, console, msg }) {
     const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
     Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll = true) {
       const previousSelection = this.selectedItem_;
-      if (Blockly.registry)
+      if (Blockly.registry) {
         oldSetSelectedItem.call(this, item); // new Blockly: no shouldScroll parameter
-      else oldSetSelectedItem.call(this, item, shouldScroll);
+      } else {
+        oldSetSelectedItem.call(this, item, shouldScroll);
+      }
       if (addon.self.disabled || getToggleSetting() !== "category") return;
       if (!shouldScroll) {
         // ignore initial selection when updating the toolbox
@@ -292,9 +297,11 @@ export default async function ({ addon, console, msg }) {
       function () {
         // scrolling should not be animated when opening the flyout in category click mode
         if (!scrollAnimation) {
-          if (Blockly.registry)
+          if (Blockly.registry) {
             this.workspace_.scrollbar.setY(this.scrollTarget); // new Blockly
-          else this.scrollbar_.set(this.scrollTarget);
+          } else {
+            this.scrollbar_.set(this.scrollTarget);
+          }
           this.scrollTarget = null;
           scrollAnimation = true;
           return;

@@ -38,8 +38,9 @@ if (chrome.declarativeNetRequest) {
   // DNR unavailable, falling back to webRequestBlocking
   // Used in Firefox < 113 (lacks DNR)
   const extraInfoSpec = ["blocking", "requestHeaders"];
-  if (Object.prototype.hasOwnProperty.call(chrome.webRequest.OnBeforeSendHeadersOptions, "EXTRA_HEADERS"))
+  if (Object.prototype.hasOwnProperty.call(chrome.webRequest.OnBeforeSendHeadersOptions, "EXTRA_HEADERS")) {
     extraInfoSpec.push("extraHeaders");
+  }
 
   chrome.webRequest.onBeforeSendHeaders.addListener(
     function (details) {
@@ -50,8 +51,9 @@ if (chrome.declarativeNetRequest) {
       } else if (
         // Chrome
         details.initiator !== chrome.runtime.getURL("").slice(0, -1)
-      )
+      ) {
         return;
+      }
 
       if (details.url.endsWith("?sareferer") || details.url.endsWith("&sareferer")) {
         details.requestHeaders.push({

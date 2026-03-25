@@ -8,9 +8,12 @@ try {
 } catch {
   throw "Scratch Addons: cross-origin iframe ignored";
 }
-if (window.frameElement && window.frameElement.getAttribute("src") === null)
+if (window.frameElement && window.frameElement.getAttribute("src") === null) {
   throw "Scratch Addons: iframe without src attribute ignored";
-if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
+}
+if (document.documentElement instanceof SVGElement) {
+  throw "Scratch Addons: SVG document ignored";
+}
 if (new URL(location.href).hostname === "localhost") {
   if (!["8333", "8601"].includes(new URL(location.href).port)) {
     throw "Scratch Addons: this localhost port is not supported";

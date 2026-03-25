@@ -50,8 +50,9 @@ export default class Trap extends Listenable {
 
   _getBlocksWrapperComponentSync() {
     const editorMode = this._getEditorMode();
-    if (!editorMode || editorMode === "embed")
+    if (!editorMode || editorMode === "embed") {
       throw new Error(`Cannot access Blockly on ${editorMode} page (${location.pathname})`);
+    }
     const BLOCKS_CLASS = '[class*="gui_blocks-wrapper_"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
@@ -62,8 +63,9 @@ export default class Trap extends Listenable {
 
   async _getBlocksWrapperComponent() {
     const editorMode = this._getEditorMode();
-    if (!editorMode || editorMode === "embed")
+    if (!editorMode || editorMode === "embed") {
       throw new Error(`Cannot access Blockly on ${editorMode} page (${location.pathname})`);
+    }
     const BLOCKS_CLASS = '[class*="gui_blocks-wrapper_"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {

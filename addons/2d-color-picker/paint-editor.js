@@ -220,10 +220,11 @@ export default async ({ addon, console, msg }) => {
       }
 
       el = null;
-      if (fillOrStroke === "fill")
+      if (fillOrStroke === "fill") {
         el = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"))[0];
-      else if (fillOrStroke === "stroke")
+      } else if (fillOrStroke === "stroke") {
         el = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"))[1];
+      }
       if (el) origHue = tinycolor(el.style.background).toHsv().h;
 
       updateHandle(e);

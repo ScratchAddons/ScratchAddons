@@ -94,8 +94,9 @@ export class BlockInputRound extends BlockInput {
   setValue(block, value) {
     if (value instanceof BlockInstance) {
       const subblock = value.createWorkspaceForm();
-      if (!subblock.outputConnection)
+      if (!subblock.outputConnection) {
         throw new Error('Cannot put block "' + subblock.typeInfo.id + '" into a round type input.');
+      }
       subblock.outputConnection.connect(this.getInput(block).connection);
     } else {
       this.getField(block).setValue(this._toFieldValue(value));
@@ -151,8 +152,9 @@ export class BlockInputBoolean extends BlockInput {
   setValue(block, value) {
     if (value instanceof BlockInstance) {
       const subblock = value.createWorkspaceForm();
-      if (!subblock.outputConnection || value.typeInfo.shape !== BlockShape.Boolean)
+      if (!subblock.outputConnection || value.typeInfo.shape !== BlockShape.Boolean) {
         throw new Error('Cannot put block "' + value.typeInfo.id + '" into a boolean type input.');
+      }
       subblock.outputConnection.connect(this.getInput(block).connection);
     } else {
       throw new Error("Boolean type inputs can only contain blocks.");
@@ -241,8 +243,9 @@ export class BlockInputBlock extends BlockInput {
   setValue(block, value) {
     if (value instanceof BlockInstance) {
       const subblock = value.createWorkspaceForm();
-      if (!subblock.previousConnection || !value.typeInfo.shape.canStackUp)
+      if (!subblock.previousConnection || !value.typeInfo.shape.canStackUp) {
         throw new Error('Cannot put block "' + value.typeInfo.id + '" into a block type input.');
+      }
       subblock.previousConnection.connect(this.getInput(block).connection);
     } else {
       throw new Error("Block type inputs can only contain blocks.");
@@ -467,8 +470,9 @@ export class BlockTypeInfo {
       if (input.connection) {
         const innerBlock = input.connection.targetBlock();
         if (innerBlock) {
-          if (innerBlock.inputList.length !== 1 || innerBlock.inputList[0].fieldRow.length !== 1)
+          if (innerBlock.inputList.length !== 1 || innerBlock.inputList[0].fieldRow.length !== 1) {
             throw new Error("This should never happen.");
+          }
           let innerField = innerBlock.inputList[0].fieldRow[0];
           addFieldInputs(innerField, inputIdx, -1);
         } else {

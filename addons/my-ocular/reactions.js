@@ -106,14 +106,15 @@ export default async function ({ addon, console, msg }) {
           if (reactionButton) {
             let tooltip = document.createElement("span");
             tooltip.className = "my-ocular-popup";
-            if (reaction.reactions.length <= 5)
+            if (reaction.reactions.length <= 5) {
               tooltip.innerText = reaction.reactions.map((user) => user.user).join(", ");
-            else
+            } else {
               tooltip.innerText =
                 reaction.reactions
                   .slice(0, 5)
                   .map((user) => user.user)
                   .join(", ") + " and others";
+            }
             reactionButton.appendChild(tooltip);
           }
 

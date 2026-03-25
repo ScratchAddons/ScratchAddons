@@ -310,8 +310,9 @@ export default async function ({ addon, console, msg }) {
       typeof target.reorderSound === "function" &&
       typeof target.addCostume === "function" &&
       typeof target.addSound === "function"
-    )
+    ) {
       return;
+    }
     throw new Error("Can not comprehend VM");
   };
 

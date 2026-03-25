@@ -37,8 +37,9 @@ export default async function ({ addon, console, msg }) {
         property.startsWith("--colour-") ||
         property.startsWith("--editorTheme3-") ||
         property.startsWith("--customBlockText-")
-      )
+      ) {
         element.style.setProperty(property, document.documentElement.style.getPropertyValue(property));
+      }
     }
   }
 

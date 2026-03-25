@@ -48,10 +48,11 @@ export default async function ({ template }) {
         if (!this.loadColorPicker) return;
         this.isOpen = value;
         this.opening = true;
-        if (callClosePickers)
+        if (callClosePickers) {
           this.$root.closePickers({ isTrusted: true }, this, {
             callCloseDropdowns: false,
           });
+        }
         if (callCloseDropdowns) this.$root.closeDropdowns({ isTrusted: true }); // close other dropdowns
         this.opening = false;
         this.$els.pickr._valueChanged();

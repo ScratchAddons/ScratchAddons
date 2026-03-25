@@ -360,8 +360,9 @@ export const updateScaleTool = (paper, tool) => {
 
     removeGuides();
 
-    if ((Math.abs(oldSX) === Math.abs(sx) && closestSnapX) || (Math.abs(oldSY) === Math.abs(sy) && closestSnapY))
+    if ((Math.abs(oldSX) === Math.abs(sx) && closestSnapX) || (Math.abs(oldSY) === Math.abs(sy) && closestSnapY)) {
       fixGuideSizes();
+    }
 
     if (Math.abs(oldSX) === Math.abs(sx) && closestSnapX) {
       switch (closestSnapX.type) {
