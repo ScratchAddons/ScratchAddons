@@ -1,6 +1,9 @@
   export default {
     props: ["title"],
     methods: {
+      openModal() {
+        this.$el.showModal();
+      },
       closeModal() {
         this.$el.close();
       },

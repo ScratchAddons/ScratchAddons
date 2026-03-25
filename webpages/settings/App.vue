@@ -139,7 +139,7 @@
       :is-open.sync="moreSettingsOpen"
       :title="msg('moreSettings')"
       v-cloak
-      v-el:moreSettings
+      ref="moreSettings"
     >
       <div class="addon-block settings-block">
         <div class="addon-body">

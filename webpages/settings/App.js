@@ -55,7 +55,6 @@ let fuse;
         theme: initialTheme,
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
-        moreSettingsOpen: false,
         relatedAddonsOpen: false,
         relatedToAddonName: null,
         relatedAddons: [],
@@ -151,7 +150,7 @@ let fuse;
     methods: {
       openMoreSettings: function () {
         this.closePickers();
-        this.$els.moresettings.showModal();
+        this.$refs.moreSettings.openModal();
         if (this.smallMode) {
           this.sidebarToggle();
         }
