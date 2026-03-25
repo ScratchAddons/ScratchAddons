@@ -331,3 +331,8 @@
     }
   }
 </style>
+
+<script>
+import AddonSetting from "./addon-setting.js";
+export default AddonSetting;
+</script>

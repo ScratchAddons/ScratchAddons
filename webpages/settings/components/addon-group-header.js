@@ -1,7 +1,5 @@
-export default async function ({ template }) {
-  const AddonGroup = Vue.extend({
+export default {
     props: ["group", "shownCount", "marginAbove"],
-    template,
     data() {
       return {};
     },
@@ -22,6 +20,4 @@ export default async function ({ template }) {
         return this.$root.msg(...params);
       },
     },
-  });
-  Vue.component("addon-group-header", AddonGroup);
 }

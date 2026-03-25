@@ -1,10 +1,8 @@
 import downloadBlob from "../../../libraries/common/cs/download-blob.js";
 const isIframe = window.parent !== window;
 
-export default async function ({ template }) {
-  const AddonBody = Vue.extend({
+export default {
     props: ["addon", "groupId", "groupExpanded", "visible"],
-    template,
     data() {
       return {
         isIframe: isIframe,
@@ -199,7 +197,7 @@ export default async function ({ template }) {
         if (newValue === true) this.everExpanded = true;
       },
     },
-    ready() {
+    mounted() {
       const onHashChange = () => {
         if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
           this.expanded = true;
@@ -208,6 +206,4 @@ export default async function ({ template }) {
       window.addEventListener("hashchange", onHashChange, { capture: false });
       setTimeout(onHashChange, 0);
     },
-  });
-  Vue.component("addon-body", AddonBody);
 }

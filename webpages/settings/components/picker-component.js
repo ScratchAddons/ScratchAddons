@@ -1,7 +1,5 @@
-export default async function ({ template }) {
-  const ColorInput = Vue.extend({
+export default {
     props: ["value", "addon", "setting", "no_alpha", "disabled"],
-    template,
     data() {
       return {
         isOpen: false,
@@ -12,7 +10,7 @@ export default async function ({ template }) {
         loadColorPicker: false, // #2090 tempfix
       };
     },
-    ready() {
+    mounted() {
       if (!this.loadColorPicker) return;
       if (this.no_alpha) {
         this.formats = "hex,rgb,hsv,hsl";
@@ -79,6 +77,4 @@ export default async function ({ template }) {
         this.$options.ready[0].call(this);
       },
     },
-  });
-  Vue.component("picker", ColorInput);
 }

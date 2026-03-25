@@ -1,7 +1,5 @@
-export default async function ({ template }) {
-  const Dropdown = Vue.extend({
+export default {
     props: ["buttonClass", "buttonTitle", "disabled", "alignStart"],
-    template,
     data() {
       return {
         isOpen: false,
@@ -67,13 +65,11 @@ export default async function ({ template }) {
         return this.$root.closeDropdowns(...params);
       },
     },
-    ready() {
+    mounted() {
       this.$root.$on("close-dropdowns", (except) => {
         if (this.isOpen && except !== this) {
           this.isOpen = false;
         }
       });
     },
-  });
-  Vue.component("dropdown", Dropdown);
 }

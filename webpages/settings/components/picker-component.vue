@@ -20,3 +20,8 @@
     </template>
   </div>
 </template>
+
+<script>
+import PickerComponent from "./picker-component.js";
+export default PickerComponent;
+</script>

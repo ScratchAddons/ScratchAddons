@@ -19,3 +19,8 @@
     <span v-if="tagInfo.tooltipText" class="tooltiptext tooltiptexttop">{{ tagTooltip }}</span>
   </div>
 </template>
+
+<script>
+import AddonTag from "./addon-tag.js";
+export default AddonTag;
+</script>

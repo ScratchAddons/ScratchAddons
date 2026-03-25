@@ -40,3 +40,8 @@
     }
   }
 </style>
+
+<script>
+import AddonGroupHeader from "./addon-group-header.js";
+export default AddonGroupHeader;
+</script>

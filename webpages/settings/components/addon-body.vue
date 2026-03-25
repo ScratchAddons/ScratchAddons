@@ -461,3 +461,8 @@
     }
   }
 </style>
+
+<script>
+import AddonBody from "./addon-body.js";
+export default AddonBody;
+</script>

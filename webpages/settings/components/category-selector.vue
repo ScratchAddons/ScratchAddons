@@ -101,3 +101,8 @@
     margin-inline-start: 15px;
   }
 </style>
+
+<script>
+import CategorySelector from "./category-selector.js";
+export default CategorySelector;
+</script>

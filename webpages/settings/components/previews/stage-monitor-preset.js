@@ -1,10 +1,8 @@
 import cssVariables from "../../../../libraries/common/vue-css-variables.js";
 import { textColor } from "../../../../libraries/common/cs/text-color.esm.js";
 
-export default async function ({ template }) {
-  const StageMonitorPresetPreview = Vue.extend({
+export default {
     props: ["options", "settingData", "settings"],
-    template,
     computed: {
       colors() {
         const valueColor = this.settings.customValueColor ? this.settings.monitorValueBg : "#ff8c1a";
@@ -18,6 +16,4 @@ export default async function ({ template }) {
     methods: {
       cssVariables,
     },
-  });
-  Vue.component("preview-stage-monitor-preset", StageMonitorPresetPreview);
 }

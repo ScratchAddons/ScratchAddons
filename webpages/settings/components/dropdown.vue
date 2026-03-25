@@ -68,3 +68,8 @@
     border-top-right-radius: 0;
   }
 </style>
+
+<script>
+import Dropdown from "./dropdown.js";
+export default Dropdown;
+</script>
