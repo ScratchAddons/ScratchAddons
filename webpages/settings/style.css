@@ -6,17 +6,20 @@ body {
   background: var(--page-background);
   font-family: "Roboto", sans-serif;
   margin: 0;
-  height: 100vh;
-  height: 100svh;
   overflow: hidden;
   color: var(--content-text);
   font-size: 14px;
-  display: flex;
-  flex-direction: column;
 }
 
 :not(body)[v-cloak] {
   display: none !important;
+}
+
+#app {
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
 }
 
 button {
