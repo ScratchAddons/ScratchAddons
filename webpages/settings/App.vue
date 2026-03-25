@@ -260,3 +260,8 @@
       </div>
     </div>
 </template>
+
+<script>
+import App from "./App.js";
+export default App;
+</script>

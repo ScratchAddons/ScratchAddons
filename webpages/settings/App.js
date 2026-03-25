@@ -1,6 +1,5 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
-import loadVueComponent from "../../libraries/common/load-vue-components.js";
 import Fuse from "../../libraries/thirdparty/cs/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
@@ -10,6 +9,11 @@ import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
 import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
+
+import AddonBody from "./components/addon-body.vue";
+import AddonGroupHeader from "./components/addon-group-header.vue";
+import CategorySelector from "./components/category-selector.vue";
+import Modal from "./components/modal.vue";
 
 const MORE_SETTINGS_HASH = "#moresettings";
 const ADDON_HASH_PREFIX = "#addon-";
@@ -21,50 +25,9 @@ if (window.parent !== window) {
   isIframe = true;
 }
 
-let vue;
 let fuse;
 
-(async () => {
   const { theme: initialTheme, setGlobalTheme } = await globalTheme();
-
-  await loadVueComponent([
-    "webpages/settings/components/picker-component",
-    "webpages/settings/components/dropdown",
-    "webpages/settings/components/reset-dropdown",
-    "webpages/settings/components/addon-setting",
-    "webpages/settings/components/addon-tag",
-    "webpages/settings/components/addon-group-header",
-    "webpages/settings/components/addon-body",
-    "webpages/settings/components/category-selector",
-    "webpages/settings/components/modal",
-    "webpages/settings/components/previews/compact-messages",
-    "webpages/settings/components/previews/dark-www",
-    "webpages/settings/components/previews/editor-dark-mode",
-    "webpages/settings/components/previews/palette",
-    "webpages/settings/components/previews/stage-monitor",
-    "webpages/settings/components/previews/stage-monitor-preset",
-    "webpages/settings/components/previews/workspace-dots",
-  ]);
-
-  Vue.directive("click-outside", {
-    priority: 700,
-    bind() {
-      let self = this;
-      this.event = function (event) {
-        self.vm.$emit(self.expression, event);
-      };
-      this.el.addEventListener("mousedown", this.stopProp);
-      document.body.addEventListener("mousedown", this.event);
-    },
-
-    unbind() {
-      this.el.removeEventListener("mousedown", this.stopProp);
-      document.body.removeEventListener("mousedown", this.event);
-    },
-    stopProp(event) {
-      event.stopPropagation();
-    },
-  });
 
   // REMINDER: update similar code at /background/imports/util.js
   const browserLevelPermissions = ["notifications"];
@@ -83,8 +46,8 @@ let fuse;
   chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
   chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 
-  vue = window.vue = new Vue({
-    el: "body",
+  export default {
+    components: { Modal, AddonBody, AddonGroupHeader, CategorySelector },
     data() {
       return {
         smallMode: false,
@@ -189,8 +152,8 @@ let fuse;
       openMoreSettings: function () {
         this.closePickers();
         this.$els.moresettings.showModal();
-        if (vue.smallMode) {
-          vue.sidebarToggle();
+        if (this.smallMode) {
+          this.sidebarToggle();
         }
         location.hash = "";
       },
@@ -304,7 +267,7 @@ let fuse;
             inputElem.remove();
             const confirmElem = document.getElementById("confirmImport");
             try {
-              await deserializeSettings(text, vue.manifests, confirmElem, { browserLevelPermissions });
+              await deserializeSettings(text, this.manifests, confirmElem, { browserLevelPermissions });
             } catch (e) {
               console.warn("Error when importing settings:", e);
               confirmElem.classList.add("hidden-button");
@@ -384,7 +347,7 @@ let fuse;
         if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
       },
     },
-    ready() {
+    mounted() {
       // Autofocus search bar in iframe mode for both browsers
       // autofocus attribute only works in Chrome for us, so
       // we also manually focus on Firefox, even in fullscreen
@@ -419,7 +382,7 @@ let fuse;
         "hashchange",
         (e) => {
           if (location.hash === MORE_SETTINGS_HASH) {
-            vue.openMoreSettings();
+            this.openMoreSettings();
           } else if (location.hash.startsWith(ADDON_HASH_PREFIX)) {
             const addonId = location.hash.substring(ADDON_HASH_PREFIX.length);
             const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
@@ -434,9 +397,6 @@ let fuse;
         },
         { capture: false }
       );
-    },
-  });
-
   const getRunningAddons = (manifests, addonsEnabled) => {
     return new Promise((resolve) => {
       chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
@@ -453,7 +413,7 @@ let fuse;
   };
 
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
-    vue.addonSettings = addonSettings;
+    this.addonSettings = addonSettings;
     const cleanManifests = [];
     let iframeData;
     if (isIframe) {
@@ -526,7 +486,7 @@ let fuse;
       manifest._groups = [];
 
       if (manifest.versionAdded) {
-        const [extMajor, extMinor, _] = vue.version.split(".");
+        const [extMajor, extMinor, _] = this.version.split(".");
         const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("new");
@@ -537,7 +497,7 @@ let fuse;
       }
 
       if (manifest.latestUpdate) {
-        const [extMajor, extMinor, _] = vue.version.split(".");
+        const [extMajor, extMinor, _] = this.version.split(".");
         const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
@@ -564,7 +524,7 @@ let fuse;
       }
 
       for (const groupId of manifest._groups) {
-        vue.addonGroups.find((g) => g.id === groupId)?.addonIds.push(manifest._addonId);
+        this.addonGroups.find((g) => g.id === groupId)?.addonIds.push(manifest._addonId);
       }
       cleanManifests.push(deepClone(manifest));
     }
@@ -581,9 +541,9 @@ let fuse;
 
     // Manifest objects will now be owned by Vue
     for (const { manifest } of manifests) {
-      Vue.set(vue.manifestsById, manifest._addonId, manifest);
+      this.manifestsById[manifest._addonId] = manifest;
     }
-    vue.manifests = manifests.map(({ manifest }) => manifest);
+    this.manifests = manifests.map(({ manifest }) => manifest);
 
     fuse = new Fuse(cleanManifests, fuseOptions);
 
@@ -599,9 +559,9 @@ let fuse;
     };
     const order = [["danger", "beta"], "editor", "player", "community", "popup"];
 
-    vue.addonGroups.forEach((group) => {
+    this.addonGroups.forEach((group) => {
       group.addonIds = group.addonIds
-        .map((id) => vue.manifestsById[id])
+        .map((id) => this.manifestsById[id])
         .sort((manifestA, manifestB) => {
           for (const tag of group.customOrder || order) {
             const val = checkTag(tag, manifestA, manifestB);
@@ -614,57 +574,57 @@ let fuse;
 
     if (isIframe) {
       const addonsInGroups = [];
-      for (const group of vue.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
-      const searchGroup = vue.addonGroups.find((group) => group.id === "_iframeSearch");
-      searchGroup.addonIds = Object.keys(vue.manifestsById).filter((addonId) => addonsInGroups.indexOf(addonId) === -1);
+      for (const group of this.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
+      const searchGroup = this.addonGroups.find((group) => group.id === "_iframeSearch");
+      searchGroup.addonIds = Object.keys(this.manifestsById).filter((addonId) => addonsInGroups.indexOf(addonId) === -1);
     }
 
     let naturalIndex = 0; // Index when not searching
-    for (const group of vue.addonGroups) {
+    for (const group of this.addonGroups) {
       group.addonIds.forEach((addonId, groupIndex) => {
-        const cachedObj = vue.addonListObjs.find((o) => o.manifest._addonId === "example");
+        const cachedObj = this.addonListObjs.find((o) => o.manifest._addonId === "example");
         const obj = cachedObj || {};
         // Some addons might be twice in the list, such as in "new" and "enabled"
         // Before setting manifest, check whether this object will be a duplicate.
-        obj.duplicate = Boolean(vue.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
-        obj.manifest = vue.manifestsById[addonId];
+        obj.duplicate = Boolean(this.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
+        obj.manifest = this.manifestsById[addonId];
         obj.group = group;
-        obj.matchesSearch = false; // Later set to true by vue.addonList if needed
+        obj.matchesSearch = false; // Later set to true by this.addonList if needed
         const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
         obj.matchesCategory = !shouldHideAsEasterEgg;
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
         obj.footerBelow = groupIndex === group.addonIds.length - 1;
         // Note: when adding new properties here, make sure to also add them to the
-        // exampleAddonListItem object on the vue.ready method, so that it's reactive!
-        if (!cachedObj) vue.addonListObjs.push(obj);
+        // exampleAddonListItem object on the this.ready method, so that it's reactive!
+        if (!cachedObj) this.addonListObjs.push(obj);
         naturalIndex++;
       });
     }
     // Remove unused remaining cached objects. Can only happen in iframe mode
-    vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
+    this.addonListObjs = this.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
-    vue.loaded = true;
+    this.loaded = true;
     setTimeout(() => {
       const hash = window.location.hash;
       if (location.hash === MORE_SETTINGS_HASH) {
-        vue.openMoreSettings();
+        this.openMoreSettings();
       } else if (hash.startsWith(ADDON_HASH_PREFIX)) {
         const addonId = hash.substring(ADDON_HASH_PREFIX.length);
-        const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+        const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
         groupWithAddon.expanded = true;
 
-        const addon = vue.manifestsById[addonId];
-        vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-        vue.blinkAddon(addonId);
+        const addon = this.manifestsById[addonId];
+        this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+        this.blinkAddon(addonId);
       }
     }, 0);
 
     let binaryNum = "";
     manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
     const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
-    vue.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
+    this.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
   });
 
   window.addEventListener("keydown", function (e) {
@@ -673,16 +633,16 @@ let fuse;
       document.querySelector("#searchBox").focus();
     } else if (e.key === "Escape") {
       if (document.activeElement === document.querySelector("#searchBox")) {
-        if (vue.searchInputReal.length > 0) {
+        if (this.searchInputReal.length > 0) {
           // Escape is used to close extension popups, so we should only prevent it if there's input text to clear
           e.preventDefault();
-          vue.searchInputReal = "";
+          this.searchInputReal = "";
         }
-      } else if (vue.categoryOpen && vue.smallMode) {
-        vue.categoryOpen = false;
+      } else if (this.categoryOpen && this.smallMode) {
+        this.categoryOpen = false;
       } else {
-        vue.closeDropdowns();
-        vue.closePickers();
+        this.closeDropdowns();
+        this.closePickers();
       }
     }
   });
@@ -690,18 +650,18 @@ let fuse;
   document.title = chrome.i18n.getMessage("settingsTitle");
   function resize() {
     if (window.innerWidth < 1100) {
-      vue.smallMode = true;
-      vue.categoryOpen = false;
-    } else if (vue.smallMode !== false) {
-      vue.smallMode = false;
-      vue.categoryOpen = true;
+      this.smallMode = true;
+      this.categoryOpen = false;
+    } else if (this.smallMode !== false) {
+      this.smallMode = false;
+      this.categoryOpen = true;
     }
   }
   window.onresize = resize;
   resize();
 
   chrome.management.getSelf((info) => {
-    if (info.installType === "development") vue.devMode = true;
+    if (info.installType === "development") this.devMode = true;
   });
 
   // Konami code easter egg
@@ -721,12 +681,13 @@ let fuse;
   document.addEventListener("keydown", (e) => {
     cursor = e.key.toLowerCase() === KONAMI_CODE[cursor] ? cursor + 1 : 0;
     if (cursor === KONAMI_CODE.length) {
-      vue.selectedCategory = "easterEgg";
-      setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
+      this.selectedCategory = "easterEgg";
+      setTimeout(() => (this.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
     }
   });
 
   if (!isIframe) {
     chrome.runtime.sendMessage("checkPermissions");
   }
-})();
+  },
+};

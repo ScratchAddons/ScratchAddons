@@ -38,3 +38,8 @@
       :key="popup._addonId"
     ></iframe>
 </template>
+
+<script>
+import App from "./App.js";
+export default App;
+</script>
