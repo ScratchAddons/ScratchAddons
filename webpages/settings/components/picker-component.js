@@ -1,3 +1,5 @@
+import bus from "../lib/eventbus";
+
 export default {
     props: ["value", "addon", "setting", "no_alpha", "disabled"],
     data() {
@@ -24,7 +26,7 @@ export default {
           this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
         }
       });
-      this.$root.$on("close-pickers", (except) => {
+      bus.$on("close-pickers", (except) => {
         if (this.isOpen && this !== except) {
           const addon = this.$parent.addon;
           const setting = this.$parent.setting;

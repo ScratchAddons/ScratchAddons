@@ -8,6 +8,8 @@
     "build": "vite build"
   },
   "dependencies": {
+    "sortablejs": "^1.15.7",
+    "tiny-emitter": "^2.1.0",
     "vue": "^3.5.30"
   },
   "devDependencies": {

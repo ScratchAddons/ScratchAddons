@@ -9,6 +9,7 @@ import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
 import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
+import bus from "./lib/eventbus";
 
 import AddonBody from "./components/addon-body.vue";
 import AddonGroupHeader from "./components/addon-group-header.vue";
@@ -226,11 +227,11 @@ let fuse;
         }, wait);
       },
       closePickers(e, leaveOpen, { callCloseDropdowns = true } = {}) {
-        this.$emit("close-pickers", leaveOpen);
+        bus.$emit("close-pickers", leaveOpen);
         if (callCloseDropdowns) this.closeDropdowns();
       },
       closeDropdowns(e, leaveOpen) {
-        this.$emit("close-dropdowns", leaveOpen);
+        bus.$emit("close-dropdowns", leaveOpen);
       },
       exportSettings() {
         serializeSettings().then((serialized) => {

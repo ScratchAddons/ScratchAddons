@@ -1,3 +1,5 @@
+import bus from "../lib/eventbus";
+
 export default {
     props: ["buttonClass", "buttonTitle", "disabled", "alignStart"],
     data() {
@@ -59,14 +61,12 @@ export default {
           targetElement.focus();
         }
       },
-    },
-    events: {
       closeDropdowns(...params) {
         return this.$root.closeDropdowns(...params);
       },
     },
     mounted() {
-      this.$root.$on("close-dropdowns", (except) => {
+      bus.$on("close-dropdowns", (except) => {
         if (this.isOpen && except !== this) {
           this.isOpen = false;
         }

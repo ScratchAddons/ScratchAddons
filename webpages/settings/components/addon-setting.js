@@ -1,3 +1,6 @@
+import Sortable from "sortablejs";
+import bus from "../lib/eventbus";
+
 import AddonSetting from "./addon-setting.vue";
 import AddonTag from "./addon-tag.vue";
 import Dropdown from "./dropdown.vue";
@@ -15,6 +18,11 @@ export default {
       };
     },
     computed: {
+      updateTable(event) {
+        let list = this.addonSettings[this.setting.id];
+        list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
+        this.updateSettings();
+      },
       show() {
         if (!this.setting.if) return true;
 
@@ -123,27 +131,23 @@ export default {
         this.addonSettings[this.setting.id] = newValue;
         this.updateSettings();
       },
-    },
-    events: {
       closePickers(...params) {
         return this.$root.closePickers(...params);
       },
     },
     directives: {
-      sortable() {
-        const sortable = new window.Sortable(this.el, {
-          handle: ".handle",
-          animation: 300,
-          onUpdate: (event) => {
-            let list = this.vm.addonSettings[this.vm.setting.id];
-            list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
-            this.vm.updateSettings();
-          },
-          disabled: !this.vm.addon._enabled,
-        });
-        this.vm.$parent.$on("toggle-addon-request", (state) => {
-          sortable.option("disabled", !state);
-        });
+      sortable: {
+        mounted: (el, binding, vnode) => {
+          const sortable = new Sortable(el, {
+            handle: ".handle",
+            animation: 300,
+            onUpdate: binding.value.update,
+            disabled: !binding.value.enabled,
+          });
+          bus.$on(`toggle-addon-request-${binding.value.id}`, (state) => {
+            sortable.option("disabled", !state);
+          });
+        },
       },
     },
 }

@@ -1,4 +1,5 @@
 import downloadBlob from "../../../libraries/common/cs/download-blob.js";
+import bus from "../lib/eventbus.js";
 
 import AddonSetting from "./addon-setting.vue";
 import AddonTag from "./addon-tag.vue";
@@ -161,7 +162,7 @@ export default {
                 ? false // Prevent expanding when shift-clicked (#1484)
                 : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
-          this.$emit("toggle-addon-request", newState);
+          bus.$emit(`toggle-addon-request-${this.addon.id}`, newState);
         };
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>
