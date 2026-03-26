@@ -57,7 +57,7 @@ export default {
       isNewOption() {
         if (!this.addon.latestUpdate) return false;
 
-        const [extMajor, extMinor, _] = window.vue.version.split(".");
+        const [extMajor, extMinor, _] = this.$root.version.split(".");
         const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
         if (!(extMajor === addonMajor && extMinor === addonMinor)) return false;
 

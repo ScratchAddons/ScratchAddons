@@ -15,7 +15,7 @@ export default {
     },
     computed: {
       items() {
-        return Array.from(this.$els.list.children);
+        return Array.from(this.refs.list.children);
       },
     },
     methods: {
@@ -27,7 +27,7 @@ export default {
         this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
         if (this.isOpen) {
           this.$nextTick(() => {
-            this.$els.list.firstElementChild.focus();
+            this.$refs.list.firstElementChild.focus();
           });
         }
       },
@@ -37,10 +37,10 @@ export default {
         }
       },
       handleKeys(e) {
-        const element = this.$els.list;
+        const element = this.$refs.list;
         if (e.ctrlKey || e.metaKey || e.altKey) return;
         if (e.key === "Tab") {
-          this.$els.button.focus(); // then let the default behavior of tab take over
+          this.$refs.button.focus(); // then let the default behavior of tab take over
           this.$root.closeDropdowns();
         } else if (document.activeElement.tagName === "LI" && e.key === "Enter") {
           document.activeElement.click();

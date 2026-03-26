@@ -315,14 +315,21 @@ let fuse;
         const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
         return group !== firstVisibleGroup;
       },
-    },
-    events: {
       closesidebar(event) {
         if (event?.target?.closest("#sidebar-toggle")) return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
       },
+      resizeEvent() {
+        if (window.innerWidth < 1100) {
+          this.smallMode = true;
+          this.categoryOpen = false;
+        } else if (this.smallMode !== false) {
+          this.smallMode = false;
+          this.categoryOpen = true;
+        }
+      }
     },
     watch: {
       searchInputReal(newValue) {
@@ -647,17 +654,8 @@ let fuse;
   });
 
   document.title = chrome.i18n.getMessage("settingsTitle");
-  function resize() {
-    if (window.innerWidth < 1100) {
-      this.smallMode = true;
-      this.categoryOpen = false;
-    } else if (this.smallMode !== false) {
-      this.smallMode = false;
-      this.categoryOpen = true;
-    }
-  }
-  window.onresize = resize;
-  resize();
+  window.onresize = this.resizeEvent;
+  this.resizeEvent();
 
   chrome.management.getSelf((info) => {
     if (info.installType === "development") this.devMode = true;
