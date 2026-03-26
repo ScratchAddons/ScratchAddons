@@ -14,6 +14,7 @@ export default async function ({ addon, console, msg }) {
       remove,
     } = addon.tab.createModal(msg("set-thumbnail"), {
       isOpen: false,
+      useEditorClasses: addon.tab.editorMode === "editor",
     });
     container.classList.add("sa-animated-thumb-popup");
     content.classList.add("sa-animated-thumb-popup-content");
@@ -132,7 +133,7 @@ export default async function ({ addon, console, msg }) {
       return;
     }
     uploadButton = Object.assign(document.createElement("button"), {
-      className: addon.tab.scratchClass("button_outlined-button", "stage-header_setThumbnailButton", {
+      className: addon.tab.scratchClass("button_outlined-button", {
         others: "sa-set-thumbnail-upload-button",
       }),
       textContent: msg("dropdown-upload"),
@@ -154,22 +155,29 @@ export default async function ({ addon, console, msg }) {
 
   while (true) {
     const setThumbnailButton = await addon.tab.waitForElement(
-      "[class*='stage-header_rightSection_'] > [class*='stage-header_setThumbnailButton_']",
-      {
-        markAsSeen: true,
-        reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-      }
+      `
+        [class*='stage-header_stage-size-row_'] > [class*='stage-header_stage-button_']:first-child,
+        [class*='stage-header_rightSection_'] > [class*='stage-header_setThumbnailButton_']
+      `,
+      { markAsSeen: true }
     );
-    setThumbnailButton.classList.add("sa-has-dropdown");
+    // Add class to parent so that it doesn't get overridden by Scratch
+    setThumbnailButton.parentElement.classList.add("sa-has-dropdown");
     const dropdownContainer = Object.assign(document.createElement("div"), {
       className: "sa-set-thumbnail-dropdown-container",
     });
     const dropdownButton = Object.assign(document.createElement("button"), {
-      className: "sa-set-thumbnail-dropdown-button",
+      className: addon.tab.scratchClass(
+        "button_outlined-button",
+        addon.tab.editorMode === "editor" ? "stage-header_stage-button" : "",
+        { others: "sa-set-thumbnail-dropdown-button" }
+      ),
     });
     dropdownButton.appendChild(
       Object.assign(document.createElement("img"), {
-        src: "/static/blocks-media/default/dropdown-arrow.svg",
+        src: addon.tab.editorMode === "editor"
+          ? "/static/blocks-media/default/dropdown-arrow-dark.svg"
+          : "/static/blocks-media/default/dropdown-arrow.svg",
         draggable: false,
       })
     );

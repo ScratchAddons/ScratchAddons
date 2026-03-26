@@ -438,7 +438,8 @@ export default class Tab extends Listenable {
         from: () => [],
         until: () => [
           // Small/big stage buttons (for editor mode)
-          q("[class*='stage-header_stage-size-toggle-group_']"),
+          q("[class*='stage-header_stage-size-toggle-group_']")
+            || q("[class*='stage-header_stage-size-row_'] > [class*='toggle-buttons_row_']"),
           // Full screen icon (for player mode)
           q("[class*='stage-header_setThumbnailButton_']")
             ? q("[class*='stage-header_rightSection_']").lastChild
