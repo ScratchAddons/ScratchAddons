@@ -1,0 +1,9 @@
+{
+  "paint-stroke-options/corner": "Corner",
+  "paint-stroke-options/cap": "Cap",
+  "paint-stroke-options/join-miter": "Miter join",
+  "paint-stroke-options/join-round": "Round join",
+  "paint-stroke-options/cap-butt": "Butt cap",
+  "paint-stroke-options/cap-round": "Round cap",
+  "paint-stroke-options/cap-square": "Square cap"
+}
