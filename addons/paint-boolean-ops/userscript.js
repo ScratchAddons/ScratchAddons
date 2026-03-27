@@ -916,10 +916,9 @@ export default async function ({ addon, msg }) {
   // tools (pen, ellipse, etc.) never render that group, so we remove the button
   // when it's absent and inject inside that group when it's present.
   // Result layout: [Curved] [Pointed] [Open/Close] | [Delete]
+  // Inject (or re-inject) the Open/Close button after "Pointed" in the
+  // mode-tools context bar — but ONLY in the Reshape/path-editing context.
   const injectModeToolsBtn = () => {
-    // Only show in Reshape mode (Curved/Pointed/Delete bar).
-    // Select, Pen, Brush, etc. all show different mode-tools bars — some also
-    // have dashed-border groups, so DOM structure alone cannot distinguish them.
     const mode = addon.tab.redux.state?.scratchPaint?.mode;
     if (mode !== "RESHAPE") {
       modeToolsOCBtn.remove();
@@ -939,7 +938,7 @@ export default async function ({ addon, msg }) {
     if (dashedGroup.contains(modeToolsOCBtn)) return;
 
     // Lazily copy button/icon/label classes from the last native button in
-    // the dashed group (= "Pointed") on first injection. Classes are stable.
+    // the dashed group (= "Pointed") on first injection.
     if (!modeToolsClassesApplied) {
       modeToolsClassesApplied = true;
       const btns = dashedGroup.querySelectorAll("[role='button']");
@@ -970,16 +969,15 @@ export default async function ({ addon, msg }) {
   // runtime so any future hash changes are handled automatically.
   const toolsLoop = async () => {
     let hasRunOnce = false;
+    let lastFrontBackRow = null;
     const updateLayout = () => (window.innerWidth >= 1600 ? setInlineMode() : setCollapsedMode());
     while (true) {
-      // Wait for the Front/Back sub-row — it appears after the outer row renders,
-      // so waiting for it guarantees the outer row is ready. Insert our sections
-      // directly after it so they follow Front/Back in the DOM.
       const frontBackRow = await addon.tab.waitForElement("[class^='fixed-tools_row'][class*='input-group']", {
         markAsSeen: true,
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
+      lastFrontBackRow = frontBackRow;
       const fixedToolsRow = frontBackRow.parentElement;
       closeDropdown(); // ensure panel is closed on each reinsertion
       frontBackRow.after(shapingSection);
@@ -1051,18 +1049,28 @@ export default async function ({ addon, msg }) {
         });
         updateButtonStates();
 
-        // Re-inject the Open/Close button into mode-tools whenever the active
-        // tool changes — React rebuilds the mode-tools children on each switch.
-        addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+        // Re-inject the Open/Close button into mode-tools whenever React
+        // rebuilds the mode-tools children. Observe the stable fixedToolsRow
+        // ancestor (always in DOM) so the observer works even if the mode-tools
+        // container is absent at setup time (e.g. during dynamic re-enable).
+        const modeToolsObserver = new MutationObserver(() => {
           if (addon.self.disabled) return;
-          if (detail.action?.type === "scratch-paint/modes/CHANGE_MODE") {
-            // Give React one frame to finish re-rendering before we inject.
-            requestAnimationFrame(injectModeToolsBtn);
-          }
+          injectModeToolsBtn();
         });
-        // Initial injection attempt (handles the case where the paint editor
-        // is already in a path-editing mode when the addon first loads).
-        requestAnimationFrame(injectModeToolsBtn);
+        modeToolsObserver.observe(fixedToolsRow, { childList: true, subtree: true });
+        addon.self.addEventListener("disabled", () => modeToolsObserver.disconnect());
+        addon.self.addEventListener("reenabled", () => {
+          modeToolsObserver.observe(fixedToolsRow, { childList: true, subtree: true });
+          // Re-insert shapingSection immediately — waitForElement won't fire again
+          // for the already-seen frontBackRow until React re-renders it.
+          if (lastFrontBackRow?.isConnected) {
+            lastFrontBackRow.after(shapingSection);
+            updateLayout();
+          }
+          injectModeToolsBtn();
+        });
+        // Initial injection attempt.
+        injectModeToolsBtn();
       }
     }
   };
