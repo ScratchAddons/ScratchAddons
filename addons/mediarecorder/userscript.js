@@ -1,8 +1,14 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
+  const availableMimeTypes = getSupportedMimeTypes();
+
   const MAX_RECORD_TIME = 600; // seconds
+  const availableFormats = [];
+  if (availableMimeTypes.includes("video/mp4")) availableFormats.push("mp4");
+  if (availableMimeTypes.includes("video/webm")) availableFormats.push("webm");
   const DEFAULT_SETTINGS = {
+    format: availableFormats[0],
     secs: 30,
     delay: 0,
     audioEnabled: true,
@@ -13,6 +19,7 @@ export default async ({ addon, console, msg }) => {
   const LOCALSTORAGE_ENTRY = "sa-record-options";
 
   let isRecording = false;
+  let mimeType = null;
   let isWaitingForFlag = false;
   let waitingForFlagFunc = null;
   let abortController = null;
@@ -34,17 +41,19 @@ export default async ({ addon, console, msg }) => {
     }
   };
 
-  const mimeType = [
-    // Prefer mp4 format over webm (Chrome and Safari)
-    "video/mp4; codecs=mp4a.40.2",
-    "video/mp4",
-    // Chrome 125 and below and Firefox only support encoding as webm
-    // VP9 is preferred as its playback is better supported across platforms
-    "video/webm; codecs=vp9",
-    // Firefox only supports encoding VP8
-    "video/webm",
-  ].find((i) => MediaRecorder.isTypeSupported(i));
-  const fileExtension = mimeType.split(";")[0].split("/")[1];
+  function getSupportedMimeTypes() {
+    const mimeTypes = [
+      // Prefer mp4 format over webm (Chrome and Safari)
+      "video/mp4; codecs=mp4a.40.2",
+      "video/mp4",
+      // Chrome 125 and below and Firefox only support encoding as webm
+      // VP9 is preferred as its playback is better supported across platforms
+      "video/webm; codecs=vp9",
+      // Firefox only supports encoding VP8
+      "video/webm",
+    ].filter((i) => MediaRecorder.isTypeSupported(i));
+    return mimeTypes;
+  }
 
   while (true) {
     const referenceElem = await addon.tab.waitForElement(
@@ -69,12 +78,23 @@ export default async ({ addon, console, msg }) => {
       container.classList.add("mediaRecorderPopup");
       content.classList.add("mediaRecorderPopupContent");
 
+      const recordDescription = msg("record-description", { extension: "{extension}" }).split("{extension}");
       const recordOptionDescription = Object.assign(document.createElement("p"), {
-        textContent: msg("record-description", {
-          extension: `.${fileExtension}`,
-        }),
         className: "recordOptionDescription",
       });
+      recordOptionDescription.appendChild(document.createTextNode(recordDescription[0]));
+      const recordOptionFormatInput = document.createElement("select");
+      availableFormats
+        .map((format) =>
+          Object.assign(document.createElement("option"), {
+            value: format,
+            textContent: "." + format,
+          })
+        )
+        .forEach((element) => recordOptionFormatInput.appendChild(element));
+      recordOptionFormatInput.value = storedOptions.format;
+      recordOptionDescription.appendChild(recordOptionFormatInput);
+      recordOptionDescription.appendChild(document.createTextNode(recordDescription[1]));
       recordOptionDescription.appendChild(
         Object.assign(document.createElement("p"), {
           textContent: msg("record-note"),
@@ -257,6 +277,7 @@ export default async ({ addon, console, msg }) => {
         "click",
         () =>
           handleOptionClose({
+            format: recordOptionFormatInput.value,
             secs: Math.min(Number(recordOptionSecondsInput.value), MAX_RECORD_TIME),
             delay: Math.min(Number(recordOptionDelayInput.value), MAX_RECORD_TIME),
             audioEnabled: recordOptionAudioInput.checked,
@@ -300,6 +321,7 @@ export default async ({ addon, console, msg }) => {
       } else {
         recorder.onstop = () => {
           const blob = new Blob(recordBuffer, { type: mimeType });
+          const fileExtension = mimeType.split(";")[0].split("/")[1];
           downloadBlob(`${addon.tab.redux.state?.preview?.projectInfo?.title || "video"}.${fileExtension}`, blob);
           disposeRecorder();
         };
@@ -418,6 +440,8 @@ export default async ({ addon, console, msg }) => {
             console.log("Canceled");
             return;
           }
+          mimeType = availableMimeTypes.find((i) => i.startsWith("video/" + opts.format));
+          console.log("Recording in " + mimeType);
           startRecording(opts);
         }
       });
