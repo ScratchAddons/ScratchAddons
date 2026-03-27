@@ -27,7 +27,7 @@
       "type": "table",
       "default": [
         {
-          "url": "https://scratch.mit.edu/studios/539952/"
+          "url": "studios/539952"
         }
       ],
       "row": [
@@ -42,31 +42,31 @@
         {
           "name": "Griffpatch's Multiplayer Games",
           "values": {
-            "url": "https://scratch.mit.edu/studios/539952/"
+            "url": "studios/539952"
           }
         },
         {
           "name": "Massive Multiplayer Platformer",
           "values": {
-            "url": "https://scratch.mit.edu/projects/612229554/"
+            "url": "projects/612229554"
           }
         },
         {
           "name": "Cloud Platformer Multiplayer Fun",
           "values": {
-            "url": "https://scratch.mit.edu/projects/378507713/"
+            "url": "projects/378507713"
           }
         },
         {
           "name": "slither.io",
           "values": {
-            "url": "https://scratch.mit.edu/projects/108566337/"
+            "url": "projects/108566337"
           }
         },
         {
           "name": "diep.io",
           "values": {
-            "url": "https://scratch.mit.edu/projects/131270192/"
+            "url": "projects/131270192"
           }
         }
       ]
