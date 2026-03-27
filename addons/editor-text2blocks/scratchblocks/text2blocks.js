@@ -567,6 +567,8 @@ export class Text2Blocks {
             variableType = "";
           } else if (info.dynamicOptions === "lists") {
             variableType = "list";
+          } else if (info.dynamicOptions === "messages") {
+            variableType = "broadcast_msg";
           }
         }
 
