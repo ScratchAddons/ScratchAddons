@@ -125,6 +125,6 @@ export default async function ({ addon, msg, console }) {
   });
 
   setTimeout(() => {
-    vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume, canvasAdjuster);
+    vm.addCostume = wrapAddCostumeWait(addon, vm.addCostume, canvasAdjuster, state);
   }, 100);
 }
