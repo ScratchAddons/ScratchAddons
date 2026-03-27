@@ -43,13 +43,16 @@ export default class TextToPath {
   static #DEBUG = false;
 
   static #rasterScale(bounds, nLines) {
-    const lineHeight = bounds.height / Math.max(nLines, 1);
-    const maxDim = Math.max(bounds.width, bounds.height);
+    const lineHeight    = bounds.height / Math.max(nLines, 1);
+    const maxDim        = Math.max(bounds.width, bounds.height);
     // Take the BETTER (max) of the two quality targets:
     //   • overall: 2400px on the longest side  — protects single-line / small text
     //   • per-line: 800px per line height      — protects wide multi-line paragraphs
     // Then clamp to the hard canvas cap.
-    const scaleQuality = Math.max(this.#TARGET_PX / maxDim, this.#TARGET_PX_PER_LINE / lineHeight);
+    const scaleQuality = Math.max(
+      this.#TARGET_PX         / maxDim,
+      this.#TARGET_PX_PER_LINE / lineHeight,
+    );
     return Math.min(scaleQuality, this.#MAX_CANVAS_PX / maxDim);
   }
 
@@ -58,44 +61,23 @@ export default class TextToPath {
   // Edges: 0 = top, 1 = right, 2 = bottom, 3 = left
   // Value: [edgeA, edgeB] pair, "S5"/"S10" for saddle cases, or null.
   static #MS = [
-    null,
-    [3, 2],
-    [2, 1],
-    [3, 1], // 0–3
-    [0, 1],
-    "S5",
-    [0, 2],
-    [3, 0], // 4–7
-    [0, 3],
-    [0, 2],
-    "S10",
-    [0, 1], // 8–11
-    [1, 3],
-    [1, 2],
-    [2, 3],
-    null, // 12–15
+    null,  [3,2],  [2,1],  [3,1],   // 0–3
+    [0,1], "S5",   [0,2],  [3,0],   // 4–7
+    [0,3], [0,2],  "S10",  [0,1],   // 8–11
+    [1,3], [1,2],  [2,3],  null,    // 12–15
   ];
 
   // Each saddle case produces two independent segments.
   // S5  = 0101: TR+BL inside → [top↔right] and [bottom↔left]
   // S10 = 1010: TL+BR inside → [top↔left] and [bottom↔right]
-  static #SAD = {
-    S5: [
-      [0, 1],
-      [2, 3],
-    ],
-    S10: [
-      [0, 3],
-      [2, 1],
-    ],
-  };
+  static #SAD = { S5: [[0,1],[2,3]], S10: [[0,3],[2,1]] };
 
   // Per exit-edge: [Δrow, Δcol, entry-edge-in-next-cell]
   static #MOV = [
-    [-1, 0, 2], // 0 TOP    → move up,    enter via BOTTOM
-    [0, 1, 3], // 1 RIGHT  → move right, enter via LEFT
-    [1, 0, 0], // 2 BOTTOM → move down,  enter via TOP
-    [0, -1, 1], // 3 LEFT   → move left,  enter via RIGHT
+    [-1,  0, 2], // 0 TOP    → move up,    enter via BOTTOM
+    [ 0,  1, 3], // 1 RIGHT  → move right, enter via LEFT
+    [ 1,  0, 0], // 2 BOTTOM → move down,  enter via TOP
+    [ 0, -1, 1], // 3 LEFT   → move left,  enter via RIGHT
   ];
 
   /**
@@ -141,10 +123,8 @@ export default class TextToPath {
 
     // Coordinate mapping: pixel (px, py) → paper (ox + px/sx, oy + py/sy)
     // The canvas spans [bounds.x, bounds.x + bounds.width] × [...height]
-    const ox = bounds.x,
-      oy = bounds.y;
-    const sx = cw / bounds.width,
-      sy = ch / bounds.height;
+    const ox = bounds.x, oy = bounds.y;
+    const sx = cw / bounds.width, sy = ch / bounds.height;
 
     // 2. Binary grid: 1 = inside (alpha above threshold) ─────────────────
     // Optional: pre-blur alpha with a separable 3×3 Gaussian (σ≈0.7px) before
@@ -169,8 +149,7 @@ export default class TextToPath {
       // Vertical pass: [1,2,1]/4 → combined σ≈0.7px
       blurredA = new Float32Array(cw * ch);
       for (let r = 0; r < ch; r++) {
-        const rt = Math.max(r - 1, 0),
-          rb = Math.min(r + 1, ch - 1);
+        const rt = Math.max(r - 1, 0), rb = Math.min(r + 1, ch - 1);
         for (let c = 0; c < cw; c++) {
           blurredA[r * cw + c] = (tmpA[rt * cw + c] + 2 * tmpA[r * cw + c] + tmpA[rb * cw + c]) * 0.25;
         }
@@ -247,12 +226,9 @@ export default class TextToPath {
         const p0 = pts[(i - CORNER_SPAN + n) % n];
         const p1 = pts[i];
         const p2 = pts[(i + CORNER_SPAN) % n];
-        const inDx = p1[0] - p0[0],
-          inDy = p1[1] - p0[1];
-        const outDx = p2[0] - p1[0],
-          outDy = p2[1] - p1[1];
-        const li = Math.hypot(inDx, inDy),
-          lo = Math.hypot(outDx, outDy);
+        const inDx = p1[0] - p0[0], inDy = p1[1] - p0[1];
+        const outDx = p2[0] - p1[0], outDy = p2[1] - p1[1];
+        const li = Math.hypot(inDx, inDy), lo = Math.hypot(outDx, outDy);
         if (li < 0.5 || lo < 0.5) continue;
         cornerDot[i] = (inDx * outDx + inDy * outDy) / (li * lo);
       }
@@ -280,10 +256,7 @@ export default class TextToPath {
           // Also check wrap-around: if last and first candidate are close
           if (cj === candidates.length && ci > 0) {
             const wrapGap = (candidates[0] + n - candidates[candidates.length - 1]) % n;
-            if (wrapGap <= clusterGap) {
-              ci = 0;
-              break;
-            } // all one cluster — no corners
+            if (wrapGap <= clusterGap) { break; } // all one cluster — no corners
           }
           // Pick sharpest in this cluster
           let best = candidates[ci];
@@ -305,12 +278,10 @@ export default class TextToPath {
       }
       const denoised = pts.map((p, i) => {
         if (isProtected[i]) return p; // preserve original position near corners
-        let ax = 0,
-          ay = 0;
+        let ax = 0, ay = 0;
         for (let j = -half; j <= half; j++) {
           const [x, y] = pts[(i + j + n) % n];
-          ax += x;
-          ay += y;
+          ax += x; ay += y;
         }
         return [ax / SMOOTH_WIN, ay / SMOOTH_WIN];
       });
@@ -322,14 +293,9 @@ export default class TextToPath {
       if (this.#DEBUG) {
         // Compact corner summary: world-space positions so we can match against SVG coordinates.
         const contourIdx = contours.indexOf(pts);
-        const cornerRows = cornerIdxs.map((ci) => {
+        const cornerRows = cornerIdxs.map(ci => {
           const [rx, ry] = pts[ci];
-          return {
-            idx: ci,
-            wx: (ox + rx / sx).toFixed(3),
-            wy: (oy + ry / sy).toFixed(3),
-            dot: cornerDot[ci].toFixed(3),
-          };
+          return { idx: ci, wx: (ox + rx / sx).toFixed(3), wy: (oy + ry / sy).toFixed(3), dot: cornerDot[ci].toFixed(3) };
         });
         console.log(`[TextToPath] contour ${contourIdx}: ${cornerRows.length} corners (world-space):`);
         console.table(cornerRows);
@@ -356,23 +322,21 @@ export default class TextToPath {
         // and the dilation zone) and measure direction over WINDOW indices.
         // SAMPLE must exceed half (the dilation half-width) — otherwise we
         // would sample unsmoothed protected points and get noisy directions.
-        const SAMPLE = half + 4; // half + a few extra pts clear of dilation
+        const SAMPLE = half + 4;  // half + a few extra pts clear of dilation
         const WINDOW = 4;
         const correctedCorner = cornerIdxs.map((ics) => {
-          const outPts = [],
-            inPts = [];
-          for (let d = SAMPLE; d < SAMPLE + WINDOW; d++) outPts.push(denoised[(ics + d + n) % n]);
-          for (let d = -(SAMPLE + WINDOW); d < -SAMPLE; d++) inPts.push(denoised[(ics + d + n) % n]);
+          const outPts = [], inPts = [];
+          for (let d = SAMPLE; d < SAMPLE + WINDOW; d++)
+            outPts.push(denoised[(ics + d + n) % n]);
+          for (let d = -(SAMPLE + WINDOW); d < -SAMPLE; d++)
+            inPts.push(denoised[(ics + d + n) % n]);
 
           // Direction vectors (endpoint→endpoint over the window)
-          const odx = outPts[WINDOW - 1][0] - outPts[0][0],
-            ody = outPts[WINDOW - 1][1] - outPts[0][1];
-          const idx = inPts[WINDOW - 1][0] - inPts[0][0],
-            idy = inPts[WINDOW - 1][1] - inPts[0][1];
+          const odx = outPts[WINDOW-1][0] - outPts[0][0], ody = outPts[WINDOW-1][1] - outPts[0][1];
+          const idx = inPts[WINDOW-1][0] - inPts[0][0],  idy = inPts[WINDOW-1][1] - inPts[0][1];
           const cross = idx * ody - idy * odx;
           if (Math.abs(cross) < 0.01) return null; // parallel → keep original
-          const dx = outPts[0][0] - inPts[0][0],
-            dy = outPts[0][1] - inPts[0][1];
+          const dx = outPts[0][0] - inPts[0][0], dy = outPts[0][1] - inPts[0][1];
           const t = (dx * ody - dy * odx) / cross;
           return [inPts[0][0] + idx * t, inPts[0][1] + idy * t];
         });
@@ -386,8 +350,8 @@ export default class TextToPath {
         const CORNER_SKIP_PX = 1.5;
         const arcPaths = cornerIdxs.map((iStart, ci) => {
           const iEnd = cornerIdxs[(ci + 1) % nc3];
-          const cs = correctedCorner[ci] ?? denoised[iStart];
-          const ce = correctedCorner[(ci + 1) % nc3] ?? denoised[iEnd];
+          const cs = correctedCorner[ci]         ?? denoised[iStart];
+          const ce = correctedCorner[(ci+1)%nc3] ?? denoised[iEnd];
 
           const arcPts = [cs];
           let k = (iStart + 1) % n;
@@ -409,14 +373,14 @@ export default class TextToPath {
           // If all interior points are within tolerance of the start→end line,
           // this arc is straight — bypass simplify() entirely (yields exactly
           // 2 segments, zero handles, guaranteed straight line after offset).
-          const [ax, ay] = cs,
-            [bx, by] = ce;
+          const [ax, ay] = cs, [bx, by] = ce;
           const abLen = Math.hypot(bx - ax, by - ay);
           let maxDev = 0;
           if (abLen > 0.01) {
             for (let j = 1; j < arcPts.length - 1; j++) {
               const [px, py] = arcPts[j];
-              maxDev = Math.max(maxDev, Math.abs((px - ax) * (by - ay) - (py - ay) * (bx - ax)) / abLen);
+              maxDev = Math.max(maxDev,
+                Math.abs((px - ax) * (by - ay) - (py - ay) * (bx - ax)) / abLen);
             }
           }
           let arc;
@@ -443,25 +407,24 @@ export default class TextToPath {
           // to arcSegs[last-1].handleOut approaching the next cusp.
           for (let s = 1; s < last; s++) {
             const seg = arcSegs[s];
-            const hi = s === 1 ? new paper.Point(0, 0) : seg.handleIn.clone();
-            const ho = s === last - 1 ? new paper.Point(0, 0) : seg.handleOut.clone();
+            const hi = s === 1      ? new paper.Point(0, 0) : seg.handleIn.clone();
+            const ho = s === last-1 ? new paper.Point(0, 0) : seg.handleOut.clone();
             path.add(new paper.Segment(seg.point.clone(), hi, ho));
           }
 
           if (this.#DEBUG) {
             // Show what simplify() produced for this arc before we override handles.
             console.groupCollapsed(
-              `  arc ${ci} (corner idx=${cornerIdxs[ci]}→${cornerIdxs[(ci + 1) % nc3]}): ` +
-                `${arcPaths[ci].segments.length} raw simplify segs → ${last} used`
+              `  arc ${ci} (corner idx=${cornerIdxs[ci]}→${cornerIdxs[(ci+1)%nc3]}): ` +
+              `${arcPaths[ci].segments.length} raw simplify segs → ${last} used`
             );
             arcPaths[ci].segments.forEach((seg, s) => {
-              const hi = seg.handleIn,
-                ho = seg.handleOut;
+              const hi = seg.handleIn,  ho = seg.handleOut;
               console.log(
                 `    seg[${s}] pt=(${seg.point.x.toFixed(2)},${seg.point.y.toFixed(2)})` +
-                  `  hIn=(${hi.x.toFixed(2)},${hi.y.toFixed(2)})` +
-                  `  hOut=(${ho.x.toFixed(2)},${ho.y.toFixed(2)})` +
-                  (s === 0 || s === last ? "  ← endpoint (handles zeroed)" : "")
+                `  hIn=(${hi.x.toFixed(2)},${hi.y.toFixed(2)})` +
+                `  hOut=(${ho.x.toFixed(2)},${ho.y.toFixed(2)})` +
+                (s===0 || s===last ? "  ← endpoint (handles zeroed)" : "")
               );
             });
             console.groupEnd();
@@ -479,14 +442,14 @@ export default class TextToPath {
       } else {
         const simp = this.#rdp(denoised, this.#EPS);
         if (simp.length < 3) continue;
-        path = new paper.Path(simp.map(([px, py]) => new paper.Point(ox + px / sx, oy + py / sy)));
+        path = new paper.Path(
+          simp.map(([px, py]) => new paper.Point(ox + px / sx, oy + py / sy))
+        );
         path.closed = true;
       }
 
-      if (path.segments.length >= 3) {
-        paths.push(path);
-        cornerCounts.push(nCorners);
-      } else path.remove();
+      if (path.segments.length >= 3) { paths.push(path); cornerCounts.push(nCorners); }
+      else path.remove();
 
       if (this.#DEBUG && path.segments.length >= 3) {
         // Final assembled path: print every segment's handle lengths.
@@ -497,8 +460,8 @@ export default class TextToPath {
           s,
           x: seg.point.x.toFixed(3),
           y: seg.point.y.toFixed(3),
-          hIn: seg.handleIn.length.toFixed(4),
-          hOut: seg.handleOut.length.toFixed(4),
+          "hIn": seg.handleIn.length.toFixed(4),
+          "hOut": seg.handleOut.length.toFixed(4),
         }));
         console.log(`[TextToPath] contour ${contours.indexOf(pts)} FINAL path (${segs.length} segs, world-space):`);
         console.table(segRows);
@@ -526,10 +489,10 @@ export default class TextToPath {
 
     // 4-bit case for cell (r, c): corners TL, TR, BR, BL
     const cellCase = (r, c) =>
-      (grid[r * w + c] << 3) |
-      (grid[r * w + (c + 1)] << 2) |
-      (grid[(r + 1) * w + (c + 1)] << 1) |
-      grid[(r + 1) * w + c];
+      (grid[ r      * w +  c   ] << 3) |
+      (grid[ r      * w + (c+1)] << 2) |
+      (grid[(r + 1) * w + (c+1)] << 1) |
+       grid[(r + 1) * w +  c   ];
 
     // Segment list for a cell case
     const segsOf = (ci) => {
@@ -541,10 +504,10 @@ export default class TextToPath {
 
     // Floating-point edge midpoint in raster-pixel space
     const edgePt = (r, c, e) => {
-      if (e === 0) return [c + 0.5, r]; // top
-      if (e === 1) return [c + 1, r + 0.5]; // right
-      if (e === 2) return [c + 0.5, r + 1]; // bottom
-      /* e===3 */ return [c, r + 0.5]; // left
+      if (e === 0) return [c + 0.5, r      ]; // top
+      if (e === 1) return [c + 1,   r + 0.5]; // right
+      if (e === 2) return [c + 0.5, r + 1  ]; // bottom
+      /* e===3 */  return [c,       r + 0.5]; // left
     };
 
     for (let r0 = 0; r0 < gh; r0++) {
@@ -560,9 +523,7 @@ export default class TextToPath {
           // edge), so the first exit will naturally be segs[si][0].
           const [startE0, startE1] = segs[si];
           const pts = [];
-          let r = r0,
-            c = c0,
-            entry = startE1;
+          let r = r0, c = c0, entry = startE1;
           const MAX = (gw * gh + 4) * 2; // safety upper bound
 
           for (let iter = 0; iter < MAX; iter++) {
@@ -570,18 +531,15 @@ export default class TextToPath {
             const cs = segsOf(cellCase(r, c));
 
             // Find the segment that contains the entry edge
-            let seg = null,
-              bit = 0;
+            let seg = null, bit = 0;
             for (let bi = 0; bi < cs.length; bi++) {
               if (cs[bi][0] === entry || cs[bi][1] === entry) {
-                seg = cs[bi];
-                bit = bi;
-                break;
+                seg = cs[bi]; bit = bi; break;
               }
             }
             if (!seg) break; // degenerate / disconnected
 
-            vis[vi] |= 1 << bit;
+            vis[vi] |= (1 << bit);
 
             // Exit via the other edge of this segment
             const exit = seg[0] === entry ? seg[1] : seg[0];
@@ -596,8 +554,8 @@ export default class TextToPath {
             if ((entry + exit) % 2 === 1) {
               // The shared corner's X is c+1 if either edge is the right edge (1).
               // The shared corner's Y is r+1 if either edge is the bottom edge (2).
-              const cx = entry === 1 || exit === 1 ? c + 1 : c;
-              const cy = entry === 2 || exit === 2 ? r + 1 : r;
+              const cx = (entry === 1 || exit === 1) ? c + 1 : c;
+              const cy = (entry === 2 || exit === 2) ? r + 1 : r;
               pts.push([cx, cy]);
             }
 
@@ -605,9 +563,7 @@ export default class TextToPath {
 
             // Step to the adjacent cell
             const [dr, dc, nextEntry] = this.#MOV[exit];
-            r += dr;
-            c += dc;
-            entry = nextEntry;
+            r += dr; c += dc; entry = nextEntry;
 
             // Off-grid → open contour, stop here
             if (r < 0 || r >= gh || c < 0 || c >= gw) break;
@@ -632,18 +588,14 @@ export default class TextToPath {
     const [x1, y1] = pts[0];
     const [x2, y2] = pts[pts.length - 1];
     const len = Math.hypot(x2 - x1, y2 - y1);
-    let maxD = 0,
-      maxI = 0;
+    let maxD = 0, maxI = 0;
     for (let i = 1; i < pts.length - 1; i++) {
       const [px, py] = pts[i];
       const d =
         len < 1e-10
           ? Math.hypot(px - x1, py - y1)
           : Math.abs((y2 - y1) * px - (x2 - x1) * py + x2 * y1 - y2 * x1) / len;
-      if (d > maxD) {
-        maxD = d;
-        maxI = i;
-      }
+      if (d > maxD) { maxD = d; maxI = i; }
     }
     if (maxD > eps) {
       const L = this.#rdp(pts.slice(0, maxI + 1), eps);
