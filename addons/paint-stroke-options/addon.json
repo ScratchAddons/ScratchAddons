@@ -1,0 +1,28 @@
+﻿{
+  "name": "Stroke join and cap options",
+  "description": "Adds stroke join (miter/round) and cap (butt/round/square) controls to the color picker in the costume editor.",
+  "credits": [
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "libraries": ["scratch-paint"],
+  "enabledByDefault": false,
+  "versionAdded": "1.45.0"
+}
