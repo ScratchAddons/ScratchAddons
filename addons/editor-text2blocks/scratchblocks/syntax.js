@@ -798,7 +798,10 @@ function recogniseStuff(scripts, workspaceCustomBlocks) {
 
   scripts.forEach((script) => {
     eachBlock(script, (block) => {
-      if (block.info && ((block.info.categoryIsDefault && block.info.category === "obsolete") || block.info.category === "custom")) {
+      if (
+        block.info &&
+        ((block.info.categoryIsDefault && block.info.category === "obsolete") || block.info.category === "custom")
+      ) {
         // custom blocks
         const info = customBlocksByHash[block.info.hash];
         if (info) {
