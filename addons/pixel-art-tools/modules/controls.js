@@ -24,6 +24,8 @@ export function createControlsModule(
   };
 
   const isBitmap = () => redux.state.scratchPaint?.format?.startsWith("BITMAP");
+  const isCostumeEditorActive = () =>
+    redux.state.scratchGui?.editorTab?.activeTabIndex === 1 && !redux.state.scratchGui?.mode?.isPlayerOnly;
 
   const getCostumeInfo = () => {
     const vm = addon.tab.traps.vm;
@@ -115,6 +117,11 @@ export function createControlsModule(
 
   const updatePixelModeVisibility = () => {
     if (!state.controlsGroup) return;
+    if (!isCostumeEditorActive()) {
+      canvasAdjuster.disable();
+      updatePixelModeState(false);
+      return;
+    }
     const bitmap = isBitmap();
     state.controlsGroup.style.display = bitmap ? "flex" : "none";
     state.toggleButton.style.display = bitmap ? "block" : "none";
@@ -326,15 +333,17 @@ export function createControlsModule(
   };
 
   const handleDisabled = () => {
+    state.pixelModeDesired = false;
+    canvasAdjuster.disable();
     updatePixelModeState(false);
-    state.brushButtons.dataset.visible = false;
+    if (state.brushButtons) state.brushButtons.dataset.visible = false;
     document.body.classList.remove("sa-pixel-art-mode-active");
   };
   const handleReenabled = () => {
-    if (!state.enabled) return;
-    updatePixelModeState(true);
-    canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
+    updatePixelModeState(false);
+    canvasAdjuster.disable();
     updateBrushControlVisibility();
+    updatePixelModeVisibility();
   };
 
   return {

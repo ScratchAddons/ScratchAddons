@@ -19,7 +19,7 @@ export default async function ({ addon, msg, console }) {
 
   const state = {
     enabled: false,
-    pixelModeDesired: addon.settings.get("enableByDefault"),
+    pixelModeDesired: false,
     palette: [],
     selectedPaletteIndex: -1,
     editingPaletteIndex: -1,
@@ -61,7 +61,11 @@ export default async function ({ addon, msg, console }) {
       textToolScaler.onModeChanged(detail.action.mode);
     }
 
-    if (detail.action.type === "scratch-paint/view/UPDATE_VIEW_BOUNDS") {
+    if (
+      detail.action.type === "scratch-paint/view/UPDATE_VIEW_BOUNDS" ||
+      detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB" ||
+      detail.action.type === "scratch-gui/mode/SET_PLAYER"
+    ) {
       controls.updatePixelModeVisibility();
     }
 
