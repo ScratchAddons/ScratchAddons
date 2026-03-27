@@ -15,6 +15,7 @@ export function createControlsModule(
   let skipNextViewBounds = false;
   let onUpdateImageTimer = null;
   let sizeDirty = false;
+  const storedSizesByCostumeSlot = new Map();
 
   const el = (tag, props = {}, children = []) => {
     const e = Object.assign(document.createElement(tag), props);
@@ -29,12 +30,24 @@ export function createControlsModule(
     const target = vm.editingTarget || vm.runtime.getEditingTarget();
     const targetId = target?.id || null;
     const costumeIndex = target?.currentCostume ?? null;
+    const slotKey = targetId !== null && costumeIndex !== null ? `${targetId}:${costumeIndex}` : null;
     const costume = target?.sprite?.costumes?.[target.currentCostume];
-    if (!costume) return { key: null, size: null, bitmapResolution: null };
+    if (!costume) return { key: null, size: null, bitmapResolution: null, slotKey };
     const mul = costume.bitmapResolution === 1 ? 2 : 1;
     const size = { width: Math.round(costume.size[0] * mul), height: Math.round(costume.size[1] * mul) };
     const key = `${targetId}:${costumeIndex}:${costume.md5 || costume.md5ext || ""}:${costume.bitmapResolution || ""}`;
-    return { key, size, bitmapResolution: costume.bitmapResolution ?? null };
+    return { key, size, bitmapResolution: costume.bitmapResolution ?? null, slotKey };
+  };
+
+  const getStoredSize = (slotKey) => {
+    if (!slotKey) return null;
+    const size = storedSizesByCostumeSlot.get(slotKey);
+    return size ? { ...size } : null;
+  };
+
+  const rememberSizeForSlot = (slotKey, width, height) => {
+    if (!slotKey) return;
+    storedSizesByCostumeSlot.set(slotKey, { width, height });
   };
 
   const updatePixelModeState = (enabled) => {
@@ -56,6 +69,9 @@ export function createControlsModule(
     state.pixelModeDesired = enabled;
     updatePixelModeState(enabled);
     if (enabled) {
+      const { slotKey } = getCostumeInfo();
+      rememberSizeForSlot(slotKey, state.pendingSize.width, state.pendingSize.height);
+      state.lastAppliedSize = { width: state.pendingSize.width, height: state.pendingSize.height };
       canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height, { fitView: true });
       redux.dispatch({ type: "scratch-paint/brush-mode/CHANGE_BIT_BRUSH_SIZE", brushSize: 1 });
       updateBrushSelection(1);
@@ -83,7 +99,9 @@ export function createControlsModule(
   };
 
   const computeDesiredSize = () => {
-    const { size } = getCostumeInfo();
+    const { size, slotKey } = getCostumeInfo();
+    const storedSize = getStoredSize(slotKey);
+    if (storedSize) return storedSize;
     return size
       ? { width: Math.max(1, size.width), height: Math.max(1, size.height) }
       : { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") };
@@ -109,12 +127,14 @@ export function createControlsModule(
       state.restoreSizePending = false;
       const { width, height } = state.lastAppliedSize;
       applySizeToInputs(width, height);
-      if (state.enabled) canvasAdjuster.enable(width, height);
+      if (state.enabled) {
+        const { slotKey } = getCostumeInfo();
+        rememberSizeForSlot(slotKey, width, height);
+        canvasAdjuster.enable(width, height);
+      }
     } else if (bitmap) {
-      const { key, size } = getCostumeInfo();
-      const desired = size
-        ? { width: Math.max(1, size.width), height: Math.max(1, size.height) }
-        : { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") };
+      const { key, slotKey } = getCostumeInfo();
+      const desired = computeDesiredSize();
 
       const recentlyUserChanged = Date.now() - lastUserSizeChangeAt < 600;
       const costumeChanged = key && key !== lastCostumeKey;
@@ -130,6 +150,7 @@ export function createControlsModule(
       if (state.enabled && skipNextViewBounds) {
         skipNextViewBounds = false;
         if (key) lastCostumeKey = key;
+        rememberSizeForSlot(slotKey, state.pendingSize.width, state.pendingSize.height);
         canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
         return;
       }
@@ -142,6 +163,7 @@ export function createControlsModule(
       }
 
       if (state.enabled) {
+        rememberSizeForSlot(slotKey, state.pendingSize.width, state.pendingSize.height);
         canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
         state.lastAppliedSize = { width: state.pendingSize.width, height: state.pendingSize.height };
       }
@@ -182,6 +204,8 @@ export function createControlsModule(
       input.value = value;
       lastUserSizeChangeAt = Date.now();
       if (state.enabled) {
+        const { slotKey } = getCostumeInfo();
+        rememberSizeForSlot(slotKey, state.pendingSize.width, state.pendingSize.height);
         canvasAdjuster.enable(state.pendingSize.width, state.pendingSize.height);
         state.lastAppliedSize = { width: state.pendingSize.width, height: state.pendingSize.height };
         if (isBitmap() && typeof paper?.tool?.onUpdateImage === "function") {
