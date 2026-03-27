@@ -1,0 +1,23 @@
+{
+  "editor-text2blocks/main": "Convert Text to Blocks",
+  "editor-text2blocks/parse-button": "Parse",
+  "editor-text2blocks/apply-button": "Apply",
+  "editor-text2blocks/code": "Code",
+  "editor-text2blocks/variables": "Variables",
+  "editor-text2blocks/issues": "Issues",
+  "editor-text2blocks/lists": "Lists",
+  "editor-text2blocks/name": "Name",
+  "editor-text2blocks/action": "Action",
+  "editor-text2blocks/configuration": "Configuration",
+  "editor-text2blocks/create-new": "Create New",
+  "editor-text2blocks/use-existing": "Use Existing",
+  "editor-text2blocks/new-name-placeholder": "Default: {name}",
+  "editor-text2blocks/errors": "Errors",
+  "editor-text2blocks/warnings": "Warnings",
+  "editor-text2blocks/warnings-confirm-content": "There are warnings. They might cause unexpected behavior or even break your project. Do you want to proceed? If you don't know, please click \"Cancel\".",
+  "editor-text2blocks/no-variables-lists": "No variables or lists found.",
+  "editor-text2blocks/no-issues": "No issues found.",
+  "editor-text2blocks/duplicate-name-error": "Already exists:\n{names}",
+  "editor-text2blocks/variable": "Variable",
+  "editor-text2blocks/list": "List"
+}
