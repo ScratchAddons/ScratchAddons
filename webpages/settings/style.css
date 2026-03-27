@@ -63,6 +63,7 @@ h1 {
   flex-grow: 1;
   display: flex;
   align-items: stretch;
+  overflow-y: auto;
 }
 
 .addons-block {
