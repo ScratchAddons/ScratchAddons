@@ -18,7 +18,7 @@
     <template v-if="noResetDropdown">
       <div v-if="setting.type === 'table'" class="setting-table">
         <div class="setting-table-list" v-sortable="{ update: updateTable, enabled: addon._enabled, id: addon.id }">
-          <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
+          <div class="setting-table-row" v-for="(row, i) of addonSettings[setting.id]">
             <div class="setting-table-options">
               <button
                 :disabled="!addon._enabled"
@@ -34,7 +34,7 @@
             </div>
             <div class="setting-table-row-settings">
               <addon-setting
-                v-for="(id, val) of row"
+                v-for="(val, id) of row"
                 :addon="addon"
                 :group-id="groupId"
                 :setting="getTableSetting(id)"
