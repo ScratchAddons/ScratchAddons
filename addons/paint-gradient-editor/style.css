@@ -1,0 +1,86 @@
+/* ── Gradient stop editor ───────────────────────────────────────────────── */
+
+.sa-grad-editor {
+  padding: 8px 16px 10px;
+  box-sizing: border-box;
+  width: 100%;
+  user-select: none;
+}
+
+/* The coloured gradient strip */
+.sa-grad-bar {
+  position: relative;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #ddd; /* visible fallback before JS sets the gradient */
+  overflow: hidden;
+}
+
+/* Handle track sits below the bar */
+.sa-grad-track {
+  position: relative;
+  height: 16px;
+  margin-top: 3px;
+}
+
+/* Shared handle base */
+.sa-grad-handle {
+  position: absolute;
+  top: 0;
+  cursor: ew-resize;
+  transform: translateX(-50%);
+}
+
+/* Start / end stop handles — upward-pointing triangle via clip-path */
+/* clip-path gives real width/height so translateX(-50%) centres correctly */
+.sa-grad-stop {
+  width: 12px;
+  height: 10px;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  /* background set via JS to match the stop colour */
+  background: #575e75;
+}
+
+/* Angle input row */
+.sa-grad-angle-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.sa-grad-angle-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #575e75;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.sa-grad-angle-input {
+  width: 48px;
+  padding: 2px 4px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-align: center;
+  color: #575e75;
+  background: #fff;
+  -moz-appearance: textfield;
+}
+.sa-grad-angle-input::-webkit-inner-spin-button,
+.sa-grad-angle-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.sa-grad-angle-input:focus {
+  outline: none;
+  border-color: #4c97ff;
+}
+
+.sa-grad-angle-deg {
+  font-size: 0.75rem;
+  color: #575e75;
+}
