@@ -1,0 +1,23 @@
+{
+  "name": "Boolean shape operations",
+  "description": "Adds boolean path operations to the vector costume editor: unite, subtract, intersect, exclude, combine, release, expand, open/close path, and a shaping sub-menu.",
+  "credits": [
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor"],
+  "versionAdded": "1.45.0",
+  "enabledByDefault": false,
+  "libraries": ["scratch-paint"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

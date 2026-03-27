@@ -1,0 +1,14 @@
+{
+  "paint-boolean-ops/shaping": "Shaping",
+  "paint-boolean-ops/unite": "Unite",
+  "paint-boolean-ops/subtract": "Subtract",
+  "paint-boolean-ops/subtract-alt": "Subtract (Shift: Punch Through)",
+  "paint-boolean-ops/intersect": "Intersect",
+  "paint-boolean-ops/intersect-alt": "Intersect (Alt: Divide)",
+  "paint-boolean-ops/divide": "Divide",
+  "paint-boolean-ops/combine": "Combine",
+  "paint-boolean-ops/release": "Release",
+  "paint-boolean-ops/expand": "Expand",
+  "paint-boolean-ops/open-path": "Open Path",
+  "paint-boolean-ops/close-path": "Close Path"
+}
