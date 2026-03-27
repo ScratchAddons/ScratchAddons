@@ -5,6 +5,7 @@ import { createAnimationPreview } from "./modules/animation-preview.js";
 import { wrapAddCostumeWait } from "./modules/bitmap-loader.js";
 import { createTextToolScaler } from "./modules/text-tool-scaler.js";
 import { installRasterCropOverride } from "./modules/raster-crop-override.js";
+import { installUpdateImageOverride } from "./modules/update-image-override.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function ({ addon, msg, console }) {
@@ -52,6 +53,7 @@ export default async function ({ addon, msg, console }) {
   const controls = createControlsModule(addon, state, redux, msg, canvasAdjuster, palette, animationPreview, paper);
   const textToolScaler = createTextToolScaler(addon, paper);
   installRasterCropOverride(addon, state, paper);
+  installUpdateImageOverride(addon, state, paper);
 
   // Main Redux event handler for paint events
   redux.addEventListener("statechanged", ({ detail }) => {
