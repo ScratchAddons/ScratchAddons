@@ -103,7 +103,8 @@ export function installUpdateImageOverride(addon, state, paper) {
           "scratch-gui/targets/UPDATE_TARGET_LIST",
           "scratch-paint/formats/CHANGE_FORMAT",
         ],
-        reduxCondition: (store) => store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
+        reduxCondition: (store) =>
+          store.scratchGui.editorTab.activeTabIndex === 1 && !store.scratchGui.mode.isPlayerOnly,
       });
       const internalKey = addon.tab.traps.getInternalKey(canvasContainer);
       const root = internalKey ? canvasContainer[internalKey] : null;
