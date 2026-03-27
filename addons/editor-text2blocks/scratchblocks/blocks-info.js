@@ -1068,17 +1068,17 @@ export const blocks_info = {
     category: "list",
     params: [
       {
-        name: "LIST",
-        type: FIELD_DROPDOWN,
-        dynamicOptions: "lists",
+        name: "ITEM",
+        opcode: "text",
       },
       {
         name: "INDEX",
         opcode: "math_integer",
       },
       {
-        name: "ITEM",
-        opcode: "text",
+        name: "LIST",
+        type: FIELD_DROPDOWN,
+        dynamicOptions: "lists",
       },
     ],
   },
