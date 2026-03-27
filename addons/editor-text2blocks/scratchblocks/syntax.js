@@ -817,7 +817,9 @@ function recogniseStuff(scripts, workspaceCustomBlocks) {
         name = blockName(block);
         info = block.info;
       } else if (block.isReporter && block.info.category === "list" /*&& block.info.categoryIsDefault*/) {
-        block.info.opcode = "data_listcontents";
+        if (!block.info.opcode) {
+          block.info.opcode = "data_listcontents";
+        }
         name = blockName(block);
         info = block.info;
       }
