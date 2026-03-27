@@ -1,0 +1,80 @@
+.extension-action.sa-midi-button {
+  border: none;
+}
+
+.extension-action.sa-midi-button img {
+  align-self: center;
+  margin-inline-start: 2px;
+  width: 8px;
+  height: 8px;
+}
+
+.sa-midi-dropdown {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  margin-top: 4px;
+  padding: 5px 0;
+  list-style: none;
+  background-color: var(--darkWww-box, white);
+  border: 1px solid var(--darkWww-border-15, rgba(0, 0, 0, 0.15));
+  border-radius: 4px;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+  color: var(--darkWww-box-text, #575e75);
+  font-size: 0.85rem;
+  line-height: normal;
+  user-select: none;
+}
+
+.sa-midi-dropdown-editor {
+  z-index: 10000; /* same as context menu */
+  background-color: var(--editorDarkMode-input, white);
+  border-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  color: var(--editorDarkMode-input-text, #575e75);
+}
+
+.sa-midi-dropdown.sa-midi-error {
+  max-width: 250px;
+  padding: 5px;
+  background-color: var(--darkWww-box-error, #fff0df);
+  border-color: #ff8c1a;
+}
+
+.sa-midi-dropdown-editor.sa-midi-error {
+  background-color: var(--editorDarkMode-accent-error, #fff0df);
+}
+
+.sa-midi-dropdown > li {
+  margin: 0;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.sa-midi-dropdown > li:hover {
+  background-color: var(--darkWww-button, #855cd6);
+  color: var(--darkWww-button-text, white);
+}
+
+.sa-midi-dropdown-editor > li:hover {
+  background-color: var(--editorDarkMode-primary, #855cd6);
+  color: var(--editorDarkMode-primary-text, white);
+}
+
+.sa-midi-selected-icon {
+  margin-inline-end: 8px;
+  filter: var(--darkWww-box-filter, none);
+  visibility: hidden;
+}
+
+.sa-midi-dropdown-editor .sa-midi-selected-icon {
+  filter: var(--editorDarkMode-input-filter, none);
+}
+
+.sa-midi-dropdown > li:hover .sa-midi-selected-icon {
+  filter: var(--editorDarkMode-primary-filter2, brightness(0) invert(1));
+}
+
+.sa-midi-selected .sa-midi-selected-icon {
+  visibility: visible;
+}
