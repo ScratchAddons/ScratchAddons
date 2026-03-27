@@ -19,21 +19,27 @@ export function createCanvasAdjuster(addon, paper) {
   const fillContextClamp = createFillContextClamp(addon, paper, getAllowedRect);
 
   const makeChecker = (w, h, size) => {
-    const [cols, rows] = [Math.ceil(w / size), Math.ceil(h / size)];
-    const base = new paper.Shape.Rectangle([0, 0], [cols, rows]);
-    base.fillColor = "#fff";
-    const dark = new paper.CompoundPath();
-    dark.fillColor = "#D9E3F2";
-    for (let y = 0; y < rows; y++) {
-      for (let x = y % 2; x < cols; x += 2) {
-        dark.addChild(new paper.Path.Rectangle(new paper.Rectangle(x, y, 1, 1)));
-      }
-    }
-    const mask = new paper.Shape.Rectangle(new paper.Rectangle(0, 0, w / size, h / size));
-    mask.clipMask = true;
-    const g = new paper.Group([base, dark, mask]);
-    g.scale(size);
-    return g;
+    const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
+    const context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false;
+
+    const tile = Object.assign(document.createElement("canvas"), { width: size * 2, height: size * 2 });
+    const tileContext = tile.getContext("2d");
+    tileContext.imageSmoothingEnabled = false;
+    tileContext.fillStyle = "#fff";
+    tileContext.fillRect(0, 0, tile.width, tile.height);
+    tileContext.fillStyle = "#D9E3F2";
+    tileContext.fillRect(0, 0, size, size);
+    tileContext.fillRect(size, size, size, size);
+
+    const pattern = context.createPattern(tile, "repeat");
+    context.fillStyle = pattern;
+    context.fillRect(0, 0, w, h);
+
+    const raster = new paper.Raster(canvas);
+    raster.guide = true;
+    raster.locked = true;
+    return raster;
   };
 
   const makeOutline = (w, h) => {
