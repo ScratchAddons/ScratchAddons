@@ -30,6 +30,8 @@ export default async function ({ addon, console }) {
     getElementAtPoint(e).dispatchEvent(new WheelEvent("wheel", e));
   });
 
+  let originalGetMetrics = null; // Store the original getMetrics function
+
   function update() {
     if (addon.tab.editorMode !== "editor") return;
 
@@ -39,6 +41,58 @@ export default async function ({ addon, console }) {
     zoomOptions.minScale = addon.settings.get("minZoom") / 100;
     zoomOptions.startScale = addon.settings.get("startZoom") / 100;
     zoomOptions.scaleSpeed = 1 + 0.2 * (addon.settings.get("zoomSpeed") / 100);
+
+    if (addon.settings.get("expandWorkspace")) {
+      // Override getMetrics to return expanded scrollable area
+      // Only override once to avoid multiple overrides
+      if (!originalGetMetrics && workspace.getMetrics) {
+        // Backup the original method
+        originalGetMetrics = workspace.getMetrics;
+
+        // Override with our expanded version
+        workspace.getMetrics = function () {
+          // Get the original metrics
+          const originalMetrics = originalGetMetrics.call(this);
+
+          // Add half a screen width and height to each side of the content area
+          const screenWidth = window.innerWidth;
+          const screenHeight = window.innerHeight;
+          const extraWidth = screenWidth; // Half screen on each side = full screen total
+          const extraHeight = screenHeight; // Half screen on each side = full screen total
+
+          // Expand the content area - this is what defines the scrollable boundaries
+          return {
+            ...originalMetrics,
+            // Expand content dimensions
+            contentWidth: originalMetrics.contentWidth + extraWidth,
+            contentHeight: originalMetrics.contentHeight + extraHeight,
+            // Shift content position to center the original content in the expanded area
+            contentLeft: originalMetrics.contentLeft - extraWidth / 2,
+            contentTop: originalMetrics.contentTop - extraHeight / 2,
+            // Keep all other properties (view, toolbox, etc.) unchanged
+          };
+        };
+
+        // Force Blockly to recalculate and redraw scrollbars with new metrics
+        workspace.resizeContents();
+        if (workspace.scrollbar) {
+          workspace.scrollbar.resize();
+        }
+        // Also trigger a resize event to update everything
+        workspace.resize();
+      }
+    } else if (originalGetMetrics) {
+      // Restore original getMetrics if we had overridden it before
+      workspace.getMetrics = originalGetMetrics;
+      originalGetMetrics = null;
+
+      // Force refresh when restoring original metrics too
+      workspace.resizeContents();
+      if (workspace.scrollbar) {
+        workspace.scrollbar.resize();
+      }
+      workspace.resize();
+    }
 
     const autohide = addon.settings.get("autohide");
     const blocklySvg = document.querySelector(".blocklySvg");
@@ -54,7 +108,8 @@ export default async function ({ addon, console }) {
   }
 
   if (!addon.self.enabledLate) {
-    addon.tab.traps.getWorkspace().scale = addon.settings.get("startZoom") / 100;
+    const workspace = addon.tab.traps.getWorkspace();
+    workspace.scale = addon.settings.get("startZoom") / 100;
   }
 
   addon.settings.addEventListener("change", update);
