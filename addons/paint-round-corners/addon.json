@@ -1,0 +1,22 @@
+{
+  "name": "Round path corners",
+  "description": "Add interactive rounded corners to vector shapes in the paint editor. Select a shape, click the Round Corners button in the left toolbar, then drag the corner handles to set the radius. Shift-click to toggle individual corners.",
+  "credits": [
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor"],
+  "versionAdded": "1.45.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "libraries": ["scratch-paint"],
+  "enabledByDefault": false
+}
