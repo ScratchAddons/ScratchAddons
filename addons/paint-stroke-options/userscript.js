@@ -10,7 +10,7 @@
       item[prop] = value;
     }
     // Trigger undo snapshot via React fiber walk.
-    const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
+    const canvasContainer = document.querySelector("[class*='paint-editor_canvas-container_']");
     if (!canvasContainer) {
       return;
     }
