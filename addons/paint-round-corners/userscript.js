@@ -759,7 +759,7 @@ export default async function ({ addon, msg }) {
       if (anyToolIcon) rcIcon.className = anyToolIcon.className;
 
       // Store the is-selected class for use when the tool activates.
-      isSelectedClass = selectedBtn ? ([...selectedBtn.classList].find((c) => c.includes("is-selected")) ?? "") : "";
+      isSelectedClass = selectedBtn ? [...selectedBtn.classList].find((c) => c.includes("is-selected")) ?? "" : "";
 
       // Ensure the button does not start in the selected state.
       if (isSelectedClass) rcBtn.classList.remove(isSelectedClass);
