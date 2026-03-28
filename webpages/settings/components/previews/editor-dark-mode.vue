@@ -1342,3 +1342,8 @@
     border-radius: 4px;
   }
 </style>
+
+<script>
+import EditorDarkMode from "./editor-dark-mode.js";
+export default EditorDarkMode;
+</script>

@@ -156,3 +156,8 @@
     color: var(--list-value-text);
   }
 </style>
+
+<script>
+import StageMonitor from "./stage-monitor.js";
+export default StageMonitor;
+</script>

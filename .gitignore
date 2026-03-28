@@ -1,6 +1,7 @@
 # Files created during packaging
 .manifest.js.bak
 .dist
+webpages-dist/
 
 # General
 .DS_Store

@@ -1,7 +1,5 @@
-export default async function ({ template }) {
-  const CategorySelector = Vue.extend({
+ export default {
     props: ["category"],
-    template,
     data() {
       return {
         lastClick: 0,
@@ -31,6 +29,4 @@ export default async function ({ template }) {
         this.$root.relatedAddonsOpen = false;
       },
     },
-  });
-  Vue.component("category-selector", CategorySelector);
 }

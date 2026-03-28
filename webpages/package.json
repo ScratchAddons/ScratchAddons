@@ -1,0 +1,20 @@
+{
+  "name": "webpages",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --mode development --watch",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@lk77/vue3-color": "^3.0.6",
+    "sortablejs": "^1.15.7",
+    "tiny-emitter": "^2.1.0",
+    "vue": "^3.5.30"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "vite": "^8.0.0"
+  }
+}

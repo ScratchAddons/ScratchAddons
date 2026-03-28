@@ -27,3 +27,8 @@
     </dropdown>
   </div>
 </template>
+
+<script>
+import ResetDropdown from "./reset-dropdown.js";
+export default ResetDropdown;
+</script>

@@ -6,7 +6,7 @@ const onPermissionsRevoked = ({ isStartup }) => {
   if (!isStartup) {
     chrome.tabs.create({
       active: true,
-      url: "/webpages/settings/permissions.html",
+      url: "/webpages-dist/permissions.html",
     });
   }
 };

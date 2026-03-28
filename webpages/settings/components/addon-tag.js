@@ -2,10 +2,8 @@ import tags from "../data/tags.js";
 
 const isIframe = window.parent !== window;
 
-export default async function ({ template }) {
-  const AddonTag = Vue.extend({
+export default {
     props: ["tag"],
-    template,
     data() {
       return {};
     },
@@ -25,6 +23,4 @@ export default async function ({ template }) {
         return chrome.i18n.getMessage(this.tagInfo.tooltipText);
       },
     },
-  });
-  Vue.component("addon-tag", AddonTag);
 }

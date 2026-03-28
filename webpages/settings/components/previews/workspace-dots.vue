@@ -40,3 +40,8 @@
     opacity: 0.14;
   }
 </style>
+
+<script>
+import WorkspaceDots from "./workspace-dots.js";
+export default WorkspaceDots;
+</script>

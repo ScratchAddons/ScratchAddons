@@ -15,8 +15,7 @@ function calculatePopupSize() {
 
 window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
-const vue = new Vue({
-  el: "body",
+export default {
   data() {
     return {
       popups: [],
@@ -55,7 +54,7 @@ const vue = new Vue({
       this.closePopup();
     },
     iframeSrc(addonId) {
-      return vue.popups.find((addon) => addon._addonId === addonId).html;
+      return this.popups.find((addon) => addon._addonId === addonId).html;
     },
   },
   computed: {
@@ -71,8 +70,8 @@ const vue = new Vue({
       return prerelease ? ver + "-pre" : ver;
     },
   },
-});
 
+mounted() {
 let manifests = null;
 // If order unspecified, addon goes first. All new popups should be added here.
 const TAB_ORDER = ["__settings__", "scratch-messaging", "cloud-games"];
@@ -95,20 +94,20 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
     icon: "../../images/icons/wrench.svg",
-    html: "../settings/index.html",
+    html: "./settings.html",
     _addonId: "__settings__",
   });
   popupObjects = popupObjects.sort(
     ({ _addonId: addonIdB }, { _addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA)
   );
-  vue.popups = popupObjects;
+  this.popups = popupObjects;
   chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
     let id = -1;
     if (typeof lastSelectedPopup === "string") {
-      id = vue.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
+      id = this.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
     }
-    if (id !== -1) vue.setPopup(vue.popups[id]);
-    else vue.setPopup(vue.popups.find((p) => p._addonId === "__settings__"));
+    if (id !== -1) this.setPopup(this.popups[id]);
+    else this.setPopup(this.popups.find((p) => p._addonId === "__settings__"));
   });
 });
 
@@ -124,20 +123,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         html: `../../popups/${addonId}/popup.html`,
       });
 
-      vue.popups.push(manifest.popup);
-      vue.popups = vue.popups.sort(
+      this.popups.push(manifest.popup);
+      this.popups = this.popups.sort(
         ({ _addonId: addonIdB }, { _addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA)
       );
     } else {
-      let removeIndex = vue.popupsWithIframes.findIndex((popup) => popup._addonId === addonId);
-      if (removeIndex !== -1) vue.popupsWithIframes.splice(removeIndex, 1);
-      removeIndex = vue.popups.findIndex((popup) => popup._addonId === addonId);
-      vue.popups.splice(removeIndex, 1);
-      if (!vue.popups.includes(vue.currentPopup)) {
-        vue.setPopup(vue.popups[0]); // set to default popup if current popup is no longer available
+      let removeIndex = this.popupsWithIframes.findIndex((popup) => popup._addonId === addonId);
+      if (removeIndex !== -1) this.popupsWithIframes.splice(removeIndex, 1);
+      removeIndex = this.popups.findIndex((popup) => popup._addonId === addonId);
+      this.popups.splice(removeIndex, 1);
+      if (!this.popups.includes(this.currentPopup)) {
+        this.setPopup(this.popups[0]); // set to default popup if current popup is no longer available
       }
     }
   }
 });
 
 chrome.runtime.sendMessage("checkPermissions");
+  },
+};
