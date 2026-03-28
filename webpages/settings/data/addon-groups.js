@@ -1,8 +1,10 @@
+import { getMessage } from "../../../libraries/common/settings-page-apis.js";
+
 export default [
   // Only popup:
   {
     id: "recentlyUsed",
-    name: chrome.i18n.getMessage("recentlyUsed"),
+    name: getMessage("recentlyUsed"),
     addonIds: [],
     expanded: true,
     iframeShow: true,
@@ -10,7 +12,7 @@ export default [
   },
   {
     id: "runningOnTab",
-    name: chrome.i18n.getMessage("runningOnThisPage"),
+    name: getMessage("runningOnThisPage"),
     addonIds: [],
     expanded: true,
     iframeShow: true,
@@ -28,7 +30,7 @@ export default [
 
   {
     id: "featuredNew",
-    name: chrome.i18n.getMessage("featuredNew"),
+    name: getMessage("featuredNew"),
     addonIds: [],
     expanded: true,
     iframeShow: false,
@@ -37,7 +39,7 @@ export default [
   },
   {
     id: "new",
-    name: chrome.i18n.getMessage("newGroup"),
+    name: getMessage("newGroup"),
     addonIds: [],
     expanded: new URLSearchParams(window.location.search).get("source") === "updatenotif",
     iframeShow: false,
@@ -46,7 +48,7 @@ export default [
   },
   {
     id: "enabled",
-    name: chrome.i18n.getMessage("enabled"),
+    name: getMessage("enabled"),
     addonIds: [],
     expanded: true,
     iframeShow: true,
@@ -54,7 +56,7 @@ export default [
   },
   {
     id: "recommended",
-    name: chrome.i18n.getMessage("recommended"),
+    name: getMessage("recommended"),
     addonIds: [],
     expanded: true,
     iframeShow: false,
@@ -62,7 +64,7 @@ export default [
   },
   {
     id: "featured",
-    name: chrome.i18n.getMessage("featured"),
+    name: getMessage("featured"),
     addonIds: [],
     expanded: true,
     iframeShow: false,
@@ -70,7 +72,7 @@ export default [
   },
   {
     id: "forums",
-    name: chrome.i18n.getMessage("forums"),
+    name: getMessage("forums"),
     addonIds: [],
     expanded: false,
     iframeShow: false,
@@ -78,7 +80,7 @@ export default [
   },
   {
     id: "others",
-    name: chrome.i18n.getMessage("others"),
+    name: getMessage("others"),
     addonIds: [],
     expanded: true,
     iframeShow: false,
@@ -86,7 +88,7 @@ export default [
   },
   {
     id: "beta",
-    name: chrome.i18n.getMessage("beta"),
+    name: getMessage("beta"),
     addonIds: [],
     expanded: false,
     iframeShow: false,

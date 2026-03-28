@@ -1,3 +1,4 @@
+import { getMessage } from "../../../libraries/common/settings-page-apis.js";
 import tags from "../data/tags.js";
 
 const isIframe = window.parent !== window;
@@ -19,10 +20,10 @@ export default async function ({ template }) {
         return this.tagInfo && (!this.tagInfo.addonTabShow || this.tagInfo.addonTabShow[this.$root.selectedCategory]);
       },
       tagName() {
-        return chrome.i18n.getMessage(this.tagInfo.name);
+        return getMessage(this.tagInfo.name);
       },
       tagTooltip() {
-        return chrome.i18n.getMessage(this.tagInfo.tooltipText);
+        return getMessage(this.tagInfo.tooltipText);
       },
     },
   });
