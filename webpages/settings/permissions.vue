@@ -3,9 +3,9 @@
       <a href="./settings.html"
         ><img src="../../images/icon-transparent.svg" class="logo header-button" alt="Logo" draggable="false"
       /></a>
-      <h1 v-cloak>{{ msg("permissions") }}</h1>
+      <h1>{{ msg("permissions") }}</h1>
     </div>
-    <div v-cloak class="main">
+    <div class="main">
       <div class="permissions-block">
         <h2>{{ msg("enablePermissionsTitle") }}</h2>
         <p>{{ msg("enablePermissionsDescription") }}</p>
