@@ -5,6 +5,16 @@ export function createCanvasAdjuster(addon, paper) {
   const getBgLayer = () => getLayer("isBackgroundGuideLayer");
   const getOutlineLayer = () => getLayer("isOutlineLayer");
   const getGuideLayer = () => getLayer("isGuideLayer");
+  const colorToCss = (color, fallback) => color?.toCSS?.(true) || color?.toCSS?.() || color || fallback;
+  const getCanvasColors = () => {
+    const bg = getBgLayer();
+    const artboard = bg?.vectorBackground?._children?.[1]?._children?.[0]?.fillColor;
+    const checker = bg?.vectorBackground?._children?.[1]?._children?.[1]?.fillColor;
+    return {
+      artboard: colorToCss(artboard, "#fff"),
+      checker: colorToCss(checker, "#D9E3F2"),
+    };
+  };
 
   let originalBg = null,
     originalOutline = null,
@@ -14,11 +24,14 @@ export function createCanvasAdjuster(addon, paper) {
     lastChecker = null,
     clickHiderAttached = false,
     gateInstalled = false,
-    helpersHidden = false;
+    helpersHidden = false,
+    themeWatcher = null,
+    lastThemeSignature = null;
   const getAllowedRect = () => getOutlineLayer()?.data?.artboardRect || null;
   const fillContextClamp = createFillContextClamp(addon, paper, getAllowedRect);
+  const getThemeSignature = (colors) => `${colors.artboard}|${colors.checker}`;
 
-  const makeChecker = (w, h, size) => {
+  const makeChecker = (w, h, size, colors) => {
     const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
     const context = canvas.getContext("2d");
     context.imageSmoothingEnabled = false;
@@ -26,9 +39,9 @@ export function createCanvasAdjuster(addon, paper) {
     const tile = Object.assign(document.createElement("canvas"), { width: size * 2, height: size * 2 });
     const tileContext = tile.getContext("2d");
     tileContext.imageSmoothingEnabled = false;
-    tileContext.fillStyle = "#fff";
+    tileContext.fillStyle = colors.artboard;
     tileContext.fillRect(0, 0, tile.width, tile.height);
-    tileContext.fillStyle = "#D9E3F2";
+    tileContext.fillStyle = colors.checker;
     tileContext.fillRect(0, 0, size, size);
     tileContext.fillRect(size, size, size, size);
 
@@ -42,11 +55,11 @@ export function createCanvasAdjuster(addon, paper) {
     return raster;
   };
 
-  const makeOutline = (w, h) => {
+  const makeOutline = (w, h, colors) => {
     const r = new paper.Rectangle(0, 0, w, h);
     const white = new paper.Shape.Rectangle(r.expand(2));
     const blue = new paper.Shape.Rectangle(r.expand(6));
-    Object.assign(white, { strokeWidth: 2, strokeColor: "white", guide: true });
+    Object.assign(white, { strokeWidth: 2, strokeColor: colors.artboard, guide: true });
     Object.assign(blue, { strokeWidth: 2, strokeColor: "#4280D7", opacity: 0.25, guide: true });
     return [white, blue];
   };
@@ -159,12 +172,31 @@ export function createCanvasAdjuster(addon, paper) {
     });
   };
 
+  const startThemeWatcher = () => {
+    if (themeWatcher) return;
+    themeWatcher = setInterval(() => {
+      if (addon.self.disabled || !lastEnabledSize || !lastChecker) return;
+      const bg = getBgLayer();
+      if (bg?.bitmapBackground !== lastChecker) return;
+      const signature = getThemeSignature(getCanvasColors());
+      if (signature === lastThemeSignature) return;
+      enable(lastEnabledSize.width, lastEnabledSize.height, { forceRebuild: true });
+    }, 250);
+  };
+
+  const stopThemeWatcher = () => {
+    if (!themeWatcher) return;
+    clearInterval(themeWatcher);
+    themeWatcher = null;
+  };
+
   const enable = (w, h, options = null) => {
     fillContextClamp.enable();
     const bg = getBgLayer();
     if (!bg?.bitmapBackground) return;
     originalBg ||= bg.bitmapBackground;
     bgCenter ||= originalBg.position.clone();
+    const forceRebuild = options?.forceRebuild;
 
     const ol = getOutlineLayer();
     const canReuse =
@@ -174,15 +206,17 @@ export function createCanvasAdjuster(addon, paper) {
       bg.bitmapBackground === lastChecker &&
       (!ol?.data?.artboardRect || (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
 
-    if (canReuse) {
+    if (canReuse && !forceRebuild) {
       installToolGate();
       installClickHider();
       if (options?.fitView) fitViewToArtboard(w, h);
       return;
     }
 
+    const canvasColors = getCanvasColors();
+    lastThemeSignature = getThemeSignature(canvasColors);
     bg.bitmapBackground.remove();
-    const g = makeChecker(w, h, 1);
+    const g = makeChecker(w, h, 1, canvasColors);
     lastChecker = g;
     lastEnabledSize = { width: w, height: h };
     g.position = bgCenter;
@@ -195,7 +229,7 @@ export function createCanvasAdjuster(addon, paper) {
         outlineCenter = ol.bounds.center.clone();
         originalOutline = ol.removeChildren();
       } else ol.removeChildren();
-      const [white, blue] = makeOutline(w, h);
+      const [white, blue] = makeOutline(w, h, canvasColors);
       white.position = blue.position = outlineCenter;
       ol.addChildren([white, blue]);
       ol.data.artboardRect = new paper.Rectangle(
@@ -206,11 +240,13 @@ export function createCanvasAdjuster(addon, paper) {
 
     installToolGate();
     installClickHider();
+    startThemeWatcher();
     if (options?.fitView) fitViewToArtboard(w, h);
   };
 
   const disable = () => {
     fillContextClamp.disable();
+    stopThemeWatcher();
     const bg = getBgLayer();
     if (bg && originalBg) {
       if (bg.bitmapBackground !== originalBg) bg.bitmapBackground.remove();

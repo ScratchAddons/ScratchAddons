@@ -10,12 +10,14 @@
 }
 
 .sa-pixel-art-toggle {
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  background: #fff;
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  background: var(--editorDarkMode-input, #fff);
   border-radius: 0.4rem;
   width: 1.95rem;
   height: 1.95rem;
   padding: 0.2rem;
+  color: var(--editorDarkMode-input-text, inherit);
+  color-scheme: var(--editorDarkMode-input-colorScheme, light);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -28,20 +30,22 @@
 }
 
 .sa-pixel-art-toggle[data-active="true"] {
-  background-color: #855cd6;
-  color: #fff;
+  background-color: var(--editorDarkMode-primary, #855cd6);
+  border-color: var(--editorDarkMode-primary, #855cd6);
+  color: var(--editorDarkMode-primary-text, #fff);
 }
 .sa-pixel-art-toggle:hover:not([data-active="true"]) {
-  background: rgba(0, 0, 0, 0.08);
+  background: var(--editorDarkMode-primary-transparent15, rgba(0, 0, 0, 0.08));
 }
 
 .sa-pixel-art-toggle-icon {
   width: 1rem;
   height: 1rem;
+  filter: var(--editorDarkMode-input-filter, none);
   pointer-events: none;
 }
 .sa-pixel-art-toggle[data-active="true"] .sa-pixel-art-toggle-icon {
-  filter: brightness(0) invert(1);
+  filter: var(--editorDarkMode-primary-filter2, brightness(0) invert(1));
 }
 
 .sa-pixel-art-toggle-wrapper {
@@ -59,15 +63,16 @@
 
 .sa-pixel-art-size input {
   width: 3rem;
-  border: 1px solid #e9eef2;
-  background: #fff;
+  border: 1px solid var(--editorDarkMode-border, #e9eef2);
+  background: var(--editorDarkMode-input, #fff);
   text-align: center;
   font-size: 0.75rem;
   height: 1.95rem;
   padding: 0 0.1rem 0 0.5rem;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
-  color: #575e75;
+  color: var(--editorDarkMode-input-text, #575e75);
+  color-scheme: var(--editorDarkMode-input-colorScheme, light);
   border-radius: 2rem;
   box-sizing: border-box;
 }
@@ -76,13 +81,15 @@
 .sa-pixel-art-palette,
 .sa-pixel-art-animation {
   margin-top: 0.5rem;
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--editorDarkMode-accent, rgba(0, 0, 0, 0.03));
+  border: 1px solid var(--editorDarkMode-border, transparent);
   border-radius: 0.4rem;
   padding: 0.4rem;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  color: #333;
+  color: var(--editorDarkMode-accent-text, #333);
+  color-scheme: var(--editorDarkMode-accent-colorScheme, light);
   box-sizing: border-box;
 }
 
@@ -117,15 +124,21 @@
   font-size: 0.75rem;
   padding: 0.25rem 0.4rem;
   border-radius: 0.3rem;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: #fff;
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.2));
+  background: var(--editorDarkMode-input, #fff);
+  color: var(--editorDarkMode-input-text, inherit);
+  color-scheme: var(--editorDarkMode-input-colorScheme, light);
   box-sizing: border-box;
+}
+.sa-pixel-art-palette-select option {
+  background: var(--editorDarkMode-input, #fff);
+  color: var(--editorDarkMode-input-text, inherit);
 }
 
 .sa-pixel-art-palette-select:focus {
   outline: none;
-  border-color: #4d97ff;
-  box-shadow: 0 0 0 2px rgba(77, 151, 255, 0.2);
+  border-color: var(--editorDarkMode-primary, #4d97ff);
+  box-shadow: 0 0 0 2px var(--editorDarkMode-primary-transparent35, rgba(77, 151, 255, 0.2));
 }
 
 .sa-pixel-art-palette-actions {
@@ -137,7 +150,7 @@
 
 .sa-pixel-art-palette-empty {
   font-size: 0.7rem;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--editorDarkMode-input-transparentText, rgba(0, 0, 0, 0.6));
   margin: 0;
   text-align: center;
 }
@@ -155,7 +168,7 @@
 .sa-pixel-art-color {
   width: 100%;
   aspect-ratio: 1;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.3));
   border-radius: 0.2rem;
   cursor: pointer;
   position: relative;
@@ -166,12 +179,12 @@
 
 .sa-pixel-art-color[data-selected="true"] {
   box-shadow:
-    0 0 0 2px #fff,
-    0 0 0 4px #4d97ff;
+    0 0 0 2px var(--editorDarkMode-accent, #fff),
+    0 0 0 4px var(--editorDarkMode-primary, #4d97ff);
 }
 .sa-pixel-art-color[data-editing="true"] {
   box-shadow:
-    0 0 0 2px #fff,
+    0 0 0 2px var(--editorDarkMode-accent, #fff),
     0 0 0 4px #ff6b47;
 }
 
@@ -189,8 +202,9 @@
 }
 
 .sa-pixel-art-color-add {
-  border: 1px dashed rgba(0, 0, 0, 0.3);
-  color: rgba(0, 0, 0, 0.5);
+  background: var(--editorDarkMode-input-transparent25, transparent);
+  border: 1px dashed var(--editorDarkMode-input-divider, rgba(0, 0, 0, 0.3));
+  color: var(--editorDarkMode-input-transparentText, rgba(0, 0, 0, 0.5));
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -202,8 +216,9 @@
   font-weight: 600;
 }
 .sa-pixel-art-color-add:hover {
-  border-color: #4d97ff;
-  color: #4d97ff;
+  background: var(--editorDarkMode-primary-transparent15, transparent);
+  border-color: var(--editorDarkMode-primary, #4d97ff);
+  color: var(--editorDarkMode-primary, #4d97ff);
 }
 
 /* Messages */
@@ -271,25 +286,30 @@
 }
 
 .sa-pixel-art-brush-button {
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.2));
   border-radius: 0.35rem;
-  background: #fff;
+  background: var(--editorDarkMode-input, #fff);
+  color: var(--editorDarkMode-input-text, inherit);
+  color-scheme: var(--editorDarkMode-input-colorScheme, light);
   padding: 0.25rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.sa-pixel-art-brush-button:hover {
+  background: var(--editorDarkMode-primary-transparent15, transparent);
+}
 
 .sa-pixel-art-brush-button[data-selected="true"] {
-  border-color: #4d97ff;
-  box-shadow: 0 0 0 2px rgba(77, 151, 255, 0.3);
+  border-color: var(--editorDarkMode-primary, #4d97ff);
+  box-shadow: 0 0 0 2px var(--editorDarkMode-primary-transparent35, rgba(77, 151, 255, 0.3));
 }
 
 .sa-pixel-art-brush-preview {
   background: currentColor;
-  color: #4d97ff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--editorDarkMode-primary, #4d97ff);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.1));
   display: block;
 }
 
@@ -303,7 +323,7 @@ body.sa-pixel-art-mode-active .sa-pixel-art-hide-when-pixel {
   position: absolute;
   z-index: 100;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--editorDarkMode-accent, rgba(255, 255, 255, 0.95));
   margin-top: 0;
 }
 
@@ -350,8 +370,8 @@ body.sa-pixel-art-mode-active .sa-pixel-art-hide-when-pixel {
   width: 100%;
   height: 120px;
   object-fit: contain;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: var(--editorDarkMode-input, #fff);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.1));
   border-radius: 0.3rem;
   image-rendering: pixelated;
 }
@@ -449,6 +469,7 @@ body.sa-pixel-art-mode-active .sa-pixel-art-hide-when-pixel {
 
 .sa-pixel-art-animation-range-icon {
   width: 1rem;
+  filter: var(--editorDarkMode-accent-filter, none);
   opacity: 0.7;
 }
 .sa-pixel-art-animation-range-toggle:hover img {
@@ -479,15 +500,18 @@ body.sa-pixel-art-mode-active .sa-pixel-art-hide-when-pixel {
 .sa-pixel-art-animation-range input {
   width: 3.2rem;
   padding: 0.2rem 0.3rem;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.2));
+  background: var(--editorDarkMode-input, #fff);
+  color: var(--editorDarkMode-input-text, inherit);
+  color-scheme: var(--editorDarkMode-input-colorScheme, light);
   border-radius: 0.25rem;
   font-size: 0.7rem;
 }
 
 .sa-pixel-art-animation-range input:focus {
   outline: none;
-  border-color: #4d97ff;
-  box-shadow: 0 0 0 2px rgba(77, 151, 255, 0.2);
+  border-color: var(--editorDarkMode-primary, #4d97ff);
+  box-shadow: 0 0 0 2px var(--editorDarkMode-primary-transparent35, rgba(77, 151, 255, 0.2));
 }
 
 .sa-pixel-art-hidden {

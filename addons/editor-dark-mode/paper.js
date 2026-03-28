@@ -62,12 +62,14 @@ export default async function ({ addon, console }) {
         layer.vectorBackground._children[0].fillColor = workspaceBackground;
         layer.vectorBackground._children[1]._children[0].fillColor = artboardBackground;
         layer.vectorBackground._children[1]._children[1].fillColor = checkerboardColor;
-        layer.bitmapBackground._children[0].fillColor = artboardBackground;
-        layer.bitmapBackground._children[1].fillColor = checkerboardColor;
+        if (layer.bitmapBackground?._children?.[0] && layer.bitmapBackground?._children?.[1]) {
+          layer.bitmapBackground._children[0].fillColor = artboardBackground;
+          layer.bitmapBackground._children[1].fillColor = checkerboardColor;
+        }
         for (let i = 0; i < 3; i++) layer._children[2]._children[i].strokeColor = crosshairOuterColor;
         for (let i = 3; i < 6; i++) layer._children[2]._children[i].strokeColor = crosshairInnerColor;
       } else if (layer.data.isOutlineLayer) {
-        layer._children[0].strokeColor = artboardBackground;
+        if (layer._children?.[0]) layer._children[0].strokeColor = artboardBackground;
       } else if (layer.data.isDragCrosshairLayer) {
         for (let i = 0; i < 3; i++) layer.dragCrosshair._children[i].strokeColor = crosshairOuterColor;
         for (let i = 3; i < 6; i++) layer.dragCrosshair._children[i].strokeColor = crosshairInnerColor;
