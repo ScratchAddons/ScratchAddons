@@ -15,7 +15,8 @@ export function installRasterCropOverride(addon, state, paper) {
     // 1) full canvas to compute bounds (https://github.com/scratchfoundation/scratch-paint/blob/ba45b03ee2913446fa71e6abd2e681188b7bcc9b/src/hocs/update-image-hoc.jsx#L97)
     // 2) cropped to those bounds (https://github.com/scratchfoundation/scratch-paint/blob/ba45b03ee2913446fa71e6abd2e681188b7bcc9b/src/hocs/update-image-hoc.jsx#L106)
     // In step 2 we swap in our own rect that preserves the pixel-mode canvas.
-    if (addon.self.disabled || !shouldOverride()) return originalGetImageData.apply(this, args);
+    if (addon.self.disabled || !shouldOverride() || !state.updateImageActive)
+      return originalGetImageData.apply(this, args);
 
     let rect = args[0];
     const isFirstStage = rect && typeof rect === "object" && "_width" in rect;

@@ -57,9 +57,11 @@ export function installUpdateImageOverride(addon, state, paper) {
       const originalOnUpdateImage = this.props.onUpdateImage;
       const wrappedOnUpdateImage = getWrappedCallback(originalOnUpdateImage);
       this.props.onUpdateImage = wrappedOnUpdateImage;
+      state.updateImageActive = true;
       try {
         return originalHandleUpdateBitmap.apply(this, args);
       } finally {
+        state.updateImageActive = false;
         if (this.props.onUpdateImage === wrappedOnUpdateImage) {
           this.props.onUpdateImage = originalOnUpdateImage;
         }
