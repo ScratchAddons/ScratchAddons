@@ -447,6 +447,9 @@ export default async function ({ addon, msg }) {
         g.appendChild(svgEl("circle", { r: 7, fill: "rgba(0,0,0,0.12)" }));
         g.appendChild(svgEl("circle", { r: 5.5, fill: "none", stroke: "#888", "stroke-width": 1.5 }));
       }
+      // Enlarged invisible hit target so clicks within 20px of any widget centre
+      // register as a widget click rather than falling through to the canvas.
+      g.appendChild(svgEl("circle", { r: 20, fill: "transparent" }));
 
       // ── Drag handling ─────────────────────────────────────────────────
       // The <g> element sits above the canvas (pointer-events:all), so SVG
@@ -456,23 +459,39 @@ export default async function ({ addon, msg }) {
         e.stopPropagation();
         e.preventDefault();
 
+        // The hit circle is r=20 and handles may overlap, so find whichever corner
+        // centre is closest to the click — that is the one the user intended to target.
+        const svgRect = overlaySvg.getBoundingClientRect();
+        const cx = e.clientX - svgRect.left;
+        const cy = e.clientY - svgRect.top;
+        let activeCorner = corner;
+        let closestDist = Infinity;
+        for (const c of corners) {
+          const p = toSVG(widgetPt(c));
+          const d = Math.hypot(cx - p.x, cy - p.y);
+          if (d < closestDist) {
+            closestDist = d;
+            activeCorner = c;
+          }
+        }
+
         // Remember whether this corner was already selected before the click,
         // so we can defer the "deselect others" action until mouseup if no drag
         // happened (dragging a selected corner should keep all selected corners moving).
-        const wasSelected = corner.selected;
-        lastDraggedCorner = corner;
+        const wasSelected = activeCorner.selected;
+        lastDraggedCorner = activeCorner;
 
         if (e.shiftKey) {
-          corner.selected = !corner.selected;
-        } else if (!corner.selected) {
+          activeCorner.selected = !activeCorner.selected;
+        } else if (!activeCorner.selected) {
           // Clicking an unselected corner always selects only it immediately.
           for (const c of corners) c.selected = false;
-          corner.selected = true;
+          activeCorner.selected = true;
         }
         // If corner was already selected (no shift), don't change selection yet —
         // wait for mouseup.  If the user drags, we keep the multi-selection intact.
 
-        const dragCorner = corner; // closed over for this drag
+        const dragCorner = activeCorner; // closed over for this drag
         let didDrag = false;
 
         // ── Pre-scan: cap maxRadius to prevent arc overlap on shared segments ──
@@ -545,7 +564,7 @@ export default async function ({ addon, msg }) {
           if (!didDrag && !e.shiftKey && wasSelected) {
             // Pure click on an already-selected corner: now deselect all others.
             for (const c of corners) c.selected = false;
-            corner.selected = true;
+            activeCorner.selected = true;
             drawWidgets();
           }
           if (didDrag && madeChanges) {
@@ -700,12 +719,22 @@ export default async function ({ addon, msg }) {
     isToolActive = true;
     if (isSelectedClass) rcBtn.classList.add(isSelectedClass);
 
-    // Watch for tool switches (CHANGE_MODE) and undo/redo events.
+    // Watch for tool switches (CHANGE_MODE), tab navigation, and undo/redo events.
     modeChangeHandler = ({ detail }) => {
       if (!isToolActive) return;
       const type = detail.action?.type;
       if (type === "scratch-paint/modes/CHANGE_MODE") {
         deactivateTool({ restoreMode: false });
+      } else if (type === "scratch-gui/navigation/ACTIVATE_TAB") {
+        // User is switching tabs. Deactivate NOW while the paint editor is still
+        // fully alive — triggerUpdateImage() and CHANGE_MODE SELECT both work
+        // correctly here. By the time toolsLoop fires on nav-back, isToolActive
+        // will already be false so it does nothing.
+        const newTab = addon.tab.redux.state?.scratchGui?.editorTab?.activeTabIndex ?? -1;
+        if (newTab !== 1) {
+          // Switching away from costumes tab.
+          deactivateTool({ restoreMode: true });
+        }
       } else if (type === "scratch-paint/undo/UNDO" || type === "scratch-paint/undo/REDO") {
         // scratch-paint's _restore() reimports the paper project from JSON.
         // The SVG overlay is DOM-only so it survives untouched.
@@ -745,9 +774,9 @@ export default async function ({ addon, msg }) {
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
 
-      // If the user navigated away and came back, deactivate and restore the
-      // previous mode so the paint editor remounts with a real tool selected.
-      if (isToolActive) deactivateTool({ restoreMode: true });
+      // If the user navigated away and came back: ACTIVATE_TAB in modeChangeHandler
+      // should have already deactivated the tool cleanly. This is a safety net only.
+      if (isToolActive) deactivateTool({ restoreMode: false });
 
       // Extract native classes each iteration so hash-mangling is always current.
       const anyToolBtn = modeSelector.querySelector("[class*='mod-tool-select']");
@@ -759,7 +788,7 @@ export default async function ({ addon, msg }) {
       if (anyToolIcon) rcIcon.className = anyToolIcon.className;
 
       // Store the is-selected class for use when the tool activates.
-      isSelectedClass = selectedBtn ? [...selectedBtn.classList].find((c) => c.includes("is-selected")) ?? "" : "";
+      isSelectedClass = selectedBtn ? ([...selectedBtn.classList].find((c) => c.includes("is-selected")) ?? "") : "";
 
       // Ensure the button does not start in the selected state.
       if (isSelectedClass) rcBtn.classList.remove(isSelectedClass);
