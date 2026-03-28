@@ -1,3 +1,4 @@
+/** @param {AddonContext} param0 */
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
@@ -51,26 +52,33 @@ export default async function ({ addon, console }) {
 
         // Override with our expanded version
         workspace.getMetrics = function () {
-          // Get the original metrics
           const originalMetrics = originalGetMetrics.call(this);
+          // Scroll limits are in workspace coordinates, independent of toolbox screen position.
+          // Expand by half a viewport on each side — matches vertical which also uses viewHeight/2 per side.
+          const extraLeft = originalMetrics.viewWidth / 2;
+          const extraRight = originalMetrics.viewWidth / 2;
+          const totalExtraWidth = extraLeft + extraRight + (originalMetrics.toolboxWidth || 0);
+          const extraHeight = originalMetrics.viewHeight;
 
-          // Add half a screen width and height to each side of the content area
-          const screenWidth = window.innerWidth;
-          const screenHeight = window.innerHeight;
-          const extraWidth = screenWidth; // Half screen on each side = full screen total
-          const extraHeight = screenHeight; // Half screen on each side = full screen total
-
-          // Expand the content area - this is what defines the scrollable boundaries
-          return {
-            ...originalMetrics,
-            // Expand content dimensions
-            contentWidth: originalMetrics.contentWidth + extraWidth,
-            contentHeight: originalMetrics.contentHeight + extraHeight,
-            // Shift content position to center the original content in the expanded area
-            contentLeft: originalMetrics.contentLeft - extraWidth / 2,
-            contentTop: originalMetrics.contentTop - extraHeight / 2,
-            // Keep all other properties (view, toolbox, etc.) unchanged
-          };
+          if (Blockly.registry) {
+            // New Blockly: scrollable area is defined by scrollWidth/scrollHeight/scrollLeft/scrollTop
+            return {
+              ...originalMetrics,
+              scrollWidth: originalMetrics.scrollWidth + totalExtraWidth,
+              scrollHeight: originalMetrics.scrollHeight + extraHeight,
+              scrollLeft: originalMetrics.scrollLeft - extraLeft,
+              scrollTop: originalMetrics.scrollTop - extraHeight / 2,
+            };
+          } else {
+            // Old Blockly: scrollable area is defined by contentWidth/contentHeight/contentLeft/contentTop
+            return {
+              ...originalMetrics,
+              contentWidth: originalMetrics.contentWidth + totalExtraWidth,
+              contentHeight: originalMetrics.contentHeight + extraHeight,
+              contentLeft: originalMetrics.contentLeft - extraLeft,
+              contentTop: originalMetrics.contentTop - extraHeight / 2,
+            };
+          }
         };
 
         // Force Blockly to recalculate and redraw scrollbars with new metrics
