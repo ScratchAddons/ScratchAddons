@@ -35,26 +35,14 @@ export default async function ({ addon, msg }) {
   // Dropdown panel — fixed-position popup shown on hover in collapsed mode.
   const shapingDropdown = document.createElement("div");
   shapingDropdown.className = "sa-shaping-dropdown";
-  shapingDropdown.style.cssText = [
-    "display:none",
-    "position:fixed",
-    "flex-direction:column",
-    "align-items:center",
-    "gap:2px",
-    "background:#fff",
-    "border-radius:8px",
-    "box-shadow:0 4px 16px rgba(0,0,0,.25)",
-    "padding:6px",
-    "z-index:9999",
-  ].join(";");
   shapingSection.appendChild(shapingDropdown);
 
   // Two layout rows inside the dropdown (used in collapsed mode).
   const row1 = document.createElement("div");
-  row1.style.cssText = "display:flex;flex-direction:row;justify-content:center;gap:2px";
+  row1.className = "sa-shaping-dropdown-row";
   shapingDropdown.appendChild(row1);
   const row2 = document.createElement("div");
-  row2.style.cssText = "display:flex;flex-direction:row;justify-content:center;gap:2px";
+  row2.className = "sa-shaping-dropdown-row";
   shapingDropdown.appendChild(row2);
 
   const makeItem = (iconFile, label, title, op) => {
@@ -172,6 +160,14 @@ export default async function ({ addon, msg }) {
   // bubble up to the section listener above — no second listener needed.
 
   // ── Enable/disable buttons based on current paper.js selection ─────────
+  // triggerUpdateImage() calls handleUpdateImage() which asynchronously
+  // serialises the canvas to SVG, feeds it through Redux, and re-imports it
+  // into paper.js — resetting selectedItems in the process. We must wait for
+  // that round-trip to finish before reading the new selection state.
+  // Two nested requestAnimationFrames ensure we run after React has committed
+  // the updated state to the DOM, without relying on a fixed timeout.
+  const deferUpdateButtonStates = () => requestAnimationFrame(() => requestAnimationFrame(updateButtonStates));
+
   const updateButtonStates = async () => {
     if (!modDisabledClass) {
       const anyDisabled = document.querySelector("[class*='button_mod-disabled']");
@@ -494,7 +490,7 @@ export default async function ({ addon, msg }) {
         topCopy.selected = true;
       }
       triggerUpdateImage();
-      setTimeout(updateButtonStates, 50);
+      deferUpdateButtonStates();
       return;
     }
 
@@ -507,7 +503,7 @@ export default async function ({ addon, msg }) {
       // Single converted text item: no unite needed, just save.
       if (convertedText > 0 && selected.length === 1) {
         triggerUpdateImage();
-        setTimeout(updateButtonStates, 50);
+        deferUpdateButtonStates();
       }
       return;
     }
@@ -535,7 +531,7 @@ export default async function ({ addon, msg }) {
     }
     if (topClone) topClone.bringToFront();
     triggerUpdateImage();
-    setTimeout(updateButtonStates, 50);
+    deferUpdateButtonStates();
   };
 
   // ── Punch Through (Shift+Subtract): topmost top-level item (or group) cuts
@@ -581,7 +577,7 @@ export default async function ({ addon, msg }) {
       topCopy.selected = true;
     }
     triggerUpdateImage();
-    setTimeout(updateButtonStates, 50);
+    deferUpdateButtonStates();
   };
 
   // ── Divide: split all shapes into every distinct non-overlapping region ───
@@ -667,7 +663,7 @@ export default async function ({ addon, msg }) {
     }
 
     triggerUpdateImage();
-    setTimeout(updateButtonStates, 50);
+    deferUpdateButtonStates();
   };
 
   // ── Combine: CompoundPath with punch-through holes ─────────────────────
@@ -707,7 +703,7 @@ export default async function ({ addon, msg }) {
     cp.selected = true;
 
     triggerUpdateImage();
-    setTimeout(updateButtonStates, 50);
+    deferUpdateButtonStates();
   };
 
   // ── Release: split CompoundPath back into individual Paths ─────────────
@@ -729,7 +725,7 @@ export default async function ({ addon, msg }) {
       }
     }
     triggerUpdateImage();
-    setTimeout(updateButtonStates, 50);
+    deferUpdateButtonStates();
   };
 
   // ── Outline Expand / Contract ──────────────────────────────────────────
@@ -767,7 +763,7 @@ export default async function ({ addon, msg }) {
     }
 
     triggerUpdateImage();
-    setTimeout(updateButtonStates, 50);
+    deferUpdateButtonStates();
   };
 
   // ── Open / Close: toggle selected paths between open and closed ─────────
@@ -859,12 +855,12 @@ export default async function ({ addon, msg }) {
     }
 
     triggerUpdateImage();
-    setTimeout(updateButtonStates, 50);
+    deferUpdateButtonStates();
   };
 
   // ── Trigger scratch-paint undo snapshot ───────────────────────────────
   const triggerUpdateImage = () => {
-    const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
+    const canvasContainer = document.querySelector("[class*='paint-editor_canvas-container_']");
     if (!canvasContainer) return;
     let fiber = canvasContainer[addon.tab.traps.getInternalKey(canvasContainer)];
     while (fiber && typeof fiber.stateNode?.handleUpdateImage !== "function") {
@@ -927,7 +923,7 @@ export default async function ({ addon, msg }) {
 
     // Find the dashed-border group (contains Curved + Pointed in Reshape mode).
     const dashedGroup = document.querySelector(
-      "[class*='mode-tools_mode-tools'] [class*='mode-tools_mod-dashed-border']"
+      "[class*='mode-tools_mode-tools_'] [class*='mode-tools_mod-dashed-border_']"
     );
     if (!dashedGroup) {
       modeToolsOCBtn.remove();
@@ -955,7 +951,7 @@ export default async function ({ addon, msg }) {
 
     // Append after "Pointed" inside the dashed-border group.
     dashedGroup.appendChild(modeToolsOCBtn);
-    setTimeout(updateButtonStates, 50);
+    deferUpdateButtonStates();
   };
 
   addon.self.addEventListener("disabled", () => {
@@ -972,7 +968,7 @@ export default async function ({ addon, msg }) {
     let lastFrontBackRow = null;
     const updateLayout = () => (window.innerWidth >= 1600 ? setInlineMode() : setCollapsedMode());
     while (true) {
-      const frontBackRow = await addon.tab.waitForElement("[class^='fixed-tools_row'][class*='input-group']", {
+      const frontBackRow = await addon.tab.waitForElement("[class*='fixed-tools_row_'][class*='input-group_']", {
         markAsSeen: true,
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
@@ -989,7 +985,7 @@ export default async function ({ addon, msg }) {
         // Extract layout and separator classes from native toolbar elements.
         const nativeDashedGroup = fixedToolsRow.querySelector("[class*='mod-dashed-border']");
         dashedBorderClass = nativeDashedGroup
-          ? [...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? ""
+          ? ([...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? "")
           : "";
 
         // Add a dashed separator to the LEFT of our section (right border on preceding group).
@@ -1012,7 +1008,9 @@ export default async function ({ addon, msg }) {
         const anyTitle = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-title']");
 
         const anyDisabled = document.querySelector("[class*='button_mod-disabled']");
-        modDisabledClass = anyDisabled ? [...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "" : "";
+        modDisabledClass = anyDisabled
+          ? ([...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "")
+          : "";
 
         if (anyBtn) shapingBtn.className += " " + anyBtn.className;
         if (anyIcon) shapingIcon.className += " " + anyIcon.className;
@@ -1037,12 +1035,12 @@ export default async function ({ addon, msg }) {
 
         const editorContainer = document.querySelector("[class*='paint-editor_editor-container']");
         if (editorContainer) {
-          editorContainer.addEventListener("mouseup", () => setTimeout(updateButtonStates, 50));
+          editorContainer.addEventListener("mouseup", deferUpdateButtonStates);
         }
         document.addEventListener("keyup", () => {
           if (addon.self.disabled) return;
           if (document.querySelector("[class*='paint-editor_editor-container']")) {
-            setTimeout(updateButtonStates, 50);
+            deferUpdateButtonStates();
           }
         });
         updateButtonStates();
@@ -1090,21 +1088,19 @@ export default async function ({ addon, msg }) {
   // native event's real hardware state. MouseEvent.altKey/shiftKey etc.
   // always reflect actual key state regardless of what paper.js cached.
   // Guarded by the "fix-stuck-modifiers" setting.
-  {
-    const _syncModifiers = (e) => {
-      if (addon.self.disabled) return;
-      if (!addon.settings.get("fix-stuck-modifiers")) return;
-      const m = _fixPaper?.Key?.modifiers;
-      if (!m) return;
-      if (!e.altKey) m.alt = false;
-      if (!e.shiftKey) m.shift = false;
-      if (!e.ctrlKey) m.control = false;
-      if (!e.metaKey) m.meta = false;
-    };
-    document.addEventListener("mousedown", _syncModifiers, true);
-    addon.self.addEventListener("disabled", () => document.removeEventListener("mousedown", _syncModifiers, true));
-    addon.self.addEventListener("reenabled", () => document.addEventListener("mousedown", _syncModifiers, true));
-  }
+  const _syncModifiers = (e) => {
+    if (addon.self.disabled) return;
+    if (!addon.settings.get("fix-stuck-modifiers")) return;
+    const m = _fixPaper?.Key?.modifiers;
+    if (!m) return;
+    if (!e.altKey) m.alt = false;
+    if (!e.shiftKey) m.shift = false;
+    if (!e.ctrlKey) m.control = false;
+    if (!e.metaKey) m.meta = false;
+  };
+  document.addEventListener("mousedown", _syncModifiers, true);
+  addon.self.addEventListener("disabled", () => document.removeEventListener("mousedown", _syncModifiers, true));
+  addon.self.addEventListener("reenabled", () => document.addEventListener("mousedown", _syncModifiers, true));
 
   // ── Hotfix: CompoundPath deselection cascade ──────────────────────────
   // scratch-paint's cloneSelection() calls `item.selected = false` on the
@@ -1122,46 +1118,44 @@ export default async function ({ addon, msg }) {
   // the setting takes effect immediately without unpatching the prototype.
   // The patch is applied once and guarded against re-application on
   // dynamic re-enable via a flag on the prototype.
-  {
-    // Guard against being applied twice (e.g. on dynamic re-enable).
-    if (!_fixPaper.CompoundPath.prototype._sa_deselect_cascade_patched) {
-      // Walk the prototype chain to find the prototype that actually owns
-      // the `selected` accessor (may be on a parent class, not CP itself).
-      let _selectedDesc = null;
-      let _proto = _fixPaper.CompoundPath.prototype;
-      while (_proto && _proto !== Object.prototype) {
-        const d = Object.getOwnPropertyDescriptor(_proto, "selected");
-        if (d?.set) {
-          _selectedDesc = d;
-          break;
-        }
-        _proto = Object.getPrototypeOf(_proto);
+  // Guard against being applied twice (e.g. on dynamic re-enable).
+  if (!_fixPaper.CompoundPath.prototype._sa_deselect_cascade_patched) {
+    // Walk the prototype chain to find the prototype that actually owns
+    // the `selected` accessor (may be on a parent class, not CP itself).
+    let _selectedDesc = null;
+    let _proto = _fixPaper.CompoundPath.prototype;
+    while (_proto && _proto !== Object.prototype) {
+      const d = Object.getOwnPropertyDescriptor(_proto, "selected");
+      if (d?.set) {
+        _selectedDesc = d;
+        break;
       }
+      _proto = Object.getPrototypeOf(_proto);
+    }
 
-      if (_selectedDesc?.set) {
-        const _origSet = _selectedDesc.set;
-        const _origGet = _selectedDesc.get;
-        const _addon = addon;
-        Object.defineProperty(_fixPaper.CompoundPath.prototype, "selected", {
-          get: _origGet,
-          set: function (selected) {
-            _origSet.call(this, selected);
-            if (!selected && !_addon.self.disabled && _addon.settings.get("fix-compound-deselect")) {
-              const children = this._children ?? this.children;
-              if (children) {
-                for (let i = 0; i < children.length; i++) {
-                  if (children[i].selected) {
-                    children[i].selected = false;
-                  }
+    if (_selectedDesc?.set) {
+      const _origSet = _selectedDesc.set;
+      const _origGet = _selectedDesc.get;
+      const _addon = addon;
+      Object.defineProperty(_fixPaper.CompoundPath.prototype, "selected", {
+        get: _origGet,
+        set: function (selected) {
+          _origSet.call(this, selected);
+          if (!selected && !_addon.self.disabled && _addon.settings.get("fix-compound-deselect")) {
+            const children = this._children ?? this.children;
+            if (children) {
+              for (let i = 0; i < children.length; i++) {
+                if (children[i].selected) {
+                  children[i].selected = false;
                 }
               }
             }
-          },
-          configurable: true,
-          enumerable: _selectedDesc.enumerable ?? false,
-        });
-        _fixPaper.CompoundPath.prototype._sa_deselect_cascade_patched = true;
-      }
+          }
+        },
+        configurable: true,
+        enumerable: _selectedDesc.enumerable ?? false,
+      });
+      _fixPaper.CompoundPath.prototype._sa_deselect_cascade_patched = true;
     }
   }
 

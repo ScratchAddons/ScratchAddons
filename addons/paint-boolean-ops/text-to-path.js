@@ -31,17 +31,6 @@ export default class TextToPath {
   // Hard cap on the longest canvas dimension to bound memory / rasterize time.
   static #MAX_CANVAS_PX = 4000;
 
-  // Enable a separable 3×3 Gaussian pre-blur (σ≈0.7px) before thresholding.
-  // Smooths the anti-aliased fringe, reducing staircase noise but can soften
-  // sharp corners very slightly. Set to false to threshold raw alpha directly.
-  static #PRE_BLUR = false;
-
-  // Set to true to log detailed per-corner diagnostics to the browser console.
-  // Shows raw marching-squares pts, post-smooth pts, corner dot products, and
-  // the final bezier segments produced — making it easy to see which stage
-  // introduces corner rounding or spurious anchors.
-  static #DEBUG = false;
-
   static #rasterScale(bounds, nLines) {
     const lineHeight = bounds.height / Math.max(nLines, 1);
     const maxDim = Math.max(bounds.width, bounds.height);
@@ -117,8 +106,6 @@ export default class TextToPath {
     }
   }
 
-  // ── Private ─────────────────────────────────────────────────────────────
-
   static #run(textItem, paper) {
     // 1. Rasterize into an off-screen canvas ─────────────────────────────
     // Use drawnBounds (Scratch fork) so stroke/glow are included; fall back
@@ -147,38 +134,12 @@ export default class TextToPath {
       sy = ch / bounds.height;
 
     // 2. Binary grid: 1 = inside (alpha above threshold) ─────────────────
-    // Optional: pre-blur alpha with a separable 3×3 Gaussian (σ≈0.7px) before
-    // thresholding. Cuts marching-squares staircase amplitude but can soften
-    // sharp corners slightly. Controlled by #PRE_BLUR.
     const T = this.#ALPHA;
     const rawA = new Float32Array(cw * ch);
     for (let i = 0; i < cw * ch; i++) rawA[i] = data[i * 4 + 3];
 
-    let blurredA = rawA;
-    if (this.#PRE_BLUR) {
-      // Horizontal pass: [1,2,1]/4
-      const tmpA = new Float32Array(cw * ch);
-      for (let r = 0; r < ch; r++) {
-        for (let c = 0; c < cw; c++) {
-          const l = rawA[r * cw + Math.max(c - 1, 0)];
-          const m = rawA[r * cw + c];
-          const ri = rawA[r * cw + Math.min(c + 1, cw - 1)];
-          tmpA[r * cw + c] = (l + 2 * m + ri) * 0.25;
-        }
-      }
-      // Vertical pass: [1,2,1]/4 → combined σ≈0.7px
-      blurredA = new Float32Array(cw * ch);
-      for (let r = 0; r < ch; r++) {
-        const rt = Math.max(r - 1, 0),
-          rb = Math.min(r + 1, ch - 1);
-        for (let c = 0; c < cw; c++) {
-          blurredA[r * cw + c] = (tmpA[rt * cw + c] + 2 * tmpA[r * cw + c] + tmpA[rb * cw + c]) * 0.25;
-        }
-      }
-    }
-
     const grid = new Uint8Array(cw * ch);
-    for (let i = 0; i < cw * ch; i++) grid[i] = blurredA[i] >= T ? 1 : 0;
+    for (let i = 0; i < cw * ch; i++) grid[i] = rawA[i] >= T ? 1 : 0;
 
     // 3. Trace closed contours ────────────────────────────────────────────
     const contours = this.#trace(grid, cw, ch);
@@ -318,22 +279,6 @@ export default class TextToPath {
       const cornerIdxs = [];
       for (let i = 0; i < n; i++) if (cornerPeak[i]) cornerIdxs.push(i);
 
-      if (this.#DEBUG) {
-        // Compact corner summary: world-space positions so we can match against SVG coordinates.
-        const contourIdx = contours.indexOf(pts);
-        const cornerRows = cornerIdxs.map((ci) => {
-          const [rx, ry] = pts[ci];
-          return {
-            idx: ci,
-            wx: (ox + rx / sx).toFixed(3),
-            wy: (oy + ry / sy).toFixed(3),
-            dot: cornerDot[ci].toFixed(3),
-          };
-        });
-        console.log(`[TextToPath] contour ${contourIdx}: ${cornerRows.length} corners (world-space):`);
-        console.table(cornerRows);
-      }
-
       let path;
       if (canSimplify && cornerIdxs.length >= 2) {
         // Split the contour at detected corners and simplify each arc
@@ -446,25 +391,6 @@ export default class TextToPath {
             const ho = s === last - 1 ? new paper.Point(0, 0) : seg.handleOut.clone();
             path.add(new paper.Segment(seg.point.clone(), hi, ho));
           }
-
-          if (this.#DEBUG) {
-            // Show what simplify() produced for this arc before we override handles.
-            console.groupCollapsed(
-              `  arc ${ci} (corner idx=${cornerIdxs[ci]}→${cornerIdxs[(ci + 1) % nc3]}): ` +
-                `${arcPaths[ci].segments.length} raw simplify segs → ${last} used`
-            );
-            arcPaths[ci].segments.forEach((seg, s) => {
-              const hi = seg.handleIn,
-                ho = seg.handleOut;
-              console.log(
-                `    seg[${s}] pt=(${seg.point.x.toFixed(2)},${seg.point.y.toFixed(2)})` +
-                  `  hIn=(${hi.x.toFixed(2)},${hi.y.toFixed(2)})` +
-                  `  hOut=(${ho.x.toFixed(2)},${ho.y.toFixed(2)})` +
-                  (s === 0 || s === last ? "  ← endpoint (handles zeroed)" : "")
-              );
-            });
-            console.groupEnd();
-          }
         }
         path.closed = true;
         for (const arc of arcPaths) arc.remove();
@@ -486,22 +412,6 @@ export default class TextToPath {
         paths.push(path);
         cornerCounts.push(nCorners);
       } else path.remove();
-
-      if (this.#DEBUG && path.segments.length >= 3) {
-        // Final assembled path: print every segment's handle lengths.
-        // Length > 0.01 means a real bezier handle; ~0 means straight line / cusp.
-        // Look for non-zero handles directly adjacent to corner cusps.
-        const segs = path.segments;
-        const segRows = segs.map((seg, s) => ({
-          s,
-          x: seg.point.x.toFixed(3),
-          y: seg.point.y.toFixed(3),
-          hIn: seg.handleIn.length.toFixed(4),
-          hOut: seg.handleOut.length.toFixed(4),
-        }));
-        console.log(`[TextToPath] contour ${contours.indexOf(pts)} FINAL path (${segs.length} segs, world-space):`);
-        console.table(segRows);
-      }
     } // end for (const pts of contours)
 
     if (!paths.length) return null;
@@ -635,6 +545,10 @@ export default class TextToPath {
       maxI = 0;
     for (let i = 1; i < pts.length - 1; i++) {
       const [px, py] = pts[i];
+      // Standard point-to-line distance: |cross(AB, AP)| / |AB|.
+      // If the two endpoints are the same point (len < 1e-10, i.e. far smaller
+      // than a sub-pixel coordinate), the line direction is undefined and the
+      // formula would divide by zero — fall back to distance from the start point.
       const d =
         len < 1e-10
           ? Math.hypot(px - x1, py - y1)
