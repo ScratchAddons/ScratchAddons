@@ -1073,5 +1073,97 @@ export default async function ({ addon, msg }) {
     }
   };
 
+  // ── Shared paper reference for both hotfixes below ───────────────────
+  const _fixPaper = await addon.tab.traps.getPaper();
+
+  // ── Hotfix: stuck modifier keys after Alt+Tab ────────────────────────
+  // When the user presses Alt+Tab to switch away, the browser never fires
+  // a keyup event for Alt. paper.js caches modifier state in
+  // paper.Key.modifiers and never resets it, so the next drag is treated
+  // as an alt-drag and triggers an unwanted clone.
+  //
+  // window blur / visibilitychange do not reliably fire when Alt+Tab shifts
+  // OS focus away in Chrome on Windows, so we can't use those.
+  //
+  // Instead, intercept mousedown in capture phase — which runs before
+  // paper.js reads modifiers — and sync paper.Key.modifiers against the
+  // native event's real hardware state. MouseEvent.altKey/shiftKey etc.
+  // always reflect actual key state regardless of what paper.js cached.
+  // Guarded by the "fix-stuck-modifiers" setting.
+  {
+    const _syncModifiers = (e) => {
+      if (addon.self.disabled) return;
+      if (!addon.settings.get("fix-stuck-modifiers")) return;
+      const m = _fixPaper?.Key?.modifiers;
+      if (!m) return;
+      if (!e.altKey) m.alt = false;
+      if (!e.shiftKey) m.shift = false;
+      if (!e.ctrlKey) m.control = false;
+      if (!e.metaKey) m.meta = false;
+    };
+    document.addEventListener("mousedown", _syncModifiers, true);
+    addon.self.addEventListener("disabled", () => document.removeEventListener("mousedown", _syncModifiers, true));
+    addon.self.addEventListener("reenabled", () => document.addEventListener("mousedown", _syncModifiers, true));
+  }
+
+  // ── Hotfix: CompoundPath deselection cascade ──────────────────────────
+  // scratch-paint's cloneSelection() calls `item.selected = false` on the
+  // original CompoundPath after cloning it. In @scratch/paper, this does
+  // NOT cascade to child Path items — they stay selected. scratch-paint's
+  // getSelectedRootItems() has a fallback that includes a CompoundPath
+  // whenever any of its children are selected, even if the CP itself is
+  // not. Result: both the original (via still-selected children) and the
+  // clone (via its own selected=true) land in this.selectedItems, and both
+  // get dragged to the destination.
+  //
+  // Fix: shadow the `selected` setter on CompoundPath.prototype so that
+  // deselecting a CompoundPath also deselects its children. The cascade is
+  // gated on the "fix-compound-deselect" setting at call time, so toggling
+  // the setting takes effect immediately without unpatching the prototype.
+  // The patch is applied once and guarded against re-application on
+  // dynamic re-enable via a flag on the prototype.
+  {
+    // Guard against being applied twice (e.g. on dynamic re-enable).
+    if (!_fixPaper.CompoundPath.prototype._sa_deselect_cascade_patched) {
+      // Walk the prototype chain to find the prototype that actually owns
+      // the `selected` accessor (may be on a parent class, not CP itself).
+      let _selectedDesc = null;
+      let _proto = _fixPaper.CompoundPath.prototype;
+      while (_proto && _proto !== Object.prototype) {
+        const d = Object.getOwnPropertyDescriptor(_proto, "selected");
+        if (d?.set) {
+          _selectedDesc = d;
+          break;
+        }
+        _proto = Object.getPrototypeOf(_proto);
+      }
+
+      if (_selectedDesc?.set) {
+        const _origSet = _selectedDesc.set;
+        const _origGet = _selectedDesc.get;
+        const _addon = addon;
+        Object.defineProperty(_fixPaper.CompoundPath.prototype, "selected", {
+          get: _origGet,
+          set: function (selected) {
+            _origSet.call(this, selected);
+            if (!selected && !_addon.self.disabled && _addon.settings.get("fix-compound-deselect")) {
+              const children = this._children ?? this.children;
+              if (children) {
+                for (let i = 0; i < children.length; i++) {
+                  if (children[i].selected) {
+                    children[i].selected = false;
+                  }
+                }
+              }
+            }
+          },
+          configurable: true,
+          enumerable: _selectedDesc.enumerable ?? false,
+        });
+        _fixPaper.CompoundPath.prototype._sa_deselect_cascade_patched = true;
+      }
+    }
+  }
+
   toolsLoop();
 }

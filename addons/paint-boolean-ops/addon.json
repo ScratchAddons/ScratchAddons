@@ -18,6 +18,20 @@
       "runAtComplete": false
     }
   ],
+  "settings": [
+    {
+      "name": "Fix modifier keys getting stuck after Alt+Tab",
+      "id": "fix-stuck-modifiers",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Fix duplicate shapes when Alt-dragging combined paths",
+      "id": "fix-compound-deselect",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true
 }
