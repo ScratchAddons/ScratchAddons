@@ -12,7 +12,7 @@
   "paint-boolean-ops/release": "Release",
   "paint-boolean-ops/release-desc": "Release — split this compound path back into separate individual shapes",
   "paint-boolean-ops/expand": "Expand",
-  "paint-boolean-ops/expand-desc": "Expand — grow (positive) or shrink (negative) the shape outline by a set amount",
+  "paint-boolean-ops/expand-desc": "Expand — grows the shape outward by half its stroke width, making the fill match the visual edge of the stroke",
   "paint-boolean-ops/open-path": "Open Path",
   "paint-boolean-ops/close-path": "Close Path"
 }

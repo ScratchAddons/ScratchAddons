@@ -24,7 +24,7 @@
     },
     {
       "type": "info",
-      "text": "Expand — grow a shape by its outline width",
+      "text": "Expand — grows the shape outward by half its stroke width, making the fill match the visual edge of the stroke",
       "id": "infoExpand"
     }
   ],
