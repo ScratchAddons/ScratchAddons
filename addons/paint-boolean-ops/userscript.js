@@ -75,11 +75,11 @@ export default async function ({ addon, msg }) {
     return btn;
   };
 
-  const uniteBtn = makeItem("unite.svg", msg("unite"), msg("unite"), "unite");
+  const uniteBtn = makeItem("unite.svg", msg("unite"), msg("unite-desc"), "unite");
   const subtractBtn = makeItem("subtract.svg", msg("subtract"), msg("subtract-alt"), "subtract");
   const intersectBtn = makeItem("intersect.svg", msg("intersect"), msg("intersect-alt"), "intersect");
-  const compoundBtn = makeItem("combine.svg", msg("combine"), msg("combine"), "combine");
-  const expandBtn = makeItem("expand.svg", msg("expand"), msg("expand"), "expand");
+  const compoundBtn = makeItem("combine.svg", msg("combine"), msg("combine-desc"), "combine");
+  const expandBtn = makeItem("expand.svg", msg("expand"), msg("expand-desc"), "expand");
   const allItems = [uniteBtn, subtractBtn, intersectBtn, compoundBtn, expandBtn];
 
   // Initially place items in the dropdown rows (collapsed is the default until measured).
@@ -163,8 +163,8 @@ export default async function ({ addon, msg }) {
     else if (op === "release") performRelease();
     else if (op === "expand") performOffset();
     else if (op === "intersect" && e.altKey) performDivide();
-    else if (op === "subtract" && e.shiftKey && e.altKey) performPunchThrough(true);
-    else if (op === "subtract" && e.shiftKey) performPunchThrough(false);
+    else if (op === "subtract" && e.shiftKey) performBooleanOp("subtract", e.altKey);
+    else if (op === "subtract") performPunchThrough(e.altKey);
     else performBooleanOp(op, e.altKey);
   };
   shapingSection.addEventListener("click", handleClick);
@@ -211,7 +211,7 @@ export default async function ({ addon, msg }) {
     // Compound button morphs: combine ↔ release based on selection.
     const compoundOp = hasMultiple ? "combine" : hasCompound ? "release" : "combine";
     compoundBtn.dataset.saOp = compoundOp;
-    compoundBtn.title = msg(compoundOp);
+    compoundBtn.title = msg(`${compoundOp}-desc`);
     compoundBtn.querySelector(".sa-shaping-item-icon").src = `${addon.self.dir}/icons/${compoundOp}.svg`;
     compoundBtn.querySelector(".sa-shaping-item-label").textContent = msg(compoundOp);
     // Open/Close button morphs: "Open Path" when selection is closed, "Close Path" when open.
@@ -989,7 +989,7 @@ export default async function ({ addon, msg }) {
         // Extract layout and separator classes from native toolbar elements.
         const nativeDashedGroup = fixedToolsRow.querySelector("[class*='mod-dashed-border']");
         dashedBorderClass = nativeDashedGroup
-          ? [...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? ""
+          ? ([...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? "")
           : "";
 
         // Add a dashed separator to the LEFT of our section (right border on preceding group).
@@ -1012,7 +1012,9 @@ export default async function ({ addon, msg }) {
         const anyTitle = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-title']");
 
         const anyDisabled = document.querySelector("[class*='button_mod-disabled']");
-        modDisabledClass = anyDisabled ? [...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "" : "";
+        modDisabledClass = anyDisabled
+          ? ([...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "")
+          : "";
 
         if (anyBtn) shapingBtn.className += " " + anyBtn.className;
         if (anyIcon) shapingIcon.className += " " + anyIcon.className;

@@ -1,6 +1,33 @@
 {
   "name": "Boolean shape operations",
-  "description": "Adds boolean path operations to the vector costume editor: unite, subtract, intersect, exclude, combine, release, expand, open/close path, and a shaping sub-menu.",
+  "description": "Adds a Shaping panel to the vector costume editor: Unite · Subtract · Intersect · Combine/Release · Expand",
+  "info": [
+    {
+      "type": "info",
+      "text": "Unite — merge all selected shapes into one filled shape",
+      "id": "infoUnite"
+    },
+    {
+      "type": "info",
+      "text": "Subtract — front shape cuts a hole in every selected shape below it (Shift: cuts back shape only; Alt: keeps the cutter)",
+      "id": "infoSubtract"
+    },
+    {
+      "type": "info",
+      "text": "Intersect — keep only the overlapping areas of selected shapes (Alt: divide all into distinct regions)",
+      "id": "infoIntersect"
+    },
+    {
+      "type": "info",
+      "text": "Combine / Release — Combine groups shapes into a compound path where overlaps become transparent holes; Release splits it back into separate shapes",
+      "id": "infoCombine"
+    },
+    {
+      "type": "info",
+      "text": "Expand — grow a shape by its outline width",
+      "id": "infoExpand"
+    }
+  ],
   "credits": [
     {
       "name": "griffpatch",

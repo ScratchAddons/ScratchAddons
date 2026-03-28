@@ -1,14 +1,18 @@
 {
   "paint-boolean-ops/shaping": "Shaping",
   "paint-boolean-ops/unite": "Unite",
+  "paint-boolean-ops/unite-desc": "Unite — merge selected shapes into one, filling all overlapping areas",
   "paint-boolean-ops/subtract": "Subtract",
-  "paint-boolean-ops/subtract-alt": "Subtract (Shift: Punch Through)",
+  "paint-boolean-ops/subtract-alt": "Subtract — cut the front shape out of every selected shape beneath it (Alt: keep the cutter; Shift: subtract all fronts from back shape only)",
   "paint-boolean-ops/intersect": "Intersect",
-  "paint-boolean-ops/intersect-alt": "Intersect (Alt: Divide)",
+  "paint-boolean-ops/intersect-alt": "Intersect — keep only where shapes overlap (Alt: divide at all intersections)",
   "paint-boolean-ops/divide": "Divide",
   "paint-boolean-ops/combine": "Combine",
+  "paint-boolean-ops/combine-desc": "Combine — merge shapes into a compound path; overlapping areas become transparent holes",
   "paint-boolean-ops/release": "Release",
+  "paint-boolean-ops/release-desc": "Release — split this compound path back into separate individual shapes",
   "paint-boolean-ops/expand": "Expand",
+  "paint-boolean-ops/expand-desc": "Expand — grow (positive) or shrink (negative) the shape outline by a set amount",
   "paint-boolean-ops/open-path": "Open Path",
   "paint-boolean-ops/close-path": "Close Path"
 }
