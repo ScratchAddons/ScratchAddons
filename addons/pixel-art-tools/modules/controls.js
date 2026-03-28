@@ -321,8 +321,10 @@ export function createControlsModule(
         const zoomControls = await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']");
         const groupClass = zoomControls?.firstChild?.className;
         const buttonClass = zoomControls?.firstChild?.firstChild?.className;
+        const imageClass = zoomControls?.firstChild?.firstChild?.firstChild?.className;
         if (groupClass) wrapper.classList.add(...groupClass.split(/\s+/).filter(Boolean));
         if (buttonClass) toggle.classList.add(...buttonClass.split(/\s+/).filter(Boolean));
+        if (imageClass) toggleIcon.classList.add(...imageClass.split(/\s+/).filter(Boolean));
       }
 
       const container = await addon.tab.waitForElement("[class*='mode-tools']");

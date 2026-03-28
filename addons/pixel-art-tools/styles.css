@@ -41,6 +41,10 @@
 .sa-pixel-art-toggle-icon {
   width: 1rem;
   height: 1rem;
+  display: block;
+  margin: auto;
+  object-fit: contain;
+  flex-shrink: 0;
   filter: var(--editorDarkMode-input-filter, none);
   pointer-events: none;
 }
@@ -273,6 +277,83 @@
 }
 .sa-pixel-art-icon--invert {
   filter: brightness(0) invert(1);
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-controls {
+  gap: 0.25rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-toggle-wrapper {
+  padding: 0 0.125rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-toggle {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.1rem;
+  border-radius: 0.3rem;
+  line-height: 0;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-toggle-icon {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-size {
+  gap: 0.1rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-size input {
+  width: 2.4rem;
+  height: 1.5rem;
+  padding: 0 0.1rem 0 0.3rem;
+  font-size: 0.7rem;
+  border-radius: 1.5rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-palette,
+body.sa-pixel-art-compact-editor .sa-pixel-art-animation {
+  padding: 0.35rem;
+  gap: 0.25rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-palette {
+  max-width: 184px;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-palette-header,
+body.sa-pixel-art-compact-editor .sa-pixel-art-animation-header {
+  margin-bottom: 0.15rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-palette-select-row {
+  gap: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-palette-select {
+  padding: 0.2rem 0.35rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-palette-actions {
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-palette-grid {
+  gap: 0.35rem;
+  padding: 0.2rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-action-button {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-icon {
+  width: 1rem;
+  height: 1rem;
 }
 
 /* Brush Size */

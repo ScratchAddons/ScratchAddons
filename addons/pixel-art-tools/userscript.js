@@ -45,6 +45,24 @@ export default async function ({ addon, msg, console }) {
   };
 
   const redux = addon.tab.redux;
+  let compactEditorObserver = null;
+  const isCompactEditorActive = () =>
+    [...document.querySelectorAll(".scratch-addons-style[data-addon-id='editor-compact']")].some(
+      (style) => style.disabled !== true
+    );
+  const updateCompactEditorState = () => {
+    document.body.classList.toggle("sa-pixel-art-compact-editor", !addon.self.disabled && isCompactEditorActive());
+  };
+  const observeCompactEditorState = () => {
+    compactEditorObserver?.disconnect();
+    compactEditorObserver = new MutationObserver(updateCompactEditorState);
+    compactEditorObserver.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["disabled"],
+    });
+  };
 
   // Initialize modules
   const canvasAdjuster = createCanvasAdjuster(addon, paper);
@@ -71,6 +89,14 @@ export default async function ({ addon, msg, console }) {
       controls.updatePixelModeVisibility();
     }
 
+    if (
+      detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB" ||
+      detail.action.type === "scratch-gui/mode/SET_PLAYER" ||
+      detail.action.type === "scratch-paint/formats/CHANGE_FORMAT"
+    ) {
+      updateCompactEditorState();
+    }
+
     const prevColor = detail.prev.scratchPaint?.color?.fillColor?.primary;
     const nextColor = detail.next.scratchPaint?.color?.fillColor?.primary;
     if (prevColor !== nextColor) {
@@ -92,9 +118,14 @@ export default async function ({ addon, msg, console }) {
 
   // Addon lifecycle events
   addon.self.addEventListener("disabled", () => {
+    compactEditorObserver?.disconnect();
+    compactEditorObserver = null;
+    document.body.classList.remove("sa-pixel-art-compact-editor");
     controls.handleDisabled();
   });
   addon.self.addEventListener("reenabled", () => {
+    observeCompactEditorState();
+    updateCompactEditorState();
     controls.handleReenabled();
   });
 
@@ -108,6 +139,8 @@ export default async function ({ addon, msg, console }) {
   });
 
   // Initialize all components
+  updateCompactEditorState();
+  observeCompactEditorState();
   controls.setupControls();
   palette.setupPalettePanel();
   palette.updatePaletteSelection();
