@@ -157,7 +157,7 @@ export default async function ({ addon, msg, console }) {
 
   // Commit an undo snapshot to scratch-paint's undo stack.
   const triggerUndo = () => {
-    const cc = document.querySelector("[class^='paint-editor_canvas-container']");
+    const cc = document.querySelector("[class*='paint-editor_canvas-container_']");
     if (!cc) return;
     let f = cc[addon.tab.traps.getInternalKey(cc)];
     while (f && typeof f.stateNode?.handleUpdateImage !== "function") f = f.return;
@@ -387,7 +387,10 @@ export default async function ({ addon, msg, console }) {
     };
 
     // Axis line: dashed for linear, solid for radial.
-    const axisLine = svgEl("line", { stroke: "white", "stroke-width": 1.5, "stroke-opacity": 0.75 });
+    // Two layers: black outline underneath + white line on top for visibility on any background.
+    const axisOutline = svgEl("line", { stroke: "black", "stroke-width": 4, "stroke-opacity": 0.5 });
+    svg.appendChild(axisOutline);
+    const axisLine = svgEl("line", { stroke: "white", "stroke-width": 2 });
     svg.appendChild(axisLine);
 
     // Invisible wider hit-target on the axis line for click-to-add-stop.
@@ -504,9 +507,11 @@ export default async function ({ addon, msg, console }) {
       const lerp = (a, b, t) => a + (b - a) * t;
 
       axisLine.setAttribute("stroke-dasharray", isRadial ? "none" : "4 3");
+      axisOutline.setAttribute("stroke-dasharray", isRadial ? "none" : "4 3");
       const op = toSVG(fc.origin);
       const dp = toSVG(fc.destination);
       setLine(axisLine, op.x, op.y, dp.x, dp.y);
+      setLine(axisOutline, op.x, op.y, dp.x, dp.y);
       setLine(axisHit, op.x, op.y, dp.x, dp.y);
 
       const axisLenPx = Math.hypot(dp.x - op.x, dp.y - op.y);
@@ -1465,11 +1470,25 @@ export default async function ({ addon, msg, console }) {
       lastKnownGradientType = colorStateNow.gradientType;
     }
 
-    const canvasContainer = document.querySelector("[class*='paint-editor_canvas-container']");
+    const canvasContainer = document.querySelector("[class*='paint-editor_canvas-container_']");
     const overlayCanvas = canvasContainer?.querySelector("canvas");
     if (canvasContainer && overlayCanvas) {
       activeOverlay = buildOverlay(paper, canvasContainer, overlayCanvas);
     }
+
+    // scratch-paint doesn't always dispatch CLOSE_MODAL when the picker closes
+    // (e.g. clicking outside the popover), but Redux modal state does update.
+    // Poll via rAF to detect the close within one frame, without DOM observation.
+    const pollPickerClose = () => {
+      const spModals = addon.tab.redux.state?.scratchPaint?.modals;
+      const stillOpen = activeColorMode === "stroke" ? spModals?.strokeColor : spModals?.fillColor;
+      if (!stillOpen) {
+        activeOverlay?.sync();
+      } else {
+        requestAnimationFrame(pollPickerClose);
+      }
+    };
+    requestAnimationFrame(pollPickerClose);
 
     if (needsReapply) applyAllStops();
 
