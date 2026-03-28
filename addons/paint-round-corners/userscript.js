@@ -592,7 +592,7 @@ export default async function ({ addon, msg }) {
   // ── Undo snapshot (identical pattern to paint-boolean-ops) ────────────
 
   const triggerUpdateImage = () => {
-    const el = document.querySelector("[class^='paint-editor_canvas-container']");
+    const el = document.querySelector("[class*='paint-editor_canvas-container_']");
     if (!el) return;
     let fiber = el[addon.tab.traps.getInternalKey(el)];
     while (fiber && typeof fiber.stateNode?.handleUpdateImage !== "function") fiber = fiber.return;
@@ -647,7 +647,7 @@ export default async function ({ addon, msg }) {
     paper = await addon.tab.traps.getPaper();
     if (!paper) return;
 
-    canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
+    canvasContainer = document.querySelector("[class*='paint-editor_canvas-container_']");
     canvas = canvasContainer?.querySelector("canvas");
     if (!canvasContainer || !canvas) return;
 
