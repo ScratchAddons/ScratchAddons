@@ -13,6 +13,12 @@ export default async function ({ addon, msg, console }) {
   let extraStops = [];
   let lastKnownGradientType = null;
   let cachedPaper = null;
+  // Items whose gradient object has been force-replaced to wire up the
+  // GradientStop→Gradient→Color→Item change chain for real-time canvas re-renders.
+  // scratch-paint's native gradient objects have an incomplete _owner chain: setting
+  // GradientStop.offset fires _changed() but it never reaches Item._changed() → canvas.
+  // Cleared automatically when items are GC'd (WeakSet semantics).
+  const liveGradientItems = new WeakSet();
   let selfItemsDispatch = false; // prevents recursion in our own CHANGE_SELECTED_ITEMS dispatch
   let lastSelectedPaperItem = null; // tracks identity to detect type-switch vs fresh select
   let storedAngle = 0; // degrees; persists for linear gradients across type-button presses
@@ -176,17 +182,18 @@ export default async function ({ addon, msg, console }) {
       const grad = fc?.gradient;
       if (!grad?.stops || grad.stops.length < 2) continue;
       if (extraStops.length > 0) {
-        if (grad.stops.length !== extraStops.length + 2) {
-          // scratch-paint wiped extra stops — rebuild using cached c0css/c1css.
-          // These are set from the last clean readCurrentStops or from the COLOR handler
-          // BEFORE the wipe result is visible, so they always carry the correct outer colours
-          // including any alpha set by the opacity addon.
+        if (grad.stops.length !== extraStops.length + 2 || !liveGradientItems.has(item)) {
+          // Either scratch-paint wiped extra stops, or this is the first applyAllStops call
+          // for this item (liveGradientItems warm-up).  In both cases, replace the Gradient
+          // object entirely: this wires the GradientStop→Gradient→Color→Item _owner chain
+          // so that subsequent offset mutations trigger real-time canvas redraws.
+          liveGradientItems.add(item);
           item[cp].gradient = {
             stops: [c0css, ...extraStops.map((s) => s.color), c1css],
             radial: grad.radial,
           };
         } else {
-          // Stop count is already correct — update extra stop colors in-place only
+          // Already warm and count matches — update extra stop colors in-place only
           // and refresh our cached outer-stop CSS from paper.
           c0css = colorToCss(grad.stops[0].color);
           c1css = colorToCss(grad.stops[grad.stops.length - 1].color);
@@ -196,6 +203,14 @@ export default async function ({ addon, msg, console }) {
             if (grad.stops[i + 1]) grad.stops[i + 1].color = new cachedPaper.Color(extraStops[i].color);
           }
         }
+      } else if (!liveGradientItems.has(item)) {
+        // First applyAllStops call for a 2-stop gradient: force-replace the Gradient object
+        // to wire the GradientStop→Gradient→Color→Item _owner chain for real-time redraws.
+        liveGradientItems.add(item);
+        item[cp].gradient = {
+          stops: [grad.stops[0].color, grad.stops[grad.stops.length - 1].color],
+          radial: grad.radial,
+        };
       }
       // Fix offsets — must run after potential rebuild above.
       const g = item[cp].gradient;
@@ -1426,7 +1441,7 @@ export default async function ({ addon, msg, console }) {
     const spModals = addon.tab.redux.state?.scratchPaint?.modals;
     const spColor = addon.tab.redux.state?.scratchPaint?.color;
     let colorModeNow;
-    if (spModals?.fillColor && spColor?.fillColor?.gradientType && spColor.fillColor.gradientType !== "SOLID") {
+    if (spModals?.fillColor && spColor?.fillColor?.gradientType !== "SOLID") {
       colorModeNow = "fill";
     } else if (spModals?.strokeColor && spColor?.strokeColor?.gradientType !== "SOLID") {
       colorModeNow = "stroke";
@@ -1490,7 +1505,11 @@ export default async function ({ addon, msg, console }) {
     };
     requestAnimationFrame(pollPickerClose);
 
-    if (needsReapply) applyAllStops();
+    // Always call applyAllStops() on overlay creation: this triggers the liveGradientItems
+    // warm-up for every selected item before any drag happens, ensuring that both p0 and p1
+    // handles (and the centre handle's destination changes) produce real-time canvas redraws
+    // from the very first interaction — even on a fresh project load with untouched gradients.
+    applyAllStops();
 
     // Fix MIXED swatches that appear when scratch-paint can't read the gradient on reopen.
     const MIXED = "scratch-paint/style-path/mixed";
