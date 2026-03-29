@@ -305,14 +305,17 @@ export default async function ({ addon, msg }) {
     }
     // Leaf (Path or CompoundPath): preprocess then offset with its own style.
     const style = cloneStyle(item);
-    // Pure stroke (no fill): leave unchanged. Returning a clone ensures the
-    // leaf is preserved even when it's inside a Group being rebuilt.
-    if (!style.fillColor) return item.clone();
+    // Open stroke-only paths (no fill, not closed) cannot be meaningfully
+    // expanded — PathOffset would implicitly close them. Leave them unchanged.
+    const isClosed = item instanceof paper.CompoundPath ? item.children.every((c) => c.closed) : item.closed;
+    if (!style.fillColor && !isClosed) return item.clone();
     preprocessPaths([item], paper);
     mergeDuplicateSegments(item, paper);
     const raw = PathOffset.offset(item, amount, paper);
     const result = raw ? cleanResult(raw) : null;
-    if (!result) return null;
+    // If expansion failed preserve the item unchanged so it is never silently
+    // dropped when the leaf sits inside a Group being rebuilt.
+    if (!result) return item.clone();
     applyStyle(result, style);
     return result;
   };
