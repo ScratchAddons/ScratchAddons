@@ -4,6 +4,7 @@ export default async function ({ addon, msg }) {
   // ── Tool state ─────────────────────────────────────────────────────────
   let isToolActive = false;
   let prevReduxMode = null;
+  let wasActiveOnNavAway = false; // re-activate on return to costume tab
   let paper = null;
   let corners = []; // CornerHandle[]
   let lastDraggedCorner = null; // rendered last (on top) in SVG z-order
@@ -747,7 +748,8 @@ export default async function ({ addon, msg }) {
         // will already be false so it does nothing.
         const newTab = addon.tab.redux.state?.scratchGui?.editorTab?.activeTabIndex ?? -1;
         if (newTab !== 1) {
-          // Switching away from costumes tab.
+          // Switching away from costumes tab — remember so we can restore on return.
+          wasActiveOnNavAway = true;
           deactivateTool({ restoreMode: true });
         }
       } else if (type === "scratch-paint/undo/UNDO" || type === "scratch-paint/undo/REDO") {
@@ -789,8 +791,10 @@ export default async function ({ addon, msg }) {
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
 
-      // If the user navigated away and came back: ACTIVATE_TAB in modeChangeHandler
-      // should have already deactivated the tool cleanly. This is a safety net only.
+      // If the tool was active when the user navigated away, re-activate it now.
+      const shouldReactivate = wasActiveOnNavAway;
+      wasActiveOnNavAway = false;
+      // Safety net: deactivate if still somehow active (should not happen).
       if (isToolActive) deactivateTool({ restoreMode: false });
 
       // Extract native classes each iteration so hash-mangling is always current.
@@ -816,6 +820,9 @@ export default async function ({ addon, msg }) {
       rcBtn.style.display = isBitmap() ? "none" : "";
 
       modeSelector.appendChild(rcBtn);
+
+      // Re-activate if the tool was selected when the user last navigated away.
+      if (shouldReactivate && !isBitmap()) activateTool();
     }
   };
 
