@@ -34,7 +34,7 @@
 
   // ── Main loop — re-runs every time the color picker popup reopens ─────────
   while (true) {
-    const swatchRow = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
+    const swatchRow = await addon.tab.waitForElement('div[class*="color-picker_swatch-row_"]', {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
