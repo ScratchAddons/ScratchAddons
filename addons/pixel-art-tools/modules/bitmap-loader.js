@@ -44,7 +44,7 @@ export function wrapAddCostumeWait(addon, original, canvasAdjuster, state) {
       const asset = await canvasToAsset(storage, canvas);
       const costume = buildCostume(asset, costumeObj, { rotationCenterX: w / 2, rotationCenterY: h / 2 });
       const result = await original.call(this, costume.md5, costume, targetId, optId);
-      if (state?.enabled) {
+      if (state.enabled) {
         canvasAdjuster.enable(w, h, { fitView: true });
       }
       return result;
@@ -60,7 +60,7 @@ export function wrapAddCostumeWait(addon, original, canvasAdjuster, state) {
       const { asset, w, h } = await halveAsset(storage, loaded);
       const costume = buildCostume(asset, costumeObj);
       const result = await original.call(this, costume.md5, costume, targetId, optId);
-      if (state?.enabled) {
+      if (state.enabled) {
         canvasAdjuster.enable(w, h, { fitView: true });
       }
       return result;

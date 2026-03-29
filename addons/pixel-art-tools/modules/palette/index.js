@@ -25,7 +25,7 @@ export function createPaletteModule(addon, state, redux, msg) {
 
   const ui = createUIModule(addon, state, redux, msg, null, null);
   const storage = createStorageModule(addon, vm, runtime, msg, state, ui);
-  const importExport = createImportExportModule(state, storage);
+  const importExport = createImportExportModule(state);
   ui.setDependencies(storage, importExport);
 
   const createPalette = (name) => ({

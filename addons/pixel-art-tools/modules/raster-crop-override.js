@@ -5,7 +5,7 @@ export function installRasterCropOverride(addon, state, paper) {
   if (!paper?.Raster || paper.Raster.__saRasterCropOverrideInstalled) return;
   paper.Raster.__saRasterCropOverrideInstalled = true;
 
-  const shouldOverride = () => state?.enabled && addon.settings.get("preventTrim");
+  const shouldOverride = () => state.enabled && addon.settings.get("preventTrim");
 
   const originalGetImageData = paper.Raster.prototype.getImageData;
   if (typeof originalGetImageData !== "function") return;
@@ -25,13 +25,13 @@ export function installRasterCropOverride(addon, state, paper) {
       const full = originalGetImageData.call(this); // full canvas
       const canvasWidth = full?.width || this.width || 0;
       const canvasHeight = full?.height || this.height || 0;
-      const targetW = Math.min(state.pendingSize?.width || canvasWidth, canvasWidth);
-      const targetH = Math.min(state.pendingSize?.height || canvasHeight, canvasHeight);
+      const targetW = Math.min(state.pendingSize.width || canvasWidth, canvasWidth);
+      const targetH = Math.min(state.pendingSize.height || canvasHeight, canvasHeight);
       // Keep the origin from the hitBounds rect to avoid shifting content; only clamp the size.
       const x = rect?.x || 0;
       const y = rect?.y || 0;
       const wouldCrop = rect && (rect.width > targetW || rect.height > targetH);
-      if (wouldCrop && state?.lastAppliedSize) {
+      if (wouldCrop && state.lastAppliedSize) {
         // Revert to the last applied size; do not shrink below current content.
         state.pendingSize = { ...state.lastAppliedSize };
         state.restoreSizePending = true;
