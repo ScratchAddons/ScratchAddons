@@ -1021,7 +1021,7 @@ export default async function ({ addon, msg }) {
         // Extract layout and separator classes from native toolbar elements.
         const nativeDashedGroup = fixedToolsRow.querySelector("[class*='mod-dashed-border_']");
         dashedBorderClass = nativeDashedGroup
-          ? ([...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? "")
+          ? [...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? ""
           : "";
 
         // Add a dashed separator to the LEFT of our section (right border on preceding group).
@@ -1044,9 +1044,7 @@ export default async function ({ addon, msg }) {
         const anyTitle = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-title_']");
 
         const anyDisabled = document.querySelector("[class*='button_mod-disabled_']");
-        modDisabledClass = anyDisabled
-          ? ([...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "")
-          : "";
+        modDisabledClass = anyDisabled ? [...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "" : "";
 
         if (anyBtn) shapingBtn.className += " " + anyBtn.className;
         if (anyIcon) shapingIcon.className += " " + anyIcon.className;
