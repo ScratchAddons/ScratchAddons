@@ -1,6 +1,18 @@
 export default async function ({ addon, msg, console }) {
   addon.tab.redux.initialize();
 
+  // If the Redux store wasn't created yet when initialize() ran (runAtComplete:false timing),
+  // target will be undefined. Retry once it becomes available so that all registered
+  // addon.tab.redux.addEventListener("statechanged", ...) listeners start receiving events.
+  if (!addon.tab.redux.initialized) {
+    (async () => {
+      while (!window.__scratchAddonsRedux?.target) {
+        await new Promise((r) => setTimeout(r, 50));
+      }
+      addon.tab.redux.initialize();
+    })();
+  }
+
   // ── Stop state ──────────────────────────────────────────────────────────────────────
   // p0/p1: absolute positions [0, 1] for the two colour stop handles.
   let stops = { p0: 0, p1: 1 };
@@ -308,24 +320,30 @@ export default async function ({ addon, msg, console }) {
     if (isGradient) {
       const dispatchedType = detail.action.gradientType;
       if (dispatchedType) {
-        const cs = getColorState();
-        if (cs) {
-          lastKnownGradientType = cs.gradientType;
-          applyAllStops();
+        // A real gradient type was dispatched.  Don't gate on getColorState() here:
+        // for multi-stop gradients Redux stores gradientType=undefined (MIXED), so
+        // getColorState() would return null and we'd silently skip the sync.
+        // We already know it's a gradient because dispatchedType is truthy.
+        lastKnownGradientType = dispatchedType;
+        applyAllStops();
+        requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            const currentType = addon.tab.redux.state?.scratchPaint?.color?.[colorProp()]?.gradientType;
             applyAllStops();
-            if (currentType === "VERTICAL") {
+            if (dispatchedType === "VERTICAL") {
               storedAngle = 90;
-            } else if (currentType === "HORIZONTAL") {
+            } else if (dispatchedType === "HORIZONTAL") {
               storedAngle = 0;
               applyAngle(0);
             }
             activeOverlay.sync();
           });
-        }
+        });
+      } else if (dispatchedType === null) {
+        // User explicitly chose SOLID (GradientTypes.SOLID = null) — hide the overlay.
+        activeOverlay.sync();
       } else {
-        // gradientType set to undefined — restore if we can.
+        // gradientType === undefined: scratch-paint internally wiped the type for a
+        // multi-stop gradient (MIXED state).  Restore it so the overlay stays visible.
         if (lastKnownGradientType) {
           addon.tab.redux.dispatch({
             type: COLOR_ACTIONS[activeColorMode].GRADIENT,
