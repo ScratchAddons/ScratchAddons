@@ -324,20 +324,17 @@ export default async function ({ addon, msg, console }) {
         // for multi-stop gradients Redux stores gradientType=undefined (MIXED), so
         // getColorState() would return null and we'd silently skip the sync.
         // We already know it's a gradient because dispatchedType is truthy.
+        // paper.js is already updated synchronously by applyGradientTypeToSelection()
+        // before this dispatch fires, so no rAF deferral is needed.
         lastKnownGradientType = dispatchedType;
+        if (dispatchedType === "VERTICAL") {
+          storedAngle = 90;
+        } else if (dispatchedType === "HORIZONTAL") {
+          storedAngle = 0;
+          applyAngle(0);
+        }
         applyAllStops();
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            applyAllStops();
-            if (dispatchedType === "VERTICAL") {
-              storedAngle = 90;
-            } else if (dispatchedType === "HORIZONTAL") {
-              storedAngle = 0;
-              applyAngle(0);
-            }
-            activeOverlay.sync();
-          });
-        });
+        activeOverlay.sync();
       } else if (dispatchedType === null) {
         // User explicitly chose SOLID (GradientTypes.SOLID = null) — hide the overlay.
         activeOverlay.sync();
