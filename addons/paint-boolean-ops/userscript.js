@@ -170,7 +170,7 @@ export default async function ({ addon, msg }) {
 
   const updateButtonStates = async () => {
     if (!modDisabledClass) {
-      const anyDisabled = document.querySelector("[class*='button_mod-disabled']");
+      const anyDisabled = document.querySelector("[class*='button_mod-disabled_']");
       if (anyDisabled) {
         modDisabledClass = [...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "";
         shapingBtn.classList.add(modDisabledClass);
@@ -1003,11 +1003,11 @@ export default async function ({ addon, msg }) {
 
         // Clone button / icon / label classes for the trigger button so it
         // matches the native toolbar button appearance.
-        const anyBtn = fixedToolsRow.querySelector("[class*='labeled-icon-button_mod-edit-field']");
-        const anyIcon = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-icon']");
-        const anyTitle = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-title']");
+        const anyBtn = fixedToolsRow.querySelector("[class*='labeled-icon-button_mod-edit-field_']");
+        const anyIcon = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-icon_']");
+        const anyTitle = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-title_']");
 
-        const anyDisabled = document.querySelector("[class*='button_mod-disabled']");
+        const anyDisabled = document.querySelector("[class*='button_mod-disabled_']");
         modDisabledClass = anyDisabled
           ? ([...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "")
           : "";
@@ -1033,13 +1033,13 @@ export default async function ({ addon, msg }) {
         updateLayout();
         window.addEventListener("resize", updateLayout);
 
-        const editorContainer = document.querySelector("[class*='paint-editor_editor-container']");
+        const editorContainer = document.querySelector("[class*='paint-editor_editor-container_']");
         if (editorContainer) {
           editorContainer.addEventListener("mouseup", deferUpdateButtonStates);
         }
         document.addEventListener("keyup", () => {
           if (addon.self.disabled) return;
-          if (document.querySelector("[class*='paint-editor_editor-container']")) {
+          if (document.querySelector("[class*='paint-editor_editor-container_']")) {
             deferUpdateButtonStates();
           }
         });
