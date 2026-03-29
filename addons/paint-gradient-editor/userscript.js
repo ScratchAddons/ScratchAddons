@@ -1428,7 +1428,7 @@ export default async function ({ addon, msg, console }) {
   });
 
   while (true) {
-    const swatchesRow = await addon.tab.waitForElement('[class*="color-picker_gradient-swatches-row"]', {
+    const swatchesRow = await addon.tab.waitForElement('[class*="color-picker_gradient-swatches-row_"]', {
       markAsSeen: true,
       reduxCondition: (state) => {
         if (state.scratchGui.editorTab.activeTabIndex !== 1 || state.scratchGui.mode.isPlayerOnly) return false;
