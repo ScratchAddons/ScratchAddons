@@ -1,9 +1,13 @@
 import { eventTarget as tooltipUpdateEventTarget } from "./force-tooltip-update.js";
+import { updateCompactEditorState } from "./state-events.js";
 
 export default async function ({ addon, global, console }) {
+  const notifyCompactEditorState = () => updateCompactEditorState(!addon.self.disabled);
+
   // The workspace needs to be manually resized via a window resize event
   // whenever the addon modifies or stops modifying UI elements
   resizeWorkspace();
+  notifyCompactEditorState();
 
   let resizeObserver = new ResizeObserver(resizeWorkspace);
   (async () => {
@@ -36,9 +40,18 @@ export default async function ({ addon, global, console }) {
     }
   };
   updateTooltips();
-  addon.settings.addEventListener("change", updateTooltips);
-  addon.self.addEventListener("disabled", updateTooltips);
-  addon.self.addEventListener("reenabled", updateTooltips);
+  addon.settings.addEventListener("change", () => {
+    updateTooltips();
+    notifyCompactEditorState();
+  });
+  addon.self.addEventListener("disabled", () => {
+    updateTooltips();
+    notifyCompactEditorState();
+  });
+  addon.self.addEventListener("reenabled", () => {
+    updateTooltips();
+    notifyCompactEditorState();
+  });
   tooltipUpdateEventTarget.addEventListener("update", updateTooltips);
 
   while (true) {

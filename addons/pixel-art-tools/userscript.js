@@ -6,6 +6,10 @@ import { wrapAddCostumeWait } from "./modules/bitmap-loader.js";
 import { createTextToolScaler } from "./modules/text-tool-scaler.js";
 import { installRasterCropOverride } from "./modules/raster-crop-override.js";
 import { installUpdateImageOverride } from "./modules/update-image-override.js";
+import {
+  eventTarget as compactEditorEventTarget,
+  isCompactEditorActive,
+} from "../editor-compact/state-events.js";
 
 /** @typedef {import("./modules/types.js").PixelArtState} PixelArtState */
 
@@ -50,23 +54,8 @@ export default async function ({ addon, msg, console }) {
   };
 
   const redux = addon.tab.redux;
-  let compactEditorObserver = null;
-  const isCompactEditorActive = () =>
-    [...document.querySelectorAll(".scratch-addons-style[data-addon-id='editor-compact']")].some(
-      (style) => style.disabled !== true
-    );
   const updateCompactEditorState = () => {
     document.body.classList.toggle("sa-pixel-art-compact-editor", !addon.self.disabled && isCompactEditorActive());
-  };
-  const observeCompactEditorState = () => {
-    compactEditorObserver?.disconnect();
-    compactEditorObserver = new MutationObserver(updateCompactEditorState);
-    compactEditorObserver.observe(document.documentElement, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["disabled"],
-    });
   };
 
   // Initialize modules
@@ -123,13 +112,10 @@ export default async function ({ addon, msg, console }) {
 
   // Addon lifecycle events
   addon.self.addEventListener("disabled", () => {
-    compactEditorObserver?.disconnect();
-    compactEditorObserver = null;
     document.body.classList.remove("sa-pixel-art-compact-editor");
     controls.handleDisabled();
   });
   addon.self.addEventListener("reenabled", () => {
-    observeCompactEditorState();
     updateCompactEditorState();
     controls.handleReenabled();
   });
@@ -144,8 +130,8 @@ export default async function ({ addon, msg, console }) {
   });
 
   // Initialize all components
+  compactEditorEventTarget.addEventListener("change", updateCompactEditorState);
   updateCompactEditorState();
-  observeCompactEditorState();
   controls.setupControls();
   palette.setupPalettePanel();
   palette.updatePaletteSelection();
