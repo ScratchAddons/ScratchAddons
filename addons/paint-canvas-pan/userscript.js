@@ -1,6 +1,8 @@
 export default async function ({ addon, console }) {
   const paper = await addon.tab.traps.getPaper();
-  const canvas = paper.view.element;
+  // Do not cache paper.view.element: the canvas element may be replaced when
+  // the paint editor unmounts and remounts across tab navigation.
+  // Always read paper.view.element dynamically at call time.
 
   let spaceHeld = false;
   let panning = false;
@@ -14,19 +16,33 @@ export default async function ({ addon, console }) {
     e.preventDefault();
     if (spaceHeld) return;
     spaceHeld = true;
-    if (!panning) canvas.style.cursor = "grab";
+    if (!panning) paper.view.element.style.cursor = "grab";
   };
 
   const onKeyUp = (e) => {
-    if (e.code !== "Space") return;
-    spaceHeld = false;
-    if (!panning) canvas.style.cursor = "";
+    if (e.code === "Space") {
+      spaceHeld = false;
+      if (!panning) paper.view.element.style.cursor = "";
+      return;
+    }
+    // Releasing Alt alone causes browsers on Windows to focus the menu bar.
+    // Suppress this while the paint editor canvas is on the page.
+    if (e.code === "AltLeft" || e.code === "AltRight") {
+      if (paper.view.element?.isConnected) e.preventDefault();
+    }
   };
 
   const onPointerDown = (e) => {
     const isSpaceDrag = spaceHeld && e.button === 0;
     const isMiddleClick = e.button === 1;
     if (!isSpaceDrag && !isMiddleClick) return;
+    // Only pan when the pointer is within the paint canvas area.
+    // Using getBoundingClientRect rather than target containment so that
+    // events on the SVG overlay (which is a sibling of the canvas, not a
+    // descendant) are also caught correctly.
+    const canvas = paper.view.element;
+    const rect = canvas.getBoundingClientRect();
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
     // Intercept before paper.js so no tool action starts.
     e.stopPropagation();
     e.preventDefault();
@@ -53,13 +69,17 @@ export default async function ({ addon, console }) {
   const onPointerUp = () => {
     if (!panning) return;
     panning = false;
-    canvas.style.cursor = spaceHeld ? "grab" : "";
+    paper.view.element.style.cursor = spaceHeld ? "grab" : "";
   };
 
   const onWheel = (e) => {
     if (!e.altKey) return;
-    // Only act when the pointer is over the paint canvas.
-    if (!canvas.contains(e.target) && e.target !== canvas) return;
+    // Only act when the pointer is over the paint canvas area.
+    // Use getBoundingClientRect so this works even when the event target is
+    // on the SVG overlay sitting above the canvas.
+    const canvas = paper.view.element;
+    const rect = canvas.getBoundingClientRect();
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
     e.preventDefault();
     e.stopPropagation();
 
@@ -73,7 +93,6 @@ export default async function ({ addon, console }) {
     // Normalise cursor position to [0,1] within the canvas's rendered rect,
     // then interpolate into the currently visible project-space bounds.
     // This avoids viewToProject entirely and works regardless of CSS scaling.
-    const rect = canvas.getBoundingClientRect();
     const nx = (e.clientX - rect.left) / rect.width;
     const ny = (e.clientY - rect.top) / rect.height;
     const b = paper.view.bounds;
@@ -90,24 +109,25 @@ export default async function ({ addon, console }) {
 
   const init = () => {
     window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-    canvas.addEventListener("pointerdown", onPointerDown, { capture: true });
-    canvas.addEventListener("pointermove", onPointerMove);
-    canvas.addEventListener("pointerup", onPointerUp);
-    canvas.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("keyup", onKeyUp, { capture: true });
+    // Use document-level capture so that:
+    // (a) events targeting the SVG overlay (sibling of canvas) are caught too, and
+    // (b) stale canvas references after paint-editor remounts don't break panning.
+    document.addEventListener("pointerdown", onPointerDown, { capture: true });
+    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("pointerup", onPointerUp);
     window.addEventListener("wheel", onWheel, { capture: true, passive: false });
   };
 
   const cleanup = () => {
     spaceHeld = false;
     panning = false;
-    canvas.style.cursor = "";
+    paper.view.element.style.cursor = "";
     window.removeEventListener("keydown", onKeyDown);
-    window.removeEventListener("keyup", onKeyUp);
-    canvas.removeEventListener("pointerdown", onPointerDown, { capture: true });
-    canvas.removeEventListener("pointermove", onPointerMove);
-    canvas.removeEventListener("pointerup", onPointerUp);
-    canvas.removeEventListener("wheel", onWheel);
+    window.removeEventListener("keyup", onKeyUp, { capture: true });
+    document.removeEventListener("pointerdown", onPointerDown, { capture: true });
+    document.removeEventListener("pointermove", onPointerMove);
+    document.removeEventListener("pointerup", onPointerUp);
     window.removeEventListener("wheel", onWheel, { capture: true });
   };
 
