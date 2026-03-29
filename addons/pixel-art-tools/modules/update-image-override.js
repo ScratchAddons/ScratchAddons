@@ -97,7 +97,7 @@ export function installUpdateImageOverride(addon, state, paper) {
 
   const install = async () => {
     while (true) {
-      const canvasContainer = await addon.tab.waitForElement("[class^='paint-editor_canvas-container']", {
+      const canvasContainer = await addon.tab.waitForElement("[class*='paint-editor_canvas-container_']", {
         markAsSeen: true,
         reduxEvents: [
           "scratch-gui/navigation/ACTIVATE_TAB",

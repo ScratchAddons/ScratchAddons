@@ -257,7 +257,9 @@ export function createControlsModule(
       "button",
       {
         type: "button",
-        className: "sa-pixel-art-toggle button_button_LhMbA paint-editor_button-group-button_ZLJcQ",
+        className: addon.tab.scratchClass("button_button", "paint-editor_button-group-button", {
+          others: "sa-pixel-art-toggle",
+        }),
         title: msg("pixelModeButton"),
         ariaLabel: msg("pixelModeButton"),
       },
@@ -303,7 +305,7 @@ export function createControlsModule(
 
     let hasAppliedZoomClasses = false;
     while (true) {
-      await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']", {
+      await addon.tab.waitForElement("[class*='paint-editor_zoom-controls_']", {
         markAsSeen: true,
         reduxEvents: [
           "scratch-gui/navigation/ACTIVATE_TAB",
@@ -318,7 +320,7 @@ export function createControlsModule(
 
       if (!hasAppliedZoomClasses) {
         hasAppliedZoomClasses = true;
-        const zoomControls = await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']");
+        const zoomControls = await addon.tab.waitForElement("[class*='paint-editor_zoom-controls_']");
         const groupClass = zoomControls?.firstChild?.className;
         const buttonClass = zoomControls?.firstChild?.firstChild?.className;
         const imageClass = zoomControls?.firstChild?.firstChild?.firstChild?.className;
