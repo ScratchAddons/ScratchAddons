@@ -98,23 +98,6 @@ export default async function ({ addon, msg, console }) {
     return `rgba(${Math.round(c.red * 255)},${Math.round(c.green * 255)},${Math.round(c.blue * 255)},${Math.round(c.alpha * 1000) / 1000})`;
   };
 
-  const getColorState = () => {
-    const state = addon.tab.redux.state?.scratchPaint;
-    if (state?.modals?.fillColor) {
-      activeColorMode = "fill";
-      const fill = state.color?.fillColor;
-      if (!fill || fill.gradientType === "SOLID" || !fill.gradientType) return null;
-      return fill;
-    }
-    if (state?.modals?.strokeColor) {
-      activeColorMode = "stroke";
-      const stroke = state.color?.strokeColor;
-      if (!stroke || stroke.gradientType === "SOLID" || !stroke.gradientType) return null;
-      return stroke;
-    }
-    return null;
-  };
-
   // ── Read p0/p1, extraStops and colours from the first selected paper item ───────
   const readCurrentStops = (paper) => {
     const items = paper.project.selectedItems.filter((i) => i.parent instanceof paper.Layer);
@@ -320,10 +303,9 @@ export default async function ({ addon, msg, console }) {
     if (isGradient) {
       const dispatchedType = detail.action.gradientType;
       if (dispatchedType) {
-        // A real gradient type was dispatched.  Don't gate on getColorState() here:
-        // for multi-stop gradients Redux stores gradientType=undefined (MIXED), so
-        // getColorState() would return null and we'd silently skip the sync.
-        // We already know it's a gradient because dispatchedType is truthy.
+        // A real gradient type was dispatched.  For multi-stop gradients Redux stores
+        // gradientType=undefined (MIXED), so we use dispatchedType directly rather than
+        // reading from Redux state, which would return null and silently skip the sync.
         // paper.js is already updated synchronously by applyGradientTypeToSelection()
         // before this dispatch fires, so no rAF deferral is needed.
         lastKnownGradientType = dispatchedType;
@@ -1443,7 +1425,7 @@ export default async function ({ addon, msg, console }) {
   });
 
   while (true) {
-    const swatchesRow = await addon.tab.waitForElement('[class*="color-picker_gradient-swatches-row_"]', {
+    await addon.tab.waitForElement('[class*="color-picker_gradient-swatches-row_"]', {
       markAsSeen: true,
       reduxCondition: (state) => {
         if (state.scratchGui.editorTab.activeTabIndex !== 1 || state.scratchGui.mode.isPlayerOnly) return false;
@@ -1476,7 +1458,6 @@ export default async function ({ addon, msg, console }) {
     stops = readCurrentStops(paper);
     storedAngle = colorStateNow.gradientType === "VERTICAL" ? 90 : readCurrentAngle(paper);
 
-    let needsReapply = false;
     if (!colorStateNow.gradientType) {
       const items = paper.project.selectedItems.filter((i) => i.parent instanceof paper.Layer);
       const fg = items[0]?.[colorProp()];
@@ -1495,7 +1476,6 @@ export default async function ({ addon, msg, console }) {
         type: COLOR_ACTIONS[activeColorMode].GRADIENT,
         gradientType: inferredType,
       });
-      needsReapply = true;
     } else {
       lastKnownGradientType = colorStateNow.gradientType;
     }
