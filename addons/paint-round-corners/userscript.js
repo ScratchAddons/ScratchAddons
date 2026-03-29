@@ -719,6 +719,21 @@ export default async function ({ addon, msg }) {
     isToolActive = true;
     if (isSelectedClass) rcBtn.classList.add(isSelectedClass);
 
+    // Reposition widgets when the user zooms or pans (paper.view.matrix changes).
+    // Mirrors the same rAF pattern used by paint-gradient-editor.
+    let lastViewKey = "";
+    const viewSyncLoop = () => {
+      if (!isToolActive) return;
+      const m = paper.view.matrix;
+      const key = `${m.a.toFixed(3)},${m.tx.toFixed(1)},${m.ty.toFixed(1)}`;
+      if (key !== lastViewKey) {
+        lastViewKey = key;
+        drawWidgets();
+      }
+      requestAnimationFrame(viewSyncLoop);
+    };
+    requestAnimationFrame(viewSyncLoop);
+
     // Watch for tool switches (CHANGE_MODE), tab navigation, and undo/redo events.
     modeChangeHandler = ({ detail }) => {
       if (!isToolActive) return;
