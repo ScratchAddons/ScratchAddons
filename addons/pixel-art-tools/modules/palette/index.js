@@ -21,7 +21,7 @@ export function createPaletteModule(addon, state, redux, msg) {
   });
 
   let resolvePalettePanelReady;
-  state.palettePanelReady = state.palettePanelReady || new Promise((r) => (resolvePalettePanelReady = r));
+  state.palettePanelReady = state.palettePanelReady || new Promise((resolve) => (resolvePalettePanelReady = resolve));
 
   const ui = createUIModule(addon, state, redux, msg, null, null);
   const storage = createStorageModule(addon, vm, runtime, msg, state, ui);
@@ -136,10 +136,15 @@ export function createPaletteModule(addon, state, redux, msg) {
     panel.appendChild(el("div", { className: "sa-pixel-art-palette-actions" }, [importBtn, exportBtn, deleteBtn]));
 
     state.palettePanel = panel;
-    resolvePalettePanelReady?.(panel);
-    resolvePalettePanelReady = null;
+    if (resolvePalettePanelReady) {
+      resolvePalettePanelReady(panel);
+      resolvePalettePanelReady = null;
+    }
 
     while (true) {
+      if (addon.self.disabled) {
+        await new Promise((resolve) => addon.self.addEventListener("reenabled", resolve, { once: true }));
+      }
       await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
         markAsSeen: true,
         reduxEvents: [
@@ -158,14 +163,11 @@ export function createPaletteModule(addon, state, redux, msg) {
   };
 
   const attachVmListener = () => {
-    if (!vm?.on) return;
     state.teardownVmTargetsListener?.();
     const handler = scheduleSync;
     vm.on("targetsUpdate", handler);
     state.teardownVmTargetsListener = () => {
-      try {
-        (vm.off || vm.removeListener)?.call(vm, "targetsUpdate", handler);
-      } catch {}
+      vm.removeListener("targetsUpdate", handler);
       state.teardownVmTargetsListener = null;
     };
   };

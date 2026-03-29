@@ -92,7 +92,7 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
   const writeCostumePaletteId = (paletteId) => {
     const t = getTarget(),
       key = getCostumeKey(getCostume(t));
-    if (!t || !key || !paletteId) return;
+    if (!(t && key && paletteId)) return;
     const mappings = loadMappings(t);
     mappings[key] = paletteId;
     writeMappings(t, mappings);
