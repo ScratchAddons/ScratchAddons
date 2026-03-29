@@ -38,18 +38,12 @@
         <addon-tag tag="new"></addon-tag>
         {{ addon.latestUpdate.temporaryNotice }}
       </div>
-      <div id="info" v-for="info of addon.info">
-        <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
-          <img
-            :src="'../../images/icons/' + {
-              'warning': 'warning.svg',
-              'notice': 'notice.svg',
-              'info': 'help.svg',
-            }[info.type || 'info']"
-            draggable="false"
-          />{{ info.text }}
-        </div>
-      </div>
+      <addon-notice
+        v-for="info of addon.info"
+        v-show="shouldShow"
+        :info="info"
+        :addon-settings="addonSettings"
+      ></addon-notice>
       <div class="addon-credits" v-if="addon.credits">
         <span>{{ msg("creditTo") }}</span>
         <span v-for="credit of addon.credits">
