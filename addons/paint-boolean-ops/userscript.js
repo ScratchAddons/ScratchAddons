@@ -277,6 +277,46 @@ export default async function ({ addon, msg }) {
     }
   };
 
+  // Removes consecutive segments that are at the same position (< 0.01 px apart).
+  // These zero-length edges cause PathOffset to produce degenerate / jagged output.
+  const mergeDuplicateSegments = (item, paper) => {
+    const paths = item instanceof paper.CompoundPath ? item.children.slice() : item instanceof paper.Path ? [item] : [];
+    for (const path of paths) {
+      for (let i = path.segments.length - 1; i >= 1; i--) {
+        if (path.segments[i].point.getDistance(path.segments[i - 1].point) < 0.01) {
+          path.segments[i - 1].handleOut = path.segments[i].handleOut;
+          path.segments[i].remove();
+        }
+      }
+    }
+  };
+
+  // Recursively offsets every leaf in item (descending into Groups), preserving
+  // each leaf's own fill/stroke. Coincident adjacent points are merged first to
+  // prevent PathOffset producing jagged artefacts. Returns the rebuilt item
+  // (possibly a new Group), or null if everything was degenerate.
+  const offsetItem = (item, amount, paper) => {
+    if (item instanceof paper.Group) {
+      const rebuilt = item.children
+        .slice()
+        .map((c) => offsetItem(c, amount, paper))
+        .filter(Boolean);
+      return rebuilt.length > 0 ? new paper.Group(rebuilt) : null;
+    }
+    // Leaf (Path or CompoundPath): preprocess then offset with its own style.
+    const style = cloneStyle(item);
+    // Pure stroke (no fill): leave unchanged. Returning a clone ensures the
+    // leaf is preserved even when it's inside a Group being rebuilt.
+    if (!style.fillColor) return item.clone();
+    preprocessPaths([item], paper);
+    mergeDuplicateSegments(item, paper);
+    const raw = PathOffset.offset(item, amount, paper);
+    const result = raw ? cleanResult(raw) : null;
+    if (!result) return null;
+    applyStyle(result, style);
+    return result;
+  };
+
   // Converts selected PointText items on the painting layer to path outlines
   // in-place, using paper.js's toPath() method. Returns the number of items
   // successfully converted.
@@ -478,17 +518,14 @@ export default async function ({ addon, msg }) {
         if (!upperCopies) rebuilt.selected = true;
       }
       // Subtract+Alt: restore all upper copies, select them only.
+      // No bringToFront() needed — each clone was inserted right after its
+      // original by clone(), so removing the original leaves the clone at the
+      // correct z-index automatically.
       if (upperCopies) {
-        for (const c of upperCopies) {
-          c.bringToFront();
-          c.selected = true;
-        }
+        for (const c of upperCopies) c.selected = true;
       }
       // Intersect+Alt: restore just the topmost clip shape and select it.
-      if (topCopy) {
-        topCopy.bringToFront();
-        topCopy.selected = true;
-      }
+      if (topCopy) topCopy.selected = true;
       triggerUpdateImage();
       deferUpdateButtonStates();
       return;
@@ -529,7 +566,7 @@ export default async function ({ addon, msg }) {
       applyStyle(cleaned, bottomStyle);
       cleaned.selected = true;
     }
-    if (topClone) topClone.bringToFront();
+    // No bringToFront() — clone lands at the correct z-index once its original is removed.
     triggerUpdateImage();
     deferUpdateButtonStates();
   };
@@ -571,11 +608,10 @@ export default async function ({ addon, msg }) {
     topItem.selected = false;
     topItem.remove();
     for (const r of allResults) r.selected = true;
-    // Restore the cutter and select it too.
-    if (topCopy) {
-      topCopy.bringToFront();
-      topCopy.selected = true;
-    }
+    // Restore the cutter and select it too. No bringToFront() needed — the
+    // clone was inserted after topItem by clone(), so topItem.remove() leaves
+    // it at the correct z-index.
+    if (topCopy) topCopy.selected = true;
     triggerUpdateImage();
     deferUpdateButtonStates();
   };
@@ -746,14 +782,11 @@ export default async function ({ addon, msg }) {
     for (const item of selected) {
       // Expand by half the stroke width — approximates converting the visual
       // stroke into a filled outline. Fall back to 1px if there is no stroke.
+      // Use the item's own strokeWidth for plain paths/compounds; for Groups,
+      // offsetItem descends to each leaf which carries its own strokeWidth.
       const amount = (item.strokeWidth ?? 0) / 2 || 1;
-      const style = cloneStyle(item);
-      const raw = PathOffset.offset(item, amount, paper);
-      // cleanResult strips tiny artifact fragments (area < 1) that paper.js's
-      // intersection engine can produce when resolving the self-union in #clean.
-      const result = raw ? cleanResult(raw) : null;
+      const result = offsetItem(item, amount, paper);
       if (!result) continue;
-      applyStyle(result, style);
       const idx = item.index;
       const layer = item.layer;
       item.selected = false;
@@ -983,7 +1016,7 @@ export default async function ({ addon, msg }) {
         hasRunOnce = true;
 
         // Extract layout and separator classes from native toolbar elements.
-        const nativeDashedGroup = fixedToolsRow.querySelector("[class*='mod-dashed-border']");
+        const nativeDashedGroup = fixedToolsRow.querySelector("[class*='mod-dashed-border_']");
         dashedBorderClass = nativeDashedGroup
           ? ([...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? "")
           : "";
@@ -1033,15 +1066,21 @@ export default async function ({ addon, msg }) {
         updateLayout();
         window.addEventListener("resize", updateLayout);
 
-        const editorContainer = document.querySelector("[class*='paint-editor_editor-container_']");
-        if (editorContainer) {
-          editorContainer.addEventListener("mouseup", deferUpdateButtonStates);
-        }
-        document.addEventListener("keyup", () => {
+        // Cache the editor container. Re-query only when React has replaced it
+        // (isConnected goes false), so we're never holding a stale reference.
+        let editorContainer = null;
+        const getEditorContainer = () => {
+          if (!editorContainer?.isConnected)
+            editorContainer = document.querySelector("[class*='paint-editor_editor-container_']");
+          return editorContainer;
+        };
+        document.addEventListener("mouseup", (e) => {
           if (addon.self.disabled) return;
-          if (document.querySelector("[class*='paint-editor_editor-container_']")) {
-            deferUpdateButtonStates();
-          }
+          if (getEditorContainer()?.contains(e.target)) deferUpdateButtonStates();
+        });
+        document.addEventListener("keyup", (e) => {
+          if (addon.self.disabled) return;
+          if (getEditorContainer()?.contains(e.target)) deferUpdateButtonStates();
         });
         updateButtonStates();
 
