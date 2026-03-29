@@ -1,5 +1,10 @@
 const BRUSH_SIZES = [1, 2, 3, 4];
 
+/** @typedef {import("./types.js").PixelArtState} PixelArtState */
+
+/**
+ * @param {PixelArtState} state
+ */
 export function createControlsModule(
   addon,
   state,

@@ -7,6 +7,8 @@ import { createTextToolScaler } from "./modules/text-tool-scaler.js";
 import { installRasterCropOverride } from "./modules/raster-crop-override.js";
 import { installUpdateImageOverride } from "./modules/update-image-override.js";
 
+/** @typedef {import("./modules/types.js").PixelArtState} PixelArtState */
+
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function ({ addon, msg, console }) {
   const paper = await addon.tab.traps.getPaper();
@@ -19,6 +21,7 @@ export default async function ({ addon, msg, console }) {
   await addon.tab.scratchClassReady();
   await addon.tab.loadScript("/libraries/thirdparty/cs/gif.js");
 
+  /** @type {PixelArtState} */
   const state = {
     enabled: false,
     pixelModeDesired: false,
@@ -41,6 +44,7 @@ export default async function ({ addon, msg, console }) {
     pixelGridOverlay: null,
     pixelCheckerboardSize: 1,
     paletteNotice: null,
+    paletteMessage: null,
     toggleButton: null,
     animationPanel: null,
   };

@@ -2,6 +2,11 @@ const PALETTE_LIMIT = 64;
 const PROJECT_MAGIC = " // _pixel_art_palette_project";
 const COSTUME_MAGIC = " // _pixel_art_palette_costume";
 
+/** @typedef {import("../types.js").PixelArtState} PixelArtState */
+
+/**
+ * @param {PixelArtState} state
+ */
 export function createStorageModule(addon, vm, runtime, msg, state, ui) {
   const randomId = () => Math.random().toString(36).slice(2, 10);
 

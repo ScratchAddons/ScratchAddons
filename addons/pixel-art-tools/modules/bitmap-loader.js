@@ -1,5 +1,7 @@
 const EMPTY_COSTUME_MD5 = "cd21514d0531fdffb22204e0ec5ed84a.svg";
 
+/** @typedef {import("./types.js").PixelArtState} PixelArtState */
+
 async function canvasToAsset(storage, canvas) {
   const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
   const data = new Uint8Array(await blob.arrayBuffer());
@@ -28,6 +30,9 @@ function buildCostume(asset, costumeObj, extra = {}) {
   };
 }
 
+/**
+ * @param {PixelArtState} state
+ */
 export function wrapAddCostumeWait(addon, original, canvasAdjuster, state) {
   return async function (md5ext, costumeObj = {}, targetId, optId) {
     if (addon.self.disabled) return original.call(this, md5ext, costumeObj, targetId, optId);

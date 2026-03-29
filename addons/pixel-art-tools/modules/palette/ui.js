@@ -1,5 +1,10 @@
 const PALETTE_LIMIT = 64;
 
+/** @typedef {import("../types.js").PixelArtState} PixelArtState */
+
+/**
+ * @param {PixelArtState} state
+ */
 export function createUIModule(addon, state, redux, msg, storage, importExport) {
   const setDependencies = (storageModule, importExportModule) => {
     storage = storageModule;

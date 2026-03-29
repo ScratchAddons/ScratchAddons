@@ -1,6 +1,11 @@
 const ART_BOARD_WIDTH = 960;
 const ART_BOARD_HEIGHT = 720;
 
+/** @typedef {import("./types.js").PixelArtState} PixelArtState */
+
+/**
+ * @param {PixelArtState} state
+ */
 export function installUpdateImageOverride(addon, state, paper) {
   const patchedInstances = new WeakSet();
   const wrappedCallbacks = new WeakMap();

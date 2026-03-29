@@ -1,5 +1,10 @@
 import { bindFloatingPanel } from "./floating-panel.js";
 
+/** @typedef {import("./types.js").PixelArtState} PixelArtState */
+
+/**
+ * @param {PixelArtState} state
+ */
 export function createAnimationPreview(addon, state, msg) {
   let panel = null;
   let previewImg = null;

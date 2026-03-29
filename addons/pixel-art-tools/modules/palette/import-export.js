@@ -1,5 +1,7 @@
 const PALETTE_LIMIT = 64;
 
+/** @typedef {import("../types.js").PixelArtState} PixelArtState */
+
 const hex = (r, g, b) => `#${((r << 16) | (g << 8) | b).toString(16).toUpperCase().padStart(6, "0")}`;
 const distSq = (h1, h2) => {
   const r1 = parseInt(h1.slice(1, 3), 16),
@@ -104,6 +106,7 @@ export const parseImage = (file) => {
   });
 };
 
+/** @param {PixelArtState} state */
 export const createExportTXT = (state) => () => {
   const palette = state.projectPalettes.find((entry) => entry.id === state.selectedPaletteId);
   if (!palette || !palette.colors.length) return;
@@ -121,6 +124,9 @@ export const createExportTXT = (state) => () => {
   }, 100);
 };
 
+/**
+ * @param {PixelArtState} state
+ */
 export function createImportExportModule(state) {
   return {
     parseGPL,

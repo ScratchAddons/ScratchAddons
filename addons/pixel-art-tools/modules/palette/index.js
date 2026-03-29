@@ -3,6 +3,12 @@ import { createUIModule } from "./ui.js";
 import { createImportExportModule } from "./import-export.js";
 import { bindFloatingPanel } from "../floating-panel.js";
 
+/** @typedef {import("../types.js").PixelArtPalette} PixelArtPalette */
+/** @typedef {import("../types.js").PixelArtState} PixelArtState */
+
+/**
+ * @param {PixelArtState} state
+ */
 export function createPaletteModule(addon, state, redux, msg) {
   const vm = addon.tab.traps.vm;
   const runtime = vm.runtime;
@@ -28,6 +34,7 @@ export function createPaletteModule(addon, state, redux, msg) {
   const importExport = createImportExportModule(state);
   ui.setDependencies(storage, importExport);
 
+  /** @returns {PixelArtPalette} */
   const createPalette = (name) => ({
     id: `pal-${storage.randomId()}`,
     name: name || `${msg("paletteTitle") || "Palette"} ${state.projectPalettes.length + 1}`,

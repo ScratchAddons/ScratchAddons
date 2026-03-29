@@ -1,6 +1,11 @@
 // raster-crop-override.js
 // Override Raster#getImageData during pixel mode to bypass Scratch's auto-crop (getHitBounds).
 
+/** @typedef {import("./types.js").PixelArtState} PixelArtState */
+
+/**
+ * @param {PixelArtState} state
+ */
 export function installRasterCropOverride(addon, state, paper) {
   if (!paper?.Raster || paper.Raster.__saRasterCropOverrideInstalled) return;
   paper.Raster.__saRasterCropOverrideInstalled = true;
