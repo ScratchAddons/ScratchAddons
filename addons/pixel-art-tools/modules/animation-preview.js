@@ -1,3 +1,5 @@
+import { bindFloatingPanel } from "./floating-panel.js";
+
 export function createAnimationPreview(addon, state, msg) {
   let panel = null;
   let previewImg = null;
@@ -106,20 +108,6 @@ export function createAnimationPreview(addon, state, msg) {
 
     // Header (draggable when floating)
     const header = el("header", { className: "sa-pixel-art-animation-header" }, [msg("animationPreview") || "Preview"]);
-    let dragStart = null;
-    header.onmousedown = (e) =>
-      panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
-    document.addEventListener(
-      "mousemove",
-      (e) =>
-        dragStart &&
-        Object.assign(panel.style, {
-          left: `${e.clientX - dragStart.x}px`,
-          top: `${e.clientY - dragStart.y}px`,
-          right: "auto",
-        })
-    );
-    document.addEventListener("mouseup", () => (dragStart = null));
     panel.appendChild(header);
 
     // Preview image
@@ -242,7 +230,7 @@ export function createAnimationPreview(addon, state, msg) {
           : 10;
       Object.assign(panel.style, { right: "10px", top: `${top}px`, left: "auto" });
     };
-    window.addEventListener("resize", updateFloat);
+    bindFloatingPanel(addon, panel, header, updateFloat);
     updateFloat();
 
     while (true) {

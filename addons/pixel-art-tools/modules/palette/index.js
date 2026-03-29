@@ -1,6 +1,7 @@
 import { createStorageModule } from "./storage.js";
 import { createUIModule } from "./ui.js";
 import { createImportExportModule } from "./import-export.js";
+import { bindFloatingPanel } from "../floating-panel.js";
 
 export function createPaletteModule(addon, state, redux, msg) {
   const vm = addon.tab.traps.vm;
@@ -91,20 +92,6 @@ export function createPaletteModule(addon, state, redux, msg) {
 
     // Header (draggable when floating)
     const header = el("header", { className: "sa-pixel-art-palette-header" }, [msg("paletteTitle")]);
-    let dragStart = null;
-    header.onmousedown = (e) =>
-      panel.dataset.floating && (dragStart = { x: e.clientX - panel.offsetLeft, y: e.clientY - panel.offsetTop });
-    document.addEventListener(
-      "mousemove",
-      (e) =>
-        dragStart &&
-        Object.assign(panel.style, {
-          left: `${e.clientX - dragStart.x}px`,
-          top: `${e.clientY - dragStart.y}px`,
-          right: "auto",
-        })
-    );
-    document.addEventListener("mouseup", () => (dragStart = null));
     panel.appendChild(header);
 
     // Float when narrow viewport
@@ -120,7 +107,7 @@ export function createPaletteModule(addon, state, redux, msg) {
         document.querySelector("[class*='paint-editor_mode-selector']")?.appendChild(panel);
       }
     };
-    window.addEventListener("resize", updateFloat);
+    bindFloatingPanel(addon, panel, header, updateFloat);
 
     // Dropdown selector
     const dropdown = el("select", { className: "sa-pixel-art-palette-select" });
