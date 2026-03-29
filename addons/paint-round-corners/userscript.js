@@ -768,7 +768,7 @@ export default async function ({ addon, msg }) {
   // our button to the end of the list alongside Select, Reshape, etc.
   const toolsLoop = async () => {
     while (true) {
-      const modeSelector = await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
+      const modeSelector = await addon.tab.waitForElement("[class*='paint-editor_mode-selector_']", {
         markAsSeen: true,
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
