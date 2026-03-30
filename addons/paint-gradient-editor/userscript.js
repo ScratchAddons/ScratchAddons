@@ -679,7 +679,7 @@ export default async function ({ addon, msg, console }) {
       // getColorsFromSelection reads the correct rgba from paper.js.
       for (const item of items) {
         const grd = item[cp]?.gradient;
-        if (!grd?.stops?.length >= 2) continue;
+        if (!grd || grd.stops.length < 2) continue;
         const c0c = grd.stops[0].color;
         const c1c = grd.stops[grd.stops.length - 1].color;
         item[cp].gradient = { stops: [c0c, c1c], radial: grd.radial };
