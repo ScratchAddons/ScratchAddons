@@ -102,10 +102,9 @@ export function createAnimationPreview(addon, state, msg) {
   const hide = () => panel && ((panel.style.display = "none"), stopAnimation());
 
   const setupPanel = async () => {
-    if (state.palettePanelReady)
-      try {
-        await state.palettePanelReady;
-      } catch {}
+    // The preview floats underneath the palette when both are visible, so wait
+    // for the palette panel to exist before computing the preview's position.
+    if (state.palettePanelReady) await state.palettePanelReady;
 
     panel = el("section", { className: "sa-pixel-art-animation" });
     panel.style.display = state.enabled && !hidden ? "block" : "none";

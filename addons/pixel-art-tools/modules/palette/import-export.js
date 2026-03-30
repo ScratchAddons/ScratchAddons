@@ -3,6 +3,8 @@ const PALETTE_LIMIT = 64;
 /** @typedef {import("../types.js").PixelArtState} PixelArtState */
 
 const hex = (r, g, b) => `#${((r << 16) | (g << 8) | b).toString(16).toUpperCase().padStart(6, "0")}`;
+// Compare colors in RGB space without sqrt since only relative distance matters
+// for near-duplicate palette filtering.
 const distSq = (h1, h2) => {
   const r1 = parseInt(h1.slice(1, 3), 16),
     g1 = parseInt(h1.slice(3, 5), 16),
@@ -16,6 +18,8 @@ const distSq = (h1, h2) => {
   return dr * dr + dg * dg + db * db;
 };
 
+// Parse the text-based GIMP palette format (.gpl):
+// https://developer.gimp.org/core/standards/gpl/
 export const parseGPL = (text) => {
   const out = [];
   for (const line of text.split(/\r?\n/)) {
@@ -44,6 +48,10 @@ export const parseTXT = (text) => {
   return out;
 };
 
+// Fast image palette extraction: sample pixels once, bucket nearby colors with
+// coarse quantization, sort those buckets by frequency, then keep only colors
+// whose true RGB values are far enough apart. This gives a small representative
+// palette quickly without running a heavier clustering algorithm over the image.
 const extractImageColors = (imageData, { threshold = 20, stride = 4, quantBits = 5, alphaMin = 128, limit } = {}) => {
   const { data } = imageData,
     qShift = 8 - quantBits;
@@ -110,6 +118,8 @@ export const parseImage = (file) => {
 export const createExportTXT = (state) => () => {
   const palette = state.projectPalettes.find((entry) => entry.id === state.selectedPaletteId);
   if (!palette || !palette.colors.length) return;
+  // Export the same compact comma-separated hex format that parseTXT accepts so
+  // palette text files round-trip without extra headers or metadata.
   const text = palette.colors.map((h) => h.slice(1)).join(",");
   const blob = new Blob([text], { type: "text/plain" });
   const url = URL.createObjectURL(blob);

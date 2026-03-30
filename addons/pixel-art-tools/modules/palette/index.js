@@ -104,6 +104,8 @@ export function createPaletteModule(addon, state, redux, msg) {
     // Float when narrow viewport
     const updateFloat = () => {
       const canvas = document.querySelector("[class*='paper-canvas_paper-canvas']");
+      // Tuned manually as the point where the mode selector area gets too tight
+      // to keep the palette docked comfortably.
       if (window.innerWidth < 1256 && canvas) {
         panel.dataset.floating = "true";
         canvas.parentElement.appendChild(panel);

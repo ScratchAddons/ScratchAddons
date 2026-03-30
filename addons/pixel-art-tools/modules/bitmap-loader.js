@@ -12,12 +12,16 @@ async function halveAsset(storage, asset) {
   const img = await createImageBitmap(await (await fetch(asset.encodeDataURI())).blob());
   const w = img.width >> 1;
   const h = img.height >> 1;
+  // Scratch bitmap costumes are stored at 2x resolution, so pre-halve imported
+  // rasters here before creating the asset we hand back to the VM.
   const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
   canvas.getContext("2d").drawImage(img, 0, 0, w, h);
   return { asset: await canvasToAsset(storage, canvas), w, h };
 }
 
 function buildCostume(asset, costumeObj, extra = {}) {
+  // Rebuild imported/blank bitmaps as Scratch bitmapResolution:2 costumes so
+  // they match the storage format pixel mode expects.
   return {
     ...costumeObj,
     asset,
@@ -61,6 +65,8 @@ export function wrapAddCostumeWait(addon, original, canvasAdjuster, state) {
     const target = targetId ? this.runtime.getTargetById(targetId) : this.editingTarget;
     const isDuplicate = target?.getCostumes().some((c) => c.md5 === md5ext);
     if (!isDuplicate) {
+      // Resize once up front so the imported bitmap lands in the same resolution
+      // scheme as new pixel-mode costumes instead of paying that conversion later.
       const loaded = costumeObj.asset || (await storage.load(storage.AssetType.ImageBitmap, md5ext.split(".")[0], ext));
       const { asset, w, h } = await halveAsset(storage, loaded);
       const costume = buildCostume(asset, costumeObj);

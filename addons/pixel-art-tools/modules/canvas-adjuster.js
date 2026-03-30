@@ -53,6 +53,8 @@ export function createCanvasAdjuster(addon, paper) {
     tileContext.fillStyle = colors.artboard;
     tileContext.fillRect(0, 0, tile.width, tile.height);
     tileContext.fillStyle = colors.checker;
+    // Fill opposite corners of a 2x2 tile so the repeated pattern alternates
+    // artboard/checker colors across odd and even squares.
     tileContext.fillRect(0, 0, size, size);
     tileContext.fillRect(size, size, size, size);
 
@@ -107,6 +109,8 @@ export function createCanvasAdjuster(addon, paper) {
       if (addon.self.disabled) return down?.call(this, evt);
       const rect = getAllowedRect();
       if (!rect || !down) return down?.call(this, evt);
+      // Track whether the active stroke starts inside the artboard so drags can
+      // pause outside the rect and resume from the last valid point on re-entry.
       this.__strokeBlocked = !rect.contains(evt.point);
       this.__paused = false;
       this.__lastInsidePoint = rect.contains(evt.point) ? evt.point.clone() : null;
@@ -203,6 +207,8 @@ export function createCanvasAdjuster(addon, paper) {
     const forceRebuild = options?.forceRebuild;
 
     const ol = getOutlineLayer();
+    // Reuse the existing checker/outline when the artboard size and backing
+    // Paper items still match; only rebuild when the size or theme actually changed.
     const canReuse =
       lastEnabledSize?.width === w &&
       lastEnabledSize?.height === h &&

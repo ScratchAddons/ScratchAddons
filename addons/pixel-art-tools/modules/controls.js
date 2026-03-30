@@ -42,9 +42,13 @@ export function createControlsModule(
     const costumeIndex = target?.currentCostume ?? null;
     const costume = target?.sprite?.costumes?.[target.currentCostume];
     if (!costume) return { key: null, size: null };
+    // Scratch reports resolution-1 bitmaps at half the pixel dimensions we want
+    // to use as the pixel-mode canvas baseline, so normalize them here.
     const mul = costume.bitmapResolution === 1 ? 2 : 1;
     const size = { width: Math.round(costume.size[0] * mul), height: Math.round(costume.size[1] * mul) };
-    const key = `${targetId}:${costumeIndex}:${costume.md5 || costume.md5ext || ""}:${costume.bitmapResolution || ""}`;
+    // Treat the active costume as changed if Scratch switches slots or replaces
+    // the underlying asset in-place without moving it in the costume list.
+    const key = `${targetId}:${costumeIndex}:${costume.md5 || costume.md5ext || ""}`;
     return { key, size };
   };
 
@@ -135,6 +139,9 @@ export function createControlsModule(
       const { key } = getCostumeInfo();
       const desired = computeDesiredSize();
 
+      // This grace window was tuned to be just long enough to stop the next
+      // automatic costume-size sync from immediately undoing a manual resize,
+      // without adding noticeable lag to normal syncing.
       const recentlyUserChanged = Date.now() - lastUserSizeChangeAt < 600;
       const costumeChanged = key && key !== lastCostumeKey;
       const desiredDiffers = desired.width !== state.pendingSize.width || desired.height !== state.pendingSize.height;
@@ -195,7 +202,10 @@ export function createControlsModule(
         return;
       }
       let value = Math.max(1, Math.min(1024, +input.value || 1));
-      // Pixel mode bitmap sizes effectively move in even steps; snap on commit only.
+      // Let users type freely, then snap on commit so the stored half-size stays valid.
+      // Scratch stores these bitmap costumes at half the pixel-mode canvas size.
+      // That means the visible canvas dimensions must stay even, otherwise the
+      // stored costume size would need fractional halving that Scratch cannot represent.
       if (state.enabled && isBitmap() && value % 2 === 1) value = Math.min(1024, value + 1);
       state.pendingSize[dimension] = value;
       input.value = value;

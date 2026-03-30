@@ -1,3 +1,5 @@
+// Share one window resize listener across floating panels so palette/preview can
+// react to layout changes without each module attaching its own global listener.
 const resizeCallbacks = new Set();
 let resizeListenerAttached = false;
 

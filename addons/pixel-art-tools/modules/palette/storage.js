@@ -27,6 +27,8 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
   const writeComment = (target, magic, payload, header, pos) => {
     if (!target) return;
     const text = `${header}\n${JSON.stringify(payload)}${magic}`;
+    // Persist palettes and costume mappings in normal Scratch comments so the data
+    // survives project saves without needing a separate storage layer or addon-only file.
     const existing = findComment(target, magic, payload.mappings ? (p) => p?.mappings : null);
     existing ? (existing.text = text) : target.createComment(randomId(), null, text, ...pos, true);
     runtime.emitProjectChanged();
@@ -72,6 +74,8 @@ export function createStorageModule(addon, vm, runtime, msg, state, ui) {
 
   const loadMappings = (target) => {
     const mappings = {};
+    // Keep the palette list project-wide on the stage, but store costume -> palette
+    // mappings on each target so sprite-local costume names stay independent.
     Object.values(target?.comments || {}).forEach((c) => {
       if (!c.text?.includes(COSTUME_MAGIC)) return;
       const p = parseComment(c.text, COSTUME_MAGIC);

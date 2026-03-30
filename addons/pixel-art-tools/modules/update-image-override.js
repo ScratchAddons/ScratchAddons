@@ -78,6 +78,8 @@ export function installUpdateImageOverride(addon, state, paper) {
   };
 
   const patchFiberTree = (root) => {
+    // Walk the mounted React subtree until we find paint editor instances whose
+    // bitmap update path we can wrap, without assuming a fixed component depth.
     const seen = new Set();
     const stack = [root];
     while (stack.length) {
@@ -93,6 +95,8 @@ export function installUpdateImageOverride(addon, state, paper) {
   };
 
   const patchFiberLineage = (node) => {
+    // Start from the canvas container's fiber, climb until we hit a stable parent,
+    // and search each child subtree because Scratch can reshuffle this part of the tree.
     const seen = new Set();
     while (node && !seen.has(node)) {
       seen.add(node);

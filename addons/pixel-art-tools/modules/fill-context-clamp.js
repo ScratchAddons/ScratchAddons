@@ -21,11 +21,16 @@ export function createFillContextClamp(addon, paper, getAllowedRect) {
         const gx = startX + x;
         if (gy >= ry && gy < ry2 && gx >= rx && gx < rx2) continue;
         const idx = (y * width + x) * 4;
+        // Tag only fully transparent pixels outside the artboard with a transparent
+        // sentinel color so flood fill can distinguish "outside" transparency from
+        // real transparent pixels inside the artboard without changing visible output.
         if (data[idx + 3] === 0) [data[idx], data[idx + 1], data[idx + 2], data[idx + 3]] = [1, 2, 3, 0];
       }
     }
   };
 
+  // Proxy raster context reads/writes so fill sees the sentinel-clamped pixels
+  // without changing every Paper call site that touches image data.
   const createClampedContext = (ctx, rect) =>
     new Proxy(ctx, {
       get(target, prop) {
