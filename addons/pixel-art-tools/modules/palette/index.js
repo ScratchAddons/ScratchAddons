@@ -152,6 +152,8 @@ export function createPaletteModule(addon, state, redux, msg) {
       if (addon.self.disabled) {
         await new Promise((resolve) => addon.self.addEventListener("reenabled", resolve, { once: true }));
       }
+      // Scratch remounts this part of the costume editor frequently when switching
+      // tabs/targets/formats, so the palette has to keep reattaching itself.
       await addon.tab.waitForElement("[class*='paint-editor_mode-selector']", {
         markAsSeen: true,
         reduxEvents: [

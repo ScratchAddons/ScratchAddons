@@ -30,11 +30,13 @@ export default async function ({ addon, msg, console }) {
     selectedPaletteIndex: -1,
     editingPaletteIndex: -1,
     pendingSize: { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") },
-    lastAppliedSize: {
+    // Rollback target if Scratch tries to auto-crop the bitmap smaller than the
+    // current pixel canvas during an update-image pass.
+    lastSafeSize: {
       width: addon.settings.get("defaultWidth"),
       height: addon.settings.get("defaultHeight"),
     },
-    restoreSizePending: false,
+    restoreSafeSizePending: false,
     brushButtons: null,
     controlsGroup: null,
     palettePanel: null,

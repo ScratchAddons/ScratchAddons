@@ -21,8 +21,8 @@
  * @property {number} selectedPaletteIndex
  * @property {number} editingPaletteIndex
  * @property {PixelArtSize} pendingSize
- * @property {PixelArtSize} lastAppliedSize
- * @property {boolean} restoreSizePending
+ * @property {PixelArtSize} lastSafeSize
+ * @property {boolean} restoreSafeSizePending
  * @property {HTMLElement | null} brushButtons
  * @property {HTMLElement | null} controlsGroup
  * @property {HTMLElement | null} sizeControls

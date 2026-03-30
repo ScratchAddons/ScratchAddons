@@ -36,10 +36,11 @@ export function installRasterCropOverride(addon, state, paper) {
       const x = rect?.x || 0;
       const y = rect?.y || 0;
       const wouldCrop = rect && (rect.width > targetW || rect.height > targetH);
-      if (wouldCrop && state.lastAppliedSize) {
-        // Revert to the last applied size; do not shrink below current content.
-        state.pendingSize = { ...state.lastAppliedSize };
-        state.restoreSizePending = true;
+      if (wouldCrop && state.lastSafeSize) {
+        // Defer the rollback to controls.js so the inputs, remembered slot size,
+        // and applied canvas size all snap back together on the next update pass.
+        state.pendingSize = { ...state.lastSafeSize };
+        state.restoreSafeSizePending = true;
         return originalGetImageData.apply(this, args);
       }
       rect = { x, y, width: targetW, height: targetH };
