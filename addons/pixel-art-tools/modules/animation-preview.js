@@ -23,14 +23,14 @@ export function createAnimationPreview(addon, state, msg) {
     return e;
   };
 
-  const getWorkerUrl = (() => {
-    let promise;
-    return () =>
-      (promise ||= fetch(addon.self.dir + "/../../../libraries/thirdparty/cs/gif.worker.js")
-        .then((r) => r.text())
-        .then((t) => URL.createObjectURL(new Blob([t], { type: "application/javascript" })))
-        .catch(() => addon.self.dir + "/../../../libraries/thirdparty/cs/gif.worker.js"));
-  })();
+  let workerUrl;
+  const getWorkerUrl = async () => {
+    if (workerUrl) return workerUrl;
+    return (workerUrl = await fetch(addon.self.dir + "/../../../libraries/thirdparty/cs/gif.worker.js")
+      .then((r) => r.text())
+      .then((t) => URL.createObjectURL(new Blob([t], { type: "application/javascript" })))
+      .catch(() => addon.self.dir + "/../../../libraries/thirdparty/cs/gif.worker.js"));
+  };
 
   const getCostumeImages = () => [
     ...(document.querySelector("[class*='selector_list-area']")?.querySelectorAll("img[class*='sprite-image']") || []),

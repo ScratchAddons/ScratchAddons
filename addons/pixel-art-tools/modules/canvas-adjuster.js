@@ -69,19 +69,17 @@ export function createCanvasAdjuster(addon, paper) {
   const fitViewToArtboard = (w, h) => {
     const view = paper?.view;
     if (!view) return;
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        const rect = view.element?.getBoundingClientRect?.();
-        const [availW, availH] = [rect?.width || view.size?.width || 0, rect?.height || view.size?.height || 0];
-        if (!availW || !availH) return;
-        const zoom = Math.min(availW / (w + OUTLINE_FIT_MARGIN), availH / (h + OUTLINE_FIT_MARGIN)) * FIT_PADDING_RATIO;
-        if (Number.isFinite(zoom) && zoom > 0) {
-          view.zoom = zoom;
-          if (outlineCenter) view.center = outlineCenter.clone();
-          view.update?.();
-        }
-      })
-    );
+    requestAnimationFrame(() => {
+      const rect = view.element?.getBoundingClientRect?.();
+      const [availW, availH] = [rect?.width || view.size?.width || 0, rect?.height || view.size?.height || 0];
+      if (!availW || !availH) return;
+      const zoom = Math.min(availW / (w + OUTLINE_FIT_MARGIN), availH / (h + OUTLINE_FIT_MARGIN)) * FIT_PADDING_RATIO;
+      if (Number.isFinite(zoom) && zoom > 0) {
+        view.zoom = zoom;
+        if (outlineCenter) view.center = outlineCenter.clone();
+        view.update?.();
+      }
+    });
   };
 
   function wrapToolOnce(tool) {
