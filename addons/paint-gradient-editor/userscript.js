@@ -745,6 +745,27 @@ export default async function ({ addon, msg, console }) {
     // Pool grows as needed; excess handles are hidden when extraStops shrinks.
     const extraHandlePool = [];
 
+    // Cleanly remove extra stop at idx: rebuild all selected-item gradients without it
+    // (so the WeakSet warm-up count stays consistent), then splice and re-sync.
+    const removeExtraStop = (idx) => {
+      const previewExtra = extraStops.filter((_, i) => i !== idx);
+      const cp = colorProp();
+      for (const item of selectedLayers()) {
+        if (!item[cp]?.gradient) continue;
+        const liveStops = item[cp].gradient.stops;
+        const c0 = liveStops[0].color;
+        const c1 = liveStops[liveStops.length - 1].color;
+        item[cp].gradient = { stops: [c0, ...previewExtra.map((s) => s.color), c1], radial: item[cp].gradient.radial };
+        const g2 = item[cp].gradient;
+        g2.stops[0].offset = stops.p0;
+        for (let i = 0; i < previewExtra.length; i++) g2.stops[i + 1].offset = previewExtra[i].offset;
+        g2.stops[g2.stops.length - 1].offset = stops.p1;
+      }
+      extraStops.splice(idx, 1);
+      applyAllStops();
+      syncOverlay();
+    };
+
     const makeExtraStopHandle = (poolIndex) => {
       const g = document.createElementNS(NS, "g");
       g._ringR = 9;
@@ -760,6 +781,15 @@ export default async function ({ addon, msg, console }) {
         if (attachDragMoved) return;
         e.stopPropagation();
         openExtraColorPicker(poolIndex, e.clientX, e.clientY, g);
+      });
+
+      // Double-click deletes this stop.
+      g.addEventListener("dblclick", (e) => {
+        if (addon.self.disabled || attachDragMoved) return;
+        e.stopPropagation();
+        picker.close();
+        removeExtraStop(poolIndex);
+        triggerUndo();
       });
 
       // Drag: constrained to axis between neighbours.
@@ -856,9 +886,7 @@ export default async function ({ addon, msg, console }) {
               pendingDeleteSuppressedRing = false;
               picker.close();
             }
-            extraStops.splice(poolIndex, 1);
-            applyAllStops();
-            syncOverlay();
+            removeExtraStop(poolIndex);
           } else {
             // Restore visibility in case we entered pending-delete then moved back.
             g.style.visibility = "";
@@ -907,9 +935,9 @@ export default async function ({ addon, msg, console }) {
       setPickerHighlight(groupEl);
       picker.open(
         extraStops[idx].color,
-        (css) => {
+        (color) => {
           if (extraStops[idx]) {
-            extraStops[idx].color = css;
+            extraStops[idx].color = color;
             applyAllStops();
             syncOverlay();
           }
@@ -978,6 +1006,18 @@ export default async function ({ addon, msg, console }) {
       const op = toSVG(fc.origin);
       const dp = toSVG(fc.destination);
       const axisLenPx = Math.hypot(dp.x - op.x, dp.y - op.y);
+      // Clicking before p0 in a radial gradient: promote the click position as the new p0,
+      // pushing the current p0 into extra stops so the rest of the gradient is preserved.
+      if (isRadial && t < stops.p0) {
+        extraStops.unshift({ color: c0css, offset: stops.p0 });
+        stops.p0 = clamp(crampedToOffset(0, extraStops.length + 2, t, axisLenPx), 0, stops.p0 - 0.01);
+        applyAllStops();
+        syncOverlay();
+        triggerUndo();
+        attachDragMoved = false;
+        p0Handle.g.dispatchEvent(new MouseEvent("click", { bubbles: true, clientX: e.clientX, clientY: e.clientY }));
+        return;
+      }
       const newInnerIdx = extraStops.filter((s) => s.offset < t).length;
       const newInnerCount = isRadial ? extraStops.length + 2 : extraStops.length + 1;
       const innerIdxForNew = isRadial ? newInnerIdx + 1 : newInnerIdx;
