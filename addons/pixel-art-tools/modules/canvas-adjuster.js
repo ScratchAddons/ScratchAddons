@@ -43,29 +43,44 @@ export function createCanvasAdjuster(addon, paper) {
   };
 
   const makeChecker = (w, h, size, colors) => {
-    const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
-    const context = canvas.getContext("2d");
-    context.imageSmoothingEnabled = false;
+    const [cols, rows] = [Math.ceil(w / size), Math.ceil(h / size)];
+    const base = new paper.Shape.Rectangle([0, 0], [cols, rows]);
+    base.fillColor = colors.artboard;
 
-    const tile = Object.assign(document.createElement("canvas"), { width: size * 2, height: size * 2 });
-    const tileContext = tile.getContext("2d");
-    tileContext.imageSmoothingEnabled = false;
-    tileContext.fillStyle = colors.artboard;
-    tileContext.fillRect(0, 0, tile.width, tile.height);
-    tileContext.fillStyle = colors.checker;
-    // Fill opposite corners of a 2x2 tile so the repeated pattern alternates
-    // artboard/checker colors across odd and even squares.
-    tileContext.fillRect(0, 0, size, size);
-    tileContext.fillRect(size, size, size, size);
+    // Match Scratch Paint's checkerboard builder:
+    // https://github.com/LLK/scratch-paint/blob/develop/src/helper/layer.js#L179-L214
+    // and its bitmap background usage:
+    // https://github.com/LLK/scratch-paint/blob/develop/src/helper/layer.js#L311-L319
+    // The zig-zag path plus evenodd fill recreates alternating dark squares
+    // across the grid without creating one Paper rectangle per cell.
+    const points = [];
+    let x = 0,
+      y = 0;
+    while (x < cols) {
+      points.push([x, y]);
+      x++;
+      points.push([x, y]);
+      y = y ? 0 : rows;
+    }
+    y = rows - 1;
+    x = cols;
+    while (y > 0) {
+      points.push([x, y]);
+      x = x ? 0 : cols;
+      points.push([x, y]);
+      y--;
+    }
+    const dark = new paper.Path(points);
+    dark.fillRule = "evenodd";
+    dark.fillColor = colors.checker;
 
-    const pattern = context.createPattern(tile, "repeat");
-    context.fillStyle = pattern;
-    context.fillRect(0, 0, w, h);
-
-    const raster = new paper.Raster(canvas);
-    raster.guide = true;
-    raster.locked = true;
-    return raster;
+    const mask = new paper.Shape.Rectangle(new paper.Rectangle(0, 0, w / size, h / size));
+    mask.clipMask = true;
+    const group = new paper.Group([base, dark, mask]);
+    group.scale(size);
+    group.guide = true;
+    group.locked = true;
+    return group;
   };
 
   const makeOutline = (w, h, colors) => {
