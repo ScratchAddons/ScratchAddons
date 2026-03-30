@@ -55,6 +55,12 @@ export default async function ({ addon, msg, console }) {
   };
   const colorProp = () => (activeColorMode === "stroke" ? "strokeColor" : "fillColor");
 
+  // Cache paper.js early so the CHANGE_SELECTED_ITEMS listener can fix MIXED
+  // swatches even before the user opens a colour picker.
+  addon.tab.traps.getPaper().then((p) => {
+    if (!cachedPaper) cachedPaper = p;
+  });
+
   // ── Helpers ────────────────────────────────────────────────────────────────────
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
@@ -225,12 +231,12 @@ export default async function ({ addon, msg, console }) {
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
     if (detail.action.type !== "scratch-paint/select/CHANGE_SELECTED_ITEMS") return;
     if (selfItemsDispatch) return; // skip our own re-dispatch
-    if (!lastKnownGradientType || !activeOverlay) return;
+    if (!cachedPaper) return;
 
     // Check paper.js directly — for multi-stop gradients Redux sets gradientType=undefined
     // (shows MIXED swatches), so we must not rely on fill.gradientType alone.
-    const items = cachedPaper?.project?.selectedItems?.filter((i) => i.parent instanceof cachedPaper.Layer);
-    const paperFc = items?.[0]?.[colorProp()];
+    const items = cachedPaper.project.selectedItems.filter((i) => i.parent instanceof cachedPaper.Layer);
+    const paperFc = items[0]?.[colorProp()];
     if (paperFc?.gradient) {
       const isSameItem = items[0] === lastSelectedPaperItem;
       const paperCount = paperFc.gradient.stops.length;
@@ -244,7 +250,7 @@ export default async function ({ addon, msg, console }) {
         c0hex = colorToHex(paperFc.gradient.stops[0].color);
         // c1css/c1hex stay from cache — stops[last] after the wipe may be an extra stop
         applyAllStops();
-        activeOverlay.sync();
+        activeOverlay?.sync();
         return;
       }
 
@@ -270,10 +276,24 @@ export default async function ({ addon, msg, console }) {
         applyAllStops();
       }
 
-      activeOverlay.sync();
+      // Infer gradient type if not yet known (first selection before picker open).
+      if (!lastKnownGradientType) {
+        const fc = items[0][colorProp()];
+        if (fc?.gradient?.radial) {
+          lastKnownGradientType = "RADIAL";
+        } else {
+          const dx = Math.abs((fc.destination?.x ?? 0) - (fc.origin?.x ?? 0));
+          const dy = Math.abs((fc.destination?.y ?? 0) - (fc.origin?.y ?? 0));
+          lastKnownGradientType = dy > dx ? "VERTICAL" : "HORIZONTAL";
+        }
+      }
+
+      activeOverlay?.sync();
       return;
     }
 
+    // Non-gradient item selected — only restore gradient type when overlay is active.
+    if (!activeOverlay) return;
     lastSelectedPaperItem = items?.[0] ?? null;
     const colorState = addon.tab.redux.state?.scratchPaint?.color?.[colorProp()];
     if (!colorState?.gradientType) {
