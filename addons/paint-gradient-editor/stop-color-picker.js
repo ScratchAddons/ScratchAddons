@@ -106,6 +106,11 @@ export default class StopColorPicker {
     return { outer, track, thumb };
   }
 
+  // Close any open panel immediately (e.g. when the addon is disabled).
+  close() {
+    document.querySelector(".sa-extra-stop-picker")?._close?.();
+  }
+
   // ── Open / reuse the picker panel ────────────────────────────────────────
   // color           — starting colour as any CSS string
   // onCommit(color) — called live on every change with the new CSS colour string
@@ -404,7 +409,7 @@ export default class StopColorPicker {
       drawSV();
       syncPickers();
     };
-    // Programmatic close used when the active node is deleted.
+    // Programmatic close used when the active node is deleted or the addon is disabled.
     panel._close = () => {
       this._onClose();
       panel.remove();

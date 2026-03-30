@@ -854,7 +854,7 @@ export default async function ({ addon, msg, console }) {
             // Ring was already hidden when we entered pending-delete; close the picker too.
             if (pendingDeleteSuppressedRing) {
               pendingDeleteSuppressedRing = false;
-              document.querySelector(".sa-extra-stop-picker")?._close?.();
+              picker.close();
             }
             extraStops.splice(poolIndex, 1);
             applyAllStops();
@@ -1009,6 +1009,7 @@ export default async function ({ addon, msg, console }) {
 
     return {
       sync: syncOverlay,
+      close: () => picker.close(),
       destroy: () => {
         active = false;
         svg.remove();
@@ -1018,6 +1019,7 @@ export default async function ({ addon, msg, console }) {
 
   // ── Main loop ──────────────────────────────────────────────────────────────────
   addon.self.addEventListener("disabled", () => {
+    activeOverlay?.close();
     activeOverlay?.destroy();
     activeOverlay = null;
   });
@@ -1091,7 +1093,8 @@ export default async function ({ addon, msg, console }) {
       const spModals = addon.tab.redux.state?.scratchPaint?.modals;
       const stillOpen = activeColorMode === "stroke" ? spModals?.strokeColor : spModals?.fillColor;
       if (!stillOpen) {
-        activeOverlay?.sync();
+        activeOverlay?.destroy();
+        activeOverlay = null;
       } else {
         requestAnimationFrame(pollPickerClose);
       }
