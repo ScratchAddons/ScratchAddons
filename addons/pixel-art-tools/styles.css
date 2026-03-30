@@ -305,11 +305,27 @@ body.sa-pixel-art-compact-editor .sa-pixel-art-size {
 }
 
 body.sa-pixel-art-compact-editor .sa-pixel-art-size input {
-  width: 2.4rem;
+  width: 2.6rem;
   height: 1.5rem;
   padding: 0 0.1rem 0 0.3rem;
   font-size: 0.7rem;
   border-radius: 1.5rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-brush {
+  gap: 0.2rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-brush-button {
+  padding: 0.15rem;
+  border-radius: 0.3rem;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+}
+
+body.sa-pixel-art-compact-editor .sa-pixel-art-brush-preview {
+  transform: scale(0.85);
+  transform-origin: center;
 }
 
 body.sa-pixel-art-compact-editor .sa-pixel-art-palette,
@@ -372,7 +388,7 @@ body.sa-pixel-art-compact-editor .sa-pixel-art-icon {
   background: var(--editorDarkMode-input, #fff);
   color: var(--editorDarkMode-input-text, inherit);
   color-scheme: var(--editorDarkMode-input-colorScheme, light);
-  padding: 0.25rem;
+  padding: 0.1rem;
   cursor: pointer;
   display: flex;
   align-items: center;

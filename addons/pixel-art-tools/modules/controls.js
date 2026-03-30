@@ -273,7 +273,7 @@ export function createControlsModule(
     const heightInput = createInput("height");
     sizeDiv.append(widthInput, el("span", {}, ["x"]), heightInput);
 
-    wrapper.append(el("div", { className: "sa-pixel-art-toggle-wrapper" }, [toggle]), sizeDiv);
+    wrapper.append(sizeDiv, el("div", { className: "sa-pixel-art-toggle-wrapper" }, [toggle]));
     Object.assign(state, {
       toggleButton: toggle,
       controlsGroup: wrapper,
@@ -288,7 +288,7 @@ export function createControlsModule(
 
     BRUSH_SIZES.forEach((size) => {
       const preview = el("span", { className: "sa-pixel-art-brush-preview" });
-      Object.assign(preview.style, { width: `${size * 6}px`, height: `${size * 6}px` });
+      Object.assign(preview.style, { width: `${size * 5}px`, height: `${size * 5}px` });
       const btn = el("button", { type: "button", className: "sa-pixel-art-brush-button" }, [preview]);
       btn.dataset.size = size;
       btn.onclick = () => {
