@@ -1,4 +1,5 @@
 import { createFillContextClamp } from "./fill-context-clamp.js";
+import { eventTarget as paperColorEventTarget } from "../../editor-dark-mode/paper-color-events.js";
 
 export function createCanvasAdjuster(addon, paper) {
   const getLayer = (key) => paper.project.layers.find((l) => l?.data?.[key]);
@@ -25,7 +26,7 @@ export function createCanvasAdjuster(addon, paper) {
     clickHiderAttached = false,
     gateInstalled = false,
     helpersHidden = false,
-    themeWatcher = null,
+    paperColorListenerAttached = false,
     lastThemeSignature = null;
   const getAllowedRect = () => getOutlineLayer()?.data?.artboardRect || null;
   const fillContextClamp = createFillContextClamp(addon, paper, getAllowedRect);
@@ -180,22 +181,17 @@ export function createCanvasAdjuster(addon, paper) {
     });
   };
 
-  const startThemeWatcher = () => {
-    if (themeWatcher) return;
-    themeWatcher = setInterval(() => {
+  const installPaperColorListener = () => {
+    if (paperColorListenerAttached) return;
+    paperColorListenerAttached = true;
+    paperColorEventTarget.addEventListener("change", () => {
       if (addon.self.disabled || !lastEnabledSize || !lastChecker) return;
       const bg = getBgLayer();
       if (bg?.bitmapBackground !== lastChecker) return;
       const signature = getThemeSignature(getCanvasColors());
       if (signature === lastThemeSignature) return;
       enable(lastEnabledSize.width, lastEnabledSize.height, { forceRebuild: true });
-    }, 250);
-  };
-
-  const stopThemeWatcher = () => {
-    if (!themeWatcher) return;
-    clearInterval(themeWatcher);
-    themeWatcher = null;
+    });
   };
 
   const enable = (w, h, options = null) => {
@@ -250,13 +246,12 @@ export function createCanvasAdjuster(addon, paper) {
     ensureLayerOrder();
     installToolGate();
     installClickHider();
-    startThemeWatcher();
+    installPaperColorListener();
     if (options?.fitView) fitViewToArtboard(w, h);
   };
 
   const disable = () => {
     fillContextClamp.disable();
-    stopThemeWatcher();
     const bg = getBgLayer();
     if (bg && originalBg) {
       if (bg.bitmapBackground !== originalBg) bg.bitmapBackground.remove();

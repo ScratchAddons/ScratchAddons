@@ -1,4 +1,5 @@
 import { textColor, multiply, brighten, alphaBlend, makeHsv } from "../../libraries/common/cs/text-color.esm.js";
+import { notifyPaperColorsChanged } from "./paper-color-events.js";
 
 export default async function ({ addon, console }) {
   const paper = await addon.tab.traps.getPaper();
@@ -66,15 +67,22 @@ export default async function ({ addon, console }) {
           layer.bitmapBackground._children[0].fillColor = artboardBackground;
           layer.bitmapBackground._children[1].fillColor = checkerboardColor;
         }
-        for (let i = 0; i < 3; i++) layer._children[2]._children[i].strokeColor = crosshairOuterColor;
-        for (let i = 3; i < 6; i++) layer._children[2]._children[i].strokeColor = crosshairInnerColor;
+        const guideCrosshair = layer._children?.[2]?._children;
+        if (guideCrosshair) {
+          for (let i = 0; i < 3; i++) if (guideCrosshair[i]) guideCrosshair[i].strokeColor = crosshairOuterColor;
+          for (let i = 3; i < 6; i++) if (guideCrosshair[i]) guideCrosshair[i].strokeColor = crosshairInnerColor;
+        }
       } else if (layer.data.isOutlineLayer) {
         if (layer._children?.[0]) layer._children[0].strokeColor = artboardBackground;
       } else if (layer.data.isDragCrosshairLayer) {
-        for (let i = 0; i < 3; i++) layer.dragCrosshair._children[i].strokeColor = crosshairOuterColor;
-        for (let i = 3; i < 6; i++) layer.dragCrosshair._children[i].strokeColor = crosshairInnerColor;
+        const dragCrosshair = layer.dragCrosshair?._children;
+        if (dragCrosshair) {
+          for (let i = 0; i < 3; i++) if (dragCrosshair[i]) dragCrosshair[i].strokeColor = crosshairOuterColor;
+          for (let i = 3; i < 6; i++) if (dragCrosshair[i]) dragCrosshair[i].strokeColor = crosshairInnerColor;
+        }
       }
     }
+    notifyPaperColorsChanged();
   };
   addon.settings.addEventListener("change", updateColors);
   addon.self.addEventListener("disabled", updateColors);
