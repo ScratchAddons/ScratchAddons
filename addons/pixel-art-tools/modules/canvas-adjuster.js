@@ -30,6 +30,16 @@ export function createCanvasAdjuster(addon, paper) {
   const getAllowedRect = () => getOutlineLayer()?.data?.artboardRect || null;
   const fillContextClamp = createFillContextClamp(addon, paper, getAllowedRect);
   const getThemeSignature = (colors) => `${colors.artboard}|${colors.checker}`;
+  // Scratch can reorder Paper layers after editor actions like undo, so reassert
+  // the pixel-mode layer order to keep the artboard border in front of the costume.
+  const ensureLayerOrder = () => {
+    const bg = getBgLayer();
+    const outline = getOutlineLayer();
+    const guide = getGuideLayer();
+    bg?.sendToBack?.();
+    outline?.bringToFront?.();
+    guide?.bringToFront?.();
+  };
 
   const makeChecker = (w, h, size, colors) => {
     const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
@@ -205,6 +215,7 @@ export function createCanvasAdjuster(addon, paper) {
       (!ol?.data?.artboardRect || (ol.data.artboardRect.width === w && ol.data.artboardRect.height === h));
 
     if (canReuse && !forceRebuild) {
+      ensureLayerOrder();
       installToolGate();
       installClickHider();
       if (options?.fitView) fitViewToArtboard(w, h);
@@ -236,6 +247,7 @@ export function createCanvasAdjuster(addon, paper) {
       );
     }
 
+    ensureLayerOrder();
     installToolGate();
     installClickHider();
     startThemeWatcher();
