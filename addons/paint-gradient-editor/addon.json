@@ -1,6 +1,23 @@
 {
   "name": "Gradient stop editor",
-  "description": "Adds a gradient bar to the fill color picker in the vector editor, letting you drag the start/end stop positions and a midpoint bias handle.",
+  "description": "Adds an advanced gradient editor to the fill and stroke colour choosers in the vector costume editor.",
+  "info": [
+    {
+      "type": "info",
+      "text": "Open the fill or stroke colour picker on a gradient shape to reveal a live axis widget drawn directly over the shape on the canvas",
+      "id": "infoHowToOpen"
+    },
+    {
+      "type": "info",
+      "text": "Click a stop handle to pick its colour; drag it to reposition it; click anywhere on the axis to add a new stop",
+      "id": "infoBasicUse"
+    },
+    {
+      "type": "info",
+      "text": "Double-click a stop or drag it off the axis to delete it",
+      "id": "infoDelete"
+    }
+  ],
   "credits": [
     {
       "name": "griffpatch",
