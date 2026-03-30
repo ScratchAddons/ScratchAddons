@@ -12,6 +12,10 @@ export default async function ({ template }) {
         return this.$root.selectedCategory;
       },
       shouldShow() {
+        if (this.category.id === "easterEgg") {
+          const d = new Date();
+          return d.getMonth() === 3 && d.getDate() === 1;
+        }
         const categoriesWithParent = this.$root.categories
           .filter((category) => category.parent === this.category.parent)
           .map((category) => category.id);

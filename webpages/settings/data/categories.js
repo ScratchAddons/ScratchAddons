@@ -85,14 +85,14 @@ export default [
     name: chrome.i18n.getMessage("websiteThemes"),
   },
   {
+    id: "easterEgg",
+    icon: "egg-easter",
+    name: chrome.i18n.getMessage("easterEggs"),
+  },
+  {
     id: "popup",
     icon: "popup",
     name: chrome.i18n.getMessage("popupFeatures"),
     marginBottom: true,
-  },
-  {
-    id: "easterEgg",
-    name: chrome.i18n.getMessage("easterEggs"),
-    hidden: true,
   },
 ];
