@@ -64,12 +64,10 @@ export function createFillContextClamp(addon, paper, getAllowedRect) {
       if (!rect) return origPaint.call(this, evt);
       fillScopeActive = true;
       fillScopeRect = rect;
-      try {
-        return origPaint.call(this, evt);
-      } finally {
-        fillScopeActive = false;
-        fillScopeRect = null;
-      }
+      const result = origPaint.call(this, evt);
+      fillScopeActive = false;
+      fillScopeRect = null;
+      return result;
     };
   };
 
