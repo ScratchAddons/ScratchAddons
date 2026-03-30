@@ -256,7 +256,10 @@ export function createAnimationPreview(addon, state, msg) {
 
   addon.settings.addEventListener("change", () => {
     const next = addon.settings.get("hideAnimationPreview");
-    if (next !== hidden) (hidden = next) ? hide() : show();
+    if (next !== hidden) {
+      hidden = next;
+      hidden ? hide() : show();
+    }
   });
 
   return { setupPanel, show, hide };
