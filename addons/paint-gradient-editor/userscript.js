@@ -1,3 +1,5 @@
+import StopColorPicker from "./stop-color-picker.js";
+
 export default async function ({ addon, msg, console }) {
   addon.tab.redux.initialize();
 
@@ -448,6 +450,7 @@ export default async function ({ addon, msg, console }) {
     // r=7 circle + r=9 shadow → shadow outer radius 9px used for min-distance calculation.
     const makeStopHandle = () => {
       const g = document.createElementNS(NS, "g");
+      g._ringR = 11;
       g.style.cssText = "pointer-events:all;cursor:pointer";
       const circle = svgEl("circle", { r: 7, stroke: "white", "stroke-width": 2 });
       g.append(svgEl("circle", { r: 9, fill: "rgba(0,0,0,0.3)" }), circle);
@@ -693,7 +696,8 @@ export default async function ({ addon, msg, console }) {
     p0Handle.g.addEventListener("click", (e) => {
       if (addon.self.disabled || attachDragMoved) return;
       e.stopPropagation();
-      openColorPicker(
+      setPickerHighlight(p0Handle.g);
+      picker.open(
         c0css,
         (css) => {
           c0css = css;
@@ -708,9 +712,7 @@ export default async function ({ addon, msg, console }) {
           syncPickerColorToRedux(0);
         },
         e.clientX,
-        e.clientY,
-        p0Handle.g,
-        11
+        e.clientY
       );
     });
 
@@ -718,7 +720,8 @@ export default async function ({ addon, msg, console }) {
     p1Handle.g.addEventListener("click", (e) => {
       if (addon.self.disabled || attachDragMoved) return;
       e.stopPropagation();
-      openColorPicker(
+      setPickerHighlight(p1Handle.g);
+      picker.open(
         c1css,
         (css) => {
           c1css = css;
@@ -733,9 +736,7 @@ export default async function ({ addon, msg, console }) {
           syncPickerColorToRedux(1);
         },
         e.clientX,
-        e.clientY,
-        p1Handle.g,
-        11
+        e.clientY
       );
     });
 
@@ -746,6 +747,7 @@ export default async function ({ addon, msg, console }) {
 
     const makeExtraStopHandle = (poolIndex) => {
       const g = document.createElementNS(NS, "g");
+      g._ringR = 9;
       g.style.cssText = "pointer-events:all;cursor:pointer";
       const circle = svgEl("circle", { r: 5, stroke: "white", "stroke-width": 1.5 });
       g.append(svgEl("circle", { r: 7, fill: "rgba(0,0,0,0.3)" }), circle);
@@ -873,18 +875,19 @@ export default async function ({ addon, msg, console }) {
     let pendingDeleteHandle = null;
     // Track which handle group currently has the picker open.
     let activePickerGroup = null;
-    const setPickerHighlight = (group, ringRadius) => {
+    const setPickerHighlight = (group) => {
       activePickerGroup = group ?? null;
       if (!group) {
         pickerRingWhite.style.display = "none";
         pickerRingBlack.style.display = "none";
         return;
       }
+      const ringR = group._ringR ?? 11;
       const tf = group.getAttribute("transform") ?? "";
       // White ring peeks outside the black ring; black ring is at the specified radius.
       for (const [ring, r] of [
-        [pickerRingWhite, ringRadius + 2.5],
-        [pickerRingBlack, ringRadius],
+        [pickerRingWhite, ringR + 2.5],
+        [pickerRingBlack, ringR],
       ]) {
         ring.setAttribute("r", r);
         ring.setAttribute("transform", tf);
@@ -892,431 +895,17 @@ export default async function ({ addon, msg, console }) {
       }
     };
 
-    // Generic inline HSV + alpha colour picker.
-    // openColorPicker(initialCss, onCommit, clientX, clientY, handleGroup?, ringRadius?)
-    //   initialCss    — starting colour as any CSS string
-    //   onCommit(css) — called live on every change with the new CSS colour string
-    //   handleGroup   — SVG <g> handle group to highlight while picker is open (optional)
-    //   ringRadius    — ring radius in SVG units (default 11 for p0/p1 handles)
-    // openExtraColorPicker(idx, …) is a thin wrapper around this for extra stops.
-    const openColorPicker = (initialCss, onCommit, clientX, clientY, handleGroup = null, ringRadius = 11) => {
-      // Reuse existing picker if open: swap colour and callback without rebuilding.
-      // Reposition only if the user has NOT manually dragged the panel since it last opened.
-      const existing = document.querySelector(".sa-extra-stop-picker");
-      if (existing?._setColor) {
-        existing._setOnCommit(onCommit);
-        existing._setColor(initialCss);
-        setPickerHighlight(handleGroup, ringRadius);
-        if (!existing._wasMoved) {
-          existing.style.left = `${clamp(clientX - 10, 4, window.innerWidth - existing.offsetWidth - 4)}px`;
-          existing.style.top = `${clamp(clientY + 28, 4, window.innerHeight - existing.offsetHeight - 4)}px`;
-        }
-        return;
-      }
-      existing?.remove();
-      setPickerHighlight(handleGroup, ringRadius);
-
-      // ── Colour math ──────────────────────────────────────────────────────
-      const rgbToHsv = (r, g, b) => {
-        r /= 255;
-        g /= 255;
-        b /= 255;
-        const max = Math.max(r, g, b),
-          min = Math.min(r, g, b),
-          d = max - min;
-        let h = 0;
-        if (d) {
-          if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
-          else if (max === g) h = ((b - r) / d + 2) / 6;
-          else h = ((r - g) / d + 4) / 6;
-        }
-        return [h * 360, max === 0 ? 0 : (d / max) * 100, max * 100];
-      };
-      const hsvToRgb = (h, s, v) => {
-        h /= 360;
-        s /= 100;
-        v /= 100;
-        const i = Math.floor(h * 6),
-          f = h * 6 - i;
-        const p = v * (1 - s),
-          q = v * (1 - f * s),
-          t = v * (1 - (1 - f) * s);
-        return [
-          [v, t, p],
-          [q, v, p],
-          [p, v, t],
-          [p, q, v],
-          [t, p, v],
-          [v, p, q],
-        ][i % 6].map((c) => Math.round(c * 255));
-      };
-      const h2 = (v) =>
-        Math.round(clamp(v, 0, 255))
-          .toString(16)
-          .padStart(2, "0");
-
-      const p0 = parseColor(initialCss) ?? [128, 128, 128, 1];
-      const initHsv = rgbToHsv(p0[0], p0[1], p0[2]);
-      let H = initHsv[0],
-        S = initHsv[1],
-        V = initHsv[2],
-        A = (p0[3] ?? 1) * 100;
-
-      const getCss = () => {
-        const [r, g, b] = hsvToRgb(H, S, V);
-        const a = +(A / 100).toFixed(3);
-        return a >= 0.999 ? `#${h2(r)}${h2(g)}${h2(b)}` : `rgba(${r},${g},${b},${a})`;
-      };
-      let activeOnCommit = onCommit;
-      const commit = () => activeOnCommit(getCss());
-
-      // ── Panel shell ──────────────────────────────────────────────────────
-      const CW = 200;
-      const panel = document.createElement("div");
-      panel.className = "sa-extra-stop-picker";
-      panel.style.cssText =
-        `position:fixed;background:#1e1e1e;border:1px solid #555;border-radius:7px;` +
-        `padding:10px;z-index:99999;box-shadow:0 6px 28px rgba(0,0,0,0.85);user-select:none;` +
-        `width:${CW}px;box-sizing:content-box;overflow:hidden;`;
-      panel.addEventListener("mousedown", (e) => e.stopPropagation());
-
-      // ── Drag handle (title bar) ──────────────────────────────────────────
-      const dragHandle = document.createElement("div");
-      dragHandle.style.cssText =
-        "margin:-10px -10px 10px;padding:5px 0;background:#2d2d2d;" +
-        "display:flex;align-items:center;justify-content:center;cursor:grab;flex-shrink:0;";
-      const gripDots = document.createElement("div");
-      gripDots.style.cssText = "display:grid;grid-template-columns:repeat(3,4px);gap:3px;opacity:0.45;";
-      for (let gi = 0; gi < 6; gi++) {
-        const dot = document.createElement("div");
-        dot.style.cssText = "width:3px;height:3px;border-radius:50%;background:white;";
-        gripDots.appendChild(dot);
-      }
-      dragHandle.appendChild(gripDots);
-      dragHandle.addEventListener("mousedown", (e) => {
-        e.stopPropagation();
-        const startX = e.clientX,
-          startY = e.clientY;
-        const origLeft = parseInt(panel.style.left, 10) || 0;
-        const origTop = parseInt(panel.style.top, 10) || 0;
-        dragHandle.style.cursor = "grabbing";
-        const mv = (ev) => {
-          panel._wasMoved = true;
-          panel.style.left = `${clamp(origLeft + ev.clientX - startX, 0, window.innerWidth - panel.offsetWidth)}px`;
-          panel.style.top = `${clamp(origTop + ev.clientY - startY, 0, window.innerHeight - panel.offsetHeight)}px`;
-        };
-        const up = () => {
-          document.removeEventListener("mousemove", mv);
-          document.removeEventListener("mouseup", up);
-          dragHandle.style.cursor = "grab";
-        };
-        document.addEventListener("mousemove", mv);
-        document.addEventListener("mouseup", up);
-      });
-
-      // Drag helper: attaches mousedown → mousemove/mouseup on document.
-      const makeDragTarget = (el, onMove, onUp) => {
-        el.addEventListener("mousedown", (e) => {
-          e.stopPropagation();
-          onMove(e);
-          const mv = (ev) => {
-            ev.preventDefault();
-            onMove(ev);
-          };
-          const up = () => {
-            document.removeEventListener("mousemove", mv);
-            document.removeEventListener("mouseup", up);
-            onUp?.();
-          };
-          document.addEventListener("mousemove", mv);
-          document.addEventListener("mouseup", up);
-        });
-      };
-
-      // ── SV canvas ────────────────────────────────────────────────────────
-      const DPR = Math.min(window.devicePixelRatio || 1, 2);
-      const SV_H = 110;
-      const svCanvas = document.createElement("canvas");
-      svCanvas.width = CW * DPR;
-      svCanvas.height = SV_H * DPR;
-      svCanvas.style.cssText = `width:${CW}px;height:${SV_H}px;border-radius:4px;cursor:crosshair;display:block;`;
-
-      const drawSV = () => {
-        const ctx = svCanvas.getContext("2d");
-        const w = svCanvas.width,
-          ch = svCanvas.height;
-        ctx.fillStyle = `hsl(${H},100%,50%)`;
-        ctx.fillRect(0, 0, w, ch);
-        const wg = ctx.createLinearGradient(0, 0, w, 0);
-        wg.addColorStop(0, "rgba(255,255,255,1)");
-        wg.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = wg;
-        ctx.fillRect(0, 0, w, ch);
-        const bk = ctx.createLinearGradient(0, 0, 0, ch);
-        bk.addColorStop(0, "rgba(0,0,0,0)");
-        bk.addColorStop(1, "rgba(0,0,0,1)");
-        ctx.fillStyle = bk;
-        ctx.fillRect(0, 0, w, ch);
-        const cx = (S / 100) * w,
-          cy = (1 - V / 100) * ch;
-        ctx.beginPath();
-        ctx.arc(cx, cy, 6 * DPR, 0, Math.PI * 2);
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 2 * DPR;
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(cx, cy, 5 * DPR, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(0,0,0,0.4)";
-        ctx.lineWidth = 1 * DPR;
-        ctx.stroke();
-      };
-      makeDragTarget(
-        svCanvas,
-        (e) => {
-          const r = svCanvas.getBoundingClientRect();
-          S = clamp((e.clientX - r.left) / r.width, 0, 1) * 100;
-          V = clamp(1 - (e.clientY - r.top) / r.height, 0, 1) * 100;
-          drawSV();
-          syncPickers();
-          commit();
-        },
-        () => triggerUndo()
-      );
-
-      // ── Shared bar factory (hue + alpha) ─────────────────────────────────
-      // The knob overhangs the track by its radius (9px) on each end, so extend the
-      // outer hit-target by KNOB_R on each side using negative margins (same pattern as
-      // the drag-handle title bar).  Track is inset by the same amount so it stays at CW wide.
-      const KNOB_R = 9;
-      const TRACK_W = CW - 2 * KNOB_R; // track narrower than panel so knob stays within panel bounds
-      const makeBar = (marginTop) => {
-        const outer = document.createElement("div");
-        outer.style.cssText = `position:relative;margin-top:${marginTop}px;margin-left:-${KNOB_R}px;margin-right:-${KNOB_R}px;height:18px;cursor:crosshair;`;
-        const track = document.createElement("div");
-        track.style.cssText = `position:absolute;top:3px;left:${2 * KNOB_R}px;right:${2 * KNOB_R}px;height:12px;border-radius:6px;pointer-events:none;`;
-        const thumb = document.createElement("div");
-        thumb.style.cssText =
-          "position:absolute;top:0;width:18px;height:18px;border-radius:50%;background:white;" +
-          "box-shadow:0 0 0 2px rgba(0,0,0,0.45),0 1px 4px rgba(0,0,0,0.6);transform:translateX(-50%);pointer-events:none;";
-        outer.append(track, thumb);
-        return { outer, track, thumb };
-      };
-
-      // ── Hue bar ──────────────────────────────────────────────────────────
-      const { outer: hueOuter, track: hueTrack, thumb: hueThumb } = makeBar(8);
-      hueTrack.style.background =
-        "linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%)," +
-        "hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))";
-      makeDragTarget(
-        hueOuter,
-        (e) => {
-          const r = hueOuter.getBoundingClientRect();
-          H = clamp((e.clientX - r.left - 2 * KNOB_R) / TRACK_W, 0, 1) * 360;
-          drawSV();
-          syncPickers();
-          commit();
-        },
-        () => triggerUndo()
-      );
-
-      // ── Alpha bar ────────────────────────────────────────────────────────
-      const { outer: alphaOuter, track: alphaTrack, thumb: alphaThumb } = makeBar(6);
-      const CHECKER =
-        "linear-gradient(45deg,#888 25%,transparent 25%),linear-gradient(-45deg,#888 25%,transparent 25%)," +
-        "linear-gradient(45deg,transparent 75%,#888 75%),linear-gradient(-45deg,transparent 75%,#888 75%)";
-      Object.assign(alphaTrack.style, {
-        backgroundImage: CHECKER,
-        backgroundSize: "8px 8px",
-        backgroundPosition: "0 0,0 4px,4px -4px,-4px 0",
-        backgroundColor: "#ccc",
-      });
-      const alphaFill = document.createElement("div");
-      alphaFill.style.cssText = "position:absolute;inset:0;border-radius:6px;pointer-events:none;";
-      alphaTrack.appendChild(alphaFill);
-
-      const updateAlphaBar = () => {
-        const [r, g, b] = hsvToRgb(H, S, V);
-        alphaFill.style.background = `linear-gradient(to right,rgba(${r},${g},${b},0),rgb(${r},${g},${b}))`;
-        alphaThumb.style.left = `${2 * KNOB_R + (A / 100) * TRACK_W}px`;
-      };
-      makeDragTarget(
-        alphaOuter,
-        (e) => {
-          const r = alphaOuter.getBoundingClientRect();
-          A = clamp((e.clientX - r.left - 2 * KNOB_R) / TRACK_W, 0, 1) * 100;
-          syncPickers();
-          commit();
-        },
-        () => triggerUndo()
-      );
-
-      // ── Bottom row (preview swatch + hex + alpha %) ───────────────────────
-      const bottomRow = document.createElement("div");
-      bottomRow.style.cssText = "display:flex;align-items:center;gap:6px;margin-top:8px;";
-
-      const swatchWrap = document.createElement("div");
-      swatchWrap.style.cssText =
-        `width:22px;height:22px;border-radius:3px;border:1px solid #555;flex-shrink:0;` +
-        `background-image:${CHECKER};background-size:8px 8px;background-position:0 0,0 4px,4px -4px,-4px 0;background-color:#ccc;`;
-      const swatchFill = document.createElement("div");
-      swatchFill.style.cssText = "width:100%;height:100%;border-radius:2px;";
-      swatchWrap.appendChild(swatchFill);
-
-      const hexInp = document.createElement("input");
-      hexInp.type = "text";
-      hexInp.maxLength = 7;
-      hexInp.style.cssText =
-        "flex:1;min-width:0;background:#111;color:white;border:1px solid #444;border-radius:3px;" +
-        "padding:3px 5px;font-family:monospace;font-size:12px;outline:none;box-sizing:border-box;";
-      hexInp.addEventListener("mousedown", (e) => e.stopPropagation());
-
-      const aLabel = document.createElement("span");
-      aLabel.textContent = "A:";
-      aLabel.style.cssText = "color:#888;font-size:11px;font-family:sans-serif;flex-shrink:0;";
-
-      const alphaInp = document.createElement("input");
-      alphaInp.type = "text";
-      alphaInp.style.cssText =
-        "width:42px;background:#111;color:white;border:1px solid #444;border-radius:3px;" +
-        "padding:3px 4px;font-size:11px;text-align:right;outline:none;box-sizing:border-box;flex-shrink:0;";
-      alphaInp.addEventListener("mousedown", (e) => e.stopPropagation());
-
-      // ── Eyedropper button ────────────────────────────────────────────────
-      // Hooks into Scratch's own EyeDropperTool via Redux — no pixel-sampling code needed.
-      const eyeDropperBtn = document.createElement("button");
-      eyeDropperBtn.title = msg("pick-color");
-      eyeDropperBtn.style.cssText =
-        "width:22px;height:22px;padding:0;border:1px solid #555;border-radius:3px;background:#2a2a2a;" +
-        "cursor:crosshair;display:flex;align-items:center;justify-content:center;flex-shrink:0;";
-      eyeDropperBtn.innerHTML =
-        `<svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">` +
-        `<path fill="white" d="M9.153 12.482c-.12.136-.274.222-.546.29-.7.154-1.365.784-1.57 1.483-.068.22-.29.459-.529.579L4.735 15.67c-.085.034-.154.052-.188.052l-.273-.256c0-.017 0-.085.051-.205l.836-1.79c.103-.22.342-.443.581-.511.7-.22 1.331-.869 1.518-1.721.034-.136.12-.272.24-.41L11.44 6.908l1.654 1.654-3.94 3.92zM16.608 5.289c.256-.256.392-.614.392-.955s-.136-.683-.392-.938c-.529-.529-1.365-.529-1.893 0l-1.484 1.483-.171-.171-.546-.545c-.341-.34-.904-.34-1.245 0l-.665.648c-.324.34-.341.835-.051 1.176L6.595 9.925c-.29.307-.494.665-.614 1.176-.051.256-.341.546-.614.631-.562.17-1.108.648-1.364 1.21l-.835 1.773c-.273.597-.205 1.21.17 1.603l.342.34c.222.222.529.341.87.341.222 0 .477-.068.716-.17l1.791-.836c.563-.272 1.041-.801 1.211-1.364.069-.272.376-.562.785-.648.359-.085.717-.29 1.007-.596l3.957-3.932c.341.29.853.256 1.16-.068l.665-.648c.341-.341.341-.904 0-1.245l-.58-.58-.136-.136 1.484-1.484z"/>` +
-        `</svg>`;
-      eyeDropperBtn.addEventListener("mousedown", (e) => e.stopPropagation());
-      eyeDropperBtn.addEventListener("click", () => {
-        // Fade the panel so user can see the canvas, but keep it in the DOM.
-        panel.style.opacity = "0.15";
-        panel.style.pointerEvents = "none";
-        addon.tab.redux.dispatch({
-          type: "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER",
-          callback: (hexString) => {
-            const c = parseColor(hexString);
-            if (c) {
-              [H, S, V] = rgbToHsv(c[0], c[1], c[2]);
-              // Eyedropper samples rendered canvas pixels — always opaque. Leave A unchanged.
-            }
-            drawSV();
-            syncPickers();
-            commit();
-            triggerUndo();
-          },
-          previousMode: cachedPaper?.tool ?? null,
-        });
-        // Restore panel after any mouseup (pick or cancel — both end the dropper session).
-        document.addEventListener(
-          "mouseup",
-          () => {
-            panel.style.opacity = "";
-            panel.style.pointerEvents = "";
-          },
-          { once: true, capture: true }
-        );
-      });
-
-      bottomRow.append(swatchWrap, hexInp, aLabel, alphaInp, eyeDropperBtn);
-
-      // syncPickers: push current H/S/V/A into all UI widgets.
-      const syncPickers = () => {
-        const [r, g, b] = hsvToRgb(H, S, V);
-        hexInp.value = `#${h2(r)}${h2(g)}${h2(b)}`;
-        alphaInp.value = `${Math.round(A)}%`;
-        hueThumb.style.left = `${2 * KNOB_R + (H / 360) * TRACK_W}px`;
-        updateAlphaBar();
-        swatchFill.style.background = getCss();
-      };
-
-      hexInp.addEventListener("change", () => {
-        const c = parseColor(hexInp.value.trim());
-        if (c) {
-          [H, S, V] = rgbToHsv(c[0], c[1], c[2]);
-          drawSV();
-          syncPickers();
-          commit();
-          triggerUndo();
-        }
-      });
-      hexInp.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") hexInp.dispatchEvent(new Event("change"));
-      });
-
-      alphaInp.addEventListener("change", () => {
-        const v = parseFloat(alphaInp.value);
-        if (!isNaN(v)) {
-          A = clamp(v, 0, 100);
-          syncPickers();
-          commit();
-          triggerUndo();
-        }
-      });
-      alphaInp.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") alphaInp.dispatchEvent(new Event("change"));
-      });
-
-      // ── Assemble ─────────────────────────────────────────────────────────
-      panel.append(dragHandle, svCanvas, hueOuter, alphaOuter, bottomRow);
-      document.body.appendChild(panel);
-      drawSV();
-      syncPickers();
-
-      // Expose updaters so openColorPicker can reuse this panel for a different stop.
-      panel._setOnCommit = (fn) => {
-        activeOnCommit = fn;
-      };
-      panel._setColor = (css) => {
-        const c = parseColor(css) ?? [128, 128, 128, 1];
-        [H, S, V] = rgbToHsv(c[0], c[1], c[2]);
-        A = (c[3] ?? 1) * 100;
-        drawSV();
-        syncPickers();
-      };
-      // Programmatic close used when the active node is deleted.
-      panel._close = () => {
-        setPickerHighlight(null);
-        panel.remove();
-        document.removeEventListener("mousedown", closeOnOutside, true);
-      };
-
-      // Position below + right of cursor, clamped inside viewport.
-      const pr = panel.getBoundingClientRect();
-      panel.style.left = `${clamp(clientX - 10, 4, window.innerWidth - CW - 24)}px`;
-      panel.style.top = `${clamp(clientY + 28, 4, window.innerHeight - pr.height - 4)}px`;
-
-      // Non-modal close: capture-phase listener on every mousedown.
-      // · Click inside the picker panel  → return, picker interaction works normally.
-      // · Click on a gradient handle (.sa-grad-overlay) → do NOT remove the panel; let the
-      //   event through so the handle's click handler calls openColorPicker, which will find
-      //   this panel via _setColor and swap the colour without rebuilding or repositioning.
-      // · Click on empty space → stopPropagation (keep fill popup open) + remove panel.
-      const closeOnOutside = (e) => {
-        // While Scratch's eyedropper is active, don't close or stop the mousedown —
-        // stopping propagation here prevents paper.js from receiving the event, which
-        // keeps hideLoupe=true and causes the dropper callback to be skipped entirely.
-        if (addon.tab.redux.state?.scratchPaint?.color?.eyeDropper?.active) return;
-        if (panel.contains(e.target)) return;
-        const overlay = document.querySelector(".sa-grad-overlay");
-        if (overlay?.contains(e.target)) return; // handle click — let event through, keep panel
-        e.stopPropagation();
-        setPickerHighlight(null);
-        panel.remove();
-        document.removeEventListener("mousedown", closeOnOutside, true);
-      };
-      setTimeout(() => document.addEventListener("mousedown", closeOnOutside, true), 150);
-    };
-
-    // Thin wrapper: open colour picker for an extra (middle) stop.
+    const picker = new StopColorPicker({
+      msg,
+      redux: addon.tab.redux,
+      triggerUndo,
+      getCachedPaper: () => cachedPaper,
+      onClose: () => setPickerHighlight(null),
+    });
     const openExtraColorPicker = (idx, clientX, clientY, groupEl = null) => {
       if (!extraStops[idx]) return;
-      openColorPicker(
+      setPickerHighlight(groupEl);
+      picker.open(
         extraStops[idx].color,
         (css) => {
           if (extraStops[idx]) {
@@ -1326,9 +915,7 @@ export default async function ({ addon, msg, console }) {
           }
         },
         clientX,
-        clientY,
-        groupEl,
-        9
+        clientY
       );
     };
 
