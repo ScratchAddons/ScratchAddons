@@ -55,7 +55,6 @@
 .sa-pixel-art-toggle-wrapper {
   display: inline-flex;
   align-items: center;
-  padding: 0.15rem;
 }
 
 .sa-pixel-art-size {
@@ -283,9 +282,6 @@ body.sa-pixel-art-compact-editor .sa-pixel-art-controls {
   gap: 0.25rem;
 }
 
-body.sa-pixel-art-compact-editor .sa-pixel-art-toggle-wrapper {
-  padding: 0 0.125rem;
-}
 
 body.sa-pixel-art-compact-editor .sa-pixel-art-toggle {
   width: 1.5rem;
@@ -296,8 +292,8 @@ body.sa-pixel-art-compact-editor .sa-pixel-art-toggle {
 }
 
 body.sa-pixel-art-compact-editor .sa-pixel-art-toggle-icon {
-  width: 0.8rem;
-  height: 0.8rem;
+  width: 100%;
+  height: 100%;
 }
 
 body.sa-pixel-art-compact-editor .sa-pixel-art-size {
