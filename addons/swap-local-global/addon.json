@@ -23,5 +23,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false,
-  "libraries": ["scratch-blocks"]
+  "libraries": ["blockly"]
 }

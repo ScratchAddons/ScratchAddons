@@ -29,7 +29,7 @@ export default class UndoGroup {
     // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
     // https://github.com/scratchfoundation/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
     // New Blockly uses a setTimeout inside requestAnimationFrame
-    // https://github.com/google/blockly/blob/fa4fce5/core/events/utils.ts#L113-L115
+    // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/events/utils.ts#L112-L114
     requestAnimationFrame(() => {
       setTimeout(() => {
         const group = generateUID();

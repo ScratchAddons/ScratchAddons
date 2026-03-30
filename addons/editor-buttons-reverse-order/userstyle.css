@@ -20,7 +20,7 @@
   margin-right: 0.2rem;
 }
 
-[class*="green-flag_green-flag_"] {
+[class*="green-flag_green-flag-button_"] {
   order: -1;
 }
 
@@ -28,7 +28,7 @@
   order: -2;
 }
 
-[class*="stop-all_stop-all_"] {
+[class*="stop-all_stop-all-button_"] {
   order: -3;
 }
 

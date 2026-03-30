@@ -74,7 +74,8 @@ export default async function ({ addon, msg, console }) {
         "scratch-gui/mode/SET_PLAYER",
         "fontsLoaded/SET_FONTS_LOADED",
         "scratch-gui/locales/SELECT_LOCALE",
-        "scratch-gui/theme/SET_THEME",
+        "scratch-gui/settings/SET_COLOR_MODE",
+        "scratch-gui/settings/SET_THEME",
       ],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });

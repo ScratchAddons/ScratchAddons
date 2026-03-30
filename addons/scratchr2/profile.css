@@ -86,10 +86,11 @@
   width: 293px;
   padding: 0;
   color: var(--darkWww-page-text, #575e75);
+  text-shadow: none;
 }
 .box .box-head .portrait {
   height: 64px;
-  margin-right: 16px;
+  margin-right: 6px;
 }
 .box .box-head .portrait img {
   width: 64px;
@@ -255,6 +256,7 @@
   margin-top: 10px;
   background-color: var(--darkWww-input, #fafafa);
   color: var(--darkWww-input-text, #575e75);
+  text-shadow: none;
 }
 .profile-box-footer-module textarea::placeholder {
   color: var(--darkWww-input-transparentText, rgba(87, 94, 117, 0.6));

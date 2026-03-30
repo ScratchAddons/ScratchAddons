@@ -1,4 +1,4 @@
-export default async function ({ addon, global, cons, msg }) {
+export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   function appendRandomOption(menuOptions) {

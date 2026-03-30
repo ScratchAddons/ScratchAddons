@@ -11,8 +11,8 @@
   align-items: center;
 }
 
-[class^="paint-editor_zoom-controls_"] {
-  margin-inline-end: 45px;
+[class*="paint-editor_zoom-controls_"] {
+  margin-inline-end: 50px;
 }
 
 .sa-backpack-button {
@@ -41,11 +41,11 @@
 }
 
 [dir="ltr"] .sa-backpack-button.sa-new-blockly {
-  right: 28px;
+  right: 30px;
 }
 
 [dir="rtl"] .sa-backpack-button.sa-new-blockly {
-  left: 29px;
+  left: 32px;
 }
 
 .sa-backpack-open .sa-backpack-button {

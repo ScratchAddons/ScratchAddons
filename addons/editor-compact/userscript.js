@@ -1,9 +1,7 @@
 import { eventTarget as tooltipUpdateEventTarget } from "./force-tooltip-update.js";
 import { updateCompactEditorState } from "./state-events.js";
 
-export default async function ({ addon, global, console }) {
-  const notifyCompactEditorState = () => updateCompactEditorState(!addon.self.disabled);
-
+export default async function ({ addon, console }) {
   // The workspace needs to be manually resized via a window resize event
   // whenever the addon modifies or stops modifying UI elements
   resizeWorkspace();
