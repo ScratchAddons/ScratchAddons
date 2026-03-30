@@ -241,7 +241,13 @@ export function createCanvasAdjuster(addon, paper) {
 
     const canvasColors = getCanvasColors();
     lastThemeSignature = getThemeSignature(canvasColors);
-    bg.bitmapBackground.remove();
+    // Hide the original bg rather than removing it from the scene so that
+    // Paper.js internal rendering caches stay intact when it is shown again.
+    if (bg.bitmapBackground === originalBg) {
+      originalBg.visible = false;
+    } else {
+      bg.bitmapBackground.remove();
+    }
     const g = makeChecker(w, h, 1, canvasColors);
     lastChecker = g;
     lastEnabledSize = { width: w, height: h };
@@ -276,9 +282,8 @@ export function createCanvasAdjuster(addon, paper) {
     const bg = getBgLayer();
     if (bg && originalBg) {
       if (bg.bitmapBackground !== originalBg) bg.bitmapBackground.remove();
-      if (!originalBg.parent) bg.addChild(originalBg);
+      originalBg.visible = true;
       bg.bitmapBackground = originalBg;
-      if (bg.vectorBackground) bg.vectorBackground.visible = true;
     }
     const ol = getOutlineLayer();
     if (ol && originalOutline) {
