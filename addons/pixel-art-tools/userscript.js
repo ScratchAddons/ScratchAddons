@@ -6,10 +6,7 @@ import { wrapAddCostumeWait } from "./modules/bitmap-loader.js";
 import { createTextToolScaler } from "./modules/text-tool-scaler.js";
 import { installRasterCropOverride } from "./modules/raster-crop-override.js";
 import { installUpdateImageOverride } from "./modules/update-image-override.js";
-import {
-  eventTarget as compactEditorEventTarget,
-  isCompactEditorActive,
-} from "../editor-compact/state-events.js";
+import { eventTarget as compactEditorEventTarget, isCompactEditorActive } from "../editor-compact/state-events.js";
 
 /** @typedef {import("./modules/types.js").PixelArtState} PixelArtState */
 
