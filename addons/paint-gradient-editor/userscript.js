@@ -971,7 +971,18 @@ export default async function ({ addon, msg, console }) {
           .padStart(2, "0");
       const blended =
         ba >= 0.999 ? `#${hex2(br)}${hex2(bg)}${hex2(bb)}` : `rgba(${br},${bg},${bb},${Math.round(ba * 1000) / 1000})`;
-      const newStop = { color: blended, offset: clamp(t, stops.p0 + 0.01, stops.p1 - 0.01) };
+      // t is the raw axis fraction of the click (proportional to pixel distance).
+      // crampedFrac shifts displayed handle positions inward to avoid overlap, so we must
+      // invert that mapping to find the logical offset whose display position matches the click.
+      const isRadial = fc.gradient.radial;
+      const op = toSVG(fc.origin);
+      const dp = toSVG(fc.destination);
+      const axisLenPx = Math.hypot(dp.x - op.x, dp.y - op.y);
+      const newInnerIdx = extraStops.filter((s) => s.offset < t).length;
+      const newInnerCount = isRadial ? extraStops.length + 2 : extraStops.length + 1;
+      const innerIdxForNew = isRadial ? newInnerIdx + 1 : newInnerIdx;
+      const offset = crampedToOffset(innerIdxForNew, newInnerCount, t, axisLenPx);
+      const newStop = { color: blended, offset: clamp(offset, stops.p0 + 0.01, stops.p1 - 0.01) };
       extraStops.push(newStop);
       extraStops.sort((a, b) => a.offset - b.offset);
       applyAllStops();
