@@ -139,6 +139,17 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
     if (usable <= 0) return rawFrac;
     return (rawFrac * axisLenPx - (innerIdx + 1) * STOP_D) / usable;
   };
+  // Radial mode counts the movable p0 handle as the first "inner" handle; linear mode does not.
+  const axisInnerCount = (isRadial, extraCount = ctx.extraStops.length) => (isRadial ? extraCount + 1 : extraCount);
+  const extraInnerIdx = (isRadial, extraIdx) => (isRadial ? extraIdx + 1 : extraIdx);
+  const displayedOffset = (innerIdx, innerCount, offset, axisLenPx) =>
+    crampedFrac(innerIdx, innerCount, offset, axisLenPx) ?? offset;
+  const logicalOffset = (innerIdx, innerCount, rawFrac, axisLenPx) =>
+    crampedToOffset(innerIdx, innerCount, rawFrac, axisLenPx);
+  const extraStopBounds = (isRadial, idx) => ({
+    left: idx === 0 ? (isRadial ? ctx.stops.p0 : 0) : ctx.extraStops[idx - 1].offset,
+    right: idx === ctx.extraStops.length - 1 ? ctx.stops.p1 : ctx.extraStops[idx + 1].offset,
+  });
 
   const syncOverlay = () => {
     const spModals = ctx.addon.tab.redux.state?.scratchPaint?.modals;
@@ -167,12 +178,13 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
 
     const axisLenPx = Math.hypot(dp.x - op.x, dp.y - op.y);
     if (isRadial) {
+      const innerCount = axisInnerCount(true);
       // Centre handle at origin; p0/p1 slide along radius with p0 offset from centre.
       moveTo(centreHandle, op.x, op.y);
       centreHandle.style.display = "";
 
       // Cramp p0 so it never visually overlaps the centre or the next handle.
-      const p0Frac = crampedFrac(0, 1 + ctx.extraStops.length, ctx.stops.p0, axisLenPx) ?? ctx.stops.p0;
+      const p0Frac = displayedOffset(0, innerCount, ctx.stops.p0, axisLenPx);
       moveTo(p0Handle.g, lerp(op.x, dp.x, p0Frac), lerp(op.y, dp.y, p0Frac));
       // p1 sits at the destination point — the end of the visible gradient line
       moveTo(p1Handle.g, dp.x, dp.y);
@@ -188,12 +200,12 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
 
     // Sync extra stop handles — grow pool as needed, hide unused entries.
     // innerCount: for radial, p0 plus extras are all inner handles; for linear, only extras.
-    const innerCount = isRadial ? 1 + ctx.extraStops.length : ctx.extraStops.length;
+    const innerCount = axisInnerCount(isRadial);
     for (let i = 0; i < ctx.extraStops.length; i++) {
       if (i >= extraHandlePool.length) extraHandlePool.push(makeExtraStopHandle(i));
       const h = extraHandlePool[i];
-      const innerIdx = isRadial ? i + 1 : i;
-      const t = crampedFrac(innerIdx, innerCount, ctx.extraStops[i].offset, axisLenPx) ?? ctx.extraStops[i].offset;
+      const innerIdx = extraInnerIdx(isRadial, i);
+      const t = displayedOffset(innerIdx, innerCount, ctx.extraStops[i].offset, axisLenPx);
       const sp = { x: lerp(op.x, dp.x, t), y: lerp(op.y, dp.y, t) };
       moveTo(h.g, sp.x, sp.y);
       h.circle.setAttribute("fill", ctx.extraStops[i].color);
@@ -273,7 +285,7 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
       const axisLenPx = Math.hypot(dp.x - op.x, dp.y - op.y);
       const rawFrac = projectOntoAxis(projected, fc.origin, fc.destination);
       const maxP0 = ctx.extraStops.length > 0 ? ctx.extraStops[0].offset : 1;
-      ctx.stops.p0 = clamp(crampedToOffset(0, 1 + ctx.extraStops.length, rawFrac, axisLenPx), 0, maxP0);
+      ctx.stops.p0 = clamp(logicalOffset(0, axisInnerCount(true), rawFrac, axisLenPx), 0, maxP0);
       ctx.applyAllStops();
     } else {
       for (const item of selectedLayers()) {
@@ -493,12 +505,11 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
             dpSVG = toSVG(B);
           const lenPx = Math.hypot(dpSVG.x - opSVG.x, dpSVG.y - opSVG.y);
           const isRad = fc.gradient.radial;
-          const innerIdx = isRad ? idx + 1 : idx;
-          const innerCount = isRad ? ctx.extraStops.length + 1 : ctx.extraStops.length;
-          const leftBound = idx === 0 ? (isRad ? ctx.stops.p0 : 0) : ctx.extraStops[idx - 1].offset;
-          const rightBound = idx === ctx.extraStops.length - 1 ? ctx.stops.p1 : ctx.extraStops[idx + 1].offset;
+          const innerIdx = extraInnerIdx(isRad, idx);
+          const innerCount = axisInnerCount(isRad);
+          const { left: leftBound, right: rightBound } = extraStopBounds(isRad, idx);
           ctx.extraStops[idx].offset = clamp(
-            crampedToOffset(innerIdx, innerCount, rawFrac, lenPx),
+            logicalOffset(innerIdx, innerCount, rawFrac, lenPx),
             leftBound,
             rightBound
           );
@@ -639,7 +650,7 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
     // pushing the current p0 into extra stops so the rest of the gradient is preserved.
     if (isRadial && t < ctx.stops.p0) {
       ctx.extraStops.unshift({ color: ctx.c0css, offset: ctx.stops.p0 });
-      ctx.stops.p0 = clamp(crampedToOffset(0, ctx.extraStops.length + 2, t, axisLenPx), 0, ctx.stops.p0 - 0.01);
+      ctx.stops.p0 = clamp(logicalOffset(0, axisInnerCount(true), t, axisLenPx), 0, ctx.stops.p0 - 0.01);
       ctx.applyAllStops();
       syncOverlay();
       ctx.triggerUndo();
@@ -648,9 +659,10 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
       return;
     }
     const newInnerIdx = ctx.extraStops.filter((s) => s.offset < t).length;
-    const newInnerCount = isRadial ? ctx.extraStops.length + 2 : ctx.extraStops.length + 1;
-    const innerIdxForNew = isRadial ? newInnerIdx + 1 : newInnerIdx;
-    const offset = crampedToOffset(innerIdxForNew, newInnerCount, t, axisLenPx);
+    const newExtraCount = ctx.extraStops.length + 1;
+    const newInnerCount = axisInnerCount(isRadial, newExtraCount);
+    const innerIdxForNew = extraInnerIdx(isRadial, newInnerIdx);
+    const offset = logicalOffset(innerIdxForNew, newInnerCount, t, axisLenPx);
     const newStop = { color: blended, offset: clamp(offset, ctx.stops.p0 + 0.01, ctx.stops.p1 - 0.01) };
     ctx.extraStops.push(newStop);
     ctx.extraStops.sort((a, b) => a.offset - b.offset);

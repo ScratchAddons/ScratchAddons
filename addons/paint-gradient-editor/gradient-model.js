@@ -26,7 +26,9 @@ export const COLOR_PROPS = ["fillColor", "strokeColor"];
 export class GradientModel {
   // ── State ────────────────────────────────────────────────────────────────────
 
-  // p0/p1: absolute positions [0, 1] for the two colour stop handles.
+  // p0/p1: absolute positions [0, 1] for the two outer colour stop handles.
+  // Invariant: linear gradients expect these at the visual endpoints (0/1); radial
+  // gradients may place them inside the radius and treat the remainder as empty space.
   stops = { p0: 0, p1: 1 };
   c0hex = "#000000";
   c1hex = "#ffffff"; // hex display colours, kept in sync with Redux

@@ -13,6 +13,8 @@
 
 import { clamp } from "./color-utils.js";
 
+const PANEL_SELECTOR = ".sa-extra-stop-picker";
+
 export default class StopColorPicker {
   constructor({ msg, redux, triggerUndo, getCachedPaper, onClose }) {
     this._msg = msg;
@@ -56,18 +58,19 @@ export default class StopColorPicker {
 
   // Close any open panel immediately (e.g. when the addon is disabled).
   close() {
-    document.querySelector(".sa-extra-stop-picker")?._close?.();
+    document.querySelector(PANEL_SELECTOR)?._saPickerApi?.close();
   }
 
   // ── Open / reuse the picker panel ────────────────────────────────────────
   // color           — starting colour as any CSS string
   // onCommit(color) — called live on every change with the new CSS colour string
   open(color, onCommit, clientX, clientY) {
-    const existing = document.querySelector(".sa-extra-stop-picker");
-    if (existing?._setColor) {
-      existing._setOnCommit(onCommit);
-      existing._setColor(color);
-      if (!existing._wasMoved) {
+    const existing = document.querySelector(PANEL_SELECTOR);
+    const existingApi = existing?._saPickerApi;
+    if (existingApi) {
+      existingApi.setOnCommit(onCommit);
+      existingApi.setColor(color);
+      if (!existing._saPickerWasMoved) {
         existing.style.left = `${clamp(clientX - 10, 4, window.innerWidth - existing.offsetWidth - 4)}px`;
         existing.style.top = `${clamp(clientY + 28, 4, window.innerHeight - existing.offsetHeight - 4)}px`;
       }
@@ -114,7 +117,7 @@ export default class StopColorPicker {
       const origTop = parseInt(panel.style.top, 10) || 0;
       dragHandle.style.cursor = "grabbing";
       const mv = (ev) => {
-        panel._wasMoved = true;
+        panel._saPickerWasMoved = true;
         panel.style.left = `${clamp(origLeft + ev.clientX - startX, 0, window.innerWidth - panel.offsetWidth)}px`;
         panel.style.top = `${clamp(origTop + ev.clientY - startY, 0, window.innerHeight - panel.offsetHeight)}px`;
       };
@@ -350,27 +353,6 @@ export default class StopColorPicker {
     drawSV();
     syncPickers();
 
-    // Expose updaters so open() can reuse this panel for a different stop.
-    panel._setOnCommit = (fn) => {
-      activeOnCommit = fn;
-    };
-    panel._setColor = (css) => {
-      const t = tinycolor(css).isValid() ? tinycolor(css) : tinycolor({ r: 128, g: 128, b: 128 });
-      const hsv = t.toHsv();
-      H = hsv.h;
-      S = hsv.s * 100;
-      V = hsv.v * 100;
-      A = t.toRgb().a * 100;
-      drawSV();
-      syncPickers();
-    };
-    // Programmatic close used when the active node is deleted or the addon is disabled.
-    panel._close = () => {
-      this._onClose();
-      panel.remove();
-      document.removeEventListener("mousedown", closeOnOutside, true);
-    };
-
     // Position below + right of cursor, clamped inside viewport.
     const pr = panel.getBoundingClientRect();
     panel.style.left = `${clamp(clientX - 10, 4, window.innerWidth - CW - 24)}px`;
@@ -380,7 +362,7 @@ export default class StopColorPicker {
     // · Click inside the picker panel  → return, picker interaction works normally.
     // · Click on a gradient handle (.sa-grad-overlay) → do NOT remove the panel; let the
     //   event through so the handle's click handler calls open(), which will find this
-    //   panel via _setColor and swap the colour without rebuilding or repositioning.
+    //   panel via its explicit panel API without rebuilding or repositioning it.
     // · Click on empty space → stopPropagation (keep fill popup open) + remove panel.
     const closeOnOutside = (e) => {
       // While Scratch's eyedropper is active, don't close or stop the mousedown —
@@ -394,6 +376,28 @@ export default class StopColorPicker {
       this._onClose();
       panel.remove();
       document.removeEventListener("mousedown", closeOnOutside, true);
+    };
+    // Picker state lives in this open() closure. Expose a small API on the panel element so
+    // a later open() call can retarget the existing DOM to a different stop without rebuilding it.
+    panel._saPickerApi = {
+      setOnCommit: (fn) => {
+        activeOnCommit = fn;
+      },
+      setColor: (css) => {
+        const t = tinycolor(css).isValid() ? tinycolor(css) : tinycolor({ r: 128, g: 128, b: 128 });
+        const hsv = t.toHsv();
+        H = hsv.h;
+        S = hsv.s * 100;
+        V = hsv.v * 100;
+        A = t.toRgb().a * 100;
+        drawSV();
+        syncPickers();
+      },
+      close: () => {
+        this._onClose();
+        panel.remove();
+        document.removeEventListener("mousedown", closeOnOutside, true);
+      },
     };
     setTimeout(() => document.addEventListener("mousedown", closeOnOutside, true), 150);
   }
