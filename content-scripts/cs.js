@@ -661,7 +661,7 @@ const showBanner = () => {
   });
   const videoButton = Object.assign(document.createElement("a"), {
     className: "sa-notification-video-button",
-    href: "https://www.youtube.com/@ScratchAddons",
+    href: "https://www.youtube.com/@ScratchAddons/videos",
     target: "_blank",
     textContent: chrome.i18n.getMessage("watchUpdateVideo"),
   });
