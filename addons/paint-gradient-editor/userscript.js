@@ -82,8 +82,12 @@ export default async function ({ addon, msg, console }) {
 
   // Cache paper.js early so the CHANGE_SELECTED_ITEMS listener can fix MIXED
   // swatches even before the user opens a colour picker.
+  // Also start the continuous new-item patcher which injects the full multi-stop
+  // gradient into shapes as they are drawn live (see patchLayerItems below).
+  let newItemPatcherActive = false;
   addon.tab.traps.getPaper().then((p) => {
     if (!cachedPaper) cachedPaper = p;
+    if (!newItemPatcherActive) startNewItemPatcher();
   });
 
   // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -323,6 +327,38 @@ export default async function ({ addon, msg, console }) {
     syncSwatches();
   };
 
+  // ── New-item patcher ────────────────────────────────────────────────────────────────────
+  // scratch-paint's drawing tools call styleShape() on every drag frame, which always
+  // creates a 2-stop gradient from Redux primary/secondary.  The item being drawn is always
+  // appended last, so checking only activeLayer.lastChild each rAF (which fires after events
+  // but before paint) is enough to win the race every frame.
+  // Cost when extraStops is empty: one lastChild + length-check per frame.
+  const patchLayerItems = () => {
+    if (!cachedPaper || extraStops.length === 0) return;
+    const item = cachedPaper.project.activeLayer.lastChild;
+    if (!item) return;
+    const cp = colorProp();
+    const grad = item[cp]?.gradient;
+    if (!grad || grad.stops.length !== 2) return; // only patch the 2-stop Redux form
+    if (colorToHex(grad.stops[0].color) !== c0hex || colorToHex(grad.stops[1].color) !== c1hex) return;
+    // This item was just styled by scratch-paint using our outer colours — inject full gradient.
+    liveGradientItems.add(item);
+    item[cp].gradient = { stops: [c0css, ...extraStops.map((s) => s.color), c1css], radial: grad.radial };
+    const g = item[cp].gradient;
+    g.stops[0].offset = stops.p0;
+    for (let i = 0; i < extraStops.length; i++) if (g.stops[i + 1]) g.stops[i + 1].offset = extraStops[i].offset;
+    g.stops[g.stops.length - 1].offset = stops.p1;
+  };
+  const startNewItemPatcher = () => {
+    newItemPatcherActive = true;
+    const loop = () => {
+      if (addon.self.disabled) { newItemPatcherActive = false; return; }
+      patchLayerItems();
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  };
+
   // ── Redux listeners ──────────────────────────────────────────────────────────────────
   // CHANGE_SELECTED_ITEMS: restore gradientType if scratch-paint wiped it.
   // (With 2 stops scratch-paint reads the gradient fine, but keep this as a safety net.)
@@ -352,9 +388,28 @@ export default async function ({ addon, msg, console }) {
           applyAllStops();
         }
 
-        // Normal selection change or re-select — read all stops fresh.
+        // Normal selection change or re-select.
+        // If the new item has exactly 2 stops whose outer colours match our current cache,
+        // has never been processed by us, and we have extra stops cached, this is almost
+        // certainly a newly drawn shape that scratch-paint colored using the Redux 2-stop
+        // simplification.  Apply the full multi-stop gradient immediately instead of
+        // wiping the cached state.  The activeOverlay check is intentionally omitted:
+        // switching to a drawing tool closes the picker (activeOverlay→null) before
+        // CHANGE_SELECTED_ITEMS fires for the new shape.
         lastSelectedPaperItem = items[0];
-        stops = readCurrentStops(cachedPaper); // also updates c0css, c1css, c0hex, c1hex
+        const isLikelyNewDraw =
+          !isSameItem &&
+          !liveGradientItems.has(items[0]) &&
+          extraStops.length > 0 &&
+          paperCount === 2 &&
+          colorToHex(activeGradient.stops[0].color) === c0hex &&
+          colorToHex(activeGradient.stops[1].color) === c1hex;
+        if (isLikelyNewDraw) {
+          // Re-inject the full multi-stop gradient onto the freshly drawn shape.
+          applyAllStops();
+        } else {
+          stops = readCurrentStops(cachedPaper); // also updates c0css, c1css, c0hex, c1hex
+        }
       }
 
       // Re-dispatch selection through Redux using collapsed outer stops for both sides.
@@ -1156,6 +1211,10 @@ export default async function ({ addon, msg, console }) {
     activeOverlay?.close();
     activeOverlay?.destroy();
     activeOverlay = null;
+    // newItemPatcherActive is cleared by the loop itself on next rAF when it sees disabled.
+  });
+  addon.self.addEventListener("reenabled", () => {
+    if (cachedPaper && !newItemPatcherActive) startNewItemPatcher();
   });
 
   while (true) {
