@@ -20,6 +20,6 @@ export const ensureHex = (c) => tinycolor(c).toHexString();
 
 // Convert a paper.js Color to a CSS string, preserving alpha when < 1.
 export const colorToCss = (c) => {
-  const t = tinycolor({ r: c.red * 255, g: c.green * 255, b: c.blue * 255, a: c.alpha ?? 1 });
-  return c.alpha == null || c.alpha >= 1 ? t.toHexString() : t.toRgbString();
+  const t = tinycolor({ r: c.red * 255, g: c.green * 255, b: c.blue * 255, a: c.alpha });
+  return c.alpha >= 1 ? t.toHexString() : t.toRgbString();
 };

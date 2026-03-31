@@ -82,8 +82,8 @@ export default async function ({ addon, msg, console }) {
         if (activeGradient.radial) {
           model.lastKnownGradientType = "RADIAL";
         } else {
-          const dx = Math.abs((activePaperColor.destination?.x ?? 0) - (activePaperColor.origin?.x ?? 0));
-          const dy = Math.abs((activePaperColor.destination?.y ?? 0) - (activePaperColor.origin?.y ?? 0));
+          const dx = Math.abs(activePaperColor.destination.x - activePaperColor.origin.x);
+          const dy = Math.abs(activePaperColor.destination.y - activePaperColor.origin.y);
           model.lastKnownGradientType = dy > dx ? "VERTICAL" : "HORIZONTAL";
         }
       }
@@ -95,7 +95,7 @@ export default async function ({ addon, msg, console }) {
 
     // Non-gradient item selected — only restore gradient type when overlay is active.
     if (!model.activeOverlay) return;
-    model.lastSelectedPaperItem = items?.[0] ?? null;
+    model.lastSelectedPaperItem = items[0] || null;
     const colorState = addon.tab.redux.state?.scratchPaint?.color?.[model.colorProp()];
     if (!colorState?.gradientType) {
       addon.tab.redux.dispatch({
@@ -287,8 +287,8 @@ export default async function ({ addon, msg, console }) {
       if (isRadial) {
         inferredType = "RADIAL";
       } else {
-        const dx = Math.abs((fg.destination?.x ?? 0) - (fg.origin?.x ?? 0));
-        const dy = Math.abs((fg.destination?.y ?? 0) - (fg.origin?.y ?? 0));
+        const dx = Math.abs(fg.destination.x - fg.origin.x);
+        const dy = Math.abs(fg.destination.y - fg.origin.y);
         inferredType = dy > dx ? "VERTICAL" : "HORIZONTAL";
       }
       model.lastKnownGradientType = inferredType;

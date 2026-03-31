@@ -80,7 +80,7 @@ export default class StopColorPicker {
     let H = initHsv.h,
       S = initHsv.s * 100,
       V = initHsv.v * 100,
-      A = (initT.toRgb().a ?? 1) * 100;
+      A = initT.toRgb().a * 100;
 
     const getCss = () => {
       const t = tinycolor({ h: H, s: S / 100, v: V / 100, a: A / 100 });
@@ -290,7 +290,7 @@ export default class StopColorPicker {
           commit();
           this._triggerUndo();
         },
-        previousMode: this._getCachedPaper()?.tool ?? null,
+        previousMode: this._getCachedPaper()?.tool,
       });
       // Restore panel after any mouseup (pick or cancel — both end the dropper session).
       document.addEventListener(
@@ -360,7 +360,7 @@ export default class StopColorPicker {
       H = hsv.h;
       S = hsv.s * 100;
       V = hsv.v * 100;
-      A = (t.toRgb().a ?? 1) * 100;
+      A = t.toRgb().a * 100;
       drawSV();
       syncPickers();
     };

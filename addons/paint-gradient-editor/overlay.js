@@ -209,8 +209,11 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
     }
     // Keep the floating rings in sync as handles are repositioned.
     if (activePickerGroup) {
-      const tf = activePickerGroup.getAttribute("transform") ?? "";
-      for (const ring of [pickerRingWhite, pickerRingBlack]) ring.setAttribute("transform", tf);
+      const tf = activePickerGroup.getAttribute("transform");
+      for (const ring of [pickerRingWhite, pickerRingBlack]) {
+        if (tf) ring.setAttribute("transform", tf);
+        else ring.removeAttribute("transform");
+      }
     }
   };
 
@@ -484,7 +487,7 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
           }
         } else {
           g.style.visibility = "";
-          circle.setAttribute("fill", ctx.extraStops[idx]?.color ?? "#888");
+          circle.setAttribute("fill", ctx.extraStops[idx].color);
           const rawFrac = projectOntoAxis(projected, A, B);
           const opSVG = toSVG(A),
             dpSVG = toSVG(B);
@@ -515,7 +518,7 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
         } else {
           // Restore visibility in case we entered pending-delete then moved back.
           g.style.visibility = "";
-          circle.setAttribute("fill", ctx.extraStops[poolIndex]?.color ?? "#888");
+          circle.setAttribute("fill", ctx.extraStops[poolIndex].color);
         }
         ctx.triggerUndo();
       }
@@ -529,21 +532,22 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
   // Track which handle group currently has the picker open.
   let activePickerGroup = null;
   const setPickerHighlight = (group) => {
-    activePickerGroup = group ?? null;
+    activePickerGroup = group;
     if (!group) {
       pickerRingWhite.style.display = "none";
       pickerRingBlack.style.display = "none";
       return;
     }
-    const ringR = group._ringR ?? 11;
-    const tf = group.getAttribute("transform") ?? "";
+    const ringR = group._ringR;
+    const tf = group.getAttribute("transform");
     // White ring peeks outside the black ring; black ring is at the specified radius.
     for (const [ring, r] of [
       [pickerRingWhite, ringR + 2.5],
       [pickerRingBlack, ringR],
     ]) {
       ring.setAttribute("r", r);
-      ring.setAttribute("transform", tf);
+      if (tf) ring.setAttribute("transform", tf);
+      else ring.removeAttribute("transform");
       ring.style.display = "";
     }
   };
