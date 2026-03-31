@@ -362,7 +362,10 @@ export default async function ({ addon, msg, console }) {
   const startNewItemPatcher = () => {
     newItemPatcherActive = true;
     const loop = () => {
-      if (addon.self.disabled) { newItemPatcherActive = false; return; }
+      if (addon.self.disabled) {
+        newItemPatcherActive = false;
+        return;
+      }
       patchLayerItems();
       requestAnimationFrame(loop);
     };
