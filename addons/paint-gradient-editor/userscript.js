@@ -53,7 +53,13 @@ export default async function ({ addon, msg, console }) {
       GRADIENT: "scratch-paint/stroke-style/CHANGE_STROKE_GRADIENT_TYPE",
     },
   };
+  const COLOR_PROPS = ["fillColor", "strokeColor"];
   const colorProp = () => (activeColorMode === "stroke" ? "strokeColor" : "fillColor");
+  const dispatchSelectedItems = (items) => {
+    selfItemsDispatch = true;
+    addon.tab.redux.dispatch({ type: "scratch-paint/select/CHANGE_SELECTED_ITEMS", selectedItems: items });
+    selfItemsDispatch = false;
+  };
 
   // Cache paper.js early so the CHANGE_SELECTED_ITEMS listener can fix MIXED
   // swatches even before the user opens a colour picker.
@@ -104,6 +110,34 @@ export default async function ({ addon, msg, console }) {
   const colorToCss = (c) => {
     if (!c || c.alpha === null || c.alpha === undefined || c.alpha >= 1) return colorToHex(c);
     return `rgba(${Math.round(c.red * 255)},${Math.round(c.green * 255)},${Math.round(c.blue * 255)},${Math.round(c.alpha * 1000) / 1000})`;
+  };
+
+  const withCollapsedOuterStops = (items, callback) => {
+    const snapshots = [];
+    for (const item of items) {
+      for (const prop of COLOR_PROPS) {
+        const style = item[prop];
+        const grad = style?.gradient;
+        if (!grad || grad.stops.length <= 2) continue;
+        const stops = Array.from(grad.stops).map((stop, index, arr) => ({
+          color: colorToCss(stop.color),
+          offset: stop.offset ?? (index === 0 ? 0 : index === arr.length - 1 ? 1 : 0.5),
+        }));
+        const first = stops[0];
+        const last = stops[stops.length - 1];
+        style.gradient = { stops: [first.color, last.color], radial: grad.radial };
+        style.gradient.stops[0].offset = first.offset;
+        style.gradient.stops[1].offset = last.offset;
+        snapshots.push({ style, radial: grad.radial, stops });
+      }
+    }
+    callback();
+    for (const { style, radial, stops } of snapshots) {
+      style.gradient = { stops: stops.map((stop) => stop.color), radial };
+      for (let i = 0; i < stops.length; i++) {
+        if (style.gradient.stops[i]) style.gradient.stops[i].offset = stops[i].offset;
+      }
+    }
   };
 
   // ── Read p0/p1, extraStops and colours from the first selected paper item ───────
@@ -236,54 +270,40 @@ export default async function ({ addon, msg, console }) {
     // Check paper.js directly — for multi-stop gradients Redux sets gradientType=undefined
     // (shows MIXED swatches), so we must not rely on fill.gradientType alone.
     const items = cachedPaper.project.selectedItems.filter((i) => i.parent instanceof cachedPaper.Layer);
-    const paperFc = items[0]?.[colorProp()];
-    if (paperFc?.gradient) {
-      const isSameItem = items[0] === lastSelectedPaperItem;
-      const paperCount = paperFc.gradient.stops.length;
+    const activePaperColor = items[0]?.[colorProp()];
+    const activeGradient = activePaperColor?.gradient;
+    if (activeGradient || COLOR_PROPS.some((prop) => items[0]?.[prop]?.gradient)) {
+      if (activeGradient) {
+        const isSameItem = items[0] === lastSelectedPaperItem;
+        const paperCount = activeGradient.stops.length;
 
-      if (isSameItem && extraStops.length > 0 && paperCount < extraStops.length + 2) {
-        // CHANGE_SELECTED_ITEMS fired because a gradient-type switch called setSelectedItems,
-        // which happens BEFORE CHANGE_FILL_GRADIENT_TYPE.  Paper.js was just wiped to 2 stops
-        // by applyGradientTypeToSelection, but our extraStops cache is still valid.
-        // Preserve extras: update outer CSS from the 2-stop result and reinstate.
-        c0css = colorToCss(paperFc.gradient.stops[0].color);
-        c0hex = colorToHex(paperFc.gradient.stops[0].color);
-        // c1css/c1hex stay from cache — stops[last] after the wipe may be an extra stop
-        applyAllStops();
-        activeOverlay?.sync();
-        return;
+        if (isSameItem && extraStops.length > 0 && paperCount < extraStops.length + 2) {
+          // CHANGE_SELECTED_ITEMS fired because a gradient-type switch called setSelectedItems,
+          // which happens BEFORE CHANGE_FILL_GRADIENT_TYPE.  Paper.js was just wiped to 2 stops
+          // by applyGradientTypeToSelection, but our extraStops cache is still valid.
+          // Preserve extras: update outer CSS from the 2-stop result and reinstate.
+          c0css = colorToCss(activeGradient.stops[0].color);
+          c0hex = colorToHex(activeGradient.stops[0].color);
+          // c1css/c1hex stay from cache — stops[last] after the wipe may be an extra stop
+          applyAllStops();
+        }
+
+        // Normal selection change or re-select — read all stops fresh.
+        lastSelectedPaperItem = items[0];
+        stops = readCurrentStops(cachedPaper); // also updates c0css, c1css, c0hex, c1hex
       }
 
-      // Normal selection change or re-select — read all stops fresh.
-      lastSelectedPaperItem = items[0];
-      stops = readCurrentStops(cachedPaper); // also updates c0css, c1css, c0hex, c1hex
-
-      if (extraStops.length > 0) {
-        // paper.js has n stops → _colorStateFromGradient returns MIXED, so Redux.primary = MIXED
-        // and the opacity slider shows 100%.  Fix: temporarily collapse to 2 outer stops so the
-        // reducer can read the real colours (with alpha), then reinstate the extras.
-        const gradStops = items[0][colorProp()].gradient.stops; // re-read after readCurrentStops
-        const tmpC0 = gradStops[0].color;
-        const tmpC1 = gradStops[gradStops.length - 1].color;
-        items[0][colorProp()].gradient = { stops: [tmpC0, tmpC1], radial: items[0][colorProp()].gradient.radial };
-        selfItemsDispatch = true;
-        addon.tab.redux.dispatch({
-          type: "scratch-paint/select/CHANGE_SELECTED_ITEMS",
-          selectedItems: items,
-        });
-        selfItemsDispatch = false;
-        // Reinstate extra stops now that Redux has the correct outer colours.
-        applyAllStops();
-      }
+      // paper.js multi-stop gradients read back as MIXED in Redux. Collapse both fill and
+      // stroke to their outer stops before the re-dispatch so both swatch previews update.
+      withCollapsedOuterStops(items, () => dispatchSelectedItems(items));
 
       // Infer gradient type if not yet known (first selection before picker open).
-      if (!lastKnownGradientType) {
-        const fc = items[0][colorProp()];
-        if (fc?.gradient?.radial) {
+      if (activeGradient && !lastKnownGradientType) {
+        if (activeGradient.radial) {
           lastKnownGradientType = "RADIAL";
         } else {
-          const dx = Math.abs((fc.destination?.x ?? 0) - (fc.origin?.x ?? 0));
-          const dy = Math.abs((fc.destination?.y ?? 0) - (fc.origin?.y ?? 0));
+          const dx = Math.abs((activePaperColor.destination?.x ?? 0) - (activePaperColor.origin?.x ?? 0));
+          const dy = Math.abs((activePaperColor.destination?.y ?? 0) - (activePaperColor.origin?.y ?? 0));
           lastKnownGradientType = dy > dx ? "VERTICAL" : "HORIZONTAL";
         }
       }
@@ -694,20 +714,9 @@ export default async function ({ addon, msg, console }) {
     const syncPickerColorToRedux = (colorIndex) => {
       const items = selectedLayers();
       if (!items.length) return;
-      const cp = colorProp();
-      // Temporarily collapse every selected item to its 2 outer stops so that
-      // getColorsFromSelection reads the correct rgba from paper.js.
-      for (const item of items) {
-        const grd = item[cp]?.gradient;
-        if (!grd || grd.stops.length < 2) continue;
-        const c0c = grd.stops[0].color;
-        const c1c = grd.stops[grd.stops.length - 1].color;
-        item[cp].gradient = { stops: [c0c, c1c], radial: grd.radial };
-      }
-      selfItemsDispatch = true;
-      addon.tab.redux.dispatch({ type: "scratch-paint/select/CHANGE_SELECTED_ITEMS", selectedItems: items });
-      selfItemsDispatch = false;
-      applyAllStops(); // reinstate extra stops for all items
+      // Collapse both fill and stroke to their outer stops during the Redux refresh so the
+      // non-active swatch does not fall back to MIXED when the active stop colour changes.
+      withCollapsedOuterStops(items, () => dispatchSelectedItems(items));
       // Trigger the opacity-slider addon to re-read Redux and update its handle position.
       addon.tab.redux.dispatch({ type: "scratch-paint/color-index/CHANGE_COLOR_INDEX", index: colorIndex });
     };
