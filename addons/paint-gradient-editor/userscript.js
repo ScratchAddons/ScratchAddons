@@ -38,7 +38,7 @@ export default async function ({ addon, msg, console }) {
   let storedAngle = 0; // degrees; persists for linear gradients across type-button presses
   let activeOverlay = null;
   let activeColorMode = "fill"; // "fill" | "stroke" — which color popup is currently open
-  const syncUI = () => activeOverlay?.sync();
+  const syncUI = () => { activeOverlay?.sync(); syncSwatches(); };
 
   // Action type strings keyed by color mode.
   const COLOR_ACTIONS = {
@@ -55,11 +55,22 @@ export default async function ({ addon, msg, console }) {
   };
   const COLOR_PROPS = ["fillColor", "strokeColor"];
   const colorProp = () => (activeColorMode === "stroke" ? "strokeColor" : "fillColor");
+  // applyAllStops()/drag paths can run before Scratch's hashed class names are available,
+  // so swatch syncing must wait until scratchClassReady resolves.
+  let scratchClassReady = false;
   const dispatchSelectedItems = (items) => {
     selfItemsDispatch = true;
     addon.tab.redux.dispatch({ type: "scratch-paint/select/CHANGE_SELECTED_ITEMS", selectedItems: items });
     selfItemsDispatch = false;
+    // Redux/React can briefly repaint Scratch's simplified swatch after selection changes.
+    // Apply our custom preview immediately, then again on the next frame in case it gets overwritten.
+    syncSwatches();
+    requestAnimationFrame(syncSwatches);
   };
+  addon.tab.scratchClassReady().then(() => {
+    scratchClassReady = true;
+    requestAnimationFrame(syncSwatches);
+  });
 
   // Cache paper.js early so the CHANGE_SELECTED_ITEMS listener can fix MIXED
   // swatches even before the user opens a colour picker.
@@ -110,6 +121,25 @@ export default async function ({ addon, msg, console }) {
   const colorToCss = (c) => {
     if (!c || c.alpha === null || c.alpha === undefined || c.alpha >= 1) return colorToHex(c);
     return `rgba(${Math.round(c.red * 255)},${Math.round(c.green * 255)},${Math.round(c.blue * 255)},${Math.round(c.alpha * 1000) / 1000})`;
+  };
+
+  const syncSwatches = () => {
+    if (!scratchClassReady) return;
+    const item = cachedPaper?.project.selectedItems.find((i) => i.parent instanceof cachedPaper.Layer);
+    if (!item) return;
+    const swatches = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"));
+    for (const [idx, prop] of [[0, "fillColor"], [1, "strokeColor"]]) {
+      const swatch = swatches[idx];
+      const gradient = item[prop]?.gradient;
+      if (!swatch || !gradient || gradient.stops.length < 2) continue;
+      const p1 = gradient.stops[gradient.stops.length - 1].offset;
+      if (gradient.radial && p1 <= 0) continue;
+      const normalize = gradient.radial ? (offset) => clamp(offset / p1, 0, 1) : (offset) => clamp(offset, 0, 1);
+      const stopsCss = gradient.stops.map((stop) => `${colorToCss(stop.color)} ${(normalize(stop.offset) * 100).toFixed(1)}%`);
+      swatch.style.background = gradient.radial
+        ? `radial-gradient(${stopsCss.join(", ")})`
+        : `linear-gradient(${stopsCss.join(", ")})`;
+    }
   };
 
   const withCollapsedOuterStops = (items, callback) => {
@@ -205,6 +235,7 @@ export default async function ({ addon, msg, console }) {
     let f = cc[addon.tab.traps.getInternalKey(cc)];
     while (f && typeof f.stateNode?.handleUpdateImage !== "function") f = f.return;
     f?.stateNode?.handleUpdateImage();
+    syncSwatches();
   };
 
   // ── Write all stops back to paper.js ────────────────────────────────────────────
@@ -257,6 +288,7 @@ export default async function ({ addon, msg, console }) {
       }
       g.stops[g.stops.length - 1].offset = stops.p1;
     }
+    syncSwatches();
   };
 
   // ── Redux listeners ──────────────────────────────────────────────────────────────────
@@ -309,6 +341,7 @@ export default async function ({ addon, msg, console }) {
       }
 
       activeOverlay?.sync();
+      requestAnimationFrame(syncSwatches);
       return;
     }
 
@@ -324,6 +357,7 @@ export default async function ({ addon, msg, console }) {
     } else {
       stops = readCurrentStops(cachedPaper);
       activeOverlay.sync();
+      requestAnimationFrame(syncSwatches);
     }
   });
 
