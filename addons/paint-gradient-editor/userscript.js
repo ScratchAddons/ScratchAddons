@@ -327,6 +327,21 @@ export default async function ({ addon, msg, console }) {
     syncSwatches();
   };
 
+  // ── Shared helper: inject full multi-stop gradient into a single item ─────────────────
+  // Precondition: item[cp] already has a 2-stop gradient matching c0hex/c1hex.
+  // Used by patchLayerItems (drawing tools) and wrapFillTool (fill tool).
+  const injectMultiStop = (item, cp) => {
+    const grad = item[cp].gradient;
+    liveGradientItems.add(item);
+    item[cp].gradient = { stops: [c0css, ...extraStops.map((s) => s.color), c1css], radial: grad.radial };
+    const g = item[cp].gradient;
+    g.stops[0].offset = stops.p0;
+    for (let i = 0; i < extraStops.length; i++) {
+      if (g.stops[i + 1]) g.stops[i + 1].offset = extraStops[i].offset;
+    }
+    g.stops[g.stops.length - 1].offset = stops.p1;
+  };
+
   // ── New-item patcher ────────────────────────────────────────────────────────────────────
   // scratch-paint's drawing tools call styleShape() on every drag frame, which always
   // creates a 2-stop gradient from Redux primary/secondary.  The item being drawn is always
@@ -342,12 +357,7 @@ export default async function ({ addon, msg, console }) {
     if (!grad || grad.stops.length !== 2) return; // only patch the 2-stop Redux form
     if (colorToHex(grad.stops[0].color) !== c0hex || colorToHex(grad.stops[1].color) !== c1hex) return;
     // This item was just styled by scratch-paint using our outer colours — inject full gradient.
-    liveGradientItems.add(item);
-    item[cp].gradient = { stops: [c0css, ...extraStops.map((s) => s.color), c1css], radial: grad.radial };
-    const g = item[cp].gradient;
-    g.stops[0].offset = stops.p0;
-    for (let i = 0; i < extraStops.length; i++) if (g.stops[i + 1]) g.stops[i + 1].offset = extraStops[i].offset;
-    g.stops[g.stops.length - 1].offset = stops.p1;
+    injectMultiStop(item, cp);
   };
   const startNewItemPatcher = () => {
     newItemPatcherActive = true;
@@ -441,7 +451,12 @@ export default async function ({ addon, msg, console }) {
         gradientType: lastKnownGradientType,
       });
     } else {
-      stops = readCurrentStops(cachedPaper);
+      // Don't call readCurrentStops when there are no selected items (e.g. fill mode
+      // clears selection on activate, and onUpdateImage dispatches CHANGE_SELECTED_ITEMS []
+      // after each fill click).  Reading with no items would wipe extraStops.
+      if (items.length > 0) {
+        stops = readCurrentStops(cachedPaper);
+      }
       activeOverlay.sync();
       requestAnimationFrame(syncSwatches);
     }
@@ -530,6 +545,72 @@ export default async function ({ addon, msg, console }) {
       applyAllStops();
       activeOverlay.sync();
     }
+  });
+
+  // ── Fill tool multi-stop hook ─────────────────────────────────────────────────────────
+  // scratch-paint's FillTool calls _setFillItemColor() on every mouse move/down.
+  // That method always uses createGradientObject() which makes a 2-stop gradient.
+  // By wrapping it we can expand 2-stop → multi-stop immediately after each call,
+  // so both the hover preview AND the committed fill use the full gradient.
+  // The FillTool instance is recreated on every mode switch, so we re-wrap on each
+  // CHANGE_MODE → FILL dispatch.
+
+  const wrapFillTool = () => {
+    if (!cachedPaper) return;
+    const tool = cachedPaper.tool;
+    if (!tool || tool.__saGradHooked) return;
+    // fill-mode's activateTool() resets gradientType to SOLID when the current fill is
+    // stored as MIXED in Redux (which is always the case for multi-stop gradients).
+    // Restore the gradient type and colours directly on the tool and via Redux so the
+    // fill tool applies gradients instead of solid fills.
+    // Note: the fill tool's gradient type always comes from CHANGE_FILL_GRADIENT_TYPE,
+    // never from the stroke side, so we use COLOR_ACTIONS.fill regardless of activeColorMode.
+    if (extraStops.length > 0 && lastKnownGradientType) {
+      tool.setGradientType(lastKnownGradientType);
+      tool.setFillColor(c0css);
+      tool.setFillColor2(c1css);
+      addon.tab.redux.dispatch({
+        type: COLOR_ACTIONS.fill.GRADIENT,
+        gradientType: lastKnownGradientType,
+      });
+    }
+    const orig = tool._setFillItemColor?.bind(tool);
+    if (!orig) return;
+    tool._setFillItemColor = function (color1, color2, gradientType, pointerLocation) {
+      orig(color1, color2, gradientType, pointerLocation);
+      if (addon.self.disabled || extraStops.length === 0) return;
+      const item = tool._getFillItem?.();
+      if (!item) return;
+      const cp = tool.fillProperty === "fill" ? "fillColor" : "strokeColor";
+      const grad = item[cp]?.gradient;
+      if (!grad || grad.stops.length !== 2) return;
+      if (colorToHex(grad.stops[0].color) !== c0hex || colorToHex(grad.stops[1].color) !== c1hex) return;
+      injectMultiStop(item, cp);
+      // For linear gradients: override origin/destination to match the custom angle shown
+      // in the fill preview box (storedAngle), spanning the item's bounding box.
+      // createGradientObject() only knows HORIZONTAL/VERTICAL so any custom angle would
+      // otherwise snap.  For radial, leave origin/destination alone — orig() already
+      // centred the gradient on the pointer position.
+      if (!grad.radial) {
+        const θ = (storedAngle * Math.PI) / 180;
+        const cosθ = Math.cos(θ);
+        const sinθ = Math.sin(θ);
+        const dir = new cachedPaper.Point(cosθ, sinθ);
+        const b = item.bounds;
+        const halfLen = Math.abs((b.width / 2) * cosθ) + Math.abs((b.height / 2) * sinθ) || 0.01;
+        item[cp].origin = b.center.subtract(dir.multiply(halfLen));
+        item[cp].destination = b.center.add(dir.multiply(halfLen));
+      }
+    };
+    tool.__saGradHooked = true;
+  };
+
+  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+    if (detail.action.type !== "scratch-paint/modes/CHANGE_MODE") return;
+    if (detail.action.mode !== "FILL") return;
+    // FillMode.activateTool() runs synchronously in the same dispatch handler,
+    // so cachedPaper.tool is already the new FillTool instance by the next rAF.
+    requestAnimationFrame(wrapFillTool);
   });
 
   // ── Canvas SVG overlay ────────────────────────────────────────────────────
@@ -1248,8 +1329,13 @@ export default async function ({ addon, msg, console }) {
 
     const paper = await addon.tab.traps.getPaper();
     cachedPaper = paper;
-    stops = readCurrentStops(paper);
-    storedAngle = colorStateNow.gradientType === "VERTICAL" ? 90 : readCurrentAngle(paper);
+    // In fill mode there are no selected items, so readCurrentStops would wipe
+    // extraStops.  Keep the cached state from the last selected shape instead.
+    const isFillMode = addon.tab.redux.state?.scratchPaint?.mode === "FILL";
+    if (!isFillMode) {
+      stops = readCurrentStops(paper);
+      storedAngle = colorStateNow.gradientType === "VERTICAL" ? 90 : readCurrentAngle(paper);
+    }
 
     if (!colorStateNow.gradientType) {
       const items = paper.project.selectedItems.filter((i) => i.parent instanceof paper.Layer);
