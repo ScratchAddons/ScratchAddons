@@ -38,7 +38,10 @@ export default async function ({ addon, msg, console }) {
   let storedAngle = 0; // degrees; persists for linear gradients across type-button presses
   let activeOverlay = null;
   let activeColorMode = "fill"; // "fill" | "stroke" — which color popup is currently open
-  const syncUI = () => { activeOverlay?.sync(); syncSwatches(); };
+  const syncUI = () => {
+    activeOverlay?.sync();
+    syncSwatches();
+  };
 
   // Action type strings keyed by color mode.
   const COLOR_ACTIONS = {
@@ -128,14 +131,19 @@ export default async function ({ addon, msg, console }) {
     const item = cachedPaper?.project.selectedItems.find((i) => i.parent instanceof cachedPaper.Layer);
     if (!item) return;
     const swatches = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"));
-    for (const [idx, prop] of [[0, "fillColor"], [1, "strokeColor"]]) {
+    for (const [idx, prop] of [
+      [0, "fillColor"],
+      [1, "strokeColor"],
+    ]) {
       const swatch = swatches[idx];
       const gradient = item[prop]?.gradient;
       if (!swatch || !gradient || gradient.stops.length < 2) continue;
       const p1 = gradient.stops[gradient.stops.length - 1].offset;
       if (gradient.radial && p1 <= 0) continue;
       const normalize = gradient.radial ? (offset) => clamp(offset / p1, 0, 1) : (offset) => clamp(offset, 0, 1);
-      const stopsCss = gradient.stops.map((stop) => `${colorToCss(stop.color)} ${(normalize(stop.offset) * 100).toFixed(1)}%`);
+      const stopsCss = gradient.stops.map(
+        (stop) => `${colorToCss(stop.color)} ${(normalize(stop.offset) * 100).toFixed(1)}%`
+      );
       swatch.style.background = gradient.radial
         ? `radial-gradient(${stopsCss.join(", ")})`
         : `linear-gradient(${stopsCss.join(", ")})`;
