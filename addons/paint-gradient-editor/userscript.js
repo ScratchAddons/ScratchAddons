@@ -56,11 +56,16 @@ export default async function ({ addon, msg, console }) {
       GRADIENT: "scratch-paint/stroke-style/CHANGE_STROKE_GRADIENT_TYPE",
     },
   };
+  // fill/stroke swatches are updated together: Redux only stores a 2-stop simplification,
+  // but either side may actually have a multi-stop paper.js gradient.
   const COLOR_PROPS = ["fillColor", "strokeColor"];
   const colorProp = () => (activeColorMode === "stroke" ? "strokeColor" : "fillColor");
   // applyAllStops()/drag paths can run before Scratch's hashed class names are available,
   // so swatch syncing must wait until scratchClassReady resolves.
   let scratchClassReady = false;
+  // CHANGE_SELECTED_ITEMS makes Scratch rebuild its own swatch preview from Redux's 2-stop model.
+  // Repaint our paper.js-based preview immediately, then again on the next frame in case React
+  // commits the simplified swatch after our first write.
   const dispatchSelectedItems = (items) => {
     selfItemsDispatch = true;
     addon.tab.redux.dispatch({ type: "scratch-paint/select/CHANGE_SELECTED_ITEMS", selectedItems: items });
@@ -126,6 +131,9 @@ export default async function ({ addon, msg, console }) {
     return `rgba(${Math.round(c.red * 255)},${Math.round(c.green * 255)},${Math.round(c.blue * 255)},${Math.round(c.alpha * 1000) / 1000})`;
   };
 
+  // Override Scratch's swatches with the real paper.js gradients for both fill and stroke.
+  // For radial gradients, normalize stop offsets against the outer stop so p0/p1 movement
+  // is previewed relative to the visible radius rather than the implicit CSS center->100% range.
   const syncSwatches = () => {
     if (!scratchClassReady) return;
     const item = cachedPaper?.project.selectedItems.find((i) => i.parent instanceof cachedPaper.Layer);
@@ -150,6 +158,9 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
+  // Temporarily collapse multi-stop gradients to their outer stops so CHANGE_SELECTED_ITEMS
+  // makes Redux/swatches read a stable 2-stop gradient instead of MIXED. Restore the full
+  // paper.js gradient immediately afterwards; syncSwatches() then paints the richer preview.
   const withCollapsedOuterStops = (items, callback) => {
     const snapshots = [];
     for (const item of items) {
@@ -333,8 +344,7 @@ export default async function ({ addon, msg, console }) {
         stops = readCurrentStops(cachedPaper); // also updates c0css, c1css, c0hex, c1hex
       }
 
-      // paper.js multi-stop gradients read back as MIXED in Redux. Collapse both fill and
-      // stroke to their outer stops before the re-dispatch so both swatch previews update.
+      // Re-dispatch selection through Redux using collapsed outer stops for both sides.
       withCollapsedOuterStops(items, () => dispatchSelectedItems(items));
 
       // Infer gradient type if not yet known (first selection before picker open).
