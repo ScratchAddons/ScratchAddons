@@ -5,8 +5,7 @@
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 // Convert a paper.js Color to "#rrggbb"
-export const colorToHex = (c) =>
-  tinycolor({ r: c.red * 255, g: c.green * 255, b: c.blue * 255 }).toHexString();
+export const colorToHex = (c) => tinycolor({ r: c.red * 255, g: c.green * 255, b: c.blue * 255 }).toHexString();
 
 // Parse any CSS colour string → [r,g,b,a] (r/g/b 0–255, a 0–1), or null.
 export const parseColor = (c) => {
