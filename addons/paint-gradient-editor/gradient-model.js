@@ -180,6 +180,26 @@ export class GradientModel {
     };
   };
 
+  // The linear overlay treats origin/destination as the two outer stop handles, so its
+  // outer stop offsets must always span the full axis. When switching from radial after
+  // moving p0/p1, scratch-paint preserves those offsets, which leaves the overlay out of
+  // sync and lets extra-stop drag bounds ignore the visible gradient start.
+  normalizeStopsForLinear = () => {
+    const { p0, p1 } = this.stops;
+    const span = p1 - p0;
+    if (span <= 0) {
+      this.stops = { p0: 0, p1: 1 };
+      this.extraStops = this.extraStops
+        .map((stop) => ({ ...stop, offset: clamp(stop.offset, 0, 1) }))
+        .sort((a, b) => a.offset - b.offset);
+      return;
+    }
+    this.extraStops = this.extraStops
+      .map((stop) => ({ ...stop, offset: clamp((stop.offset - p0) / span, 0, 1) }))
+      .sort((a, b) => a.offset - b.offset);
+    this.stops = { p0: 0, p1: 1 };
+  };
+
   // Read the gradient axis angle (degrees, 0–359) from the first selected item.
   readCurrentAngle = (paper) => {
     const items = paper.project.selectedItems.filter((i) => i.parent instanceof paper.Layer);

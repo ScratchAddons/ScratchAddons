@@ -132,6 +132,7 @@ export default async function ({ addon, msg, console }) {
     if (isGradient) {
       const dispatchedType = detail.action.gradientType;
       if (dispatchedType) {
+        const previousType = model.lastKnownGradientType;
         // A real gradient type was dispatched.  For multi-stop gradients Redux stores
         // gradientType=undefined (MIXED), so we use dispatchedType directly rather than
         // reading from Redux state, which would return null and silently skip the sync.
@@ -143,6 +144,9 @@ export default async function ({ addon, msg, console }) {
         } else if (dispatchedType === "HORIZONTAL") {
           model.storedAngle = 0;
           model.applyAngle(0);
+        }
+        if (previousType === "RADIAL" && (dispatchedType === "VERTICAL" || dispatchedType === "HORIZONTAL")) {
+          model.normalizeStopsForLinear();
         }
         model.applyAllStops();
         model.activeOverlay.sync();
