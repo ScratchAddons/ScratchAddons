@@ -7,6 +7,12 @@
   user-select: none;
 }
 
+.sa-grad-overlay {
+  --sa-grad-overlay-paper: var(--editorDarkMode-input, white);
+  --sa-grad-overlay-ink: var(--editorDarkMode-page-text, #575e75);
+  --sa-grad-overlay-shadow: var(--editorDarkMode-input-foregroundShadow, rgba(0, 0, 0, 0.3));
+}
+
 /* The coloured gradient strip */
 .sa-grad-bar {
   position: relative;

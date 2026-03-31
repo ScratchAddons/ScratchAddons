@@ -18,6 +18,9 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
   svg.style.cssText =
     "position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:10";
   ctx.addon.tab.displayNoneWhileDisabled(svg);
+  const overlayPaper = "var(--sa-grad-overlay-paper)";
+  const overlayInk = "var(--sa-grad-overlay-ink)";
+  const overlayShadow = "var(--sa-grad-overlay-shadow)";
 
   // ── SVG element helpers ───────────────────────────────────────────────
   // svgEl: create a namespaced element with all attributes set in one call.
@@ -37,10 +40,10 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
   };
 
   // Axis line: dashed for linear, solid for radial.
-  // Two layers: black outline underneath + white line on top for visibility on any background.
-  const axisOutline = svgEl("line", { stroke: "black", "stroke-width": 4, "stroke-opacity": 0.5 });
+  // Two theme-aware layers preserve contrast against the artwork and editor chrome.
+  const axisOutline = svgEl("line", { stroke: overlayInk, "stroke-width": 4, "stroke-opacity": 0.5 });
   svg.appendChild(axisOutline);
-  const axisLine = svgEl("line", { stroke: "white", "stroke-width": 2 });
+  const axisLine = svgEl("line", { stroke: overlayPaper, "stroke-width": 2 });
   svg.appendChild(axisLine);
 
   // Invisible wider hit-target on the axis line for click-to-add-stop.
@@ -53,14 +56,14 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
   // insertBefore(pickerRingWhite) is used when creating pool handles for the same reason.
   const pickerRingWhite = svgEl("circle", {
     fill: "none",
-    stroke: "white",
+    stroke: overlayPaper,
     "stroke-width": 2,
     "pointer-events": "none",
   });
   pickerRingWhite.style.display = "none";
   const pickerRingBlack = svgEl("circle", {
     fill: "none",
-    stroke: "black",
+    stroke: overlayInk,
     "stroke-width": 3.5,
     "pointer-events": "none",
   });
@@ -72,8 +75,8 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
     const g = document.createElementNS(NS, "g");
     g.style.cssText = "pointer-events:all;cursor:pointer";
     g.append(
-      svgEl("circle", { r: 8, fill: "rgba(0,0,0,0.3)" }),
-      svgEl("circle", { r: 6, fill: "transparent", stroke: "white", "stroke-width": 2 })
+      svgEl("circle", { r: 8, fill: overlayShadow }),
+      svgEl("circle", { r: 6, fill: "transparent", stroke: overlayPaper, "stroke-width": 2 })
     );
     svg.appendChild(g);
     return g;
@@ -88,8 +91,8 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
     const g = document.createElementNS(NS, "g");
     g._ringR = 11;
     g.style.cssText = "pointer-events:all;cursor:pointer";
-    const circle = svgEl("circle", { r: 7, stroke: "white", "stroke-width": 2 });
-    g.append(svgEl("circle", { r: 9, fill: "rgba(0,0,0,0.3)" }), circle);
+    const circle = svgEl("circle", { r: 7, stroke: overlayPaper, "stroke-width": 2 });
+    g.append(svgEl("circle", { r: 9, fill: overlayShadow }), circle);
     svg.appendChild(g);
     return { g, circle };
   };
@@ -410,8 +413,8 @@ export function buildOverlay(paper, canvasContainer, canvas, ctx) {
     const g = document.createElementNS(NS, "g");
     g._ringR = 9;
     g.style.cssText = "pointer-events:all;cursor:pointer";
-    const circle = svgEl("circle", { r: 5, stroke: "white", "stroke-width": 1.5 });
-    g.append(svgEl("circle", { r: 7, fill: "rgba(0,0,0,0.3)" }), circle);
+    const circle = svgEl("circle", { r: 5, stroke: overlayPaper, "stroke-width": 1.5 });
+    g.append(svgEl("circle", { r: 7, fill: overlayShadow }), circle);
     // Insert before the floating rings so the rings always stay on top.
     svg.insertBefore(g, pickerRingWhite);
 
