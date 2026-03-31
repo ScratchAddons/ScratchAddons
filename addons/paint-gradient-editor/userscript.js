@@ -144,7 +144,8 @@ export default async function ({ addon, msg, console }) {
       [1, "strokeColor"],
     ]) {
       const swatch = swatches[idx];
-      const gradient = item[prop]?.gradient;
+      const color = item[prop];
+      const gradient = color?.gradient;
       if (!swatch || !gradient || gradient.stops.length < 2) continue;
       const p1 = gradient.stops[gradient.stops.length - 1].offset;
       if (gradient.radial && p1 <= 0) continue;
@@ -152,9 +153,21 @@ export default async function ({ addon, msg, console }) {
       const stopsCss = gradient.stops.map(
         (stop) => `${colorToCss(stop.color)} ${(normalize(stop.offset) * 100).toFixed(1)}%`
       );
-      swatch.style.background = gradient.radial
-        ? `radial-gradient(${stopsCss.join(", ")})`
-        : `linear-gradient(${stopsCss.join(", ")})`;
+      if (gradient.radial) {
+        swatch.style.background = `radial-gradient(${stopsCss.join(", ")})`;
+      } else {
+        // Derive angle from paper.js origin→destination so the swatch matches the canvas gradient.
+        // CSS linear-gradient angle is clockwise from "to top"; convert from paper.js screen coords
+        // (y-down) using atan2(dx, -dy): right→90°, down→180°, left→270°, up→0°.
+        let angleDeg = 90; // fallback: left→right
+        if (color.origin && color.destination) {
+          const dx = color.destination.x - color.origin.x;
+          const dy = color.destination.y - color.origin.y;
+          angleDeg = Math.atan2(dx, -dy) * (180 / Math.PI);
+          if (angleDeg < 0) angleDeg += 360;
+        }
+        swatch.style.background = `linear-gradient(${angleDeg.toFixed(1)}deg, ${stopsCss.join(", ")})`;
+      }
     }
   };
 
