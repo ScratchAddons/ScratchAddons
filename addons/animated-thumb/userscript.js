@@ -119,6 +119,7 @@ export default async function ({ addon, console, msg }) {
     uploadFromFile();
   };
 
+  let dropdownContainer = null;
   let uploadButton = null;
 
   const closeDropdown = () => {
@@ -153,17 +154,10 @@ export default async function ({ addon, console, msg }) {
     document.addEventListener("click", () => closeDropdown(), { once: true });
   };
 
-  while (true) {
-    const setThumbnailButton = await addon.tab.waitForElement(
-      `
-        [class*='stage-header_stage-size-row_'] > [class*='stage-header_stage-button_']:first-child,
-        [class*='stage-header_rightSection_'] > [class*='stage-header_setThumbnailButton_']
-      `,
-      { markAsSeen: true }
-    );
+  const addDropdown = (setThumbnailButton) => {
     // Add class to parent so that it doesn't get overridden by Scratch
     setThumbnailButton.parentElement.classList.add("sa-has-dropdown");
-    const dropdownContainer = Object.assign(document.createElement("div"), {
+    dropdownContainer = Object.assign(document.createElement("div"), {
       className: "sa-set-thumbnail-dropdown-container",
     });
     const dropdownButton = Object.assign(document.createElement("button"), {
@@ -175,9 +169,10 @@ export default async function ({ addon, console, msg }) {
     });
     dropdownButton.appendChild(
       Object.assign(document.createElement("img"), {
-        src: addon.tab.editorMode === "editor"
-          ? "/static/blocks-media/default/dropdown-arrow-dark.svg"
-          : "/static/blocks-media/default/dropdown-arrow.svg",
+        src:
+          addon.tab.editorMode === "editor"
+            ? "/static/blocks-media/default/dropdown-arrow-dark.svg"
+            : "/static/blocks-media/default/dropdown-arrow.svg",
         draggable: false,
       })
     );
@@ -192,5 +187,37 @@ export default async function ({ addon, console, msg }) {
       order: -1,
       element: dropdownContainer,
     });
+  };
+
+  await addon.tab.redux.waitForState((state) => state.scratchGui.projectState.loadingState === "SHOWING_WITH_ID");
+  while (true) {
+    await addon.tab.waitForElement(
+      // Full screen button
+      // (need an element that's recreated every time when entering/exiting full screen)
+      '[class*="stage-header_right"] > [class*="button_outlined-button_"]:last-child, [class*="stage-header_unselect-wrapper_"] > [class*="button_outlined-button_"]',
+      {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "scratch-gui/mode/SET_FULL_SCREEN",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+      }
+    );
+    const setThumbnailButton = document.querySelector(
+      `
+        [class*="stage-header_stage-size-row_"] > [class*="stage-header_stage-button_"]:first-child,
+        [class*="stage-header_rightSection_"] > [class*="stage-header_setThumbnailButton_"]
+      `,
+      { markAsSeen: true }
+    );
+    if (dropdownContainer) {
+      dropdownContainer.remove();
+      dropdownContainer = null;
+    }
+    if (setThumbnailButton) {
+      addDropdown(setThumbnailButton);
+    }
   }
 }
