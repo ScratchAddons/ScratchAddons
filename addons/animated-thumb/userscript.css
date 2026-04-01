@@ -112,6 +112,9 @@ p.sa-animated-thumb-uploaded-thumb {
   width: 10px;
   height: 10px;
 }
+[class*="stage-header_stage-button_"] + * > .sa-set-thumbnail-dropdown-button > img {
+  filter: var(--editorDarkMode-accent-filter, none);
+}
 
 .sa-set-thumbnail-upload-button {
   position: absolute;
