@@ -683,6 +683,10 @@ export default async function ({ addon, console, msg }) {
     ogSetVariableTo.call(this, args, util);
   };
 
+  // Add button after Scratch adds the Set Thumbnail button - otherwise the order will be wrong
+  await addon.tab.redux.waitForState((state) =>
+    ["SHOWING_WITH_ID", "SHOWING_WITHOUT_ID"].includes(state.scratchGui.projectState.loadingState)
+  );
   while (true) {
     await addon.tab.waitForElement(
       // Full screen button
