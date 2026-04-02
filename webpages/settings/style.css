@@ -57,6 +57,7 @@ h1 {
 }
 
 .main {
+  min-height: 0;
   flex-grow: 1;
   display: flex;
   align-items: stretch;
