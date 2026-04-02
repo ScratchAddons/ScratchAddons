@@ -76,7 +76,6 @@ h1 {
   padding-top: 10px;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
-  flex-basis: 0;
   flex-grow: 1;
 }
 
