@@ -1,0 +1,50 @@
+{
+  "name": "Gradient stop editor",
+  "description": "Adds an advanced gradient editor to the fill and stroke colour choosers in the vector costume editor.",
+  "info": [
+    {
+      "type": "info",
+      "text": "Open the fill or stroke colour picker on a gradient shape to reveal a live axis widget drawn directly over the shape on the canvas",
+      "id": "infoHowToOpen"
+    },
+    {
+      "type": "info",
+      "text": "Click a stop handle to pick its colour; drag it to reposition it; click anywhere on the axis to add a new stop",
+      "id": "infoBasicUse"
+    },
+    {
+      "type": "info",
+      "text": "Double-click a stop or drag it off the axis to delete it",
+      "id": "infoDelete"
+    }
+  ],
+  "credits": [
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
+    },
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor"],
+  "versionAdded": "1.45.0",
+  "enabledByDefault": false,
+  "libraries": ["scratch-paint", "tinycolor2"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
