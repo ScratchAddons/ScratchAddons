@@ -1,0 +1,70 @@
+{
+  "name": "Boolean shape operations",
+  "description": "Adds a Shaping panel to the vector costume editor: Unite · Subtract · Intersect · Combine/Release · Expand",
+  "info": [
+    {
+      "type": "info",
+      "text": "Unite — merge all selected shapes into one filled shape",
+      "id": "infoUnite"
+    },
+    {
+      "type": "info",
+      "text": "Subtract — front shape cuts a hole in every selected shape below it (Shift: cuts back shape only; Alt: keeps the cutter)",
+      "id": "infoSubtract"
+    },
+    {
+      "type": "info",
+      "text": "Intersect — keep only the overlapping areas of selected shapes (Alt: divide all into distinct regions)",
+      "id": "infoIntersect"
+    },
+    {
+      "type": "info",
+      "text": "Combine / Release — Combine groups shapes into a compound path where overlaps become transparent holes; Release splits it back into separate shapes",
+      "id": "infoCombine"
+    },
+    {
+      "type": "info",
+      "text": "Expand — grows the shape outward by half its stroke width, making the fill match the visual edge of the stroke",
+      "id": "infoExpand"
+    }
+  ],
+  "credits": [
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor"],
+  "versionAdded": "1.45.0",
+  "enabledByDefault": false,
+  "libraries": ["scratch-paint"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Fix modifier keys getting stuck after Alt+Tab",
+      "id": "fix-stuck-modifiers",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Fix duplicate shapes when Alt-dragging combined paths",
+      "id": "fix-compound-deselect",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
