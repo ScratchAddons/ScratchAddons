@@ -21,15 +21,25 @@
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
               <button
-                :disabled="!addon._enabled"
-                class="addon-buttons"
-                @click="deleteTableRow(i)"
-                :title="msg('deleteRow')"
+                :disabled="!addon._enabled || i == 0"
+                class="icon-button"
+                :class="{'disabled': i == 0}"
+                @click="moveTableRow(i, i - 1)"
+                :title="msg('moveUp')"
               >
-                <img class="icon-type" src="../../images/icons/close.svg" />
+                <img class="icon-type" src="../../images/icons/move-up.svg" />
               </button>
-              <button :disabled="!addon._enabled" class="addon-buttons handle">
+              <button :disabled="!addon._enabled" class="icon-button handle" tabindex="-1">
                 <img class="icon-type" src="../../images/icons/drag.svg" />
+              </button>
+              <button
+                :disabled="!addon._enabled || i == addonSettings[setting.id].length - 1"
+                class="icon-button"
+                :class="{'disabled': i == addonSettings[setting.id].length - 1}"
+                @click="moveTableRow(i, i + 1)"
+                :title="msg('moveDown')"
+              >
+                <img class="icon-type" src="../../images/icons/move-down.svg" />
               </button>
             </div>
             <div class="setting-table-row-settings">
@@ -42,19 +52,29 @@
                 :addon-settings="row"
               ></addon-setting>
             </div>
+            <div class="setting-table-options">
+              <button
+                :disabled="!addon._enabled"
+                class="icon-button"
+                @click="deleteTableRow(i)"
+                :title="msg('deleteRow')"
+              >
+                <img class="icon-type" src="../../images/icons/close.svg" />
+              </button>
+            </div>
           </div>
         </div>
-        <div class="addon-split-button setting-table-dropdown dropdown-parent">
+        <div class="icon-split-button setting-table-dropdown dropdown-parent">
           <button
             :disabled="!addon._enabled"
-            class="addon-buttons addon-split-button-button"
+            class="icon-button icon-split-button-button"
             @click="addTableRow()"
             :title="msg('addRow')"
           >
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
           <dropdown
-            button-class="addon-buttons addon-split-button-dropdown"
+            button-class="icon-button icon-split-button-dropdown"
             :disabled="!addon._enabled"
             :button-title="msg('addPresetRow')"
             align-start="true"
@@ -294,24 +314,33 @@
   .setting-table-row {
     display: flex;
     margin: 10px 0px;
+    padding: 4px;
+    background: var(--navigation-background);
+    border-radius: 8px;
   }
   .setting-table-row-settings {
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding-bottom: 10px;
-    background: var(--navigation-background);
-    border-radius: 10px;
   }
   .setting-table-row-settings .addon-setting {
     margin-inline-end: 10px;
     margin-bottom: 0;
     flex-wrap: wrap;
   }
+  .setting-table-row-settings .setting-label-container {
+    width: auto;
+    max-width: 200px;
+    flex-grow: 1; /* align labels of different lengths */
+  }
   .setting-table-options {
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+  .setting-table-options .handle {
+    cursor: grab;
   }
   .setting-table-dropdown {
     align-self: flex-start;

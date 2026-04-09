@@ -13,7 +13,7 @@
   user-select: none;
 }
 
-.large-button:hover:not([disabled]) {
+.large-button:hover:not(:disabled) {
   background: var(--button-hover-background);
   cursor: pointer;
 }
@@ -26,4 +26,56 @@
 
 .large-button > * {
   vertical-align: middle;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  padding-block: 8px;
+  padding-inline-start: 8px;
+  padding-inline-end: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  user-select: none;
+  transition: 0.2s ease;
+}
+
+.icon-split-button:hover:not(:disabled) .icon-split-button-button:not(:hover),
+.icon-split-button:hover:not(:disabled) .icon-split-button-dropdown:not(:hover),
+.icon-split-button:has(.open) .icon-split-button-button {
+  background: var(--hover-highlight-reduced);
+}
+
+.icon-button:hover:not(:disabled),
+.icon-split-button .icon-split-button-dropdown.open,
+.icon-split-button:hover .icon-split-button-dropdown.open:not(:hover) {
+  background: var(--hover-highlight);
+}
+
+.icon-split-button {
+  display: flex;
+}
+
+.icon-split-button-button {
+  border-radius: 4px 0 0 4px;
+}
+
+[dir="rtl"] .icon-split-button-button {
+  border-radius: 0 4px 4px 0;
+}
+
+.icon-split-button-dropdown {
+  border-radius: 0 4px 4px 0;
+}
+
+[dir="rtl"] .icon-split-button-dropdown {
+  border-radius: 4px 0 0 4px;
+}
+
+.icon-split-button:has(.open) .icon-split-button-button,
+.icon-split-button .icon-split-button-dropdown.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }

@@ -109,6 +109,10 @@ h1 {
   margin-inline-end: 8px;
 }
 
+:disabled {
+  cursor: initial !important;
+}
+
 .disabled {
   opacity: 50%;
 }

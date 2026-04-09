@@ -200,6 +200,12 @@
   "addPresetRow": {
     "message": "Add preset row"
   },
+  "moveUp": {
+    "message": "Move up"
+  },
+  "moveDown": {
+    "message": "Move down"
+  },
   "deleteRow": {
     "message": "Delete row"
   },
