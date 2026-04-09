@@ -10,10 +10,21 @@
   box-sizing: border-box;
   font-family: inherit;
   font-size: 14px;
+  line-height: 16px;
   user-select: none;
 }
 
-.large-button:hover:not(:disabled) {
+.large-button.split-button-dropdown {
+  border-inline-start: none;
+  padding: 7px;
+}
+
+.large-button.split-button-dropdown > .icon-type {
+  margin: 0;
+}
+
+.large-button:hover:not(:disabled),
+.split-button .large-button.split-button-dropdown.open {
   background: var(--button-hover-background);
   cursor: pointer;
 }
@@ -31,9 +42,7 @@
 .icon-button {
   display: flex;
   align-items: center;
-  padding-block: 8px;
-  padding-inline-start: 8px;
-  padding-inline-end: 0;
+  padding: 8px;
   border-radius: 4px;
   cursor: pointer;
   background: none;
@@ -42,40 +51,44 @@
   transition: 0.2s ease;
 }
 
-.icon-split-button:hover:not(:disabled) .icon-split-button-button:not(:hover),
-.icon-split-button:hover:not(:disabled) .icon-split-button-dropdown:not(:hover),
-.icon-split-button:has(.open) .icon-split-button-button {
+.icon-button > .icon-type {
+  margin: 0;
+}
+
+.split-button:hover:not(:disabled) .icon-button.split-button-button:not(:hover),
+.split-button:hover:not(:disabled) .icon-button.split-button-dropdown:not(:hover),
+.split-button:has(.open) .icon-button.split-button-button {
   background: var(--hover-highlight-reduced);
 }
 
 .icon-button:hover:not(:disabled),
-.icon-split-button .icon-split-button-dropdown.open,
-.icon-split-button:hover .icon-split-button-dropdown.open:not(:hover) {
+.split-button .icon-button.split-button-dropdown.open,
+.split-button:hover .icon-button.split-button-dropdown.open:not(:hover) {
   background: var(--hover-highlight);
 }
 
-.icon-split-button {
+.split-button {
   display: flex;
 }
 
-.icon-split-button-button {
+.split-button-button {
   border-radius: 4px 0 0 4px;
 }
 
-[dir="rtl"] .icon-split-button-button {
+[dir="rtl"] .split-button-button {
   border-radius: 0 4px 4px 0;
 }
 
-.icon-split-button-dropdown {
+.split-button-dropdown {
   border-radius: 0 4px 4px 0;
 }
 
-[dir="rtl"] .icon-split-button-dropdown {
+[dir="rtl"] .split-button-dropdown {
   border-radius: 4px 0 0 4px;
 }
 
-.icon-split-button:has(.open) .icon-split-button-button,
-.icon-split-button .icon-split-button-dropdown.open {
+.split-button:has(.open) .split-button-button,
+.split-button .split-button-dropdown.open {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }

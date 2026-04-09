@@ -64,17 +64,17 @@
             </div>
           </div>
         </div>
-        <div class="icon-split-button setting-table-dropdown dropdown-parent">
+        <div class="split-button setting-table-dropdown dropdown-parent">
           <button
             :disabled="!addon._enabled"
-            class="icon-button icon-split-button-button"
+            class="large-button split-button-button"
             @click="addTableRow()"
-            :title="msg('addRow')"
           >
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
+            {{ msg("addRow") }}
           </button>
           <dropdown
-            button-class="icon-button icon-split-button-dropdown"
+            button-class="large-button split-button-dropdown"
             :disabled="!addon._enabled"
             :button-title="msg('addPresetRow')"
             align-start="true"
@@ -313,7 +313,7 @@
   }
   .setting-table-row {
     display: flex;
-    margin: 10px 0px;
+    margin-bottom: 10px;
     padding: 4px;
     background: var(--navigation-background);
     border-radius: 8px;
