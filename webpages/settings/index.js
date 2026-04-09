@@ -8,6 +8,7 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
+import resetSettings from "../../libraries/common/reset-settings.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
 import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 
@@ -186,6 +187,7 @@ let fuse;
     },
 
     methods: {
+      resetSettings,
       openMoreSettings: function () {
         this.closePickers();
         this.$els.moresettings.showModal();

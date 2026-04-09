@@ -27,3 +27,10 @@
 .large-button > * {
   vertical-align: middle;
 }
+
+.large-button.danger:hover,
+.large-button.danger:focus {
+  color: var(--white-text);
+  background-color: var(--warning-background);
+  border-color: var(--warning-border);
+}
