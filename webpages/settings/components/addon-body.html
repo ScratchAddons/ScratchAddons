@@ -17,11 +17,7 @@
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
         <div v-show="expanded && addon._enabled" v-if="addon.settings" class="split-button dropdown-parent">
-          <button
-            class="icon-button split-button-button"
-            title="{{ msg('resetToDefault') }}"
-            @click="loadDefaults"
-          >
+          <button class="icon-button split-button-button" title="{{ msg('resetToDefault') }}" @click="loadDefaults">
             <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
           </button>
           <dropdown button-class="icon-button split-button-dropdown" :button-title="msg('importExport')">

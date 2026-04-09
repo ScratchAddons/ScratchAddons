@@ -65,11 +65,7 @@
           </div>
         </div>
         <div class="split-button setting-table-dropdown dropdown-parent">
-          <button
-            :disabled="!addon._enabled"
-            class="large-button split-button-button"
-            @click="addTableRow()"
-          >
+          <button :disabled="!addon._enabled" class="large-button split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
             {{ msg("addRow") }}
           </button>
