@@ -76,17 +76,15 @@ h1 {
 
 .addons-block::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
+  z-index: 199; /* Just beflow .categories-block.smallMode */
   pointer-events: none;
-  transition: opacity 0.25s;
+  transition: background-color 0.25s;
 }
 
 .addons-block.darken::after {
-  opacity: 1;
-  pointer-events: auto;
+  background-color: var(--modal-overlay);
 }
 
 .addons-container {
