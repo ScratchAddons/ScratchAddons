@@ -228,7 +228,7 @@
       </div>
 
       <!-- This is the main menu, where the searchbar and the addon items are located -->
-      <div class="addons-block">
+      <div class="addons-block" :class="{darken: smallMode && categoryOpen}">
         <div class="addons-block-header">
           <div v-if="!isIframe" class="category-header-title" v-cloak>
             <button

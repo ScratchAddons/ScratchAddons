@@ -70,6 +70,24 @@ h1 {
   flex-direction: column;
 }
 
+.addons-block {
+  position: relative;
+}
+
+.addons-block::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.addons-block.darken::after {
+  opacity: 1;
+}
+
 .addons-container {
   overflow-y: auto;
   padding: 20px;
