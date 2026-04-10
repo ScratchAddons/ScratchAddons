@@ -232,10 +232,9 @@
         <div class="addons-block-header">
           <div v-if="!isIframe" class="category-header-title" v-cloak>
             <button
-              id="sidebar-toggle"
               class="arrow-button"
               :title="msg('toggleSidebar')"
-              @click="sidebarToggle()"
+              @click="categoryOpen = !categoryOpen"
               v-cloak
             >
               <img src="../../images/icons/menu.svg" draggable="false" />

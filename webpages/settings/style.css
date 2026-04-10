@@ -214,7 +214,6 @@ h1 {
 .header-button:focus-visible {
   outline: 2px solid var(--white-text);
 }
-.sidebarToggleOpen,
 .header-button:hover {
   background: var(--header-hover-darken);
 }
@@ -298,8 +297,7 @@ body.iframe .search-box input {
     margin-inline-start: 42px;
   }
 
-  body[v-cloak] .categories-block,
-  body[v-cloak] .categories-shrink {
+  body[v-cloak] .categories-block {
     display: none;
   }
 }
