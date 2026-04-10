@@ -86,6 +86,7 @@ h1 {
 
 .addons-block.darken::after {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .addons-container {
