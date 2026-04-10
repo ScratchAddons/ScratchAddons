@@ -231,12 +231,7 @@
       <div class="addons-block" :class="{darken: smallMode && categoryOpen}">
         <div class="addons-block-header">
           <div v-if="!isIframe" class="category-header-title" v-cloak>
-            <button
-              class="arrow-button"
-              :title="msg('toggleSidebar')"
-              @click="categoryOpen = !categoryOpen"
-              v-cloak
-            >
+            <button class="arrow-button" :title="msg('toggleSidebar')" @click="categoryOpen = !categoryOpen" v-cloak>
               <img src="../../images/icons/menu.svg" draggable="false" />
             </button>
 
