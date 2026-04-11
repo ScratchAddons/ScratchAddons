@@ -94,9 +94,13 @@ export default async function ({ template }) {
         let list = this.addonSettings[this.setting.id];
         list.splice(newIndex, 0, list.splice(oldIndex, 1)[0]);
         this.updateSettings();
-        // Keep move button focused after reordering rows
+        this.sortable.captureAnimationState();
         const focusedElement = document.activeElement;
-        setTimeout(() => focusedElement.focus(), 0);
+        setTimeout(() => {
+          this.sortable.animateAll();
+          // Keep move button focused
+          focusedElement.focus();
+        }, 0);
       },
       deleteTableRow(i) {
         this.addonSettings[this.setting.id].splice(i, 1);
@@ -134,14 +138,14 @@ export default async function ({ template }) {
     },
     directives: {
       sortable() {
-        const sortable = new window.Sortable(this.el, {
+        this.vm.sortable = new window.Sortable(this.el, {
           handle: ".handle",
           animation: 300,
           onUpdate: (event) => this.vm.moveTableRow(event.oldIndex, event.newIndex),
           disabled: !this.vm.addon._enabled,
         });
         this.vm.$parent.$on("toggle-addon-request", (state) => {
-          sortable.option("disabled", !state);
+          this.vm.sortable.option("disabled", !state);
         });
       },
     },
