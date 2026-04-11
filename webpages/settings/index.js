@@ -190,7 +190,7 @@ let fuse;
         this.closePickers();
         this.$els.moresettings.showModal();
         if (vue.smallMode) {
-          vue.sidebarToggle();
+          this.categoryOpen = false;
         }
         location.hash = "";
       },
@@ -228,9 +228,6 @@ let fuse;
           // 2s (animation length) + 1ms
           setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
         }, 0);
-      },
-      sidebarToggle: function () {
-        this.categoryOpen = !this.categoryOpen;
       },
       msg(message, ...params) {
         return chrome.i18n.getMessage(message, ...params);
@@ -356,9 +353,8 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target?.closest("#sidebar-toggle")) return;
         if (this.categoryOpen && this.smallMode) {
-          this.sidebarToggle();
+          this.categoryOpen = false;
         }
       },
     },

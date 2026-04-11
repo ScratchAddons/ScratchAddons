@@ -70,6 +70,23 @@ h1 {
   flex-direction: column;
 }
 
+.addons-block {
+  position: relative;
+}
+
+.addons-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 199; /* Just beflow .categories-block.smallMode */
+  pointer-events: none;
+  transition: background-color 0.25s;
+}
+
+.addons-block.darken::after {
+  background-color: var(--modal-overlay);
+}
+
 .addons-container {
   overflow-y: auto;
   padding: 20px;
@@ -123,11 +140,13 @@ h1 {
   border-bottom: 1px solid var(--control-border);
   display: flex;
   align-items: center;
-  padding: 10px 40px;
+  padding: 10px 30px;
   user-select: none;
 }
 
 .category-header-title {
+  display: flex;
+  align-items: center;
   flex-grow: 1;
   font-size: 16px;
   font-weight: 500;
@@ -195,7 +214,6 @@ h1 {
 .header-button:focus-visible {
   outline: 2px solid var(--white-text);
 }
-.sidebarToggleOpen,
 .header-button:hover {
   background: var(--header-hover-darken);
 }
@@ -273,33 +291,13 @@ body.iframe .search-box input {
   flex-basis: 0;
 }
 
-.categories-shrink {
-  text-align: right;
-  bottom: 0;
-  position: fixed;
-  padding: 0;
-  margin: 5px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  user-select: none;
-}
-.categories-shrink img {
-  vertical-align: middle;
-  filter: var(--content-icon-filter);
-}
-.flipped {
-  transform: scaleX(-1);
-}
-
 /* Hide categories and prevent logo from jumping while loading in the popup and small mode */
 @media (max-width: 1099px) {
   body[v-cloak] .logo {
     margin-inline-start: 42px;
   }
 
-  body[v-cloak] .categories-block,
-  body[v-cloak] .categories-shrink {
+  body[v-cloak] .categories-block {
     display: none;
   }
 }

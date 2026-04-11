@@ -177,17 +177,6 @@
   </head>
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
-      <button
-        id="sidebar-toggle"
-        class="header-button"
-        :class="{sidebarToggleOpen: categoryOpen === true}"
-        :title="msg('toggleSidebar')"
-        @click="sidebarToggle()"
-        v-cloak
-        v-show="smallMode"
-      >
-        <img src="../../images/icons/menu.svg" draggable="false" />
-      </button>
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
       <button
@@ -232,28 +221,20 @@
           <img src="../../images/icons/comment.svg" draggable="false" />
           <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
-        <button v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
+        <button v-cloak class="category" style="margin-top: 12px" @click="openMoreSettings()">
           <img src="../../images/icons/wrench.svg" draggable="false" />
           <span>{{ msg("moreSettings") }}</span>
         </button>
       </div>
-      <button
-        v-show="!isIframe && smallMode === false"
-        class="categories-shrink"
-        @click="sidebarToggle()"
-        :title="msg('toggleSidebar')"
-      >
-        <img
-          src="../../images/icons/left-arrow.svg"
-          :class="{flipped: categoryOpen === (direction() === 'rtl')}"
-          draggable="false"
-        />
-      </button>
 
       <!-- This is the main menu, where the searchbar and the addon items are located -->
-      <div class="addons-block">
+      <div class="addons-block" :class="{darken: smallMode && categoryOpen}">
         <div class="addons-block-header">
           <div v-if="!isIframe" class="category-header-title" v-cloak>
+            <button class="arrow-button" :title="msg('toggleSidebar')" @click="categoryOpen = !categoryOpen" v-cloak>
+              <img src="../../images/icons/menu.svg" draggable="false" />
+            </button>
+
             <div v-if="relatedAddonsOpen" class="related-addons-header">
               <button class="arrow-button" :title="msg('back')" @click="backRelatedAddon()">
                 <img src="../../images/icons/left-arrow.svg" draggable="false" />
