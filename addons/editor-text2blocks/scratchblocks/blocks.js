@@ -365,6 +365,8 @@ export function applyOverrides(info, overrides) {
       info.isReset = true;
     }
   }
+  // We regard "cat" shape as "hat", because "cat" is a kind of "hat".
+  if (info.shape === "cat") info.shape = "hat";
   info.categoryIsDefault = info.category === originalCategory;
   info.shapeIsDefault = info.shape === originalShape;
 }

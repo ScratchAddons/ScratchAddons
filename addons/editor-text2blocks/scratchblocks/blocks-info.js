@@ -362,6 +362,10 @@ export const blocks_info = {
     category: "motion",
     params: [
       {
+        name: "SECS",
+        opcode: "math_positive_number",
+      },
+      {
         name: "TO",
         opcode: "motion_goto_menu",
         type: DROPDOWN,
@@ -370,10 +374,6 @@ export const blocks_info = {
           MOTION_GLIDETO_RANDOM: "_random_",
         },
         dynamicOptions: "sprites",
-      },
-      {
-        name: "SECS",
-        opcode: "math_positive_number",
       },
     ],
   },
@@ -682,10 +682,24 @@ export const blocks_info = {
       },
     ],
   },
-  sound_seteffecto: {
+  sound_seteffectto: {
+    id: "SOUND_SETEFFECTO",
     shape: "stack",
     category: "sound",
-    params: [],
+    params: [
+      {
+        name: "EFFECT",
+        type: FIELD_DROPDOWN,
+        options: {
+          SOUND_EFFECTS_PITCH: "PITCH",
+          SOUND_EFFECTS_PAN: "PAN",
+        },
+      },
+      {
+        name: "VALUE",
+        opcode: "math_number",
+      },
+    ],
   },
   sound_cleareffects: {
     shape: "stack",
@@ -712,7 +726,12 @@ export const blocks_info = {
   sound_changevolumeby: {
     shape: "stack",
     category: "sound",
-    params: [],
+    params: [
+      {
+        name: "VOLUME",
+        opcode: "math_number",
+      },
+    ],
   },
   sound_setvolumeto: {
     shape: "stack",
@@ -1027,13 +1046,13 @@ export const blocks_info = {
     category: "list",
     params: [
       {
+        name: "ITEM",
+        opcode: "text",
+      },
+      {
         name: "LIST",
         type: FIELD_DROPDOWN,
         dynamicOptions: "lists",
-      },
-      {
-        name: "ITEM",
-        opcode: "text",
       },
     ],
   },
@@ -1042,13 +1061,13 @@ export const blocks_info = {
     category: "list",
     params: [
       {
+        name: "INDEX",
+        opcode: "math_integer",
+      },
+      {
         name: "LIST",
         type: FIELD_DROPDOWN,
         dynamicOptions: "lists",
-      },
-      {
-        name: "INDEX",
-        opcode: "math_integer",
       },
     ],
   },
@@ -1538,7 +1557,16 @@ export const blocks_info = {
   operator_letterof: {
     shape: "reporter",
     category: "operators",
-    params: [],
+    params: [
+      {
+        name: "LETTER",
+        opcode: "math_number",
+      },
+      {
+        name: "STRING",
+        opcode: "text",
+      },
+    ],
   },
   operator_length: {
     shape: "reporter",
@@ -2608,10 +2636,11 @@ for (const [opcode, block] of Object.entries(blocks_info)) {
 }
 export const toOpcode = (str) => {
   if (!str) return "";
+  if (specialOpcodesMap[str]) {
+    return specialOpcodesMap[str];
+  }
   if (str.includes(".")) {
     return str.replace(".", "_");
-  } else if (specialOpcodesMap[str]) {
-    return specialOpcodesMap[str];
   }
   return str.toLowerCase().replace("operators_", "operator_");
 };

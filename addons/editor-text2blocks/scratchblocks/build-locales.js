@@ -2,6 +2,16 @@ import extraAliases from "./extra_aliases.js";
 import { blocks_info, toOpcode } from "./blocks-info.js";
 import { extensionList } from "./extensions.js";
 
+const faceParts = [
+  "faceSensing.nose",
+  "faceSensing.mouth",
+  "faceSensing.leftEye",
+  "faceSensing.rightEye",
+  "faceSensing.betweenEyes",
+  "faceSensing.leftEar",
+  "faceSensing.rightEar",
+  "faceSensing.topOfHead",
+]
 const soundEffects = ["SOUND_EFFECTS_PITCH", "SOUND_EFFECTS_PAN"];
 const microbitWhen = ["microbit.gesturesMenu.moved", "microbit.gesturesMenu.shaken", "microbit.gesturesMenu.jumped"];
 const osis = ["CONTROL_STOP_OTHER"];
@@ -36,6 +46,7 @@ const buildLocale = (code, rawLocale) => {
   const locale = {
     commands: {},
     dropdowns: {},
+    faceParts: listFor(faceParts),
     soundEffects: listFor(soundEffects),
     microbitWhen: listFor(microbitWhen),
     osis: listFor(osis),
