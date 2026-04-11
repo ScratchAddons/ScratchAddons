@@ -23,7 +23,7 @@ export default async function ({ template }) {
         event.stopPropagation();
         if (this.selectedCategory === this.category.id) {
           if (this.$root.smallMode) {
-            vue.categoryOpen = false;
+            this.$root.categoryOpen = false;
           } else {
             if (this.category.parent || Date.now() - this.lastClick < 350) return;
             this.$root.selectedCategory = "all";
