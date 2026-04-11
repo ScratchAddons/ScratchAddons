@@ -94,6 +94,9 @@ export default async function ({ template }) {
         let list = this.addonSettings[this.setting.id];
         list.splice(newIndex, 0, list.splice(oldIndex, 1)[0]);
         this.updateSettings();
+        // Keep move button focused after reordering rows
+        const focusedElement = document.activeElement;
+        setTimeout(() => focusedElement.focus(), 0);
       },
       deleteTableRow(i) {
         this.addonSettings[this.setting.id].splice(i, 1);
