@@ -15,17 +15,7 @@ export default async function ({ addon, console, msg }) {
     ...(userLang !== "en" ? { [userLang]: getLocale(userLang, redux.state, Blockly) } : {}),
   });
 
-  const editorMenu = document.querySelector("[class^=menu-bar_main-menu_]");
-  const devider = document.createElement("div");
-  devider.className = addon.tab.scratchClass("divider_divider", "menu-bar_divider");
-  editorMenu.appendChild(devider);
-
-  const menuItem = document.createElement("div");
-  menuItem.className = addon.tab.scratchClass("menu-bar_menu-bar-item", "menu-bar_no-offset", "menu-bar_hoverable");
-  menuItem.textContent = msg("main");
-  editorMenu.appendChild(menuItem);
-
-  menuItem.addEventListener("click", async () => {
+  async function openText2BlocksModal() {
     const modal = addon.tab.createModal(msg("main"), {
       isOpen: true,
       useEditorClasses: true,
@@ -64,6 +54,18 @@ export default async function ({ addon, console, msg }) {
 
     // Switch to code tab
     tabManager.switchTab("code-tab");
+
+    // Auto-paste clipboard content if setting is enabled
+    if (addon.settings.get("autoPaste")) {
+      try {
+        const clipboardText = await navigator.clipboard.readText();
+        if (clipboardText) {
+          textarea.value = clipboardText;
+        }
+      } catch (e) {
+        // Clipboard access denied or unavailable, ignore
+      }
+    }
 
     // Used to record variable mapping selections
     const variableMappings = new Map(); // key: variableName, value: { type: 'new' | 'existing', data: {...} }
@@ -592,7 +594,28 @@ export default async function ({ addon, console, msg }) {
         alert("Apply failed: " + error.message);
       }
     });
-  });
+  }
+
+  addon.tab.createBlockContextMenu(
+    (items) => {
+      if (addon.self.disabled) return items;
+
+      const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+      const insertBeforeIndex = pasteItemIndex !== -1 ? pasteItemIndex : items.length;
+
+      items.splice(insertBeforeIndex, 0, { separator: true });
+      items.splice(insertBeforeIndex + 1, 0, {
+        enabled: true,
+        text: msg("main"),
+        callback: () => {
+          openText2BlocksModal();
+        },
+      });
+
+      return items;
+    },
+    { workspace: true }
+  );
 
   function getVariablesOfTarget(target, type = "variable") {
     type = type === "list" ? "list" : "";
@@ -603,13 +626,4 @@ export default async function ({ addon, console, msg }) {
       ])
     );
   }
-
-  addon.self.addEventListener("disabled", () => {
-    devider.hidden = true;
-    menuItem.style.display = "none";
-  });
-  addon.self.addEventListener("reenabled", () => {
-    devider.hidden = false;
-    menuItem.style.display = "flex";
-  });
 }

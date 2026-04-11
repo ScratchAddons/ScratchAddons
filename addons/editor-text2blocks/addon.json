@@ -2,6 +2,12 @@
   "name": "Scratchblocks Text to Blocks",
   "description": "Convert Scratchblocks-formatted text into Scratch blocks in the editor.",
   "tags": ["editor", "codeEditor"],
+  "info": [
+    {
+      "text": "Tip: Right-click the workspace and select \"Convert Scratchblocks Text to Blocks\" to convert the text into blocks.",
+      "id": "useInstruction"
+    }
+  ],
   "credits": [
     {
       "name": "LuYifei2011",
@@ -10,6 +16,15 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "settings": [
+    {
+      "name": "auto paste",
+      "id": "autoPaste",
+      "type": "boolean",
+      "default": true,
+      "description": "Automatically paste the scratchblocks text into the text area."
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
