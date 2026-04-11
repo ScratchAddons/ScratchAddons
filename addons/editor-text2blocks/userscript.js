@@ -10,6 +10,10 @@ export default async function ({ addon, console, msg }) {
   const redux = addon.tab.redux;
   const userLang = redux.state.locales.locale;
 
+  // Record right-click position for block placement
+  let menuMouseX = 0;
+  let menuMouseY = 0;
+
   loadLanguages({
     en: getLocale("en", redux.state, Blockly),
     ...(userLang !== "en" ? { [userLang]: getLocale(userLang, redux.state, Blockly) } : {}),
@@ -583,6 +587,18 @@ export default async function ({ addon, console, msg }) {
         // Apply variable mappings, replace variable references in blocks
         text2blocks.applyVariableMappings(finalVariableMappings);
 
+        // Place top-level blocks at the recorded right-click position with offsets
+        const VERTICAL_OFFSET = 50;
+        const HORIZONTAL_OFFSET = 80;
+        let offsetIndex = 0;
+        for (const block of text2blocks.blockJson) {
+          if (block.topLevel) {
+            block.x = menuMouseX + HORIZONTAL_OFFSET * offsetIndex;
+            block.y = menuMouseY + VERTICAL_OFFSET * offsetIndex;
+            offsetIndex++;
+          }
+        }
+
         await vm.shareBlocksToTarget(text2blocks.blockJson, target.id);
         vm.emitWorkspaceUpdate();
         vm.emitTargetsUpdate();
@@ -599,6 +615,30 @@ export default async function ({ addon, console, msg }) {
   addon.tab.createBlockContextMenu(
     (items) => {
       if (addon.self.disabled) return items;
+
+      // Capture right-click workspace coordinates from the current gesture
+      const gesture = workspace.currentGesture_;
+      if (gesture) {
+        const event = Blockly.registry ? gesture.mostRecentEvent : gesture.mostRecentEvent_;
+        if (event) {
+          const svgPoint = Blockly.utils.mouseToSvg
+            ? Blockly.utils.mouseToSvg(event, workspace.getParentSvg(), workspace.getInverseScreenCTM())
+            : Blockly.browserEvents.mouseToSvg(event, workspace.getParentSvg(), workspace.getInverseScreenCTM());
+          const wsPoint = Blockly.utils.svgMath
+            ? Blockly.utils.svgMath.screenToWsCoordinates(workspace, svgPoint)
+            : svgPoint;
+          // For old Blockly, manually convert from SVG to workspace coordinates
+          if (!Blockly.utils.svgMath) {
+            const scale = workspace.scale;
+            const origin = workspace.getOriginOffsetInPixels();
+            menuMouseX = (svgPoint.x - origin.x) / scale;
+            menuMouseY = (svgPoint.y - origin.y) / scale;
+          } else {
+            menuMouseX = wsPoint.x;
+            menuMouseY = wsPoint.y;
+          }
+        }
+      }
 
       const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
       const insertBeforeIndex = pasteItemIndex !== -1 ? pasteItemIndex : items.length;
