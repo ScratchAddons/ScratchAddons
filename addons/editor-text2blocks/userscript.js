@@ -111,7 +111,7 @@ export default async function ({ addon, console, msg }) {
       if (text2blocks.variableNames.size === 0 && text2blocks.listNames.size === 0) {
         const emptyMsg = document.createElement("p");
         emptyMsg.textContent = msg("no-variables-lists");
-        emptyMsg.style.color = "var(--editorDarkMode-input-transparentText, rgba(255, 255, 255, 0.4))";
+        emptyMsg.style.color = "var(--editorDarkMode-input-transparentText, hsla(225, 15%, 40%, 0.6))";
         variablesPanel.appendChild(emptyMsg);
         return;
       }
@@ -121,7 +121,7 @@ export default async function ({ addon, console, msg }) {
         const varTitle = document.createElement("h3");
         varTitle.textContent = msg("variables");
         varTitle.style.marginBottom = "10px";
-        varTitle.style.color = "var(--editorDarkMode-page-text, #ffffff)";
+        varTitle.style.color = "var(--editorDarkMode-page-text, #575e75)";
         variablesPanel.appendChild(varTitle);
 
         const varTable = createVariablesTable(Array.from(text2blocks.variableNames), "variable");
@@ -134,7 +134,7 @@ export default async function ({ addon, console, msg }) {
         listTitle.textContent = msg("lists");
         listTitle.style.marginBottom = "10px";
         listTitle.style.marginTop = "20px";
-        listTitle.style.color = "var(--editorDarkMode-page-text, #ffffff)";
+        listTitle.style.color = "var(--editorDarkMode-page-text, #575e75)";
         variablesPanel.appendChild(listTitle);
 
         const listTable = createVariablesTable(Array.from(text2blocks.listNames), "list");
@@ -153,7 +153,7 @@ export default async function ({ addon, console, msg }) {
       if (!hasErrors && !hasWarnings) {
         const emptyMsg = document.createElement("p");
         emptyMsg.textContent = msg("no-issues");
-        emptyMsg.style.color = "var(--editorDarkMode-input-transparentText, rgba(255, 255, 255, 0.4))";
+        emptyMsg.style.color = "var(--editorDarkMode-input-transparentText, hsla(225, 15%, 40%, 0.6))";
         issuesPanel.appendChild(emptyMsg);
         return;
       }
@@ -220,7 +220,7 @@ export default async function ({ addon, console, msg }) {
         issuesPanel.appendChild(errorTitle);
 
         const errorList = document.createElement("ul");
-        errorList.style.color = "var(--editorDarkMode-page-text, #ffffff)";
+        errorList.style.color = "var(--editorDarkMode-page-text, #575e75)";
         errorList.style.marginBottom = "20px";
         for (const error of text2blocks.errors) {
           const li = document.createElement("li");
@@ -240,7 +240,7 @@ export default async function ({ addon, console, msg }) {
         issuesPanel.appendChild(warningTitle);
 
         const warningList = document.createElement("ul");
-        warningList.style.color = "var(--editorDarkMode-page-text, #ffffff)";
+        warningList.style.color = "var(--editorDarkMode-page-text, #575e75)";
         for (const warning of text2blocks.warnings) {
           const li = document.createElement("li");
           li.textContent = formatErrorMessage(warning);
