@@ -104,9 +104,8 @@ button {
   content: "";
   display: block;
   position: absolute;
-  left: 10px;
-  right: 10px;
   bottom: 0;
+  width: calc(100% - 20px);
   height: 4px;
   background-color: var(--orange);
   border-radius: 4px 4px 0 0;

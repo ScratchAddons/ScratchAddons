@@ -75,7 +75,7 @@
     display: block;
     width: 4px;
     border-radius: 0 4px 4px 0;
-    height: 40px;
+    height: calc(100% - 8px);
     background: var(--orange);
     position: absolute;
     left: 0;
@@ -88,9 +88,6 @@
   .category.sel::before {
     opacity: 1;
   }
-  .category.hasParent::before {
-    height: 25px;
-  }
 
   .category img {
     height: 18px;
@@ -99,5 +96,11 @@
   }
   .category span {
     margin-inline-start: 15px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .category {
+      transition-property: background-color;
+    }
   }
 </style>
