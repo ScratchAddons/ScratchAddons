@@ -23,11 +23,22 @@
 }
 
 .categories-block.smallMode.closed {
-  transform: translateX(-100%);
   visibility: hidden;
 }
-[dir="rtl"] .categories-block.smallMode.closed {
-  transform: translateX(100%);
+
+@media (prefers-reduced-motion: no-preference) {
+  .categories-block.smallMode.closed {
+    transform: translateX(-100%);
+  }
+  [dir="rtl"] .categories-block.smallMode.closed {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .categories-block.smallMode.closed {
+    opacity: 0;
+  }
 }
 
 .categories-block.closed:not(.smallMode) {
