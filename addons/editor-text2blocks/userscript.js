@@ -463,7 +463,7 @@ export default async function ({ addon, console, msg }) {
     parseButton.addEventListener("click", async () => {
       try {
         const text = textarea.value;
-        text2blocks.text2blocks(text, userLang !== "en" ? [userLang, "en"] : ["en"]);
+        text2blocks.text2blocks(text, userLang !== "en" ? ["en", userLang] : ["en"]);
         console.log("Converted blocks JSON:", text2blocks.blockJson);
         console.log("Variable names:", text2blocks.variableNames);
         console.log("List names:", text2blocks.listNames);

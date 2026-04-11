@@ -1554,7 +1554,8 @@ export const blocks_info = {
       },
     ],
   },
-  operator_letterof: {
+  operator_letter_of: {
+    id: "OPERATORS_LETTEROF",
     shape: "reporter",
     category: "operators",
     params: [
