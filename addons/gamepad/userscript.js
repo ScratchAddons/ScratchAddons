@@ -463,10 +463,14 @@ export default async function ({ addon, console, msg }) {
   gamepad.addEventListener("mouseup", handleGamepadMouseUp);
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
 
+  // Add button after Scratch adds the Set Thumbnail button - otherwise the order will be wrong
+  await addon.tab.redux.waitForState((state) =>
+    ["SHOWING_WITH_ID", "SHOWING_WITHOUT_ID"].includes(state.scratchGui.projectState.loadingState)
+  );
   while (true) {
     const target = await addon.tab.waitForElement(
       // Full screen button
-      '[class*="stage-header_stage-size-row_"] [class*="button_outlined-button_"], [class*="stage-header_unselect-wrapper_"] > [class*="button_outlined-button_"]',
+      '[class*="stage-header_right"] > [class*="button_outlined-button_"]:last-child, [class*="stage-header_unselect-wrapper_"] > [class*="button_outlined-button_"]',
       {
         markAsSeen: true,
         reduxEvents: [
