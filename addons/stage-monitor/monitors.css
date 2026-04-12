@@ -19,8 +19,8 @@ body [class*="monitor_monitor-container_"],
   color: var(--stageMonitor-listHeaderText);
 }
 
-[class*="monitor_monitor-container_"],
-[class*="monitor_large-value_"] {
+body [class*="monitor_monitor-container_"],
+body [class*="monitor_large-value_"] {
   border-radius: calc(var(--stageMonitor-monitorRadius) * 1px);
 }
 

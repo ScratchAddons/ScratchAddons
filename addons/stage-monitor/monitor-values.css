@@ -1,6 +1,6 @@
-[class*="monitor_value_"],
-[class*="monitor_large-value_"],
-[class*="monitor_list-value_"] {
+body [class*="monitor_value_"],
+body [class*="monitor_large-value_"],
+body [class*="monitor_list-value_"] {
   background-color: var(--stageMonitor-monitorValueBg) !important;
   color: var(--stageMonitor-monitorValueText) !important;
 }
