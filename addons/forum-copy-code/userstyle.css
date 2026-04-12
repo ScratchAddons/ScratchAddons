@@ -1,6 +1,8 @@
 .sa-copyCodeDiv {
   text-align: right;
   height: 0px;
+  position: relative;
+  z-index: 1;
 }
 .sa-copyCodeButton {
   opacity: 0.75;
