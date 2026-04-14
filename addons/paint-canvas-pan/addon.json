@@ -1,0 +1,22 @@
+{
+  "name": "Pan costume editor canvas",
+  "description": "Pan the vector costume editor canvas by holding Space and dragging or using middle-click drag. Zoom to cursor with Alt+scroll.",
+  "credits": [
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
+    }
+  ],
+  "libraries": ["scratch-paint"],
+  "tags": ["editor", "costumeEditor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false,
+  "versionAdded": "1.45.0"
+}
