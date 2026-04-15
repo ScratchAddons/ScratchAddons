@@ -73,7 +73,6 @@
             button-class="large-button split-button-dropdown"
             :disabled="!addon._enabled"
             :button-title="msg('addPresetRow')"
-            align-start="true"
           >
             <li tabindex="0" role="menuitem" v-for="preset of setting.presets" @click="addTableRow(preset.values)">
               {{ preset.name }}
@@ -104,7 +103,7 @@
         </div>
       </div>
     </template>
-    <div v-else class="setting-input-container" :class="{ 'full-radius': tableChild }">
+    <div v-else class="setting-input-container dropdown-parent" :class="{ 'full-radius': tableChild }">
       <template v-if="setting.type === 'positive_integer'">
         <input
           type="number"
@@ -239,18 +238,6 @@
 
   .setting-dropdown .clear-button.open {
     background: var(--button-hover-background);
-  }
-  .iframe .setting-dropdown ul {
-    right: auto;
-    left: -100px;
-  }
-  [dir="rtl"] .setting-dropdown ul {
-    right: auto;
-    left: 0;
-  }
-  .iframe[dir="rtl"] .setting-dropdown ul {
-    left: auto;
-    right: -100px;
   }
   .setting-dropdown li > * {
     vertical-align: middle;
