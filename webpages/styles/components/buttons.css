@@ -86,9 +86,3 @@
 [dir="rtl"] .split-button-dropdown {
   border-radius: 4px 0 0 4px;
 }
-
-.split-button:has(.open) .split-button-button,
-.split-button .split-button-dropdown.open {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}

@@ -24,17 +24,18 @@
 
   .dropdown-list {
     position: absolute;
-    top: calc(100% - 1px);
+    top: calc(100% + 5px);
     right: 0;
     margin: 0;
+    min-width: 100px;
     padding: 6px 0;
     display: none;
     z-index: 3;
     border-radius: 4px;
-    border-top-right-radius: 0;
     background: var(--button-background);
     color: var(--content-text);
     border: 1px solid var(--control-border);
+    box-shadow: var(--large-shadow);
   }
 
   .dropdown-btn.open + ul {
@@ -58,14 +59,10 @@
   .dropdown-list.align-start {
     right: auto;
     left: 0;
-    border-radius: 4px;
-    border-top-left-radius: 0;
   }
 
   [dir="rtl"] .dropdown-list.align-start {
     left: auto;
     right: 0;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 0;
   }
 </style>
