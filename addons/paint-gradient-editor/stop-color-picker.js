@@ -1,4 +1,5 @@
 // Standalone HSV + alpha colour picker popup for the gradient stop editor.
+// Has no imports — all external dependencies are injected via the constructor.
 //
 // new StopColorPicker({ msg, redux, triggerUndo, getCachedPaper, onClose })
 //   msg(key)        — localised string lookup (returns the translated string)
@@ -11,9 +12,16 @@
 //   color         — starting colour as any CSS string
 //   onCommit(css) — called live on every change with the new CSS colour string
 
-import { clamp } from "./color-utils.js";
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-const PANEL_SELECTOR = ".sa-extra-stop-picker";
+// Parse "#rrggbb", "rgb(r,g,b)" or "rgba(r,g,b,a)" → [r,g,b,a] (a is 0–1), or null.
+const parseColor = (c) => {
+  if (!c || typeof c !== "string") return null;
+  if (c.startsWith("#") && c.length >= 7)
+    return [...[0, 1, 2].map((i) => parseInt(c.slice(1 + i * 2, 3 + i * 2), 16)), 1];
+  const m = c.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)/);
+  return m ? [+m[1], +m[2], +m[3], m[4] !== undefined ? +m[4] : 1] : null;
+};
 
 export default class StopColorPicker {
   constructor({ msg, redux, triggerUndo, getCachedPaper, onClose }) {
@@ -22,6 +30,48 @@ export default class StopColorPicker {
     this._triggerUndo = triggerUndo;
     this._getCachedPaper = getCachedPaper;
     this._onClose = onClose;
+  }
+
+  // ── Colour math ─────────────────────────────────────────────────────────
+  _rgbToHsv(r, g, b) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+    const max = Math.max(r, g, b),
+      min = Math.min(r, g, b),
+      d = max - min;
+    let h = 0;
+    if (d) {
+      if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+      else if (max === g) h = ((b - r) / d + 2) / 6;
+      else h = ((r - g) / d + 4) / 6;
+    }
+    return [h * 360, max === 0 ? 0 : (d / max) * 100, max * 100];
+  }
+
+  _hsvToRgb(h, s, v) {
+    h /= 360;
+    s /= 100;
+    v /= 100;
+    const i = Math.floor(h * 6),
+      f = h * 6 - i;
+    const p = v * (1 - s),
+      q = v * (1 - f * s),
+      t = v * (1 - (1 - f) * s);
+    return [
+      [v, t, p],
+      [q, v, p],
+      [p, v, t],
+      [p, q, v],
+      [t, p, v],
+      [v, p, q],
+    ][i % 6].map((c) => Math.round(c * 255));
+  }
+
+  _h2(v) {
+    return Math.round(clamp(v, 0, 255))
+      .toString(16)
+      .padStart(2, "0");
   }
 
   // ── Drag helper ──────────────────────────────────────────────────────────
@@ -58,19 +108,18 @@ export default class StopColorPicker {
 
   // Close any open panel immediately (e.g. when the addon is disabled).
   close() {
-    document.querySelector(PANEL_SELECTOR)?._saPickerApi?.close();
+    document.querySelector(".sa-extra-stop-picker")?._close?.();
   }
 
   // ── Open / reuse the picker panel ────────────────────────────────────────
   // color           — starting colour as any CSS string
   // onCommit(color) — called live on every change with the new CSS colour string
   open(color, onCommit, clientX, clientY) {
-    const existing = document.querySelector(PANEL_SELECTOR);
-    const existingApi = existing?._saPickerApi;
-    if (existingApi) {
-      existingApi.setOnCommit(onCommit);
-      existingApi.setColor(color);
-      if (!existing._saPickerWasMoved) {
+    const existing = document.querySelector(".sa-extra-stop-picker");
+    if (existing?._setColor) {
+      existing._setOnCommit(onCommit);
+      existing._setColor(color);
+      if (!existing._wasMoved) {
         existing.style.left = `${clamp(clientX - 10, 4, window.innerWidth - existing.offsetWidth - 4)}px`;
         existing.style.top = `${clamp(clientY + 28, 4, window.innerHeight - existing.offsetHeight - 4)}px`;
       }
@@ -78,16 +127,17 @@ export default class StopColorPicker {
     }
     existing?.remove();
 
-    const initT = tinycolor(color).isValid() ? tinycolor(color) : tinycolor({ r: 128, g: 128, b: 128 });
-    const initHsv = initT.toHsv();
-    let H = initHsv.h,
-      S = initHsv.s * 100,
-      V = initHsv.v * 100,
-      A = initT.toRgb().a * 100;
+    const p0 = parseColor(color) ?? [128, 128, 128, 1];
+    const initHsv = this._rgbToHsv(p0[0], p0[1], p0[2]);
+    let H = initHsv[0],
+      S = initHsv[1],
+      V = initHsv[2],
+      A = (p0[3] ?? 1) * 100;
 
     const getCss = () => {
-      const t = tinycolor({ h: H, s: S / 100, v: V / 100, a: A / 100 });
-      return A >= 99.9 ? t.toHexString() : t.toRgbString();
+      const [r, g, b] = this._hsvToRgb(H, S, V);
+      const a = +(A / 100).toFixed(3);
+      return a >= 0.999 ? `#${this._h2(r)}${this._h2(g)}${this._h2(b)}` : `rgba(${r},${g},${b},${a})`;
     };
     let activeOnCommit = onCommit;
     const commit = () => activeOnCommit(getCss());
@@ -117,7 +167,7 @@ export default class StopColorPicker {
       const origTop = parseInt(panel.style.top, 10) || 0;
       dragHandle.style.cursor = "grabbing";
       const mv = (ev) => {
-        panel._saPickerWasMoved = true;
+        panel._wasMoved = true;
         panel.style.left = `${clamp(origLeft + ev.clientX - startX, 0, window.innerWidth - panel.offsetWidth)}px`;
         panel.style.top = `${clamp(origTop + ev.clientY - startY, 0, window.innerHeight - panel.offsetHeight)}px`;
       };
@@ -219,7 +269,7 @@ export default class StopColorPicker {
     alphaTrack.appendChild(alphaFill);
 
     const updateAlphaBar = () => {
-      const { r, g, b } = tinycolor({ h: H, s: S / 100, v: V / 100 }).toRgb();
+      const [r, g, b] = this._hsvToRgb(H, S, V);
       alphaFill.style.background = `linear-gradient(to right,rgba(${r},${g},${b},0),rgb(${r},${g},${b}))`;
       alphaThumb.style.left = `${2 * KNOB_R + (A / 100) * TRACK_W}px`;
     };
@@ -280,12 +330,9 @@ export default class StopColorPicker {
       this._redux.dispatch({
         type: "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER",
         callback: (hexString) => {
-          const t = tinycolor(hexString);
-          if (t.isValid()) {
-            const hsv = t.toHsv();
-            H = hsv.h;
-            S = hsv.s * 100;
-            V = hsv.v * 100;
+          const c = parseColor(hexString);
+          if (c) {
+            [H, S, V] = this._rgbToHsv(c[0], c[1], c[2]);
             // Eyedropper samples rendered canvas pixels — always opaque. Leave A unchanged.
           }
           drawSV();
@@ -310,7 +357,8 @@ export default class StopColorPicker {
 
     // syncPickers: push current H/S/V/A into all UI widgets.
     const syncPickers = () => {
-      hexInp.value = tinycolor({ h: H, s: S / 100, v: V / 100 }).toHexString();
+      const [r, g, b] = this._hsvToRgb(H, S, V);
+      hexInp.value = `#${this._h2(r)}${this._h2(g)}${this._h2(b)}`;
       alphaInp.value = `${Math.round(A)}%`;
       hueThumb.style.left = `${2 * KNOB_R + (H / 360) * TRACK_W}px`;
       updateAlphaBar();
@@ -318,12 +366,9 @@ export default class StopColorPicker {
     };
 
     hexInp.addEventListener("change", () => {
-      const t = tinycolor(hexInp.value.trim());
-      if (t.isValid()) {
-        const hsv = t.toHsv();
-        H = hsv.h;
-        S = hsv.s * 100;
-        V = hsv.v * 100;
+      const c = parseColor(hexInp.value.trim());
+      if (c) {
+        [H, S, V] = this._rgbToHsv(c[0], c[1], c[2]);
         drawSV();
         syncPickers();
         commit();
@@ -353,6 +398,24 @@ export default class StopColorPicker {
     drawSV();
     syncPickers();
 
+    // Expose updaters so open() can reuse this panel for a different stop.
+    panel._setOnCommit = (fn) => {
+      activeOnCommit = fn;
+    };
+    panel._setColor = (css) => {
+      const c = parseColor(css) ?? [128, 128, 128, 1];
+      [H, S, V] = this._rgbToHsv(c[0], c[1], c[2]);
+      A = (c[3] ?? 1) * 100;
+      drawSV();
+      syncPickers();
+    };
+    // Programmatic close used when the active node is deleted or the addon is disabled.
+    panel._close = () => {
+      this._onClose();
+      panel.remove();
+      document.removeEventListener("mousedown", closeOnOutside, true);
+    };
+
     // Position below + right of cursor, clamped inside viewport.
     const pr = panel.getBoundingClientRect();
     panel.style.left = `${clamp(clientX - 10, 4, window.innerWidth - CW - 24)}px`;
@@ -362,7 +425,7 @@ export default class StopColorPicker {
     // · Click inside the picker panel  → return, picker interaction works normally.
     // · Click on a gradient handle (.sa-grad-overlay) → do NOT remove the panel; let the
     //   event through so the handle's click handler calls open(), which will find this
-    //   panel via its explicit panel API without rebuilding or repositioning it.
+    //   panel via _setColor and swap the colour without rebuilding or repositioning.
     // · Click on empty space → stopPropagation (keep fill popup open) + remove panel.
     const closeOnOutside = (e) => {
       // While Scratch's eyedropper is active, don't close or stop the mousedown —
@@ -376,28 +439,6 @@ export default class StopColorPicker {
       this._onClose();
       panel.remove();
       document.removeEventListener("mousedown", closeOnOutside, true);
-    };
-    // Picker state lives in this open() closure. Expose a small API on the panel element so
-    // a later open() call can retarget the existing DOM to a different stop without rebuilding it.
-    panel._saPickerApi = {
-      setOnCommit: (fn) => {
-        activeOnCommit = fn;
-      },
-      setColor: (css) => {
-        const t = tinycolor(css).isValid() ? tinycolor(css) : tinycolor({ r: 128, g: 128, b: 128 });
-        const hsv = t.toHsv();
-        H = hsv.h;
-        S = hsv.s * 100;
-        V = hsv.v * 100;
-        A = t.toRgb().a * 100;
-        drawSV();
-        syncPickers();
-      },
-      close: () => {
-        this._onClose();
-        panel.remove();
-        document.removeEventListener("mousedown", closeOnOutside, true);
-      },
     };
     setTimeout(() => document.addEventListener("mousedown", closeOnOutside, true), 150);
   }

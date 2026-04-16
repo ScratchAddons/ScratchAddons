@@ -1,25 +1,43 @@
-// Pure colour-conversion helpers shared by the gradient editor modules.
-// No side-effects, no DOM access — safe to import from any context.
-// Colour operations delegate to the tinycolor global (loaded by userscript.js).
-
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 // Convert a paper.js Color to "#rrggbb"
-export const colorToHex = (c) => tinycolor({ r: c.red * 255, g: c.green * 255, b: c.blue * 255 }).toHexString();
+export const colorToHex = (c) =>
+  "#" +
+  [c.red, c.green, c.blue]
+    .map((v) =>
+      Math.round(clamp(v, 0, 1) * 255)
+        .toString(16)
+        .padStart(2, "0")
+    )
+    .join("");
 
-// Parse any CSS colour string → [r,g,b,a] (r/g/b 0–255, a 0–1), or null.
+// Parse "#rrggbb", "rgb(r,g,b)" or "rgba(r,g,b,a)" → [r,g,b,a] (a is 0–1), or null.
 export const parseColor = (c) => {
-  const t = tinycolor(c);
-  if (!t.isValid()) return null;
-  const { r, g, b, a } = t.toRgb();
-  return [r, g, b, a];
+  if (!c || typeof c !== "string") return null;
+  if (c.startsWith("#") && c.length >= 7)
+    return [...[0, 1, 2].map((i) => parseInt(c.slice(1 + i * 2, 3 + i * 2), 16)), 1];
+  const m = c.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)/);
+  return m ? [+m[1], +m[2], +m[3], m[4] !== undefined ? +m[4] : 1] : null;
 };
 
 // Normalise any CSS colour string to "#rrggbb" (strips alpha; redux dispatch expects hex).
-export const ensureHex = (c) => tinycolor(c).toHexString();
+export const ensureHex = (c) => {
+  const arr = parseColor(c);
+  return arr
+    ? "#" +
+        arr
+          .slice(0, 3)
+          .map((v) =>
+            Math.round(clamp(v, 0, 255))
+              .toString(16)
+              .padStart(2, "0")
+          )
+          .join("")
+    : c;
+};
 
 // Convert a paper.js Color to a CSS string, preserving alpha when < 1.
 export const colorToCss = (c) => {
-  const t = tinycolor({ r: c.red * 255, g: c.green * 255, b: c.blue * 255, a: c.alpha });
-  return c.alpha >= 1 ? t.toHexString() : t.toRgbString();
+  if (!c || c.alpha >= 1) return colorToHex(c);
+  return `rgba(${Math.round(c.red * 255)},${Math.round(c.green * 255)},${Math.round(c.blue * 255)},${Math.round(c.alpha * 1000) / 1000})`;
 };

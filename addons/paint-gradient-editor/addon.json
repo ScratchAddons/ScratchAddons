@@ -31,7 +31,7 @@
   "tags": ["editor", "costumeEditor"],
   "versionAdded": "1.45.0",
   "enabledByDefault": false,
-  "libraries": ["scratch-paint", "tinycolor2"],
+  "libraries": ["scratch-paint"],
   "userscripts": [
     {
       "url": "userscript.js",
