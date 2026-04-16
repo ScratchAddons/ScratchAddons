@@ -1,0 +1,62 @@
+.sa-stroke-opts-wrapper {
+  padding: 4px 8px 8px;
+}
+
+.sa-stroke-opts-inner {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.sa-stroke-opts-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Override the 8px margin the native color-picker label class applies */
+.sa-stroke-opts-group > span {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 0.65rem;
+  color: #575e75;
+}
+
+.sa-stroke-opts-btns {
+  display: flex;
+  gap: 1px;
+}
+
+.sa-stroke-opt-btn {
+  all: unset;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #d9d9d9;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background: white;
+}
+
+.sa-stroke-opt-btn:hover {
+  border-color: #855cd6;
+}
+
+.sa-stroke-opt-btn img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.sa-stroke-opt-active {
+  background: #855cd6;
+  border-color: #855cd6;
+}
+
+.sa-stroke-opt-active img {
+  /* Turn all icon colours white when button is active/selected */
+  filter: brightness(0) invert(1);
+}
