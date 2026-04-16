@@ -1,3 +1,5 @@
+/* The arrow is outside the modal's DOM and its class is shared with the set thumbnail callout */
+[class*="modal-with-arrow_arrow_"]:not([class*="feature-callout-popover_arrow_"]),
 [class*="delete-confirmation-prompt_"] {
   visibility: hidden;
 }
