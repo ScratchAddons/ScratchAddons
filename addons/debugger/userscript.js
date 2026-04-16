@@ -423,6 +423,20 @@ export default async function ({ addon, console, msg }) {
     return parts.join(" ");
   };
 
+  const getScratchBlockCategory = (jsonData) => {
+    if (jsonData.extensions?.includes("scratch_extension")) {
+      return "pen";
+    }
+
+    const colorExtension = jsonData.extensions?.find((extension) => extension.startsWith("colours_"));
+    return colorExtension
+      ? {
+          colours_event: "events",
+          colours_data_lists: "list",
+        }[colorExtension] || colorExtension.replace("colours_", "")
+      : null;
+  };
+
   const createBlockPreview = (targetId, blockId) => {
     const target = vm.runtime.getTargetById(targetId);
     if (!target) {
@@ -499,8 +513,7 @@ export default async function ({ addon, console, msg }) {
       if (!text) {
         return null;
       }
-      // jsonData.extensions is not guaranteed to exist
-      category = jsonData.extensions?.includes("scratch_extension") ? "pen" : jsonData.category;
+      category = getScratchBlockCategory(jsonData);
       const isStatement =
         (jsonData.extensions &&
           (jsonData.extensions.includes("shape_statement") ||
