@@ -1,6 +1,7 @@
 .sa-copyCodeDiv {
   text-align: right;
   height: 0px;
+  /* To make the button appear on top of the scratchblocks, or else it will not be able to be clicked */
   position: relative;
   z-index: 1;
 }
