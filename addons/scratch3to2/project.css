@@ -280,47 +280,6 @@
 :root:not(.sa-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gamepad-container *) {
   display: none;
 }
-[class*="stage-header_rightSection_"] [class*="stage-header_setThumbnailButton_"],
-.sa-set-thumbnail-dropdown-button {
-  height: 26px;
-  padding: 0 10px;
-  background-image: linear-gradient(
-    var(--darkWww-box-scratchr2ButtonGradientTop, white),
-    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
-  );
-  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
-  color: var(--darkWww-box-scratchr2ButtonText, #666);
-  font-size: 13px;
-  font-weight: normal;
-  line-height: 24px;
-  text-shadow: 0 1px var(--darkWww-box, white);
-}
-[dir="ltr"] .sa-set-thumbnail-dropdown-button {
-  border-left: none;
-}
-[dir="rtl"] .sa-set-thumbnail-dropdown-button {
-  border-right: none;
-}
-[class*="stage-header_rightSection_"] [class*="stage-header_setThumbnailButton_"]:hover,
-.sa-set-thumbnail-dropdown-button:hover {
-  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
-  background-image: none;
-}
-[class*="stage-header_rightSection_"] [class*="stage-header_setThumbnailButton_"]:active,
-.sa-set-thumbnail-dropdown-button:active {
-  filter: none;
-}
-.sa-set-thumbnail-dropdown-button img {
-  display: none;
-}
-.sa-set-thumbnail-dropdown-button::before {
-  content: "";
-  display: block;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid var(--darkWww-box-scratchr2BlackText, black);
-  opacity: 0.5;
-}
 [class*="stage-header_embed-scratch-logo_"] img {
   padding: 0.8rem 2.4rem; /* hide original image */
   background-repeat: no-repeat;
@@ -365,11 +324,6 @@
 }
 :root:not(.sa-editor) [class*="stage_green-flag-overlay_"] > img {
   display: none;
-}
-
-/* animated-thumb dropdown */
-.sa-set-thumbnail-upload-button > img {
-  filter: var(--darkWww-box-filterInverted, brightness(0.4));
 }
 
 /* Scratch's Set Thumbnail modal */
@@ -607,7 +561,6 @@
 .subactions .action-buttons .action-button.studio-button::before,
 .subactions .action-buttons .action-button.copy-link-button::before,
 .subactions .action-buttons .action-button.report-button::before,
-.sa-set-thumbnail-button::before,
 #sa-download-button::before {
   display: none;
 }
