@@ -472,6 +472,11 @@ a:hover {
   background-color: transparent;
 }
 
+/* Student deactivation banner */
+.student-deactivation-banner {
+  top: 35px;
+}
+
 /* Footer */
 #footer {
   height: 220px;
