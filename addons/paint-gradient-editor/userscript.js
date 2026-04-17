@@ -3,6 +3,7 @@ import { clamp, colorToHex, ensureHex, colorToCss } from "./color-utils.js";
 import { setupStateHandlers, COLOR_PROPS, COLOR_ACTIONS } from "./state-handlers.js";
 
 export default async function ({ addon, msg, console }) {
+  await addon.tab.loadScript("/libraries/thirdparty/cs/tinycolor-min.js");
   addon.tab.redux.initialize();
 
   // If the Redux store wasn't created yet when initialize() ran (runAtComplete:false timing),
