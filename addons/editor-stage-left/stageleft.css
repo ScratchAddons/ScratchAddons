@@ -65,6 +65,7 @@
 }
 
 /* Move delete button confirmation to the right side */
+/* TODO: override the props of the ModalWithArrow component instead */
 .ReactModal__Content[style*="width: 290px"] {
   /* 290px (popup width)
    + 25px (padding)
@@ -72,11 +73,11 @@
    + 25px (padding) */
   margin-left: 410px !important;
 }
-/* The arrow is outside the modal's DOM and its class is shared with the set thumbnail callout */
-[class*="modal-with-arrow_arrow_"]:not([class*="feature-callout-popover_arrow_"]) {
+[class*="modal-with-arrow_arrow_"][style*="width: 14px"] {
   /* 70px (sprite selector item width)
    + 50px (padding)
-   - 10px (arrow width) */
+   + 4px (popup borders)
+   - 14px (arrow width) */
   margin-left: 110px;
   transform: scaleX(-1);
 }

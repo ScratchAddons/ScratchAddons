@@ -1,5 +1,5 @@
-/* The arrow is outside the modal's DOM and its class is shared with the set thumbnail callout */
-[class*="modal-with-arrow_arrow_"]:not([class*="feature-callout-popover_arrow_"]),
+/* TODO: Override the props of the ModalWithArrow component instead */
+[class*="modal-with-arrow_arrow_"][style*="width: 14px"],
 [class*="delete-confirmation-prompt_"] {
   visibility: hidden;
 }
