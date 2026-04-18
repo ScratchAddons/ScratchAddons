@@ -1,10 +1,14 @@
 {
   "name": "Copy code button on forums",
-  "description": "Adds a \"copy code\" button above code boxes in forum posts that copies the contents into the clipboard.",
+  "description": "Adds a \"copy code\" button above code boxes and scratchblocks in forum posts that copies the contents into the clipboard.",
   "credits": [
     {
       "name": "CST1229",
       "link": "https://github.com/CST1229/"
+    },
+    {
+      "name": "LuYifei2011",
+      "link": "https://github.com/LuYifei2011/"
     }
   ],
   "userscripts": [
