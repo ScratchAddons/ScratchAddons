@@ -631,17 +631,6 @@
   height: 46px; /* two lines */
 }
 
-/* animated-thumb modal */
-.sa-animated-thumb-popup-content {
-  padding: 0;
-}
-.sa-animated-thumb-popup-actions button {
-  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
-}
-.sa-animated-thumb-popup-actions button:hover {
-  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
-}
-
 /* Extensions row */
 .preview .project-notes .preview-row {
   /* Extension list is inside project notes on small screens */
