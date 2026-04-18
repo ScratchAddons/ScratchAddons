@@ -9,13 +9,13 @@ export default async function ({ addon, console }) {
   const fastFlag = addon.self.dir + "/svg/fast-flag.svg";
   let vanillaFlag = null;
 
-  // --- 1. VMの挙動をカスタマイズ (モンキーパッチ) ---
+  // --- 1. VMの挙動をカスタマイズ ---
   const originalStart = runtime.start;
 
   const setFPS = (fps) => {
-    // アドオン無効時は強制的に30、有効時は設定値 or 30
     global_fps = addon.self.disabled ? 30 : fps;
     
+    // すでに動いている場合は再起動してインターバルを更新
     if (runtime._steppingInterval) {
       clearInterval(runtime._steppingInterval);
       runtime._steppingInterval = null;
@@ -23,7 +23,7 @@ export default async function ({ addon, console }) {
     }
   };
 
-  // 実行ループを書き換え
+  // 実行ループのモンキーパッチ
   runtime.start = function () {
     if (this._steppingInterval) return;
     let interval = 1000 / global_fps;
@@ -34,10 +34,16 @@ export default async function ({ addon, console }) {
     this.emit("RUNTIME_STARTED");
   };
 
-  // --- 2. モニターの更新制限を解除 ---
+  const updateFlagVisuals = (button) => {
+    if (!button) return;
+    if (!vanillaFlag) vanillaFlag = button.src;
+    button.src = mode ? fastFlag : vanillaFlag;
+    if (mode) button.setAttribute("data-sa-60fps", "true");
+    else button.removeAttribute("data-sa-60fps");
+  };
+
   const fixMonitorThrottling = () => {
     if (monitorUpdateFixed) return;
-    // Scratch標準の低速モニター更新リスナーを探して差し替える
     const originalListener = vm.listeners("MONITORS_UPDATE").find((f) => f.name === "onMonitorsUpdate");
     if (originalListener) {
       vm.removeListener("MONITORS_UPDATE", originalListener);
@@ -51,19 +57,6 @@ export default async function ({ addon, console }) {
     }
   };
 
-  // --- 3. モード切替ロジック ---
-  const updateFlagVisuals = (button) => {
-    if (!button) return;
-    if (!vanillaFlag) vanillaFlag = button.src;
-    
-    button.src = mode ? fastFlag : vanillaFlag;
-    if (mode) {
-      button.setAttribute("data-sa-60fps", "true");
-    } else {
-      button.removeAttribute("data-sa-60fps");
-    }
-  };
-
   const changeMode = (newMode = !mode) => {
     mode = newMode;
     if (mode) {
@@ -72,21 +65,22 @@ export default async function ({ addon, console }) {
     } else {
       setFPS(30);
     }
-    // 表示されている全ての緑の旗を更新
     const buttons = document.querySelectorAll("[class*='green-flag_green-flag_']");
     buttons.forEach(updateFlagVisuals);
   };
 
-  // --- 4. イベント監視と後処理 ---
+  // --- 2. ライフサイクル管理 ---
   addon.settings.addEventListener("change", () => {
     if (mode) setFPS(addon.settings.get("framerate"));
   });
 
   addon.self.addEventListener("disabled", () => {
     changeMode(false);
+    // アドオン無効化時は元のstart関数に戻す
+    runtime.start = originalStart;
   });
 
-  // --- 5. DOMの監視 (旗が生成されるたびに実行) ---
+  // --- 3. DOM監視ループ ---
   while (true) {
     const button = await addon.tab.waitForElement("[class*='green-flag_green-flag_']", {
       markAsSeen: true,
@@ -108,7 +102,6 @@ export default async function ({ addon, console }) {
       }
     };
 
-    // キャプチャフェーズでイベントを奪い取る
     button.addEventListener("click", flagListener, { capture: true });
     button.addEventListener("contextmenu", flagListener, { capture: true });
   }
