@@ -1,10 +1,34 @@
 import downloadBlob from "../../../libraries/common/cs/download-blob.js";
+import bus from "../lib/eventbus.js";
+
+import AddonSetting from "./addon-setting.vue";
+import AddonTag from "./addon-tag.vue";
+import Dropdown from "./dropdown.vue";
+
+import PreviewCompactMessages from "./previews/compact-messages.vue";
+import PreviewDarkWww from "./previews/dark-www.vue";
+import PreviewEditorDarkMode from "./previews/editor-dark-mode.vue";
+import PreviewPalette from "./previews/palette.vue";
+import PreviewStageMonitorPreset from "./previews/stage-monitor-preset.vue";
+import PreviewStageMonitor from "./previews/stage-monitor.vue";
+import PreviewWorkspaceDots from "./previews/workspace-dots.vue";
+
 const isIframe = window.parent !== window;
 
-export default async function ({ template }) {
-  const AddonBody = Vue.extend({
+export default {
+    components: {
+      AddonTag,
+      Dropdown,
+      AddonSetting,
+      PreviewCompactMessages,
+      PreviewDarkWww,
+      PreviewEditorDarkMode,
+      PreviewPalette,
+      PreviewStageMonitorPreset,
+      PreviewStageMonitor,
+      PreviewWorkspaceDots
+    },
     props: ["addon", "groupId", "groupExpanded", "visible"],
-    template,
     data() {
       return {
         isIframe: isIframe,
@@ -138,7 +162,7 @@ export default async function ({ template }) {
                 ? false // Prevent expanding when shift-clicked (#1484)
                 : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
-          this.$emit("toggle-addon-request", newState);
+          bus.$emit(`toggle-addon-request-${this.addon.id}`, newState);
         };
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>
@@ -199,7 +223,7 @@ export default async function ({ template }) {
         if (newValue === true) this.everExpanded = true;
       },
     },
-    ready() {
+    mounted() {
       const onHashChange = () => {
         if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
           this.expanded = true;
@@ -208,6 +232,4 @@ export default async function ({ template }) {
       window.addEventListener("hashchange", onHashChange, { capture: false });
       setTimeout(onHashChange, 0);
     },
-  });
-  Vue.component("addon-body", AddonBody);
 }

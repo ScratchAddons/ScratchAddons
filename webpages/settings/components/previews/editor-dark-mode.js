@@ -1,10 +1,8 @@
 import cssVariables from "../../../../libraries/common/vue-css-variables.js";
 import { textColor, multiply, alphaBlend, makeHsv } from "../../../../libraries/common/cs/text-color.esm.js";
 
-export default async function ({ template }) {
-  const EditorDarkModePreview = Vue.extend({
+export default {
     props: ["settings", "hoveredSettingId"],
-    template,
     data() {
       return {
         tabs: [
@@ -86,6 +84,4 @@ export default async function ({ template }) {
       },
       cssVariables,
     },
-  });
-  Vue.component("preview-editor-dark-mode", EditorDarkModePreview);
 }

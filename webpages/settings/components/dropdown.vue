@@ -6,12 +6,12 @@
       :class="['dropdown-btn', buttonClass, {'open': isOpen}]"
       :disabled="disabled"
       :title="buttonTitle"
-      v-el:button
+      ref="button"
       @click="toggle"
     >
-      <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
+      <img src="../../../images/icons/expand.svg" class="icon-type" draggable="false" />
     </button>
-    <ul class="dropdown-list" :class="{'align-start': alignStart}" @click="listClick" role="menu" v-el:list>
+    <ul class="dropdown-list" :class="{'align-start': alignStart}" @click="listClick" role="menu" ref="list">
       <slot></slot>
     </ul>
   </div>
@@ -68,3 +68,8 @@
     border-top-right-radius: 0;
   }
 </style>
+
+<script>
+import Dropdown from "./dropdown.js";
+export default Dropdown;
+</script>

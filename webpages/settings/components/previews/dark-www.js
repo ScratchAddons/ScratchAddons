@@ -1,10 +1,8 @@
 import cssVariables from "../../../../libraries/common/vue-css-variables.js";
 import { textColor } from "../../../../libraries/common/cs/text-color.esm.js";
 
-export default async function ({ template }) {
-  const WebsiteDarkModePreview = Vue.extend({
+export default {
     props: ["settings", "hoveredSettingId"],
-    template,
     data() {
       return {
         footerColumns: [
@@ -35,6 +33,4 @@ export default async function ({ template }) {
     methods: {
       cssVariables,
     },
-  });
-  Vue.component("preview-dark-www", WebsiteDarkModePreview);
 }

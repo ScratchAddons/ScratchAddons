@@ -39,3 +39,8 @@
     color: var(--value-text);
   }
 </style>
+
+<script>
+import StageMonitorPreset from "./stage-monitor-preset.js";
+export default StageMonitorPreset;
+</script>

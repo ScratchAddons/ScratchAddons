@@ -10,7 +10,7 @@
     "type": "module",
     "page": "background/background.html"
   },
-  "action": { "default_popup": "webpages/popup/index.html" },
+  "action": { "default_popup": "webpages-dist/popup.html" },
   "icons": {
     "16": "images/icon-blue-16.png",
     "32": "images/icon-blue-32.png",
@@ -41,7 +41,7 @@
     }
   ],
   "options_ui": {
-    "page": "webpages/settings/index.html",
+    "page": "webpages-dist/settings.html",
     "open_in_tab": true
   },
   "homepage_url": "https://scratchaddons.com",

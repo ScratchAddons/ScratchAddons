@@ -1,4 +1,5 @@
 <template>
+  <transition name="expand" mode="in-out">
   <button
     class="category"
     :class="{
@@ -7,13 +8,13 @@
       }"
     v-if="!category.hidden"
     v-show="shouldShow"
-    transition="expand"
     :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
     @click="onClick($event)"
   >
     <img :src="'../../images/icons/' + category.icon + '.svg'" draggable="false" />
     <span>{{ category.name }}</span>
   </button>
+  </transition>
 </template>
 
 <style>
@@ -55,8 +56,8 @@
     padding-block: 10px;
     opacity: 1;
   }
-  .category.expand-enter,
-  .category.expand-leave {
+  .category.expand-enter-from,
+  .category.expand-leave-to {
     padding-block: 0;
     height: 0;
     opacity: 0;
@@ -101,3 +102,8 @@
     margin-inline-start: 15px;
   }
 </style>
+
+<script>
+import CategorySelector from "./category-selector.js";
+export default CategorySelector;
+</script>

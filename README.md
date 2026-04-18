@@ -62,10 +62,17 @@ Other open-source projects (such as Scratch forks) can also make use of the addo
 
 ## Installation
 
-No building is required. The best way to download the source is with Git:
+The best way to download the source is with Git:
 
 ```sh
 git clone https://github.com/ScratchAddons/ScratchAddons.git
+```
+
+Once downloaded build the webpages:
+```sh
+cd webpages
+npm install
+npm run build
 ```
 
 For browser support information and other installation methods, check [the documentation](https://scratchaddons.com/docs/getting-started/installing).

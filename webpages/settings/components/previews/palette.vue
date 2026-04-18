@@ -45,3 +45,8 @@
     border-radius: 4px 0 0 4px;
   }
 </style>
+
+<script>
+import Palette from "./palette.js";
+export default Palette;
+</script>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <script src="./public/set-lang.js" type="module"></script>
+    <script src="./error/check-unsupported.js" defer></script>
+    <script src="./error/check-chrome-storage.js" defer></script>
+
+    <style>
+      /*
+       * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
+      */
+      @import url("./styles/colors.css");
+      @import url("./styles/components/badges.css");
+      @import url("./styles/components/buttons.css");
+      @import url("./styles/components/filter.css");
+      @import url("./styles/components/categories.css");
+      @import url("./styles/components/search.css");
+      @import url("./styles/components/switch.css");
+      @import url("./styles/components/tooltips.css");
+      /* Modals and popups are needed last */
+      @import url("./styles/components/modal.css");
+      @import url("./styles/components/enablepopup.css");
+    </style>
+
+    <link rel="icon" href="../images/icon.png" id="favicon" />
+
+    <link href="../libraries/thirdparty/Sora.css" rel="stylesheet" />
+    <link href="../libraries/thirdparty/Roboto.css" rel="stylesheet" />
+    <script src="../libraries/thirdparty/color-picker.js" type="module"></script>
+    <script src="../libraries/thirdparty/sortable.min.js" type="module"></script>
+    <script src="./settings/main.js" type="module"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/settings/main.js"></script>
+  </body>
+</html>

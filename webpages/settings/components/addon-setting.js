@@ -1,7 +1,15 @@
-export default async function ({ template }) {
-  const AddonSetting = Vue.extend({
+import Sortable from "sortablejs";
+import bus from "../lib/eventbus";
+
+import AddonSetting from "./addon-setting.vue";
+import AddonTag from "./addon-tag.vue";
+import Dropdown from "./dropdown.vue";
+import Picker from "./picker-component.vue";
+import ResetDropdown from "./reset-dropdown.vue";
+
+export default {
+  components: { AddonSetting, AddonTag, Dropdown, Picker, ResetDropdown },
     props: ["addon", "groupId", "setting", "settingPath", "addon-settings"],
-    template,
     data() {
       return {
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
@@ -10,6 +18,11 @@ export default async function ({ template }) {
       };
     },
     computed: {
+      updateTable(event) {
+        let list = this.addonSettings[this.setting.id];
+        list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
+        this.updateSettings();
+      },
       show() {
         if (!this.setting.if) return true;
 
@@ -52,7 +65,7 @@ export default async function ({ template }) {
       isNewOption() {
         if (!this.addon.latestUpdate) return false;
 
-        const [extMajor, extMinor, _] = window.vue.version.split(".");
+        const [extMajor, extMinor, _] = this.$root.version.split(".");
         const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
         if (!(extMajor === addonMajor && extMinor === addonMinor)) return false;
 
@@ -118,29 +131,23 @@ export default async function ({ template }) {
         this.addonSettings[this.setting.id] = newValue;
         this.updateSettings();
       },
-    },
-    events: {
       closePickers(...params) {
         return this.$root.closePickers(...params);
       },
     },
     directives: {
-      sortable() {
-        const sortable = new window.Sortable(this.el, {
-          handle: ".handle",
-          animation: 300,
-          onUpdate: (event) => {
-            let list = this.vm.addonSettings[this.vm.setting.id];
-            list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
-            this.vm.updateSettings();
-          },
-          disabled: !this.vm.addon._enabled,
-        });
-        this.vm.$parent.$on("toggle-addon-request", (state) => {
-          sortable.option("disabled", !state);
-        });
+      sortable: {
+        mounted: (el, binding, vnode) => {
+          const sortable = new Sortable(el, {
+            handle: ".handle",
+            animation: 300,
+            onUpdate: binding.value.update,
+            disabled: !binding.value.enabled,
+          });
+          bus.$on(`toggle-addon-request-${binding.value.id}`, (state) => {
+            sortable.option("disabled", !state);
+          });
+        },
       },
     },
-  });
-  Vue.component("addon-setting", AddonSetting);
 }

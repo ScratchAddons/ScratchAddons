@@ -1,8 +1,9 @@
-export default async function ({ template }) {
-  const Modal = Vue.extend({
+  export default {
     props: ["title"],
-    template,
     methods: {
+      openModal() {
+        this.$el.showModal();
+      },
       closeModal() {
         this.$el.close();
       },
@@ -10,6 +11,4 @@ export default async function ({ template }) {
         return this.$root.msg(...params);
       },
     },
-  });
-  Vue.component("modal", Modal);
 }

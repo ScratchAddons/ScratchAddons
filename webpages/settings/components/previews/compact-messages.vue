@@ -143,3 +143,8 @@
     border-radius: 0 0 12px 0;
   }
 </style>
+
+<script>
+import CompactMessages from "./compact-messages.js";
+export default CompactMessages;
+</script>
