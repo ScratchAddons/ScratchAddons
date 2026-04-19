@@ -66,14 +66,68 @@ export default async function ({ addon }) {
       originalFinalizeHorizontalAlignment.call(this);
       this.constants_.MIN_BLOCK_WIDTH = oldMinBlockWidth;
     };
+
+    const ScratchRenderer = ScratchBlocks.registry.getClass(ScratchBlocks.registry.Type.RENDERER, "scratch_classic");
+
+    const originalMakeConstants = ScratchRenderer.prototype.makeConstants_;
+    ScratchRenderer.prototype.makeConstants_ = function () {
+      const constants = originalMakeConstants.call(this);
+
+      const originalShapeFor = constants.shapeFor;
+      constants.shapeFor = function (connection) {
+        if (!addon.self.disabled && connection.type === ScratchBlocks.ConnectionType.INPUT_VALUE) {
+          const connectedBlock = connection.targetBlock();
+          if (connectedBlock && connectedBlock.getOutputShape() === SQUARE) {
+            return this.SQUARED;
+          }
+        }
+        return originalShapeFor.call(this, connection);
+      };
+
+      return constants;
+    };
+
+    const originalMakeDrawer = ScratchRenderer.prototype.makeDrawer_;
+    ScratchRenderer.prototype.makeDrawer_ = function (...args) {
+      const drawer = originalMakeDrawer.call(this, ...args);
+
+      const originalDrawConnectionHighlightPath = drawer.drawConnectionHighlightPath;
+      drawer.drawConnectionHighlightPath = function (measurable) {
+        if (
+          !addon.self.disabled &&
+          measurable.connectionModel.type === ScratchBlocks.ConnectionType.INPUT_VALUE &&
+          measurable.isDynamicShape &&
+          measurable.shape.type === SQUARE
+        ) {
+          // Add horizontal padding between a square input and its connection highlight
+          const oldConnectionWidth = measurable.connectionWidth;
+          measurable.connectionWidth -= 1.5;
+          const result = originalDrawConnectionHighlightPath.call(this, measurable);
+          measurable.connectionWidth = oldConnectionWidth;
+          return result;
+        }
+        return originalDrawConnectionHighlightPath.call(this, measurable);
+      };
+
+      return drawer;
+    };
   }
 
-  function update() {
+  const updateRendererAndBlocks = () => {
+    const workspace = addon.tab.traps.getWorkspace();
+    workspace.renderer.refreshDom(workspace.getSvgGroup(), workspace.getTheme(), workspace.getInjectionDiv());
+
+    const flyout = workspace.getFlyout();
+    if (flyout) {
+      const flyoutWorkspace = flyout.getWorkspace();
+      flyoutWorkspace.renderer.refreshDom(flyoutWorkspace.getSvgGroup(), flyoutWorkspace.getTheme(), null);
+    }
+
     updateAllBlocks(addon.tab);
-  }
+  };
 
-  addon.self.addEventListener("disabled", update);
-  addon.self.addEventListener("reenabled", update);
-  addon.settings.addEventListener("change", update);
-  update();
+  addon.self.addEventListener("disabled", () => updateRendererAndBlocks());
+  addon.self.addEventListener("reenabled", () => updateRendererAndBlocks());
+  addon.settings.addEventListener("change", () => updateRendererAndBlocks());
+  updateRendererAndBlocks();
 }
