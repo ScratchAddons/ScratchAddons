@@ -399,7 +399,7 @@ export default async function ({ addon, console, msg }) {
 
   const recolorExtensionIcon = (item) => {
     if (addon.self.disabled) return;
-    const oldIconUri = Blockly.registry ? item.toolboxItemDef_.iconURI : item.iconURI_;
+    const oldIconUri = item.iconURI;
     if (oldIconUri) {
       const id = Blockly.registry ? item.getId() : item.id_;
       if (!["sa-blocks", "videoSensing", "text2speech"].includes(id)) return oldIconUri;
@@ -412,8 +412,7 @@ export default async function ({ addon, console, msg }) {
         if (newColor) {
           const newSvg = oldSvg.replace(/#29beb8|#229487|#0ebd8c/gi, newColor);
           const newIconUri = `data:image/svg+xml;base64,${btoa(newSvg)}`;
-          if (Blockly.registry) item.toolboxItemDef_.iconURI = newIconUri;
-          else item.iconURI_ = newIconUri;
+          item.iconURI = newIconUri;
         }
       }
     }
@@ -427,17 +426,17 @@ export default async function ({ addon, console, msg }) {
     const oldCategoryCreateIconDom = ScratchContinuousCategory.prototype.createIconDom_;
     ScratchContinuousCategory.prototype.createIconDom_ = function () {
       // Category bubbles
-      const oldIconUri = this.toolboxItemDef_.iconURI;
+      const oldIconUri = this.iconURI;
       recolorExtensionIcon(this);
       if (!oldIconUri) {
         const category = categories.find((item) => item.id === this.getId());
         if (category) {
           this.colour_ = isColoredTextMode() ? fieldBackground(category) : primaryColor(category);
-          this.toolboxItemDef_.secondaryColour = tertiaryColor(category);
+          this.secondaryColour = tertiaryColor(category);
         }
       }
       const iconElement = oldCategoryCreateIconDom.call(this);
-      this.toolboxItemDef_.iconURI = oldIconUri;
+      this.iconURI = oldIconUri;
       return iconElement;
     };
   } else {
