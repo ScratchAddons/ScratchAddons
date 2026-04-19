@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+  <!-- Exclude (XOR): both shapes filled except the overlapping region -->
+  <defs>
+    <!-- Mask out the right circle from the left -->
+    <mask id="em1">
+      <rect width="24" height="24" fill="white"/>
+      <circle cx="15.5" cy="12" r="5.5" fill="black"/>
+    </mask>
+    <!-- Mask out the left circle from the right -->
+    <mask id="em2">
+      <rect width="24" height="24" fill="white"/>
+      <circle cx="8.5" cy="12" r="5.5" fill="black"/>
+    </mask>
+  </defs>
+  <circle cx="8.5" cy="12" r="5.5" fill="#575e75" mask="url(#em1)"/>
+  <circle cx="15.5" cy="12" r="5.5" fill="#575e75" mask="url(#em2)"/>
+</svg>
