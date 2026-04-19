@@ -190,7 +190,7 @@ let fuse;
         this.closePickers();
         this.$els.moresettings.showModal();
         if (vue.smallMode) {
-          vue.sidebarToggle();
+          vue.categoryOpen = false;
         }
         location.hash = "";
       },
