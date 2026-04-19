@@ -367,6 +367,9 @@
   "viewSettings": {
     "message": "View settings file"
   },
+  "resetSettings": {
+    "message": "Reset all settings"
+  },
   "fileNotSelected": {
     "message": "Please select a settings file."
   },
