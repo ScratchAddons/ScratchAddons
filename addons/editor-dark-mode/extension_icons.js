@@ -37,10 +37,10 @@ export default async function ({ addon, console }) {
     );
     const oldCategoryCreateIconDom = ScratchContinuousCategory.prototype.createIconDom_;
     ScratchContinuousCategory.prototype.createIconDom_ = function () {
-      const oldIconUri = this.toolboxItemDef_.iconURI;
-      this.toolboxItemDef_.iconURI = recolorIcon(oldIconUri, this.getId());
+      const oldIconUri = this.iconURI;
+      this.iconURI = recolorIcon(oldIconUri, this.getId());
       const iconElement = oldCategoryCreateIconDom.call(this);
-      this.toolboxItemDef_.iconURI = oldIconUri;
+      this.iconURI = oldIconUri;
       return iconElement;
     };
   } else {
