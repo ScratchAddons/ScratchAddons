@@ -1,0 +1,235 @@
+/* ── Gradient stop editor ───────────────────────────────────────────────── */
+
+.sa-grad-editor {
+  padding: 8px 16px 10px;
+  box-sizing: border-box;
+  width: 100%;
+  user-select: none;
+}
+
+.sa-grad-overlay {
+  --sa-grad-overlay-paper: var(--editorDarkMode-input, white);
+  --sa-grad-overlay-ink: var(--editorDarkMode-page-text, #575e75);
+  --sa-grad-overlay-shadow: var(--editorDarkMode-input-foregroundShadow, rgba(0, 0, 0, 0.3));
+}
+
+/* The coloured gradient strip */
+.sa-grad-bar {
+  position: relative;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #ddd; /* visible fallback before JS sets the gradient */
+  overflow: hidden;
+}
+
+/* Handle track sits below the bar */
+.sa-grad-track {
+  position: relative;
+  height: 16px;
+  margin-top: 3px;
+}
+
+/* Shared handle base */
+.sa-grad-handle {
+  position: absolute;
+  top: 0;
+  cursor: ew-resize;
+  transform: translateX(-50%);
+}
+
+/* Start / end stop handles — upward-pointing triangle via clip-path */
+/* clip-path gives real width/height so translateX(-50%) centres correctly */
+.sa-grad-stop {
+  width: 12px;
+  height: 10px;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  /* background set via JS to match the stop colour */
+  background: #575e75;
+}
+
+/* Angle input row */
+.sa-grad-angle-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.sa-grad-angle-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #575e75;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.sa-grad-angle-input {
+  width: 48px;
+  padding: 2px 4px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-align: center;
+  color: #575e75;
+  background: #fff;
+  -moz-appearance: textfield;
+}
+.sa-grad-angle-input::-webkit-inner-spin-button,
+.sa-grad-angle-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.sa-grad-angle-input:focus {
+  outline: none;
+  border-color: #4c97ff;
+}
+
+.sa-grad-angle-deg {
+  font-size: 0.75rem;
+  color: #575e75;
+}
+
+/* ── Extra gradient stop colour picker popup ────────────────────────────── */
+/* Colours use editor-dark-mode variables with light-mode Scratch fallbacks, */
+/* mirroring the same pattern used by the native .Popover-body colour picker. */
+
+.sa-extra-stop-picker {
+  position: fixed;
+  border-radius: 7px;
+  padding: 10px;
+  z-index: 99999;
+  user-select: none;
+  width: 200px;
+  box-sizing: content-box;
+  overflow: hidden;
+  background-color: var(--editorDarkMode-input, white);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
+  color: var(--editorDarkMode-input-text, #575e75);
+}
+
+.sa-stop-picker-handle {
+  margin: -10px -10px 10px;
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  flex-shrink: 0;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.sa-stop-picker-handle:active {
+  cursor: grabbing;
+}
+
+.sa-stop-picker-grip {
+  display: grid;
+  grid-template-columns: repeat(3, 4px);
+  gap: 3px;
+  opacity: 0.45;
+}
+
+.sa-stop-picker-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--editorDarkMode-input-text, #575e75);
+}
+
+.sa-stop-picker-sv {
+  border-radius: 4px;
+  cursor: crosshair;
+  display: block;
+}
+
+.sa-stop-picker-thumb {
+  position: absolute;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.45),
+    0 1px 4px rgba(0, 0, 0, 0.6);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.sa-stop-picker-alpha-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.sa-stop-picker-bottom-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.sa-stop-picker-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+}
+
+.sa-stop-picker-swatch-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.sa-stop-picker-input {
+  background-color: var(--editorDarkMode-input, white);
+  color: var(--editorDarkMode-input-text, #575e75);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  border-radius: 3px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.sa-stop-picker-hex {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 5px;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.sa-stop-picker-alpha-input {
+  width: 42px;
+  padding: 3px 4px;
+  font-size: 11px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.sa-stop-picker-alpha-label {
+  font-size: 11px;
+  font-family: sans-serif;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.sa-stop-picker-eyedropper {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--editorDarkMode-input, white);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  color: var(--editorDarkMode-input-text, #575e75);
+}
