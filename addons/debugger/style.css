@@ -323,6 +323,11 @@
   border-radius: 3px;
 }
 
+/* Keep Blockly's selected-path overlay from painting over heatmapped blocks. */
+.sa-debugger-heatmap > .blocklyPathSelected {
+  fill: none !important;
+}
+
 .sa-timing-timer {
   position: absolute;
   top: 0px;

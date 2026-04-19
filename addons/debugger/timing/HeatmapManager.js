@@ -13,11 +13,13 @@ function recursiveFillBlock(block, fill = null) {
     else style.fill = fill;
   };
   setFill(block.pathObject.svgPath.style);
+  // Mark heatmapped blocks so CSS can keep Blockly's selected overlay unfilled.
+  block.getSvgRoot().classList.toggle("sa-debugger-heatmap", !isReset);
 
   // Set text color for blocks with heatmap applied
   const textElements = block
     .getSvgRoot()
-    .querySelectorAll(":scope > :not(.blocklyDraggable):not([data-shapes='stack']) > text, :scope > text");
+    .querySelectorAll(":scope > :not(.blocklyDraggable) > text, :scope > text");
 
   if (!isReset) {
     // Heatmap is being applied - force white text
