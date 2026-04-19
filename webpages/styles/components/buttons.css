@@ -10,10 +10,21 @@
   box-sizing: border-box;
   font-family: inherit;
   font-size: 14px;
+  line-height: 16px;
   user-select: none;
 }
 
-.large-button:hover:not([disabled]) {
+.large-button.split-button-dropdown {
+  border-inline-start: none;
+  padding: 7px;
+}
+
+.large-button.split-button-dropdown > .icon-type {
+  margin: 0;
+}
+
+.large-button:hover:not(:disabled),
+.split-button .large-button.split-button-dropdown.open {
   background: var(--button-hover-background);
   cursor: pointer;
 }
@@ -26,4 +37,52 @@
 
 .large-button > * {
   vertical-align: middle;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  user-select: none;
+  transition: 0.2s ease;
+}
+
+.icon-button > .icon-type {
+  margin: 0;
+}
+
+.split-button:hover:not(:disabled) .icon-button.split-button-button:not(:hover),
+.split-button:hover:not(:disabled) .icon-button.split-button-dropdown:not(:hover),
+.split-button:has(.open) .icon-button.split-button-button {
+  background: var(--hover-highlight-reduced);
+}
+
+.icon-button:hover:not(:disabled),
+.split-button .icon-button.split-button-dropdown.open,
+.split-button:hover .icon-button.split-button-dropdown.open:not(:hover) {
+  background: var(--hover-highlight);
+}
+
+.split-button {
+  display: flex;
+}
+
+.split-button-button {
+  border-radius: 4px 0 0 4px;
+}
+
+[dir="rtl"] .split-button-button {
+  border-radius: 0 4px 4px 0;
+}
+
+.split-button-dropdown {
+  border-radius: 0 4px 4px 0;
+}
+
+[dir="rtl"] .split-button-dropdown {
+  border-radius: 4px 0 0 4px;
 }

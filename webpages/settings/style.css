@@ -71,6 +71,7 @@ h1 {
 }
 
 .addons-container {
+  flex-grow: 1;
   overflow-y: auto;
   padding: 20px;
   padding-top: 10px;
@@ -107,6 +108,10 @@ h1 {
   vertical-align: middle;
   filter: var(--content-icon-filter);
   margin-inline-end: 8px;
+}
+
+:disabled {
+  cursor: initial !important;
 }
 
 .disabled {
@@ -374,9 +379,10 @@ body.iframe .search-box input {
 color-picker {
   z-index: 2;
   position: absolute;
-  top: calc(100% - 1px);
+  top: calc(100% + 5px);
   left: 0;
   border: 1px solid var(--control-border);
+  box-shadow: var(--large-shadow);
   --color-picker-background-color: var(--button-background);
   --color-picker-color: var(--content-text);
   --color-picker-font-family: Roboto, sans-serif;
@@ -384,11 +390,6 @@ color-picker {
 
 button.setting-input.color {
   width: 100px;
-  transition: border-radius 0.2s ease;
-}
-
-button.setting-input.color.open {
-  border-bottom-left-radius: 0;
 }
 
 .color-container {

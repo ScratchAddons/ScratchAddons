@@ -90,6 +90,18 @@ export default async function ({ template }) {
       getTableSetting(id) {
         return this.setting.row.find((setting) => setting.id === id);
       },
+      moveTableRow(oldIndex, newIndex) {
+        let list = this.addonSettings[this.setting.id];
+        list.splice(newIndex, 0, list.splice(oldIndex, 1)[0]);
+        this.updateSettings();
+        this.sortable.captureAnimationState();
+        const focusedElement = document.activeElement;
+        setTimeout(() => {
+          this.sortable.animateAll();
+          // Keep move button focused
+          focusedElement.focus();
+        }, 0);
+      },
       deleteTableRow(i) {
         this.addonSettings[this.setting.id].splice(i, 1);
         this.updateSettings();
@@ -126,18 +138,14 @@ export default async function ({ template }) {
     },
     directives: {
       sortable() {
-        const sortable = new window.Sortable(this.el, {
+        this.vm.sortable = new window.Sortable(this.el, {
           handle: ".handle",
           animation: 300,
-          onUpdate: (event) => {
-            let list = this.vm.addonSettings[this.vm.setting.id];
-            list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
-            this.vm.updateSettings();
-          },
+          onUpdate: (event) => this.vm.moveTableRow(event.oldIndex, event.newIndex),
           disabled: !this.vm.addon._enabled,
         });
         this.vm.$parent.$on("toggle-addon-request", (state) => {
-          sortable.option("disabled", !state);
+          this.vm.sortable.option("disabled", !state);
         });
       },
     },

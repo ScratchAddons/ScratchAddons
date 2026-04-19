@@ -16,15 +16,11 @@
       </div>
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
-        <div v-show="expanded && addon._enabled" v-if="addon.settings" class="addon-split-button dropdown-parent">
-          <button
-            class="addon-buttons addon-split-button-button"
-            title="{{ msg('resetToDefault') }}"
-            @click="loadDefaults"
-          >
+        <div v-show="expanded && addon._enabled" v-if="addon.settings" class="split-button dropdown-parent">
+          <button class="icon-button split-button-button" title="{{ msg('resetToDefault') }}" @click="loadDefaults">
             <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
           </button>
-          <dropdown button-class="addon-buttons addon-split-button-dropdown" :button-title="msg('importExport')">
+          <dropdown button-class="icon-button split-button-dropdown" :button-title="msg('importExport')">
             <li role="menuitem" tabindex="0" @click="exportPreset">{{ msg('export') }}</li>
             <li role="menuitem" tabindex="0" @click="importPreset">{{ msg('import') }}</li>
           </dropdown>
@@ -230,56 +226,6 @@
       Use CSS class to force animation.
     */
     animation: addonBlink 1s 2 ease-in-out;
-  }
-
-  .addon-buttons {
-    display: flex;
-    align-items: center;
-    padding-block: 8px;
-    padding-inline-start: 8px;
-    padding-inline-end: 0;
-    border-radius: 4px;
-    margin-inline-end: 8px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    user-select: none;
-    transition: 0.2s ease;
-  }
-  .addon-buttons:hover:not([disabled]),
-  .addon-split-button .addon-split-button-dropdown.open,
-  .addon-split-button:hover .addon-split-button-dropdown.open:not(:hover) {
-    background: var(--hover-highlight);
-  }
-  .addon-split-button:hover:not([disabled]) .addon-split-button-button:not(:hover),
-  .addon-split-button:hover:not([disabled]) .addon-split-button-dropdown:not(:hover),
-  .addon-split-button:has(.open) .addon-split-button-button {
-    background: var(--hover-highlight-reduced);
-  }
-  [disabled] {
-    cursor: initial !important;
-  }
-  .addon-split-button {
-    display: flex;
-  }
-  .addon-split-button-button {
-    margin: 0;
-    border-radius: 4px 0 0 4px;
-  }
-  [dir="rtl"] .addon-split-button-button {
-    border-radius: 0 4px 4px 0;
-  }
-  .addon-split-button-dropdown {
-    margin: 0;
-    border-radius: 0 4px 4px 0;
-  }
-  [dir="rtl"] .addon-split-button-dropdown {
-    border-radius: 4px 0 0 4px;
-  }
-  .addon-split-button:has(.open) .addon-split-button-button,
-  .addon-split-button .addon-split-button-dropdown.open {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
   }
 
   .clickable-area {
