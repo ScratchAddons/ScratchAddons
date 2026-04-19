@@ -21,7 +21,18 @@ export async function updateAllBlocks(
         xml.querySelector("variables").remove();
       }
       // Add all variables, including unused ones, to the XML document
-      xml.appendChild(blockly.Xml.variablesToDom(workspace.getVariableMap().getAllVariables()));
+      const variables = blockly.utils.xml.createElement("variables");
+      const globalVariables = Object.values(tab.traps.vm.runtime.getTargetForStage().variables);
+      const localVariables = tab.traps.vm.editingTarget.isStage
+        ? []
+        : Object.values(tab.traps.vm.editingTarget.variables);
+      for (const variable of globalVariables) {
+        variables.appendChild(blockly.utils.xml.textToDom(variable.toXML()));
+      }
+      for (const variable of localVariables) {
+        variables.appendChild(blockly.utils.xml.textToDom(variable.toXML(true)));
+      }
+      xml.appendChild(variables);
       blockly.clearWorkspaceAndLoadFromXml(xml, workspace);
     }
     const toolbox = workspace.getToolbox();
