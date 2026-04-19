@@ -55,14 +55,14 @@ export default async function ({ addon, console, msg }) {
   });
   addon.self.addEventListener("reenabled", () => {
     const stageControls = document.querySelector(
-      "[class*='stage-header_stage-size-toggle-group_'] > [class*='toggle-buttons_row_']"
+      "[class*='stage-header_stage-size-row_'] > [class*='toggle-buttons_row_']"
     );
     if (stageControls) stageControls.insertBefore(hideStageButton, smallStageButton);
   });
 
   while (true) {
     const stageControls = await addon.tab.waitForElement(
-      "[class*='stage-header_stage-size-toggle-group_'] > [class*='toggle-buttons_row_']",
+      "[class*='stage-header_stage-size-row_'] > [class*='toggle-buttons_row_']",
       {
         markAsSeen: true,
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
