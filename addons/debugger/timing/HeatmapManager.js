@@ -17,9 +17,7 @@ function recursiveFillBlock(block, fill = null) {
   block.getSvgRoot().classList.toggle("sa-debugger-heatmap", !isReset);
 
   // Set text color for blocks with heatmap applied
-  const textElements = block
-    .getSvgRoot()
-    .querySelectorAll(":scope > :not(.blocklyDraggable) > text, :scope > text");
+  const textElements = block.getSvgRoot().querySelectorAll(":scope > :not(.blocklyDraggable) > text, :scope > text");
 
   if (!isReset) {
     // Heatmap is being applied - force white text
