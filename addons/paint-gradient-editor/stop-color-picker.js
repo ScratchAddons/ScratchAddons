@@ -324,9 +324,7 @@ export default class StopColorPicker {
       `</svg>`;
     eyeDropperBtn.addEventListener("mousedown", (e) => e.stopPropagation());
     eyeDropperBtn.addEventListener("click", () => {
-      // Fade the panel so user can see the canvas, but keep it in the DOM.
-      panel.style.opacity = "0.15";
-      panel.style.pointerEvents = "none";
+      eyeDropperBtn.classList.add("sa-eyedropper-active");
       this._redux.dispatch({
         type: "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER",
         callback: (hexString) => {
@@ -339,18 +337,12 @@ export default class StopColorPicker {
           syncPickers();
           commit();
           this._triggerUndo();
+          eyeDropperBtn.classList.remove("sa-eyedropper-active");
         },
         previousMode: this._getCachedPaper()?.tool,
       });
-      // Restore panel after any mouseup (pick or cancel — both end the dropper session).
-      document.addEventListener(
-        "mouseup",
-        () => {
-          panel.style.opacity = "";
-          panel.style.pointerEvents = "";
-        },
-        { once: true, capture: true }
-      );
+      // Remove highlight if user cancels (mouseup without picking).
+      document.addEventListener("mouseup", () => { eyeDropperBtn.classList.remove("sa-eyedropper-active"); }, { once: true, capture: true });
     });
 
     bottomRow.append(swatchWrap, hexInp, aLabel, alphaInp, eyeDropperBtn);

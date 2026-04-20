@@ -233,3 +233,7 @@
   border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
   color: var(--editorDarkMode-input-text, #575e75);
 }
+
+.sa-stop-picker-eyedropper.sa-eyedropper-active {
+  box-shadow: 0px 0px 0px 3px hsla(260, 60%, 60%, 0.35);
+}
