@@ -599,7 +599,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 .sa-onion-button[data-enabled="true"] .sa-onion-image {
   filter: var(--editorDarkMode-primary-filter2);
 }
-[class*="modal-with-arrow_root_"] [class*="modal-with-arrow_arrow_"] {
+[class*="modal-with-arrow_arrow_"] {
   filter: var(--editorDarkMode-primary-iconFilter);
 }
 [class*="action-menu_more-buttons-outer_"],
