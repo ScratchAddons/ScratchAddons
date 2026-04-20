@@ -67,7 +67,6 @@
   "transparent-orphans",
   "gamepad",
   "remove-curved-stage-border",
-  "fix-pasted-scripts",
   "better-img-uploads",
   "ctrl-click-run-scripts",
   "redirect-mobile-forums-v2",
@@ -183,7 +182,6 @@
   "horizontal-mystuff-tabs",
   "// For editor:",
   "editor-dark-mode",
-  "stage-monitor",
   "editor-colored-context-menus",
   "hide-stage",
   "editor-stage-left",
@@ -191,5 +189,6 @@
   "fullscreen",
   "columns",
   "editor-compact",
-  "editor-theme3"
+  "editor-theme3",
+  "stage-monitor"
 ]

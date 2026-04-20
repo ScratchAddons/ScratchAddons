@@ -87,7 +87,7 @@
 .sa-stage-hidden [class*="stage-header_stage-size-row_"] {
   right: auto;
   left: 0.5rem;
-  width: calc(240px + 0.125rem);
+  width: calc(480px + 0.125rem);
   justify-content: flex-end;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .sa-stage-hidden [class*="gui_tab-list_"] {
-  padding-inline-start: calc(240px + 1.125rem);
+  padding-inline-start: calc(480px + 1.125rem);
 }
 
 /* search-sprites compatibility */
