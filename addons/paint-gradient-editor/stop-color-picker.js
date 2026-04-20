@@ -340,7 +340,7 @@ export default class StopColorPicker {
           commit();
           this._triggerUndo();
         },
-        previousMode: this._getCachedPaper()?.tool ?? null,
+        previousMode: this._getCachedPaper()?.tool,
       });
       // Restore panel after any mouseup (pick or cancel — both end the dropper session).
       document.addEventListener(
