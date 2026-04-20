@@ -108,7 +108,7 @@ export default class StopColorPicker {
 
   // Close any open panel immediately (e.g. when the addon is disabled).
   close() {
-    document.querySelector(".sa-extra-stop-picker")?._close?.();
+    document.querySelector(".sa-extra-stop-picker")?._close();
   }
 
   // ── Open / reuse the picker panel ────────────────────────────────────────
@@ -116,7 +116,7 @@ export default class StopColorPicker {
   // onCommit(color) — called live on every change with the new CSS colour string
   open(color, onCommit, clientX, clientY) {
     const existing = document.querySelector(".sa-extra-stop-picker");
-    if (existing?._setColor) {
+    if (existing) {
       existing._setOnCommit(onCommit);
       existing._setColor(color);
       if (!existing._wasMoved) {
@@ -125,7 +125,6 @@ export default class StopColorPicker {
       }
       return;
     }
-    existing?.remove();
 
     const p0 = parseColor(color) ?? [128, 128, 128, 1];
     const initHsv = this._rgbToHsv(p0[0], p0[1], p0[2]);
@@ -342,7 +341,13 @@ export default class StopColorPicker {
         previousMode: this._getCachedPaper()?.tool,
       });
       // Remove highlight if user cancels (mouseup without picking).
-      document.addEventListener("mouseup", () => { eyeDropperBtn.classList.remove("sa-eyedropper-active"); }, { once: true, capture: true });
+      document.addEventListener(
+        "mouseup",
+        () => {
+          eyeDropperBtn.classList.remove("sa-eyedropper-active");
+        },
+        { once: true, capture: true }
+      );
     });
 
     bottomRow.append(swatchWrap, hexInp, aLabel, alphaInp, eyeDropperBtn);
