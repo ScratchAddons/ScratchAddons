@@ -81,6 +81,15 @@ Go to `about:debugging`, select "This Firefox", click "Load Temporary Add-on..."
 > [!NOTE]
 > Firefox extensions loaded this way are removed when the browser is closed.
 
+### Loading the extension via `web-ext` (Chrome and Firefox)
+
+Install `web-ext` with `npm install --global web-ext` as administrator from the terminal and in the `ScratchAddons` folder, run `web-ext run` or, if the previous did not work, `web-ext run --target=firefox-desktop` to automatically load the temporary extension in a new, isolated Firefox window. To use `web-ext` with any Chromium-based browser, run `web-ext run --target=chromium`.
+
+This method automatically updates the extension in the background. Because the browser is isolated, no other extensions will appear and Scratch Addons will be in its default state. The tab running Scratch Addons may still need to be refreshed for extension changes to take effect.
+
+> [!NOTE]
+> Extensions loaded with `web-ext` are removed when the browser is closed.
+
 ## Contributing
 
 ### Suggestions and bug reports
