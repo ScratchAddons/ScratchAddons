@@ -442,7 +442,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="backpack_more_"],
 [class*="sprite-selector-item_is-selected_"] [class*="sprite-selector-item_sprite-info_"],
 [class*="delete-button_delete-button-visible_"],
-[class*="delete-confirmation-prompt_body_"],
+[class*="confirmation-prompt_modal-container_"],
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header_"],
 [class*="font-dropdown_mod-menu-item_"]:hover:not(:active),
 [class*="tool-select-base_mod-tool-select_"][class*="tool-select-base_is-selected_"],
@@ -567,10 +567,17 @@ img[class*="tool-select-base_tool-select-icon_"],
   fill: var(--editorDarkMode-primary-transparent35);
   stroke: var(--editorDarkMode-primary);
 }
-[class*="delete-confirmation-prompt_body_"] [class*="confirmation-prompt_button-row_"] span {
+[class*="confirmation-prompt_modal-container_"] [class*="confirmation-prompt_button-row_"] span {
   color: var(--editorDarkMode-primary);
 }
-[class*="delete-confirmation-prompt_label_"],
+/* Set thumbnail confirmation cancel button */
+[class*="modal-with-arrow_modal-content_"][style*="width: 200px"] [class*="confirmation-prompt_cancel-button_"] {
+  background-color: var(--editorDarkMode-primary);
+  border-color: var(--editorDarkMode-input);
+}
+[class*="modal-with-arrow_modal-content_"][style*="width: 200px"] [class*="confirmation-prompt_cancel-button_"] > span {
+  color: var(--editorDarkMode-input);
+}
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header-title_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
@@ -589,8 +596,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 .sa-onion-button[data-enabled="true"] .sa-onion-image {
   filter: var(--editorDarkMode-primary-filter2);
 }
-[class*="modal-with-arrow_arrow_"][style*="width: 14px"], /* sprite confirmation prompt arrow */
-[class*="delete-confirmation-prompt_body_"] img {
+[class*="modal-with-arrow_arrow_"],
+[class*="confirmation-prompt_modal-container_"] img {
   filter: var(--editorDarkMode-primary-iconFilter);
 }
 [class*="action-menu_more-buttons-outer_"],
