@@ -65,15 +65,20 @@
 }
 
 /* Move delete button confirmation to the right side */
-.ReactModal__Content[style*="width: 300px"] {
-  /* 300px (popup width)
+/* TODO: override the props of the ModalWithArrow component instead */
+.ReactModal__Content[style*="width: 290px"] {
+  /* 290px (popup width)
    + 25px (padding)
    + 70px (sprite selector item width)
    + 25px (padding) */
-  margin-left: 420px !important;
+  margin-left: 410px !important;
 }
-[class*="delete-confirmation-prompt_arrow-container_"] {
-  order: -1;
+[class*="modal-with-arrow_arrow_"][style*="width: 14px"] {
+  /* 70px (sprite selector item width)
+   + 50px (padding)
+   + 4px (popup borders)
+   - 14px (arrow width) */
+  margin-left: 110px;
   transform: scaleX(-1);
 }
 
