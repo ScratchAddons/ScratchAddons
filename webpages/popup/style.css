@@ -105,7 +105,7 @@ button {
   display: block;
   position: absolute;
   bottom: 0;
-  width: calc(100% - 20px);
+  inset-inline: 10px;
   height: 4px;
   background-color: var(--orange);
   border-radius: 4px 4px 0 0;
