@@ -40,13 +40,29 @@ export function setupStateHandlers(addon, state, ops, liveGradientItems) {
         const paperCount = activeGradient.stops.length;
 
         if (isSameItem && state.extraStops.length > 0 && paperCount < state.extraStops.length + 2) {
-          // CHANGE_SELECTED_ITEMS fired because a gradient-type switch called setSelectedItems,
-          // which happens BEFORE CHANGE_FILL_GRADIENT_TYPE.  Paper.js was just wiped to 2 state.stops
-          // by applyGradientTypeToSelection, but our state.extraStops cache is still valid.
-          // Preserve extras: update outer CSS from the 2-stop result and reinstate.
-          state.c0css = colorToCss(activeGradient.stops[0].color);
-          state.c0hex = colorToHex(activeGradient.stops[0].color);
-          // state.c1css/state.c1hex stay from cache — state.stops[last] after the wipe may be an extra stop
+          // scratch-paint wiped extra stops (gradient-type switch or colour swap).
+          // Paper always has exactly 2 stops at this point.
+          //
+          // Detect swap vs type-switch: after a swap, scratch-paint reverses the 2-stop gradient,
+          // so paper[last] === old c0.  After a type-switch, paper[last] is an extra stop colour,
+          // not c1 — so we keep c1 from cache and only update c0 from paper.
+          const paperC0 = colorToHex(activeGradient.stops[0].color);
+          const paperC1 = colorToHex(activeGradient.stops[activeGradient.stops.length - 1].color);
+          const isSwap = paperC1 === state.c0hex;
+          if (isSwap) {
+            // Reverse the cached outer colours and mirror extra-stop offsets to match.
+            const oldC0css = state.c0css,
+              oldC0hex = state.c0hex;
+            state.c0css = state.c1css;
+            state.c0hex = state.c1hex;
+            state.c1css = oldC0css;
+            state.c1hex = oldC0hex;
+            state.extraStops = state.extraStops.map((s) => ({ ...s, offset: 1 - s.offset })).reverse();
+          } else {
+            // Type-switch: paper[0] is the correct new c0; paper[last] is an extra stop, not c1.
+            state.c0css = colorToCss(activeGradient.stops[0].color);
+            state.c0hex = paperC0;
+          }
           ops.applyAllStops();
         }
 
