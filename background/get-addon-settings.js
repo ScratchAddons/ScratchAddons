@@ -203,6 +203,32 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
         }
       }
 
+      if (addonId === "editor-number-arrow-keys" && settings.useCustom != null) {
+        // Transition v1.36 to v1.37
+        // Migrate all users away from select settings
+        if (settings.useCustom) {
+          settings.regular = Math.abs(settings.regularCustom);
+          settings.shift = Math.abs(settings.shiftCustom);
+          settings.alt = Math.abs(settings.altCustom);
+        } else {
+          const conversions = {
+            none: 0,
+            hundredth: 0.01,
+            tenth: 0.1,
+            one: 1,
+            ten: 10,
+          };
+          settings.regular = conversions[settings.regular];
+          settings.shift = conversions[settings.shift];
+          settings.alt = conversions[settings.alt];
+        }
+        delete settings.regularCustom;
+        delete settings.shiftCustom;
+        delete settings.altCustom;
+        delete settings.useCustom;
+        madeAnyChanges = madeChangesToAddon = true;
+      }
+
       if (manifest.settings) {
         for (const option of manifest.settings) {
           if (settings[option.id] === undefined) {
@@ -212,7 +238,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             // Fill in with default value
             // Cloning required for tables
             settings[option.id] = JSON.parse(JSON.stringify(option.default));
-          } else if (option.type === "positive_integer" || option.type === "integer") {
+          } else if (option.type === "positive_integer" || option.type === "integer" || option.type === "number") {
             // ^ else means typeof can't be "undefined", so it must be number
             if (typeof settings[option.id] !== "number") {
               // This setting was stringified, see #2142
