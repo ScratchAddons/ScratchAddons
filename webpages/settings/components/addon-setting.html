@@ -20,26 +20,8 @@
         <div class="setting-table-list" v-sortable>
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
-              <button
-                :disabled="!addon._enabled || i == 0"
-                class="icon-button"
-                :class="{'disabled': i == 0}"
-                @click="moveTableRow(i, i - 1)"
-                :title="msg('moveUp')"
-              >
-                <img class="icon-type" src="../../images/icons/move-up.svg" />
-              </button>
               <button :disabled="!addon._enabled" class="icon-button handle" tabindex="-1">
                 <img class="icon-type" src="../../images/icons/drag.svg" />
-              </button>
-              <button
-                :disabled="!addon._enabled || i == addonSettings[setting.id].length - 1"
-                class="icon-button"
-                :class="{'disabled': i == addonSettings[setting.id].length - 1}"
-                @click="moveTableRow(i, i + 1)"
-                :title="msg('moveDown')"
-              >
-                <img class="icon-type" src="../../images/icons/move-down.svg" />
               </button>
             </div>
             <div class="setting-table-row-settings">
@@ -65,12 +47,16 @@
           </div>
         </div>
         <div class="split-button setting-table-dropdown dropdown-parent">
-          <button :disabled="!addon._enabled" class="large-button split-button-button" @click="addTableRow()">
+          <button
+            :disabled="!addon._enabled"
+            class="icon-button split-button-button"
+            :title="msg('addRow')"
+            @click="addTableRow()"
+          >
             <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
-            {{ msg("addRow") }}
           </button>
           <dropdown
-            button-class="large-button split-button-dropdown"
+            button-class="icon-button split-button-dropdown"
             :disabled="!addon._enabled"
             :button-title="msg('addPresetRow')"
           >
