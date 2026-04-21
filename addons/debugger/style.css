@@ -1,13 +1,5 @@
 @import url("../editor-theme3/compatibility.css");
 
-[dir="ltr"] .sa-debugger-container {
-  margin-right: 0.2rem;
-}
-
-[dir="rtl"] .sa-debugger-container {
-  margin-left: 0.2rem;
-}
-
 .sa-small-stage [class*="gui_body-wrapper_"]:not(.sa-stage-hidden) .sa-debugger-container {
   display: none !important;
 }
