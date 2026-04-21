@@ -5,6 +5,24 @@ export default async function ({ addon, msg }) {
   // Redux must be initialized before waitForElement can use reduxCondition.
   addon.tab.redux.initialize();
 
+  // ── Media query patch ─────────────────────────────────────────────────
+  // scratch-paint uses react-responsive MediaQuery components with a fixed
+  // breakpoint of 1274px (fullSizeEditorMinWidth) to decide whether to show
+  // the Front/Back buttons inline or collapse them into the More dropdown.
+  // Our 5 inline shaping buttons add ~250px, so the toolbar overflows before
+  // that breakpoint is reached. We intercept matchMedia before React subscribes
+  // and shift the breakpoint to 1536px to match our actual content width.
+  // This must run before React mounts — confirmed viable by probe testing.
+  {
+    const _matchMedia = window.matchMedia.bind(window);
+    window.matchMedia = (query) => {
+      const patched = query
+        .replace("(min-width: 1274px)", "(min-width: 1536px)")
+        .replace("(max-width: 1273px)", "(max-width: 1535px)");
+      return _matchMedia(patched);
+    };
+  }
+
   // Mangled disabled-state class, populated after first DOM injection.
   let modDisabledClass = "";
   // Dashed-border separator class, populated after first DOM injection.
@@ -15,35 +33,6 @@ export default async function ({ addon, msg }) {
   shapingSection.className = "sa-shaping-section";
   shapingSection.setAttribute("dir", "");
   addon.tab.displayNoneWhileDisabled(shapingSection);
-
-  // Trigger button — visible in collapsed (narrow) mode only.
-  const shapingBtn = document.createElement("span");
-  shapingBtn.className = "sa-shaping-trigger";
-  shapingBtn.setAttribute("role", "button");
-  shapingBtn.title = msg("shaping");
-  const shapingIcon = document.createElement("img");
-  shapingIcon.className = "sa-shaping-icon";
-  shapingIcon.draggable = false;
-  shapingIcon.src = `${addon.self.dir}/icons/shaping.svg`;
-  const shapingLbl = document.createElement("span");
-  shapingLbl.className = "sa-shaping-label";
-  shapingLbl.textContent = msg("shaping");
-  shapingBtn.appendChild(shapingIcon);
-  shapingBtn.appendChild(shapingLbl);
-  shapingSection.appendChild(shapingBtn);
-
-  // Dropdown panel — fixed-position popup shown on hover in collapsed mode.
-  const shapingDropdown = document.createElement("div");
-  shapingDropdown.className = "sa-shaping-dropdown";
-  shapingSection.appendChild(shapingDropdown);
-
-  // Two layout rows inside the dropdown (used in collapsed mode).
-  const row1 = document.createElement("div");
-  row1.className = "sa-shaping-dropdown-row";
-  shapingDropdown.appendChild(row1);
-  const row2 = document.createElement("div");
-  row2.className = "sa-shaping-dropdown-row";
-  shapingDropdown.appendChild(row2);
 
   const makeItem = (iconFile, label, title, op) => {
     const btn = document.createElement("span");
@@ -69,76 +58,7 @@ export default async function ({ addon, msg }) {
   const compoundBtn = makeItem("combine.svg", msg("combine"), msg("combine-desc"), "combine");
   const expandBtn = makeItem("expand.svg", msg("expand"), msg("expand-desc"), "expand");
   const allItems = [uniteBtn, subtractBtn, intersectBtn, compoundBtn, expandBtn];
-
-  // Initially place items in the dropdown rows (collapsed is the default until measured).
-  row1.append(uniteBtn, subtractBtn, intersectBtn);
-  row2.append(compoundBtn, expandBtn);
-
-  // ── Inline ↔ collapsed layout ─────────────────────────────────────────
-  // "inline"   : 5 buttons sit directly in the toolbar section (wide toolbar).
-  // "collapsed": single trigger button; hovering opens a dropdown panel.
-  let shapingMode = "collapsed";
-
-  const setInlineMode = () => {
-    if (shapingMode === "inline") return;
-    shapingMode = "inline";
-    shapingBtn.style.display = "none";
-    closeDropdown();
-    for (const item of allItems) shapingSection.insertBefore(item, shapingDropdown);
-    if (dashedBorderClass) {
-      intersectBtn.classList.add(dashedBorderClass);
-      compoundBtn.classList.add(dashedBorderClass);
-    }
-  };
-
-  const setCollapsedMode = () => {
-    if (shapingMode === "collapsed") return;
-    shapingMode = "collapsed";
-    shapingBtn.style.display = "";
-    closeDropdown();
-    if (dashedBorderClass) intersectBtn.classList.remove(dashedBorderClass);
-    row1.append(uniteBtn, subtractBtn, intersectBtn);
-    row2.append(compoundBtn, expandBtn);
-  };
-
-  // Dropdown open/close on hover with a short leave-delay so the mouse can
-  // travel from the trigger into the panel without it flickering closed.
-  let closeTimer = null;
-  const closeDropdown = () => {
-    shapingDropdown.style.display = "none";
-  };
-  const openDropdown = () => {
-    if (closeTimer) {
-      clearTimeout(closeTimer);
-      closeTimer = null;
-    }
-    const r = shapingBtn.getBoundingClientRect();
-    shapingDropdown.style.left = r.left + "px";
-    shapingDropdown.style.top = r.bottom + 2 + "px";
-    shapingDropdown.style.display = "flex";
-  };
-  const scheduleClose = () => {
-    closeTimer = setTimeout(() => {
-      closeTimer = null;
-      closeDropdown();
-    }, 120);
-  };
-  shapingSection.addEventListener("mouseenter", () => {
-    if (addon.self.disabled) return;
-    if (shapingMode !== "collapsed") return;
-    if (modDisabledClass && shapingBtn.classList.contains(modDisabledClass)) return;
-    openDropdown();
-  });
-  shapingSection.addEventListener("mouseleave", () => scheduleClose());
-  // The dropdown is outside the section in the DOM flow (fixed position), so
-  // keep it open while the pointer is over it directly.
-  shapingDropdown.addEventListener("mouseenter", () => {
-    if (closeTimer) {
-      clearTimeout(closeTimer);
-      closeTimer = null;
-    }
-  });
-  shapingDropdown.addEventListener("mouseleave", () => scheduleClose());
+  shapingSection.append(uniteBtn, subtractBtn, intersectBtn, compoundBtn, expandBtn);
 
   // ── Click handler ─────────────────────────────────────────────────────
   const handleClick = (e) => {
@@ -156,8 +76,35 @@ export default async function ({ addon, msg }) {
     else performBooleanOp(op, e.altKey);
   };
   shapingSection.addEventListener("click", handleClick);
-  // Note: shapingDropdown is a DOM child of shapingSection so clicks already
-  // bubble up to the section listener above — no second listener needed.
+
+  // ── More-popover item factory ──────────────────────────────────────────
+  // Builds a span matching the native More menu item structure.
+  // Classes are lazily copied from native items when the popover first opens.
+  let moreItemBtnClass = "";
+  let moreItemIconClass = "";
+  let moreItemDisabledClasses = [];
+
+  const makeMoreItem = (iconFile, label, op) => {
+    const btn = document.createElement("span");
+    btn.dataset.saOp = op;
+    addon.tab.displayNoneWhileDisabled(btn);
+    const img = document.createElement("img");
+    img.draggable = false;
+    img.src = `${addon.self.dir}/icons/${iconFile}`;
+    const lbl = document.createElement("span");
+    lbl.textContent = label;
+    btn.appendChild(img);
+    btn.appendChild(lbl);
+    btn.addEventListener("click", handleClick);
+    return btn;
+  };
+
+  const moreUniteBtn = makeMoreItem("unite.svg", msg("unite"), "unite");
+  const moreSubtractBtn = makeMoreItem("subtract.svg", msg("subtract"), "subtract");
+  const moreIntersectBtn = makeMoreItem("intersect.svg", msg("intersect"), "intersect");
+  const moreCompoundBtn = makeMoreItem("combine.svg", msg("combine"), "combine");
+  const moreExpandBtn = makeMoreItem("expand.svg", msg("expand"), "expand");
+  const allMoreItems = [moreUniteBtn, moreSubtractBtn, moreIntersectBtn, moreCompoundBtn, moreExpandBtn];
 
   // ── Enable/disable buttons based on current paper.js selection ─────────
   // triggerUpdateImage() calls handleUpdateImage() which asynchronously
@@ -173,7 +120,6 @@ export default async function ({ addon, msg }) {
       const anyDisabled = document.querySelector("[class*='button_mod-disabled_']");
       if (anyDisabled) {
         modDisabledClass = [...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "";
-        shapingBtn.classList.add(modDisabledClass);
         for (const btn of shapingSection.querySelectorAll("[data-sa-op]")) {
           btn.classList.add(modDisabledClass);
         }
@@ -192,17 +138,32 @@ export default async function ({ addon, msg }) {
     const hasCompound = sel.some((item) => item instanceof paper.CompoundPath);
     const hasPaths = sel.some((item) => item instanceof paper.Path);
     const totalCount = sel.length + textCount;
+    // Count only leaves that unite would actually operate on: CompoundPaths and closed Paths.
+    // Open paths are left behind by unite, so they don't count toward the threshold.
+    const effectiveLeafCount = sel
+      .flatMap((item) => getLeafPaths(item, paper))
+      .filter((l) => l instanceof paper.CompoundPath || (l instanceof paper.Path && l.closed)).length;
     if (modDisabledClass) {
       for (const btn of shapingSection.querySelectorAll("[data-sa-op]")) {
         const op = btn.dataset.saOp;
         let enabled;
-        if (op === "unite" || op === "expand") enabled = totalCount >= 1;
+        if (op === "unite") enabled = textCount >= 1 || effectiveLeafCount >= 2;
+        else if (op === "expand") enabled = totalCount >= 1;
         else if (op === "combine" || op === "release") enabled = totalCount >= 2 || hasCompound;
         else enabled = totalCount >= 2; // subtract, intersect
         btn.classList.toggle(modDisabledClass, !enabled);
       }
-      // Main trigger: enabled whenever any operation would be available.
-      shapingBtn.classList.toggle(modDisabledClass, totalCount < 1 && !hasCompound);
+      if (moreItemDisabledClasses.length) {
+        for (const btn of allMoreItems) {
+          const op = btn.dataset.saOp;
+          let enabled;
+          if (op === "unite") enabled = textCount >= 1 || effectiveLeafCount >= 2;
+          else if (op === "expand") enabled = totalCount >= 1;
+          else if (op === "combine" || op === "release") enabled = totalCount >= 2 || hasCompound;
+          else enabled = totalCount >= 2; // subtract, intersect
+          for (const cls of moreItemDisabledClasses) btn.classList.toggle(cls, !enabled);
+        }
+      }
     }
     // Compound button morphs: combine ↔ release based on selection.
     const compoundOp = hasMultiple ? "combine" : hasCompound ? "release" : "combine";
@@ -210,6 +171,9 @@ export default async function ({ addon, msg }) {
     compoundBtn.title = msg(`${compoundOp}-desc`);
     compoundBtn.querySelector(".sa-shaping-item-icon").src = `${addon.self.dir}/icons/${compoundOp}.svg`;
     compoundBtn.querySelector(".sa-shaping-item-label").textContent = msg(compoundOp);
+    moreCompoundBtn.dataset.saOp = compoundOp;
+    moreCompoundBtn.querySelector("img").src = `${addon.self.dir}/icons/${compoundOp}.svg`;
+    moreCompoundBtn.querySelector("span").textContent = msg(compoundOp);
     // Open/Close button morphs: "Open Path" when selection is closed, "Close Path" when open.
     const paths = sel.filter((item) => item instanceof paper.Path);
     const allOpen = paths.length > 0 && paths.every((p) => !p.closed);
@@ -996,13 +960,13 @@ export default async function ({ addon, msg }) {
   });
 
   // ── Inject both sections into the fixed-tools row ─────────────────────
-  // We wait for the Front/Back sub-row specifically, then insert our sections
-  // immediately after it. Class names are read from live DOM elements at
   // runtime so any future hash changes are handled automatically.
   const toolsLoop = async () => {
     let hasRunOnce = false;
     let lastFrontBackRow = null;
-    const updateLayout = () => (window.innerWidth >= 1600 ? setInlineMode() : setCollapsedMode());
+    const updateLayout = () => {
+      shapingSection.style.display = window.innerWidth >= 1536 ? "" : "none";
+    };
     while (true) {
       const frontBackRow = await addon.tab.waitForElement("[class*='fixed-tools_row_'][class*='input-group_']", {
         markAsSeen: true,
@@ -1011,9 +975,8 @@ export default async function ({ addon, msg }) {
       });
       lastFrontBackRow = frontBackRow;
       const fixedToolsRow = frontBackRow.parentElement;
-      closeDropdown(); // ensure panel is closed on each reinsertion
       frontBackRow.after(shapingSection);
-      updateLayout(); // re-evaluate inline vs collapsed after (re)insertion
+      updateLayout(); // show or hide based on current window width
 
       if (!hasRunOnce) {
         hasRunOnce = true;
@@ -1026,7 +989,8 @@ export default async function ({ addon, msg }) {
 
         // Add a dashed separator to the LEFT of our section (right border on preceding group).
         if (dashedBorderClass) frontBackRow.classList.add(dashedBorderClass);
-        // Also apply immediately to compoundBtn for collapsed mode.
+        // Separators between the three inline groups: [unite/subtract/intersect] | [combine] | [expand].
+        if (dashedBorderClass) intersectBtn.classList.add(dashedBorderClass);
         if (dashedBorderClass) compoundBtn.classList.add(dashedBorderClass);
 
         // Copy input-group layout classes (height, flex, alignment) onto our
@@ -1037,8 +1001,7 @@ export default async function ({ addon, msg }) {
           shapingSection.className = base + " sa-shaping-section";
         }
 
-        // Clone button / icon / label classes for the trigger button so it
-        // matches the native toolbar button appearance.
+        // Capture native button / icon / label classes to apply to our inline items.
         const anyBtn = fixedToolsRow.querySelector("[class*='labeled-icon-button_mod-edit-field_']");
         const anyIcon = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-icon_']");
         const anyTitle = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-title_']");
@@ -1046,12 +1009,7 @@ export default async function ({ addon, msg }) {
         const anyDisabled = document.querySelector("[class*='button_mod-disabled_']");
         modDisabledClass = anyDisabled ? [...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "" : "";
 
-        if (anyBtn) shapingBtn.className += " " + anyBtn.className;
-        if (anyIcon) shapingIcon.className += " " + anyIcon.className;
-        if (anyTitle) shapingLbl.className += " " + anyTitle.className;
-        if (modDisabledClass) shapingBtn.classList.add(modDisabledClass);
-
-        // Style all operation items (inline and dropdown share the same elements).
+        // Style all inline operation items.
         for (const btn of shapingSection.querySelectorAll(".sa-shaping-item")) {
           if (anyBtn) btn.className += " " + anyBtn.className;
           if (modDisabledClass) btn.classList.add(modDisabledClass);
@@ -1063,7 +1021,7 @@ export default async function ({ addon, msg }) {
           if (anyTitle) lbl.className += " " + anyTitle.className;
         }
 
-        // ── Adaptive layout: inline ≥1600px window width, collapsed below ──
+        // ── Adaptive layout: show shaping section inline at ≥1536px ──
         updateLayout();
         window.addEventListener("resize", updateLayout);
 
@@ -1094,9 +1052,49 @@ export default async function ({ addon, msg }) {
           injectModeToolsBtn();
         });
         modeToolsObserver.observe(fixedToolsRow, { childList: true, subtree: true });
+
+        // Inject our items into the native More popover when it opens.
+        const injectMoreItems = (menu) => {
+          if (menu.querySelector("[data-sa-op]")) return; // already injected
+          // Lazily copy classes from the first native item (a span with an img child).
+          if (!moreItemBtnClass) {
+            const refItem = [...menu.children].find((el) => el.tagName === "SPAN" && el.querySelector("img"));
+            if (refItem) {
+              moreItemDisabledClasses = [...refItem.classList].filter((c) => c.includes("mod-disabled"));
+              moreItemBtnClass = [...refItem.classList].filter((c) => !c.includes("mod-disabled")).join(" ");
+              const refImg = refItem.querySelector("img");
+              if (refImg) moreItemIconClass = refImg.className;
+            }
+          }
+          for (const btn of allMoreItems) {
+            btn.className = moreItemBtnClass;
+            const img = btn.querySelector("img");
+            if (img && moreItemIconClass) img.className = moreItemIconClass;
+            menu.appendChild(btn);
+          }
+          deferUpdateButtonStates();
+        };
+
+        const moreMenuObserver = new MutationObserver((mutations) => {
+          if (addon.self.disabled) return;
+          for (const mutation of mutations) {
+            for (const node of mutation.addedNodes) {
+              if (node.nodeType !== Node.ELEMENT_NODE) continue;
+              const menu = node.querySelector("[class*='mod-context-menu']");
+              if (menu) {
+                injectMoreItems(menu);
+                return;
+              }
+            }
+          }
+        });
+        moreMenuObserver.observe(document.body, { childList: true });
+
         addon.self.addEventListener("disabled", () => modeToolsObserver.disconnect());
+        addon.self.addEventListener("disabled", () => moreMenuObserver.disconnect());
         addon.self.addEventListener("reenabled", () => {
           modeToolsObserver.observe(fixedToolsRow, { childList: true, subtree: true });
+          moreMenuObserver.observe(document.body, { childList: true });
           // Re-insert shapingSection immediately — waitForElement won't fire again
           // for the already-seen frontBackRow until React re-renders it.
           if (lastFrontBackRow?.isConnected) {

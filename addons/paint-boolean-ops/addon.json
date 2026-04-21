@@ -45,12 +45,6 @@
       "runAtComplete": false
     }
   ],
-  "userstyles": [
-    {
-      "url": "style.css",
-      "matches": ["projects"]
-    }
-  ],
   "settings": [
     {
       "name": "Fix modifier keys getting stuck after Alt+Tab",
