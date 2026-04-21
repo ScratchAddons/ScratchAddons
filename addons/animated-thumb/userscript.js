@@ -163,16 +163,13 @@ export default async function ({ addon, console, msg }) {
     const dropdownButton = Object.assign(document.createElement("button"), {
       className: addon.tab.scratchClass(
         "button_outlined-button",
-        addon.tab.editorMode === "editor" ? "stage-header_stage-button" : "",
+        "stage-header_stage-button",
         { others: "sa-set-thumbnail-dropdown-button" }
       ),
     });
     dropdownButton.appendChild(
       Object.assign(document.createElement("img"), {
-        src:
-          addon.tab.editorMode === "editor"
-            ? "/static/blocks-media/default/dropdown-arrow-dark.svg"
-            : "/static/blocks-media/default/dropdown-arrow.svg",
+        src: "/static/blocks-media/default/dropdown-arrow-dark.svg",
         draggable: false,
       })
     );
@@ -206,10 +203,7 @@ export default async function ({ addon, console, msg }) {
       }
     );
     const setThumbnailButton = document.querySelector(
-      `
-        [class*="stage-header_stage-size-row_"] > [class*="stage-header_stage-button_"]:first-child,
-        [class*="stage-header_rightSection_"] > [class*="stage-header_setThumbnailButton_"]
-      `,
+      '[class*="stage-header_stage-size-row_"] > [class*="stage-header_stage-button_"]:first-child',
       { markAsSeen: true }
     );
     if (dropdownContainer) {
