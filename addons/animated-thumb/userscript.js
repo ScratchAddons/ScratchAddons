@@ -161,11 +161,9 @@ export default async function ({ addon, console, msg }) {
       className: "sa-set-thumbnail-dropdown-container",
     });
     const dropdownButton = Object.assign(document.createElement("button"), {
-      className: addon.tab.scratchClass(
-        "button_outlined-button",
-        "stage-header_stage-button",
-        { others: "sa-set-thumbnail-dropdown-button" }
-      ),
+      className: addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button", {
+        others: "sa-set-thumbnail-dropdown-button",
+      }),
     });
     dropdownButton.appendChild(
       Object.assign(document.createElement("img"), {
