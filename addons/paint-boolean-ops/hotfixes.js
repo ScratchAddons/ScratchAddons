@@ -11,11 +11,9 @@
 // paper.js reads modifiers — and sync paper.Key.modifiers against the
 // native event's real hardware state. MouseEvent.altKey/shiftKey etc.
 // always reflect actual key state regardless of what paper.js cached.
-// Guarded by the "fix-stuck-modifiers" setting.
 const applyModifierKeyFix = (addon, paper) => {
   const syncModifiers = (e) => {
     if (addon.self.disabled) return;
-    if (!addon.settings.get("fix-stuck-modifiers")) return;
     const m = paper?.Key?.modifiers;
     if (!m) return;
     if (!e.altKey) m.alt = false;
@@ -39,11 +37,9 @@ const applyModifierKeyFix = (addon, paper) => {
 // get dragged to the destination.
 //
 // Fix: shadow the `selected` setter on CompoundPath.prototype so that
-// deselecting a CompoundPath also deselects its children. The cascade is
-// gated on the "fix-compound-deselect" setting at call time, so toggling
-// the setting takes effect immediately without unpatching the prototype.
-// The patch is applied once and guarded against re-application on
-// dynamic re-enable via a flag on the prototype.
+// deselecting a CompoundPath also deselects its children. Applied once
+// and guarded against re-application on dynamic re-enable via a flag
+// on the prototype.
 const applyCompoundDeselect = (addon, paper) => {
   // Guard against being applied twice (e.g. on dynamic re-enable).
   if (paper.CompoundPath.prototype._sa_deselect_cascade_patched) return;
@@ -69,7 +65,7 @@ const applyCompoundDeselect = (addon, paper) => {
     get: origGet,
     set: function (selected) {
       origSet.call(this, selected);
-      if (!selected && !addon.self.disabled && addon.settings.get("fix-compound-deselect")) {
+      if (!selected && !addon.self.disabled) {
         const children = this._children ?? this.children;
         if (children) {
           for (let i = 0; i < children.length; i++) {
