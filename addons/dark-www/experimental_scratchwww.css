@@ -207,7 +207,7 @@ body {
 .financials-section .financials-button,
 .donate-section .donate-button,
 .initiatives-section .initiatives-subsection-content .bubble.inverted,
-.share-modal .change-thumbnail-button {
+.share-modal .cancel-button {
   background-color: var(--darkWww-box);
 }
 .ReactModal__Content[style*="background: rgb(255, 255, 255)"] {
