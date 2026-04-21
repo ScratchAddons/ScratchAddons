@@ -102,10 +102,10 @@ p.sa-animated-thumb-uploaded-thumb {
   top: calc(100% + 3px);
   width: max-content;
   padding: 0.5rem 0.75rem;
-  background-color: #4d97ff;
-  border: 1px solid #3373cc;
+  background-color: var(--editorDarkMode-input, white);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
-  color: white;
+  color: var(--editorDarkMode-input-text, #575e75);
   font-size: 0.75rem;
   line-height: 0.875rem;
 }
@@ -117,7 +117,11 @@ p.sa-animated-thumb-uploaded-thumb {
 }
 
 .sa-set-thumbnail-upload-button:hover {
-  background-color: #4280d7;
+  background-color: color-mix(
+    in srgb,
+    var(--editorDarkMode-input, white),
+    var(--editorDarkMode-primary, #855cd6) 15%
+  );
 }
 
 [class*="stage-header_stage-size-row_"] .sa-set-thumbnail-upload-button:active {
@@ -128,4 +132,5 @@ p.sa-animated-thumb-uploaded-thumb {
   margin-inline-end: 0.5rem;
   width: 20px;
   height: 20px;
+  filter: var(--editorDarkMode-input-filter, none);
 }
