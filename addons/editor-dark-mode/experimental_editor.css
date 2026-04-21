@@ -262,6 +262,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="sound-editor_round-button_"] {
   border-color: var(--editorDarkMode-accent-transparent75);
 }
+[class*="alert_alert_"][class*="alert_info-blue_"] {
+  background-color: var(--editorDarkMode-accent-info);
+}
 [class*="alert_alert_"][class*="alert_success_"] {
   background-color: var(--editorDarkMode-accent-success);
   box-shadow: 0 0 0 2px var(--editorDarkMode-accent-success);
