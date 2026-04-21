@@ -1,6 +1,7 @@
 import { GradientOverlay } from "./overlay.js";
 import { clamp, colorToHex, ensureHex, colorToCss } from "./color-utils.js";
 import { setupStateHandlers, COLOR_PROPS, COLOR_ACTIONS } from "./state-handlers.js";
+import { selectedShapes } from "./paper-utils.js";
 
 export default async function ({ addon, msg, console }) {
   await addon.tab.loadScript("/libraries/thirdparty/cs/tinycolor-min.js");
@@ -84,7 +85,7 @@ export default async function ({ addon, msg, console }) {
   // is previewed relative to the visible radius rather than the implicit CSS center->100% range.
   const syncSwatches = () => {
     if (!scratchClassReady) return;
-    const item = state.cachedPaper?.project.selectedItems.find((i) => i.parent instanceof state.cachedPaper.Layer);
+    const item = selectedShapes(state.cachedPaper)[0];
     if (!item) return;
     const swatches = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"));
     for (const [idx, prop] of [
@@ -152,7 +153,7 @@ export default async function ({ addon, msg, console }) {
 
   // ── Read p0/p1, state.extraStops and colours from the first selected paper item ───────
   const readCurrentStops = (paper) => {
-    const items = paper.project.selectedItems.filter((i) => i.parent instanceof paper.Layer);
+    const items = selectedShapes(paper);
     const gradStops = items[0]?.[colorProp()]?.gradient?.stops;
     if (!gradStops || gradStops.length < 2) {
       state.extraStops = [];
@@ -183,7 +184,7 @@ export default async function ({ addon, msg, console }) {
   // Synchronous: uses state.cachedPaper so it is safe to call from rAF/event callbacks.
   // Read the gradient axis angle (degrees, 0–359) from the first selected item.
   const readCurrentAngle = (paper) => {
-    const items = paper.project.selectedItems.filter((i) => i.parent instanceof paper.Layer);
+    const items = selectedShapes(paper);
     const fc = items[0]?.[colorProp()];
     if (!fc?.gradient || fc.gradient.radial) return 0;
     const dx = fc.destination.x - fc.origin.x;
@@ -198,9 +199,7 @@ export default async function ({ addon, msg, console }) {
     if (!state.cachedPaper || addon.self.disabled) return;
     const rad = (deg * Math.PI) / 180;
     const dir = new state.cachedPaper.Point(Math.cos(rad), Math.sin(rad));
-    for (const item of state.cachedPaper.project.selectedItems.filter(
-      (i) => i.parent instanceof state.cachedPaper.Layer
-    )) {
+    for (const item of selectedShapes(state.cachedPaper)) {
       const fc = item[colorProp()];
       if (!fc?.gradient || fc.gradient.radial) continue;
       const center = fc.origin.add(fc.destination).divide(2);
@@ -245,9 +244,7 @@ export default async function ({ addon, msg, console }) {
   const applyAllStops = () => {
     if (!state.cachedPaper || addon.self.disabled) return;
     const cp = colorProp();
-    for (const item of state.cachedPaper.project.selectedItems.filter(
-      (i) => i.parent instanceof state.cachedPaper.Layer
-    )) {
+    for (const item of selectedShapes(state.cachedPaper)) {
       const fc = item[cp];
       const grad = fc?.gradient;
       if (!grad?.stops || grad.stops.length < 2) continue;
@@ -479,7 +476,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     if (!colorStateNow.gradientType) {
-      const items = paper.project.selectedItems.filter((i) => i.parent instanceof paper.Layer);
+      const items = selectedShapes(paper);
       const fg = items[0]?.[colorProp()];
       if (fg?.type !== "gradient") continue;
       const isRadial = fg.gradient?.radial;

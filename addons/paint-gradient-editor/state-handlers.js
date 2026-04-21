@@ -1,4 +1,5 @@
 import { colorToHex, colorToCss, ensureHex } from "./color-utils.js";
+import { selectedShapes } from "./paper-utils.js";
 
 // Action type strings keyed by color mode.
 export const COLOR_ACTIONS = {
@@ -31,7 +32,7 @@ export function setupStateHandlers(addon, state, ops, liveGradientItems) {
 
     // Check paper.js directly — for multi-stop gradients Redux sets gradientType=undefined
     // (shows MIXED swatches), so we must not rely on fill.gradientType alone.
-    const items = state.cachedPaper.project.selectedItems.filter((i) => i.parent instanceof state.cachedPaper.Layer);
+    const items = selectedShapes(state.cachedPaper);
     const activePaperColor = items[0]?.[ops.colorProp()];
     const activeGradient = activePaperColor?.gradient;
     if (activeGradient || COLOR_PROPS.some((prop) => items[0]?.[prop]?.gradient)) {
@@ -187,9 +188,7 @@ export function setupStateHandlers(addon, state, ops, liveGradientItems) {
       // CRITICAL: after the wipe, state.stops[0] is always the correctly-set C0, but state.stops[last]
       // may be an *extra* stop when the primary color (colorIndex=0) changed WITH extras present.
       // Read state.c0css/state.c1css from paper.js BEFORE applyAllStops uses them for the rebuild.
-      const liveItems = state.cachedPaper?.project?.selectedItems?.filter(
-        (i) => i.parent instanceof state.cachedPaper.Layer
-      );
+      const liveItems = selectedShapes(state.cachedPaper);
       const liveGrad = liveItems?.[0]?.[ops.colorProp()]?.gradient;
       if (liveGrad?.stops?.length >= 2) {
         // state.stops[0] is always the correct C0 after any applyColorToSelection wipe.

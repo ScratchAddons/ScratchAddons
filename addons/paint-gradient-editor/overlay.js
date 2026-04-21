@@ -1,6 +1,7 @@
 import StopColorPicker from "./stop-color-picker.js";
 import { clamp, colorToHex, colorToCss, parseColor, ensureHex } from "./color-utils.js";
 import { STOP_D, makeCoordHelpers, projectOntoAxis, crampedFrac, crampedToOffset } from "./gradient-coords.js";
+import { selectedShapes } from "./paper-utils.js";
 
 /**
  * @typedef {Object} OverlayOps
@@ -191,7 +192,7 @@ export class GradientOverlay {
       this.#svg.style.display = "none";
       return;
     }
-    const items = this.#paper.project.selectedItems.filter((i) => i.parent instanceof this.#paper.Layer);
+    const items = selectedShapes(this.#paper);
     const fc = items[0]?.[this.#ops.colorProp()];
     if (!fc?.gradient) {
       this.#svg.style.display = "none";
@@ -292,7 +293,7 @@ export class GradientOverlay {
 
   // -- Endpoint drag + click handlers
   #selectedLayers() {
-    return this.#paper.project.selectedItems.filter((i) => i.parent instanceof this.#paper.Layer);
+    return selectedShapes(this.#paper);
   }
 
   // Sync a p0/p1 colour change (possibly including alpha) back to Redux in a way that is
