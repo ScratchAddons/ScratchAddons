@@ -5,6 +5,9 @@ export async function updateAllBlocks(
   tab,
   { updateMainWorkspace = true, updateFlyout = true, updateCategories = false } = {}
 ) {
+  // Don't try to update if project hasn't loaded
+  if (!tab.traps.vm.editingTarget) return;
+
   const blockly = await tab.traps.getBlockly();
   const workspace = tab.traps.getWorkspace();
 
