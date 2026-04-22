@@ -2,8 +2,8 @@ import TextToPath from "./text-to-path.js";
 import PathOffset from "./path-offset.js";
 
 // ── Degenerate detection ───────────────────────────────────────────────
-// Returns true if the path/compound-path is degenerate (zero-area sliver,
-// single-point artefact, etc.) and should be discarded.
+// Checks whether a path is effectively empty — a zero-area sliver or a
+// single-point artefact left over from a boolean op.
 const isDegenerate = (r) => {
   if (!r) return true;
   if (r.children) {
@@ -16,8 +16,8 @@ const isDegenerate = (r) => {
   return false;
 };
 
-// Strips degenerate children from a CompoundPath in-place, then removes r
-// and returns null if the whole result is degenerate, otherwise returns r.
+// Removes any empty sub-paths from a boolean op result, then returns the
+// cleaned result or null if nothing usable remains.
 export const cleanResult = (r) => {
   if (!r) return null;
   if (r.children) {
@@ -35,14 +35,16 @@ export const cleanResult = (r) => {
 };
 
 // ── Style helpers ──────────────────────────────────────────────────────
-// paper.js boolean ops reliably corrupt/lose item styles, so we snapshot
-// before ops and restore after via these two helpers.
+// Snapshots an item's fill, stroke colour, and stroke width. Boolean ops
+// in paper.js reliably lose style information, so we save before and
+// restore after every operation.
 export const cloneStyle = (src) => ({
   fillColor: src.fillColor ? src.fillColor.clone() : null,
   strokeColor: src.strokeColor ? src.strokeColor.clone() : null,
   strokeWidth: src.strokeWidth,
 });
 
+// Restores a previously snapshotted style onto an item.
 export const applyStyle = (dst, style) => {
   dst.fillColor = style.fillColor;
   dst.strokeColor = style.strokeColor;
@@ -50,11 +52,9 @@ export const applyStyle = (dst, style) => {
 };
 
 // ── Path normalisation ─────────────────────────────────────────────────
-// Normalise paths before boolean ops. Scratch sometimes stores circles as
-// open paths whose last segment coincides with the first — paper.js boolean
-// ops treat open paths differently, producing corrupt results. Convert these
-// to proper closed paths by transferring the last segment's handleIn to the
-// first (preserving the closing arc's tangent) then removing the duplicate.
+// Fixes paths that Scratch stores as open but should be closed (e.g. circles
+// whose last point sits on top of the first). Boolean ops treat open and
+// closed paths differently, so we close them before operating.
 export const preprocessPaths = (items, paper) => {
   for (const item of items) {
     if (!(item instanceof paper.Path || item instanceof paper.CompoundPath)) continue;
@@ -73,8 +73,8 @@ export const preprocessPaths = (items, paper) => {
   }
 };
 
-// Removes consecutive segments that are at the same position (< 0.01 px apart).
-// These zero-length edges cause PathOffset to produce degenerate / jagged output.
+// Merges consecutive segments that sit on the same point. Duplicate points
+// cause PathOffset to produce jagged or degenerate output.
 const mergeDuplicateSegments = (item, paper) => {
   const paths = item instanceof paper.CompoundPath ? item.children.slice() : item instanceof paper.Path ? [item] : [];
   for (const path of paths) {
@@ -88,8 +88,8 @@ const mergeDuplicateSegments = (item, paper) => {
 };
 
 // ── Selection helpers ──────────────────────────────────────────────────
-// Returns the selected painting-layer closed paths/compounds sorted back→front.
-// Includes Scratch's pseudo-open circles (first point ≈ last point).
+// Returns the selected closed paths and compound paths on the painting layer,
+// sorted back-to-front. Includes Scratch's pseudo-open circles.
 export const getPaintingSelected = (paper) =>
   paper.project.selectedItems
     .filter(
@@ -108,9 +108,8 @@ export const getPaintingSelected = (paper) =>
     )
     .sort((a, b) => a.index - b.index);
 
-// Returns the top-level selected items on the painting layer, back→front.
-// "Top-level" means direct children of the Layer (not inside a Group).
-// Includes paper.Group so that Scratch groups count as one atomic unit.
+// Returns the top-level selected items on the painting layer, back-to-front.
+// Groups are treated as one unit; child paths inside a Group are excluded.
 export const getTopLevelSelected = (paper) =>
   paper.project.selectedItems
     .filter(
@@ -121,17 +120,16 @@ export const getTopLevelSelected = (paper) =>
     )
     .sort((a, b) => a.index - b.index);
 
-// Recursively collects all leaf Path/CompoundPath nodes from an item.
-// Descends into Groups; treats Path and CompoundPath as leaves (not descended).
+// Collects every leaf Path or CompoundPath from an item, descending into
+// Groups. The leaves are the actual shapes boolean ops act on.
 export const getLeafPaths = (item, paper) => {
   if (item instanceof paper.Group) return item.children.flatMap((c) => getLeafPaths(c, paper));
   return [item];
 };
 
 // ── Group-aware boolean helpers ────────────────────────────────────────
-// Recursively subtracts all cutterLeaves from every leaf in item, rebuilding
-// the original Group nesting at every depth. Returns the rebuilt item, or
-// null if the item was entirely cut away.
+// Subtracts a set of cutter shapes from every leaf in item, preserving any
+// Group nesting. Returns the rebuilt item, or null if fully cut away.
 export const subtractCuttersFrom = (item, cutterLeaves, paper) => {
   if (item instanceof paper.Group) {
     const rebuilt = item.children
@@ -154,9 +152,9 @@ export const subtractCuttersFrom = (item, cutterLeaves, paper) => {
   return cleaned;
 };
 
-// Collapses an item (potentially a nested Group) into a single flat region
-// by uniting all its leaf shapes. Returns a temporary paper item — caller
-// must .remove() it when done.
+// Flattens an item (including nested Groups) into a single united shape.
+// Used to treat a Group as one indivisible clip region. Caller must .remove()
+// the returned item when done.
 export const itemToRegion = (item, paper) => {
   const leaves = getLeafPaths(item, paper);
   let region = leaves[0].clone();
@@ -168,10 +166,8 @@ export const itemToRegion = (item, paper) => {
   return region;
 };
 
-// Recursively intersects every leaf in item with each clipRegion in sequence
-// (A∩R1∩R2…), rebuilding the original Group nesting. Each clipRegion is a
-// single pre-built shape (one per upper top-level item). Returns the rebuilt
-// item, or null if no overlap remains.
+// Intersects every leaf in item with each clip region in sequence, preserving
+// Group nesting. Returns the rebuilt item, or null if no overlap remains.
 export const intersectRegionsFrom = (item, clipRegions, paper) => {
   if (item instanceof paper.Group) {
     const rebuilt = item.children
@@ -194,10 +190,9 @@ export const intersectRegionsFrom = (item, clipRegions, paper) => {
 };
 
 // ── Expand helper ──────────────────────────────────────────────────────
-// Recursively offsets every leaf in item (descending into Groups), preserving
-// each leaf's own fill/stroke. Coincident adjacent points are merged first to
-// prevent PathOffset producing jagged artefacts. Returns the rebuilt item
-// (possibly a new Group), or null if everything was degenerate.
+// Outsets every leaf shape in item by the given amount, descending into
+// Groups. Used to convert a stroke into a filled outline. Returns the
+// rebuilt item, or null if the result is entirely degenerate.
 export const offsetItem = (item, amount, paper) => {
   if (item instanceof paper.Group) {
     const rebuilt = item.children
@@ -224,8 +219,8 @@ export const offsetItem = (item, amount, paper) => {
 };
 
 // ── Text conversion ────────────────────────────────────────────────────
-// Converts selected PointText items to path outlines using rasterize+trace.
-// Returns the number of items successfully converted.
+// Converts any selected text items to path outlines so boolean ops can act
+// on them. Returns the number of items converted.
 export const convertTextItems = (paper) => {
   const textItems = paper.project.selectedItems.filter(
     (item) => item instanceof paper.PointText && item.layer?.data?.isPaintingLayer

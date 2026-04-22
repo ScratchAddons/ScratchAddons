@@ -1,4 +1,5 @@
 ﻿import { applyHotfixes } from "./hotfixes.js";
+import { patchToolbarBreakpoint } from "./breakpoint-patch.js";
 import {
   applyStyle,
   cleanResult,
@@ -18,24 +19,6 @@ export default async function ({ addon, msg }) {
   // Redux must be initialized before waitForElement can use reduxCondition.
   addon.tab.redux.initialize();
 
-  // ── Media query patch ─────────────────────────────────────────────────
-  // scratch-paint uses react-responsive MediaQuery components with a fixed
-  // breakpoint of 1274px (fullSizeEditorMinWidth) to decide whether to show
-  // the Front/Back buttons inline or collapse them into the More dropdown.
-  // Our 5 inline shaping buttons add ~250px, so the toolbar overflows before
-  // that breakpoint is reached. We intercept matchMedia before React subscribes
-  // and shift the breakpoint to 1536px to match our actual content width.
-  // This must run before React mounts — confirmed viable by probe testing.
-  {
-    const _matchMedia = window.matchMedia.bind(window);
-    window.matchMedia = (query) => {
-      const patched = query
-        .replace("(min-width: 1274px)", "(min-width: 1536px)")
-        .replace("(max-width: 1273px)", "(max-width: 1535px)");
-      return _matchMedia(patched);
-    };
-  }
-
   // Mangled disabled-state class, populated after first DOM injection.
   let modDisabledClass = "";
   // Dashed-border separator class, populated after first DOM injection.
@@ -47,6 +30,7 @@ export default async function ({ addon, msg }) {
   shapingSection.setAttribute("dir", "");
   addon.tab.displayNoneWhileDisabled(shapingSection);
 
+  // Builds one inline toolbar button (icon + label) for a shaping operation.
   const makeItem = (iconFile, label, title, op) => {
     const btn = document.createElement("span");
     btn.className = "sa-shaping-item";
@@ -73,6 +57,7 @@ export default async function ({ addon, msg }) {
   shapingSection.append(uniteBtn, subtractBtn, intersectBtn, compoundBtn, expandBtn);
 
   // ── Click handler ─────────────────────────────────────────────────────
+  // Routes clicks on any [data-sa-op] element to the correct operation.
   const handleClick = (e) => {
     if (addon.self.disabled) return;
     const btn = e.target.closest("[data-sa-op]");
@@ -90,8 +75,8 @@ export default async function ({ addon, msg }) {
   shapingSection.addEventListener("click", handleClick);
 
   // ── More-popover item factory ──────────────────────────────────────────
-  // Builds a span matching the native More menu item structure.
-  // Classes are lazily copied from native items when the popover first opens.
+  // Builds a button matching the native More popover item structure.
+  // CSS classes are lazily copied from native items when the popover first opens.
   let moreItemBtnClass = "";
   let moreItemIconClass = "";
   let moreItemDisabledClasses = [];
@@ -119,14 +104,13 @@ export default async function ({ addon, msg }) {
   const allMoreItems = [moreUniteBtn, moreSubtractBtn, moreIntersectBtn, moreCompoundBtn, moreExpandBtn];
 
   // ── Enable/disable buttons based on current paper.js selection ─────────
-  // triggerUpdateImage() calls handleUpdateImage() which asynchronously
-  // serialises the canvas to SVG, feeds it through Redux, and re-imports it
-  // into paper.js — resetting selectedItems in the process. We must wait for
-  // that round-trip to finish before reading the new selection state.
-  // Two nested requestAnimationFrames ensure we run after React has committed
-  // the updated state to the DOM, without relying on a fixed timeout.
+  // Schedules updateButtonStates after React's next two paint frames. This is
+  // necessary because triggerUpdateImage() round-trips through Redux, resetting
+  // paper.js selectedItems — we must read selection only after that settles.
   const deferUpdateButtonStates = () => requestAnimationFrame(() => requestAnimationFrame(updateButtonStates));
 
+  // Reads the current paper.js selection and enables or disables each button
+  // accordingly. Also morphs the Combine/Release and Open/Close buttons.
   const updateButtonStates = async () => {
     if (!modDisabledClass) {
       const anyDisabled = document.querySelector("[class*='button_mod-disabled_']");
@@ -199,6 +183,8 @@ export default async function ({ addon, msg }) {
     if (modDisabledClass) compoundBtn.classList.toggle(modDisabledClass, !(totalCount >= 2 || hasCompound));
   };
 
+  // Runs a flat unite, subtract, or intersect on the current paper.js selection.
+  // keepTop=true clones the front shape and keeps it in place after the op.
   const performBooleanOp = async (opName, keepTop = false) => {
     const paper = await addon.tab.traps.getPaper();
 
@@ -308,11 +294,9 @@ export default async function ({ addon, msg }) {
     deferUpdateButtonStates();
   };
 
-  // ── Punch Through (Shift+Subtract): topmost top-level item (or group) cuts
-  // every leaf in every other top-level item. The cutter item is removed.
-  //
-  // Process targets front→back (high index first): inserting results at a high
-  // position doesn't shift the indices of lower (unprocessed) targets.
+  // ── Punch Through (Shift+Subtract) ──────────────────────────────────────
+  // The topmost selected item cuts through every other selected item.
+  // Targets are processed front→back so index insertions don't shift unprocessed items.
   const performPunchThrough = async (keepTop = false) => {
     const paper = await addon.tab.traps.getPaper();
     convertTextItems(paper);
@@ -353,18 +337,10 @@ export default async function ({ addon, msg }) {
     deferUpdateButtonStates();
   };
 
-  // ── Divide: split all shapes into every distinct non-overlapping region ───
-  // Matching Illustrator's Divide Pathfinder: A circle and a half-covering
-  // rectangle → 3 pieces (crescent, overlap, rectangle-overhang).
-  //
-  // Algorithm (back→front):
-  //   • Seed with the backmost shape as the first region.
-  //   • For each subsequent shape, split every existing region at the new
-  //     shape's boundary into (overlap) and (remainder).
-  //     - overlap takes the incoming shape's colour (it's on top).
-  //     - remainder keeps its existing colour.
-  //   • Also emit the part of the incoming shape not covered by any prior
-  //     region (the "exclusive" fragment).
+  // ── Divide (Alt+Intersect) ────────────────────────────────────────────────
+  // Splits all selected shapes into every distinct non-overlapping region,
+  // like Illustrator's Divide Pathfinder. Each overlap fragment takes the
+  // colour of the frontmost shape covering it.
   const performDivide = async () => {
     const paper = await addon.tab.traps.getPaper();
     convertTextItems(paper);
@@ -439,11 +415,9 @@ export default async function ({ addon, msg }) {
     deferUpdateButtonStates();
   };
 
-  // ── Combine: CompoundPath with punch-through holes ─────────────────────
-  // Use the even-odd fill rule: a point inside an ODD number of sub-paths is
-  // filled; inside an EVEN number = transparent hole. This works correctly for
-  // both fully-contained shapes AND partially-overlapping shapes — no winding
-  // manipulation needed.
+  // ── Combine ───────────────────────────────────────────────────────────────
+  // Merges all selected paths into one CompoundPath using the even-odd fill
+  // rule, so overlapping areas become transparent holes.
   const performCombine = async () => {
     const paper = await addon.tab.traps.getPaper();
     convertTextItems(paper);
@@ -479,7 +453,8 @@ export default async function ({ addon, msg }) {
     deferUpdateButtonStates();
   };
 
-  // ── Release: split CompoundPath back into individual Paths ─────────────
+  // ── Release ───────────────────────────────────────────────────────────────
+  // Splits any selected CompoundPaths back into their individual child paths.
   const performRelease = async () => {
     const paper = await addon.tab.traps.getPaper();
     const selected = paper.project.selectedItems.filter((item) => item instanceof paper.CompoundPath);
@@ -501,9 +476,9 @@ export default async function ({ addon, msg }) {
     deferUpdateButtonStates();
   };
 
-  // ── Outline Expand / Contract ──────────────────────────────────────────
-  // Applies PathOffset to every selected path/compound/group in the painting
-  // layer. Text items are converted to paths first.
+  // ── Outline Expand ────────────────────────────────────────────────────────
+  // Outsets each selected shape by half its stroke width, turning the visual
+  // stroke into a filled outline. Text items are converted to paths first.
   const performOffset = async () => {
     const paper = await addon.tab.traps.getPaper();
     convertTextItems(paper);
@@ -536,7 +511,8 @@ export default async function ({ addon, msg }) {
     deferUpdateButtonStates();
   };
 
-  // ── Open / Close: toggle selected paths between open and closed ─────────
+  // ── Open / Close ──────────────────────────────────────────────────────────
+  // Toggles selected paths between open and closed.
   // CLOSING: sets closed = true (straight line back to start).
   // OPENING: finds the break-point (first segment with segment.selected or
   //   segment.point.selected — only visible when using the Reshape tool),
@@ -628,7 +604,9 @@ export default async function ({ addon, msg }) {
     deferUpdateButtonStates();
   };
 
-  // ── Trigger scratch-paint undo snapshot ───────────────────────────────
+  // ── Trigger scratch-paint undo snapshot ───────────────────────────────────
+  // Walks up the React fiber tree to call handleUpdateImage(), which commits
+  // the current paper.js canvas state to Redux and records an undo entry.
   const triggerUpdateImage = () => {
     const canvasContainer = document.querySelector("[class*='paint-editor_canvas-container_']");
     if (!canvasContainer) return;
@@ -655,6 +633,8 @@ export default async function ({ addon, msg }) {
   let modeToolsOCLbl = null; // <span> label
   let modeToolsClassesApplied = false;
 
+  // Creates the Open/Close button DOM element. Called once; the element is
+  // re-inserted into whichever mode-tools bar instance is currently live.
   const buildModeToolsBtn = () => {
     modeToolsOCBtn = document.createElement("span");
     modeToolsOCBtn.setAttribute("role", "button");
@@ -674,16 +654,10 @@ export default async function ({ addon, msg }) {
   };
   buildModeToolsBtn();
 
-  // Inject (or re-inject) the Open/Close button after "Pointed" in the
-  // mode-tools context bar — but ONLY in the Reshape/path-editing context.
-  //
-  // Detection: the Reshape context is the only mode that renders a group with
-  // class mode-tools_mod-dashed-border (contains Curved + Pointed). Drawing
-  // tools (pen, ellipse, etc.) never render that group, so we remove the button
-  // when it's absent and inject inside that group when it's present.
-  // Result layout: [Curved] [Pointed] [Open/Close] | [Delete]
-  // Inject (or re-inject) the Open/Close button after "Pointed" in the
-  // mode-tools context bar — but ONLY in the Reshape/path-editing context.
+  // ── Mode-tools injection ──────────────────────────────────────────────────
+  // Inserts the Open/Close button after "Pointed" in the Reshape mode-tools
+  // bar. Removes it in all other modes. Called on every CHANGE_MODE event
+  // because React rebuilds mode-tools children when the active tool changes.
   const injectModeToolsBtn = () => {
     const mode = addon.tab.redux.state?.scratchPaint?.mode;
     if (mode !== "RESHAPE") {
@@ -729,14 +703,12 @@ export default async function ({ addon, msg }) {
     modeToolsOCBtn?.remove();
   });
 
-  // ── Inject both sections into the fixed-tools row ─────────────────────
-  // runtime so any future hash changes are handled automatically.
+  // ── Main loop ─────────────────────────────────────────────────────────────
+  // Waits for the paint editor toolbar to appear, injects our sections, and
+  // wires up all observers. Loops so it re-injects after sprite switches.
   const toolsLoop = async () => {
     let hasRunOnce = false;
     let lastFrontBackRow = null;
-    const updateLayout = () => {
-      shapingSection.style.display = window.innerWidth >= 1536 ? "" : "none";
-    };
     while (true) {
       const frontBackRow = await addon.tab.waitForElement("[class*='fixed-tools_row_'][class*='input-group_']", {
         markAsSeen: true,
@@ -746,7 +718,7 @@ export default async function ({ addon, msg }) {
       lastFrontBackRow = frontBackRow;
       const fixedToolsRow = frontBackRow.parentElement;
       frontBackRow.after(shapingSection);
-      updateLayout(); // show or hide based on current window width
+      shapingSection.style.display = ""; // waitForElement only fires in wide mode
 
       // Re-apply the separator on every loop iteration: frontBackRow is a React
       // element that gets replaced when the toolbar re-renders at the breakpoint,
@@ -796,9 +768,17 @@ export default async function ({ addon, msg }) {
           if (anyTitle) lbl.className += " " + anyTitle.className;
         }
 
-        // ── Adaptive layout: show shaping section inline at ≥1536px ──
-        updateLayout();
-        window.addEventListener("resize", updateLayout);
+        // ── Patch React's MediaQuery breakpoint ───────────────────────────
+        // react-responsive captures window.matchMedia at bundle evaluation time,
+        // so we drive the toolbar layout by patching the fiber tree directly.
+        // See breakpoint-patch.js for implementation details.
+        const applyPatch = patchToolbarBreakpoint({
+          fixedToolsRow,
+          onMatchChange: (matches) => {
+            shapingSection.style.display = matches ? "" : "none";
+          },
+          isDisabled: () => addon.self.disabled,
+        });
 
         // Cache the editor container. Re-query only when React has replaced it
         // (isConnected goes false), so we're never holding a stale reference.
@@ -870,11 +850,11 @@ export default async function ({ addon, msg }) {
         addon.self.addEventListener("reenabled", () => {
           modeToolsObserver.observe(fixedToolsRow, { childList: true, subtree: true });
           moreMenuObserver.observe(document.body, { childList: true });
-          // Re-insert shapingSection immediately — waitForElement won't fire again
-          // for the already-seen frontBackRow until React re-renders it.
-          if (lastFrontBackRow?.isConnected) {
+          applyPatch();
+          // Re-insert shapingSection immediately in wide mode — waitForElement
+          // won't fire again for an already-seen frontBackRow.
+          if (lastFrontBackRow?.isConnected && shapingSection.style.display !== "none") {
             lastFrontBackRow.after(shapingSection);
-            updateLayout();
           }
           injectModeToolsBtn();
         });
