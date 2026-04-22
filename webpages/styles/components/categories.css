@@ -32,3 +32,8 @@
 .categories-block.closed:not(.smallMode) {
   display: none;
 }
+
+.categories-container {
+  display: flex;
+  flex-direction: column;
+}
