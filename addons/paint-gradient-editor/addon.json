@@ -29,7 +29,7 @@
     }
   ],
   "tags": ["editor", "costumeEditor", "beta"],
-  "versionAdded": "1.45.0",
+  "versionAdded": "1.46.0",
   "enabledByDefault": false,
   "libraries": ["scratch-paint", "tinycolor2"],
   "userscripts": [
