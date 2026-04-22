@@ -330,6 +330,9 @@ export default async function ({ addon, console, msg }) {
         }
       }
       // If there is no top value, do nothing and leave the dropdown open
+    } else if (event.key === " ") {
+      // Typing space in search bar shouldn't select an item.
+      event.stopPropagation();
     } else if (event.key === "Escape") {
       Blockly.DropDownDiv.hide();
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
