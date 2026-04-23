@@ -129,11 +129,6 @@ export default async function ({ addon, msg }) {
     return true;
   };
 
-  // Returns true when segment A and the following segment B form a rounded corner
-  // in a "native" (non-rounded-by-us) smooth shape such as a circle drawn by the
-  // circle tool.  In this case BOTH A and B have all handles set.  We recover the
-  // virtual corner tip by intersecting lines through A.handleOut and B.handleIn —
-  // both of which point from their respective arc endpoints toward the corner tip.
   // Build a CornerHandle for a sharp corner at segment index i.
   const buildSharpCorner = (pathItem, i) => {
     const segs = pathItem.segments;
