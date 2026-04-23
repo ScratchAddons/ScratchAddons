@@ -8,7 +8,7 @@
     }
   ],
   "tags": ["editor", "costumeEditor"],
-  "versionAdded": "1.45.0",
+  "versionAdded": "1.46.0",
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
