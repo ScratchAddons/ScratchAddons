@@ -234,10 +234,14 @@ export default async function ({ addon, msg, console }) {
           // Keep the popup focused when Shift+dragging
           // Blockly wants to focus the dragged block when starting or ending drag
           popupInput.focus();
-          document.addEventListener("pointerup", () => {
-            allowMenuClose = true;
-            popupInput.focus();
-          }, { once: true });
+          document.addEventListener(
+            "pointerup",
+            () => {
+              allowMenuClose = true;
+              popupInput.focus();
+            },
+            { once: true }
+          );
         }
       };
 

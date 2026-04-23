@@ -557,7 +557,16 @@ export class BlockTypeInfo {
 
       return [
         new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, parts, inputs, BlockShape.End),
-        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, newBlockParts, [newInput], BlockShape.Stack),
+        new BlockTypeInfo(
+          workspace,
+          Blockly,
+          vm,
+          workspaceForm,
+          serializedForm,
+          newBlockParts,
+          [newInput],
+          BlockShape.Stack
+        ),
       ];
     } else {
       return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, parts, inputs)];
