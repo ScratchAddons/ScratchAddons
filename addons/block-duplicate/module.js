@@ -47,7 +47,11 @@ export async function load(addon) {
       }
 
       const isDuplicating =
-        enableDuplication && e.altKey && !this.flyout && this.targetBlock.type !== "procedures_definition";
+        enableDuplication &&
+        e.altKey &&
+        !this.flyout &&
+        this.targetBlock.type !== "procedures_definition" &&
+        this.targetBlock.type !== "procedures_prototype";
 
       if (isDuplicating) {
         this.startWorkspace_.setResizesEnabled(false);
