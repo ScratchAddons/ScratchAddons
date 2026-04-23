@@ -392,11 +392,6 @@ export default async function ({ addon, msg, console }) {
     Blockly.Events.disable();
     try {
       newBlock = selectedPreview.block.createWorkspaceForm();
-      if (!Blockly.registry) {
-        // New Blockly doesn't currently change shadow IDs when copying blocks,
-        // so the addon only does this on old Blockly.
-        Blockly.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
-      }
 
       var svgRootNew = newBlock.getSvgRoot();
       if (!svgRootNew) {

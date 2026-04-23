@@ -275,13 +275,10 @@ export class BlockInstance {
    * @returns {*} A 'workspace form' block.
    */
   createWorkspaceForm() {
-    if (this.typeInfo.id === "control_stop") {
-      this.typeInfo.domForm
-        .querySelector("mutation")
-        .setAttribute("hasnext", "" + (this.inputs[0].value === "other scripts in sprite"));
-    }
-
-    const block = this.typeInfo.Blockly.Xml.domToBlock(this.typeInfo.domForm, this.typeInfo.workspace);
+    const block = this.typeInfo.Blockly.serialization.blocks.append(
+      this.typeInfo.serializedForm,
+      this.typeInfo.workspace
+    );
     for (let i = 0; i < this.typeInfo.inputs.length; i++) {
       const inputValue = this.inputs[i];
       if (inputValue !== null) this.typeInfo.inputs[i].setValue(block, inputValue);
@@ -377,19 +374,11 @@ export class BlockTypeInfo {
    * @returns {BlockTypeInfo[]}
    */
   static getBlocks(Blockly, vm, workspace, locale) {
-    const flyoutWorkspace = workspace.getFlyout()?.getWorkspace();
+    const flyout = workspace.getFlyout();
+    const flyoutWorkspace = flyout?.getWorkspace();
     if (!flyoutWorkspace) return [];
 
     const blocks = [];
-
-    const flyoutDom = Blockly.Xml.workspaceToDom(flyoutWorkspace);
-    const flyoutDomBlockMap = {};
-    for (const blockDom of flyoutDom.children) {
-      if (blockDom.tagName.toUpperCase() === "BLOCK") {
-        let id = blockDom.getAttribute("id");
-        flyoutDomBlockMap[id] = blockDom;
-      }
-    }
     for (const workspaceBlock of flyoutWorkspace.getTopBlocks()) {
       blocks.push(
         ...BlockTypeInfo._createBlocks(
@@ -398,7 +387,7 @@ export class BlockTypeInfo {
           Blockly,
           locale,
           workspaceBlock,
-          flyoutDomBlockMap[workspaceBlock.id]
+          flyout.serializeBlock(workspaceBlock)
         )
       );
     }
@@ -406,7 +395,7 @@ export class BlockTypeInfo {
     return blocks;
   }
 
-  static _createBlocks(workspace, vm, Blockly, locale, workspaceForm, domForm) {
+  static _createBlocks(workspace, vm, Blockly, locale, workspaceForm, serializedForm) {
     let parts = [];
     let inputs = [];
 
@@ -546,7 +535,7 @@ export class BlockTypeInfo {
         ofParts[baseVarPartIdx] = ofInputs[baseVarInputIdx];
         ofParts[baseTargetPartIdx] = ofInputs[baseTargetInputIdx];
 
-        blocks.push(new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, ofParts, ofInputs));
+        blocks.push(new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, ofParts, ofInputs));
       }
 
       return blocks;
@@ -567,19 +556,19 @@ export class BlockTypeInfo {
       newBlockParts[parts.indexOf(oldInput)] = newInput;
 
       return [
-        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs, BlockShape.End),
-        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, newBlockParts, [newInput], BlockShape.Stack),
+        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, parts, inputs, BlockShape.End),
+        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, newBlockParts, [newInput], BlockShape.Stack),
       ];
     } else {
-      return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs)];
+      return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, parts, inputs)];
     }
   }
 
-  constructor(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs, shape) {
+  constructor(workspace, Blockly, vm, workspaceForm, serializedForm, parts, inputs, shape) {
     /** @type {string} */
     this.id = workspaceForm.type;
     this.workspaceForm = workspaceForm;
-    this.domForm = domForm;
+    this.serializedForm = serializedForm;
     /** @type {BlockShape} */
     this.shape = shape ?? BlockShape.getBlockShape(this.workspaceForm);
     /** @type {BlockCategory} */
