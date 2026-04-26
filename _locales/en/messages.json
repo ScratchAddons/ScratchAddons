@@ -149,8 +149,8 @@
   "close": {
     "message": "Close"
   },
-  "filter": {
-    "message": "Filter:"
+  "filters": {
+    "message": "Addon filters"
   },
   "resetToDefault": {
     "message": "Reset to default settings"
