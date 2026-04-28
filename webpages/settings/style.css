@@ -1,5 +1,7 @@
 html {
   background: var(--content-background);
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-text) transparent;
 }
 
 body {
@@ -228,26 +230,6 @@ body.iframe #search-not-found {
   text-align: center;
 }
 
-/*scrollbar*/
-
-/* width */
-::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
-}
-
-/* hide track */
-::-webkit-scrollbar-track,
-::-webkit-scrollbar-corner {
-  background: none;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: var(--gray-text);
-  border-radius: 4px;
-}
-
 /* Small screens & popup */
 @media (max-width: 700px) {
   .addons-block-header {
@@ -379,4 +361,20 @@ button.setting-input.color {
   align-items: center;
   justify-content: center;
   user-select: none;
+}
+
+@media (forced-colors: active) {
+  .header-button {
+    background-color: ButtonFace;
+    outline: 1px solid ButtonBorder;
+    outline-offset: -1px;
+  }
+
+  .color-container {
+    forced-color-adjust: none;
+  }
+
+  .color-container .setting-input.color {
+    border-color: ButtonBorder;
+  }
 }

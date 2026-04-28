@@ -54,6 +54,7 @@
     margin-left: auto;
     background-color: transparent;
     border: none;
+    line-height: 0;
     cursor: pointer;
   }
 
@@ -70,6 +71,16 @@
       max-height: 100%;
       box-sizing: border-box;
       border-radius: 0;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .modal {
+      outline: 1px solid;
+    }
+
+    .close {
+      background-color: ButtonFace;
     }
   }
 </style>

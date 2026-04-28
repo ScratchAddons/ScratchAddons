@@ -102,4 +102,19 @@
       transition-property: background-color;
     }
   }
+
+  @media (forced-colors: active) {
+    .category {
+      transition-property: padding, height;
+    }
+
+    .category.sel {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: preserve-parent-color;
+    }
+    .category::before {
+      background-color: HighlightText;
+    }
+  }
 </style>

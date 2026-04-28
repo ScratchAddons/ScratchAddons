@@ -65,3 +65,22 @@
     text-align: center;
   }
 }
+
+@media (forced-colors: active) {
+  .filter-options {
+    border-color: ButtonBorder;
+  }
+
+  .filter-option {
+    background-color: ButtonFace;
+    border-color: ButtonBorder;
+    color: ButtonText;
+    transition: none;
+  }
+
+  .filter-options input:checked + label {
+    background-color: Highlight;
+    color: HighlightText;
+    forced-color-adjust: preserve-parent-color;
+  }
+}

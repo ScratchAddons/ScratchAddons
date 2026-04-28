@@ -328,4 +328,14 @@
       flex-shrink: 0;
     }
   }
+
+  @media (forced-colors: active) {
+    .setting-dropdown .color-preview {
+      forced-color-adjust: none;
+    }
+
+    .setting-dropdown .color-preview span {
+      border-color: CanvasText;
+    }
+  }
 </style>

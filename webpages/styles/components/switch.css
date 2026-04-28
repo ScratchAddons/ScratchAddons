@@ -47,3 +47,25 @@
 [dir="rtl"] .switch:checked::before {
   left: 4px;
 }
+
+@media (forced-colors: active) {
+  .switch {
+    background-color: ButtonFace;
+    border-color: ButtonBorder;
+    transition: none;
+  }
+
+  .switch::before {
+    background-color: ButtonText;
+    transition-property: left;
+  }
+
+  .switch:checked,
+  .switch.blue:checked {
+    background-color: SelectedItem;
+  }
+
+  .switch:checked::before {
+    background-color: SelectedItemText;
+  }
+}

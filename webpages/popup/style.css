@@ -165,3 +165,21 @@ iframe {
   font-size: 14px;
   user-select: text;
 }
+
+@media (forced-colors: active) {
+  #version {
+    opacity: 1;
+  }
+
+  .popup-name {
+    transition: none;
+  }
+  .popup-name.sel {
+    background-color: Highlight;
+    color: HighlightText;
+    forced-color-adjust: preserve-parent-color;
+  }
+  .popup-name.sel::before {
+    background-color: HighlightText;
+  }
+}

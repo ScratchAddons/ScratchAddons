@@ -90,3 +90,13 @@
   border-inline-end-color: transparent;
   border-top-color: var(--tooltip-background);
 }
+
+@media (forced-colors: active) {
+  .tooltiptext {
+    outline: 1px solid;
+  }
+
+  .tooltip .tooltiptext::after {
+    display: none;
+  }
+}

@@ -63,6 +63,7 @@
     background-color: #4d97ff;
     border-radius: 10px;
     opacity: 0.25;
+    forced-color-adjust: none;
   }
 
   .compact-messages-text-placeholder {
@@ -94,6 +95,7 @@
     background-color: #4d97ff;
     border-radius: 3px;
     opacity: 0.25;
+    forced-color-adjust: none;
   }
 
   .compact-messages-comment-bubble {
@@ -141,5 +143,15 @@
     left: auto;
     right: -12px;
     border-radius: 0 0 12px 0;
+  }
+
+  @media (forced-colors: active) {
+    .compact-messages-text-placeholder {
+      background-color: CanvasText;
+    }
+
+    .compact-messages-comment-bubble::after {
+      border-color: Canvas;
+    }
   }
 </style>

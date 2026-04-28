@@ -44,4 +44,14 @@
   [dir="rtl"] .preset-palette > span:last-child {
     border-radius: 4px 0 0 4px;
   }
+
+  @media (forced-colors: active) {
+    .preset-palette {
+      forced-color-adjust: none;
+    }
+
+    .preset-palette > span {
+      border-color: CanvasText;
+    }
+  }
 </style>
