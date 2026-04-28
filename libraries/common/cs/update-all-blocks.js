@@ -3,13 +3,15 @@ const updateAllBlocksEvents = new EventTarget();
 
 export async function updateAllBlocks(
   tab,
-  { updateMainWorkspace = true, updateFlyout = true, updateCategories = false } = {}
+  { updateMainWorkspace = true, updateFlyout = true, updateCategories = false, updateRenderer = false } = {}
 ) {
   // Don't try to update if project hasn't loaded
   if (!tab.traps.vm.editingTarget) return;
 
   const blockly = await tab.traps.getBlockly();
   const workspace = tab.traps.getWorkspace();
+  const toolbox = workspace.getToolbox();
+  const flyout = workspace.getFlyout();
 
   // Calling Events.disable() will:
   // - prevent changes to the workspace from being added to the undo stack;
@@ -18,6 +20,13 @@ export async function updateAllBlocks(
   blockly.Events.disable();
 
   if (workspace) {
+    if (updateRenderer) {
+      workspace.renderer.refreshDom(workspace.getSvgGroup(), workspace.getTheme(), workspace.getInjectionDiv());
+      if (flyout) {
+        const flyoutWorkspace = flyout.getWorkspace();
+        flyoutWorkspace.renderer.refreshDom(flyoutWorkspace.getSvgGroup(), flyoutWorkspace.getTheme(), null);
+      }
+    }
     if (updateMainWorkspace) {
       const xml = blockly.Xml.workspaceToDom(workspace);
       if (xml.querySelector("variables")) {
@@ -38,8 +47,6 @@ export async function updateAllBlocks(
       xml.appendChild(variables);
       blockly.clearWorkspaceAndLoadFromXml(xml, workspace);
     }
-    const toolbox = workspace.getToolbox();
-    const flyout = workspace.getFlyout();
     if (toolbox && flyout && (updateFlyout || updateCategories)) {
       if (updateFlyout) {
         if (blockly.registry) {

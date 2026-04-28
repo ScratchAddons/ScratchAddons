@@ -167,20 +167,11 @@ export default async function ({ addon, console }) {
     return new Blockly.utils.Size(-8 * multiplier, 0);
   };
 
-  const updateRendererAndBlocks = () => {
-    const workspace = addon.tab.traps.getWorkspace();
-    workspace.renderer.refreshDom(workspace.getSvgGroup(), workspace.getTheme(), workspace.getInjectionDiv());
-
-    const flyout = workspace.getFlyout();
-    if (flyout) {
-      const flyoutWorkspace = flyout.getWorkspace();
-      flyoutWorkspace.renderer.refreshDom(flyoutWorkspace.getSvgGroup(), flyoutWorkspace.getTheme(), null);
-    }
-
-    updateAllBlocks(addon.tab);
+  const update = () => {
+    updateAllBlocks(addon.tab, { updateRenderer: true });
   };
-  addon.settings.addEventListener("change", () => updateRendererAndBlocks());
-  addon.self.addEventListener("disabled", () => updateRendererAndBlocks());
-  addon.self.addEventListener("reenabled", () => updateRendererAndBlocks());
-  updateRendererAndBlocks();
+  addon.settings.addEventListener("change", () => update());
+  addon.self.addEventListener("disabled", () => update());
+  addon.self.addEventListener("reenabled", () => update());
+  update();
 }

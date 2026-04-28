@@ -113,21 +113,12 @@ export default async function ({ addon }) {
     };
   }
 
-  const updateRendererAndBlocks = () => {
-    const workspace = addon.tab.traps.getWorkspace();
-    workspace.renderer.refreshDom(workspace.getSvgGroup(), workspace.getTheme(), workspace.getInjectionDiv());
-
-    const flyout = workspace.getFlyout();
-    if (flyout) {
-      const flyoutWorkspace = flyout.getWorkspace();
-      flyoutWorkspace.renderer.refreshDom(flyoutWorkspace.getSvgGroup(), flyoutWorkspace.getTheme(), null);
-    }
-
-    updateAllBlocks(addon.tab);
+  const update = () => {
+    updateAllBlocks(addon.tab, { updateRenderer: true });
   };
 
-  addon.self.addEventListener("disabled", () => updateRendererAndBlocks());
-  addon.self.addEventListener("reenabled", () => updateRendererAndBlocks());
-  addon.settings.addEventListener("change", () => updateRendererAndBlocks());
-  updateRendererAndBlocks();
+  addon.self.addEventListener("disabled", () => update());
+  addon.self.addEventListener("reenabled", () => update());
+  addon.settings.addEventListener("change", () => update());
+  update();
 }
