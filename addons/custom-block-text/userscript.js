@@ -21,8 +21,7 @@ export default async function ({ addon, console }) {
   // Be careful with specificity because we're adding this userstyle manually
   // to the <head> without checking if other styles are above or below.
   fontSizeCss.textContent = `
-    .blocklyText,
-    .blocklyHtmlInput {
+    .blocklyText {
       font-size: calc(var(--customBlockText-sizeSetting) * 0.12pt) !important;
     }
     .blocklyFlyoutLabelText {
@@ -65,6 +64,16 @@ export default async function ({ addon, console }) {
   textShadowCss.disabled = true;
   document.head.appendChild(textShadowCss);
 
+  const ScratchRenderer = blocklyInstance.registry.getClass(blocklyInstance.registry.Type.RENDERER, "scratch_classic");
+  const oldScratchRendererMakeConstants = ScratchRenderer.prototype.makeConstants_;
+  ScratchRenderer.prototype.makeConstants_ = function () {
+    const constants = oldScratchRendererMakeConstants.call(this);
+    if (!addon.self.disabled) {
+      constants.FIELD_TEXT_FONTSIZE = 0.12 * currentTextSize;
+    }
+    return constants;
+  };
+
   const updateBlockly = () => {
     if (!blocklyInstance.registry) {
       // old Blockly
@@ -73,7 +82,7 @@ export default async function ({ addon, console }) {
     // If font size has changed, middle click popup needs to clear its cache too
     clearTextWidthCache();
 
-    updateAllBlocks(addon.tab);
+    updateAllBlocks(addon.tab, { updateRenderer: true });
   };
 
   const setFontSize = (wantedSize) => {

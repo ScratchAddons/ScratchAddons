@@ -460,19 +460,7 @@ export default async function ({ addon, console, msg }) {
       await setTheme(scratchTheme);
     }
 
-    if (Blockly.registry) {
-      // new Blockly
-      const workspace = addon.tab.traps.getWorkspace();
-      workspace.renderer.refreshDom(workspace.getSvgGroup(), workspace.getTheme(), workspace.getInjectionDiv());
-
-      const flyout = workspace.getFlyout();
-      if (flyout) {
-        const flyoutWorkspace = flyout.getWorkspace();
-        flyoutWorkspace.renderer.refreshDom(flyoutWorkspace.getSvgGroup(), flyoutWorkspace.getTheme(), null);
-      }
-    }
-
-    updateAllBlocks(addon.tab);
+    updateAllBlocks(addon.tab, { updateRenderer: true });
   };
 
   update();

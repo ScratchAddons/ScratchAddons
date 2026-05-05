@@ -58,8 +58,9 @@ export async function load(addon) {
         ScratchBlocks.Events.disable();
         let newBlock;
         try {
-          const serializedBlock = ScratchBlocks.serialization.blocks.save(this.targetBlock);
-          ScratchBlocks.scratchBlocksUtils.stripIds(serializedBlock);
+          let serializedBlock = ScratchBlocks.serialization.blocks.save(this.targetBlock);
+          const stripIdsResult = ScratchBlocks.scratchBlocksUtils.stripIds(serializedBlock);
+          if (stripIdsResult) serializedBlock = stripIdsResult;
           newBlock = ScratchBlocks.serialization.blocks.appendInternal(serializedBlock, this.startWorkspace_);
           const xy = this.targetBlock.getRelativeToSurfaceXY();
           newBlock.moveBy(xy.x, xy.y);
