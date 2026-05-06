@@ -293,7 +293,7 @@ export default async function ({ addon, console, msg }) {
         // scrolling should not be animated when opening the flyout in category click mode
         if (!scrollAnimation) {
           if (Blockly.registry)
-            this.workspace_.scrollbar.setY(this.scrollTarget); // new Blockly
+            this.getWorkspace().scrollbar.setY(this.scrollTarget); // new Blockly
           else this.scrollbar_.set(this.scrollTarget);
           this.scrollTarget = null;
           scrollAnimation = true;
@@ -304,8 +304,8 @@ export default async function ({ addon, console, msg }) {
     if (Blockly.registry) {
       // new Blockly
       const ContinuousFlyout = workspace.getToolbox().getFlyout().constructor;
-      const oldStepScrollAnimation = ContinuousFlyout.prototype.stepScrollAnimation_;
-      ContinuousFlyout.prototype.stepScrollAnimation_ = newStepScrollAnimation(oldStepScrollAnimation);
+      const oldStepScrollAnimation = ContinuousFlyout.prototype.stepScrollAnimation;
+      ContinuousFlyout.prototype.stepScrollAnimation = newStepScrollAnimation(oldStepScrollAnimation);
     } else {
       const oldStepScrollAnimation = Blockly.Flyout.prototype.stepScrollAnimation;
       Blockly.Flyout.prototype.stepScrollAnimation = newStepScrollAnimation(oldStepScrollAnimation);
