@@ -203,7 +203,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
         }
       }
 
-      // Needs to be outside of manifest.settings condition
+      // Needs to be outside of the manifest.settings condition
       if (addonId === "block-cherry-picking" && settings.invertDrag !== undefined) {
         // Transition v1.45.2 to v1.46.0
         addonsEnabled[addonId] = settings.invertDrag;
