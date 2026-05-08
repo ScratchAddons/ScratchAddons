@@ -32,57 +32,9 @@ export async function load(addon) {
 
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
-    const oldUpdateIsDragging = ScratchBlocks.Gesture.prototype.updateIsDragging;
-    ScratchBlocks.Gesture.prototype.updateIsDragging = function (e) {
-      if (!this.targetBlock) {
-        oldUpdateIsDragging.call(this, e);
-        return;
-      }
-
-      const isDuplicating =
-        enableDuplication &&
-        e.altKey &&
-        !this.flyout &&
-        this.targetBlock.type !== "procedures_definition" &&
-        this.targetBlock.type !== "procedures_prototype";
-
-      if (isDuplicating) {
-        this.startWorkspace_.setResizesEnabled(false);
-        ScratchBlocks.Events.disable();
-        let newBlock;
-        try {
-          let serializedBlock = ScratchBlocks.serialization.blocks.save(this.targetBlock);
-          const stripIdsResult = ScratchBlocks.scratchBlocksUtils.stripIds(serializedBlock);
-          if (stripIdsResult) serializedBlock = stripIdsResult;
-          newBlock = ScratchBlocks.serialization.blocks.appendInternal(serializedBlock, this.startWorkspace_);
-          const xy = this.targetBlock.getRelativeToSurfaceXY();
-          newBlock.moveBy(xy.x, xy.y);
-        } catch (e) {
-          console.error(e);
-        }
-        ScratchBlocks.Events.enable();
-        this.startWorkspace_.setResizesEnabled(true);
-
-        if (newBlock) {
-          if (ScratchBlocks.Events.isEnabled()) {
-            ScratchBlocks.Events.setGroup(true);
-            // setGroup(false) will be called in endDrag() (overridden below)
-            ScratchBlocks.Events.fire(new (ScratchBlocks.Events.get(ScratchBlocks.Events.BLOCK_CREATE))(newBlock));
-          }
-          const isCherryPickingInverted = invertCherryPicking && this.targetBlock.getParent();
-          if ((e.ctrlKey || e.metaKey) === !isCherryPickingInverted) {
-            // Holding both Ctrl/Cmd and Alt -> duplicate a single block
-            const nextBlock = newBlock.getNextBlock();
-            if (nextBlock) {
-              nextBlock.dispose();
-            }
-          }
-          this.targetBlock = newBlock;
-          ScratchBlocks.common.setSelected(newBlock);
-          newBlock.dragStrategy.saIsDuplicating = true;
-        }
-      }
-
+  const oldUpdateIsDragging = ScratchBlocks.Gesture.prototype.updateIsDragging;
+  ScratchBlocks.Gesture.prototype.updateIsDragging = function (e) {
+    if (!this.targetBlock) {
       oldUpdateIsDragging.call(this, e);
       return;
     }
