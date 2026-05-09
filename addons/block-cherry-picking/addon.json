@@ -3,7 +3,7 @@
   "description": "Flips the block dragging controls. Drag a single block out of the middle of a script by default, or hold the Ctrl key to drag the entire stack attached below it.",
   "info": [
     {
-      "text": "To drag a single block without this addon hold Ctrl.",
+      "text": "To drag a single block without this addon, hold Ctrl.",
       "id": "vanilla"
     },
     {
