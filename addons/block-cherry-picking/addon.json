@@ -3,6 +3,10 @@
   "description": "Inverts the block dragging controls. Drag a single block out of the middle of a script by default and hold the Ctrl key to drag the entire stack attached below it.",
   "info": [
     {
+      "text": "To drag a single block without this addon hold Ctrl.",
+      "id": "vanilla"
+    },
+    {
       "text": "On macOS, use the Cmd key instead of the Ctrl key.",
       "id": "macContextDisabled"
     }
