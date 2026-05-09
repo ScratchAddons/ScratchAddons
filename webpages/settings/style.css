@@ -263,6 +263,10 @@ body.iframe #search-not-found {
   .addons-container {
     padding: 10px 0;
   }
+
+  .arrow-button {
+    margin-inline-end: 6px;
+  }
 }
 
 /* Popup */
