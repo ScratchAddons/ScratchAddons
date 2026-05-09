@@ -107,18 +107,6 @@
       }
     },
     {
-      "name": "page-divider5",
-      "value": {
-        "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.05)",
-        "white": "rgba(255, 255, 255, 0.05)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "page"
-        }
-      }
-    },
-    {
       "name": "page-divider15",
       "value": {
         "type": "textColor",
@@ -555,6 +543,18 @@
       "value": {
         "type": "textColor",
         "black": "#056dff",
+        "white": "#80b5ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchFoundationBlueText",
+      "value": {
+        "type": "textColor",
+        "black": "#0060e6",
         "white": "#80b5ff",
         "source": {
           "type": "settingValue",

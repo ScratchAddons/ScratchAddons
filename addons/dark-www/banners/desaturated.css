@@ -1,4 +1,5 @@
 .unsupported-browser,
+.become-member-banner,
 .wedo .top-banner,
 .sa-annual-report-2019 .message-section,
 .sa-annual-report-2019 .initiatives-section .initiatives-subsection-header.community,
@@ -85,7 +86,6 @@
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
   border-color: #27473e;
 }
-.donate-banner,
 .sa-annual-report-2019 .reach-scratch-jr {
   background-color: #1c332c;
 }

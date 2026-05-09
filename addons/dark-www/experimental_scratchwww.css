@@ -48,9 +48,6 @@ body {
 .project-favorites.favorited::before {
   filter: none;
 }
-.about .masthead div li:nth-child(odd) {
-  border-color: var(--darkWww-page-divider5);
-}
 .developers #donate,
 .conf2021-panel,
 .conf2019-panel,
@@ -146,7 +143,6 @@ body {
 .studio-activity .studio-messages-list,
 .cards-modal-container,
 .projects-carousel .content .slick-track .thumbnail,
-.about .body,
 .messages-social-list,
 .comment-text,
 .comment .comment-body .comment-bubble,
@@ -194,7 +190,7 @@ body {
 }
 :root:not(.sa-editor) .button.white,
 .intro-banner .intro-button,
-.donate-banner .donate-container .donate-button,
+.become-member-banner .become-member-container .become-member-button,
 .hoc-banner .hoc-more-activities,
 .hoc-banner .hoc-banner-image,
 .feature-banner .feature-learn-more,
@@ -310,13 +306,15 @@ a.social-messages-profile-link:link,
 .tabs button.active:hover {
   border-color: var(--darkWww-box-greenText);
 }
-.donate-banner .donate-container .donate-button,
 .donate-section .donate-button,
 .tou-modal .tou-step-inner-content a.link {
   color: var(--darkWww-box-greenText);
 }
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
+}
+.become-member-banner .become-member-container .become-member-button {
+  color: var(--darkWww-box-scratchFoundationBlueText);
 }
 .validation-checkbox-required /* join flow */,
 /* ToU acceptance */
@@ -718,9 +716,6 @@ img.tips-icon {
 }
 
 /* Border color */
-.about .body,
-.about .body img,
-.about .body iframe,
 .preview .remix-credit,
 .preview .project-description,
 .commenting-status,
