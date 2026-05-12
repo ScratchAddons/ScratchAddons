@@ -32,7 +32,7 @@ button {
   box-shadow: var(--large-shadow);
   user-select: none;
   position: relative;
-  z-index: 10;
+  z-index: 100;
 }
 
 h1 {
