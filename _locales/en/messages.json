@@ -149,8 +149,8 @@
   "close": {
     "message": "Close"
   },
-  "filters": {
-    "message": "Addon filters"
+  "categoryFilter": {
+    "message": "Addon category filter"
   },
   "resetToDefault": {
     "message": "Reset to default settings"
@@ -265,6 +265,9 @@
   },
   "search": {
     "message": "Search"
+  },
+  "addonsSearch": {
+    "message": "Addons Search"
   },
   "permissionsTitle": {
     "message": "Permissions - Scratch Addons"
