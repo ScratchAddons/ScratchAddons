@@ -2,9 +2,6 @@ function removeScratchBadges() {
 const membershipInComments = document.querySelectorAll('.avatar-wrapper.avatar-badge-wrapper');
 const membershipOnProfilePicture = document.querySelectorAll('.user-icon.avatar-badge');
 const membershipOnProfilePictureAlt = document.querySelectorAll('.avatar.avatar-badge');
-const membershipProfileImage = document.querySelectorAll('[src*="membership-badge.svg"]');
-const membershipMemberBadge = document.querySelectorAll('.membership-label-container');
-const membershipLinks = document.querySelectorAll('[href="https://www.scratchfoundation.org/membership"]');
 
 membershipInComments.forEach(function(el) {
   el.classList.remove('avatar-badge-wrapper');
@@ -16,18 +13,6 @@ membershipOnProfilePictureAlt.forEach(function(el) {
 
 membershipOnProfilePicture.forEach(function(el) {
   el.classList.remove('avatar-badge');
-  });
-
-membershipProfileImage.forEach(function(el) {
-  el.style.display = 'none';
-  });
-
-membershipMemberBadge.forEach(function(el) {
-   el.style.display = 'none';
-  });
-
-membershipLinks.forEach(function(el) {
-   el.style.display = 'none';  
   });
 }
 
