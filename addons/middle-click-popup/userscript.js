@@ -122,7 +122,7 @@ export default async function ({ addon, msg, console }) {
       // 4. everything else
       const prio = (block) =>
         ["operators", "data"].indexOf(block.category.name) -
-        (block.id.startsWith("data_") && block.id !== "data_variable");
+        (block.id.startsWith("data_") && block.id !== "data_variable" ? 1 : 0);
       return prio(b) - prio(a);
     });
 
@@ -138,10 +138,13 @@ export default async function ({ addon, msg, console }) {
     popupInput.focus();
     updateInput();
 
+    // @ts-ignore - registry exists in scratch-blocks but not in standard Blockly types
     if (Blockly.registry) {
-      // new Blockly: register delete area
+      // new Blockly: register delete area (remove first in case a previous open didn't clean up)
+      workspace.getComponentManager().removeComponent("saMiddleClickPopup");
       const component = new Blockly.DeleteArea();
       component.id = "saMiddleClickPopup";
+      // @ts-ignore - Blockly type mismatch between versions
       component.getClientRect = () => {
         const rect = popupContainer.getBoundingClientRect();
         return new Blockly.utils.Rect(rect.top, rect.bottom, rect.left, rect.right);
@@ -420,18 +423,15 @@ export default async function ({ addon, msg, console }) {
     } finally {
       Blockly.Events.enable();
     }
-    if (Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
-    }
 
-    let fakeEvent = {
+    let fakeEvent = /** @type {any} */ ({
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
       stopPropagation: function () {},
       preventDefault: function () {},
       target: selectedPreview.svgBlock,
-    };
+    });
     if (Blockly.registry) {
       // new Blockly expects a pointerdown event
       fakeEvent.type = "pointerdown";
@@ -456,6 +456,11 @@ export default async function ({ addon, msg, console }) {
       gesture.hasExceededDragRadius = true;
       gesture.dragger = gesture.createDragger(newBlock, workspace);
       gesture.dragger.onDragStart(fakeEvent);
+      // Fire BlockCreate inside the drag's event group (set by onDragStart) so it
+      // coalesces with the BlockMove fired on drop into a single undo point.
+      if (Blockly.Events.isEnabled()) {
+        Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
+      }
       if (e instanceof KeyboardEvent) {
         // Blockly gets confused when it receives two pointerdown events (the fake one
         // and a real one) without a pointerup in between. Prevent it from canceling
@@ -466,6 +471,11 @@ export default async function ({ addon, msg, console }) {
     } else {
       if (workspace.getGesture(fakeEvent)) {
         workspace.startDragWithFakeEvent(fakeEvent, newBlock);
+      }
+      // Fire BlockCreate inside the drag's event group so it coalesces with the
+      // BlockMove fired on drop into a single undo point.
+      if (Blockly.Events.isEnabled()) {
+        Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
       }
     }
   }
@@ -534,11 +544,15 @@ export default async function ({ addon, msg, console }) {
 
   // Open on mouse wheel button
   const doWorkspaceClickMethodName = Blockly.registry ? "doWorkspaceClick" : "doWorkspaceClick_";
+  // @ts-ignore - Blockly prototype modification
   const _doWorkspaceClick_ = Blockly.Gesture.prototype[doWorkspaceClickMethodName];
+  // @ts-ignore - Blockly prototype modification
   Blockly.Gesture.prototype[doWorkspaceClickMethodName] = function () {
-    const event = Blockly.registry ? this.mostRecentEvent : this.mostRecentEvent_;
+    // @ts-ignore - Blockly internal property access
+    const event = /** @type {MouseEvent} */ (Blockly.registry ? this.mostRecentEvent : this.mostRecentEvent_);
     if (event.button === 1 || event.shiftKey) openPopup();
     mousePosition = { x: event.clientX, y: event.clientY };
+    // @ts-ignore - calling saved function
     _doWorkspaceClick_.call(this);
   };
 
