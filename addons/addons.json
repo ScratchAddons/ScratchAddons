@@ -1,4 +1,4 @@
-[
+f[
   "editor-searchable-dropdowns",
   "editor-devtools",
   "forum-search",
@@ -82,6 +82,7 @@
   "no-script-bumping",
   "user-id",
   "hide-delete-button",
+  "hide-membership",
   "name-backpack-items",
   "forum-copy-code",
   "paint-by-default",
