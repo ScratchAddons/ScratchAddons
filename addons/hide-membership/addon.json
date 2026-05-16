@@ -22,5 +22,6 @@
   ],
   "libraries": ["scratch-www"],
   "versionAdded": "1.46.0",
+  "injectAsStyleElt": true,
   "enabledByDefault": false
 }
