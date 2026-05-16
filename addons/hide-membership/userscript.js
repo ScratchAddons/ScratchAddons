@@ -15,7 +15,6 @@ membershipOnProfilePicture.forEach(function(el) {
   el.classList.remove('avatar-badge');
   });
   }
-}
 
 removeScratchBadges();
 
