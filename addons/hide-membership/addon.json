@@ -14,12 +14,6 @@
       "matches": ["website"]
     }
   ],
-  "userstyles": [
-    {
-      "url": "style.css",
-      "matches": ["website"]
-    }
-  ],
   "libraries": ["scratch-www"],
   "versionAdded": "1.46.0",
   "enabledByDefault": false
