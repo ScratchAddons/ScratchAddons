@@ -11,7 +11,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["website"]
+      "matches": ["https://scratch.mit.edu/*"]
     }
   ],
   "libraries": ["scratch-www"],
