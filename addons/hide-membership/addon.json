@@ -14,6 +14,12 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "userstyle.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
   "libraries": ["scratch-www"],
   "versionAdded": "1.46.0",
   "enabledByDefault": false
