@@ -1,0 +1,26 @@
+{
+  "name": "Hide Membership",
+  "description": "Hides scratch membership.",
+  "tags": ["community", "theme"],
+  "credits": [
+    {
+      "name": "rosics-code",
+      "link": "https://github.com/rosics-code"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["website"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["website"]
+    }
+  ],
+  "libraries": ["scratch-www"],
+  "versionAdded": "1.46.0",
+  "enabledByDefault": false
+}
