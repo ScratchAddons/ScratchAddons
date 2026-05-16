@@ -1,0 +1,15 @@
+    .avatar-badge-wrapper {
+        background: none;
+    }
+
+    [src*="membership-badge.svg"] {
+        display: none;
+    }
+
+    .membership-label-container {
+        display: none;
+    }
+
+    [href="https://www.scratchfoundation.org/membership"] {
+        display: none;
+    }
