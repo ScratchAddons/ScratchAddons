@@ -13,3 +13,11 @@
     [href="https://www.scratchfoundation.org/membership"] {
         display: none;
     }
+
+    #profile-data .box-head .header-text {
+        margin-left: -10px !important;
+   }
+
+    .studio-project-tile .studio-project-info {
+      padding: 0px 5px !important;
+    }
