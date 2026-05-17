@@ -35,6 +35,22 @@
   ],
   "settings": [
     {
+      "name": "Toggle on",
+      "id": "mode",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "hover",
+          "name": "Hover"
+        },
+        {
+          "id": "click",
+          "name": "Click"
+        }
+      ],
+      "default": "hover"
+    },
+    {
       "name": "Animation speed",
       "id": "speed",
       "type": "select",
@@ -79,5 +95,10 @@
   "tags": ["community"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.35.0"
+  "versionAdded": "1.35.0",
+  "latestUpdate": {
+    "version": "1.45.0",
+    "isMajor": false,
+    "newSettings": ["mode"]
+  }
 }
