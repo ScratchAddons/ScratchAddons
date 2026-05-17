@@ -5,8 +5,16 @@ import {
   autoPositionComment,
 } from "../../libraries/common/cs/devtools-utils.js";
 
+// Gap between stacks when script-snap is not active (not constrained to grid size)
+const NON_SNAP_GAP = 50;
+
 export default async function ({ addon, console, msg, safeMsg: m }) {
   const blockly = await addon.tab.traps.getBlockly();
+
+  const isScriptSnapEnabled = async () => {
+    const enabledAddons = await addon.self.getEnabledAddons();
+    return enabledAddons.includes("script-snap");
+  };
 
   const originalMsg = blockly.Msg.CLEAN_UP;
   addon.self.addEventListener("disabled", () => (blockly.Msg.CLEAN_UP = originalMsg));
@@ -16,12 +24,13 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
   const oldCleanUpFunc = blockly.WorkspaceSvg.prototype.cleanUp;
   blockly.WorkspaceSvg.prototype.cleanUp = function () {
     if (addon.self.disabled) return oldCleanUpFunc.call(this);
-    doCleanUp();
+    void doCleanUp();
   };
 
-  const doCleanUp = () => {
+  const doCleanUp = async () => {
     const workspace = addon.tab.traps.getWorkspace();
     const promptUnused = addon.settings.get("promptUnused");
+    const scriptSnapEnabled = await isScriptSnapEnabled();
 
     UndoGroup.startUndoGroup(workspace);
 
@@ -42,14 +51,17 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
     }
 
     const gridSize = workspace.getGrid().spacing || workspace.getGrid().spacing_; // new blockly || old blockly
+    // Use a fixed pixel gap when script-snap is off; the grid-size gap was too large without snapping.
+    const gap = scriptSnapEnabled ? gridSize : NON_SNAP_GAP;
 
-    // coordinates start between the workspace dots but script-snap snaps to them
-    let cursorX = gridSize / 2;
+    // When script-snap is active, coordinates start between workspace dots so snap aligns to them
+    const startOffset = scriptSnapEnabled ? gridSize / 2 : 0;
+    let cursorX = startOffset;
 
     const maxWidths = result.maxWidths;
 
     for (const column of columns) {
-      let cursorY = gridSize / 2;
+      let cursorY = startOffset;
       let maxWidth = 0;
 
       for (const block of column.blocks) {
@@ -58,15 +70,20 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
           block.moveBy(cursorX - xy.x, cursorY - xy.y);
         }
         const heightWidth = block.getHeightWidth();
-        cursorY += heightWidth.height + gridSize;
-        cursorY += gridSize - ((cursorY + gridSize / 2) % gridSize);
+        cursorY += heightWidth.height + gap;
+        // Only snap-round cursor positions when script-snap is active; otherwise gaps become grid-size multiples.
+        if (scriptSnapEnabled) {
+          cursorY += gridSize - ((cursorY + gridSize / 2) % gridSize);
+        }
 
         const maxWidthWithComments = maxWidths[block.id] || 0;
         maxWidth = Math.max(maxWidth, Math.max(heightWidth.width, maxWidthWithComments));
       }
 
-      cursorX += maxWidth + gridSize;
-      cursorX += gridSize - ((cursorX + gridSize / 2) % gridSize);
+      cursorX += maxWidth + gap;
+      if (scriptSnapEnabled) {
+        cursorX += gridSize - ((cursorX + gridSize / 2) % gridSize);
+      }
     }
 
     const topComments = workspace.getTopComments();
