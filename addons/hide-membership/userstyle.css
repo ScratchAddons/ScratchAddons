@@ -22,7 +22,7 @@
       padding: 0px 5px !important;
     }
 
-    .slider-carousel img.avatar-badge, .avatar {
+    .slider-carousel img.avatar-badge, .avatar, dd.postavatar img.avatar-badge {
       border: none !important;
       border-radius: 0 !important;
     }
