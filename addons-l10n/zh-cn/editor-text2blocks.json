@@ -1,0 +1,23 @@
+{
+  "editor-text2blocks/main": "将文本转换为积木",
+  "editor-text2blocks/parse-button": "解析",
+  "editor-text2blocks/apply-button": "应用",
+  "editor-text2blocks/code": "代码",
+  "editor-text2blocks/variables": "变量",
+  "editor-text2blocks/issues": "问题",
+  "editor-text2blocks/lists": "列表",
+  "editor-text2blocks/name": "名称",
+  "editor-text2blocks/action": "操作",
+  "editor-text2blocks/configuration": "配置",
+  "editor-text2blocks/create-new": "创建新项",
+  "editor-text2blocks/use-existing": "使用现有项",
+  "editor-text2blocks/new-name-placeholder": "默认值：{name}",
+  "editor-text2blocks/errors": "错误",
+  "editor-text2blocks/warnings": "警告",
+  "editor-text2blocks/warnings-confirm-content": "存在警告。它们可能导致意外行为，甚至破坏您的项目。您想继续吗？如果您不确定，请点击“取消”。",
+  "editor-text2blocks/no-variables-lists": "未找到变量或列表。",
+  "editor-text2blocks/no-issues": "未发现问题。",
+  "editor-text2blocks/duplicate-name-error": "已存在：\n{names}",
+  "editor-text2blocks/variable": "变量",
+  "editor-text2blocks/list": "列表"
+}
