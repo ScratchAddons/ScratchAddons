@@ -37,6 +37,7 @@
       "matches": ["projects"]
     }
   ],
+  "relatedAddons": ["editor-random-direction-block"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.20.0"
