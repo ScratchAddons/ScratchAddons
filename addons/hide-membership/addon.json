@@ -1,0 +1,27 @@
+{
+  "name": "Hide Membership",
+  "description": "Hides Scratch Membership badges.",
+  "tags": ["community", "theme"],
+  "credits": [
+    {
+      "name": "rosics-code",
+      "link": "https://github.com/rosics-code"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "libraries": ["scratch-www"],
+  "versionAdded": "1.46.0",
+  "injectAsStyleElt": true,
+  "enabledByDefault": false
+}

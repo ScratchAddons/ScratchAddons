@@ -1,0 +1,28 @@
+    .avatar-badge-wrapper {
+        background: none;
+    }
+
+    [src*="membership-badge.svg"] {
+        display: none;
+    }
+
+    .membership-label-container {
+        display: none;
+    }
+
+    [href="https://www.scratchfoundation.org/membership"] {
+        display: none;
+    }
+
+    #profile-data .box-head .header-text {
+        margin-left: -10px !important;
+   }
+
+    .studio-project-tile .studio-project-info {
+      padding: 0px 5px !important;
+    }
+
+    .slider-carousel img.avatar-badge, .avatar, dd.postavatar img.avatar-badge {
+      border: none !important;
+      border-radius: 0 !important;
+    }
