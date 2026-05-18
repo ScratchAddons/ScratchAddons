@@ -1,0 +1,13 @@
+.sa-mention {
+  background-color: var(--darkWww-button, #855cd6);
+  --color: var(--darkWww-button-text, #ffffff);
+  color: var(--color) !important;
+  padding: 0 4px;
+  display: inline-block;
+  margin-block: 1px;
+  border-radius: 99999px;
+}
+
+.sa-mention::selection {
+  background-color: rgba(0, 0, 0, 15%);
+}
