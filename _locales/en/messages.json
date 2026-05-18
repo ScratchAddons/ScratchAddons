@@ -143,14 +143,17 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "sidebar": {
+    "message": "Sidebar"
+  },
   "toggleSidebar": {
     "message": "Toggle sidebar"
   },
   "close": {
     "message": "Close"
   },
-  "filter": {
-    "message": "Filter:"
+  "categoryFilter": {
+    "message": "Addon category filter"
   },
   "resetToDefault": {
     "message": "Reset to default settings"
@@ -265,6 +268,9 @@
   },
   "search": {
     "message": "Search"
+  },
+  "addonsSearch": {
+    "message": "Addons Search"
   },
   "permissionsTitle": {
     "message": "Permissions - Scratch Addons"
