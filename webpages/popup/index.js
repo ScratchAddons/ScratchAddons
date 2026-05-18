@@ -1,6 +1,8 @@
 import globalTheme from "../../libraries/common/global-theme.js";
+import { checkAndOpenUnsupportedPage } from "../../libraries/common/settings-page-apis.js";
 
 globalTheme();
+checkAndOpenUnsupportedPage();
 
 function calculatePopupSize() {
   /* For mobile or when there isn't enough space for the full popup size */
