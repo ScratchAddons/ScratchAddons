@@ -11,7 +11,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["newPostScreens"]
+      "matches": ["forums"]
     }
   ],
   "userstyles": [
