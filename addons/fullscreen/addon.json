@@ -10,8 +10,11 @@
   "info": [
     {
       "type": "notice",
-      "text": "If you choose to never show the toolbar, remember that you can use the Esc key to exit the project player's full screen mode.",
-      "id": "hideToolbarNotice"
+      "text": "Remember that you can use the Esc key to exit the project player's full screen mode.",
+      "id": "hideToolbarNotice",
+      "if": {
+        "settings": { "toolbar": "hide" }
+      }
     }
   ],
   "settings": [
