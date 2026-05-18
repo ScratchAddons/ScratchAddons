@@ -1,0 +1,77 @@
+{
+  "name": "Pixel art tools",
+  "description": "Adds pixel art focused tools and options to the bitmap costume editor, including a palette, pixel mode, pixel-sized canvas, and brush tweaks.",
+  "tags": ["editor", "costumeEditor"],
+  "versionAdded": "1.45.0",
+  "info": [
+    {
+      "type": "info",
+      "text": "Shift-click a palette color to edit it. Right-click a color to remove it from the palette.",
+      "id": "paletteControls"
+    },
+    {
+      "type": "notice",
+      "text": "Imported costumes will be half their original size. Use \"set size to 200%\" in your project to display them at full size.",
+      "id": "importedCostumeSize"
+    }
+  ],
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js",
+      "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "styles.css"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false,
+  "libraries": ["scratch-gui", "scratch-paint"],
+  "settings": [
+    {
+      "name": "Default width",
+      "id": "defaultWidth",
+      "type": "integer",
+      "default": 32,
+      "min": 1,
+      "max": 480
+    },
+    {
+      "name": "Default height",
+      "id": "defaultHeight",
+      "type": "integer",
+      "default": 32,
+      "min": 1,
+      "max": 360
+    },
+    {
+      "name": "Enable pixel mode by default",
+      "id": "enableByDefault",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "New paint costumes are bitmap by default",
+      "id": "autoBitmap",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Prevent automatic bitmap trimming",
+      "id": "preventTrim",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Hide animation preview",
+      "id": "hideAnimationPreview",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

@@ -14,5 +14,6 @@ Third-party libraries included are:
 - [idb 7.1.1](https://unpkg.com/idb@7.1.1/build/umd.js) (ISC)
 - [Sortable.js 1.15.0](https://unpkg.com/sortablejs@1.15.0/Sortable.min.js) (MIT)
 - [Roboto](https://fonts.google.com/specimen/Roboto) (Apache-2.0)
+- [gif.js 0.2.0](https://unpkg.com/gif.js@0.2.0/dist/gif.js) (MIT)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
