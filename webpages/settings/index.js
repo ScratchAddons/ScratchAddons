@@ -403,6 +403,7 @@ let fuse;
         duplicate: false,
       };
 
+      // Display placeholders while the addon list is loading
       setTimeout(() => {
         if (!this.loaded) {
           this.addonListObjs = Array(EXAMPLE_LIST_SIZE)
@@ -624,6 +625,7 @@ let fuse;
     for (const group of vue.addonGroups) {
       for (let groupIndex = 0; groupIndex < group.addonIds.length; groupIndex++) {
         const addonId = group.addonIds[groupIndex];
+        // Find and reuse a placeholder object if one exists (see exampleAddonListItem)
         const cachedObj = vue.addonListObjs.find((o) => o.manifest._addonId === "example");
         const obj = cachedObj || {};
         // Some addons might be twice in the list, such as in "new" and "enabled"
@@ -644,13 +646,13 @@ let fuse;
         if (!cachedObj) vue.addonListObjs.push(obj);
         naturalIndex++;
 
-        // After replacing all cached objects, pause until the first items render
+        // After reusing all placeholder objects, pause until the first items render
         if (naturalIndex === EXAMPLE_LIST_SIZE) {
           await new Promise((resolve) => setTimeout(resolve, 0));
         }
       }
     }
-    // Remove unused remaining cached objects. Can only happen in iframe mode
+    // Remove leftover placeholder slots. Can only happen in iframe mode
     vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
