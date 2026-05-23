@@ -13,6 +13,7 @@ import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 
 const MORE_SETTINGS_HASH = "#moresettings";
 const ADDON_HASH_PREFIX = "#addon-";
+const EXAMPLE_LIST_SIZE = 15; // Determines the number of placeholders to show on the skeleton loader
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -404,7 +405,7 @@ let fuse;
 
       setTimeout(() => {
         if (!this.loaded) {
-          this.addonListObjs = Array(25)
+          this.addonListObjs = Array(EXAMPLE_LIST_SIZE)
             .fill("")
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
@@ -621,7 +622,8 @@ let fuse;
 
     let naturalIndex = 0; // Index when not searching
     for (const group of vue.addonGroups) {
-      group.addonIds.forEach((addonId, groupIndex) => {
+      for (let groupIndex = 0; groupIndex < group.addonIds.length; groupIndex++) {
+        const addonId = group.addonIds[groupIndex];
         const cachedObj = vue.addonListObjs.find((o) => o.manifest._addonId === "example");
         const obj = cachedObj || {};
         // Some addons might be twice in the list, such as in "new" and "enabled"
@@ -639,7 +641,12 @@ let fuse;
         // exampleAddonListItem object on the vue.ready method, so that it's reactive!
         if (!cachedObj) vue.addonListObjs.push(obj);
         naturalIndex++;
-      });
+
+        // After replacing all cached objects, pause until the first items render
+        if (naturalIndex === EXAMPLE_LIST_SIZE) {
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+      }
     }
     // Remove unused remaining cached objects. Can only happen in iframe mode
     vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
