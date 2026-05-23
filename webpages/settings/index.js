@@ -633,7 +633,9 @@ let fuse;
         obj.group = group;
         obj.matchesSearch = false; // Later set to true by vue.addonList if needed
         const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
-        obj.matchesCategory = !shouldHideAsEasterEgg;
+        obj.matchesCategory =
+          !shouldHideAsEasterEgg &&
+          (vue.selectedCategory === "all" || obj.manifest._categories.includes(vue.selectedCategory));
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
         obj.footerBelow = groupIndex === group.addonIds.length - 1;
