@@ -10,6 +10,7 @@ export default async function ({ template }) {
         isIframe: isIframe,
         expanded: this.getDefaultExpanded(),
         everExpanded: this.getDefaultExpanded(),
+        everWithinView: this.addon.name === "", // Always render placeholders immediately
         hoveredSettingId: null,
         highlightedSettingId: null,
       };
@@ -54,6 +55,12 @@ export default async function ({ template }) {
       },
     },
     methods: {
+      onIntersectionChange(entries, observer) {
+        if (entries.some((e) => e.isIntersecting)) {
+          this.everWithinView = true;
+          observer.disconnect();
+        }
+      },
       getDefaultExpanded() {
         return isIframe ? false : this.groupId === "enabled";
       },
@@ -218,6 +225,18 @@ export default async function ({ template }) {
       };
       window.addEventListener("hashchange", onHashChange, { capture: false });
       setTimeout(onHashChange, 0);
+
+      if (!this.everWithinView) {
+        this._intersectionObserver = new IntersectionObserver(this.onIntersectionChange, {
+          root: document.querySelector(".addons-container"),
+          threshold: 0,
+          rootMargin: "50px",
+        });
+        this._intersectionObserver.observe(this.$el);
+      }
+    },
+    beforeDestroy() {
+      this._intersectionObserver?.disconnect();
     },
   });
   Vue.component("addon-body", AddonBody);

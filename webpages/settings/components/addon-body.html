@@ -1,6 +1,6 @@
 <template>
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
-    <div class="addon-topbar">
+    <div class="addon-topbar" v-if="everWithinView">
       <div class="clickable-area" @click="expanded = !expanded">
         <button class="arrow-button" :title="msg(expanded ? 'collapse' : 'expand')">
           <img src="../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
@@ -28,7 +28,7 @@
         <input type="checkbox" class="switch" v-model="addon._enabled" @click="toggleAddonRequest" />
       </div>
     </div>
-    <div class="addon-settings" v-if="everExpanded" v-show="expanded">
+    <div class="addon-settings" v-if="everWithinView && everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
       <div class="addon-message addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
@@ -217,6 +217,7 @@
     padding-inline-start: 10px;
   }
   .addon-body {
+    min-height: 54px;
     margin: 10px;
     background: var(--content-background);
     border: 1px solid var(--content-border);
@@ -360,6 +361,9 @@
     .addon-topbar {
       min-height: 44px;
       padding-inline-end: 6px;
+    }
+    .addon-body {
+      min-height: 46px;
     }
     .clickable-area {
       padding-inline-start: 6px;
