@@ -16,6 +16,9 @@ export default async function ({ template }) {
       };
     },
     computed: {
+      isPlaceholder() {
+        return this.addon.name === "" || !this.everWithinView;
+      },
       shouldShow() {
         return this.visible && (this.$root.searchInput === "" ? this.groupExpanded : true);
       },
