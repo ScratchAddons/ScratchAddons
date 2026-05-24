@@ -14,7 +14,8 @@
           <div class="addon-name tooltip">
             <span>{{ addon.name }}</span>
             <span v-if="devMode" class="tooltiptext tooltiptexttop">{{ addon._addonId }}</span>
-          </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
+          </div>
+          <!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
       </div>
       <template v-if="everWithinView">

@@ -15,7 +15,7 @@ export default async function ({ template }) {
       },
       label() {
         return this.group.name + (this.$root.loaded ? ` (${this.shownCount})` : "");
-      }
+      },
     },
     methods: {
       toggle() {
