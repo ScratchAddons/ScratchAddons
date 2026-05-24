@@ -6,16 +6,15 @@
           <img src="../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
         </button>
         <img :src="addonIconSrc" :title="addonIconAlt" class="icon-type addon-icon" draggable="false" />
-        <!-- prettier-ignore -->
         <div class="addon-name-and-tags" v-if="isPlaceholder">
           <div class="addon-name tooltip"><span></span></div>
         </div>
+        <!-- prettier-ignore -->
         <div class="addon-name-and-tags" v-else>
           <div class="addon-name tooltip">
             <span>{{ addon.name }}</span>
             <span v-if="devMode" class="tooltiptext tooltiptexttop">{{ addon._addonId }}</span>
-          </div>
-          <!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
+          </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
       </div>
       <template v-if="everWithinView">
