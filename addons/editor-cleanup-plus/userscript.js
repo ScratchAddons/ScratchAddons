@@ -3,6 +3,7 @@ import {
   getVariableUsesById,
   getOrderedTopBlockColumns,
   autoPositionComment,
+  COLUMN_GROUP_TOLERANCE,
 } from "../../libraries/common/cs/devtools-utils.js";
 
 // Gap between stacks when script-snap is not active (not constrained to grid size)
@@ -53,6 +54,8 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
     const gridSize = workspace.getGrid().spacing || workspace.getGrid().spacing_; // new blockly || old blockly
     // Use a fixed pixel gap when script-snap is off; the grid-size gap was too large without snapping.
     const gap = scriptSnapEnabled ? gridSize : NON_SNAP_GAP;
+    // Horizontal gap between columns: at least 64px regardless of the vertical gap.
+    const hGap = Math.max(gap, 64);
 
     // When script-snap is active, coordinates start between workspace dots so snap aligns to them
     const startOffset = scriptSnapEnabled ? gridSize / 2 : 0;
@@ -80,7 +83,9 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
         maxWidth = Math.max(maxWidth, Math.max(heightWidth.width, maxWidthWithComments));
       }
 
-      cursorX += maxWidth + gap;
+      // Advance by at least COLUMN_GROUP_TOLERANCE so adjacent column left-edges are always
+      // far enough apart that a second cleanup won't merge them into one column.
+      cursorX += Math.max(maxWidth + hGap, COLUMN_GROUP_TOLERANCE);
       if (scriptSnapEnabled) {
         cursorX += gridSize - ((cursorX + gridSize / 2) % gridSize);
       }
