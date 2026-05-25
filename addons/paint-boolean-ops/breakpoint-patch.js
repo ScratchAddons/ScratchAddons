@@ -15,7 +15,9 @@
 //   isDisabled     — function returning true when the addon is disabled
 // Returns: applyPatch() — call this to re-apply the patch (e.g. on re-enable)
 
-const WIDE_BREAKPOINT = 1536;
+// 1580px: wide at 100% zoom on 1920px displays, narrow at 125% zoom (1536px
+// logical) where sub-pixel rounding at 1.25x DPR causes a 1px overflow.
+const WIDE_BREAKPOINT = 1580;
 const COMPACT_BREAKPOINT = 1140;
 
 // Returns true if the compact-editor addon is currently enabled. Its style
