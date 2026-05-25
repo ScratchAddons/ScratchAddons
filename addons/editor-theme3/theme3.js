@@ -973,7 +973,12 @@ export default async function ({ addon, console, msg }) {
     Blockly.ThemeManager.prototype.subscribeWorkspace = function (workspace) {
       oldThemeManagerSubscribeWorkspace.call(this, workspace);
       setTimeout(() => {
-        updateOriginalColors(workspace.getTheme());
+        /* We need to update originalColors if the user toggles the high contrast theme
+           while the addon is dynamically disabled. We shouldn't update them if the addon is
+           enabled because that would save the colors modified by the addon to originalColors. */
+        if (addon.self.disabled) {
+          updateOriginalColors(workspace.getTheme());
+        }
         updateColors(workspace);
       }, 0);
     };
