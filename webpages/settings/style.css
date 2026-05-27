@@ -333,12 +333,12 @@ body.iframe .search-box input {
 
 .permissions-block {
   margin-top: 1rem;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
 }
 
 .permissions-block h2 {
   font-family: "Sora", sans-serif;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 600;
   margin: 0;
 }
