@@ -435,6 +435,22 @@
         </p>
       </div>
     </modal>
+    <modal :title="msg('permissions')" v-cloak v-el:permissions>
+      <div class="permissions-block">
+        <h2>{{ msg("enablePermissionsTitle") }}</h2>
+        <p>{{ msg("enablePermissionsDescription") }}</p>
+      </div>
+      <div class="permissions-steps">
+        <div>
+          <button class="large-button" @click="requestPermissions">{{ msg("enableButton") }}</button>
+          <p>{{ msg("enableButtonDescription") }}</p>
+        </div>
+        <div>
+          <img alt="{{ msg('permissionsScreenAlt') }}" v-bind:src="permissionScreenshotPath" />
+          <p>{{ msg("clickAllowDescription") }}</p>
+        </div>
+      </div>
+    </modal>
     <div class="popup" v-cloak v-show="showPopupModal">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>

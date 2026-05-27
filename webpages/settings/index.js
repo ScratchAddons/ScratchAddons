@@ -46,6 +46,14 @@ let fuse;
     "webpages/settings/components/previews/workspace-dots",
   ]);
 
+  if (!isIframe) {
+    chrome.runtime.sendMessage("checkPermissions", (hasPermissions) => {
+      if (!hasPermissions) {
+        vue.$els.permissions.showModal();
+      }
+    });
+  }
+
   Vue.directive("click-outside", {
     priority: 700,
     bind() {
@@ -128,6 +136,9 @@ let fuse;
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
+        permissionScreenshotPath: initialTheme
+          ? "../../images/screenshots/permissions-light.png"
+          : "../../images/screenshots/permissions-dark.png",
       };
     },
     computed: {
@@ -322,6 +333,17 @@ let fuse;
       applyLanguageSettings() {
         alert(chrome.i18n.getMessage("importSuccess"));
         chrome.runtime.reload();
+      },
+      async requestPermissions() {
+        const manifest = chrome.runtime.getManifest();
+        const origins = manifest.host_permissions.filter((url) => url.startsWith("https://"));
+
+        const granted = await chrome.permissions.request({ origins });
+        if (granted) {
+          alert(chrome.i18n.getMessage("permissionsAllowed"));
+          return chrome.runtime.reload();
+        }
+        alert(chrome.i18n.getMessage("permissionsDenied"));
       },
       openFullSettings() {
         window.open(
@@ -725,8 +747,4 @@ let fuse;
       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
     }
   });
-
-  if (!isIframe) {
-    chrome.runtime.sendMessage("checkPermissions");
-  }
 })();

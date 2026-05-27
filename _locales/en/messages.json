@@ -320,6 +320,9 @@
   "clickAllowDescription": {
     "message": "Click \"Allow\". Scratch Addons will reload and the addons will start working correctly again"
   },
+  "permissionsAllowed": {
+    "message": "Site access was enabled successfully. Scratch Addons will reload."
+  },
   "permissionsDenied": {
     "message": "Site access could not be enabled. Try again."
   },

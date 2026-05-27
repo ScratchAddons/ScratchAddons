@@ -366,7 +366,7 @@ body.iframe .search-box input {
   }
 }
 
-#permissionsBtn {
+.permissions-steps button {
   display: block;
   height: 6rem;
   width: 18rem;
@@ -375,7 +375,7 @@ body.iframe .search-box input {
   cursor: pointer;
 }
 
-#screenshot {
+.permissions-steps img {
   width: 24rem;
   max-width: 100%;
 }
