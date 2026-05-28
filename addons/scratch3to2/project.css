@@ -274,9 +274,6 @@
 :root:not(.sa-editor) [class*="stage-header_stage-button_"]:active {
   background-color: transparent;
 }
-:root:not(.sa-editor) [class*="stage-header_stage-button-icon_"] {
-  filter: none;
-}
 :root:not(.sa-editor) [class*="stage-header_stage-button-icon_"]:not(.sa-gamepad-container *) {
   display: none;
 }
