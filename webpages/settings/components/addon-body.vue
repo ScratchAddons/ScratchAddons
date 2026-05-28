@@ -3,7 +3,7 @@
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
         <button class="arrow-button" :title="msg(expanded ? 'collapse' : 'expand')">
-          <img src="../../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
+          <img src="../../../images/icons/expand.svg" :class="{ reverted: expanded }" draggable="false" />
         </button>
         <img :src="addonIconSrc" class="icon-type addon-icon" draggable="false" />
         <!-- prettier-ignore -->
@@ -25,8 +25,8 @@
             <img src="../../../images/icons/undo.svg" class="icon-type" draggable="false" />
           </button>
           <dropdown button-class="addon-buttons addon-split-button-dropdown" :button-title="msg('importExport')">
-            <li role="menuitem" tabindex="0" @click="exportPreset">{{ msg('export') }}</li>
-            <li role="menuitem" tabindex="0" @click="importPreset">{{ msg('import') }}</li>
+            <li role="menuitem" tabindex="0" @click="exportPreset">{{ msg("export") }}</li>
+            <li role="menuitem" tabindex="0" @click="importPreset">{{ msg("import") }}</li>
           </dropdown>
         </div>
         <input type="checkbox" class="switch" v-model="addon._enabled" @click="toggleAddonRequest" />
@@ -41,11 +41,14 @@
       <div id="info" v-for="info of addon.info">
         <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
           <img
-            :src="'../../../images/icons/' + {
-              'warning': 'warning.svg',
-              'notice': 'notice.svg',
-              'info': 'help.svg',
-            }[info.type || 'info']"
+            :src="
+              '../../../images/icons/' +
+              {
+                warning: 'warning.svg',
+                notice: 'notice.svg',
+                info: 'help.svg',
+              }[info.type || 'info']
+            "
             draggable="false"
           />{{ info.text }}
         </div>
@@ -61,9 +64,9 @@
         </span>
       </div>
       <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-        <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
-          >{{ msg("viewLicenses") }}</a
-        >
+        <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}">{{
+          msg("viewLicenses")
+        }}</a>
       </div>
       <div
         class="preview-column"
@@ -82,7 +85,7 @@
         <addon-setting
           v-for="setting of addon.settings"
           :key="setting.id"
-          :class="{'setting-highlighted': highlightedSettingId === setting.id}"
+          :class="{ 'setting-highlighted': highlightedSettingId === setting.id }"
           :addon="addon"
           :group-id="groupId"
           :setting="setting"
@@ -111,15 +114,15 @@
                 :settings="preset.values"
               />
             </span>
-            <span>{{preset.name}}</span>
+            <span>{{ preset.name }}</span>
           </button>
         </div>
       </div>
       <div class="related-addons" v-if="addon._relatedAddons && !isIframe">
         <div class="addon-message">
-          <span class="related-addons-text">{{msg('relatedAddons')}}</span>
+          <span class="related-addons-text">{{ msg("relatedAddons") }}</span>
           <span v-for="addonManifest of addon._relatedAddons">
-            <a href="#" @click="openRelated(addonManifest, $event)">{{addonManifest.name}}</a>
+            <a href="#" @click="openRelated(addonManifest, $event)">{{ addonManifest.name }}</a>
           </span>
         </div>
       </div>
@@ -128,339 +131,339 @@
 </template>
 
 <style>
-  .addon-description {
-    margin-inline: 15px;
-    color: var(--gray-text);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 0; /* don't include the description
+.addon-description {
+  margin-inline: 15px;
+  color: var(--gray-text);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 0; /* don't include the description
                  when calculating addon-body size */
-    flex-grow: 1;
-    /* Badges have a 2px bottom border which means the text
+  flex-grow: 1;
+  /* Badges have a 2px bottom border which means the text
        is not vertically centered relative to the addon name
        and description. Fixed by adding 1px bottom padding
        here and 1px extra top padding to the badge. */
-    padding-bottom: 1px;
-  }
+  padding-bottom: 1px;
+}
 
-  .addon-description-full,
-  .addon-credits {
-    width: 100%;
-    white-space: normal;
-    color: var(--description-text);
-  }
+.addon-description-full,
+.addon-credits {
+  width: 100%;
+  white-space: normal;
+  color: var(--description-text);
+}
 
-  .addon-credits,
-  .addon-license {
-    margin-top: 4px;
-    font-size: 13px;
-  }
-  .addon-credits a,
-  .related-addons a,
-  .addon-license a {
-    color: var(--blue-text);
-    cursor: pointer;
-  }
+.addon-credits,
+.addon-license {
+  margin-top: 4px;
+  font-size: 13px;
+}
+.addon-credits a,
+.related-addons a,
+.addon-license a {
+  color: var(--blue-text);
+  cursor: pointer;
+}
 
-  .addon-credits > span,
-  .related-addons span {
-    margin-inline-end: 0.5rem;
-  }
+.addon-credits > span,
+.related-addons span {
+  margin-inline-end: 0.5rem;
+}
 
-  .addon-credits > span:not(:first-child):not(:last-child)::after,
-  .related-addons span:not(:first-child):not(:last-child)::after {
-    content: ",";
-  }
-  .related-addons-text {
-    font-weight: bold;
-  }
+.addon-credits > span:not(:first-child):not(:last-child)::after,
+.related-addons span:not(:first-child):not(:last-child)::after {
+  content: ",";
+}
+.related-addons-text {
+  font-weight: bold;
+}
 
-  .addon-icon {
-    margin-inline-start: 1px;
-    padding-bottom: 1px; /* align with addon name */
-    user-select: none;
-  }
-  .addon-name-and-tags {
-    padding: 10px 0;
-  }
-  .addon-name {
-    font-weight: 400;
-    display: inline-block;
-    vertical-align: middle;
-    /* Badges have a 2px bottom border which means the text
+.addon-icon {
+  margin-inline-start: 1px;
+  padding-bottom: 1px; /* align with addon name */
+  user-select: none;
+}
+.addon-name-and-tags {
+  padding: 10px 0;
+}
+.addon-name {
+  font-weight: 400;
+  display: inline-block;
+  vertical-align: middle;
+  /* Badges have a 2px bottom border which means the text
        is not vertically centered relative to the addon name
        and description. Fixed by adding 1px bottom padding
        here and 1px extra top padding to the badge. */
-    padding-bottom: 1px;
-  }
-  .addon-name > span:empty {
-    display: inline-block;
-    width: 150px;
-    height: 8px;
-    background-color: var(--gray-text);
-    border-radius: 3px;
-  }
-  .addon-name-and-tags > .badge {
-    display: inline-block;
-    vertical-align: middle;
-    margin-block: 1px;
-  }
+  padding-bottom: 1px;
+}
+.addon-name > span:empty {
+  display: inline-block;
+  width: 150px;
+  height: 8px;
+  background-color: var(--gray-text);
+  border-radius: 3px;
+}
+.addon-name-and-tags > .badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-block: 1px;
+}
 
-  .addon-topbar {
-    min-height: 52px;
-    padding-inline-end: 10px;
-    display: flex;
-    align-items: center;
-  }
-  .clickable-area {
-    padding-inline-start: 10px;
-  }
-  .addon-body {
-    margin: 10px;
-    background: var(--content-background);
-    border: 1px solid var(--content-border);
-    border-radius: 4px;
-    box-shadow: var(--content-shadow);
-  }
-  .addon-body:target,
-  .addon-blink {
-    /*
+.addon-topbar {
+  min-height: 52px;
+  padding-inline-end: 10px;
+  display: flex;
+  align-items: center;
+}
+.clickable-area {
+  padding-inline-start: 10px;
+}
+.addon-body {
+  margin: 10px;
+  background: var(--content-background);
+  border: 1px solid var(--content-border);
+  border-radius: 4px;
+  box-shadow: var(--content-shadow);
+}
+.addon-body:target,
+.addon-blink {
+  /*
       Browsers sometimes ignore :target when the element is appended.
       (This is working as intended per spec.)
       Use CSS class to force animation.
     */
-    animation: addonBlink 1s 2 ease-in-out;
-  }
+  animation: addonBlink 1s 2 ease-in-out;
+}
 
-  .addon-buttons {
-    display: flex;
-    align-items: center;
-    padding-block: 8px;
-    padding-inline-start: 8px;
-    padding-inline-end: 0;
-    border-radius: 4px;
-    margin-inline-end: 8px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    user-select: none;
-    transition: 0.2s ease;
-  }
-  .addon-buttons:hover:not([disabled]),
-  .addon-split-button .addon-split-button-dropdown.open,
-  .addon-split-button:hover .addon-split-button-dropdown.open:not(:hover) {
-    background: var(--hover-highlight);
-  }
-  .addon-split-button:hover:not([disabled]) .addon-split-button-button:not(:hover),
-  .addon-split-button:hover:not([disabled]) .addon-split-button-dropdown:not(:hover),
-  .addon-split-button:has(.open) .addon-split-button-button {
-    background: var(--hover-highlight-reduced);
-  }
-  [disabled] {
-    cursor: initial !important;
-  }
-  .addon-split-button {
-    display: flex;
-  }
-  .addon-split-button-button {
-    margin: 0;
-    border-radius: 4px 0 0 4px;
-  }
-  [dir="rtl"] .addon-split-button-button {
-    border-radius: 0 4px 4px 0;
-  }
-  .addon-split-button-dropdown {
-    margin: 0;
-    border-radius: 0 4px 4px 0;
-  }
-  [dir="rtl"] .addon-split-button-dropdown {
-    border-radius: 4px 0 0 4px;
-  }
-  .addon-split-button:has(.open) .addon-split-button-button,
-  .addon-split-button .addon-split-button-dropdown.open {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
+.addon-buttons {
+  display: flex;
+  align-items: center;
+  padding-block: 8px;
+  padding-inline-start: 8px;
+  padding-inline-end: 0;
+  border-radius: 4px;
+  margin-inline-end: 8px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  user-select: none;
+  transition: 0.2s ease;
+}
+.addon-buttons:hover:not([disabled]),
+.addon-split-button .addon-split-button-dropdown.open,
+.addon-split-button:hover .addon-split-button-dropdown.open:not(:hover) {
+  background: var(--hover-highlight);
+}
+.addon-split-button:hover:not([disabled]) .addon-split-button-button:not(:hover),
+.addon-split-button:hover:not([disabled]) .addon-split-button-dropdown:not(:hover),
+.addon-split-button:has(.open) .addon-split-button-button {
+  background: var(--hover-highlight-reduced);
+}
+[disabled] {
+  cursor: initial !important;
+}
+.addon-split-button {
+  display: flex;
+}
+.addon-split-button-button {
+  margin: 0;
+  border-radius: 4px 0 0 4px;
+}
+[dir="rtl"] .addon-split-button-button {
+  border-radius: 0 4px 4px 0;
+}
+.addon-split-button-dropdown {
+  margin: 0;
+  border-radius: 0 4px 4px 0;
+}
+[dir="rtl"] .addon-split-button-dropdown {
+  border-radius: 4px 0 0 4px;
+}
+.addon-split-button:has(.open) .addon-split-button-button,
+.addon-split-button .addon-split-button-dropdown.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
 
+.clickable-area {
+  cursor: pointer;
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+}
+.clickable-area .tooltip {
+  cursor: pointer;
+}
+.iframe .clickable-area {
+  flex-grow: 1;
+}
+.addon-message {
+  padding: 8px;
+  border: 2px solid;
+  border-radius: 5px;
+  font-weight: 500;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+.related-addons > .addon-message {
+  flex-wrap: wrap;
+  padding: 6px;
+  padding-left: 10px;
+  border: none;
+  font-size: 14px;
+}
+.addon-notice {
+  border-color: var(--notice-border);
+  background-color: var(--notice-background);
+  color: var(--notice-text);
+}
+.addon-warning {
+  border-color: var(--warning-border);
+  background-color: var(--warning-background);
+  color: var(--warning-text);
+}
+.addon-info {
+  border-color: var(--info-border);
+  background-color: var(--navigation-background);
+  color: var(--description-text);
+  font-weight: normal;
+}
+.addon-update {
+  border-color: var(--update-border);
+  background-color: var(--update-background);
+  color: var(--update-text);
+}
+.addon-update .badge {
+  margin: -3px;
+  margin-inline-end: 10px;
+}
+.addon-message img {
+  height: 16px;
+  width: 16px;
+  margin-inline-end: 10px;
+  user-select: none;
+}
+.addon-notice img {
+  filter: var(--notice-icon-filter);
+}
+.addon-warning img {
+  filter: var(--warning-icon-filter);
+}
+.addon-info img {
+  filter: var(--description-icon-filter);
+}
+.addon-settings {
+  padding-top: 5px;
+  padding-inline: 20px;
+}
+.addon-setting::after {
+  content: "";
+  position: absolute;
+  top: -7px;
+  bottom: -7px;
+  left: -7px;
+  right: -7px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  pointer-events: none;
+  transition: 0.2s ease;
+}
+.setting-highlighted::after {
+  border-color: var(--orange);
+}
+
+.presets-column,
+.settings-column {
+  width: 100%;
+  margin: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.preview-column {
+  margin: 10px 0;
+  padding-left: 10px;
+}
+.presets-column {
+  align-items: center;
+}
+.presets-column > .setting-label {
+  margin-inline-start: 10px;
+}
+.addon-preset {
+  margin-inline-end: 30px;
+}
+.preset-preview {
+  display: inline-flex;
+}
+
+.addon-check {
+  margin-inline-start: auto;
+  padding: 5px;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .addon-description {
+    display: none;
+  }
+  .addon-topbar {
+    min-height: 44px;
+    padding-inline-end: 6px;
+  }
   .clickable-area {
-    cursor: pointer;
-    display: flex;
-    align-self: stretch;
-    align-items: center;
+    padding-inline-start: 6px;
   }
-  .clickable-area .tooltip {
-    cursor: pointer;
+  .addon-icon {
+    margin-inline-end: 6px;
   }
-  .iframe .clickable-area {
-    flex-grow: 1;
+  .addon-name-and-tags {
+    padding: 6px 0;
   }
-  .addon-message {
-    padding: 8px;
-    border: 2px solid;
-    border-radius: 5px;
-    font-weight: 500;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-  }
-  .related-addons > .addon-message {
-    flex-wrap: wrap;
-    padding: 6px;
-    padding-left: 10px;
-    border: none;
-    font-size: 14px;
-  }
-  .addon-notice {
-    border-color: var(--notice-border);
-    background-color: var(--notice-background);
-    color: var(--notice-text);
-  }
-  .addon-warning {
-    border-color: var(--warning-border);
-    background-color: var(--warning-background);
-    color: var(--warning-text);
-  }
-  .addon-info {
-    border-color: var(--info-border);
-    background-color: var(--navigation-background);
-    color: var(--description-text);
-    font-weight: normal;
-  }
-  .addon-update {
-    border-color: var(--update-border);
-    background-color: var(--update-background);
-    color: var(--update-text);
-  }
-  .addon-update .badge {
-    margin: -3px;
-    margin-inline-end: 10px;
-  }
-  .addon-message img {
-    height: 16px;
-    width: 16px;
-    margin-inline-end: 10px;
-    user-select: none;
-  }
-  .addon-notice img {
-    filter: var(--notice-icon-filter);
-  }
-  .addon-warning img {
-    filter: var(--warning-icon-filter);
-  }
-  .addon-info img {
-    filter: var(--description-icon-filter);
-  }
-  .addon-settings {
-    padding-top: 5px;
-    padding-inline: 20px;
-  }
-  .addon-setting::after {
-    content: "";
-    position: absolute;
-    top: -7px;
-    bottom: -7px;
-    left: -7px;
-    right: -7px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    pointer-events: none;
-    transition: 0.2s ease;
-  }
-  .setting-highlighted::after {
-    border-color: var(--orange);
+  .addon-name {
+    margin-inline-start: 8px;
   }
 
-  .presets-column,
-  .settings-column {
-    width: 100%;
-    margin: 10px 0;
-    display: flex;
-    flex-wrap: wrap;
+  .addon-settings {
+    padding-inline: 16px;
   }
   .preview-column {
-    margin: 10px 0;
-    padding-left: 10px;
+    display: none;
   }
-  .presets-column {
+  .settings-column {
+    flex-direction: column;
+  }
+  .settings-column > .addon-setting {
+    margin: 10px 0;
+    min-height: 0;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .settings-column > .addon-setting.boolean-setting {
+    margin: 5px 0;
+    flex-direction: row;
     align-items: center;
+  }
+  .settings-column > .addon-setting.boolean-setting .setting-label-container {
+    margin-bottom: 0;
   }
   .presets-column > .setting-label {
-    margin-inline-start: 10px;
+    margin-inline-start: 0;
+    margin-top: 10px;
+    margin-bottom: 0;
+    width: 100%;
   }
-  .addon-preset {
-    margin-inline-end: 30px;
+  .presets-column > .addon-setting {
+    margin: 5px 0;
+    margin-inline-end: 10px;
   }
-  .preset-preview {
-    display: inline-flex;
+  .presets-column > .addon-setting:last-child {
+    margin-inline-end: 0;
   }
-
-  .addon-check {
-    margin-inline-start: auto;
-    padding: 5px;
-    gap: 8px;
-    display: flex;
-    align-items: center;
-  }
-
-  @media (max-width: 700px) {
-    .addon-description {
-      display: none;
-    }
-    .addon-topbar {
-      min-height: 44px;
-      padding-inline-end: 6px;
-    }
-    .clickable-area {
-      padding-inline-start: 6px;
-    }
-    .addon-icon {
-      margin-inline-end: 6px;
-    }
-    .addon-name-and-tags {
-      padding: 6px 0;
-    }
-    .addon-name {
-      margin-inline-start: 8px;
-    }
-
-    .addon-settings {
-      padding-inline: 16px;
-    }
-    .preview-column {
-      display: none;
-    }
-    .settings-column {
-      flex-direction: column;
-    }
-    .settings-column > .addon-setting {
-      margin: 10px 0;
-      min-height: 0;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .settings-column > .addon-setting.boolean-setting {
-      margin: 5px 0;
-      flex-direction: row;
-      align-items: center;
-    }
-    .settings-column > .addon-setting.boolean-setting .setting-label-container {
-      margin-bottom: 0;
-    }
-    .presets-column > .setting-label {
-      margin-inline-start: 0;
-      margin-top: 10px;
-      margin-bottom: 0;
-      width: 100%;
-    }
-    .presets-column > .addon-setting {
-      margin: 5px 0;
-      margin-inline-end: 10px;
-    }
-    .presets-column > .addon-setting:last-child {
-      margin-inline-end: 0;
-    }
-  }
+}
 </style>
 
 <script>

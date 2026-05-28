@@ -1,259 +1,245 @@
 <template>
-    <div class="navbar">
-      <button
-        id="sidebar-toggle"
-        class="header-button"
-        :class="{sidebarToggleOpen: categoryOpen === true}"
-        :title="msg('toggleSidebar')"
-        @click="sidebarToggle()"
-        v-show="smallMode"
-      >
-        <img src="../../images/icons/menu.svg" draggable="false" />
-      </button>
-      <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
-      <h1>{{ msg("settings") }}</h1>
-      <button
-        @click="setTheme(!theme)"
-        class="header-button header-end"
-        :title="msg(theme ? 'switchDark' : 'switchLight')"
-      >
-        <img class="theme-switch" :src="themePath" draggable="false" />
-      </button>
-    </div>
-    <div class="main">
-      <div
-        class="categories-block"
-        v-click-outside="closesidebar"
-        v-show="!isIframe"
-        :class="{closed: categoryOpen === false, smallMode: smallMode === true}"
-      >
-        <category-selector v-for="category of categories" :key="category.id" :category="category"></category-selector>
-
-        <a
-          class="category"
-          style="margin-top: auto"
-          :href="sidebarUrls.contributors"
-          target="_blank"
-        >
-          <img src="../../images/icons/users.svg" draggable="false" />
-          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
-        </a>
-        <a class="category" href="https://scratchaddons.com/translate" target="_blank">
-          <img src="../../images/icons/translate.svg" draggable="false" />
-          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
-        </a>
-        <a
-          class="category"
-          :href="sidebarUrls.feedback"
-          target="_blank"
-        >
-          <img src="../../images/icons/comment.svg" draggable="false" />
-          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
-        </a>
-        <button class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
-          <img src="../../images/icons/wrench.svg" draggable="false" />
-          <span>{{ msg("moreSettings") }}</span>
-        </button>
-      </div>
-      <button
-        v-show="!isIframe && smallMode === false"
-        class="categories-shrink"
-        @click="sidebarToggle()"
-        :title="msg('toggleSidebar')"
-      >
-        <img
-          src="../../images/icons/left-arrow.svg"
-          :class="{flipped: categoryOpen === (direction() === 'rtl')}"
-          draggable="false"
-        />
-      </button>
-
-      <!-- This is the main menu, where the searchbar and the addon items are located -->
-      <div class="addons-block">
-        <div class="addons-block-header">
-          <div v-if="!isIframe" class="category-header-title">
-            <div v-if="relatedAddonsOpen" class="related-addons-header">
-              <button class="arrow-button" :title="msg('back')" @click="backRelatedAddon()">
-                <img src="../../images/icons/left-arrow.svg" draggable="false" />
-              </button>
-              <span>{{ msg("relatedTo", relatedToAddonName) }}</span>
-            </div>
-            <span v-else>{{ selectedCategoryName }}</span>
-          </div>
-          <div class="search-box" v-if="!relatedAddonsOpen" :class="{smallMode: smallMode === true}">
-            <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
-            <button disabled v-if="searchInput === ''">
-              <img src="../../images/icons/search.svg" class="search-icon" />
-            </button>
-            <button v-else @click="clearAndFocusSearch()">
-              <img src="../../images/icons/x.svg" class="search-icon" />
-            </button>
-          </div>
-        </div>
-
-        <div class="addons-container" :class="{placeholder: !loaded}">
-          <p v-if="searchInput && hasNoResults" id="search-not-found">{{ msg("searchNotFound") }}</p>
-          <template v-if="relatedAddonsOpen">
-            <addon-body
-              v-for="addonManifest of relatedAddons"
-              :key="addonManifest._addonId"
-              :visible="true"
-              :addon="addonManifest"
-              group-id="enabled"
-              :group-expanded="true"
-            ></addon-body>
-          </template>
-          <template v-else>
-            <div v-for="addon of addonList" :key="addon.manifest._addonId">
-              <div
-                id="iframe-fullscreen-suggestion"
-                v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
-                v-show="searchInput === ''"
-              >
-                <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
-                <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
-              </div>
-              <addon-group-header
-                v-if="addon.headerAbove"
-                :group="addon.group"
-                :shown-count="groupShownCount(addon.group)"
-                :margin-above="groupMarginAbove(addon.group)"
-              ></addon-group-header>
-              <addon-body
-                :visible="addon.matchesSearch && addon.matchesCategory"
-                :addon="addon.manifest"
-                :group-id="addon.group.id"
-                :group-expanded="addon.group.expanded"
-              ></addon-body>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-    <modal
-      class="more-settings"
-      :is-open.sync="moreSettingsOpen"
-      :title="msg('moreSettings')"
-      ref="moreSettings"
+  <div class="navbar">
+    <button
+      id="sidebar-toggle"
+      class="header-button"
+      :class="{ sidebarToggleOpen: categoryOpen === true }"
+      :title="msg('toggleSidebar')"
+      @click="sidebarToggle()"
+      v-show="smallMode"
     >
-      <div class="addon-block settings-block">
-        <div class="addon-body">
-          <div class="addon-topbar">
-            <img src="../../images/icons/theme.svg" class="icon-type addon-icon" draggable="false" />
-            <span class="addon-name-and-tags">{{ msg("scratchAddonsTheme") }}</span>
+      <img src="../../images/icons/menu.svg" draggable="false" />
+    </button>
+    <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
+    <h1>{{ msg("settings") }}</h1>
+    <button
+      @click="setTheme(!theme)"
+      class="header-button header-end"
+      :title="msg(theme ? 'switchDark' : 'switchLight')"
+    >
+      <img class="theme-switch" :src="themePath" draggable="false" />
+    </button>
+  </div>
+  <div class="main">
+    <div
+      class="categories-block"
+      v-click-outside="closesidebar"
+      v-show="!isIframe"
+      :class="{ closed: categoryOpen === false, smallMode: smallMode === true }"
+    >
+      <category-selector v-for="category of categories" :key="category.id" :category="category"></category-selector>
+
+      <a class="category" style="margin-top: auto" :href="sidebarUrls.contributors" target="_blank">
+        <img src="../../images/icons/users.svg" draggable="false" />
+        <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
+      </a>
+      <a class="category" href="https://scratchaddons.com/translate" target="_blank">
+        <img src="../../images/icons/translate.svg" draggable="false" />
+        <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
+      </a>
+      <a class="category" :href="sidebarUrls.feedback" target="_blank">
+        <img src="../../images/icons/comment.svg" draggable="false" />
+        <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
+      </a>
+      <button class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
+        <img src="../../images/icons/wrench.svg" draggable="false" />
+        <span>{{ msg("moreSettings") }}</span>
+      </button>
+    </div>
+    <button
+      v-show="!isIframe && smallMode === false"
+      class="categories-shrink"
+      @click="sidebarToggle()"
+      :title="msg('toggleSidebar')"
+    >
+      <img
+        src="../../images/icons/left-arrow.svg"
+        :class="{ flipped: categoryOpen === (direction() === 'rtl') }"
+        draggable="false"
+      />
+    </button>
+
+    <!-- This is the main menu, where the searchbar and the addon items are located -->
+    <div class="addons-block">
+      <div class="addons-block-header">
+        <div v-if="!isIframe" class="category-header-title">
+          <div v-if="relatedAddonsOpen" class="related-addons-header">
+            <button class="arrow-button" :title="msg('back')" @click="backRelatedAddon()">
+              <img src="../../images/icons/left-arrow.svg" draggable="false" />
+            </button>
+            <span>{{ msg("relatedTo", relatedToAddonName) }}</span>
           </div>
-          <div class="addon-settings">
-            <span class="addon-description-full">{{ msg("scratchAddonsThemeDescription") }}</span>
-            <div class="addon-setting">
-              <div class="filter-selector">
-                <div class="filter-text">{{ msg("theme") }}</div>
-                <div class="filter-options" role="radiogroup">
-                  <div>
-                    <input
-                      type="radio"
-                      name="theme-selector"
-                      id="theme-select-light"
-                      :checked="theme === true"
-                      @change="setTheme(true)"
-                    />
-                    <label for="theme-select-light" class="filter-option">{{ msg("light") }}</label>
-                  </div>
-                  <div>
-                    <input
-                      type="radio"
-                      name="theme-selector"
-                      id="theme-select-dark"
-                      :checked="theme === false"
-                      @change="setTheme(false)"
-                    />
-                    <label for="theme-select-dark" class="filter-option">{{ msg("dark") }}</label>
-                  </div>
+          <span v-else>{{ selectedCategoryName }}</span>
+        </div>
+        <div class="search-box" v-if="!relatedAddonsOpen" :class="{ smallMode: smallMode === true }">
+          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
+          <button disabled v-if="searchInput === ''">
+            <img src="../../images/icons/search.svg" class="search-icon" />
+          </button>
+          <button v-else @click="clearAndFocusSearch()">
+            <img src="../../images/icons/x.svg" class="search-icon" />
+          </button>
+        </div>
+      </div>
+
+      <div class="addons-container" :class="{ placeholder: !loaded }">
+        <p v-if="searchInput && hasNoResults" id="search-not-found">{{ msg("searchNotFound") }}</p>
+        <template v-if="relatedAddonsOpen">
+          <addon-body
+            v-for="addonManifest of relatedAddons"
+            :key="addonManifest._addonId"
+            :visible="true"
+            :addon="addonManifest"
+            group-id="enabled"
+            :group-expanded="true"
+          ></addon-body>
+        </template>
+        <template v-else>
+          <div v-for="addon of addonList" :key="addon.manifest._addonId">
+            <div
+              id="iframe-fullscreen-suggestion"
+              v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
+              v-show="searchInput === ''"
+            >
+              <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
+              <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
+            </div>
+            <addon-group-header
+              v-if="addon.headerAbove"
+              :group="addon.group"
+              :shown-count="groupShownCount(addon.group)"
+              :margin-above="groupMarginAbove(addon.group)"
+            ></addon-group-header>
+            <addon-body
+              :visible="addon.matchesSearch && addon.matchesCategory"
+              :addon="addon.manifest"
+              :group-id="addon.group.id"
+              :group-expanded="addon.group.expanded"
+            ></addon-body>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+  <modal class="more-settings" :is-open.sync="moreSettingsOpen" :title="msg('moreSettings')" ref="moreSettings">
+    <div class="addon-block settings-block">
+      <div class="addon-body">
+        <div class="addon-topbar">
+          <img src="../../images/icons/theme.svg" class="icon-type addon-icon" draggable="false" />
+          <span class="addon-name-and-tags">{{ msg("scratchAddonsTheme") }}</span>
+        </div>
+        <div class="addon-settings">
+          <span class="addon-description-full">{{ msg("scratchAddonsThemeDescription") }}</span>
+          <div class="addon-setting">
+            <div class="filter-selector">
+              <div class="filter-text">{{ msg("theme") }}</div>
+              <div class="filter-options" role="radiogroup">
+                <div>
+                  <input
+                    type="radio"
+                    name="theme-selector"
+                    id="theme-select-light"
+                    :checked="theme === true"
+                    @change="setTheme(true)"
+                  />
+                  <label for="theme-select-light" class="filter-option">{{ msg("light") }}</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="theme-selector"
+                    id="theme-select-dark"
+                    :checked="theme === false"
+                    @change="setTheme(false)"
+                  />
+                  <label for="theme-select-dark" class="filter-option">{{ msg("dark") }}</label>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="addon-body">
-          <div class="addon-topbar">
-            <img
-              src="../../images/icons/import-export.svg"
-              class="icon-type addon-icon"
-              :class="{'dark': theme === false}"
-              draggable="false"
+      </div>
+      <div class="addon-body">
+        <div class="addon-topbar">
+          <img
+            src="../../images/icons/import-export.svg"
+            class="icon-type addon-icon"
+            :class="{ dark: theme === false }"
+            draggable="false"
+          />
+          <span class="addon-name-and-tags">{{ msg("exportAndImportSettings") }}</span>
+        </div>
+        <div class="addon-settings">
+          <span class="addon-description-full">{{ msg("exportAndImportSettingsDescription") }}</span>
+          <span class="addon-description-full">{{ msg("useBrowserSync") }}</span>
+          <div class="addon-setting export-actions">
+            <div class="export-actions-group">
+              <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
+              <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
+              <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
+            </div>
+            <div class="export-actions-group">
+              <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="addon-body">
+        <div class="addon-topbar">
+          <img src="../../images/icons/translate.svg" class="icon-type addon-icon" draggable="false" />
+          <span class="addon-name-and-tags">{{ msg("language") }}</span>
+        </div>
+        <div class="addon-settings">
+          <div class="addon-setting" style="margin-top: 0">
+            <input
+              type="checkbox"
+              class="switch"
+              v-model="forceEnglishSetting"
+              style="margin-inline-start: 0; margin-inline-end: 8px"
             />
-            <span class="addon-name-and-tags">{{ msg("exportAndImportSettings") }}</span>
-          </div>
-          <div class="addon-settings">
-            <span class="addon-description-full">{{ msg("exportAndImportSettingsDescription") }}</span>
-            <span class="addon-description-full">{{ msg("useBrowserSync") }}</span>
-            <div class="addon-setting export-actions">
-              <div class="export-actions-group">
-                <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
-                <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
-                <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
-              </div>
-              <div class="export-actions-group">
-                <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
-              </div>
-            </div>
+            <span>Show addon names and descriptions in English</span>
+            <div class="badge red">{{ msg("beta") }}</div>
+            <button
+              class="large-button"
+              id="applyLanguageSettingsButton"
+              v-show="forceEnglishSetting !== null && forceEnglishSetting !== this.forceEnglishSettingInitial"
+              @click="applyLanguageSettings()"
+              style="margin-inline-start: 16px"
+            >
+              {{ msg("applySettings") }}
+            </button>
           </div>
         </div>
-        <div class="addon-body">
-          <div class="addon-topbar">
-            <img src="../../images/icons/translate.svg" class="icon-type addon-icon" draggable="false" />
-            <span class="addon-name-and-tags">{{ msg("language") }}</span>
-          </div>
-          <div class="addon-settings">
-            <div class="addon-setting" style="margin-top: 0">
-              <input
-                type="checkbox"
-                class="switch"
-                v-model="forceEnglishSetting"
-                style="margin-inline-start: 0; margin-inline-end: 8px"
-              />
-              <span>Show addon names and descriptions in English</span>
-              <div class="badge red">{{ msg("beta") }}</div>
-              <button
-                class="large-button"
-                id="applyLanguageSettingsButton"
-                v-show="forceEnglishSetting !== null && forceEnglishSetting !== this.forceEnglishSettingInitial"
-                @click="applyLanguageSettings()"
-                style="margin-inline-start: 16px"
-              >
-                {{ msg("applySettings") }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="footer">
-        <p>
-          {{ msg("extensionName") }}
-          <a
-            href="https://scratchaddons.com/changelog"
-            :href="sidebarUrls.changelog"
-            title="{{ msg('changelog') }}"
-            target="_blank"
-          >
-            v{{ version }}</a
-          >
-        </p>
-        <p>
-          <a
-            href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb,sortable,Roboto"
-            target="_blank"
-            >{{ msg("libraryCredits") }}</a
-          >
-        </p>
-      </div>
-    </modal>
-    <div class="popup" v-show="showPopupModal">
-      <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
-      <div>
-        <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
-        <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
       </div>
     </div>
+    <div class="footer">
+      <p>
+        {{ msg("extensionName") }}
+        <a
+          href="https://scratchaddons.com/changelog"
+          :href="sidebarUrls.changelog"
+          title="{{ msg('changelog') }}"
+          target="_blank"
+        >
+          v{{ version }}</a
+        >
+      </p>
+      <p>
+        <a
+          href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb,sortable,Roboto"
+          target="_blank"
+          >{{ msg("libraryCredits") }}</a
+        >
+      </p>
+    </div>
+  </modal>
+  <div class="popup" v-show="showPopupModal">
+    <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
+    <div>
+      <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
+      <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
+    </div>
+  </div>
 </template>
 
 <script>

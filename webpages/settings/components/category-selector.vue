@@ -1,106 +1,106 @@
 <template>
   <transition name="expand" mode="in-out">
-  <button
-    class="category"
-    :class="{
+    <button
+      class="category"
+      :class="{
         sel: category.id === selectedCategory && !this.$root.relatedAddonsOpen,
         hasParent: category.parent,
       }"
-    v-if="!category.hidden"
-    v-show="shouldShow"
-    :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
-    @click="onClick($event)"
-  >
-    <img :src="'../../images/icons/' + category.icon + '.svg'" draggable="false" />
-    <span>{{ category.name }}</span>
-  </button>
+      v-if="!category.hidden"
+      v-show="shouldShow"
+      :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
+      @click="onClick($event)"
+    >
+      <img :src="'../../images/icons/' + category.icon + '.svg'" draggable="false" />
+      <span>{{ category.name }}</span>
+    </button>
   </transition>
 </template>
 
 <style>
-  .category {
-    transition:
-      background-color 0.2s ease,
-      padding 0.2s ease,
-      height 0.2s ease,
-      opacity 0.2s ease;
-    padding: 15px 20px;
-    position: relative;
-    user-select: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    outline-offset: -2px;
-  }
+.category {
+  transition:
+    background-color 0.2s ease,
+    padding 0.2s ease,
+    height 0.2s ease,
+    opacity 0.2s ease;
+  padding: 15px 20px;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  outline-offset: -2px;
+}
 
-  /* Classes used by index.html */
-  a.category {
-    color: inherit;
-    text-decoration: inherit;
-  }
-  a.category > span > img /* popout icon */ {
-    height: 12px;
-    vertical-align: -1px;
-  }
-  button.category {
-    background-color: transparent;
-    border: none;
-  }
+/* Classes used by index.html */
+a.category {
+  color: inherit;
+  text-decoration: inherit;
+}
+a.category > span > img /* popout icon */ {
+  height: 12px;
+  vertical-align: -1px;
+}
+button.category {
+  background-color: transparent;
+  border: none;
+}
 
-  .category.sel {
-    font-weight: 600;
-  }
-  .category.hasParent {
-    padding-inline: 40px 20px;
-    box-sizing: border-box;
-    padding-block: 10px;
-    opacity: 1;
-  }
-  .category.expand-enter-from,
-  .category.expand-leave-to {
-    padding-block: 0;
-    height: 0;
-    opacity: 0;
-  }
+.category.sel {
+  font-weight: 600;
+}
+.category.hasParent {
+  padding-inline: 40px 20px;
+  box-sizing: border-box;
+  padding-block: 10px;
+  opacity: 1;
+}
+.category.expand-enter-from,
+.category.expand-leave-to {
+  padding-block: 0;
+  height: 0;
+  opacity: 0;
+}
 
-  .category:hover,
-  .category.sel {
-    background: var(--hover-darken);
-  }
-  .category:focus-visible {
-    outline: 2px solid var(--content-text);
-  }
-  .category::before {
-    content: "";
-    transition: all 0.2s ease;
-    display: block;
-    width: 4px;
-    border-radius: 0 4px 4px 0;
-    height: 40px;
-    background: var(--orange);
-    position: absolute;
-    left: 0;
-    opacity: 0;
-  }
-  [dir="rtl"] .category::before {
-    right: 0;
-    border-radius: 4px 0 0 4px;
-  }
-  .category.sel::before {
-    opacity: 1;
-  }
-  .category.hasParent::before {
-    height: 25px;
-  }
+.category:hover,
+.category.sel {
+  background: var(--hover-darken);
+}
+.category:focus-visible {
+  outline: 2px solid var(--content-text);
+}
+.category::before {
+  content: "";
+  transition: all 0.2s ease;
+  display: block;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  height: 40px;
+  background: var(--orange);
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+[dir="rtl"] .category::before {
+  right: 0;
+  border-radius: 4px 0 0 4px;
+}
+.category.sel::before {
+  opacity: 1;
+}
+.category.hasParent::before {
+  height: 25px;
+}
 
-  .category img {
-    height: 18px;
-    width: 18px;
-    filter: var(--content-icon-filter);
-  }
-  .category span {
-    margin-inline-start: 15px;
-  }
+.category img {
+  height: 18px;
+  width: 18px;
+  filter: var(--content-icon-filter);
+}
+.category span {
+  margin-inline-start: 15px;
+}
 </style>
 
 <script>

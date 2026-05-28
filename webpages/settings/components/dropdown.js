@@ -1,75 +1,75 @@
 import bus from "../lib/eventbus";
 
 export default {
-    props: ["buttonClass", "buttonTitle", "disabled", "alignStart"],
-    data() {
-      return {
-        isOpen: false,
-        shiftAmountsByKey: {
-          ArrowUp: -1,
-          ArrowDown: 1,
-          ArrowLeft: -1,
-          ArrowRight: 1,
-          Home: -Infinity,
-          End: Infinity,
-        },
-      };
+  props: ["buttonClass", "buttonTitle", "disabled", "alignStart"],
+  data() {
+    return {
+      isOpen: false,
+      shiftAmountsByKey: {
+        ArrowUp: -1,
+        ArrowDown: 1,
+        ArrowLeft: -1,
+        ArrowRight: 1,
+        Home: -Infinity,
+        End: Infinity,
+      },
+    };
+  },
+  computed: {
+    items() {
+      return Array.from(this.refs.list.children);
     },
-    computed: {
-      items() {
-        return Array.from(this.refs.list.children);
-      },
-    },
-    methods: {
-      toggle() {
-        this.isOpen = !this.isOpen;
-        this.$root.closePickers({ isTrusted: true }, null, {
-          callCloseDropdowns: false,
-        });
-        this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
-        if (this.isOpen) {
-          this.$nextTick(() => {
-            this.$refs.list.firstElementChild.focus();
-          });
-        }
-      },
-      listClick(e) {
-        if (e.target.closest("li")) {
-          this.$root.closeDropdowns();
-        }
-      },
-      handleKeys(e) {
-        const element = this.$refs.list;
-        if (e.ctrlKey || e.metaKey || e.altKey) return;
-        if (e.key === "Tab") {
-          this.$refs.button.focus(); // then let the default behavior of tab take over
-          this.$root.closeDropdowns();
-        } else if (document.activeElement.tagName === "LI" && e.key === "Enter") {
-          document.activeElement.click();
-        } else {
-          const shiftBy = this.shiftAmountsByKey[e.key];
-          if (shiftBy) e.preventDefault();
-          else return;
-
-          const oldFocusIndex = this.items.indexOf(document.activeElement);
-          // Move,
-          const adjustedFocusIndex = oldFocusIndex + shiftBy;
-          // clamp,
-          const newFocusIndex = Math.min(Math.max(adjustedFocusIndex, 0), element.childElementCount - 1);
-          // set focus!
-          const targetElement = element.children[newFocusIndex];
-          targetElement.focus();
-        }
-      },
-      closeDropdowns(...params) {
-        return this.$root.closeDropdowns(...params);
-      },
-    },
-    mounted() {
-      bus.$on("close-dropdowns", (except) => {
-        if (this.isOpen && except !== this) {
-          this.isOpen = false;
-        }
+  },
+  methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+      this.$root.closePickers({ isTrusted: true }, null, {
+        callCloseDropdowns: false,
       });
+      this.$root.closeDropdowns({ isTrusted: true }, this); // close other dropdowns
+      if (this.isOpen) {
+        this.$nextTick(() => {
+          this.$refs.list.firstElementChild.focus();
+        });
+      }
     },
-}
+    listClick(e) {
+      if (e.target.closest("li")) {
+        this.$root.closeDropdowns();
+      }
+    },
+    handleKeys(e) {
+      const element = this.$refs.list;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.key === "Tab") {
+        this.$refs.button.focus(); // then let the default behavior of tab take over
+        this.$root.closeDropdowns();
+      } else if (document.activeElement.tagName === "LI" && e.key === "Enter") {
+        document.activeElement.click();
+      } else {
+        const shiftBy = this.shiftAmountsByKey[e.key];
+        if (shiftBy) e.preventDefault();
+        else return;
+
+        const oldFocusIndex = this.items.indexOf(document.activeElement);
+        // Move,
+        const adjustedFocusIndex = oldFocusIndex + shiftBy;
+        // clamp,
+        const newFocusIndex = Math.min(Math.max(adjustedFocusIndex, 0), element.childElementCount - 1);
+        // set focus!
+        const targetElement = element.children[newFocusIndex];
+        targetElement.focus();
+      }
+    },
+    closeDropdowns(...params) {
+      return this.$root.closeDropdowns(...params);
+    },
+  },
+  mounted() {
+    bus.$on("close-dropdowns", (except) => {
+      if (this.isOpen && except !== this) {
+        this.isOpen = false;
+      }
+    });
+  },
+};

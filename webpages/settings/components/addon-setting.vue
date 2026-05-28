@@ -3,15 +3,15 @@
     v-show="show"
     class="addon-setting"
     :class="{
-    'boolean-setting': setting.type === 'boolean',
-    'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
-  }"
+      'boolean-setting': setting.type === 'boolean',
+      'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
+    }"
   >
     <div class="setting-label-container">
       <div class="setting-label" v-html="settingsName(addon)"></div>
-      <div v-if="setting.description" :class="{tooltip: addon._enabled}" :tabindex="addon._enabled ? '0' : '-1' ">
+      <div v-if="setting.description" :class="{ tooltip: addon._enabled }" :tabindex="addon._enabled ? '0' : '-1'">
         <img src="../../../images/icons/help.svg" class="icon-type setting-help-icon" />
-        <span class="tooltiptext tooltiptexttop">{{setting.description}}</span>
+        <span class="tooltiptext tooltiptexttop">{{ setting.description }}</span>
       </div>
       <addon-tag v-if="isNewOption" tag="new"></addon-tag>
     </div>
@@ -153,183 +153,183 @@
 </template>
 
 <style>
-  .addon-setting {
-    margin: 10px;
-    margin-inline-end: 20px;
-    min-height: 32px;
-    display: flex;
-    align-items: center;
-    position: relative;
+.addon-setting {
+  margin: 10px;
+  margin-inline-end: 20px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.setting-help-icon {
+  margin-inline-start: 8px;
+  width: 18px;
+  height: 18px;
+}
+.setting-input {
+  color: var(--content-text);
+  background: var(--input-background);
+  border: 1px solid var(--control-border);
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border-radius: 4px 0 0 4px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: 0.2s ease;
+  transition-property: box-shadow, border;
+}
+[dir="rtl"] .setting-input {
+  border-radius: 0 4px 4px 0;
+}
+.full-radius .setting-input {
+  border-radius: 4px;
+}
+.setting-input:focus-visible {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: var(--input-focus-shadow);
+}
+
+.setting-input.number {
+  max-width: 150px;
+  border-radius: 16px 0 0 16px;
+}
+[dir="rtl"] .setting-input.number {
+  border-radius: 0 16px 16px 0;
+}
+.full-radius .setting-input.number {
+  border-radius: 16px;
+}
+
+.setting-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.setting-label-container {
+  display: flex;
+  align-items: center;
+  width: 200px;
+  margin-inline-end: 10px;
+}
+
+.setting-label {
+  text-transform: uppercase;
+  color: var(--label-text);
+  font-weight: 500;
+  min-width: 70px;
+}
+
+.setting-dropdown .clear-button.open {
+  border-bottom-right-radius: 0;
+  background: var(--button-hover-background);
+}
+[dir="rtl"] .setting-dropdown .clear-button.open {
+  border-bottom-left-radius: 0;
+}
+.iframe .setting-dropdown .clear-button.open {
+  border-bottom-right-radius: 4px;
+}
+.iframe[dir="rtl"] .setting-dropdown .clear-button.open {
+  border-bottom-left-radius: 4px;
+}
+.iframe .setting-dropdown ul {
+  right: auto;
+  left: -100px;
+  border-top-right-radius: 4px;
+}
+[dir="rtl"] .setting-dropdown ul {
+  right: auto;
+  left: 0;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 0;
+}
+.iframe[dir="rtl"] .setting-dropdown ul {
+  left: auto;
+  right: -100px;
+  border-top-left-radius: 4px;
+}
+.setting-dropdown li > * {
+  vertical-align: middle;
+}
+.setting-dropdown .color-preview {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-inline-end: 8px;
+  border-radius: 5px;
+  background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
+  background-color: white;
+  background-size: 6px 6px;
+  background-position:
+    0 0,
+    0 3px,
+    3px -3px,
+    -3px 0px;
+}
+.setting-dropdown .color-preview span {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid var(--control-border);
+}
+.setting-dropdown .text-preview {
+  margin-left: 12px;
+  color: var(--label-text);
+  font-weight: 500;
+}
+
+.setting-table {
+  display: flex;
+  flex-direction: column;
+}
+.setting-table-list {
+  display: flex;
+  flex-direction: column;
+}
+.setting-table-row {
+  display: flex;
+  margin: 10px 0px;
+}
+.setting-table-row-settings {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 10px;
+  background: var(--navigation-background);
+  border-radius: 10px;
+}
+.setting-table-row-settings .addon-setting {
+  margin-inline-end: 10px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+}
+.setting-table-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.setting-table-dropdown {
+  align-self: flex-start;
+}
+
+@media (max-width: 700px) {
+  .setting-label-container {
+    width: auto;
+    margin-bottom: 5px;
+    max-width: calc(100% - 66px); /* prevent setting description tooltip from overflowing */
   }
-  .setting-help-icon {
-    margin-inline-start: 8px;
-    width: 18px;
-    height: 18px;
+  .setting-label-container:not(:has(.tooltip)) {
+    max-width: none;
   }
   .setting-input {
-    color: var(--content-text);
-    background: var(--input-background);
-    border: 1px solid var(--control-border);
-    height: 32px;
-    box-sizing: border-box;
-    padding: 0 12px;
-    border-radius: 4px 0 0 4px;
-    font-family: inherit;
-    font-size: 14px;
-    transition: 0.2s ease;
-    transition-property: box-shadow, border;
+    flex-shrink: 0;
   }
-  [dir="rtl"] .setting-input {
-    border-radius: 0 4px 4px 0;
-  }
-  .full-radius .setting-input {
-    border-radius: 4px;
-  }
-  .setting-input:focus-visible {
-    outline: none;
-    border-color: var(--orange);
-    box-shadow: var(--input-focus-shadow);
-  }
-
-  .setting-input.number {
-    max-width: 150px;
-    border-radius: 16px 0 0 16px;
-  }
-  [dir="rtl"] .setting-input.number {
-    border-radius: 0 16px 16px 0;
-  }
-  .full-radius .setting-input.number {
-    border-radius: 16px;
-  }
-
-  .setting-input-container {
-    display: flex;
-    align-items: center;
-  }
-
-  .setting-label-container {
-    display: flex;
-    align-items: center;
-    width: 200px;
-    margin-inline-end: 10px;
-  }
-
-  .setting-label {
-    text-transform: uppercase;
-    color: var(--label-text);
-    font-weight: 500;
-    min-width: 70px;
-  }
-
-  .setting-dropdown .clear-button.open {
-    border-bottom-right-radius: 0;
-    background: var(--button-hover-background);
-  }
-  [dir="rtl"] .setting-dropdown .clear-button.open {
-    border-bottom-left-radius: 0;
-  }
-  .iframe .setting-dropdown .clear-button.open {
-    border-bottom-right-radius: 4px;
-  }
-  .iframe[dir="rtl"] .setting-dropdown .clear-button.open {
-    border-bottom-left-radius: 4px;
-  }
-  .iframe .setting-dropdown ul {
-    right: auto;
-    left: -100px;
-    border-top-right-radius: 4px;
-  }
-  [dir="rtl"] .setting-dropdown ul {
-    right: auto;
-    left: 0;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 0;
-  }
-  .iframe[dir="rtl"] .setting-dropdown ul {
-    left: auto;
-    right: -100px;
-    border-top-left-radius: 4px;
-  }
-  .setting-dropdown li > * {
-    vertical-align: middle;
-  }
-  .setting-dropdown .color-preview {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    margin-inline-end: 8px;
-    border-radius: 5px;
-    background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
-    background-color: white;
-    background-size: 6px 6px;
-    background-position:
-      0 0,
-      0 3px,
-      3px -3px,
-      -3px 0px;
-  }
-  .setting-dropdown .color-preview span {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    border-radius: 4px;
-    border: 1px solid var(--control-border);
-  }
-  .setting-dropdown .text-preview {
-    margin-left: 12px;
-    color: var(--label-text);
-    font-weight: 500;
-  }
-
-  .setting-table {
-    display: flex;
-    flex-direction: column;
-  }
-  .setting-table-list {
-    display: flex;
-    flex-direction: column;
-  }
-  .setting-table-row {
-    display: flex;
-    margin: 10px 0px;
-  }
-  .setting-table-row-settings {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-bottom: 10px;
-    background: var(--navigation-background);
-    border-radius: 10px;
-  }
-  .setting-table-row-settings .addon-setting {
-    margin-inline-end: 10px;
-    margin-bottom: 0;
-    flex-wrap: wrap;
-  }
-  .setting-table-options {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .setting-table-dropdown {
-    align-self: flex-start;
-  }
-
-  @media (max-width: 700px) {
-    .setting-label-container {
-      width: auto;
-      margin-bottom: 5px;
-      max-width: calc(100% - 66px); /* prevent setting description tooltip from overflowing */
-    }
-    .setting-label-container:not(:has(.tooltip)) {
-      max-width: none;
-    }
-    .setting-input {
-      flex-shrink: 0;
-    }
-  }
+}
 </style>
 
 <script>

@@ -3,7 +3,7 @@
     <dropdown button-class="large-button clear-button" :disabled="disabled" :button-title="msg('resetTo')">
       <li tabindex="0" role="menuitem" @click="resetToDefault">
         <span v-if="setting.type === 'color'" class="color-preview"
-          ><span :style="{backgroundColor: setting.default}"></span
+          ><span :style="{ backgroundColor: setting.default }"></span
         ></span>
         <span>{{ msg("default") }}</span>
         <span v-if="setting.type !== 'color'" class="text-preview">{{ setting.default }}</span>
@@ -12,13 +12,15 @@
         <li
           tabindex="0"
           role="menuitem"
-          v-if="preset.values.hasOwnProperty(setting.id) && setting.type === 'color'
-            ? preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()
-            : preset.values[setting.id] !== setting.default"
+          v-if="
+            preset.values.hasOwnProperty(setting.id) && setting.type === 'color'
+              ? preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()
+              : preset.values[setting.id] !== setting.default
+          "
           @click="resetToPreset(preset)"
         >
           <span v-if="setting.type === 'color'" class="color-preview"
-            ><span :style="{backgroundColor: preset.values[setting.id]}"></span
+            ><span :style="{ backgroundColor: preset.values[setting.id] }"></span
           ></span>
           <span>{{ preset.name }}</span>
           <span v-if="setting.type !== 'color'" class="text-preview">{{ preset.values[setting.id] }}</span>

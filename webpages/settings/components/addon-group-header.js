@@ -1,23 +1,23 @@
 export default {
-    props: ["group", "shownCount", "marginAbove"],
-    data() {
-      return {};
+  props: ["group", "shownCount", "marginAbove"],
+  data() {
+    return {};
+  },
+  computed: {
+    shouldShow() {
+      if (this.$root.searchInput !== "") return false;
+      return this.shownCount > 0;
     },
-    computed: {
-      shouldShow() {
-        if (this.$root.searchInput !== "") return false;
-        return this.shownCount > 0;
-      },
-      manifestsById() {
-        return this.$root.manifestsById;
-      },
+    manifestsById() {
+      return this.$root.manifestsById;
     },
-    methods: {
-      toggle() {
-        this.group.expanded = !this.group.expanded;
-      },
-      msg(...params) {
-        return this.$root.msg(...params);
-      },
+  },
+  methods: {
+    toggle() {
+      this.group.expanded = !this.group.expanded;
     },
-}
+    msg(...params) {
+      return this.$root.msg(...params);
+    },
+  },
+};

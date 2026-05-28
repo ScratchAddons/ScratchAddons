@@ -2,25 +2,25 @@ import cssVariables from "../../../../libraries/common/vue-css-variables.js";
 import { textColor } from "../../../../libraries/common/cs/text-color.esm.js";
 
 export default {
-    props: ["settings", "hoveredSettingId"],
-    computed: {
-      colors() {
-        const variableValue = this.settings.customValueColor ? this.settings.monitorValueBg : "#ff8c1a";
-        const listValue = this.settings.customValueColor ? this.settings.monitorValueBg : "#fc662c";
-        return {
-          monitorLabel: textColor(this.settings.monitor),
-          listHeaderText: textColor(this.settings.listHeader),
-          variableValue,
-          variableValueText: textColor(variableValue),
-          listValue,
-          listValueText: textColor(listValue),
-        };
-      },
+  props: ["settings", "hoveredSettingId"],
+  computed: {
+    colors() {
+      const variableValue = this.settings.customValueColor ? this.settings.monitorValueBg : "#ff8c1a";
+      const listValue = this.settings.customValueColor ? this.settings.monitorValueBg : "#fc662c";
+      return {
+        monitorLabel: textColor(this.settings.monitor),
+        listHeaderText: textColor(this.settings.listHeader),
+        variableValue,
+        variableValueText: textColor(variableValue),
+        listValue,
+        listValueText: textColor(listValue),
+      };
     },
-    methods: {
-      cssVariables,
-      msg(...params) {
-        return this.$root.msg(...params);
-      },
+  },
+  methods: {
+    cssVariables,
+    msg(...params) {
+      return this.$root.msg(...params);
     },
-}
+  },
+};

@@ -1,18 +1,14 @@
 <template>
   <div class="color-container" @click="open" @mouseover="load = true">
     <button
-      :style="{'background-color': color }"
+      :style="{ 'background-color': color }"
       class="setting-input color"
-      :class="{'action-disabled': !addon._enabled, 'open': isOpen }"
+      :class="{ 'action-disabled': !addon._enabled, open: isOpen }"
       :disabled="disabled"
     ></button>
 
     <div v-if="load" v-show="isOpen" class="picker-popup">
-      <Chrome
-        v-model:modelValue="color"
-        :disable-alpha="no_alpha"
-        @update:modelValue="onColorChange"
-      />
+      <Chrome v-model:modelValue="color" :disable-alpha="no_alpha" @update:modelValue="onColorChange" />
     </div>
   </div>
 </template>

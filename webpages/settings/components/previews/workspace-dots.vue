@@ -28,17 +28,17 @@
 </template>
 
 <style>
-  .dots-preview {
-    margin-top: 10px;
-    background-color: var(--input-background);
-    border: 1px solid var(--control-border);
-    border-radius: 4px;
-  }
+.dots-preview {
+  margin-top: 10px;
+  background-color: var(--input-background);
+  border: 1px solid var(--control-border);
+  border-radius: 4px;
+}
 
-  .dots-preview > svg {
-    display: block;
-    opacity: 0.14;
-  }
+.dots-preview > svg {
+  display: block;
+  opacity: 0.14;
+}
 </style>
 
 <script>
