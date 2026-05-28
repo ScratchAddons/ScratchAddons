@@ -34,7 +34,6 @@
           v-cloak
           class="category"
           style="margin-top: auto"
-          href="https://scratchaddons.com/credits/"
           :href="sidebarUrls.contributors"
           target="_blank"
         >
@@ -48,7 +47,6 @@
         <a
           v-cloak
           class="category"
-          href="https://scratchaddons.com/feedback/"
           :href="sidebarUrls.feedback"
           target="_blank"
         >

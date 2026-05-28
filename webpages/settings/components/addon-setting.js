@@ -18,11 +18,6 @@ export default {
       };
     },
     computed: {
-      updateTable(event) {
-        let list = this.addonSettings[this.setting.id];
-        list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
-        this.updateSettings();
-      },
       show() {
         if (!this.setting.if) return true;
 
@@ -75,6 +70,11 @@ export default {
       },
     },
     methods: {
+      updateTable(event) {
+        let list = this.addonSettings[this.setting.id];
+        list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
+        this.updateSettings();
+      },
       settingsName(addon) {
         const name = this.setting.name;
         const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
