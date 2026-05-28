@@ -2,14 +2,16 @@ export default async function ({ template }) {
   const AddonSetting = Vue.extend({
     props: ["addon", "groupId", "setting", "settingPath", "addon-settings"],
     template,
-    data() {
-      return {
-        noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
-        tableChild: this.settingPath.length > 1,
-        selectName: `${this.groupId}-${this.addon._addonId}-${this.settingPath.join("-")}`,
-      };
-    },
     computed: {
+      noResetDropdown() {
+        return ["table", "boolean", "select"].includes(this.setting.type);
+      },
+      tableChild() {
+        return this.settingPath.length > 1;
+      },
+      selectName() {
+        return `${this.groupId}-${this.addon._addonId}-${this.settingPath.join("-")}`;
+      },
       show() {
         if (!this.setting.if) return true;
 
