@@ -6,19 +6,18 @@
         :class="{sidebarToggleOpen: categoryOpen === true}"
         :title="msg('toggleSidebar')"
         @click="sidebarToggle()"
-        v-cloak
         v-show="smallMode"
       >
         <img src="../../images/icons/menu.svg" draggable="false" />
       </button>
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
-      <h1 v-cloak>{{ msg("settings") }}</h1>
+      <h1>{{ msg("settings") }}</h1>
       <button
         @click="setTheme(!theme)"
         class="header-button header-end"
         :title="msg(theme ? 'switchDark' : 'switchLight')"
       >
-        <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
+        <img class="theme-switch" :src="themePath" draggable="false" />
       </button>
     </div>
     <div class="main">
@@ -31,7 +30,6 @@
         <category-selector v-for="category of categories" :key="category.id" :category="category"></category-selector>
 
         <a
-          v-cloak
           class="category"
           style="margin-top: auto"
           :href="sidebarUrls.contributors"
@@ -40,12 +38,11 @@
           <img src="../../images/icons/users.svg" draggable="false" />
           <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
-        <a v-cloak class="category" href="https://scratchaddons.com/translate" target="_blank">
+        <a class="category" href="https://scratchaddons.com/translate" target="_blank">
           <img src="../../images/icons/translate.svg" draggable="false" />
           <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
         <a
-          v-cloak
           class="category"
           :href="sidebarUrls.feedback"
           target="_blank"
@@ -53,7 +50,7 @@
           <img src="../../images/icons/comment.svg" draggable="false" />
           <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
         </a>
-        <button v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
+        <button class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
           <img src="../../images/icons/wrench.svg" draggable="false" />
           <span>{{ msg("moreSettings") }}</span>
         </button>
@@ -74,7 +71,7 @@
       <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="addons-block-header">
-          <div v-if="!isIframe" class="category-header-title" v-cloak>
+          <div v-if="!isIframe" class="category-header-title">
             <div v-if="relatedAddonsOpen" class="related-addons-header">
               <button class="arrow-button" :title="msg('back')" @click="backRelatedAddon()">
                 <img src="../../images/icons/left-arrow.svg" draggable="false" />
@@ -83,7 +80,7 @@
             </div>
             <span v-else>{{ selectedCategoryName }}</span>
           </div>
-          <div v-cloak class="search-box" v-if="!relatedAddonsOpen" :class="{smallMode: smallMode === true}">
+          <div class="search-box" v-if="!relatedAddonsOpen" :class="{smallMode: smallMode === true}">
             <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
             <button disabled v-if="searchInput === ''">
               <img src="../../images/icons/search.svg" class="search-icon" />
@@ -94,7 +91,7 @@
           </div>
         </div>
 
-        <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
+        <div class="addons-container" :class="{placeholder: !loaded}">
           <p v-if="searchInput && hasNoResults" id="search-not-found">{{ msg("searchNotFound") }}</p>
           <template v-if="relatedAddonsOpen">
             <addon-body
@@ -137,7 +134,6 @@
       class="more-settings"
       :is-open.sync="moreSettingsOpen"
       :title="msg('moreSettings')"
-      v-cloak
       ref="moreSettings"
     >
       <div class="addon-block settings-block">
@@ -251,7 +247,7 @@
         </p>
       </div>
     </modal>
-    <div class="popup" v-cloak v-show="showPopupModal">
+    <div class="popup" v-show="showPopupModal">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>
         <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>

@@ -19,10 +19,6 @@ button {
   font: inherit;
 }
 
-[v-cloak] {
-  display: none !important;
-}
-
 #header {
   display: flex;
   height: 60px;

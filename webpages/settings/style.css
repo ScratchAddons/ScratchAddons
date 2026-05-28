@@ -11,9 +11,6 @@ body {
   font-size: 14px;
 }
 
-:not(body)[v-cloak] {
-  display: none !important;
-}
 
 #app {
   height: 100vh;
@@ -297,24 +294,6 @@ body.iframe .search-box input {
   transform: scaleX(-1);
 }
 
-/* Hide categories and prevent logo from jumping while loading in the popup and small mode */
-@media (max-width: 1099px) {
-  body[v-cloak] .logo {
-    margin-inline-start: 42px;
-  }
-
-  body[v-cloak] .categories-block,
-  body[v-cloak] .categories-shrink {
-    display: none;
-  }
-}
-
-/* Hide top bar while loading in the popup */
-@media (max-width: 400px) {
-  body[v-cloak] .navbar {
-    display: none;
-  }
-}
 
 .permissions div.main {
   display: block;

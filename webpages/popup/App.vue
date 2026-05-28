@@ -2,7 +2,7 @@
     <div id="header">
       <div id="title">
         <img src="../../images/icon-transparent.svg" id="logo" alt="Logo" draggable="false" />
-        <span id="title-text" v-cloak>
+        <span id="title-text">
           {{ msg("extensionName") }}
           <a id="version" :href="changelogLink" target="_blank" title="{{ msg('changelog') }}">v{{ version }}</a>
         </span>
@@ -11,7 +11,7 @@
         <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" draggable="false" />
       </a>
     </div>
-    <div id="popup-bar" v-cloak>
+    <div id="popup-bar">
       <button
         v-for="popup of popups"
         class="popup-name"
@@ -31,7 +31,6 @@
       </button>
     </div>
     <iframe
-      v-cloak
       v-for="popup in popupsWithIframes"
       v-show="currentPopup === popup"
       :src="iframeSrc(popup._addonId)"
