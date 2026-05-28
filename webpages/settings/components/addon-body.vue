@@ -81,6 +81,7 @@
       <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
         <addon-setting
           v-for="setting of addon.settings"
+          :key="setting.id"
           :class="{'setting-highlighted': highlightedSettingId === setting.id}"
           :addon="addon"
           :group-id="groupId"

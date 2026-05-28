@@ -28,7 +28,7 @@
         v-show="!isIframe"
         :class="{closed: categoryOpen === false, smallMode: smallMode === true}"
       >
-        <category-selector v-for="category of categories" :category="category"></category-selector>
+        <category-selector v-for="category of categories" :key="category.id" :category="category"></category-selector>
 
         <a
           v-cloak
@@ -99,6 +99,7 @@
           <template v-if="relatedAddonsOpen">
             <addon-body
               v-for="addonManifest of relatedAddons"
+              :key="addonManifest._addonId"
               :visible="true"
               :addon="addonManifest"
               group-id="enabled"
@@ -106,7 +107,7 @@
             ></addon-body>
           </template>
           <template v-else>
-            <div v-for="addon of addonList">
+            <div v-for="addon of addonList" :key="addon.manifest._addonId">
               <div
                 id="iframe-fullscreen-suggestion"
                 v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"

@@ -10,14 +10,16 @@ import ResetDropdown from "./reset-dropdown.vue";
 export default {
   components: { AddonSetting, AddonTag, Dropdown, Picker, ResetDropdown },
     props: ["addon", "groupId", "setting", "settingPath", "addon-settings"],
-    data() {
-      return {
-        noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
-        tableChild: this.settingPath.length > 1,
-        selectName: `${this.groupId}-${this.addon._addonId}-${this.settingPath.join("-")}`,
-      };
-    },
     computed: {
+      noResetDropdown() {
+        return ["table", "boolean", "select"].includes(this.setting.type);
+      },
+      tableChild() {
+        return this.settingPath.length > 1;
+      },
+      selectName() {
+        return `${this.groupId}-${this.addon._addonId}-${this.settingPath.join("-")}`;
+      },
       show() {
         if (!this.setting.if) return true;
 
