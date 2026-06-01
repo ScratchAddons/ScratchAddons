@@ -174,7 +174,7 @@ async function getAddonData({ addonId, manifest, url }) {
   return { userscripts, userstyles, cssVariables: manifest.customCssVariables || [] };
 }
 
-async function getContentScriptInfo(url) {
+async function getContentScriptInfo(url, trust) {
   const data = {
     url,
     httpStatusCode: null, // Set by webRequest onResponseStarted listener
@@ -208,7 +208,20 @@ async function getContentScriptInfo(url) {
   await Promise.all(promises);
   data.globalState = scratchAddons.globalState._target;
 
-  return data;
+  if (trust) {
+    return data;
+  } else {
+    // Request came from an untrusted location, so remove sensitive account data
+    const defaultAuth = {
+      isLoggedIn: false,
+      username: null,
+      userId: null,
+      xToken: null,
+      csrfToken: null,
+      scratchLang: navigator.language,
+    };
+    return { ...data, globalState: { ...data.globalState, auth: defaultAuth } };
+  }
 }
 
 function createCsIdentity({ tabId, frameId, url }) {
@@ -217,6 +230,10 @@ function createCsIdentity({ tabId, frameId, url }) {
 }
 
 const csInfoCache = new Map();
+// The following whitelist defines the places where it is safe to pass account data into.
+// This is important for developers using SA on localhost, which may not always
+// contain trusted content.
+const trustedOrigins = ["https://scratch.mit.edu"];
 
 // Using this event to preload contentScriptInfo ASAP, since onBeforeRequest
 // obviously happens before the content script has a chance to send us a message.
@@ -226,10 +243,14 @@ chrome.webRequest.onBeforeRequest.addListener(
   async (request) => {
     setUserAsActive();
     if (!scratchAddons.localState.allReady) return;
+
+    const requestUrl = new URL(request.url);
+    const isTrustedRequest = trustedOrigins.includes(requestUrl.origin);
+
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
     const loadingObj = { loading: true };
     csInfoCache.set(identity, loadingObj);
-    const info = await getContentScriptInfo(request.url);
+    const info = await getContentScriptInfo(request.url, isTrustedRequest);
     if (csInfoCache.get(identity) !== loadingObj) {
       // Another content script with same identity took our
       // place in the csInfoCache map while the promise resolved
@@ -279,11 +300,18 @@ chrome.webRequest.onResponseStarted.addListener(
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (!request.contentScriptReady) return;
+  // This URL is what userscripts and userstyles are matched against.
+  // It may be a pseudo-URL.
+  const matchUrl = request.contentScriptReady.url;
+  // For security purposes, this is the URL that the request actually came from.
+  const trustedUrl = new URL(sender.url);
+  const isTrustedRequest = trustedOrigins.includes(trustedUrl.origin);
+
   if (scratchAddons.localState.allReady) {
     const identity = createCsIdentity({
       tabId: sender.tab.id,
       frameId: sender.frameId,
-      url: request.contentScriptReady.url,
+      url: matchUrl,
     });
     const getCacheEntry = () => csInfoCache.get(identity);
     let cacheEntry = getCacheEntry();
@@ -305,7 +333,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         csInfoCache.delete(identity);
       }
     } else {
-      getContentScriptInfo(request.contentScriptReady.url).then((info) => {
+      getContentScriptInfo(matchUrl, isTrustedRequest).then((info) => {
         sendResponse(info);
       });
       return true;
@@ -315,7 +343,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     scratchAddons.localEvents.addEventListener(
       "ready",
       async () => {
-        const info = await getContentScriptInfo(request.contentScriptReady.url);
+        const info = await getContentScriptInfo(matchUrl, isTrustedRequest);
         sendResponse(info);
       },
       { once: true }
