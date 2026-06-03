@@ -45,10 +45,41 @@ class StateProxy {
   }
 }
 
+// The following whitelist defines the places where it is safe to pass account data into.
+// This is important for developers using SA on localhost, which may not always
+// contain trusted content.
+const trustedOrigins = ["https://scratch.mit.edu"];
+
 function messageForAllTabs(message) {
-  chrome.tabs.query({}, (tabs) =>
-    tabs.forEach((tab) => tab.url && chrome.tabs.sendMessage(tab.id, message, () => void chrome.runtime.lastError))
-  );
+  chrome.tabs.query({}, (tabs) => {
+    tabs.forEach((tab) => {
+      if (!tab.url) return; // Skip tabs we don't have access to
+
+      const tabUrl = new URL(tab.url);
+      const isTrustedTab = trustedOrigins.includes(tabUrl.origin);
+
+      let messageToSend = message;
+      if (message.newGlobalState && !isTrustedTab) {
+        // For untrusted tabs, modify the message to remove account data
+        messageToSend = {
+          ...message,
+          newGlobalState: {
+            ...message.newGlobalState,
+            auth: {
+              isLoggedIn: false,
+              username: null,
+              userId: null,
+              xToken: null,
+              csrfToken: null,
+              scratchLang: navigator.language,
+            },
+          },
+        };
+      }
+      chrome.tabs.sendMessage(tab.id, messageToSend, () => void chrome.runtime.lastError);
+    });
+  });
+
   scratchAddons.sendToPopups(message);
 }
 
