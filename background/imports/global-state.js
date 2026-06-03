@@ -3,6 +3,8 @@
 // Content scripts cannot modify global state, but they can always read from it.
 // Exception: authentication info is local state, but is stored here for historical reasons.
 
+import { isTrustedOrigin, guestUser } from "./trust-manager.js";
+
 const _globalState = {
   auth: {
     isLoggedIn: false,
@@ -45,19 +47,11 @@ class StateProxy {
   }
 }
 
-// The following whitelist defines the places where it is safe to pass account data into.
-// This is important for developers using SA on localhost, which may not always
-// contain trusted content.
-const trustedOrigins = ["https://scratch.mit.edu"];
-
 function messageForAllTabs(message) {
   chrome.tabs.query({}, (tabs) => {
     tabs.forEach((tab) => {
       if (!tab.url) return; // Skip tabs we don't have access to
-
-      const tabUrl = new URL(tab.url);
-      const isTrustedTab = trustedOrigins.includes(tabUrl.origin);
-
+      const isTrustedTab = isTrustedOrigin(tab.url);
       let messageToSend = message;
       if (message.newGlobalState && !isTrustedTab) {
         // For untrusted tabs, modify the message to remove account data
@@ -65,14 +59,7 @@ function messageForAllTabs(message) {
           ...message,
           newGlobalState: {
             ...message.newGlobalState,
-            auth: {
-              isLoggedIn: false,
-              username: null,
-              userId: null,
-              xToken: null,
-              csrfToken: null,
-              scratchLang: navigator.language,
-            },
+            auth: guestUser,
           },
         };
       }

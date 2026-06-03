@@ -1,6 +1,7 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
 import { setUserAsActive } from "./imports/inactivity.js";
+import { isTrustedOrigin, guestUser } from "./imports/trust-manager.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
@@ -211,16 +212,8 @@ async function getContentScriptInfo(url, trust) {
   if (trust) {
     return data;
   } else {
-    // Request came from an untrusted location, so remove sensitive account data
-    const defaultAuth = {
-      isLoggedIn: false,
-      username: null,
-      userId: null,
-      xToken: null,
-      csrfToken: null,
-      scratchLang: navigator.language,
-    };
-    return { ...data, globalState: { ...data.globalState, auth: defaultAuth } };
+    // Request came from an untrusted location, so don't include account data
+    return { ...data, globalState: { ...data.globalState, auth: guestUser } };
   }
 }
 
@@ -230,10 +223,6 @@ function createCsIdentity({ tabId, frameId, url }) {
 }
 
 const csInfoCache = new Map();
-// The following whitelist defines the places where it is safe to pass account data into.
-// This is important for developers using SA on localhost, which may not always
-// contain trusted content.
-const trustedOrigins = ["https://scratch.mit.edu"];
 
 // Using this event to preload contentScriptInfo ASAP, since onBeforeRequest
 // obviously happens before the content script has a chance to send us a message.
@@ -244,8 +233,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     setUserAsActive();
     if (!scratchAddons.localState.allReady) return;
 
-    const requestUrl = new URL(request.url);
-    const isTrustedRequest = trustedOrigins.includes(requestUrl.origin);
+    const isTrustedRequest = isTrustedOrigin(request.url);
 
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
     const loadingObj = { loading: true };
@@ -303,9 +291,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // This URL is what userscripts and userstyles are matched against.
   // It may be a pseudo-URL.
   const matchUrl = request.contentScriptReady.url;
-  // For security purposes, this is the URL that the request actually came from.
-  const trustedUrl = new URL(sender.url);
-  const isTrustedRequest = trustedOrigins.includes(trustedUrl.origin);
+  // For security purposes, sender.url is the URL which the request actually came from.
+  const isTrustedRequest = isTrustedOrigin(sender.url);
 
   if (scratchAddons.localState.allReady) {
     const identity = createCsIdentity({
