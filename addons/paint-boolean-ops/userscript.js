@@ -709,6 +709,11 @@ export default async function ({ addon, msg }) {
   const toolsLoop = async () => {
     let hasRunOnce = false;
     let lastFrontBackRow = null;
+    // Tracks the current fixedToolsRow so the breakpoint patch always acts on
+    // the live element — the paint editor can remount on tab switches, giving
+    // a fresh DOM node with new React fibers.
+    let currentFixedToolsRow = null;
+    let applyPatch = null;
     while (true) {
       const frontBackRow = await addon.tab.waitForElement("[class*='fixed-tools_row_'][class*='input-group_']", {
         markAsSeen: true,
@@ -716,14 +721,19 @@ export default async function ({ addon, msg }) {
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
       lastFrontBackRow = frontBackRow;
-      const fixedToolsRow = frontBackRow.parentElement;
+      currentFixedToolsRow = frontBackRow.parentElement;
+      const fixedToolsRow = currentFixedToolsRow;
       frontBackRow.after(shapingSection);
-      shapingSection.style.display = ""; // waitForElement only fires in wide mode
+      shapingSection.style.display = "";
 
       // Re-apply the separator on every loop iteration: frontBackRow is a React
       // element that gets replaced when the toolbar re-renders at the breakpoint,
       // so the class must be added to each new instance, not just the first one.
       if (dashedBorderClass) frontBackRow.classList.add(dashedBorderClass);
+
+      // Re-apply the breakpoint patch on every iteration so freshly remounted
+      // fibers get their native MQL disposed and our state pushed.
+      if (applyPatch) applyPatch();
 
       if (!hasRunOnce) {
         hasRunOnce = true;
@@ -731,7 +741,7 @@ export default async function ({ addon, msg }) {
         // Extract layout and separator classes from native toolbar elements.
         const nativeDashedGroup = fixedToolsRow.querySelector("[class*='mod-dashed-border_']");
         dashedBorderClass = nativeDashedGroup
-          ? [...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? ""
+          ? ([...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? "")
           : "";
 
         // Add a dashed separator to the LEFT of our section (right border on preceding group).
@@ -754,7 +764,9 @@ export default async function ({ addon, msg }) {
         const anyTitle = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-title_']");
 
         const anyDisabled = document.querySelector("[class*='button_mod-disabled_']");
-        modDisabledClass = anyDisabled ? [...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "" : "";
+        modDisabledClass = anyDisabled
+          ? ([...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "")
+          : "";
 
         // Style all inline operation items.
         for (const btn of shapingSection.querySelectorAll(".sa-shaping-item")) {
@@ -772,8 +784,8 @@ export default async function ({ addon, msg }) {
         // react-responsive captures window.matchMedia at bundle evaluation time,
         // so we drive the toolbar layout by patching the fiber tree directly.
         // See breakpoint-patch.js for implementation details.
-        const applyPatch = patchToolbarBreakpoint({
-          fixedToolsRow,
+        applyPatch = patchToolbarBreakpoint({
+          getFixedToolsRow: () => currentFixedToolsRow,
           onMatchChange: (matches) => {
             shapingSection.style.display = matches ? "" : "none";
           },

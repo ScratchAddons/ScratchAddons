@@ -9,10 +9,11 @@
 // reach directly into the React fiber tree, silence the built-in breakpoint
 // listener, and drive the layout ourselves with a new MQL at the right width.
 //
-// Public API: patchToolbarBreakpoint({ fixedToolsRow, onMatchChange, isDisabled })
-//   fixedToolsRow  — the stable outer toolbar DOM element (never unmounts)
-//   onMatchChange  — called with (matches: boolean) whenever our breakpoint fires
-//   isDisabled     — function returning true when the addon is disabled
+// Public API: patchToolbarBreakpoint({ getFixedToolsRow, onMatchChange, isDisabled })
+//   getFixedToolsRow — called on every apply to get the current toolbar DOM element
+//                      (the element can change when the paint editor remounts)
+//   onMatchChange    — called with (matches: boolean) whenever our breakpoint fires
+//   isDisabled       — function returning true when the addon is disabled
 // Returns: applyPatch() — call this to re-apply the patch (e.g. on re-enable)
 
 // 1580px: wide at 100% zoom on 1920px displays, narrow at 125% zoom (1536px
@@ -72,7 +73,7 @@ const findMediaQueryFibers = (fixedToolsRow) => {
 // real MQL listener to keep it responsive, and re-applies whenever the
 // compact-editor addon is toggled. Call the returned applyPatch() function to
 // manually re-apply (e.g. when the addon is re-enabled).
-export const patchToolbarBreakpoint = ({ fixedToolsRow, onMatchChange, isDisabled }) => {
+export const patchToolbarBreakpoint = ({ getFixedToolsRow, onMatchChange, isDisabled }) => {
   let mql = null;
 
   // Silences the built-in listener and pushes our current matches value into
@@ -89,7 +90,7 @@ export const patchToolbarBreakpoint = ({ fixedToolsRow, onMatchChange, isDisable
     }
 
     // Dispose all native 1274px listeners and push our current matches value.
-    const fibers = findMediaQueryFibers(fixedToolsRow);
+    const fibers = findMediaQueryFibers(getFixedToolsRow());
     for (const f of fibers) disposeNativeMql(f);
     const matches = mql.matches;
     for (const f of fibers) {
