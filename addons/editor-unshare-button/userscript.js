@@ -1,7 +1,7 @@
 export default async function ({ addon, msg, console }) {
   const { redux } = addon.tab;
   while (true) {
-    const button = await addon.tab.waitForElement("span[class*='share-button_share-button'][class*='is-shared']", {
+    const button = await addon.tab.waitForElement("[class*='share-button_share-button_'][class*='is-shared']", {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
       markAsSeen: true,
     });
