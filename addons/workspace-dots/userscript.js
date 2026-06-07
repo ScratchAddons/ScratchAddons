@@ -1,31 +1,19 @@
 export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
-  // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L136
+  // https://github.com/RaspberryPiFoundation/blockly/blob/1e002dd/packages/blockly/core/grid.ts#L128
   const oldUpdate = ScratchBlocks.Grid.prototype.update;
   ScratchBlocks.Grid.prototype.update = function (scale) {
     const spacingDivisor = addon.settings.get("spacingDivisor");
     const oldSpacing = this.getSpacing();
-    if (!addon.self.disabled) {
-      if (ScratchBlocks.registry)
-        this.spacing /= spacingDivisor; // new Blockly
-      else this.spacing_ /= spacingDivisor;
-    }
+    if (!addon.self.disabled) this.spacing /= spacingDivisor;
     oldUpdate.call(this, scale);
-    if (!addon.self.disabled) {
-      if (ScratchBlocks.registry)
-        this.spacing = oldSpacing; // new Blockly
-      else this.spacing_ = oldSpacing;
-    }
+    if (!addon.self.disabled) this.spacing = oldSpacing;
   };
 
-  // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L167
-  let setLineAttrMethodName;
-  if (ScratchBlocks.registry)
-    setLineAttrMethodName = "setLineAttributes"; // new Blockly
-  else setLineAttrMethodName = "setLineAttributes_";
-  const oldSetLineAttr = ScratchBlocks.Grid.prototype[setLineAttrMethodName];
-  ScratchBlocks.Grid.prototype[setLineAttrMethodName] = function (line, width, x1, x2, y1, y2) {
+  // https://github.com/RaspberryPiFoundation/blockly/blob/1e002dd/packages/blockly/core/grid.ts#L158
+  const oldSetLineAttr = ScratchBlocks.Grid.prototype.setLineAttributes;
+  ScratchBlocks.Grid.prototype.setLineAttributes = function (line, width, x1, x2, y1, y2) {
     if (!addon.self.disabled) {
       const DOT_LENGTH = 1;
       const FULL_LENGTH = this.getSpacing() + 1;
@@ -43,10 +31,10 @@ export default async function ({ addon, console }) {
           case "none":
             return NO_LENGTH;
           case "vertical":
-            if (line === this.line1 || line === this.line1_) return FULL_LENGTH;
+            if (line === this.line1) return FULL_LENGTH;
             else return NO_LENGTH;
           case "horizontal":
-            if (line === this.line2 || line === this.line2_) return FULL_LENGTH;
+            if (line === this.line2) return FULL_LENGTH;
             else return NO_LENGTH;
           case "dots":
           default:
@@ -60,9 +48,7 @@ export default async function ({ addon, console }) {
   function updateGrid() {
     const workspace = addon.tab.traps.getWorkspace();
     const grid = workspace.getGrid();
-    if (ScratchBlocks.registry)
-      grid.update(grid.scale); // new Blockly
-    else grid.update(grid.scale_);
+    grid.update(grid.scale);
   }
 
   updateGrid();

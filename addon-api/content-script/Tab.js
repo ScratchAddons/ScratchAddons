@@ -783,13 +783,11 @@ export default class Tab extends Listenable {
    * Creates an item in the editor Blockly context menu.
    * @param {Tab~blockContextMenuCallback} callback Returns new menu items.
    * @param {object} conditions - Show context menu when one of these conditions meet.
-   * @param {boolean=} conditions.workspace - Add to workspace context menu.
    * @param {boolean=} conditions.blocks - Add to block context menu outside the flyout.
    * @param {boolean=} conditions.flyout - Add to block context menu in flyout/palette.
-   * @param {boolean=} conditions.comments - Add to comments.
    */
-  createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
-    contextMenuCallbacks.push({ addonId: this._addonId, callback, workspace, blocks, flyout, comments });
+  createBlockContextMenu(callback, { blocks = false, flyout = false } = {}) {
+    contextMenuCallbacks.push({ addonId: this._addonId, callback, blocks, flyout });
 
     // Sort to ensure userscript run order doesn't change callback order
     contextMenuCallbacks.sort((b, a) => CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId));
@@ -798,75 +796,24 @@ export default class Tab extends Listenable {
     createdAnyBlockContextMenus = true;
 
     this.traps.getBlockly().then((ScratchBlocks) => {
-      if (ScratchBlocks.registry) {
-        // new Blockly
-        const oldGenerateContextMenu = ScratchBlocks.BlockSvg.prototype.generateContextMenu;
-        ScratchBlocks.BlockSvg.prototype.generateContextMenu = function (...args) {
-          let items = oldGenerateContextMenu.call(this, ...args);
-          for (const { callback, blocks, flyout } of contextMenuCallbacks) {
-            let injectMenu =
-              // Block in workspace
-              (blocks && !this.isInFlyout) ||
-              // Block in flyout
-              (flyout && this.isInFlyout);
-            if (injectMenu) {
-              try {
-                items = callback(items, this);
-              } catch (e) {
-                console.error("Error while calling context menu callback: ", e);
-              }
-            }
-          }
-          return items;
-        };
-        return;
-      }
-
-      const oldShow = ScratchBlocks.ContextMenu.show;
-      ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
-        const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
-        const block = gesture.targetBlock_;
-
-        for (const { callback, workspace, blocks, flyout, comments } of contextMenuCallbacks) {
+      const oldGenerateContextMenu = ScratchBlocks.BlockSvg.prototype.generateContextMenu;
+      ScratchBlocks.BlockSvg.prototype.generateContextMenu = function (...args) {
+        let items = oldGenerateContextMenu.call(this, ...args);
+        for (const { callback, blocks, flyout } of contextMenuCallbacks) {
           let injectMenu =
-            // Workspace
-            (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
             // Block in workspace
-            (blocks && block && !gesture.flyout_) ||
+            (blocks && !this.isInFlyout) ||
             // Block in flyout
-            (flyout && gesture.flyout_) ||
-            // Comments
-            (comments && gesture.startBubble_);
+            (flyout && this.isInFlyout);
           if (injectMenu) {
             try {
-              items = callback(items, block);
+              items = callback(items, this);
             } catch (e) {
               console.error("Error while calling context menu callback: ", e);
             }
           }
         }
-
-        const oldCreateWidget = ScratchBlocks.ContextMenu.createWidget_;
-        ScratchBlocks.ContextMenu.createWidget_ = function (...args) {
-          oldCreateWidget.call(this, ...args);
-          // Add styles to separator items
-          // This must be done before ContextMenu.position_() is called because it changes the height
-          const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
-          items.forEach((item, i) => {
-            if (item.separator) {
-              const itemElt = blocklyContextMenu.children[i];
-              itemElt.setAttribute("role", "separator");
-              itemElt.style.padding = "0";
-              if (i !== 0) {
-                itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-              }
-            }
-          });
-        };
-
-        oldShow.call(this, event, items, rtl);
-
-        ScratchBlocks.ContextMenu.createWidget_ = oldCreateWidget;
+        return items;
       };
     });
   }

@@ -140,7 +140,7 @@ export default async function ({ addon, msg, console }) {
 
       /* Create a separate container for extension categories */
       this.secondTable = this.createContentsContainer_();
-      this.secondTable.classList.add("scratchCategorySecondMenu");
+      this.secondTable.classList.add("sa-extension-categories");
       this.secondTable.tabIndex = 0;
       Blockly.utils.aria.setRole(this.secondTable, Blockly.utils.aria.Role.TREE);
       container.appendChild(this.secondTable);
@@ -199,7 +199,7 @@ export default async function ({ addon, msg, console }) {
       if (addon.self.disabled) return;
       this.secondTable = document.createElement("div");
       this.secondTable.className =
-        "scratchCategorySecondMenu " +
+        "sa-extension-categories " +
         (this.parent_.horizontalLayout_ ? "scratchCategoryMenuHorizontal" : "scratchCategoryMenu");
       this.parentHtml_.appendChild(this.secondTable);
     };

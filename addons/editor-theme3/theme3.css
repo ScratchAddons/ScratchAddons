@@ -3,22 +3,15 @@
 /* Styles for .high-contrast-theme aren't necessary
    because the addon sets the theme name to "default". */
 
-.blocklyEditableText > text,
 .scratch-renderer.default-theme .blocklyEditableField > text {
   fill: var(--editorTheme3-inputColor-text);
 }
-.blocklyHtmlInput,
 .scratch-renderer.default-theme .blocklyHtmlInput {
   background-color: var(--editorTheme3-inputColor);
   color: var(--editorTheme3-inputColor-text);
 }
-.sa-theme3-editable-label .blocklyHtmlInput {
-  /* Labels in custom block editor (focused state) */
-  background-color: var(--editorTheme3-inputColor-editableLabel);
-}
 .scratch-renderer.default-theme .blocklyEditableField > rect:not(.blocklyDropdownRect) {
-  /* Labels in custom block editor.
-     In the new Blockly version, they currently look like normal text inputs. */
+  /* Labels in custom block editor */
   fill: var(--editorTheme3-inputColor);
 }
 .blocklyShadow.textField.blocklyEditing,
@@ -28,33 +21,14 @@
   visibility: hidden;
 }
 
-/* Override Scratch's high contrast theme */
-.blocklyDropDownDiv .goog-menuitem {
-  color: white;
-}
-.blocklyDropDownDiv .blocklyText {
-  /* "Play note" dropdown */
-  fill: white;
-}
-.blocklyDropDownDiv .goog-menuitem-highlight,
-.blocklyDropDownDiv .goog-menuitem-hover,
 .blocklyDropDownDiv .blocklyMenu .blocklyMenuItem:hover,
 .blocklyDropDownDiv .blocklyMenu .u-dropdown-selected-item,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight,
 .sa-contextmenu-colored .blocklyContextMenu .blocklyMenuItem:hover {
   background-color: var(--editorTheme3-hoveredItem, rgba(0, 0, 0, 0.2));
 }
 
-.scratchCommentRect {
-  fill: var(--editorTheme3-commentColor);
-}
-.scratchCommentBody,
-.scratchCommentTextarea,
 .blocklyComment .blocklyTextarea {
   background-color: var(--editorTheme3-commentColor);
-}
-.scratchWorkspaceCommentBorder {
-  stroke: var(--editorTheme3-commentBorder);
 }
 .blocklyComment {
   --colour-commentBorder: var(--editorTheme3-commentBorder);
@@ -62,11 +36,9 @@
 .blocklyCommentTopbarBackground {
   fill: var(--editorTheme3-commentTopBar);
 }
-.scratchCommentTextarea::placeholder,
 .blocklyCommentText::placeholder {
   color: var(--editorTheme3-commentTextTransparent);
 }
-.scratchCommentText,
 .scratch-renderer.default-theme .blocklyComment .blocklyTextarea {
   fill: var(--editorTheme3-commentText);
   color: var(--editorTheme3-commentText);
@@ -94,7 +66,6 @@
   background-color: transparent;
 }
 
-.blocklyCommentTopbar > image,
-.scratchCommentTopBar ~ image {
+.blocklyCommentTopbar > image {
   filter: var(--editorTheme3-commentFilter);
 }

@@ -6,12 +6,7 @@ export default async function ({ addon, console }) {
   function createArrow(direction, callback) {
     const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
 
-    let widgetDiv;
-    if (Blockly.registry)
-      widgetDiv = Blockly.WidgetDiv.getDiv(); // new Blockly
-    else widgetDiv = Blockly.WidgetDiv.DIV;
-
-    widgetDiv.insertAdjacentHTML(
+    Blockly.WidgetDiv.getDiv().insertAdjacentHTML(
       "beforeend",
       `
             <svg width="20px" height="40px"
@@ -22,7 +17,7 @@ export default async function ({ addon, console }) {
             </svg>`
     );
 
-    widgetDiv.lastChild.addEventListener("click", callback);
+    Blockly.WidgetDiv.getDiv().lastChild.addEventListener("click", callback);
   }
 
   function createArrows(field) {
@@ -30,7 +25,6 @@ export default async function ({ addon, console }) {
     createArrow("right", () => shiftFieldCallback(field.sourceBlock_, field, "right"));
   }
 
-  //https://github.com/scratchfoundation/scratch-blocks/blob/f210e042988b91bcdc2abeca7a2d85e178edadb2/blocks_vertical/procedures.js#L674
   //https://github.com/scratchfoundation/scratch-blocks/blob/0f6a3f3/src/blocks/procedures.ts#L782
   function modifiedRemoveFieldCallback(field) {
     // Do not delete if there is only one input
@@ -70,7 +64,7 @@ export default async function ({ addon, console }) {
       // We account for this with a hacky method of adding the delimiter at the end of the last label input
       if (fnName === "addLabelExternal") {
         const lastInput = proc.inputList[proc.inputList.length - 1];
-        if (lastInput?.type === INPUT_DUMMY) {
+        if (lastInput?.type === Blockly.inputs.inputTypes.DUMMY) {
           lastInput.fieldRow[0].setValue(lastInput.fieldRow[0].getValue() + " %l");
         }
       }
@@ -129,9 +123,9 @@ export default async function ({ addon, console }) {
 
   function focusOnInput(input) {
     if (!input) return;
-    if (input.type === INPUT_DUMMY) {
+    if (input.type === Blockly.inputs.inputTypes.DUMMY) {
       input.fieldRow[0].showEditor_();
-    } else if (input.type === INPUT_VALUE) {
+    } else if (input.type === Blockly.inputs.inputTypes.VALUE) {
       const target = input.connection.targetBlock();
       target.getField("TEXT").showEditor_();
     }
@@ -183,19 +177,14 @@ export default async function ({ addon, console }) {
 
   function enableAddon() {
     // pollute the procedures_declaration prototype with a modified version that prevents merging, and allows inserting after
-    if (Blockly.registry) {
-      // new Blockly
-      const originalInit = Blockly.Blocks["procedures_declaration"].init;
-      Blockly.Blocks["procedures_declaration"].init = function () {
-        originalInit.call(this);
-        originalCreateAllInputs = this.createAllInputs_;
-        originalUpdateDeclarationProcCode = this.onChangeFn;
-        originalRemoveFieldCallback = this.removeFieldCallback;
-        polluteProcedureDeclaration(this);
-      };
-    } else {
-      polluteProcedureDeclaration(Blockly.Blocks["procedures_declaration"]);
-    }
+    const originalInit = Blockly.Blocks["procedures_declaration"].init;
+    Blockly.Blocks["procedures_declaration"].init = function () {
+      originalInit.call(this);
+      originalCreateAllInputs = this.createAllInputs_;
+      originalUpdateDeclarationProcCode = this.onChangeFn;
+      originalRemoveFieldCallback = this.removeFieldCallback;
+      polluteProcedureDeclaration(this);
+    };
 
     // if custom procedures modal is already open we also directly pollute the existing procedures_declaration block
     if (addon.tab.redux.state.scratchGui.customProcedures.active) {
@@ -205,46 +194,25 @@ export default async function ({ addon, console }) {
     FieldTextInputRemovable.prototype.showEditor_ = function () {
       originalShowEditor.call(this);
       if (addon.self.disabled) return;
-      if (Blockly.registry) {
-        // new Blockly
-        Blockly.renderManagement.finishQueuedRenders().then(() => createArrows(this));
-      } else {
-        createArrows(this);
-      }
+      Blockly.renderManagement.finishQueuedRenders().then(() => createArrows(this));
       selectedField = this;
     };
   }
 
   function disableAddon() {
-    let widgetDiv;
-    if (Blockly.registry)
-      widgetDiv = Blockly.WidgetDiv.getDiv(); // new Blockly
-    else widgetDiv = Blockly.WidgetDiv.DIV;
-    widgetDiv.querySelectorAll(".sa-reorder-inputs-arrow").forEach((e) => e.remove());
+    Blockly.WidgetDiv.getDiv()
+      .querySelectorAll(".sa-reorder-inputs-arrow")
+      .forEach((e) => e.remove());
   }
 
-  let INPUT_DUMMY;
-  let INPUT_VALUE;
-  let FieldTextInputRemovable;
+  // set in enableAddon()
   let originalCreateAllInputs;
   let originalUpdateDeclarationProcCode;
   let originalRemoveFieldCallback;
-  if (Blockly.registry) {
-    // new Blockly
-    INPUT_DUMMY = Blockly.inputs.inputTypes.DUMMY;
-    INPUT_VALUE = Blockly.inputs.inputTypes.VALUE;
-    FieldTextInputRemovable = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_input_removable");
-    // The other variables are set in enableAddon()
-  } else {
-    INPUT_DUMMY = Blockly.DUMMY_INPUT;
-    INPUT_VALUE = Blockly.INPUT_VALUE;
-    FieldTextInputRemovable = Blockly.FieldTextInputRemovable;
-    originalCreateAllInputs = Blockly.Blocks["procedures_declaration"].createAllInputs_;
-    originalUpdateDeclarationProcCode = Blockly.Blocks["procedures_declaration"].onChangeFn;
-    originalRemoveFieldCallback = Blockly.Blocks["procedures_declaration"].removeFieldCallback;
-  }
 
+  const FieldTextInputRemovable = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_input_removable");
   const originalShowEditor = FieldTextInputRemovable.prototype.showEditor_;
+
   let originalAddFns = {};
   let selectedField = null;
 

@@ -29,27 +29,18 @@ export default async function ({ addon, console }) {
     }
   };
 
-  if (Blockly.registry) {
-    // new Blockly
-    const ScratchContinuousCategory = Blockly.registry.getClass(
-      Blockly.registry.Type.TOOLBOX_ITEM,
-      Blockly.ToolboxCategory.registrationName
-    );
-    const oldCategoryCreateIconDom = ScratchContinuousCategory.prototype.createIconDom_;
-    ScratchContinuousCategory.prototype.createIconDom_ = function () {
-      const oldIconUri = this.iconURI;
-      this.iconURI = recolorIcon(oldIconUri, this.getId());
-      const iconElement = oldCategoryCreateIconDom.call(this);
-      this.iconURI = oldIconUri;
-      return iconElement;
-    };
-  } else {
-    const oldCategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
-    Blockly.Toolbox.Category.prototype.createDom = function () {
-      this.iconURI_ = recolorIcon(this.iconURI_, this.id_);
-      oldCategoryCreateDom.call(this);
-    };
-  }
+  const ScratchContinuousCategory = Blockly.registry.getClass(
+    Blockly.registry.Type.TOOLBOX_ITEM,
+    Blockly.ToolboxCategory.registrationName
+  );
+  const oldCategoryCreateIconDom = ScratchContinuousCategory.prototype.createIconDom_;
+  ScratchContinuousCategory.prototype.createIconDom_ = function () {
+    const oldIconUri = this.iconURI;
+    this.iconURI = recolorIcon(oldIconUri, this.getId());
+    const iconElement = oldCategoryCreateIconDom.call(this);
+    this.iconURI = oldIconUri;
+    return iconElement;
+  };
 
   const reloadToolbox = () => {
     updateAllBlocks(addon.tab, {
