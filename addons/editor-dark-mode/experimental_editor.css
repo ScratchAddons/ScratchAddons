@@ -469,8 +469,6 @@ img[class*="tool-select-base_tool-select-icon_"],
   border-color: var(--editorDarkMode-primary);
 }
 [class*="input_input-form_"]:not([class*="project-title-input_title-field_"]):hover,
-[class*="react-tabs_react-tabs__tab_"]:focus-visible,
-[class*="react-tabs_react-tabs__tab_"][class*="gui_tab_"][class*="gui_is-selected_"]:focus-visible,
 [class*="toggle-buttons_button_"]:focus::before,
 [class*="stage_frame_"],
 [class*="sprite-selector-item_sprite-selector-item_"]:hover,
@@ -737,8 +735,4 @@ div[class*="delete-confirmation-prompt_body_"] /* <-- specificity */ [class*="de
 .Popover .resize-sensor {
   /* The <object> gets a white background if color-scheme is dark. */
   color-scheme: light;
-}
-
-[class*="react-tabs_react-tabs__tab_"]:focus::after {
-  display: none;
 }
