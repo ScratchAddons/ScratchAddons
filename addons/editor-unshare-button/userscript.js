@@ -42,6 +42,7 @@ export default async function ({ addon, msg, console }) {
         });
 
         button.classList.remove("sa-unshare-button");
+        button.querySelector("span").innerText = addon.tab.scratchMessage("gui.menuBar.share");
         button.removeEventListener("click", thisFunction);
 
         redux.dispatch({
