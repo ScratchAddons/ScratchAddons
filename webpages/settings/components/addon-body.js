@@ -160,11 +160,15 @@ export default async function ({ template }) {
           this.$root.addonToEnable = this.addon;
           dialog.returnValue = null;
           dialog.showModal();
-          dialog.addEventListener("close", () => {
-            if (dialog.returnValue === "yes") {
-              toggleSwitch.click(); // Re-runs the function
-            }
-          }, { once: true });
+          dialog.addEventListener(
+            "close",
+            () => {
+              if (dialog.returnValue === "yes") {
+                toggleSwitch.click(); // Re-runs the function
+              }
+            },
+            { once: true }
+          );
           return;
         }
 
