@@ -1,3 +1,9 @@
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .footer {
   text-align: center;
   color: var(--gray-text);

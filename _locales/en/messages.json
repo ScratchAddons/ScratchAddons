@@ -71,11 +71,20 @@
   "forWebsite": {
     "message": "For website"
   },
+  "confirmationTitle": {
+    "message": "Confirmation"
+  },
   "confirmPreset": {
     "message": "Load this preset and overwrite this addon's current settings?"
   },
   "confirmReset": {
     "message": "Are you sure you want to reset this addon to default settings?"
+  },
+  "enableAddon": {
+    "message": "Enable"
+  },
+  "cancel": {
+    "message": "Cancel"
   },
   "settingsTitle": {
     "message": "Settings - Scratch Addons"

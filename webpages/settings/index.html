@@ -435,6 +435,38 @@
         </p>
       </div>
     </modal>
+    <modal class="more-settings" :title="msg('confirmationTitle')" v-cloak v-el:enableaddon>
+      <div class="settings-block" v-if="addonToEnable">
+        <span>{{ msg("dangerWarning", [addonToEnable.name]) }}</span>
+        <div class="addon-body">
+          <div class="addon-settings">
+            <span>{{ addonToEnable.description }}</span>
+            <!-- Element from addon-body.html: -->
+            <div v-for="info of addonToEnable.info">
+              <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
+                <img
+                  :src="'../../images/icons/' + {
+                    'warning': 'warning.svg',
+                    'notice': 'notice.svg',
+                    'info': 'help.svg',
+                  }[info.type || 'info']"
+                  :alt="msg({
+                    'warning': 'warningMessage',
+                    'notice': 'noticeMessage',
+                    'info': 'infoMessage',
+                  }[info.type || 'info'])"
+                  draggable="false"
+                />{{ info.text }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button value="no" @click="closeDialog" class="large-button">{{ msg("cancel") }}</button>
+          <button value="yes" @click="closeDialog" class="large-button" style="border-color: var(--warning-border)">{{ msg("enableAddon") }}</button>
+        </div>
+      </div>
+    </modal>
     <div class="popup" v-cloak v-show="showPopupModal">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>

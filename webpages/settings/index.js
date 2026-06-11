@@ -343,6 +343,9 @@ let fuse;
           { once: true }
         );
       },
+      closeDialog(event) {
+        event.target.closest("dialog").close(event.target.value);
+      },
       groupShownCount(group) {
         if (group.id === "_iframeSearch") return -1;
         return this.addonListObjs.filter(
