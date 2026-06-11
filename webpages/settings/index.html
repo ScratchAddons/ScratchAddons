@@ -373,7 +373,7 @@
               <div class="export-actions-group">
                 <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
                 <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
-                <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
+                <button class="large-button confirm-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
               </div>
               <div class="export-actions-group">
                 <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
@@ -402,7 +402,7 @@
               <span>Show addon names and descriptions in English</span>
               <div class="badge red">{{ msg("beta") }}</div>
               <button
-                class="large-button"
+                class="large-button confirm-button"
                 id="applyLanguageSettingsButton"
                 v-show="forceEnglishSetting !== null && forceEnglishSetting !== this.forceEnglishSettingInitial"
                 @click="applyLanguageSettings()"
@@ -463,7 +463,7 @@
         </div>
         <div class="actions">
           <button value="no" @click="closeDialog" class="large-button">{{ msg("cancel") }}</button>
-          <button value="yes" @click="closeDialog" class="large-button" style="border-color: var(--warning-border)">{{ msg("enableAddon") }}</button>
+          <button value="yes" @click="closeDialog" class="large-button danger-button">{{ msg("enableAddon") }}</button>
         </div>
       </div>
     </modal>

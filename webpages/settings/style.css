@@ -215,10 +215,6 @@ h1 {
   /* needs !important because it conflicts with display: block */
   display: none !important;
 }
-#confirmImport,
-#applyLanguageSettingsButton {
-  border-color: var(--orange);
-}
 
 #search-not-found {
   margin: 20px;
