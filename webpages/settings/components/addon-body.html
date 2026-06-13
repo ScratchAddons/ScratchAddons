@@ -223,13 +223,7 @@
     border-radius: 4px;
     box-shadow: var(--content-shadow);
   }
-  .addon-body:target,
   .addon-blink {
-    /*
-      Browsers sometimes ignore :target when the element is appended.
-      (This is working as intended per spec.)
-      Use CSS class to force animation.
-    */
     animation: addonBlink 1s 2 ease-in-out;
   }
 

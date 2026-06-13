@@ -11,7 +11,6 @@ import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
 import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 
-const MORE_SETTINGS_HASH = "#moresettings";
 const ADDON_HASH_PREFIX = "#addon-";
 
 let isIframe = false;
@@ -233,12 +232,25 @@ let fuse;
           const addonElem = document.getElementById("addon-" + addonId);
           if (!addonElem) return;
           addonElem.scrollIntoView();
-          // Browsers sometimes ignore :target for the elements dynamically appended.
-          // Use CSS class to initiate the blink animation.
           addonElem.classList.add("addon-blink");
           // 2s (animation length) + 1ms
           setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
         }, 0);
+      },
+      checkHash() {
+        if (location.hash === "#moresettings") {
+          this.openMoreSettings();
+        } else if (location.hash.startsWith(ADDON_HASH_PREFIX)) {
+          const addonId = location.hash.substring(ADDON_HASH_PREFIX.length);
+          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+          if (!groupWithAddon) return; //Don't run if hash is invalid
+          const addon = this.manifestsById[addonId];
+
+          groupWithAddon.expanded = true;
+          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+          this.clearSearch();
+          this.blinkAddon(addonId);
+        }
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -437,25 +449,7 @@ let fuse;
         this.forceEnglishSetting = forceEnglish;
       });
 
-      window.addEventListener(
-        "hashchange",
-        (e) => {
-          if (location.hash === MORE_SETTINGS_HASH) {
-            vue.openMoreSettings();
-          } else if (location.hash.startsWith(ADDON_HASH_PREFIX)) {
-            const addonId = location.hash.substring(ADDON_HASH_PREFIX.length);
-            const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
-            if (!groupWithAddon) return; //Don't run if hash is invalid
-            const addon = this.manifestsById[addonId];
-
-            groupWithAddon.expanded = true;
-            this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-            this.clearSearch();
-            setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
-          }
-        },
-        { capture: false }
-      );
+      window.addEventListener("hashchange", this.checkHash, { capture: false });
     },
   });
 
@@ -667,21 +661,7 @@ let fuse;
     vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
-    setTimeout(() => {
-      const hash = window.location.hash;
-      if (location.hash === MORE_SETTINGS_HASH) {
-        vue.openMoreSettings();
-      } else if (hash.startsWith(ADDON_HASH_PREFIX)) {
-        const addonId = hash.substring(ADDON_HASH_PREFIX.length);
-        const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
-        if (!groupWithAddon) return;
-        groupWithAddon.expanded = true;
-
-        const addon = vue.manifestsById[addonId];
-        vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-        vue.blinkAddon(addonId);
-      }
-    }, 0);
+    setTimeout(vue.checkHash, 0);
 
     let binaryNum = "";
     manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
