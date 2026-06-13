@@ -342,6 +342,7 @@ body.iframe .search-box input {
   font-size: 2rem;
   font-weight: 600;
   margin: 0;
+  margin-right: 19px;
 }
 
 .permissions-steps {
