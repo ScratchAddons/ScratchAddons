@@ -337,7 +337,7 @@ body.iframe .search-box input {
   font-size: 1.1rem;
 }
 
-.permissions-block h2 {
+.permissions-block h1 {
   font-family: "Sora", sans-serif;
   font-size: 2rem;
   font-weight: 600;
@@ -360,7 +360,7 @@ body.iframe .search-box input {
 }
 
 @media (max-width: 1000px) {
-  .permissions-block h2 {
+  .permissions-block h1 {
     font-size: 2rem;
   }
 
