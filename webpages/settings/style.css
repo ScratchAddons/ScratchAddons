@@ -332,7 +332,8 @@ body.iframe .search-box input {
 }
 
 .permissions-block {
-  margin-top: 1rem;
+  padding: 5px;
+  margin-bottom: 1rem;
   font-size: 1.1rem;
 }
 
@@ -344,8 +345,9 @@ body.iframe .search-box input {
 }
 
 .permissions-steps {
+  padding: 5px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 2rem;
 }
 
@@ -353,6 +355,7 @@ body.iframe .search-box input {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
 @media (max-width: 1000px) {
