@@ -735,3 +735,7 @@ let fuse;
     }
   });
 })();
+
+chrome.runtime.onMessage.addListener((request) => {
+  if (request === "promptPermissions") vue.openPermissionPrompt();
+});

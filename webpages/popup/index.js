@@ -74,10 +74,8 @@ const vue = new Vue({
   ready() {
     chrome.runtime.sendMessage("checkPermissions").then((granted) => {
       if (!granted) {
-        chrome.tabs.create({
-          active: true,
-          url: "/webpages/settings/index.html",
-        });
+        chrome.runtime.sendMessage("promptPermissions");
+        chrome.runtime.openOptionsPage();
         this.closePopup();
       }
     });

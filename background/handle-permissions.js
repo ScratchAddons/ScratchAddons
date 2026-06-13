@@ -9,10 +9,8 @@ const logPermissionError = (granted) => {
 const openPermissionSettings = (granted) => {
   if (granted) return;
   logPermissionError(granted);
-  chrome.tabs.create({
-    active: true,
-    url: "/webpages/settings/index.html",
-  });
+  chrome.runtime.sendMessage("promptPermissions");
+  chrome.runtime.openOptionsPage();
 };
 
 const checkSitePermissions = (callback) => {
