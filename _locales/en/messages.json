@@ -296,12 +296,6 @@
   "search": {
     "message": "Search"
   },
-  "permissionsTitle": {
-    "message": "Permissions - Scratch Addons"
-  },
-  "permissions": {
-    "message": "Permissions"
-  },
   "enablePermissionsTitle": {
     "message": "Please enable site access"
   },

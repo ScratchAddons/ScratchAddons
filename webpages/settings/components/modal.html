@@ -1,8 +1,8 @@
 <template>
   <dialog closedby="any" class="modal">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1>{{ title }}</h1>
+      <div class="modal-header" :class="{ 'zero-height': !title }">
+        <h1 v-if="title">{{ title }}</h1>
         <button @click="closeModal" class="close" :title="msg('close')">
           <img src="../../../images/icons/close.svg" draggable="false" />
         </button>
@@ -40,8 +40,14 @@
     justify-content: space-between;
   }
 
+  .modal-header.zero-height {
+    height: 0;
+    margin-bottom: 0;
+  }
+
   .close {
     padding: 0;
+    margin-left: auto;
     background-color: transparent;
     border: none;
     cursor: pointer;
