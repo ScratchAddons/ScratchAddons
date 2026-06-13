@@ -48,7 +48,7 @@ let fuse;
   if (!isIframe) {
     chrome.runtime.sendMessage("checkPermissions", (hasPermissions) => {
       if (!hasPermissions) {
-        vue.$els.permissions.showModal();
+        vue.openPermissionPrompt();
       }
     });
   }
@@ -199,10 +199,17 @@ let fuse;
       openMoreSettings: function () {
         this.closePickers();
         this.$els.moresettings.showModal();
-        if (vue.smallMode) {
-          vue.categoryOpen = false;
+        if (this.smallMode) {
+          this.categoryOpen = false;
         }
         location.hash = "";
+      },
+      openPermissionPrompt() {
+        this.closePickers();
+        this.$els.permissions.showModal();
+        if (this.smallMode) {
+          this.categoryOpen = false;
+        }
       },
       openRelatedAddons(addonManifest, log = true) {
         this.relatedToAddonName = addonManifest.name;
