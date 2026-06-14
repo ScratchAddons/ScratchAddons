@@ -310,6 +310,23 @@ export default async function ({ addon, console, msg }) {
       if (svgAttrs && svgAttrs[0].indexOf("xmlns=") === -1) {
         asset = asset.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
       }
+
+      // After the above, we apply sanitization. Reference:
+      // https://github.com/scratchfoundation/scratch-paint/commit/cc837ae481a3be5be379665ef3bd107a71aac670
+      //
+      // This is a rough approximation of:
+      // https://github.com/scratchfoundation/scratch-editor/blob/develop/packages/scratch-svg-renderer/src/sanitize-svg.js#L176
+      //
+      // We don't have a good way to access that function directly, but isomorphic-dompurify exports the
+      // DOMPurify on Window which we can access. This is the same DOMPurify used by Scratch internally,
+      // so we get all the hooks Scratch has configured. The only important part of that function is
+      // calling DOMPurify, which we can easily copy the right arguments for.
+      asset = window.DOMPurify.sanitize(asset, {
+        USE_PROFILES: { svg: true },
+        FORBID_TAGS: ["a", "audio", "canvas", "video"],
+        ADD_DATA_URI_TAGS: ["image"],
+      });
+
       const parser = new DOMParser();
       const svgDom = parser.parseFromString(asset, "text/xml");
       const viewBox = svgDom.documentElement.attributes.viewBox
