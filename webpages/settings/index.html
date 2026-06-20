@@ -438,54 +438,52 @@
       </div>
     </modal>
     <modal :title="msg('enableConfirmation')" v-cloak v-el:enableaddon>
-      <div class="settings-block" v-if="addonToEnable">
-        <div class="addon-body" style="margin: -5px 0 15px 0">
-          <div class="addon-topbar">
-            <div class="clickable-area">
-              <button class="arrow-button" disabled>
-                <img src="../../images/icons/expand.svg" class="reverted" draggable="false" />
-              </button>
+      <div class="addon-body" v-if="addonToEnable">
+        <div class="addon-topbar">
+          <div class="clickable-area">
+            <button class="arrow-button" disabled>
+              <img src="../../images/icons/expand.svg" class="reverted" draggable="false" />
+            </button>
+            <img
+              :src="addonIconSrc(addonToEnable)"
+              :title="addonIconAlt(addonToEnable)"
+              class="icon-type addon-icon"
+              draggable="false"
+            />
+            <!-- prettier-ignore -->
+            <div class="addon-name-and-tags">
+              <div class="addon-name">
+                <span>{{ addonToEnable.name }}</span>
+              </div><!-- no space --><addon-tag v-for="tag of addonToEnable.tags" :tag="tag"></addon-tag>
+            </div>
+          </div>
+        </div>
+        <div class="addon-settings">
+          <span>{{ addonToEnable.description }}</span>
+          <!-- Element from addon-body.html: -->
+          <div v-for="info of addonToEnable.info">
+            <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
               <img
-                :src="addonIconSrc(addonToEnable)"
-                :title="addonIconAlt(addonToEnable)"
-                class="icon-type addon-icon"
+                :src="'../../images/icons/' + {
+                  'warning': 'warning.svg',
+                  'notice': 'notice.svg',
+                  'info': 'help.svg',
+                }[info.type || 'info']"
+                :alt="msg({
+                  'warning': 'warningMessage',
+                  'notice': 'noticeMessage',
+                  'info': 'infoMessage',
+                }[info.type || 'info'])"
                 draggable="false"
-              />
-              <!-- prettier-ignore -->
-              <div class="addon-name-and-tags">
-                <div class="addon-name">
-                  <span>{{ addonToEnable.name }}</span>
-                </div><!-- no space --><addon-tag v-for="tag of addonToEnable.tags" :tag="tag"></addon-tag>
-              </div>
+              />{{ info.text }}
             </div>
           </div>
-          <div class="addon-settings">
-            <span>{{ addonToEnable.description }}</span>
-            <!-- Element from addon-body.html: -->
-            <div v-for="info of addonToEnable.info">
-              <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
-                <img
-                  :src="'../../images/icons/' + {
-                    'warning': 'warning.svg',
-                    'notice': 'notice.svg',
-                    'info': 'help.svg',
-                  }[info.type || 'info']"
-                  :alt="msg({
-                    'warning': 'warningMessage',
-                    'notice': 'noticeMessage',
-                    'info': 'infoMessage',
-                  }[info.type || 'info'])"
-                  draggable="false"
-                />{{ info.text }}
-              </div>
-            </div>
-            <div class="settings-column"><!-- empty, but still has margins --></div>
-          </div>
+          <div class="settings-column"><!-- empty, but still has margins --></div>
         </div>
-        <div class="actions">
-          <button value="no" @click="closeDialog" class="large-button">{{ msg("cancel") }}</button>
-          <button value="yes" @click="closeDialog" class="large-button danger-button">{{ msg("enableAddon") }}</button>
-        </div>
+      </div>
+      <div class="actions">
+        <button value="no" @click="closeDialog" class="large-button">{{ msg("cancel") }}</button>
+        <button value="yes" @click="closeDialog" class="large-button danger-button">{{ msg("enableAddon") }}</button>
       </div>
     </modal>
     <div class="popup" v-cloak v-show="showPopupModal">
