@@ -437,10 +437,28 @@
         </p>
       </div>
     </modal>
-    <modal class="more-settings" :title="msg('confirmationTitle')" v-cloak v-el:enableaddon>
+    <modal :title="msg('enableConfirmation')" v-cloak v-el:enableaddon>
       <div class="settings-block" v-if="addonToEnable">
-        <span>{{ msg("dangerWarning", [addonToEnable.name]) }}</span>
-        <div class="addon-body">
+        <div class="addon-body" style="margin: -5px 0 15px 0">
+          <div class="addon-topbar">
+            <div class="clickable-area">
+              <button class="arrow-button" disabled>
+                <img src="../../images/icons/expand.svg" class="reverted" draggable="false" />
+              </button>
+              <img
+                :src="addonIconSrc(addonToEnable)"
+                :title="addonIconAlt(addonToEnable)"
+                class="icon-type addon-icon"
+                draggable="false"
+              />
+              <!-- prettier-ignore -->
+              <div class="addon-name-and-tags">
+                <div class="addon-name">
+                  <span>{{ addonToEnable.name }}</span>
+                </div><!-- no space --><addon-tag v-for="tag of addonToEnable.tags" :tag="tag"></addon-tag>
+              </div>
+            </div>
+          </div>
           <div class="addon-settings">
             <span>{{ addonToEnable.description }}</span>
             <!-- Element from addon-body.html: -->
@@ -461,6 +479,7 @@
                 />{{ info.text }}
               </div>
             </div>
+            <div class="settings-column"><!-- empty, but still has margins --></div>
           </div>
         </div>
         <div class="actions">

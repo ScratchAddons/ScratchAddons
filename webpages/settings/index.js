@@ -186,6 +186,30 @@ let fuse;
     },
 
     methods: {
+      /* Also in addon-body */
+      addonIconSrc(addon) {
+        const map = {
+          editor: "puzzle",
+          player: "player",
+          community: "web",
+          theme: "brush",
+          easterEgg: "egg-easter",
+          popup: "popup",
+        };
+        return `../../images/icons/${map[addon._icon]}.svg`;
+      },
+      /* Also in addon-body */
+      addonIconAlt(addon) {
+        const map = {
+          editor: "editorFeature",
+          player: "playerFeature",
+          community: "websiteFeature",
+          theme: "themeAddon",
+          easterEgg: "easterEgg",
+          popup: "popupFeature",
+        };
+        return chrome.i18n.getMessage(map[addon._icon]);
+      },
       openMoreSettings: function () {
         this.closePickers();
         this.$els.moresettings.showModal();

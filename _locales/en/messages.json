@@ -56,8 +56,8 @@
   "danger": {
     "message": "Dangerous"
   },
-  "dangerWarning": {
-    "message": "Are you sure you want to enable the \"$1\" addon?"
+  "enableConfirmation": {
+    "message": "Enable this addon?"
   },
   "forums": {
     "message": "Forums"
@@ -70,9 +70,6 @@
   },
   "forWebsite": {
     "message": "For website"
-  },
-  "confirmationTitle": {
-    "message": "Confirmation"
   },
   "confirmPreset": {
     "message": "Load this preset and overwrite this addon's current settings?"
