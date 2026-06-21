@@ -442,10 +442,12 @@
       </div>
       <div class="permissions-steps">
         <div>
+          <span class="step-number">1</span>
           <button class="large-button" @click="requestPermissions">{{ msg("enableButton") }}</button>
           <p>{{ msg("enableButtonDescription") }}</p>
         </div>
         <div>
+          <span class="step-number">2</span>
           <img alt="{{ msg('permissionsScreenAlt') }}" v-bind:src="permissionScreenshotPath" />
           <p>{{ msg("clickAllowDescription") }}</p>
         </div>

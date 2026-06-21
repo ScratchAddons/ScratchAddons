@@ -80,6 +80,14 @@
   font-size: 2.5rem;
   cursor: pointer;
 }
+.step-number {
+  background-color: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  line-height: 2em;
+  width: 2em;
+  margin: 0 auto 1em auto;
+}
 @media not (max-width: 1000px) {
   .permissions-steps p {
     height: 2rem;
@@ -91,5 +99,9 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+  }
+  .step-number {
+    position: absolute;
+    inset-inline-start: 25px;
   }
 }
