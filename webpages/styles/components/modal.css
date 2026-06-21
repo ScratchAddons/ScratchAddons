@@ -71,8 +71,10 @@
 .permissions-steps > div {
   display: flex;
   flex-direction: column;
-  align-items: center;
   text-align: center;
+}
+.permissions-steps > div:last-child {
+  width: 24rem;
 }
 .permissions-steps button {
   display: block;
@@ -82,8 +84,4 @@
   font-family: "Sora", sans-serif;
   font-size: 2.5rem;
   cursor: pointer;
-}
-.permissions-steps img {
-  width: 24rem;
-  max-width: 100%;
 }
