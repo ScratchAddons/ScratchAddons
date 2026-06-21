@@ -48,7 +48,6 @@
 
 .permissions-block {
   padding: 5px;
-  margin-bottom: 1rem;
   font-size: 1.1rem;
 }
 .permissions-block h1 {
@@ -61,12 +60,8 @@
 .permissions-steps {
   padding: 5px;
   display: flex;
+  justify-content: space-evenly;
   gap: 2rem;
-}
-@media (max-width: 1000px) {
-  .permissions-steps {
-    flex-direction: column;
-  }
 }
 .permissions-steps > div {
   display: flex;
@@ -84,4 +79,17 @@
   font-family: "Sora", sans-serif;
   font-size: 2.5rem;
   cursor: pointer;
+}
+@media not (max-width: 1000px) {
+  .permissions-steps p {
+    height: 2rem;
+    margin-top: 1.5rem;
+  }
+}
+@media (max-width: 1000px) {
+  .permissions-steps {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
 }
