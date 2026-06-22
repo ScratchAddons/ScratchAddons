@@ -67,6 +67,7 @@
   display: flex;
   flex-direction: column;
   text-align: center;
+  max-width: 100%;
 }
 .permissions-steps > div:last-child {
   width: 24rem;
@@ -75,6 +76,7 @@
   display: block;
   height: 6rem;
   width: 18rem;
+  max-width: 100%;
   margin-block: auto;
   font-family: "Sora", sans-serif;
   font-size: 2.5rem;
