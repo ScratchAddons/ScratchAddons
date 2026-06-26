@@ -135,14 +135,16 @@ let fuse;
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
-        permissionScreenshotPath: initialTheme
-          ? "../../images/screenshots/permissions-light.png"
-          : "../../images/screenshots/permissions-dark.png",
       };
     },
     computed: {
       themePath() {
         return this.theme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
+      },
+      permissionScreenshotPath() {
+        return this.theme
+          ? "../../images/screenshots/permissions-light.png"
+          : "../../images/screenshots/permissions-dark.png";
       },
       addonList() {
         if (!this.searchInput) {
