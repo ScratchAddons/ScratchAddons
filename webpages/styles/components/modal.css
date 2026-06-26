@@ -58,25 +58,23 @@
   margin-right: 19px;
 }
 .permissions-steps {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template: repeat(3, auto) / 18rem 24rem;
+  justify-content: center;
+  justify-items: center;
+  gap: 1.75em 3rem;
   padding: 5px;
-  display: flex;
-  justify-content: space-evenly;
-  gap: 2rem;
-}
-.permissions-steps > div {
-  display: flex;
-  flex-direction: column;
   text-align: center;
+}
+.permissions-steps > img {
+  width: 24rem;
   max-width: 100%;
 }
-.permissions-steps > div:last-child {
-  width: 24rem;
-}
-.permissions-steps button {
+.permissions-steps > button {
   display: block;
   height: 6rem;
   width: 18rem;
-  max-width: 100%;
   margin-block: auto;
   font-family: "Sora", sans-serif;
   font-size: 2.5rem;
@@ -88,22 +86,14 @@
   border-radius: 50%;
   line-height: 2em;
   width: 2em;
-  margin: 0 auto 1em auto;
 }
-@media not (max-width: 1000px) {
-  .permissions-steps p {
-    height: 2rem;
-    margin-top: 1.5rem;
-  }
+.permissions-steps > p {
+  margin-top: 0;
 }
 @media (max-width: 1000px) {
   .permissions-steps {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-  }
-  .step-number {
-    position: absolute;
-    inset-inline-start: 25px;
   }
 }
