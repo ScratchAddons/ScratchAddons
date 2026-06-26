@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "warning",
-      "text": "This will prevent projects from saving automatically; manually save your changes whenever possible to avoid data loss.",
+      "text": "Manually save your changes whenever possible to prevent data loss.",
       "id": "manuallysave"
     }
   ],
