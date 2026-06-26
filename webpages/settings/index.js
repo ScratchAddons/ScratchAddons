@@ -11,6 +11,7 @@ import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
 import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
 
+const MORE_SETTINGS_HASH = "#moresettings";
 const ADDON_HASH_PREFIX = "#addon-";
 
 let isIframe = false;
@@ -247,7 +248,7 @@ let fuse;
         }, 0);
       },
       checkHash() {
-        if (location.hash === "#moresettings") {
+        if (location.hash === MORE_SETTINGS_HASH) {
           this.openMoreSettings();
         } else if (location.hash.startsWith(ADDON_HASH_PREFIX)) {
           const addonId = location.hash.substring(ADDON_HASH_PREFIX.length);
