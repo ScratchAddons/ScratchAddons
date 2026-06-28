@@ -221,7 +221,7 @@ export default async function ({ addon, console, msg }) {
       return;
     }
 
-    const loaderMessageContainerOuter = document.querySelector('[class^="loader_message-container-outer"]');
+    const loaderMessageContainerOuter = document.querySelector('[class*="loader_message-container-outer_"]');
     if (loaderMessageContainerOuter) {
       loaderMessageContainerOuter.hidden = true;
       loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
@@ -229,7 +229,7 @@ export default async function ({ addon, console, msg }) {
       return;
     }
 
-    const spinner = document.querySelector('[class^="inline-message_spinner"]');
+    const spinner = document.querySelector('[class*="inline-message_spinner_"]');
     if (spinner) {
       const container = spinner.parentElement.querySelector("span");
       container.appendChild(barOuter);
@@ -242,7 +242,7 @@ export default async function ({ addon, console, msg }) {
       return;
     }
 
-    const alertMessage = document.querySelector('[class^="alert_alert-message"] span');
+    const alertMessage = document.querySelector('[class*="alert_alert-message_"] span');
     if (alertMessage) {
       alertMessage.appendChild(barOuter);
       return;

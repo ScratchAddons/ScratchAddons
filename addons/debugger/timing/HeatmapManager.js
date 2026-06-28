@@ -7,15 +7,19 @@ function valueToHeatmapColor(value, min = 0, max = 1) {
 }
 
 function recursiveFillBlock(block, fill = null) {
-  const fillColor = fill === null ? block.colour_ : fill;
-  block.svgPath_.style.fill = fillColor;
+  const isReset = fill === null;
+  const setFill = (style) => {
+    if (isReset) style.removeProperty("fill");
+    else style.fill = fill;
+  };
+  setFill(block.pathObject.svgPath.style);
+  // Mark heatmapped blocks so CSS can keep Blockly's selected overlay unfilled.
+  block.getSvgRoot().classList.toggle("sa-debugger-heatmap", !isReset);
 
   // Set text color for blocks with heatmap applied
-  const textElements = block.svgGroup_.querySelectorAll(
-    ":scope > :not(.blocklyDraggable):not([data-shapes='stack']) > text, :scope > text"
-  );
+  const textElements = block.getSvgRoot().querySelectorAll(":scope > :not(.blocklyDraggable) > text, :scope > text");
 
-  if (fill !== null) {
+  if (!isReset) {
     // Heatmap is being applied - force white text
     textElements.forEach((textEl) => {
       textEl.style.setProperty("fill", "white", "important");
@@ -37,9 +41,13 @@ function recursiveFillBlock(block, fill = null) {
 
   block.inputList.forEach((input) => {
     input.fieldRow.forEach((field) => {
-      if (field.box_) field.box_.style.fill = fill;
+      if (field.box_) setFill(field.box_.style);
     });
   });
+
+  if (isReset) {
+    block.applyColour();
+  }
 }
 
 class HeatmapManager {
@@ -70,7 +78,7 @@ class HeatmapManager {
     // Reset all previously colored blocks, not just current timer blocks
     const workspace = this.getWorkspace();
     this.coloredBlocks.forEach((blockId) => {
-      const block = workspace.blockDB_[blockId];
+      const block = workspace.getBlockById(blockId);
       if (block) {
         recursiveFillBlock(block);
       }
@@ -90,7 +98,7 @@ class HeatmapManager {
         return this.config.showLineByLine ? isLineByLineTimer : !isLineByLineTimer;
       })
       .forEach((timer) => {
-        const block = workspace.blockDB_[timer.blockId];
+        const block = workspace.getBlockById(timer.blockId);
         if (block) fillFn(block, timer);
       });
   }
@@ -157,7 +165,7 @@ class HeatmapManager {
     const max = Math.max(...timerPercentTimes) * heatmapMax;
 
     filteredTimers.forEach((timer) => {
-      const block = workspace.blockDB_[timer.blockId];
+      const block = workspace.getBlockById(timer.blockId);
       if (block) {
         recursiveFillBlock(block, valueToHeatmapColor(timer.totalTime / totalTimerTime, min, max));
         this.coloredBlocks.add(timer.blockId);

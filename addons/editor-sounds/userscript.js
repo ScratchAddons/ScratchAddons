@@ -4,32 +4,10 @@ export default async function ({ addon, console }) {
     const workspace = addon.tab.traps.getWorkspace();
     const pathToMedia = workspace.options.pathToMedia;
     if (ScratchBlocks.registry) {
-      // new Blockly: based on code from https://github.com/google/blockly/blob/7184cb2/core/inject.ts#L327
-      // (the addon can't call loadSounds() because it isn't exported)
-      const audioMgr = workspace.getAudioManager();
-      audioMgr.load([pathToMedia + "click.mp3", pathToMedia + "click.wav", pathToMedia + "click.ogg"], "click");
-      audioMgr.load([pathToMedia + "delete.mp3", pathToMedia + "delete.ogg", pathToMedia + "delete.wav"], "delete");
-
-      // Bind temporary hooks that preload the sounds.
-      const soundBinds = [];
-      function unbindSounds() {
-        while (soundBinds.length) {
-          const oldSoundBinding = soundBinds.pop();
-          if (oldSoundBinding) {
-            ScratchBlocks.browserEvents.unbind(oldSoundBinding);
-          }
-        }
-        audioMgr.preload();
-      }
-
-      // These are bound on mouse/touch events with
-      // Blockly.browserEvents.conditionalBind, so they restrict the touch
-      // identifier that will be recognized.  But this is really something that
-      // happens on a click, not a drag, so that's not necessary.
-
-      // Android ignores any sound not loaded as a result of a user action.
-      soundBinds.push(ScratchBlocks.browserEvents.conditionalBind(document, "pointermove", null, unbindSounds, true));
-      soundBinds.push(ScratchBlocks.browserEvents.conditionalBind(document, "touchstart", null, unbindSounds, true));
+      // new Blockly: the addon can't call loadSounds() because it isn't exported
+      const audio = workspace.getAudioManager();
+      audio.load([pathToMedia + "click.mp3", pathToMedia + "click.wav", pathToMedia + "click.ogg"], "click");
+      audio.load([pathToMedia + "delete.mp3", pathToMedia + "delete.ogg", pathToMedia + "delete.wav"], "delete");
     } else {
       ScratchBlocks.inject.loadSounds_(pathToMedia, workspace);
     }

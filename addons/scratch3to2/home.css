@@ -4,18 +4,19 @@
 }
 
 /* Donate banner */
-.donate-banner {
+.become-member-banner {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-.donate-banner .donate-container {
+.become-member-banner .become-member-container,
+.become-member-banner .become-member-container .become-member-icon {
   margin-top: 0;
   margin-bottom: 0;
 }
-.donate-banner .donate-container .donate-text {
+.become-member-banner .become-member-container .become-member-text {
   font-size: 13px;
   font-weight: normal;
 }
-.donate-banner .donate-container .donate-button {
+.become-member-banner .become-member-container .become-member-button {
   height: 26px;
   box-sizing: border-box;
   padding: 0 10px;
@@ -31,7 +32,7 @@
   line-height: 24px;
   text-shadow: 0 1px var(--darkWww-box, white);
 }
-.donate-banner .donate-container .donate-button:hover {
+.become-member-banner .become-member-container .become-member-button:hover {
   background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
   background-image: none;
 }

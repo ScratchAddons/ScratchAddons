@@ -1,10 +1,12 @@
 export default async function ({ template }) {
   const AddonSetting = Vue.extend({
-    props: ["addon", "tableChild", "setting", "addon-settings"],
+    props: ["addon", "groupId", "setting", "settingPath", "addon-settings"],
     template,
     data() {
       return {
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
+        tableChild: this.settingPath.length > 1,
+        selectName: `${this.groupId}-${this.addon._addonId}-${this.settingPath.join("-")}`,
       };
     },
     computed: {
@@ -77,6 +79,9 @@ export default async function ({ template }) {
           }
         });
       },
+      selectOptionId(option) {
+        return `${this.selectName}-${option.id}`;
+      },
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
         let input = this.$event.target;
@@ -84,6 +89,18 @@ export default async function ({ template }) {
       },
       getTableSetting(id) {
         return this.setting.row.find((setting) => setting.id === id);
+      },
+      moveTableRow(oldIndex, newIndex) {
+        let list = this.addonSettings[this.setting.id];
+        list.splice(newIndex, 0, list.splice(oldIndex, 1)[0]);
+        this.updateSettings();
+        this.sortable.captureAnimationState();
+        const focusedElement = document.activeElement;
+        setTimeout(() => {
+          this.sortable.animateAll();
+          // Keep move button focused
+          focusedElement.focus();
+        }, 0);
       },
       deleteTableRow(i) {
         this.addonSettings[this.setting.id].splice(i, 1);
@@ -121,18 +138,14 @@ export default async function ({ template }) {
     },
     directives: {
       sortable() {
-        const sortable = new window.Sortable(this.el, {
+        this.vm.sortable = new window.Sortable(this.el, {
           handle: ".handle",
           animation: 300,
-          onUpdate: (event) => {
-            let list = this.vm.addonSettings[this.vm.setting.id];
-            list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
-            this.vm.updateSettings();
-          },
+          onUpdate: (event) => this.vm.moveTableRow(event.oldIndex, event.newIndex),
           disabled: !this.vm.addon._enabled,
         });
         this.vm.$parent.$on("toggle-addon-request", (state) => {
-          sortable.option("disabled", !state);
+          this.vm.sortable.option("disabled", !state);
         });
       },
     },

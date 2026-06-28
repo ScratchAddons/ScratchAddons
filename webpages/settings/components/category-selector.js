@@ -21,8 +21,13 @@ export default async function ({ template }) {
     methods: {
       onClick(event) {
         event.stopPropagation();
-        if (this.selectedCategory === this.category.id && !this.category.parent && Date.now() - this.lastClick > 350) {
-          this.$root.selectedCategory = "all";
+        if (this.selectedCategory === this.category.id) {
+          if (this.$root.smallMode) {
+            this.$root.categoryOpen = false;
+          } else {
+            if (this.category.parent || Date.now() - this.lastClick < 350) return;
+            this.$root.selectedCategory = "all";
+          }
         } else {
           this.$root.selectedCategory = this.category.id;
         }

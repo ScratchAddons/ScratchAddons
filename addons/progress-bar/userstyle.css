@@ -47,12 +47,12 @@
   height: 20px;
 }
 
-[class^="loader_background"] .u-progress-bar-integrated {
+[class*="loader_background_"] .u-progress-bar-integrated {
   margin: auto;
   width: 250px;
 }
-[class^="inline-message_inline-message"] .u-progress-bar-integrated,
-[class^="alert_alert"] .u-progress-bar-integrated {
+[class*="inline-message_inline-message_"] .u-progress-bar-integrated,
+[class*="alert_alert_"] .u-progress-bar-integrated {
   min-width: 100px;
   margin-top: 2px;
 }

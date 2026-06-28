@@ -9,6 +9,10 @@ import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
+import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
+
+const MORE_SETTINGS_HASH = "#moresettings";
+const ADDON_HASH_PREFIX = "#addon-";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -42,6 +46,14 @@ let fuse;
     "webpages/settings/components/previews/workspace-dots",
   ]);
 
+  if (!isIframe) {
+    chrome.runtime.sendMessage("checkPermissions", (hasPermissions) => {
+      if (!hasPermissions) {
+        vue.openPermissionPrompt();
+      }
+    });
+  }
+
   Vue.directive("click-outside", {
     priority: 700,
     bind() {
@@ -64,8 +76,7 @@ let fuse;
 
   // REMINDER: update similar code at /background/imports/util.js
   const browserLevelPermissions = ["notifications"];
-  if (typeof browser !== "undefined") {
-    // Firefox only
+  if (isFirefox()) {
     if (typeof Clipboard.prototype.write !== "function") {
       // Firefox 109-126 only
       browserLevelPermissions.push("clipboardWrite");
@@ -131,6 +142,11 @@ let fuse;
       themePath() {
         return this.theme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
       },
+      permissionScreenshotPath() {
+        return this.theme
+          ? "../../images/screenshots/permissions-light.png"
+          : "../../images/screenshots/permissions-dark.png";
+      },
       addonList() {
         if (!this.searchInput) {
           this.addonListObjs.forEach((obj) => {
@@ -186,10 +202,17 @@ let fuse;
       openMoreSettings: function () {
         this.closePickers();
         this.$els.moresettings.showModal();
-        if (vue.smallMode) {
-          vue.sidebarToggle();
+        if (this.smallMode) {
+          this.categoryOpen = false;
         }
         location.hash = "";
+      },
+      openPermissionPrompt() {
+        this.closePickers();
+        this.$els.permissions.showModal();
+        if (this.smallMode) {
+          this.categoryOpen = false;
+        }
       },
       openRelatedAddons(addonManifest, log = true) {
         this.relatedToAddonName = addonManifest.name;
@@ -219,12 +242,25 @@ let fuse;
           const addonElem = document.getElementById("addon-" + addonId);
           if (!addonElem) return;
           addonElem.scrollIntoView();
-          // Browsers sometimes ignore :target for the elements dynamically appended.
-          // Use CSS class to initiate the blink animation.
           addonElem.classList.add("addon-blink");
           // 2s (animation length) + 1ms
           setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
         }, 0);
+      },
+      checkHash() {
+        if (location.hash === MORE_SETTINGS_HASH) {
+          this.openMoreSettings();
+        } else if (location.hash.startsWith(ADDON_HASH_PREFIX)) {
+          const addonId = location.hash.substring(ADDON_HASH_PREFIX.length);
+          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+          if (!groupWithAddon) return; //Don't run if hash is invalid
+          const addon = this.manifestsById[addonId];
+
+          groupWithAddon.expanded = true;
+          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+          this.clearSearch();
+          this.blinkAddon(addonId);
+        }
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -320,9 +356,20 @@ let fuse;
         alert(chrome.i18n.getMessage("importSuccess"));
         chrome.runtime.reload();
       },
+      async requestPermissions() {
+        const manifest = chrome.runtime.getManifest();
+        const origins = manifest.host_permissions.filter((url) => url.startsWith("https://"));
+
+        const granted = await chrome.permissions.request({ origins });
+        if (granted) {
+          alert(chrome.i18n.getMessage("permissionsAllowed"));
+          return chrome.runtime.reload();
+        }
+        alert(chrome.i18n.getMessage("permissionsDenied"));
+      },
       openFullSettings() {
         window.open(
-          `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
+          `${chrome.runtime.getURL("webpages/settings/index.html")}${ADDON_HASH_PREFIX}${
             this.addonToEnable && this.addonToEnable._addonId
           }`
         );
@@ -385,8 +432,7 @@ let fuse;
       // Autofocus search bar in iframe mode for both browsers
       // autofocus attribute only works in Chrome for us, so
       // we also manually focus on Firefox, even in fullscreen
-      if (isIframe || typeof browser !== "undefined")
-        setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
+      if (isIframe || isFirefox()) setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
 
       const exampleAddonListItem = {
         // Need to specify all used properties for reactivity!
@@ -413,25 +459,7 @@ let fuse;
         this.forceEnglishSetting = forceEnglish;
       });
 
-      window.addEventListener(
-        "hashchange",
-        (e) => {
-          if (location.hash === "#moresettings") {
-            vue.openMoreSettings();
-          } else {
-            const addonId = location.hash.replace(/^#addon-/, "");
-            const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
-            if (!groupWithAddon) return; //Don't run if hash is invalid
-            const addon = this.manifestsById[addonId];
-
-            groupWithAddon.expanded = true;
-            this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-            this.clearSearch();
-            setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
-          }
-        },
-        { capture: false }
-      );
+      window.addEventListener("hashchange", this.checkHash, { capture: false });
     },
   });
 
@@ -643,21 +671,7 @@ let fuse;
     vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
-    setTimeout(() => {
-      const hash = window.location.hash;
-      if (location.hash === "#moresettings") {
-        vue.openMoreSettings();
-      } else if (hash.startsWith("#addon-")) {
-        const addonId = hash.substring(7);
-        const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
-        if (!groupWithAddon) return;
-        groupWithAddon.expanded = true;
-
-        const addon = vue.manifestsById[addonId];
-        vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-        this.blinkAddon(addonId);
-      }
-    }, 0);
+    setTimeout(vue.checkHash, 0);
 
     let binaryNum = "";
     manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
@@ -671,8 +685,11 @@ let fuse;
       document.querySelector("#searchBox").focus();
     } else if (e.key === "Escape") {
       if (document.activeElement === document.querySelector("#searchBox")) {
-        e.preventDefault();
-        vue.searchInputReal = "";
+        if (vue.searchInputReal.length > 0) {
+          // Escape is used to close extension popups, so we should only prevent it if there's input text to clear
+          e.preventDefault();
+          vue.searchInputReal = "";
+        }
       } else if (vue.categoryOpen && vue.smallMode) {
         vue.categoryOpen = false;
       } else {
@@ -720,8 +737,8 @@ let fuse;
       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
     }
   });
-
-  if (!isIframe) {
-    chrome.runtime.sendMessage("checkPermissions");
-  }
 })();
+
+chrome.runtime.onMessage.addListener((request) => {
+  if (request === "promptPermissions") vue.openPermissionPrompt();
+});

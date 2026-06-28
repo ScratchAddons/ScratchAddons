@@ -28,26 +28,28 @@ export default async function ({ addon, msg, console }) {
         stripeState.set(block, isStriped);
 
         const elements = [];
-        if (block.pathObject) {
-          // new Blockly
-          elements.push(block.pathObject.svgPath);
-          if (block.pathObject.svgPathSelected) {
-            elements.push(block.pathObject.svgPathSelected);
+        if (block.type !== "procedures_prototype") {
+          if (block.pathObject) {
+            // new Blockly
+            elements.push(block.pathObject.svgPath);
+            if (block.pathObject.svgPathSelected) {
+              elements.push(block.pathObject.svgPathSelected);
+            }
+            for (const outlinePath of block.pathObject.outlines.values()) {
+              elements.push(outlinePath);
+            }
+          } else {
+            elements.push(block.svgPath_);
           }
-          for (const outlinePath of block.pathObject.outlines.values()) {
-            elements.push(outlinePath);
-          }
-        } else {
-          elements.push(block.svgPath_);
-        }
-        for (const input of block.inputList) {
-          if (input.outlinePath) {
-            // old Blockly
-            elements.push(input.outlinePath);
-          }
-          for (const field of input.fieldRow) {
-            if (field.fieldGroup_) {
-              elements.push(field.fieldGroup_);
+          for (const input of block.inputList) {
+            if (input.outlinePath) {
+              // old Blockly
+              elements.push(input.outlinePath);
+            }
+            for (const field of input.fieldRow) {
+              if (field.fieldGroup_) {
+                elements.push(field.fieldGroup_);
+              }
             }
           }
         }
@@ -74,7 +76,8 @@ export default async function ({ addon, msg, console }) {
         "scratch-gui/mode/SET_PLAYER",
         "fontsLoaded/SET_FONTS_LOADED",
         "scratch-gui/locales/SELECT_LOCALE",
-        "scratch-gui/theme/SET_THEME",
+        "scratch-gui/settings/SET_COLOR_MODE",
+        "scratch-gui/settings/SET_THEME",
       ],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });

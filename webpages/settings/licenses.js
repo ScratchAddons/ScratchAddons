@@ -5,8 +5,10 @@ document.title = chrome.i18n.getMessage("licensesTitle");
 
 const vue = new Vue({
   el: "body",
-  data: {
-    libraries: [],
+  data() {
+    return {
+      libraries: [],
+    };
   },
   methods: {
     msg(message, ...param) {

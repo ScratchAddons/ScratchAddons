@@ -45,7 +45,6 @@ button {
 
 .message-type-title {
   font-size: 14px;
-  color: var(--content-text);
   padding: 6px;
   padding-inline-end: 9px;
   cursor: default;
@@ -127,9 +126,6 @@ button > .small-icon {
   .message-type-title-text {
     margin-inline-start: 10px;
   }
-}
-a.message-type-title-text {
-  color: var(--content-text);
 }
 .float-right {
   margin-inline-start: 6px;

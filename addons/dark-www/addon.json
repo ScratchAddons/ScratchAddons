@@ -107,11 +107,11 @@
       }
     },
     {
-      "name": "page-divider5",
+      "name": "page-divider15",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.05)",
-        "white": "rgba(255, 255, 255, 0.05)",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
         "source": {
           "type": "settingValue",
           "settingId": "page"
@@ -119,11 +119,11 @@
       }
     },
     {
-      "name": "page-divider15",
+      "name": "page-greenText",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.15)",
-        "white": "rgba(255, 255, 255, 0.15)",
+        "black": "#328554",
+        "white": "#13ecaf",
         "source": {
           "type": "settingValue",
           "settingId": "page"
@@ -551,11 +551,35 @@
       }
     },
     {
+      "name": "box-scratchFoundationBlueText",
+      "value": {
+        "type": "textColor",
+        "black": "#0060e6",
+        "white": "#80b5ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-greenText",
       "value": {
         "type": "textColor",
         "black": "#328554",
         "white": "#13ecaf",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-redText",
+      "value": {
+        "type": "textColor",
+        "black": "#cc4400",
+        "white": "#ff9966",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1563,6 +1587,17 @@
           "settingId": "blue"
         },
         "transparentSource": "#4d97ff80"
+      }
+    },
+    {
+      "name": "blue-deletedComment",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "transparentSource": "#ff668040"
       }
     },
     {

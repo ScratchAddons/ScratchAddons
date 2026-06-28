@@ -4,17 +4,31 @@
   "info": [
     {
       "type": "warning",
-      "text": "This will disable all types of project autosaving. Make sure to manually save your changes frequently to avoid losing them.",
+      "text": "Manually save your changes whenever possible to prevent data loss.",
       "id": "manuallysave"
     }
   ],
   "credits": [
     {
       "name": "RustingRobot"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    },
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "userstyles": [
+    {
+      "url": "modal.css",
+      "matches": ["projects"]
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",

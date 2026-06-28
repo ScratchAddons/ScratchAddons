@@ -741,6 +741,17 @@
       }
     },
     {
+      "name": "accent-info",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#4d97ff26"
+      }
+    },
+    {
       "name": "accent-success",
       "value": {
         "type": "alphaBlend",

@@ -1,4 +1,13 @@
+let RESIZE_BUTTON_OFFSET;
+
 export default async function ({ addon, console }) {
+  if (document.querySelector(".blocklyToolboxCategoryGroup")) {
+    // new Blockly
+    RESIZE_BUTTON_OFFSET = 31;
+  } else {
+    RESIZE_BUTTON_OFFSET = 36;
+  }
+
   let originalBackpack;
 
   // Event listeners that add dynamic enable/disable
@@ -11,14 +20,17 @@ export default async function ({ addon, console }) {
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/theme/SET_THEME" && !addon.self.disabled) {
+    if (
+      ["scratch-gui/settings/SET_COLOR_MODE", "scratch-gui/settings/SET_THEME"].includes(e.detail.action.type) &&
+      !addon.self.disabled
+    ) {
       // queueMicrotask isn't enough on new Blockly
       setTimeout(changeBackpackVisibility, 0);
     }
   });
 
   while (true) {
-    originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
+    originalBackpack = await addon.tab.waitForElement("[class*=backpack_backpack-header_]", {
       markAsSeen: true,
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
@@ -29,7 +41,7 @@ export default async function ({ addon, console }) {
     originalBackpack.style.display = "none";
     let backpackEl = document.querySelector(".sa-backpack-button");
     if (backpackEl) {
-      moveResizeButtons(addon, 36);
+      moveResizeButtons(addon, RESIZE_BUTTON_OFFSET);
     } else {
       createBackpackButton(addon);
     }
@@ -39,7 +51,7 @@ export default async function ({ addon, console }) {
 }
 
 function isBackpackOpen() {
-  return !!document.querySelector("[class^=backpack_backpack-list_]");
+  return !!document.querySelector("[class*=backpack_backpack-list_]");
 }
 
 // Create default backpack button
@@ -61,7 +73,7 @@ function createBackpackButton(addon) {
       draggable: false,
     })
   );
-  moveResizeButtons(addon, 36);
+  moveResizeButtons(addon, RESIZE_BUTTON_OFFSET);
 
   document.querySelector("[class*='gui_tabs_']").appendChild(backpackButton);
 }
@@ -75,7 +87,7 @@ function toggleBackpack() {
     // Backpack is closed and will be opened
     document.body.classList.add("sa-backpack-open");
   }
-  document.querySelector("[class^=backpack_backpack-header_]").click();
+  document.querySelector("[class*=backpack_backpack-header_]").click();
   window.dispatchEvent(new Event("resize"));
 }
 
@@ -85,7 +97,8 @@ function moveResizeButtons(addon, distance) {
   if (document.querySelector(".blocklyToolboxCategoryGroup")) {
     // new Blockly
     const workspace = addon.tab.traps.getWorkspace();
-    workspace.zoomControls_.MARGIN_VERTICAL = 20 + distance;
+    const zoomControls = workspace.getComponentManager().getComponent("zoomControls");
+    zoomControls.MARGIN_VERTICAL = 20 + distance;
   } else {
     resizeElements[0].setAttribute("y", (44 - distance).toString());
     resizeElements[1].setAttribute("y", (0 - distance).toString());

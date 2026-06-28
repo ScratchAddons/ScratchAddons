@@ -216,14 +216,15 @@ function editorClassCheck() {
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!isScratchGui && split[0] !== "projects") return;
-  let isInEditor = false;
-  let isFullScreen = false;
+  let isInEditor;
+  let isFullScreen;
   const state = __scratchAddonsRedux.state;
   if (state) {
     isInEditor = !state.scratchGui.mode.isPlayerOnly;
     isFullScreen = state.scratchGui.mode.isFullScreen;
   } else if (isScratchGui) {
     isInEditor = true;
+    isFullScreen = false;
   } else {
     isInEditor = split.includes("editor");
     isFullScreen = split.includes("fullscreen");
@@ -327,7 +328,7 @@ const isProject =
   !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
 if (isScratchGui || isProject) {
   // Stylesheets are considered to have loaded if this element exists
-  const elementSelector = isScratchGui ? "div[class*=index_app_]" : ":root > body > .ReactModalPortal";
+  const elementSelector = isScratchGui ? "[class*=index_app_]" : ":root > body > .ReactModalPortal";
 
   if (document.querySelector(elementSelector)) loadClasses();
   else {

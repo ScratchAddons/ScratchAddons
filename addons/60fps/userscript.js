@@ -11,7 +11,7 @@ export default async function ({ addon, console }) {
   let vanillaFlag = null;
 
   while (true) {
-    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
+    let button = await addon.tab.waitForElement("[class*='green-flag_green-flag_']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });

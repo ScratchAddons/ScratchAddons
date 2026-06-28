@@ -7,7 +7,8 @@
   color: var(--gray-text);
 }
 .settings-block {
-  margin-top: 20px;
+  margin: 0 -20px;
+  padding: 10px 20px; /* prevents shadows from being cut off */
   overflow-y: auto;
 }
 .more-settings .filter-selector {
@@ -43,4 +44,62 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.permissions-block {
+  padding: 5px;
+  font-size: 1.1rem;
+}
+.permissions-block h1 {
+  font-family: "Sora", sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  margin-right: 19px;
+}
+.permissions-steps {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template: repeat(3, auto) / 18rem 24rem;
+  justify-content: center;
+  justify-items: center;
+  gap: 1.75em 3rem;
+  padding: 5px;
+  text-align: center;
+}
+.permissions-steps > img {
+  width: 24rem;
+  max-width: 100%;
+}
+.permissions-steps > button {
+  display: block;
+  height: 6rem;
+  width: 18rem;
+  margin-block: auto;
+  border-radius: 8px;
+  background-color: var(--blue);
+  color: #fff;
+  font-family: "Sora", sans-serif;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+.permissions-steps > button:hover:not(:active) {
+  background-color: var(--blue-variant);
+}
+.step-number {
+  background-color: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  line-height: 2em;
+  width: 2em;
+}
+.permissions-steps > p {
+  margin-top: 0;
+}
+@media (max-width: 1000px) {
+  .permissions-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }

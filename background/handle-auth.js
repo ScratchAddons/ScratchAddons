@@ -1,6 +1,7 @@
 import { startCache } from "./message-cache.js";
 import { openMessageCache } from "../libraries/common/message-cache.js";
 import { purgeDatabase } from "../addons/scratch-notifier/notifier.js";
+import { isFirefox } from "../libraries/common/cs/detect-browser.js";
 
 async function getDefaultStoreId() {
   const CHROME_DEFAULT = "0";
@@ -168,8 +169,7 @@ function notify(cookie) {
   if (cookie.name === "scratchlanguage") return;
   const storeId = cookie.storeId;
   const cond = {};
-  if (typeof browser === "object") {
-    // Firefox-exclusive.
+  if (isFirefox()) {
     cond.cookieStoreId = storeId;
   }
   // On Chrome this can cause unnecessary session re-fetch, but there should be

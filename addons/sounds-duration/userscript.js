@@ -1,10 +1,10 @@
 export default async function ({ addon, msg, console }) {
   while (true) {
-    const container = await addon.tab.waitForElement("[class^=sound-editor_editor-container]", {
+    const container = await addon.tab.waitForElement("[class*=sound-editor_editor-container_]", {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 2 && !state.scratchGui.mode.isPlayerOnly,
     });
-    const el = container.querySelector("[class^=sound-editor_row]").appendChild(
+    const el = container.querySelector("[class*=sound-editor_row_]").appendChild(
       Object.assign(document.createElement("div"), {
         className: "sa-sound-duration",
       })

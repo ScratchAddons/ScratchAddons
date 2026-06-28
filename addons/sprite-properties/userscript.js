@@ -15,7 +15,7 @@ export default async function ({ addon, console, msg }) {
 
   // Toggle the properties panel when double clicking in the sprite grid
   document.addEventListener("click", (e) => {
-    if (e.detail === 2 && e.target.closest('[class^="sprite-selector_scroll-wrapper_"]')) {
+    if (e.detail === 2 && e.target.closest('[class*="sprite-selector_scroll-wrapper_"]')) {
       togglePropertiesPanel();
     }
   });
@@ -109,7 +109,7 @@ export default async function ({ addon, console, msg }) {
     // languages.
     // List of languages is here:
     // https://github.com/scratchfoundation/scratch-gui/blob/e15b2dfa3a2e58e80fae8d1586c7f56aa0cc0ede/src/lib/locale-utils.js#L6-L18
-    const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
+    const isWideLocale = !!propertiesPanel.querySelector("[class*=label_input-group-column_]");
     document.body.classList.toggle("sa-sprite-properties-wide-locale", isWideLocale);
   }
 
@@ -121,7 +121,7 @@ export default async function ({ addon, console, msg }) {
   });
 
   while (true) {
-    propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]', {
+    propertiesPanel = await addon.tab.waitForElement('[class*="sprite-info_sprite-info_"]', {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,

@@ -1,5 +1,5 @@
 <template>
-  <div class="setting-dropdown dropdown-parent">
+  <div class="setting-dropdown">
     <dropdown button-class="large-button clear-button" :disabled="disabled" :button-title="msg('resetTo')">
       <li tabindex="0" role="menuitem" @click="resetToDefault">
         <span v-if="setting.type === 'color'" class="color-preview"

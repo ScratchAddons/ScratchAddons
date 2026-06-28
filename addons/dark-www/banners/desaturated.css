@@ -1,4 +1,5 @@
 .unsupported-browser,
+.become-member-banner,
 .wedo .top-banner,
 .sa-annual-report-2019 .message-section,
 .sa-annual-report-2019 .initiatives-section .initiatives-subsection-header.community,
@@ -37,6 +38,7 @@
 .parents .title-banner.masthead .ted-talk {
   border-color: black;
 }
+.membership-page .get-involved-section,
 .educators .title-banner.masthead,
 .educators #teacher-accounts,
 .expect .keynote,
@@ -84,7 +86,6 @@
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
   border-color: #27473e;
 }
-.donate-banner,
 .sa-annual-report-2019 .reach-scratch-jr {
   background-color: #1c332c;
 }

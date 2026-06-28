@@ -1,11 +1,8 @@
-html,
-body {
-  overflow: hidden;
-}
 body {
   width: var(--width, 400px);
-  height: var(--height, 599px);
-  overflow: hidden;
+  height: var(--height, 600px);
+  display: flex;
+  flex-direction: column;
   margin: 0;
   background-color: var(--page-background);
   font-family: "Roboto", sans-serif;
@@ -64,23 +61,13 @@ button {
   width: 24px;
   height: 24px;
 }
-#popups {
-  background-color: var(--content-background);
-  width: 100%;
-  height: calc(100% - 60px);
-}
 
 #popup-bar {
   display: flex;
   background-color: var(--navigation-background);
   border-bottom: 1px solid var(--control-border);
-}
-
-#popup-chooser {
-  flex-grow: 1;
-  display: flex;
-  color: var(--content-text);
   height: 45px;
+  flex-shrink: 0;
   overflow: hidden;
 }
 .popup-name {
@@ -117,9 +104,8 @@ button {
   content: "";
   display: block;
   position: absolute;
-  left: 10px;
-  right: 10px;
   bottom: 0;
+  inset-inline: 10px;
   height: 4px;
   background-color: var(--orange);
   border-radius: 4px 4px 0 0;
@@ -159,8 +145,7 @@ button {
 }
 
 iframe {
-  width: 100%;
-  height: calc(100% - 45px);
+  flex-grow: 1;
   overflow-x: hidden;
   border: none;
   overflow-y: scroll;
