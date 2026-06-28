@@ -189,6 +189,28 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
+  function delegateContextMenuToPrototypeParent(block) {
+    const origShowContextMenu = block.showContextMenu.bind(block);
+    block.showContextMenu = function (e) {
+      const parent = this.getParent();
+      if (isPrototypeBlockType(parent?.type)) {
+        parent.showContextMenu(e);
+      } else {
+        origShowContextMenu(e);
+      }
+    };
+  }
+
+  function patchArgumentInit(block) {
+    const originalInit = block.init;
+    block.init = function () {
+      originalInit.call(this);
+      delegateContextMenuToPrototypeParent(this);
+    };
+  }
+  patchArgumentInit(ScratchBlocks.Blocks.argument_reporter_boolean);
+  patchArgumentInit(ScratchBlocks.Blocks.argument_reporter_string_number);
+
   // todo: patch allProcedureMutations
 
   // Adapted from original to account for new opcodes.
