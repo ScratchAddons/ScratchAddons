@@ -68,3 +68,11 @@ export function getReturnVar(proccode, type = "") {
   //console.log(variable);
   return variable;
 }
+
+/**
+ * @param {string} type
+ * @returns is `type` a (possibly reporter or boolean) prototype?
+ */
+export function isPrototypeBlockType(type) {
+  return ["procedures_prototype", "procedures_prototype_reporter", "procedures_prototype_boolean"].includes(type);
+}

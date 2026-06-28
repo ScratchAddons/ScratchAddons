@@ -1,5 +1,6 @@
 import { VarTranspiler } from "./transpilers/var.js";
 import { ListTranspiler } from "./transpilers/list.js";
+import { isPrototypeBlockType } from "./util.js";
 
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
@@ -158,11 +159,7 @@ export default async function ({ addon, msg, console }) {
   // (licensed under APACHE-2.0)
   DuplicateOnDragDraggable.startDrag = function (e) {
     const parent = this.block.getParent();
-    this.isDuplicating_ = [
-      "procedures_prototype",
-      "procedures_prototype_reporter",
-      "procedures_prototype_boolean",
-    ].includes(parent?.type);
+    this.isDuplicating_ = isPrototypeBlockType(parent?.type);
 
     if (this.isDuplicating_) {
       const data = this.block.toCopyData();
@@ -304,12 +301,7 @@ export default async function ({ addon, msg, console }) {
         return;
       }
       const innerBlock = conn.targetBlock();
-      if (
-        !innerBlock ||
-        (innerBlock.type !== "procedures_prototype" &&
-          innerBlock.type !== "procedures_prototype_reporter" &&
-          innerBlock.type !== "procedures_prototype_boolean")
-      ) {
+      if (!innerBlock || !isPrototypeBlockType(innerBlock.type)) {
         alert("Bad inner block"); // TODO: Decide what to do about this.
         return;
       }
@@ -405,9 +397,7 @@ export default async function ({ addon, msg, console }) {
       block.type === "procedures_call_reporter" ||
       block.type === "procedures_call_boolean" ||
       block.type === "procedures_declaration" ||
-      block.type === "procedures_prototype" ||
-      block.type === "procedures_prototype_reporter" ||
-      block.type === "procedures_prototype_boolean"
+      isPrototypeBlockType(block.type)
     );
   };
 
@@ -606,12 +596,7 @@ export default async function ({ addon, msg, console }) {
   const oldChangeBlock = blocksPrototype.changeBlock;
   blocksPrototype.changeBlock = function (args) {
     oldChangeBlock.call(this, args);
-    if (
-      args.element === "mutation" &&
-      ["procedures_prototype", "procedures_prototype_reporter", "procedures_prototype_boolean"].includes(
-        this._blocks[args.id].opcode
-      )
-    ) {
+    if (args.element === "mutation" && isPrototypeBlockType(this._blocks[args.id].opcode)) {
       this.queueToolboxUpdate();
     }
   };
