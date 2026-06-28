@@ -416,7 +416,7 @@ export default async function ({ addon, msg, console }) {
       <xml>
         <block type="procedures_definition${statementOrValue === "value" ? "_reporter" : ""}">
           <${statementOrValue} name="custom_block">
-            <shadow type="procedures_prototype${
+            <block type="procedures_prototype${
               {
                 stack: "",
                 number: "_reporter",
@@ -424,7 +424,7 @@ export default async function ({ addon, msg, console }) {
               }[selectedType]
             }">
               ${ScratchBlocks.Xml.domToText(mutation)}
-            </shadow>
+            </block>
           </${statementOrValue}>
         </block>
       </xml>`;
