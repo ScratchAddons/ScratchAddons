@@ -6,7 +6,7 @@ export default async function ({ addon, msg, console }) {
 
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
-  ScratchBlocks.Blocks["procedures_prototype_reporter"] = {
+  ScratchBlocks.Blocks.procedures_prototype_reporter = {
     /**
      * Block for calling a procedure with a return value, for rendering inside
      * define block.
@@ -22,12 +22,12 @@ export default async function ({ addon, msg, console }) {
           })
         );
       };
-      ScratchBlocks.Blocks["procedures_prototype"].init.call(this);
+      ScratchBlocks.Blocks.procedures_prototype.init.call(this);
       ScratchBlocks.BlockSvg.prototype.jsonInit = originalJsonInit;
     },
   };
 
-  ScratchBlocks.Blocks["procedures_prototype_boolean"] = {
+  ScratchBlocks.Blocks.procedures_prototype_boolean = {
     /**
      * Block for calling a procedure with a boolean return value, for rendering inside
      * define block.
@@ -43,12 +43,12 @@ export default async function ({ addon, msg, console }) {
           })
         );
       };
-      ScratchBlocks.Blocks["procedures_prototype"].init.call(this);
+      ScratchBlocks.Blocks.procedures_prototype.init.call(this);
       ScratchBlocks.BlockSvg.prototype.jsonInit = originalJsonInit;
     },
   };
 
-  ScratchBlocks.Blocks["procedures_call_reporter"] = {
+  ScratchBlocks.Blocks.procedures_call_reporter = {
     /**
      * Block for calling a procedure with no return value.
      * @this {ProcedureCallBlock}
@@ -63,12 +63,12 @@ export default async function ({ addon, msg, console }) {
           })
         );
       };
-      ScratchBlocks.Blocks["procedures_call"].init.call(this);
+      ScratchBlocks.Blocks.procedures_call.init.call(this);
       ScratchBlocks.BlockSvg.prototype.jsonInit = originalJsonInit;
     },
   };
 
-  ScratchBlocks.Blocks["procedures_call_boolean"] = {
+  ScratchBlocks.Blocks.procedures_call_boolean = {
     /**
      * Block for calling a procedure with no return value.
      * @this {ProcedureCallBlock}
@@ -83,12 +83,12 @@ export default async function ({ addon, msg, console }) {
           })
         );
       };
-      ScratchBlocks.Blocks["procedures_call"].init.call(this);
+      ScratchBlocks.Blocks.procedures_call.init.call(this);
       ScratchBlocks.BlockSvg.prototype.jsonInit = originalJsonInit;
     },
   };
 
-  ScratchBlocks.Blocks["procedures_definition_reporter"] = {
+  ScratchBlocks.Blocks.procedures_definition_reporter = {
     /**
      * Block for defining a procedure with a return value.
      * @this ScratchBlocks.Block
@@ -107,7 +107,7 @@ export default async function ({ addon, msg, console }) {
     },
   };
 
-  ScratchBlocks.Blocks["procedures_return_reporter"] = {
+  ScratchBlocks.Blocks.procedures_return_reporter = {
     init: function () {
       this.jsonInit({
         id: "procedures_return_reporter",
@@ -123,7 +123,7 @@ export default async function ({ addon, msg, console }) {
     },
   };
 
-  ScratchBlocks.Blocks["procedures_return_boolean"] = {
+  ScratchBlocks.Blocks.procedures_return_boolean = {
     init: function () {
       this.jsonInit({
         id: "procedures_return_boolean",
@@ -392,7 +392,7 @@ export default async function ({ addon, msg, console }) {
     const mutationText = `
     <xml>
       <mutation
-        proccode="${ScratchBlocks.Msg["PROCEDURE_DEFAULT_NAME"]}"
+        proccode="${ScratchBlocks.Msg.PROCEDURE_DEFAULT_NAME}"
         argumentids="[]"
         argumentnames="[]"
         argumentdefaults="[]"
