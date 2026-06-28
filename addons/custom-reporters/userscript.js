@@ -142,6 +142,56 @@ export default async function ({ addon, msg, console }) {
 
   console.log(ScratchBlocks);
 
+  let DuplicateOnDragDraggable;
+  const fakeProcArgThis = Object.create({
+    jsonInit: () => null,
+    setDragStrategy: (dragStrategy) => {
+      console.log(dragStrategy)
+      DuplicateOnDragDraggable = dragStrategy.constructor.prototype;
+      console.log(DuplicateOnDragDraggable)
+    },
+    showContextMenu: () => null,
+  });
+  ScratchBlocks.Blocks.argument_reporter_boolean.init.call(fakeProcArgThis);
+
+  // Adapted from https://github.com/scratchfoundation/scratch-blocks/blob/99b7fca/src/blocks/procedures.ts#L223-L253
+  // (licensed under APACHE-2.0)
+  DuplicateOnDragDraggable.startDrag = function (e) {
+    const parent = this.block.getParent();
+    this.isDuplicating_ = [
+      "procedures_prototype",
+      "procedures_prototype_reporter",
+      "procedures_prototype_boolean",
+    ].includes(parent?.type);
+
+    if (this.isDuplicating_) {
+      const data = this.block.toCopyData();
+      if (!data) {
+        console.warn(
+          "DuplicateOnDragDraggable.startDrag: failed to serialize block for copy",
+          this.block.type,
+          this.block.id
+        );
+        return;
+      }
+      this.copy = ScratchBlocks.clipboard.paste(data, this.block.workspace);
+      this.copy.setDeletable(true);
+      this.copy.setDragStrategy(new ScratchBlocks.dragging.BlockDragStrategy(this.copy));
+      this.copy.startDrag(e);
+    } else {
+      // Not in a prototype: drag the original block normally and replace this
+      // drag strategy so future drags also behave normally.
+      // Also ensure the block is deletable — reporters created by createArgumentReporter_
+      // are non-deletable by default, but one that has escaped a prototype should be
+      // cleanable by the user.
+      this.block.setDeletable(true);
+      const normalStrategy = new ScratchBlocks.dragging.BlockDragStrategy(this.block);
+      this.block.setDragStrategy(normalStrategy);
+      this.copy = this.block;
+      normalStrategy.startDrag(e);
+    }
+  };
+
   // todo: patch allProcedureMutations
 
   // Adapted from original to account for new opcodes.
