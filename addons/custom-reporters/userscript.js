@@ -146,9 +146,9 @@ export default async function ({ addon, msg, console }) {
   const fakeProcArgThis = Object.create({
     jsonInit: () => null,
     setDragStrategy: (dragStrategy) => {
-      console.log(dragStrategy)
+      console.log(dragStrategy);
       DuplicateOnDragDraggable = dragStrategy.constructor.prototype;
-      console.log(DuplicateOnDragDraggable)
+      console.log(DuplicateOnDragDraggable);
     },
     showContextMenu: () => null,
   });
