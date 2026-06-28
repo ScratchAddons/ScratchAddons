@@ -1,6 +1,6 @@
 import { VarTranspiler } from "./transpilers/var.js";
 import { ListTranspiler } from "./transpilers/list.js";
-import { isPrototypeBlockType } from "./util.js";
+import { isCallBlockType, isDefinitionBlockType, isPrototypeBlockType } from "./util.js";
 
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
@@ -224,9 +224,7 @@ export default async function ({ addon, msg, console }) {
       return block.getDescendants(false).filter((descendant) => {
         return (
           ScratchBlocks.Procedures.isProcedureBlock(descendant) &&
-          (descendant.type === "procedures_call" ||
-            descendant.type === "procedures_call_reporter" ||
-            descendant.type === "procedures_call_boolean") &&
+          isCallBlockType(descendant.type) &&
           descendant.getProcCode() === name
         );
       });
@@ -241,7 +239,7 @@ export default async function ({ addon, msg, console }) {
   ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
     // Assume that a procedure definition is a top block.
     return workspace.getTopBlocks(false).find((block) => {
-      if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
+      if (isDefinitionBlockType(block.type)) {
         const prototypeBlock = block.getInput("custom_block").connection.targetBlock();
         return ScratchBlocks.Procedures.isProcedureBlock(prototypeBlock) && prototypeBlock.getProcCode() === procCode;
       }
@@ -311,7 +309,7 @@ export default async function ({ addon, msg, console }) {
     // Edit can come from one of three block types (call, define, prototype)
     // Normalize by setting the block to the prototype block for the procedure.
     let prototypeBlock;
-    if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
+    if (isDefinitionBlockType(block.type)) {
       const input = block.getInput("custom_block");
       if (!input) {
         alert("Bad input"); // TODO: Decide what to do about this.
@@ -328,12 +326,7 @@ export default async function ({ addon, msg, console }) {
         return;
       }
       prototypeBlock = innerBlock;
-    } else if (
-      (block.type === "procedures_call" ||
-        block.type === "procedures_call_reporter" ||
-        block.type === "procedures_call_boolean") &&
-      ScratchBlocks.Procedures.isProcedureBlock(block)
-    ) {
+    } else if (isCallBlockType(block.type) && ScratchBlocks.Procedures.isProcedureBlock(block)) {
       // This is a call block, find the prototype corresponding to the procCode.
       // Make sure to search the correct workspace, call block can be in flyout.
       const workspaceToSearch = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
@@ -414,13 +407,7 @@ export default async function ({ addon, msg, console }) {
   // Adapted from original to account for new opcodes.
   // Source: https://github.com/scratchfoundation/scratch-blocks/blob/e6ecb8e813009ccdb83068969163abcb6df85865/src/procedures.ts#L423
   ScratchBlocks.Procedures.isProcedureBlock = function (block) {
-    return (
-      block.type === "procedures_call" ||
-      block.type === "procedures_call_reporter" ||
-      block.type === "procedures_call_boolean" ||
-      block.type === "procedures_declaration" ||
-      isPrototypeBlockType(block.type)
-    );
+    return isCallBlockType(block.type) || block.type === "procedures_declaration" || isPrototypeBlockType(block.type);
   };
 
   // Adapted from original to use patched version of getDefineBlock
@@ -521,11 +508,7 @@ export default async function ({ addon, msg, console }) {
       myBlocksCat.removeAttribute("custom");
       myBlocksCat.innerHTML = "";
       const myBlocks = [];
-      for (const blockid of blocks._scripts.filter(
-        (bid) =>
-          blocks._blocks[bid].opcode === "procedures_definition_reporter" ||
-          blocks._blocks[bid].opcode === "procedures_definition"
-      )) {
+      for (const blockid of blocks._scripts.filter((bid) => isDefinitionBlockType(blocks._blocks[bid].opcode))) {
         const blockEl = toolboxXML.createElement("block");
         const definitionBlock = blocks._getCustomBlockInternal(blocks._blocks[blockid]);
         blockEl.setAttribute("type", "procedures_call" + definitionBlock.opcode.substr("procedures_prototype".length));
@@ -611,7 +594,7 @@ export default async function ({ addon, msg, console }) {
   const oldCreateBlock = blocksPrototype.createBlock;
   blocksPrototype.createBlock = function (block) {
     oldCreateBlock.call(this, block);
-    if (block.opcode === "procedures_definition" || block.opcode === "procedures_definition_reporter") {
+    if (isDefinitionBlockType(block.opcode)) {
       this.queueToolboxUpdate();
     }
   };
@@ -627,7 +610,7 @@ export default async function ({ addon, msg, console }) {
     if (!this._blocks[blockid]) return;
     const opcode = this._blocks[blockid].opcode;
     oldDeleteBlock.call(this, blockid);
-    if (opcode === "procedures_definition" || opcode === "procedures_definition_reporter") {
+    if (isDefinitionBlockType(opcode)) {
       this.queueToolboxUpdate();
     }
   };

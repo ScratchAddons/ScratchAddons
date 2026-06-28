@@ -71,8 +71,25 @@ export function getReturnVar(proccode, type = "") {
 
 /**
  * @param {string} type
- * @returns is `type` a (possibly reporter or boolean) prototype?
+ * @returns is `type` a (possibly reporter or boolean) prototype block?
  */
 export function isPrototypeBlockType(type) {
   return ["procedures_prototype", "procedures_prototype_reporter", "procedures_prototype_boolean"].includes(type);
+}
+
+/**
+ * @param {string} type
+ * @returns is `type` a (possibly reporter or boolean) call block?
+ */
+export function isCallBlockType(type) {
+  return ["procedures_call", "procedures_call_reporter", "procedures_call_boolean"].includes(type);
+}
+
+/**
+ *
+ * @param {string} type
+ * @returns is `type` a (possibly reporter) definition block?
+ */
+export function isDefinitionBlockType(type) {
+  return (type === "procedures_definition") | (type === "procedures_definition_reporter");
 }
