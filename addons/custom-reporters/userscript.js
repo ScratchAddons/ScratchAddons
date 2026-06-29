@@ -155,6 +155,7 @@ export default async function ({ addon, msg, console }) {
   });
   ScratchBlocks.Blocks.argument_reporter_boolean.init.call(fakeProcArgThis);
 
+  // Duplicate arguments when dragging from a prototype block
   // Adapted from https://github.com/scratchfoundation/scratch-blocks/blob/99b7fca/src/blocks/procedures.ts#L223-L253
   // (licensed under APACHE-2.0)
   DuplicateOnDragDraggable.startDrag = function (e) {
@@ -189,6 +190,7 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
+  // Include 'edit' option in argument context menu
   function delegateContextMenuToPrototypeParent(block) {
     const origShowContextMenu = block.showContextMenu.bind(block);
     block.showContextMenu = function (e) {
@@ -200,7 +202,6 @@ export default async function ({ addon, msg, console }) {
       }
     };
   }
-
   function patchArgumentInit(block) {
     const originalInit = block.init;
     block.init = function () {
@@ -210,6 +211,18 @@ export default async function ({ addon, msg, console }) {
   }
   patchArgumentInit(ScratchBlocks.Blocks.argument_reporter_boolean);
   patchArgumentInit(ScratchBlocks.Blocks.argument_reporter_string_number);
+
+  // Use secondary colour for procedures_prototype_{reporter,boolean}
+  const sampleBlock = ScratchBlocks.getMainWorkspace().getFlyout().getWorkspace().getTopBlocks()[0];
+  const PathObject = sampleBlock.pathObject.constructor.prototype;
+  const originalApplyColour = PathObject.applyColour;
+  PathObject.applyColour = function (block) {
+    originalApplyColour.call(this, block);
+
+    if (isPrototypeBlockType(block.type)) {
+      this.svgPath.setAttribute("fill", this.style.colourSecondary);
+    }
+  };
 
   // todo: patch allProcedureMutations
 
