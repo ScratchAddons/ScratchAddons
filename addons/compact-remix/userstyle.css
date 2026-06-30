@@ -1,25 +1,25 @@
 .preview .remix-credit {
-    width: auto;
-    margin-bottom: 0%;
+  width: auto;
+  margin-bottom: 0%;
 }
 .preview .remix-credit:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 .preview .remix-credit .credit-text {
-    display: none;
+  display: none;
 }
 .preview .remix-credit .avatar-wrapper {
-    margin-right: 0%;
+  margin-right: 0%;
 }
 .remixes-text {
-    margin-right: .5rem;
-    font-size: 1rem;
-    font-weight: bold;
-    text-align: left;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: left;
 }
 .compact-remix-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 5%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5%;
 }
