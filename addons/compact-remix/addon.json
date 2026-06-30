@@ -1,0 +1,31 @@
+{
+  "name": "Compact Remix Credits",
+  "description": "Collapses remix notes in order to have more space for Instructions and Notes & Credits.",
+  "credits": [
+    {
+      "name": "Oreg Sam",
+      "link": "https://scratch.mit.edu/users/simiagain/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "?",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "latestUpdate": {
+    "version": "?"
+  },
+  "tags": ["community", "recommended", "projectPage"],
+  "enabledByDefault": false
+}
