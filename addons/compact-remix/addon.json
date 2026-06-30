@@ -9,7 +9,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "?",
+  "versionAdded": "1.0.0",
   "userscripts": [
     {
       "url": "userscript.js",
