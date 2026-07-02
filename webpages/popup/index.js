@@ -71,6 +71,15 @@ const vue = new Vue({
       return prerelease ? ver + "-pre" : ver;
     },
   },
+  ready() {
+    chrome.runtime.sendMessage("checkPermissions").then((granted) => {
+      if (!granted) {
+        chrome.runtime.sendMessage("promptPermissions");
+        chrome.runtime.openOptionsPage();
+        this.closePopup();
+      }
+    });
+  },
 });
 
 let manifests = null;
@@ -139,5 +148,3 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
   }
 });
-
-chrome.runtime.sendMessage("checkPermissions");

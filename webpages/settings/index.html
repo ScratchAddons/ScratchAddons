@@ -312,7 +312,7 @@
       </div>
     </div>
     <modal
-      class="more-settings large-modal"
+      class="more-settings modal-full-height modal-full-width"
       :is-open.sync="moreSettingsOpen"
       :title="msg('moreSettings')"
       v-cloak
@@ -484,6 +484,20 @@
       <div class="actions">
         <button value="no" @click="closeDialog" class="large-button">{{ msg("cancel") }}</button>
         <button value="yes" @click="closeDialog" class="large-button danger-button">{{ msg("enableAddon") }}</button>
+      </div>
+    </modal>
+    <modal class="modal-full-width" v-cloak v-el:permissions>
+      <div class="permissions-block">
+        <h1>{{ msg("enablePermissionsTitle") }}</h1>
+        <p>{{ msg("enablePermissionsDescription") }}</p>
+      </div>
+      <div class="permissions-steps">
+        <span class="step-number">1</span>
+        <button class="large-button" @click="requestPermissions">{{ msg("enableButton") }}</button>
+        <p>{{ msg("enableButtonDescription") }}</p>
+        <span class="step-number">2</span>
+        <img alt="{{ msg('permissionsScreenAlt') }}" v-bind:src="permissionScreenshotPath" />
+        <p>{{ msg("clickAllowDescription") }}</p>
       </div>
     </modal>
     <div class="popup" v-cloak v-show="showPopupModal">
