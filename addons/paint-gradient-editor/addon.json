@@ -16,6 +16,11 @@
       "type": "info",
       "text": "Double-click a stop or drag it off the axis to delete it",
       "id": "infoDelete"
+    },
+    {
+      "type": "info",
+      "text": "While using the Fill (paint bucket) tool, hold Shift to turn it into a colour picker: the cursor changes, and hovering any shape's fill or outline temporarily previews that colour (gradient stops included) in the fill swatch. Click to pick it, or release Shift without clicking to cancel",
+      "id": "infoEyedropper"
     }
   ],
   "credits": [

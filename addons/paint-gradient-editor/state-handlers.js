@@ -1,5 +1,9 @@
 import { colorToHex, colorToCss, ensureHex } from "./color-utils.js";
 import { selectedShapes } from "./paper-utils.js";
+import { classifyLinearType } from "./gradient-coords.js";
+
+// Redux's sentinel value for a mixed-value colour/style across a multi-item selection.
+export const MIXED = "scratch-paint/style-path/mixed";
 
 // Action type strings keyed by color mode.
 export const COLOR_ACTIONS = {
@@ -33,6 +37,11 @@ export function setupStateHandlers(addon, state, ops, liveGradientItems) {
     // Check paper.js directly — for multi-stop gradients Redux sets gradientType=undefined
     // (shows MIXED swatches), so we must not rely on fill.gradientType alone.
     const items = selectedShapes(state.cachedPaper);
+    // Unconditionally track the last real (non-empty) selection, regardless of gradient/overlay
+    // state. Unlike state.lastSelectedPaperItem below (which is only updated in specific gradient-
+    // popup code paths), this always reflects whatever shape the user actually selected last —
+    // including solid-coloured ones — so tools like the fill bucket can copy its exact style.
+    if (items[0]) state.lastRealSelectedItem = items[0];
     const activePaperColor = items[0]?.[ops.colorProp()];
     const activeGradient = activePaperColor?.gradient;
     if (activeGradient || COLOR_PROPS.some((prop) => items[0]?.[prop]?.gradient)) {
@@ -99,9 +108,9 @@ export function setupStateHandlers(addon, state, ops, liveGradientItems) {
         if (activeGradient.radial) {
           state.lastKnownGradientType = "RADIAL";
         } else {
-          const dx = Math.abs(activePaperColor.destination.x - activePaperColor.origin.x);
-          const dy = Math.abs(activePaperColor.destination.y - activePaperColor.origin.y);
-          state.lastKnownGradientType = dy > dx ? "VERTICAL" : "HORIZONTAL";
+          const dx = activePaperColor.destination.x - activePaperColor.origin.x;
+          const dy = activePaperColor.destination.y - activePaperColor.origin.y;
+          state.lastKnownGradientType = classifyLinearType(dx, dy);
         }
       }
 
@@ -205,7 +214,6 @@ export function setupStateHandlers(addon, state, ops, liveGradientItems) {
         // Fallback: use Redux (alpha-unaware but better than nothing)
         const colorState = addon.tab.redux.state?.scratchPaint?.color?.[ops.colorProp()];
         if (!colorState) return;
-        const MIXED = "scratch-paint/style-path/mixed";
         if (colorState.primary && colorState.primary !== MIXED) {
           state.c0hex = ensureHex(colorState.primary);
           state.c0css = state.c0hex;

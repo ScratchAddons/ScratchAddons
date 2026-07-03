@@ -42,3 +42,25 @@ export const crampedToOffset = (innerIdx, innerCount, rawFrac, axisLenPx) => {
   if (usable <= 0) return rawFrac;
   return (rawFrac * axisLenPx - (innerIdx + 1) * STOP_D) / usable;
 };
+
+// Classify a linear gradient's axis as HORIZONTAL or VERTICAL from a raw (non-absolute)
+// destination-minus-origin delta — whichever axis has the larger magnitude wins.
+export const classifyLinearType = (dx, dy) => (Math.abs(dy) > Math.abs(dx) ? "VERTICAL" : "HORIZONTAL");
+
+// Standard math angle (0–359°) of a vector: atan2(dy, dx), 0°=right, 90°=down, in paper.js's
+// y-down screen coordinates. Used wherever a gradient axis angle is read/stored (e.g. the
+// angle slider, or re-deriving it from a sampled gradient's origin/destination).
+export const vectorToDeg = (dx, dy) => {
+  let deg = Math.atan2(dy, dx) * (180 / Math.PI);
+  if (deg < 0) deg += 360;
+  return deg;
+};
+
+// CSS linear-gradient angle (clockwise from "to top") for a direction vector in paper.js's
+// y-down screen coordinates: right→90°, down→180°, left→270°, up→0°. Used wherever a
+// gradient axis needs to be drawn as an actual CSS `linear-gradient(<deg>deg, ...)`.
+export const vectorToCssAngleDeg = (dx, dy) => {
+  let deg = Math.atan2(dx, -dy) * (180 / Math.PI);
+  if (deg < 0) deg += 360;
+  return deg;
+};
