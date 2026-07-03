@@ -95,7 +95,9 @@ export default async function ({ addon, msg, console }) {
     if (isRadial && p1 <= 0) return null;
     const normalize = isRadial ? (offset) => clamp(offset / p1, 0, 1) : (offset) => clamp(offset, 0, 1);
     const stopsCss = stops.map((s) => `${s.color} ${(normalize(s.offset) * 100).toFixed(1)}%`);
-    return isRadial ? `radial-gradient(${stopsCss.join(", ")})` : `linear-gradient(${angleDeg.toFixed(1)}deg, ${stopsCss.join(", ")})`;
+    return isRadial
+      ? `radial-gradient(${stopsCss.join(", ")})`
+      : `linear-gradient(${angleDeg.toFixed(1)}deg, ${stopsCss.join(", ")})`;
   };
 
   // Override Scratch's swatches with the real paper.js gradients for both fill and stroke.
@@ -138,7 +140,11 @@ export default async function ({ addon, msg, console }) {
     if (!scratchClassReady || state.extraStops.length === 0) return;
     const swatch = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"))[0];
     if (!swatch) return;
-    const stops = [{ color: state.c0css, offset: state.stops.p0 }, ...state.extraStops, { color: state.c1css, offset: state.stops.p1 }];
+    const stops = [
+      { color: state.c0css, offset: state.stops.p0 },
+      ...state.extraStops,
+      { color: state.c1css, offset: state.stops.p1 },
+    ];
     const isRadial = state.lastKnownGradientType === "RADIAL";
     // Convert state.storedAngle (atan2(dy, dx) convention, matching readCurrentAngle) into
     // the same CSS angle convention syncSwatches() derives from real origin/destination points.
@@ -147,7 +153,6 @@ export default async function ({ addon, msg, console }) {
     const css = buildSwatchGradientCss(stops, isRadial, angleDeg);
     if (css) swatch.style.background = css;
   };
-
 
   // Temporarily collapse multi-stop gradients to their outer state.stops so CHANGE_SELECTED_ITEMS
   // makes Redux/swatches read a stable 2-stop gradient instead of MIXED. Restore the full
@@ -571,7 +576,8 @@ export default async function ({ addon, msg, console }) {
     // surrounding container.
     canvasEl.style.cursor = active ? "crosshair" : "";
   };
-  const clientToProjectPoint = (canvasEl, clientX, clientY) => makeCoordHelpers(state.cachedPaper, canvasEl).toProject(clientX, clientY);
+  const clientToProjectPoint = (canvasEl, clientX, clientY) =>
+    makeCoordHelpers(state.cachedPaper, canvasEl).toProject(clientX, clientY);
   const snapshotFillPalette = () => {
     if (state.lastKnownGradientType) {
       return {
