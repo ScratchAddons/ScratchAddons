@@ -15,10 +15,11 @@
       return;
     }
     let fiber = canvasContainer[addon.tab.traps.getInternalKey(canvasContainer)];
+    // Walking .return always terminates: the fiber tree has finite depth, and the root fiber's .return is null.
     while (fiber && typeof fiber.stateNode?.handleUpdateImage !== "function") {
       fiber = fiber.return;
     }
-    if (fiber?.stateNode?.handleUpdateImage) {
+    if (fiber) {
       fiber.stateNode.handleUpdateImage();
     }
   };
