@@ -1,6 +1,6 @@
 {
   "name": "Round path corners",
-  "description": "Add interactive rounded corners to vector shapes in the paint editor. Select a shape, click the Round Corners button in the left toolbar, then drag the corner handles to set the radius. Shift-click to toggle individual corners.",
+  "description": "Adds interactive corner-rounding handles to vector shapes in the paint editor's Reshape tool. Select a shape's points with Reshape to reveal draggable handles at its eligible corners, then drag one to round it. Selecting specific points rounds just those corners; with no points selected, dragging any handle rounds every corner together.",
   "credits": [
     {
       "name": "griffpatch",

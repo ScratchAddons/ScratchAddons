@@ -1,20 +1,21 @@
-export default async function ({ addon, msg }) {
+export default async function ({ addon }) {
   addon.tab.redux.initialize();
 
   // ── Tool state ─────────────────────────────────────────────────────────
-  let isToolActive = false;
-  let prevReduxMode = null;
-  let wasActiveOnNavAway = false; // re-activate on return to costume tab
+  // Corner rounding is a passive overlay on top of scratch-paint's native Reshape
+  // tool: active whenever Reshape mode is selected on a vector costume. Reshape
+  // keeps full ownership of canvas interaction (selecting shapes, dragging points/
+  // handles, box-select); we only draw corner-rounding widgets on top of whatever
+  // it has selected and let the user drag them directly.
   let paper = null;
   let corners = []; // CornerHandle[]
   let lastDraggedCorner = null; // rendered last (on top) in SVG z-order
   let activeDragCorner = null; // corner currently mid-drag — its widget tracks the cursor exactly
+  let groupDragActive = false; // dragging with nothing explicitly selected — every corner moves together
   // paper.Path → Array<{x, y, hix, hiy, hox, hoy}>
   let pathSnapshots = new Map();
-  let cornerTool = null; // paper.Tool while active (canvas clicks + keyboard only)
   let madeChanges = false;
-  // Redux statechanged listener (added while tool is active, removed on deactivation)
-  let modeChangeHandler = null;
+  let overlayActive = false;
 
   // ── SVG overlay refs ───────────────────────────────────────────────────
   // The widget circles are DOM SVG elements sitting on top of the paper canvas,
@@ -23,23 +24,26 @@ export default async function ({ addon, msg }) {
   let canvas = null; // the paper.js <canvas> element (coordinate conversion)
   let canvasContainer = null;
 
-  // ── Side-toolbar button ────────────────────────────────────────────────
-  // Injected into paint-editor_mode-selector alongside Select, Reshape, etc.
-  // Native side-toolbar buttons are bare spans containing only an <img>;
-  // classes are extracted at runtime so hash-mangling is handled automatically.
-  let isSelectedClass = "";
-
-  const rcBtn = document.createElement("span");
-  rcBtn.setAttribute("role", "button");
-  rcBtn.title = msg("round-corners");
-  addon.tab.displayNoneWhileDisabled(rcBtn);
-
-  const rcIcon = document.createElement("img");
-  rcIcon.alt = msg("round-corners");
-  rcIcon.draggable = false;
-  rcIcon.src = `${addon.self.dir}/icons/round-corners.svg`;
-
-  rcBtn.appendChild(rcIcon);
+  // ── Constants ──────────────────────────────────────────────────────────
+  // Handles shorter than this (in paper-space units) are treated as zero.
+  const EPS = 0.5;
+  // Minimum on-screen distance (px) between a corner's widget and its tip when at
+  // rest — see widgetPt() below.
+  const MIN_WIDGET_OFFSET_PX = 16;
+  // Corner widget appearance, in screen pixels.
+  const WIDGET_BLUE = "#388fe5";
+  // Solid white halo behind the selected circle for contrast against busy
+  // backgrounds, without darkening/muddying its pure blue fill. Unselected
+  // widgets keep the original darker drop-shadow halo.
+  const WIDGET_HALO_FILL_SELECTED = "white";
+  const WIDGET_HALO_FILL_UNSELECTED = "rgba(0,0,0,0.12)";
+  const WIDGET_RADIUS_SELECTED = 4;
+  const WIDGET_HALO_RADIUS_SELECTED = 6;
+  const WIDGET_RADIUS_UNSELECTED = 3.5;
+  const WIDGET_HALO_RADIUS_UNSELECTED = 5;
+  // Enlarged invisible hit target so clicks within this distance of any widget
+  // centre register as a widget click rather than falling through to the canvas.
+  const WIDGET_HIT_RADIUS = 8;
 
   // ── Math utilities ─────────────────────────────────────────────────────
 
@@ -72,14 +76,18 @@ export default async function ({ addon, msg }) {
   // minimum on-screen distance so it never sits exactly on top of the corner tip —
   // e.g. at radius 0. While a corner is being dragged it ignores that minimum and
   // tracks the exact radius-derived position so the cursor stays glued to it.
-  const MIN_WIDGET_OFFSET_PX = 16;
+  //
+  // That minimum is capped to the distance the corner's own maxRadius would place
+  // it at — otherwise a corner with short adjacent edges would push its widget out
+  // past the point it could ever actually be rounded to, making it look disconnected
+  // from the shape.
   const widgetPt = (corner) => {
     const exactPt =
       corner.radius === 0
         ? corner.origCorner.clone()
         : corner.origCorner.add(corner.bisector.multiply(corner.radius / corner.sinHalfAngle));
     if (corner === activeDragCorner) return exactPt;
-    const minDist = MIN_WIDGET_OFFSET_PX / paper.view.zoom;
+    const minDist = Math.min(MIN_WIDGET_OFFSET_PX / paper.view.zoom, corner.maxRadius / corner.sinHalfAngle);
     if (exactPt.subtract(corner.origCorner).length >= minDist) return exactPt;
     return corner.origCorner.add(corner.bisector.multiply(minDist));
   };
@@ -97,9 +105,6 @@ export default async function ({ addon, msg }) {
   };
 
   // ── Corner detection ───────────────────────────────────────────────────
-
-  // Handles shorter than this (in paper-space units) are treated as zero.
-  const EPS = 0.5;
 
   const isSharp = (seg) => seg.handleIn.length < EPS && seg.handleOut.length < EPS;
 
@@ -156,7 +161,13 @@ export default async function ({ addon, msg }) {
     if (prevLen < 0.01 || nextLen < 0.01) return null;
     const vPrev = toPrev.normalize();
     const vNext = toNext.normalize();
-    if (vPrev.dot(vNext) > 0.98) return null; // nearly straight — skip
+    // vPrev/vNext point from the corner tip back toward the previous/next points.
+    // dot ≈ +1 is an extremely sharp spike/cusp (the path folds back on itself) —
+    // its maxRadius collapses to ~0 anyway, so there's nothing meaningful to round.
+    // dot ≈ -1 means the two edges continue in the same straight line through this
+    // point — it isn't a corner at all, and the bisector (vPrev + vNext) degenerates
+    // to a near-zero vector there, which would collapse the widget onto the path.
+    if (vPrev.dot(vNext) > 0.98 || vPrev.dot(vNext) < -0.98) return null;
     const alpha = Math.acos(Math.max(-1, Math.min(1, vPrev.dot(vNext))));
     const sinHalfAngle = Math.sin(alpha / 2);
     const tanHalfAngle = Math.tan(alpha / 2);
@@ -172,7 +183,7 @@ export default async function ({ addon, msg }) {
       prevLen,
       nextLen,
       startRadius: 0,
-      selected: true,
+      selected: false,
       widget: null,
       bisector: vPrev.add(vNext).normalize(),
       vPrev,
@@ -214,7 +225,9 @@ export default async function ({ addon, msg }) {
     if (!orig) return null;
     const vPrev = prev.point.subtract(orig).normalize();
     const vNext = next.point.subtract(orig).normalize();
-    if (vPrev.dot(vNext) > 0.98) return null;
+    // See buildSharpCorner for why both the spike (dot ≈ +1) and colinear
+    // (dot ≈ -1) cases are rejected here.
+    if (vPrev.dot(vNext) > 0.98 || vPrev.dot(vNext) < -0.98) return null;
     const alpha = Math.acos(Math.max(-1, Math.min(1, vPrev.dot(vNext))));
     const sinHalfAngle = Math.sin(alpha / 2);
     const tanHalfAngle = Math.tan(alpha / 2);
@@ -235,7 +248,7 @@ export default async function ({ addon, msg }) {
       prevLen,
       nextLen,
       startRadius: r,
-      selected: true,
+      selected: false,
       widget: null,
       bisector: vPrev.add(vNext).normalize(),
       vPrev,
@@ -279,14 +292,23 @@ export default async function ({ addon, msg }) {
           }
         }
         // Build a corner handle for each arc start and each non-arc sharp corner.
+        // If any point on this path is natively selected in Reshape (paper.js
+        // segment.selected), only show corners at those points — matching
+        // Reshape's own convention of showing point handles just for points
+        // you've actually selected. But if the shape is selected as a whole
+        // with no individual points selected yet, behave as if every corner
+        // were selected (there's nothing more specific to narrow down to).
+        const anyNodeSelected = path.segments.some((s) => s.selected);
         // For open paths, endpoints (0 and n-1) have only one adjacent edge so skip them.
         const cornerStart = closed ? 0 : 1;
         const cornerEnd = closed ? n : n - 1;
         for (let i = cornerStart; i < cornerEnd; i++) {
           if (arcStarts.has(i)) {
+            if (anyNodeSelected && !path.segments[i].selected && !path.segments[(i + 1) % n].selected) continue;
             const c = buildArcCorner(path, i);
             if (c) corners.push(c);
           } else if (!arcUsed.has(i) && isSharp(path.segments[i])) {
+            if (anyNodeSelected && !path.segments[i].selected) continue;
             const c = buildSharpCorner(path, i);
             if (c) corners.push(c);
           }
@@ -437,13 +459,18 @@ export default async function ({ addon, msg }) {
     if (!overlaySvg) return;
     while (overlaySvg.firstChild) overlaySvg.removeChild(overlaySvg.firstChild);
 
+    // While a drag is in progress, hide every handle except the one actually
+    // being dragged so stationary handles don't clutter the view — they
+    // reappear once the mouse is released.
+    const visibleCorners = activeDragCorner ? corners.filter((c) => c === activeDragCorner) : corners;
+
     // Render lastDraggedCorner last so it sits on top in SVG z-order.
     // This ensures the user always grabs the most-recently-touched handle
     // when handles overlap at maximum rounding.
     const orderedCorners =
-      lastDraggedCorner && corners.includes(lastDraggedCorner)
-        ? [...corners.filter((c) => c !== lastDraggedCorner), lastDraggedCorner]
-        : corners;
+      lastDraggedCorner && visibleCorners.includes(lastDraggedCorner)
+        ? [...visibleCorners.filter((c) => c !== lastDraggedCorner), lastDraggedCorner]
+        : visibleCorners;
 
     for (const corner of orderedCorners) {
       const { x, y } = toSVG(widgetPt(corner));
@@ -451,18 +478,24 @@ export default async function ({ addon, msg }) {
       g.style.cssText = "pointer-events:all;cursor:pointer";
       moveTo(g, x, y);
 
-      // Drop-shadow ring, then main circle.
-      // Selected: white fill + blue stroke. Unselected: transparent fill + grey stroke.
-      if (corner.selected) {
-        g.appendChild(svgEl("circle", { r: 8, fill: "rgba(0,0,0,0.25)" }));
-        g.appendChild(svgEl("circle", { r: 6, fill: "white", stroke: "#388fe5", "stroke-width": 2 }));
+      // Drop-shadow ring, then main circle — matching Adobe-style anchor points
+      // but in Scratch's blue. Selected: solid blue circle. Unselected: plain
+      // white circle with a thin blue outline.
+      // While a group drag is in progress (nothing was explicitly selected, so every
+      // corner is moving together) every widget renders with the selected style too.
+      if (corner.selected || groupDragActive) {
+        g.appendChild(svgEl("circle", { r: WIDGET_HALO_RADIUS_SELECTED, fill: WIDGET_HALO_FILL_SELECTED }));
+        g.appendChild(svgEl("circle", { r: WIDGET_RADIUS_SELECTED, fill: WIDGET_BLUE }));
       } else {
-        g.appendChild(svgEl("circle", { r: 7, fill: "rgba(0,0,0,0.12)" }));
-        g.appendChild(svgEl("circle", { r: 5.5, fill: "none", stroke: "#888", "stroke-width": 1.5 }));
+        g.appendChild(svgEl("circle", { r: WIDGET_HALO_RADIUS_UNSELECTED, fill: WIDGET_HALO_FILL_UNSELECTED }));
+        g.appendChild(
+          svgEl("circle", { r: WIDGET_RADIUS_UNSELECTED, fill: "white", stroke: WIDGET_BLUE, "stroke-width": 1.5 })
+        );
       }
-      // Enlarged invisible hit target so clicks within 20px of any widget centre
-      // register as a widget click rather than falling through to the canvas.
-      g.appendChild(svgEl("circle", { r: 20, fill: "transparent" }));
+      // Enlarged invisible hit target so clicks within WIDGET_HIT_RADIUS of any
+      // widget centre register as a widget click rather than falling through to
+      // the canvas.
+      g.appendChild(svgEl("circle", { r: WIDGET_HIT_RADIUS, fill: "transparent" }));
 
       // ── Drag handling ─────────────────────────────────────────────────
       // The <g> element sits above the canvas (pointer-events:all), so SVG
@@ -472,8 +505,9 @@ export default async function ({ addon, msg }) {
         e.stopPropagation();
         e.preventDefault();
 
-        // The hit circle is r=20 and handles may overlap, so find whichever corner
-        // centre is closest to the click — that is the one the user intended to target.
+        // The hit circle is WIDGET_HIT_RADIUS and handles may overlap, so find
+        // whichever corner centre is closest to the click — that is the one the
+        // user intended to target.
         const svgRect = overlaySvg.getBoundingClientRect();
         const cx = e.clientX - svgRect.left;
         const cy = e.clientY - svgRect.top;
@@ -488,33 +522,37 @@ export default async function ({ addon, msg }) {
           }
         }
 
-        // Remember whether this corner was already selected before the click,
-        // so we can defer the "deselect others" action until mouseup if no drag
-        // happened (dragging a selected corner should keep all selected corners moving).
+        // Remember whether this corner was already selected before the click.
+        // Dragging an already-selected corner keeps the existing (possibly multi-)
+        // selection moving together; dragging an unselected corner — regardless of
+        // what else happens to be selected — shapes every corner together instead,
+        // since there's nothing meaningful to narrow a fresh single-corner drag to.
+        // Shift-click is the only way to build/adjust an explicit multi-selection.
         const wasSelected = activeCorner.selected;
         lastDraggedCorner = activeCorner;
 
         if (e.shiftKey) {
           activeCorner.selected = !activeCorner.selected;
-        } else if (!activeCorner.selected) {
-          // Clicking an unselected corner always selects only it immediately.
+        } else if (!wasSelected) {
+          // Dragging (or clicking) a corner that isn't part of the current
+          // selection clears any existing selection immediately — an unselected-
+          // corner drag always shapes every corner together, so there's no old
+          // selection left to silently keep alive in the background.
           for (const c of corners) c.selected = false;
-          activeCorner.selected = true;
         }
-        // If corner was already selected (no shift), don't change selection yet —
-        // wait for mouseup.  If the user drags, we keep the multi-selection intact.
 
         const dragCorner = activeCorner; // closed over for this drag
+        const dragAll = !e.shiftKey && !wasSelected;
         let didDrag = false;
 
-        // Snapshot each selected corner's radius at drag start so, once dragging,
-        // every selected corner moves by the same delta as dragCorner — preserving
+        // Snapshot each affected corner's radius at drag start so, once dragging,
+        // every affected corner moves by the same delta as dragCorner — preserving
         // each corner's individual rounding instead of snapping them all to the
         // same absolute radius.
         for (const c of corners) c.startRadius = c.radius;
 
         // ── Pre-scan: cap maxRadius to prevent arc overlap on shared segments ──
-        // When two adjacent selected corners both expand, their tangent points
+        // When two adjacent affected corners both expand, their tangent points
         // travel toward each other along the shared segment.  Equal split:
         // each gets at most half the original shared edge as tangent distance.
         //
@@ -538,7 +576,7 @@ export default async function ({ addon, msg }) {
               if (!path.closed && idx === pn - 1) continue;
               const A = pc[idx];
               const B = pc[(idx + 1) % pn];
-              if (!A.selected || !B.selected) continue;
+              if (!(dragAll || A.selected) || !(dragAll || B.selected)) continue;
               // Total original edge length between the two corner tips.
               // A.vNext points from A's corner toward the next original vertex.
               // Dot product extracts the component along that direction.
@@ -556,6 +594,7 @@ export default async function ({ addon, msg }) {
           if (addon.self.disabled) return;
           didDrag = true;
           activeDragCorner = dragCorner;
+          groupDragActive = dragAll;
           const pt = toProject(ev.clientX, ev.clientY);
           // Direct mapping: project the mouse position onto the bisector from the
           // corner tip.  That projection distance equals r/sin(α/2) when the mouse
@@ -564,10 +603,10 @@ export default async function ({ addon, msg }) {
           const projected = pt.subtract(dragCorner.origCorner).dot(dragCorner.bisector);
           const rDragged = Math.max(0, Math.min(projected * dragCorner.sinHalfAngle, dragCorner.maxRadius));
           // Apply the same delta (relative to each corner's own radius at drag start)
-          // to every other selected corner, capped at each corner's own maximum.
+          // to every other affected corner, capped at each corner's own maximum.
           const delta = rDragged - dragCorner.startRadius;
           for (const c of corners) {
-            if (!c.selected) continue;
+            if (!dragAll && !c.selected) continue;
             c.radius = Math.max(0, Math.min(c.startRadius + delta, c.maxRadius));
           }
           reapplyAll();
@@ -580,11 +619,14 @@ export default async function ({ addon, msg }) {
           document.removeEventListener("mousemove", onMove);
           document.removeEventListener("mouseup", onUp);
           activeDragCorner = null;
+          groupDragActive = false;
           // Restore the unconstrained maxRadius values (constraints were only
           // needed during this drag to prevent arc overlap).
           corners.forEach((c, i) => (c.maxRadius = savedMaxRadius[i]));
-          if (!didDrag && !e.shiftKey && wasSelected) {
-            // Pure click on an already-selected corner: now deselect all others.
+          if (!didDrag && !e.shiftKey) {
+            // Pure click (no drag): select just this corner, whether it was
+            // already selected (narrowing a multi-selection) or not (starting
+            // a fresh one), so a following drag targets only it.
             for (const c of corners) c.selected = false;
             activeCorner.selected = true;
             drawWidgets();
@@ -622,20 +664,21 @@ export default async function ({ addon, msg }) {
   };
 
   // ── Tool lifecycle ─────────────────────────────────────────────────────
+  // Corner rounding is purely a passive overlay on scratch-paint's native
+  // Reshape tool — there is no separate mode or toolbar button. It starts
+  // whenever Reshape mode is selected on a vector costume, and stops when
+  // Reshape is exited, the format switches to bitmap, or the addon is disabled.
 
-  // Clean up overlay, tool, and state.  If restoreMode is true also dispatch
-  // a CHANGE_MODE to restore the paint editor to the mode that was active before
-  // we took over (normally true; false when the mode changed externally).
-  const deactivateTool = ({ restoreMode = true } = {}) => {
-    if (!isToolActive) return;
+  const isBitmapFormat = () => {
+    const fmt = addon.tab.redux.state?.scratchPaint?.format ?? "";
+    return fmt === "BITMAP" || fmt === "BITMAP_SKIP_CONVERT";
+  };
+
+  const resetOverlayState = () => {
     // DOM SVG never touches the paper project, so no pre-clear needed before
     // triggerUpdateImage() — this is the key advantage over the old layer approach.
     if (madeChanges) triggerUpdateImage();
     madeChanges = false;
-    if (modeChangeHandler) {
-      addon.tab.redux.removeEventListener("statechanged", modeChangeHandler);
-      modeChangeHandler = null;
-    }
     // Hide (not remove) the SVG so it can be reused next activation.
     if (overlaySvg) {
       while (overlaySvg.firstChild) overlaySvg.removeChild(overlaySvg.firstChild);
@@ -643,223 +686,139 @@ export default async function ({ addon, msg }) {
     }
     corners = [];
     lastDraggedCorner = null;
+    activeDragCorner = null;
+    groupDragActive = false;
     pathSnapshots = new Map();
-    if (cornerTool) {
-      cornerTool.remove();
-      cornerTool = null;
-    }
-    isToolActive = false;
-    if (isSelectedClass) rcBtn.classList.remove(isSelectedClass);
-    if (restoreMode) {
-      const mode = prevReduxMode ?? "SELECT";
-      prevReduxMode = null;
-      addon.tab.redux.dispatch({ type: "scratch-paint/modes/CHANGE_MODE", mode });
-    } else {
-      prevReduxMode = null;
-    }
   };
 
-  const activateTool = async () => {
-    // Toggle off if already active.
-    if (isToolActive) {
-      deactivateTool();
-      return;
+  // Reposition widgets when the user zooms or pans (paper.view.matrix changes).
+  // Mirrors the same rAF pattern used by paint-gradient-editor.
+  const startViewSyncLoop = () => {
+    let lastViewKey = "";
+    const loop = () => {
+      if (!overlayActive) return;
+      const m = paper.view.matrix;
+      const viewKey = `${m.a.toFixed(3)},${m.tx.toFixed(1)},${m.ty.toFixed(1)}`;
+      if (viewKey !== lastViewKey) {
+        lastViewKey = viewKey;
+        drawWidgets();
+      }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  };
+
+  // Rescan corners for whatever is currently selected, keeping selection state
+  // for corners that still exist (matched by original tip position).
+  const rescanKeepingSelection = () => {
+    const prevSel = corners.filter((c) => c.selected).map((c) => c.origCorner.clone());
+    scanCorners();
+    for (const c of corners) {
+      c.selected = prevSel.some((pt) => pt.isClose(c.origCorner, 1.0));
     }
+    takeSnapshots();
+    drawWidgets();
+  };
+
+  // Hide the overlay the moment the user interacts directly with the canvas
+  // (Reshape's own point/handle/whole-shape dragging) and only rescan + reveal
+  // it again once they release the mouse. Neither of those native drags
+  // dispatches a redux action, so there's no event to resync against mid-drag —
+  // polling every frame caused visible selection-state flicker, so instead we
+  // go hidden-and-stale for the duration of the gesture rather than fight it,
+  // then resync once in a single clean redraw on release.
+  const handleCanvasMouseDown = () => {
+    if (overlaySvg) overlaySvg.style.display = "none";
+    const onRelease = () => {
+      document.removeEventListener("mouseup", onRelease);
+      if (!overlayActive) return;
+      rescanKeepingSelection();
+      if (overlaySvg) overlaySvg.style.display = "";
+    };
+    document.addEventListener("mouseup", onRelease);
+  };
+
+  const startOverlay = async () => {
+    if (overlayActive || addon.self.disabled || isBitmapFormat()) return;
 
     paper = await addon.tab.traps.getPaper();
     if (!paper) return;
-
     canvasContainer = document.querySelector("[class*='paint-editor_canvas-container_']");
     canvas = canvasContainer?.querySelector("canvas");
     if (!canvasContainer || !canvas) return;
 
-    prevReduxMode = addon.tab.redux.state?.scratchPaint?.mode ?? null;
+    // Bail if the mode changed again while we were awaiting getPaper().
+    if (addon.tab.redux.state?.scratchPaint?.mode !== "RESHAPE") return;
 
-    // Dispatch ROUNDED_RECT: deactivates the current tool container cleanly
-    // and leaves no native side-toolbar button highlighted (ROUNDED_RECT is a
-    // registered-but-stub mode with no toolbar button).
-    addon.tab.redux.dispatch({ type: "scratch-paint/modes/CHANGE_MODE", mode: "ROUNDED_RECT" });
-
-    // Wait two animation frames for React to flush the dispatch.
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-
-    if (addon.self.disabled) return;
-
-    // Scan whatever is currently selected (may be nothing — user can click a shape).
+    overlayActive = true;
     scanCorners();
     takeSnapshots();
-
-    // Build the SVG overlay if it doesn't exist yet, or reattach if it was removed.
     if (!overlaySvg || !canvasContainer.contains(overlaySvg)) {
       overlaySvg = buildOverlaySvg();
     }
     overlaySvg.style.display = "";
     drawWidgets();
-
-    // Minimal paper.Tool: only intercepts canvas clicks (shape selection) and
-    // keyboard shortcuts.  All widget interaction is handled by the SVG elements
-    // directly — SVG mousedown stops propagation so this tool never sees widget
-    // clicks (the SVG <g> sits above the canvas in the DOM stacking order).
-    cornerTool = new paper.Tool();
-
-    cornerTool.onMouseDown = (e) => {
-      if (addon.self.disabled) return;
-      // Hit-test the painting layer for a shape to select.
-      const paintLayer = paper.project.layers.find((l) => l.data.isPaintingLayer);
-      const hitResult = paintLayer
-        ? paper.project.hitTest(e.point, {
-            fill: true,
-            stroke: true,
-            tolerance: 4 / paper.view.zoom,
-            match: (r) => paintLayer.isAncestor(r.item) || r.item.layer === paintLayer,
-          })
-        : null;
-
-      if (hitResult) {
-        const target = hitResult.item.parent instanceof paper.Layer ? hitResult.item : hitResult.item.parent;
-        for (const item of paper.project.selectedItems) item.selected = false;
-        target.selected = true;
-        if (madeChanges) triggerUpdateImage();
-        madeChanges = false;
-        scanCorners();
-        takeSnapshots();
-      } else {
-        // Clicked on empty canvas — deselect the paper shape and all corner handles.
-        for (const item of paper.project.selectedItems) item.selected = false;
-        corners = [];
-        pathSnapshots = new Map();
-      }
-      drawWidgets();
-    };
-
-    cornerTool.onKeyDown = (e) => {
-      if (addon.self.disabled) return;
-      if (e.key === "escape" || e.key === "Escape") deactivateTool();
-    };
-
-    cornerTool.activate();
-    isToolActive = true;
-    if (isSelectedClass) rcBtn.classList.add(isSelectedClass);
-
-    // Reposition widgets when the user zooms or pans (paper.view.matrix changes).
-    // Mirrors the same rAF pattern used by paint-gradient-editor.
-    let lastViewKey = "";
-    const viewSyncLoop = () => {
-      if (!isToolActive) return;
-      const m = paper.view.matrix;
-      const key = `${m.a.toFixed(3)},${m.tx.toFixed(1)},${m.ty.toFixed(1)}`;
-      if (key !== lastViewKey) {
-        lastViewKey = key;
-        drawWidgets();
-      }
-      requestAnimationFrame(viewSyncLoop);
-    };
-    requestAnimationFrame(viewSyncLoop);
-
-    // Watch for tool switches (CHANGE_MODE), tab navigation, and undo/redo events.
-    modeChangeHandler = ({ detail }) => {
-      if (!isToolActive) return;
-      const type = detail.action?.type;
-      if (type === "scratch-paint/modes/CHANGE_MODE") {
-        deactivateTool({ restoreMode: false });
-      } else if (type === "scratch-gui/navigation/ACTIVATE_TAB") {
-        // User is switching tabs. Deactivate NOW while the paint editor is still
-        // fully alive — triggerUpdateImage() and CHANGE_MODE SELECT both work
-        // correctly here. By the time toolsLoop fires on nav-back, isToolActive
-        // will already be false so it does nothing.
-        const newTab = addon.tab.redux.state?.scratchGui?.editorTab?.activeTabIndex ?? -1;
-        if (newTab !== 1) {
-          // Switching away from costumes tab — remember so we can restore on return.
-          wasActiveOnNavAway = true;
-          deactivateTool({ restoreMode: true });
-        }
-      } else if (type === "scratch-paint/undo/UNDO" || type === "scratch-paint/undo/REDO") {
-        // scratch-paint's _restore() reimports the paper project from JSON.
-        // The SVG overlay is DOM-only so it survives untouched.
-        // Wait one frame for paper.js to finish restoring, then rescan.
-        requestAnimationFrame(() => {
-          if (!isToolActive) return;
-          madeChanges = false;
-          const prevSel = corners.filter((c) => c.selected).map((c) => c.origCorner.clone());
-          scanCorners();
-          for (const c of corners) {
-            c.selected = prevSel.some((pt) => pt.isClose(c.origCorner, 1.0));
-          }
-          takeSnapshots();
-          drawWidgets();
-        });
-      }
-    };
-    addon.tab.redux.addEventListener("statechanged", modeChangeHandler);
+    canvas.addEventListener("mousedown", handleCanvasMouseDown);
+    startViewSyncLoop();
   };
 
-  addon.self.addEventListener("disabled", () => deactivateTool({ restoreMode: true }));
-
-  rcBtn.addEventListener("click", () => {
-    if (addon.self.disabled) return;
-    activateTool();
-  });
-
-  // ── Side-toolbar injection loop ────────────────────────────────────────
-  // Waits for the paint-editor_mode-selector (the vertical toolbar on the left),
-  // extracts native button/icon/is-selected CSS classes at runtime, and appends
-  // our button to the end of the list alongside Select, Reshape, etc.
-  const toolsLoop = async () => {
-    while (true) {
-      const modeSelector = await addon.tab.waitForElement("[class*='paint-editor_mode-selector_']", {
-        markAsSeen: true,
-        reduxCondition: (state) =>
-          state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
-      });
-
-      // If the tool was active when the user navigated away, re-activate it now.
-      const shouldReactivate = wasActiveOnNavAway;
-      wasActiveOnNavAway = false;
-      // Safety net: deactivate if still somehow active (should not happen).
-      if (isToolActive) deactivateTool({ restoreMode: false });
-
-      // Extract native classes each iteration so hash-mangling is always current.
-      const anyToolBtn = modeSelector.querySelector("[class*='mod-tool-select']");
-      const anyToolIcon = modeSelector.querySelector("[class*='tool-select-icon']");
-      const selectedBtn = modeSelector.querySelector("[class*='is-selected']");
-
-      // Copy button and icon classes to match native toolbar appearance.
-      if (anyToolBtn) rcBtn.className = anyToolBtn.className;
-      if (anyToolIcon) rcIcon.className = anyToolIcon.className;
-
-      // Store the is-selected class for use when the tool activates.
-      isSelectedClass = selectedBtn ? ([...selectedBtn.classList].find((c) => c.includes("is-selected")) ?? "") : "";
-
-      // Ensure the button does not start in the selected state.
-      if (isSelectedClass) rcBtn.classList.remove(isSelectedClass);
-
-      // Hide in bitmap mode — corner rounding only works on vector paths.
-      const isBitmap = () => {
-        const fmt = addon.tab.redux.state?.scratchPaint?.format ?? "";
-        return fmt === "BITMAP" || fmt === "BITMAP_SKIP_CONVERT";
-      };
-      rcBtn.style.display = isBitmap() ? "none" : "";
-
-      modeSelector.appendChild(rcBtn);
-
-      // Re-activate if the tool was selected when the user last navigated away.
-      if (shouldReactivate && !isBitmap()) activateTool();
-    }
+  const stopOverlay = () => {
+    if (!overlayActive) return;
+    if (canvas) canvas.removeEventListener("mousedown", handleCanvasMouseDown);
+    resetOverlayState();
+    overlayActive = false;
   };
 
-  // Also respond to live format switches (Convert to Bitmap / Convert to Vector).
+  // ── Redux listener ──────────────────────────────────────────────────────
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
-    if (detail.action?.type !== "scratch-paint/formats/CHANGE_FORMAT") return;
-    const fmt = detail.action.format ?? "";
-    const bitmap = fmt === "BITMAP" || fmt === "BITMAP_SKIP_CONVERT";
-    rcBtn.style.display = bitmap ? "none" : "";
-    if (bitmap && isToolActive) deactivateTool({ restoreMode: true });
+    const type = detail.action?.type;
+    if (type === "scratch-paint/modes/CHANGE_MODE") {
+      if (detail.action.mode === "RESHAPE") {
+        startOverlay();
+      } else if (overlayActive) {
+        stopOverlay();
+      }
+    } else if (type === "scratch-gui/navigation/ACTIVATE_TAB") {
+      const newTab = addon.tab.redux.state?.scratchGui?.editorTab?.activeTabIndex ?? -1;
+      if (newTab !== 1) {
+        // Switching away from the costumes tab — tear down now while the paint
+        // editor is still alive (triggerUpdateImage() needs it).
+        if (overlayActive) stopOverlay();
+      } else if (addon.tab.redux.state?.scratchPaint?.mode === "RESHAPE") {
+        // Returning to the costumes tab with Reshape mode still selected
+        // (Reshape mode persists across tab switches) — resume the overlay.
+        startOverlay();
+      }
+    } else if (type === "scratch-paint/undo/UNDO" || type === "scratch-paint/undo/REDO") {
+      // scratch-paint's _restore() reimports the paper project from JSON.
+      // The SVG overlay is DOM-only so it survives untouched.
+      // Wait one frame for paper.js to finish restoring, then rescan.
+      if (!overlayActive) return;
+      requestAnimationFrame(() => {
+        if (!overlayActive) return;
+        madeChanges = false;
+        rescanKeepingSelection();
+      });
+    } else if (type === "scratch-paint/select/CHANGE_SELECTED_ITEMS") {
+      // Skip while a corner widget is being interactively dragged so we don't
+      // clobber the in-progress drag's corner state.
+      if (!overlayActive || activeDragCorner) return;
+      // A shape-selection change (different shape, or shape added/removed from
+      // a multi-select) always starts fresh with every corner deselected —
+      // scanCorners() already defaults every corner to unselected.
+      scanCorners();
+      takeSnapshots();
+      drawWidgets();
+    } else if (type === "scratch-paint/formats/CHANGE_FORMAT") {
+      // Convert to Bitmap / Convert to Vector — corner rounding only works on
+      // vector paths.
+      if (isBitmapFormat() && overlayActive) stopOverlay();
+    }
   });
 
-  toolsLoop();
+  addon.self.addEventListener("disabled", () => stopOverlay());
 
-  // Prime the getPaper() cache before toolsLoop() marks the mode-selector as
-  // seen — after that, waitForElement skips the existing element and getPaper()
-  // would hang until the next DOM remount.
-  addon.tab.traps.getPaper().catch(() => {});
+  // Resume automatically if the addon loads (or is enabled) while Reshape is
+  // already the active mode.
+  if (addon.tab.redux.state?.scratchPaint?.mode === "RESHAPE") startOverlay();
 }
