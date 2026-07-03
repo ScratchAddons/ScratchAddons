@@ -1,6 +1,6 @@
 {
   "name": "Stroke join and cap options",
-  "description": "Adds stroke join (miter/round) and cap (butt/round/square) controls to the color picker in the costume editor.",
+  "description": "Adds stroke join (miter/round) and cap (butt/round/square) controls to the outline color picker in the costume editor.",
   "credits": [
     {
       "name": "griffpatch",
