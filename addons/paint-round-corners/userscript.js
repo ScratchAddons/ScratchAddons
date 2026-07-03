@@ -417,10 +417,14 @@ export default async function ({ addon, msg }) {
   const moveTo = (el, x, y) => el.setAttribute("transform", `translate(${x},${y})`);
 
   // Create the <svg> element and attach it to canvasContainer.
+  // overflow:hidden clips widgets to the visible canvas area — scratch-paint's own
+  // .canvas-container is overflow:visible, so without this, panning a corner off
+  // the edge of the canvas leaves its widget rendered on top of the mode-selector
+  // / color-picker panels instead of disappearing along with the shape.
   const buildOverlaySvg = () => {
     const svg = document.createElementNS(svgNS, "svg");
     svg.style.cssText =
-      "position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:10";
+      "position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:10";
     addon.tab.displayNoneWhileDisabled(svg);
     canvasContainer.appendChild(svg);
     return svg;
