@@ -19,7 +19,7 @@
 .sa-stroke-opts-group > span {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   font-size: 0.65rem;
-  color: #575e75;
+  color: var(--editorDarkMode-input-text, #575e75);
 }
 
 .sa-stroke-opts-btns {
@@ -32,31 +32,33 @@
   cursor: pointer;
   width: 28px;
   height: 28px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--editorDarkMode-border, #d9d9d9);
   border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  background: white;
+  background: var(--editorDarkMode-input, white);
 }
 
 .sa-stroke-opt-btn:hover {
-  border-color: #855cd6;
+  border-color: var(--editorDarkMode-primary, #855cd6);
 }
 
 .sa-stroke-opt-btn img {
   width: 20px;
   height: 20px;
   display: block;
+  /* Recolor the icon so it stays visible against the (possibly dark) button background */
+  filter: var(--editorDarkMode-input-filter, none);
 }
 
 .sa-stroke-opt-active {
-  background: #855cd6;
-  border-color: #855cd6;
+  background: var(--editorDarkMode-primary, #855cd6);
+  border-color: var(--editorDarkMode-primary, #855cd6);
 }
 
 .sa-stroke-opt-active img {
-  /* Turn all icon colours white when button is active/selected */
-  filter: brightness(0) invert(1);
+  /* Turn all icon colours white/black as needed to contrast with the active background */
+  filter: var(--editorDarkMode-primary-filter2, brightness(0) invert(1));
 }
