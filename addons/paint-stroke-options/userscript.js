@@ -1,6 +1,57 @@
 ﻿export default async function ({ addon, msg, console }) {
   addon.tab.redux.initialize();
 
+  // ── Remember the user's last-picked join/cap so newly drawn shapes can use them ──
+  let defaultJoin = "miter";
+  let defaultCap = "butt";
+
+  // ── Apply the remembered defaults to a shape as it's drawn ─────────────────
+  // Scratch-paint creates a new tool instance every time its mode is activated, so this
+  // just guards against patching the same instance twice if handleModeChange fires again.
+  const patchToolDefaults = (paper, mode) => {
+    const tool = paper.tool;
+    if (!tool || tool.saStrokeOptsPatched) return;
+    tool.saStrokeOptsPatched = true;
+
+    const applyDefaults = (item) => {
+      if (!item) return;
+      item.strokeJoin = defaultJoin;
+      item.strokeCap = defaultCap;
+    };
+
+    if (mode === "RECT" || mode === "OVAL") {
+      // Rect/oval tools rebuild their preview shape on every drag frame, so re-apply each time.
+      const origMouseDrag = tool.onMouseDrag;
+      tool.onMouseDrag = function (event) {
+        origMouseDrag?.call(this, event);
+        applyDefaults(mode === "RECT" ? this.rect : this.oval);
+      };
+    } else if (mode === "LINE") {
+      // Only apply to a brand new line, not one continued from an existing endpoint
+      // (continuing doesn't add a new item to the layer).
+      const origMouseDown = tool.onMouseDown;
+      tool.onMouseDown = function (event) {
+        const itemCountBefore = paper.project.activeLayer.children.length;
+        origMouseDown?.call(this, event);
+        if (paper.project.activeLayer.children.length > itemCountBefore) {
+          applyDefaults(paper.project.activeLayer.lastChild);
+        }
+      };
+    }
+  };
+
+  // Patch the active tool whenever the draw mode changes (and once up front, in
+  // case a relevant tool is already active).
+  const handleModeChange = async () => {
+    const mode = addon.tab.redux.state?.scratchPaint?.mode;
+    if (mode !== "RECT" && mode !== "OVAL" && mode !== "LINE") return;
+    patchToolDefaults(await addon.tab.traps.getPaper(), mode);
+  };
+  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+    if (detail.action.type === "scratch-paint/modes/CHANGE_MODE") queueMicrotask(handleModeChange);
+  });
+  handleModeChange();
+
   // ── Apply a paper.js stroke property to all selected items ────────────────
   const applyProp = async (prop, value) => {
     const paper = await addon.tab.traps.getPaper();
@@ -102,6 +153,11 @@
       const btn = e.target.closest(".sa-stroke-opt-btn");
       if (!btn) return;
       const prop = btn.dataset.saOp === "join" ? "strokeJoin" : "strokeCap";
+      if (btn.dataset.saOp === "join") {
+        defaultJoin = btn.dataset.saVal;
+      } else {
+        defaultCap = btn.dataset.saVal;
+      }
       await applyProp(prop, btn.dataset.saVal);
       updateActive();
     });
@@ -113,8 +169,8 @@
       for (const btn of wrapper.querySelectorAll(".sa-stroke-opt-btn")) {
         const active =
           btn.dataset.saOp === "join"
-            ? btn.dataset.saVal === (currentJoin ?? "miter")
-            : btn.dataset.saVal === (currentCap ?? "butt");
+            ? btn.dataset.saVal === (currentJoin ?? defaultJoin)
+            : btn.dataset.saVal === (currentCap ?? defaultCap);
         btn.classList.toggle("sa-stroke-opt-active", active);
       }
     };
