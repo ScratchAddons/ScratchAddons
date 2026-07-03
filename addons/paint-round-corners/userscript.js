@@ -8,6 +8,7 @@ export default async function ({ addon, msg }) {
   let paper = null;
   let corners = []; // CornerHandle[]
   let lastDraggedCorner = null; // rendered last (on top) in SVG z-order
+  let activeDragCorner = null; // corner currently mid-drag — its widget tracks the cursor exactly
   // paper.Path → Array<{x, y, hix, hiy, hox, hoy}>
   let pathSnapshots = new Map();
   let cornerTool = null; // paper.Tool while active (canvas clicks + keyboard only)
@@ -66,10 +67,22 @@ export default async function ({ addon, msg }) {
   // Placing the widget here means the mouse is always exactly at the circle centre
   // while dragging, giving a direct 1:1 feel between cursor position and radius.
   // Circle centre is at distance r/sin(α/2) from the corner tip along the bisector.
-  const widgetPt = (corner) =>
-    corner.radius === 0
-      ? corner.origCorner.clone()
-      : corner.origCorner.add(corner.bisector.multiply(corner.radius / corner.sinHalfAngle));
+  //
+  // At rest (not the corner actively being dragged), the widget is pushed out to a
+  // minimum on-screen distance so it never sits exactly on top of the corner tip —
+  // e.g. at radius 0. While a corner is being dragged it ignores that minimum and
+  // tracks the exact radius-derived position so the cursor stays glued to it.
+  const MIN_WIDGET_OFFSET_PX = 16;
+  const widgetPt = (corner) => {
+    const exactPt =
+      corner.radius === 0
+        ? corner.origCorner.clone()
+        : corner.origCorner.add(corner.bisector.multiply(corner.radius / corner.sinHalfAngle));
+    if (corner === activeDragCorner) return exactPt;
+    const minDist = MIN_WIDGET_OFFSET_PX / paper.view.zoom;
+    if (exactPt.subtract(corner.origCorner).length >= minDist) return exactPt;
+    return corner.origCorner.add(corner.bisector.multiply(minDist));
+  };
 
   // ── Coordinate conversion (same pattern as paint-gradient-editor) ──────
   // Convert a paper-space Point → SVG pixel position within canvasContainer.
@@ -490,6 +503,12 @@ export default async function ({ addon, msg }) {
         const dragCorner = activeCorner; // closed over for this drag
         let didDrag = false;
 
+        // Snapshot each selected corner's radius at drag start so, once dragging,
+        // every selected corner moves by the same delta as dragCorner — preserving
+        // each corner's individual rounding instead of snapping them all to the
+        // same absolute radius.
+        for (const c of corners) c.startRadius = c.radius;
+
         // ── Pre-scan: cap maxRadius to prevent arc overlap on shared segments ──
         // When two adjacent selected corners both expand, their tangent points
         // travel toward each other along the shared segment.  Equal split:
@@ -532,6 +551,7 @@ export default async function ({ addon, msg }) {
         const onMove = (ev) => {
           if (addon.self.disabled) return;
           didDrag = true;
+          activeDragCorner = dragCorner;
           const pt = toProject(ev.clientX, ev.clientY);
           // Direct mapping: project the mouse position onto the bisector from the
           // corner tip.  That projection distance equals r/sin(α/2) when the mouse
@@ -539,11 +559,12 @@ export default async function ({ addon, msg }) {
           // This means the cursor is always at the circle centre — a 1:1 feel.
           const projected = pt.subtract(dragCorner.origCorner).dot(dragCorner.bisector);
           const rDragged = Math.max(0, Math.min(projected * dragCorner.sinHalfAngle, dragCorner.maxRadius));
-          // Apply the same absolute radius to every other selected corner, capped
-          // at each corner's own maximum.
+          // Apply the same delta (relative to each corner's own radius at drag start)
+          // to every other selected corner, capped at each corner's own maximum.
+          const delta = rDragged - dragCorner.startRadius;
           for (const c of corners) {
             if (!c.selected) continue;
-            c.radius = Math.max(0, Math.min(rDragged, c.maxRadius));
+            c.radius = Math.max(0, Math.min(c.startRadius + delta, c.maxRadius));
           }
           reapplyAll();
           madeChanges = true;
@@ -554,6 +575,7 @@ export default async function ({ addon, msg }) {
         const onUp = () => {
           document.removeEventListener("mousemove", onMove);
           document.removeEventListener("mouseup", onUp);
+          activeDragCorner = null;
           // Restore the unconstrained maxRadius values (constraints were only
           // needed during this drag to prevent arc overlap).
           corners.forEach((c, i) => (c.maxRadius = savedMaxRadius[i]));
