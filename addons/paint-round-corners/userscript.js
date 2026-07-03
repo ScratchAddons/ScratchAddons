@@ -41,8 +41,8 @@ export default async function ({ addon }) {
   const WIDGET_HALO_RADIUS_SELECTED = 6;
   const WIDGET_RADIUS_UNSELECTED = 3.5;
   const WIDGET_HALO_RADIUS_UNSELECTED = 5;
-  // Enlarged invisible hit target so clicks within this distance of any widget
-  // centre register as a widget click rather than falling through to the canvas.
+  // Invisible hit target so clicks within this distance of any widget centre
+  // register as a widget click rather than falling through to the canvas.
   const WIDGET_HIT_RADIUS = 8;
 
   // ── Math utilities ─────────────────────────────────────────────────────
@@ -180,11 +180,8 @@ export default async function ({ addon }) {
       // Max radius so that the tangent point stays within the shorter adjacent edge.
       // Tangent distance d = r / tan(α/2), so r_max = min_edge * tan(α/2).
       maxRadius: Math.min(prevLen, nextLen) * tanHalfAngle,
-      prevLen,
-      nextLen,
       startRadius: 0,
       selected: false,
-      widget: null,
       bisector: vPrev.add(vNext).normalize(),
       vPrev,
       vNext,
@@ -245,11 +242,8 @@ export default async function ({ addon }) {
       origCorner: orig,
       radius: r,
       maxRadius: Math.min(prevLen, nextLen) * tanHalfAngle,
-      prevLen,
-      nextLen,
       startRadius: r,
       selected: false,
-      widget: null,
       bisector: vPrev.add(vNext).normalize(),
       vPrev,
       vNext,
@@ -262,7 +256,6 @@ export default async function ({ addon }) {
   // CornerHandle for every detected sharp corner and rounded arc.
   const scanCorners = () => {
     corners = [];
-    if (!paper) return;
     const selected = paper.project.selectedItems.filter(
       (item) =>
         item.layer?.data?.isPaintingLayer &&
@@ -533,13 +526,10 @@ export default async function ({ addon }) {
 
         if (e.shiftKey) {
           activeCorner.selected = !activeCorner.selected;
-        } else if (!wasSelected) {
-          // Dragging (or clicking) a corner that isn't part of the current
-          // selection clears any existing selection immediately — an unselected-
-          // corner drag always shapes every corner together, so there's no old
-          // selection left to silently keep alive in the background.
-          for (const c of corners) c.selected = false;
         }
+        // Otherwise, leave selection untouched for now — the drag/click outcome
+        // below (dragAll, and the pure-click branch in onUp) decides it, so there's
+        // no old selection left behind either way once this gesture finishes.
 
         const dragCorner = activeCorner; // closed over for this drag
         const dragAll = !e.shiftKey && !wasSelected;
@@ -559,7 +549,8 @@ export default async function ({ addon }) {
         // Key: use (B.origCorner - A.origCorner)·A.vNext as the available length.
         // This is based on the stable reconstructed corner tips, so it gives the
         // correct original edge length even after the path has already been rounded
-        // and re-scanned (unlike A.nextLen which shrinks each time).
+        // and re-scanned (unlike the distance to the current, already-shrunk segment
+        // point, which would keep shrinking every time this corner is re-applied).
         const savedMaxRadius = corners.map((c) => c.maxRadius);
         const applyAdjacentConstraints = () => {
           // Group corners by path (they are already in ascending segIndex order).
@@ -633,11 +624,18 @@ export default async function ({ addon }) {
           }
           if (didDrag && madeChanges) {
             triggerUpdateImage();
-            // Rescan from the committed geometry so segIndex values stay valid.
-            const prevSel = corners.filter((c) => c.selected).map((c) => c.origCorner.clone());
-            scanCorners();
-            for (const c of corners) {
-              c.selected = prevSel.some((pt) => pt.isClose(c.origCorner, 1.0));
+            if (dragAll) {
+              // A group-drag doesn't leave any explicit selection behind.
+              scanCorners();
+            } else {
+              // Rescan from the committed geometry so segIndex values stay valid,
+              // keeping whichever corners were selected (matched by original tip
+              // position, since segIndex may have shifted).
+              const prevSel = corners.filter((c) => c.selected).map((c) => c.origCorner.clone());
+              scanCorners();
+              for (const c of corners) {
+                c.selected = prevSel.some((pt) => pt.isClose(c.origCorner, 1.0));
+              }
             }
             takeSnapshots();
             drawWidgets();
@@ -680,10 +678,8 @@ export default async function ({ addon }) {
     if (madeChanges) triggerUpdateImage();
     madeChanges = false;
     // Hide (not remove) the SVG so it can be reused next activation.
-    if (overlaySvg) {
-      while (overlaySvg.firstChild) overlaySvg.removeChild(overlaySvg.firstChild);
-      overlaySvg.style.display = "none";
-    }
+    while (overlaySvg.firstChild) overlaySvg.removeChild(overlaySvg.firstChild);
+    overlaySvg.style.display = "none";
     corners = [];
     lastDraggedCorner = null;
     activeDragCorner = null;
@@ -728,12 +724,12 @@ export default async function ({ addon }) {
   // go hidden-and-stale for the duration of the gesture rather than fight it,
   // then resync once in a single clean redraw on release.
   const handleCanvasMouseDown = () => {
-    if (overlaySvg) overlaySvg.style.display = "none";
+    overlaySvg.style.display = "none";
     const onRelease = () => {
       document.removeEventListener("mouseup", onRelease);
       if (!overlayActive) return;
       rescanKeepingSelection();
-      if (overlaySvg) overlaySvg.style.display = "";
+      overlaySvg.style.display = "";
     };
     document.addEventListener("mouseup", onRelease);
   };
