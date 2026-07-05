@@ -126,11 +126,67 @@ export default async function ({ addon }) {
     // exit tangent of the previous bezier at prevA, which is −prevA.handleIn.
     const inDirVec = A.point.subtract(prevA.point);
     const inDir =
+      inDirVec.length > 0.01
         ? inDirVec.normalize()
         : prevA.handleIn.length > EPS
           ? prevA.handleIn.multiply(-1).normalize()
           : null;
     if (!inDir) return false;
+    if (inDir.dot(A.handleOut.normalize()) < 0.85) return false;
+    // At P2: direction B→nextB must align with −B.handleIn.
+    // Same fallback: when B.point ≈ nextB.point use nextB's entry tangent (handleOut).
+    const outDirVec = nextB.point.subtract(B.point);
+    const outDir =
+      outDirVec.length > 0.01
+        ? outDirVec.normalize()
+        : nextB.handleOut.length > EPS
+          ? nextB.handleOut.normalize()
+          : null;
+    if (!outDir) return false;
+    if (outDir.dot(B.handleIn.multiply(-1).normalize()) < 0.85) return false;
+    return true;
+  };
+
+  // Build a CornerHandle for a sharp corner at segment index i.
+  const buildSharpCorner = (pathItem, i) => {
+    const segs = pathItem.segments;
+    const n = segs.length;
+    const seg = segs[i];
+    const prev = segs[(i - 1 + n) % n];
+    const next = segs[(i + 1) % n];
+    const toPrev = prev.point.subtract(seg.point);
+    const toNext = next.point.subtract(seg.point);
+    const prevLen = toPrev.length;
+    const nextLen = toNext.length;
+    if (prevLen < 0.01 || nextLen < 0.01) return null;
+    const vPrev = toPrev.normalize();
+    const vNext = toNext.normalize();
+    // vPrev/vNext point from the corner tip back toward the previous/next points.
+    // dot ≈ +1 is an extremely sharp spike/cusp (the path folds back on itself) —
+    // its maxRadius collapses to ~0 anyway, so there's nothing meaningful to round.
+    // dot ≈ -1 means the two edges continue in the same straight line through this
+    // point — it isn't a corner at all, and the bisector (vPrev + vNext) degenerates
+    // to a near-zero vector there, which would collapse the widget onto the path.
+    if (vPrev.dot(vNext) > 0.98 || vPrev.dot(vNext) < -0.98) return null;
+    const alpha = Math.acos(Math.max(-1, Math.min(1, vPrev.dot(vNext))));
+    const sinHalfAngle = Math.sin(alpha / 2);
+    const tanHalfAngle = Math.tan(alpha / 2);
+    return {
+      pathItem,
+      segIndex: i,
+      isArc: false,
+      origCorner: seg.point.clone(),
+      radius: 0,
+      // Max radius so that the tangent point stays within the shorter adjacent edge.
+      // Tangent distance d = r / tan(α/2), so r_max = min_edge * tan(α/2).
+      maxRadius: Math.min(prevLen, nextLen) * tanHalfAngle,
+      startRadius: 0,
+      selected: false,
+      bisector: vPrev.add(vNext).normalize(),
+      vPrev,
+      vNext,
+      sinHalfAngle,
+      tanHalfAngle,
     };
   };
 
@@ -139,11 +195,67 @@ export default async function ({ addon }) {
   // extending the adjacent straight edges to their intersection.
   const buildArcCorner = (pathItem, i) => {
     const segs = pathItem.segments;
+    const n = segs.length;
     const A = segs[i];
     const B = segs[(i + 1) % n];
     const prev = segs[(i - 1 + n) % n];
     const next = segs[(i + 2) % n];
     // dir1: direction of the incoming edge at A (FROM prev TOWARD the corner tip).
+    // When adjacent arcs touch, prev.point ≈ A.point so the chord is near-zero;
+    // fall back to the exit tangent of the previous arc encoded in prev.handleIn.
+    // (prev is a B-type arc segment: its handleIn = -vNext*h, so -handleIn points
+    //  from the previous corner tip toward A — i.e. the same edge direction.)
+    const dir1raw = A.point.subtract(prev.point);
+    const dir1 =
+      dir1raw.length > 0.5
+        ? dir1raw.normalize()
+        : prev.handleIn.length > EPS
+          ? prev.handleIn.multiply(-1).normalize()
+          : null;
+    if (!dir1) return null;
+    // dir2: direction of the outgoing edge at B (FROM next TOWARD the corner tip).
+    // Same fallback when next.point ≈ B.point.
+    const dir2raw = B.point.subtract(next.point);
+    const dir2 = dir2raw.length > 0.5 ? dir2raw.normalize() : B.handleIn.length > EPS ? B.handleIn.normalize() : null;
+    if (!dir2) return null;
+    const orig = lineIntersect(A.point, dir1, B.point, dir2);
+    if (!orig) return null;
+    const vPrev = prev.point.subtract(orig).normalize();
+    const vNext = next.point.subtract(orig).normalize();
+    // See buildSharpCorner for why both the spike (dot ≈ +1) and colinear
+    // (dot ≈ -1) cases are rejected here.
+    if (vPrev.dot(vNext) > 0.98 || vPrev.dot(vNext) < -0.98) return null;
+    const alpha = Math.acos(Math.max(-1, Math.min(1, vPrev.dot(vNext))));
+    const sinHalfAngle = Math.sin(alpha / 2);
+    const tanHalfAngle = Math.tan(alpha / 2);
+    // d = tangent-point distance from reconstructed corner tip to the arc endpoint.
+    // r = actual circle radius = d * tan(α/2).
+    const d = A.point.subtract(orig).length;
+    if (d < 0.1) return null;
+    const r = d * tanHalfAngle;
+    const prevLen = prev.point.subtract(orig).length;
+    const nextLen = next.point.subtract(orig).length;
+    return {
+      pathItem,
+      segIndex: i,
+      isArc: true,
+      origCorner: orig,
+      radius: r,
+      maxRadius: Math.min(prevLen, nextLen) * tanHalfAngle,
+      startRadius: r,
+      selected: false,
+      bisector: vPrev.add(vNext).normalize(),
+      vPrev,
+      vNext,
+      sinHalfAngle,
+      tanHalfAngle,
+    };
+  };
+
+  // Walk all selected closed paths on the painting layer and build a
+  // CornerHandle for every detected sharp corner and rounded arc.
+  const scanCorners = () => {
+    corners = [];
     const selected = paper.project.selectedItems.filter(
       (item) =>
         item.layer?.data?.isPaintingLayer &&
@@ -166,11 +278,69 @@ export default async function ({ addon }) {
         for (let i = 0; i < arcScanEnd; i++) {
           const A = path.segments[i];
           const B = path.segments[(i + 1) % n];
+          if (isArcPair(A, B)) {
             arcStarts.add(i);
             arcUsed.add(i);
             arcUsed.add((i + 1) % n);
           }
         }
+        // Build a corner handle for each arc start and each non-arc sharp corner.
+        // If any point on this path is natively selected in Reshape (paper.js
+        // segment.selected), only show corners at those points — matching
+        // Reshape's own convention of showing point handles just for points
+        // you've actually selected. But if the shape is selected as a whole
+        // with no individual points selected yet, behave as if every corner
+        // were selected (there's nothing more specific to narrow down to).
+        const anyNodeSelected = path.segments.some((s) => s.selected);
+        // For open paths, endpoints (0 and n-1) have only one adjacent edge so skip them.
+        const cornerStart = closed ? 0 : 1;
+        const cornerEnd = closed ? n : n - 1;
+        for (let i = cornerStart; i < cornerEnd; i++) {
+          if (arcStarts.has(i)) {
+            if (anyNodeSelected && !path.segments[i].selected && !path.segments[(i + 1) % n].selected) continue;
+            const c = buildArcCorner(path, i);
+            if (c) corners.push(c);
+          } else if (!arcUsed.has(i) && isSharp(path.segments[i])) {
+            if (anyNodeSelected && !path.segments[i].selected) continue;
+            const c = buildSharpCorner(path, i);
+            if (c) corners.push(c);
+          }
+        }
+      }
+    }
+  };
+
+  // ── Snapshot helpers ───────────────────────────────────────────────────
+
+  const snapPath = (path) =>
+    path.segments.map((s) => ({
+      x: s.point.x,
+      y: s.point.y,
+      hix: s.handleIn.x,
+      hiy: s.handleIn.y,
+      hox: s.handleOut.x,
+      hoy: s.handleOut.y,
+      selected: s.selected,
+    }));
+
+  // Restore a path to a previously snapshotted state by rewriting its segments
+  // in-place.  Adjusts segment count as needed.
+  const restorePath = (path, snap) => {
+    while (path.segments.length > snap.length) path.removeSegment(path.segments.length - 1);
+    while (path.segments.length < snap.length) path.add(new paper.Segment());
+    for (let i = 0; i < snap.length; i++) {
+      const s = snap[i];
+      path.segments[i].point = new paper.Point(s.x, s.y);
+      path.segments[i].handleIn = new paper.Point(s.hix, s.hiy);
+      path.segments[i].handleOut = new paper.Point(s.hox, s.hoy);
+      path.segments[i].selected = !!s.selected;
+    }
+  };
+
+  const takeSnapshots = () => {
+    pathSnapshots = new Map();
+    const seen = new Set();
+    for (const c of corners) {
       if (!seen.has(c.pathItem)) {
         seen.add(c.pathItem);
         pathSnapshots.set(c.pathItem, snapPath(c.pathItem));
@@ -189,9 +359,13 @@ export default async function ({ addon }) {
     if (corner.isArc) {
       if (r < 0.1) {
         // Collapse the arc back to a sharp corner.
+        const aSeg = pathItem.segments[corner.segIndex];
+        const bSeg = pathItem.segments[corner.segIndex + 1];
+        const mergedWasSelected = !!aSeg?.selected || !!bSeg?.selected;
         pathItem.segments[corner.segIndex].point = corner.origCorner.clone();
         pathItem.segments[corner.segIndex].handleIn = new paper.Point(0, 0);
         pathItem.segments[corner.segIndex].handleOut = new paper.Point(0, 0);
+        pathItem.segments[corner.segIndex].selected = mergedWasSelected;
         pathItem.removeSegment(corner.segIndex + 1);
       } else {
         // Replace the existing A/B segments with a new arc at updated radius.
@@ -213,6 +387,7 @@ export default async function ({ addon }) {
       }
     } else {
       if (r < 0.1) return; // already sharp — nothing to modify
+      const originalWasSelected = pathItem.segments[corner.segIndex].selected;
       const d = r / corner.tanHalfAngle;
       const P1 = corner.origCorner.add(corner.vPrev.multiply(d));
       const P2 = corner.origCorner.add(corner.vNext.multiply(d));
@@ -224,10 +399,12 @@ export default async function ({ addon }) {
         // handleIn points back toward the corner tip → convex arc
         new paper.Segment(P2, corner.vNext.multiply(-h), new paper.Point(0, 0)),
       ]);
+      pathItem.segments[corner.segIndex + 1].selected = originalWasSelected;
       pathItem.segments[corner.segIndex].point = P1;
       pathItem.segments[corner.segIndex].handleIn = new paper.Point(0, 0);
       // handleOut points back toward the corner tip → convex arc
       pathItem.segments[corner.segIndex].handleOut = corner.vPrev.multiply(-h);
+      pathItem.segments[corner.segIndex].selected = originalWasSelected;
     }
   };
 
