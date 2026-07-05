@@ -644,7 +644,7 @@ export default async function ({ addon, msg, console }) {
       restoreFillPalette(committedDuringShift ? committedFillSnapshot : preShiftFillSnapshot);
       preShiftFillSnapshot = null;
       committedFillSnapshot = null;
-      if (clientX != null && clientY != null) {
+      if (clientX !== null && clientX !== undefined && clientY !== null && clientY !== undefined) {
         const canvasEl = getCanvasEl();
         if (canvasEl) tool.updateFillPreview({ point: clientToProjectPoint(canvasEl, clientX, clientY) });
       }
