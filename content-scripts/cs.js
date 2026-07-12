@@ -859,12 +859,7 @@ if (isProfile || isStudio || isProject || isForums) {
       .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
       .join("");
   const shouldCaptureComment = (value) => {
-    const limitedValue = removeReiteratedChars(
-      value
-        .toLowerCase()
-        .match(/[a-z]+/g)
-        .join("")
-    );
+    const limitedValue = removeReiteratedChars((value.toLowerCase().match(/[a-z]+/g) || []).join(""));
     return limitedValue.includes("scratchadon");
   };
   const extensionPolicyLink = document.createElement("a");
