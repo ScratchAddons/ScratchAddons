@@ -4,10 +4,7 @@ export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   if (!Blockly.registry) return;
 
-  const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch_classic");
-  const oldScratchRendererMakeConstants = ScratchRenderer.prototype.makeConstants_;
-  ScratchRenderer.prototype.makeConstants_ = function () {
-    const constants = oldScratchRendererMakeConstants.call(this);
+  const changeConstants = (constants) => {
     if (addon.self.disabled) return constants;
 
     const GRID_UNIT = constants.GRID_UNIT;
@@ -53,6 +50,18 @@ export default async function ({ addon, console }) {
     constants.SHAPE_IN_SHAPE_PADDING[1][3] = 5 * GRID_UNIT * multiplier; // Square in hexagon
 
     return constants;
+  }
+
+  const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch_classic");
+  const oldScratchRendererMakeConstants = ScratchRenderer.prototype.makeConstants_;
+  ScratchRenderer.prototype.makeConstants_ = function () {
+    return changeConstants(oldScratchRendererMakeConstants.call(this));
+  };
+
+  const CatScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch_catblocks");
+  const oldCatScratchRendererMakeConstants = CatScratchRenderer.prototype.makeConstants_;
+  CatScratchRenderer.prototype.makeConstants_ = function () {
+    return changeConstants(oldCatScratchRendererMakeConstants.call(this));
   };
 
   const oldZelosSetFontConstants = Blockly.zelos.ConstantProvider.prototype.setFontConstants_;
