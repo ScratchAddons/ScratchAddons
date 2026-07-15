@@ -551,18 +551,6 @@
       }
     },
     {
-      "name": "box-scratchFoundationBlueText",
-      "value": {
-        "type": "textColor",
-        "black": "#0060e6",
-        "white": "#80b5ff",
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
       "name": "box-greenText",
       "value": {
         "type": "textColor",
