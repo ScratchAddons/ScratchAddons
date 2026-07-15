@@ -50,7 +50,7 @@ export default async function ({ addon, console }) {
     constants.SHAPE_IN_SHAPE_PADDING[1][3] = 5 * GRID_UNIT * multiplier; // Square in hexagon
 
     return constants;
-  }
+  };
 
   const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch_classic");
   const oldScratchRendererMakeConstants = ScratchRenderer.prototype.makeConstants_;
