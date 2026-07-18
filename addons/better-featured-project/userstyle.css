@@ -37,7 +37,7 @@
 #profile-data .box-head .profile-details .group {
   border-right-color: white;
 }
-#profile-data .box-head .portrait img {
+#profile-data .box-head .portrait img:not(.avatar-badge) {
   border: none;
 }
 #profile-data .box-head .buttons {
