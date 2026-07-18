@@ -44,11 +44,6 @@
   z-index: 1;
   flex-shrink: 0;
 }
-#profile-data .box-head .buttons ~ img {
-  /* membership badge */
-  position: relative;
-  z-index: 1;
-}
 #better-featured-project-name {
   color: white;
   position: absolute;

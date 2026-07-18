@@ -190,7 +190,7 @@ body {
 }
 :root:not(.sa-editor) .button.white,
 .intro-banner .intro-button,
-.become-member-banner .become-member-container .become-member-button,
+.donate-banner .donate-container .donate-button,
 .hoc-banner .hoc-more-activities,
 .hoc-banner .hoc-banner-image,
 .feature-banner .feature-learn-more,
@@ -306,15 +306,13 @@ a.social-messages-profile-link:link,
 .tabs button.active:hover {
   border-color: var(--darkWww-box-greenText);
 }
+.donate-banner .donate-container .donate-button,
 .donate-section .donate-button,
 .tou-modal .tou-step-inner-content a.link {
   color: var(--darkWww-box-greenText);
 }
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
-}
-.become-member-banner .become-member-container .become-member-button {
-  color: var(--darkWww-box-scratchFoundationBlueText);
 }
 .validation-checkbox-required /* join flow */,
 /* ToU acceptance */
@@ -353,7 +351,6 @@ a.social-messages-profile-link:link,
 /* Gray background */
 .box .box-header,
 .outer #projectBox,
-.membership-page .faq-section,
 .download .installation,
 :root:not(.sa-editor) .gender-radio-row,
 .wedo .banner,
@@ -364,9 +361,6 @@ a.social-messages-profile-link:link,
 .mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected,
 .mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected:hover {
   background-color: hsla(215, 100%, 65%, 0.25);
-}
-.membership-page .faq-section .content-wrapper {
-  color: var(--darkWww-gray-text);
 }
 :root:not(.sa-editor) /* specificity */ .outer .sort-mode .select select {
   background-color: transparent;
@@ -395,7 +389,6 @@ a.social-messages-profile-link:link,
 /* Blue background */
 .empty,
 .intro-banner .intro-subnav,
-.membership-page .scratch-membership-section,
 .social-message.mod-unread,
 .preview .remix-credit,
 .preview .project-description,
@@ -530,7 +523,6 @@ p.callout,
 .button,
 .outer .categories li.active,
 .subactions .action-buttons .action-button,
-.membership-label-container,
 .unsupported-browser .back-button,
 .studio-status-icon-unselected,
 .studio-info .studio-info-footer-report button,
@@ -547,9 +539,6 @@ p.callout,
 }
 .banner-outer:not(.banner-danger) .banner-button /* Share */ {
   background-color: #ffab1a;
-}
-.membership-label-text {
-  color: var(--darkWww-button-text);
 }
 .row .col-sm-9 input[type="radio"]:checked::after {
   background-color: var(--darkWww-button-text);

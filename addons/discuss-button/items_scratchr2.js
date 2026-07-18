@@ -36,18 +36,8 @@ export default async function ({ addon, console, msg }) {
     return;
   }
   async function init() {
-    const loggedIn = await addon.auth.fetchIsLoggedIn();
     removeAllItems();
     let items = addon.self.disabled ? originalNavbar : addon.settings.get("items");
-    if (!addon.self.disabled && !loggedIn && addon.settings.get("showMembership")) {
-      items = [
-        ...items,
-        {
-          name: msg("membership"),
-          url: "/membership",
-        },
-      ];
-    }
     items.forEach((item, i) => {
       list.append(createItem(item, i + 1 === items.length));
     });
