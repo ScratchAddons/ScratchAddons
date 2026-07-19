@@ -577,11 +577,15 @@ export default async function ({ addon }) {
               const A = pc[idx];
               const B = pc[(idx + 1) % pn];
               if (!(dragAll || A.selected) || !(dragAll || B.selected)) continue;
-              // Total original edge length between the two corner tips.
-              // A.vNext points from A's corner toward the next original vertex.
-              // Dot product extracts the component along that direction.
-              const totalAvailable = B.origCorner.subtract(A.origCorner).dot(A.vNext);
+              // Only constrain corners that actually face each other on the
+              // same connecting edge. Consecutive entries in `pc` are not always
+              // edge-adjacent when non-corner/curved vertices exist between them.
+              const edgeVec = B.origCorner.subtract(A.origCorner);
+              const totalAvailable = edgeVec.length;
               if (totalAvailable <= 0.1) continue;
+              const edgeDir = edgeVec.normalize();
+              if (edgeDir.dot(A.vNext) < 0.98) continue;
+              if (edgeDir.dot(B.vPrev.multiply(-1)) < 0.98) continue;
               const dMax = totalAvailable / 2;
               A.maxRadius = Math.min(A.maxRadius, dMax * A.tanHalfAngle);
               B.maxRadius = Math.min(B.maxRadius, dMax * B.tanHalfAngle);
