@@ -56,6 +56,22 @@ export default async function ({ addon }) {
     return new paper.Point(p1.x + t * d1.x, p1.y + t * d1.y);
   };
 
+  // Estimate the local side direction near a sharp corner from adjacent curve
+  // geometry. Sampling slightly away from the corner gives a better direction
+  // for curved neighbors than using only the endpoint-to-endpoint chord.
+  const probeSideDirection = (cornerPt, fallbackPt, curve, probeTs) => {
+    if (curve) {
+      for (const t of probeTs) {
+        const probe = curve.getPointAtTime(t);
+        if (!probe) continue;
+        const v = probe.subtract(cornerPt);
+        if (v.length > 0.01) return v.normalize();
+      }
+    }
+    const fallback = fallbackPt.subtract(cornerPt);
+    return fallback.length > 0.01 ? fallback.normalize() : null;
+  };
+
   // Bezier handle length for a circular-arc approximation of a rounded corner
   // with radius r. vPrev and vNext are unit vectors from the corner tip toward
   // each adjacent segment.
@@ -132,7 +148,7 @@ export default async function ({ addon }) {
           ? prevA.handleIn.multiply(-1).normalize()
           : null;
     if (!inDir) return false;
-    if (inDir.dot(A.handleOut.normalize()) < 0.85) return false;
+    const inAlign = inDir.dot(A.handleOut.normalize());
     // At P2: direction B→nextB must align with −B.handleIn.
     // Same fallback: when B.point ≈ nextB.point use nextB's entry tangent (handleOut).
     const outDirVec = nextB.point.subtract(B.point);
@@ -143,7 +159,32 @@ export default async function ({ addon }) {
           ? nextB.handleOut.normalize()
           : null;
     if (!outDir) return false;
-    if (outDir.dot(B.handleIn.multiply(-1).normalize()) < 0.85) return false;
+    const outAlign = outDir.dot(B.handleIn.multiply(-1).normalize());
+    if (inAlign >= 0.85 && outAlign >= 0.85) return true;
+
+    // Fallback for curved-neighbor joins: detect the specific arc signature that
+    // this addon emits, without broadly matching arbitrary bezier transitions.
+    const h1 = A.handleOut.length;
+    const h2 = B.handleIn.length;
+    const hRatio = h1 / h2;
+    if (hRatio < 0.3 || hRatio > 3.5) return false;
+
+    const dirA = A.handleOut.normalize();
+    const dirB = B.handleIn.normalize();
+    const reconstructedCorner = lineIntersect(A.point, dirA, B.point, dirB);
+    if (!reconstructedCorner) return false;
+
+    const d1 = A.point.subtract(reconstructedCorner).length;
+    const d2 = B.point.subtract(reconstructedCorner).length;
+    if (d1 < 0.1 || d2 < 0.1) return false;
+
+    // Reject only almost perfectly straight joins; curved-neighbor corners can
+    // still have very shallow angles and must remain editable after commit.
+    if (dirA.dot(dirB) < -0.995) return false;
+
+    const relDiff = Math.abs(d1 - d2) / Math.max(d1, d2);
+    if (relDiff > 0.75) return false;
+
     return true;
   };
 
@@ -154,13 +195,14 @@ export default async function ({ addon }) {
     const seg = segs[i];
     const prev = segs[(i - 1 + n) % n];
     const next = segs[(i + 1) % n];
-    const toPrev = prev.point.subtract(seg.point);
-    const toNext = next.point.subtract(seg.point);
-    const prevLen = toPrev.length;
-    const nextLen = toNext.length;
+    const incomingCurve = prev.curve;
+    const outgoingCurve = seg.curve;
+    const prevLen = incomingCurve?.length ?? prev.point.subtract(seg.point).length;
+    const nextLen = outgoingCurve?.length ?? next.point.subtract(seg.point).length;
     if (prevLen < 0.01 || nextLen < 0.01) return null;
-    const vPrev = toPrev.normalize();
-    const vNext = toNext.normalize();
+    const vPrev = probeSideDirection(seg.point, prev.point, incomingCurve, [0.9, 0.75, 0.6]);
+    const vNext = probeSideDirection(seg.point, next.point, outgoingCurve, [0.1, 0.25, 0.4]);
+    if (!vPrev || !vNext) return null;
     // vPrev/vNext point from the corner tip back toward the previous/next points.
     // dot ≈ +1 is an extremely sharp spike/cusp (the path folds back on itself) —
     // its maxRadius collapses to ~0 anyway, so there's nothing meaningful to round.
@@ -200,6 +242,46 @@ export default async function ({ addon }) {
     const B = segs[(i + 1) % n];
     const prev = segs[(i - 1 + n) % n];
     const next = segs[(i + 2) % n];
+    // Preferred reconstruction for addon-created arc pairs: both A.handleOut and
+    // B.handleIn point toward the original sharp corner tip. This is robust even
+    // when neighboring segments are curved or also rounded.
+    if (A.handleOut.length > EPS && B.handleIn.length > EPS) {
+      const dirA = A.handleOut.normalize();
+      const dirB = B.handleIn.normalize();
+      const origFromHandles = lineIntersect(A.point, dirA, B.point, dirB);
+      if (origFromHandles) {
+        const vPrevFromHandles = dirA.multiply(-1);
+        const vNextFromHandles = dirB.multiply(-1);
+        const dot = vPrevFromHandles.dot(vNextFromHandles);
+        if (dot <= 0.98 && dot >= -0.98) {
+          const alpha = Math.acos(Math.max(-1, Math.min(1, dot)));
+          const sinHalfAngle = Math.sin(alpha / 2);
+          const tanHalfAngle = Math.tan(alpha / 2);
+          const d = A.point.subtract(origFromHandles).length;
+          if (d >= 0.1 && tanHalfAngle > 1e-6) {
+            const r = d * tanHalfAngle;
+            const prevLen = prev.point.subtract(origFromHandles).length;
+            const nextLen = next.point.subtract(origFromHandles).length;
+            return {
+              pathItem,
+              segIndex: i,
+              isArc: true,
+              origCorner: origFromHandles,
+              radius: r,
+              maxRadius: Math.min(prevLen, nextLen) * tanHalfAngle,
+              startRadius: r,
+              selected: false,
+              bisector: vPrevFromHandles.add(vNextFromHandles).normalize(),
+              vPrev: vPrevFromHandles,
+              vNext: vNextFromHandles,
+              sinHalfAngle,
+              tanHalfAngle,
+            };
+          }
+        }
+      }
+    }
+
     // dir1: direction of the incoming edge at A (FROM prev TOWARD the corner tip).
     // When adjacent arcs touch, prev.point ≈ A.point so the chord is near-zero;
     // fall back to the exit tangent of the previous arc encoded in prev.handleIn.
@@ -295,16 +377,36 @@ export default async function ({ addon }) {
         // For open paths, endpoints (0 and n-1) have only one adjacent edge so skip them.
         const cornerStart = closed ? 0 : 1;
         const cornerEnd = closed ? n : n - 1;
+        const pathCornersAll = [];
+        const pathCornersSelected = [];
         for (let i = cornerStart; i < cornerEnd; i++) {
           if (arcStarts.has(i)) {
-            if (anyNodeSelected && !path.segments[i].selected && !path.segments[(i + 1) % n].selected) continue;
             const c = buildArcCorner(path, i);
-            if (c) corners.push(c);
+            if (c) {
+              pathCornersAll.push(c);
+              if (!anyNodeSelected || path.segments[i].selected || path.segments[(i + 1) % n].selected) {
+                pathCornersSelected.push(c);
+              }
+            }
           } else if (!arcUsed.has(i) && isSharp(path.segments[i])) {
-            if (anyNodeSelected && !path.segments[i].selected) continue;
             const c = buildSharpCorner(path, i);
-            if (c) corners.push(c);
+            if (c) {
+              pathCornersAll.push(c);
+              if (!anyNodeSelected || path.segments[i].selected) {
+                pathCornersSelected.push(c);
+              }
+            }
           }
+        }
+
+        if (!anyNodeSelected) {
+          corners.push(...pathCornersAll);
+        } else if (pathCornersSelected.length > 0) {
+          corners.push(...pathCornersSelected);
+        } else {
+          // If selected nodes are not roundable corners, do not hide all
+          // handles for the path.
+          corners.push(...pathCornersAll);
         }
       }
     }
