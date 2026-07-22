@@ -188,6 +188,18 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
     }
 
+    if (
+      addonsEnabled["editor-straight-comments"] === undefined
+      && addonsEnabled["fix-editor-comments"]
+      && addonSettings["fix-editor-comments"].straighten === true
+    ) {
+      // fix-editor-comments replaced with editor-straight-comments in v1.46
+      madeAnyChanges = true;
+      addonsEnabled["editor-straight-comments"] = true;
+      // Invert the activation so that the behavior is consistent with the old addon as per user settings
+      addonSettings["editor-straight-comments"].invert = true;
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
