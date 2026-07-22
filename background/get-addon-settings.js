@@ -189,9 +189,9 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
     }
 
     if (
-      addonsEnabled["editor-straight-comments"] === undefined
-      && addonsEnabled["fix-editor-comments"]
-      && addonSettings["fix-editor-comments"].straighten === true
+      addonsEnabled["editor-straight-comments"] === undefined &&
+      addonsEnabled["fix-editor-comments"] &&
+      addonSettings["fix-editor-comments"].straighten === true
     ) {
       // fix-editor-comments replaced with editor-straight-comments in v1.46
       madeAnyChanges = true;
