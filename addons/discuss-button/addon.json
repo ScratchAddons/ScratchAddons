@@ -95,12 +95,6 @@
       ]
     },
     {
-      "name": "Show Membership link when logged out",
-      "id": "showMembership",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Compact user dropdown",
       "id": "compact-nav",
       "type": "boolean",

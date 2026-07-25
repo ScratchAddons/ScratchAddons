@@ -78,12 +78,7 @@ export default async ({ addon, msg, safeMsg }) => {
             .join("");
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const limitedValue = removeReiteratedChars(
-            value
-              .toLowerCase()
-              .match(/[a-z]+/g)
-              .join("")
-          );
+          const limitedValue = removeReiteratedChars((value.toLowerCase().match(/[a-z]+/g) || []).join(""));
           return limitedValue.includes("scratchadon");
         };
         if (shouldCaptureComment(this.replyBoxValue)) {

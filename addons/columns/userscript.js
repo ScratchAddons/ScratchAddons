@@ -15,7 +15,7 @@ export default async function ({ addon, msg, console }) {
   ];
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
-  // https://github.com/google/blockly/blob/60b7ee1/core/toolbox/toolbox.ts#L683
+  // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/toolbox/toolbox.ts#L694
   const _ToolboxPosition = Blockly.Toolbox.prototype.position;
   Blockly.Toolbox.prototype.position = function () {
     _ToolboxPosition.call(this);
@@ -31,7 +31,7 @@ export default async function ({ addon, msg, console }) {
   };
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_vertical.js#L314
-  // https://github.com/google/blockly/blob/60b7ee1/core/flyout_vertical.ts#L125
+  // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/flyout_vertical.ts#L125
   const _VerticalFlyoutPosition = Blockly.VerticalFlyout.prototype.position;
   Blockly.VerticalFlyout.prototype.position = function () {
     _VerticalFlyoutPosition.call(this);
@@ -132,7 +132,7 @@ export default async function ({ addon, msg, console }) {
   if (Blockly.registry) {
     // new Blockly
 
-    // https://github.com/google/blockly/blob/60b7ee1/core/toolbox/toolbox.ts#L185
+    // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/toolbox/toolbox.ts#L185
     const _ToolboxCreateDom = Blockly.Toolbox.prototype.createDom_;
     Blockly.Toolbox.prototype.createDom_ = function (...args) {
       const container = _ToolboxCreateDom.call(this, ...args);
@@ -158,7 +158,7 @@ export default async function ({ addon, msg, console }) {
       return container;
     };
 
-    // https://github.com/google/blockly/blob/60b7ee1/core/toolbox/toolbox.ts#L380
+    // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/toolbox/toolbox.ts#L391
     const _ToolboxRenderContents = Blockly.Toolbox.prototype.renderContents_;
     Blockly.Toolbox.prototype.renderContents_ = function (toolboxDef) {
       /* Separate extensions from core categories */
@@ -178,14 +178,14 @@ export default async function ({ addon, msg, console }) {
       this.contentsDiv_ = originalTable;
     };
 
-    // https://github.com/google/blockly/blob/60b7ee1/core/toolbox/toolbox.ts#L895
+    // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/toolbox/toolbox.ts#L906
     const _ToolboxSelectItem = Blockly.Toolbox.prototype.selectItem_;
     Blockly.Toolbox.prototype.selectItem_ = function (oldItem, newItem) {
       _ToolboxSelectItem.call(this, oldItem, newItem);
       Blockly.utils.aria.setState(this.secondTable, Blockly.utils.aria.State.ACTIVEDESCENDANT, newItem.getId());
     };
 
-    // https://github.com/google/blockly/blob/60b7ee1/core/toolbox/toolbox.ts#L878
+    // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/toolbox/toolbox.ts#L889
     const _ToolboxDeselectItem = Blockly.Toolbox.prototype.deselectItem_;
     Blockly.Toolbox.prototype.deselectItem_ = function (item) {
       _ToolboxDeselectItem.call(this, item);
@@ -244,7 +244,7 @@ export default async function ({ addon, msg, console }) {
   }
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/d374085e42a84d8aaf10f1ef3fb6ec6e9f1b7cf4/core/scrollbar.js#L700
-  // https://github.com/google/blockly/blob/60b7ee1/core/scrollbar.ts#L711
+  // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/scrollbar.ts#L711
   const _ScrollbarOnMouseDownBarName = Blockly.registry ? "onMouseDownBar" : "onMouseDownBar_";
   const _ScrollbarOnMouseDownBar = Blockly.Scrollbar.prototype[_ScrollbarOnMouseDownBarName];
   Blockly.Scrollbar.prototype[_ScrollbarOnMouseDownBarName] = function (e) {

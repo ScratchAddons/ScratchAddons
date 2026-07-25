@@ -230,8 +230,19 @@ export default async function ({ addon, msg, console }) {
         updateSelection(resultIdx);
         allowMenuClose = !e.shiftKey;
         selectBlock(e);
-        allowMenuClose = true;
-        if (e.shiftKey) popupInput.focus();
+        if (e.shiftKey) {
+          // Keep the popup focused when Shift+dragging
+          // Blockly wants to focus the dragged block when starting or ending drag
+          popupInput.focus();
+          document.addEventListener(
+            "pointerup",
+            () => {
+              allowMenuClose = true;
+              popupInput.focus();
+            },
+            { once: true }
+          );
+        }
       };
 
       const svgBackground = popupPreviewBlocks.appendChild(
@@ -392,11 +403,6 @@ export default async function ({ addon, msg, console }) {
     Blockly.Events.disable();
     try {
       newBlock = selectedPreview.block.createWorkspaceForm();
-      if (!Blockly.registry) {
-        // New Blockly doesn't currently change shadow IDs when copying blocks,
-        // so the addon only does this on old Blockly.
-        Blockly.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
-      }
 
       var svgRootNew = newBlock.getSvgRoot();
       if (!svgRootNew) {

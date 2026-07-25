@@ -323,7 +323,7 @@ export default async function ({ addon, console, msg }) {
       return hat;
     };
 
-    const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch");
+    const ScratchRenderer = Blockly.registry.getClass(Blockly.registry.Type.RENDERER, "scratch_classic");
     const oldMakeDrawer = ScratchRenderer.prototype.makeDrawer_;
     ScratchRenderer.prototype.makeDrawer_ = function (...args) {
       const drawer = oldMakeDrawer.call(this, ...args);
@@ -460,19 +460,7 @@ export default async function ({ addon, console, msg }) {
       await setTheme(scratchTheme);
     }
 
-    if (Blockly.registry) {
-      // new Blockly
-      const workspace = addon.tab.traps.getWorkspace();
-      workspace.renderer.refreshDom(workspace.getSvgGroup(), workspace.getTheme(), workspace.getInjectionDiv());
-
-      const flyout = workspace.getFlyout();
-      if (flyout) {
-        const flyoutWorkspace = flyout.getWorkspace();
-        flyoutWorkspace.renderer.refreshDom(flyoutWorkspace.getSvgGroup(), flyoutWorkspace.getTheme(), null);
-      }
-    }
-
-    updateAllBlocks(addon.tab);
+    updateAllBlocks(addon.tab, { updateRenderer: true });
   };
 
   update();
@@ -541,7 +529,7 @@ export default async function ({ addon, console, msg }) {
 
   while (true) {
     const themeSubmenu = await addon.tab.waitForElement(
-      "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2):not(:last-child) ul",
+      "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2):not(:last-child) [class*=menu_menu_]",
       {
         markAsSeen: true,
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,

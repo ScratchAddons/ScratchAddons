@@ -107,18 +107,6 @@
       }
     },
     {
-      "name": "page-divider5",
-      "value": {
-        "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.05)",
-        "white": "rgba(255, 255, 255, 0.05)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "page"
-        }
-      }
-    },
-    {
       "name": "page-divider15",
       "value": {
         "type": "textColor",
@@ -1587,6 +1575,17 @@
           "settingId": "blue"
         },
         "transparentSource": "#4d97ff80"
+      }
+    },
+    {
+      "name": "blue-deletedComment",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "transparentSource": "#ff668040"
       }
     },
     {

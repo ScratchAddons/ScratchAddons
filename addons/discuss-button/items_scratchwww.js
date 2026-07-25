@@ -50,17 +50,6 @@ export default async function ({ addon, console }) {
     if (list.type !== "ul") return result;
 
     let items = addon.settings.get("items");
-    const loggedIn = !!this.props.user;
-    if (!loggedIn && addon.settings.get("showMembership")) {
-      items = [
-        ...items,
-        {
-          name: addon.tab.scratchMessage("general.membership"),
-          url: "/membership",
-        },
-      ];
-    }
-
     list.props.children = [
       list.props.children[0], // logo
 

@@ -3,10 +3,15 @@ const updateAllBlocksEvents = new EventTarget();
 
 export async function updateAllBlocks(
   tab,
-  { updateMainWorkspace = true, updateFlyout = true, updateCategories = false } = {}
+  { updateMainWorkspace = true, updateFlyout = true, updateCategories = false, updateRenderer = false } = {}
 ) {
+  // Don't try to update if project hasn't loaded
+  if (!tab.traps.vm.editingTarget) return;
+
   const blockly = await tab.traps.getBlockly();
   const workspace = tab.traps.getWorkspace();
+  const toolbox = workspace.getToolbox();
+  const flyout = workspace.getFlyout();
 
   // Calling Events.disable() will:
   // - prevent changes to the workspace from being added to the undo stack;
@@ -15,22 +20,33 @@ export async function updateAllBlocks(
   blockly.Events.disable();
 
   if (workspace) {
-    if (updateMainWorkspace) {
-      let clearWorkspaceAndLoadFromXml;
-      const xml = blockly.Xml.workspaceToDom(workspace);
-      if (blockly.registry) {
-        // new Blockly: use Scratch's modified implementation instead of the one from Blockly
-        clearWorkspaceAndLoadFromXml = blockly.clearWorkspaceAndLoadFromXml;
-        if (!xml.querySelector("variables")) {
-          xml.appendChild(blockly.utils.xml.createElement("variables"));
-        }
-      } else {
-        clearWorkspaceAndLoadFromXml = blockly.Xml.clearWorkspaceAndLoadFromXml;
+    if (updateRenderer) {
+      workspace.renderer.refreshDom(workspace.getSvgGroup(), workspace.getTheme(), workspace.getInjectionDiv());
+      if (flyout) {
+        const flyoutWorkspace = flyout.getWorkspace();
+        flyoutWorkspace.renderer.refreshDom(flyoutWorkspace.getSvgGroup(), flyoutWorkspace.getTheme(), null);
       }
-      clearWorkspaceAndLoadFromXml(xml, workspace);
     }
-    const toolbox = workspace.getToolbox();
-    const flyout = workspace.getFlyout();
+    if (updateMainWorkspace) {
+      const xml = blockly.Xml.workspaceToDom(workspace);
+      if (xml.querySelector("variables")) {
+        xml.querySelector("variables").remove();
+      }
+      // Add all variables, including unused ones, to the XML document
+      const variables = blockly.utils.xml.createElement("variables");
+      const globalVariables = Object.values(tab.traps.vm.runtime.getTargetForStage().variables);
+      const localVariables = tab.traps.vm.editingTarget.isStage
+        ? []
+        : Object.values(tab.traps.vm.editingTarget.variables);
+      for (const variable of globalVariables) {
+        variables.appendChild(blockly.utils.xml.textToDom(variable.toXML()));
+      }
+      for (const variable of localVariables) {
+        variables.appendChild(blockly.utils.xml.textToDom(variable.toXML(true)));
+      }
+      xml.appendChild(variables);
+      blockly.clearWorkspaceAndLoadFromXml(xml, workspace);
+    }
     if (toolbox && flyout && (updateFlyout || updateCategories)) {
       if (updateFlyout) {
         if (blockly.registry) {

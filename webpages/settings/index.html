@@ -205,37 +205,39 @@
         v-show="!isIframe"
         :class="{closed: categoryOpen === false, smallMode: smallMode === true}"
       >
-        <category-selector v-for="category of categories" :category="category"></category-selector>
-
-        <a
-          v-cloak
-          class="category"
-          style="margin-top: auto"
-          href="https://scratchaddons.com/credits/"
-          :href="sidebarUrls.contributors"
-          target="_blank"
-        >
-          <img src="../../images/icons/users.svg" draggable="false" />
-          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
-        </a>
-        <a v-cloak class="category" href="https://scratchaddons.com/translate" target="_blank">
-          <img src="../../images/icons/translate.svg" draggable="false" />
-          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
-        </a>
-        <a
-          v-cloak
-          class="category"
-          href="https://scratchaddons.com/feedback/"
-          :href="sidebarUrls.feedback"
-          target="_blank"
-        >
-          <img src="../../images/icons/comment.svg" draggable="false" />
-          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
-        </a>
-        <button v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
-          <img src="../../images/icons/wrench.svg" draggable="false" />
-          <span>{{ msg("moreSettings") }}</span>
-        </button>
+        <div>
+          <category-selector v-for="category of categories" :category="category"></category-selector>
+        </div>
+        <div>
+          <a
+            v-cloak
+            class="category"
+            href="https://scratchaddons.com/credits/"
+            :href="sidebarUrls.contributors"
+            target="_blank"
+          >
+            <img src="../../images/icons/users.svg" draggable="false" />
+            <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
+          </a>
+          <a v-cloak class="category" href="https://scratchaddons.com/translate" target="_blank">
+            <img src="../../images/icons/translate.svg" draggable="false" />
+            <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
+          </a>
+          <a
+            v-cloak
+            class="category"
+            href="https://scratchaddons.com/feedback/"
+            :href="sidebarUrls.feedback"
+            target="_blank"
+          >
+            <img src="../../images/icons/comment.svg" draggable="false" />
+            <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" draggable="false" /></span>
+          </a>
+          <button v-cloak class="category" style="margin-top: 12px" @click="openMoreSettings()">
+            <img src="../../images/icons/wrench.svg" draggable="false" />
+            <span>{{ msg("moreSettings") }}</span>
+          </button>
+        </div>
       </div>
       <button
         v-show="!isIframe && smallMode === false"
@@ -267,7 +269,7 @@
             <button disabled v-show="searchInput === ''">
               <img src="../../images/icons/search.svg" class="search-icon" />
             </button>
-            <button v-else @click="clearAndFocusSearch()">
+            <button v-else :title="msg('clear')" @click="clearAndFocusSearch()">
               <img src="../../images/icons/x.svg" class="search-icon" />
             </button>
           </div>
@@ -312,7 +314,7 @@
       </div>
     </div>
     <modal
-      class="more-settings"
+      class="more-settings full-height"
       :is-open.sync="moreSettingsOpen"
       :title="msg('moreSettings')"
       v-cloak
@@ -321,7 +323,7 @@
       <div class="addon-block settings-block">
         <div class="addon-body">
           <div class="addon-topbar">
-            <img src="../../images/icons/theme.svg" class="icon-type addon-icon" draggable="false" />
+            <img src="../../images/icons/theme.svg" aria-hidden="true" class="icon-type addon-icon" draggable="false" />
             <span class="addon-name-and-tags">{{ msg("scratchAddonsTheme") }}</span>
           </div>
           <div class="addon-settings">
@@ -359,6 +361,7 @@
           <div class="addon-topbar">
             <img
               src="../../images/icons/import-export.svg"
+              aria-hidden="true"
               class="icon-type addon-icon"
               :class="{'dark': theme === false}"
               draggable="false"
@@ -382,7 +385,12 @@
         </div>
         <div class="addon-body">
           <div class="addon-topbar">
-            <img src="../../images/icons/translate.svg" class="icon-type addon-icon" draggable="false" />
+            <img
+              src="../../images/icons/translate.svg"
+              aria-hidden="true"
+              class="icon-type addon-icon"
+              draggable="false"
+            />
             <span class="addon-name-and-tags">{{ msg("language") }}</span>
           </div>
           <div class="addon-settings">
@@ -427,6 +435,20 @@
             >{{ msg("libraryCredits") }}</a
           >
         </p>
+      </div>
+    </modal>
+    <modal v-cloak v-el:permissions>
+      <div class="permissions-block">
+        <h1>{{ msg("enablePermissionsTitle") }}</h1>
+        <p>{{ msg("enablePermissionsDescription") }}</p>
+      </div>
+      <div class="permissions-steps">
+        <span class="step-number">1</span>
+        <button class="large-button" @click="requestPermissions">{{ msg("enableButton") }}</button>
+        <p>{{ msg("enableButtonDescription") }}</p>
+        <span class="step-number">2</span>
+        <img alt="{{ msg('permissionsScreenAlt') }}" v-bind:src="permissionScreenshotPath" />
+        <p>{{ msg("clickAllowDescription") }}</p>
       </div>
     </modal>
     <div class="popup" v-cloak v-show="showPopupModal">

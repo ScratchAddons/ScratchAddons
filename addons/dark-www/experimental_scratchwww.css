@@ -48,9 +48,6 @@ body {
 .project-favorites.favorited::before {
   filter: none;
 }
-.about .masthead div li:nth-child(odd) {
-  border-color: var(--darkWww-page-divider5);
-}
 .developers #donate,
 .conf2021-panel,
 .conf2019-panel,
@@ -146,7 +143,6 @@ body {
 .studio-activity .studio-messages-list,
 .cards-modal-container,
 .projects-carousel .content .slick-track .thumbnail,
-.about .body,
 .messages-social-list,
 .comment-text,
 .comment .comment-body .comment-bubble,
@@ -207,7 +203,7 @@ body {
 .financials-section .financials-button,
 .donate-section .donate-button,
 .initiatives-section .initiatives-subsection-content .bubble.inverted,
-.share-modal .change-thumbnail-button {
+.share-modal .cancel-button {
   background-color: var(--darkWww-box);
 }
 .ReactModal__Content[style*="background: rgb(255, 255, 255)"] {
@@ -273,8 +269,6 @@ a.social-messages-profile-link:link,
 .youtbe-video-button .video-info .video-title {
   color: var(--darkWww-box-blackText);
 }
-.comment .comment-body .comment-bubble.comment-bubble-reported,
-.comment .comment-body .comment-bubble.comment-bubble-reported::before,
 .react-tel-input {
   color: #575e75;
 }
@@ -357,7 +351,6 @@ a.social-messages-profile-link:link,
 /* Gray background */
 .box .box-header,
 .outer #projectBox,
-.membership-page .faq-section,
 .download .installation,
 :root:not(.sa-editor) .gender-radio-row,
 .wedo .banner,
@@ -368,9 +361,6 @@ a.social-messages-profile-link:link,
 .mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected,
 .mod-feedback .feedback-content .feedback-form .feedback-options .feedback-radio-row-selected:hover {
   background-color: hsla(215, 100%, 65%, 0.25);
-}
-.membership-page .faq-section .content-wrapper {
-  color: var(--darkWww-gray-text);
 }
 :root:not(.sa-editor) /* specificity */ .outer .sort-mode .select select {
   background-color: transparent;
@@ -399,7 +389,6 @@ a.social-messages-profile-link:link,
 /* Blue background */
 .empty,
 .intro-banner .intro-subnav,
-.membership-page .scratch-membership-section,
 .social-message.mod-unread,
 .preview .remix-credit,
 .preview .project-description,
@@ -501,6 +490,10 @@ p.callout,
   background-color: var(--darkWww-blue-studioPlaceholder) !important;
   color: var(--darkWww-blue-studioPlaceholder) !important;
 }
+.comment .comment-body .comment-bubble.comment-bubble-reported,
+.comment .comment-body .comment-bubble.comment-bubble-reported::before {
+  background-color: var(--darkWww-blue-deletedComment);
+}
 
 /* Input background */
 :root:not(.sa-editor) .select select,
@@ -530,7 +523,6 @@ p.callout,
 .button,
 .outer .categories li.active,
 .subactions .action-buttons .action-button,
-.membership-label-container,
 .unsupported-browser .back-button,
 .studio-status-icon-unselected,
 .studio-info .studio-info-footer-report button,
@@ -547,9 +539,6 @@ p.callout,
 }
 .banner-outer:not(.banner-danger) .banner-button /* Share */ {
   background-color: #ffab1a;
-}
-.membership-label-text {
-  color: var(--darkWww-button-text);
 }
 .row .col-sm-9 input[type="radio"]:checked::after {
   background-color: var(--darkWww-button-text);
@@ -716,9 +705,6 @@ img.tips-icon {
 }
 
 /* Border color */
-.about .body,
-.about .body img,
-.about .body iframe,
 .preview .remix-credit,
 .preview .project-description,
 .commenting-status,

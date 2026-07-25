@@ -399,7 +399,7 @@ export default async function ({ addon, console, msg }) {
 
   const recolorExtensionIcon = (item) => {
     if (addon.self.disabled) return;
-    const oldIconUri = Blockly.registry ? item.toolboxItemDef_.iconURI : item.iconURI_;
+    const oldIconUri = item.iconURI;
     if (oldIconUri) {
       const id = Blockly.registry ? item.getId() : item.id_;
       if (!["sa-blocks", "videoSensing", "text2speech"].includes(id)) return oldIconUri;
@@ -412,8 +412,7 @@ export default async function ({ addon, console, msg }) {
         if (newColor) {
           const newSvg = oldSvg.replace(/#29beb8|#229487|#0ebd8c/gi, newColor);
           const newIconUri = `data:image/svg+xml;base64,${btoa(newSvg)}`;
-          if (Blockly.registry) item.toolboxItemDef_.iconURI = newIconUri;
-          else item.iconURI_ = newIconUri;
+          item.iconURI = newIconUri;
         }
       }
     }
@@ -427,17 +426,17 @@ export default async function ({ addon, console, msg }) {
     const oldCategoryCreateIconDom = ScratchContinuousCategory.prototype.createIconDom_;
     ScratchContinuousCategory.prototype.createIconDom_ = function () {
       // Category bubbles
-      const oldIconUri = this.toolboxItemDef_.iconURI;
+      const oldIconUri = this.iconURI;
       recolorExtensionIcon(this);
       if (!oldIconUri) {
         const category = categories.find((item) => item.id === this.getId());
         if (category) {
           this.colour_ = isColoredTextMode() ? fieldBackground(category) : primaryColor(category);
-          this.toolboxItemDef_.secondaryColour = tertiaryColor(category);
+          this.secondaryColour = tertiaryColor(category);
         }
       }
       const iconElement = oldCategoryCreateIconDom.call(this);
-      this.toolboxItemDef_.iconURI = oldIconUri;
+      this.iconURI = oldIconUri;
       return iconElement;
     };
   } else {
@@ -802,7 +801,7 @@ export default async function ({ addon, console, msg }) {
 
   let FieldNote;
   if (Blockly.registry) FieldNote = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_note");
-  FieldNote = Blockly.FieldNote;
+  else FieldNote = Blockly.FieldNote;
   const oldFieldNoteAddOctaveButton = FieldNote.prototype.addOctaveButton_;
   FieldNote.prototype.addOctaveButton_ = function (...args) {
     // Octave buttons in "play note" dropdown
@@ -974,7 +973,12 @@ export default async function ({ addon, console, msg }) {
     Blockly.ThemeManager.prototype.subscribeWorkspace = function (workspace) {
       oldThemeManagerSubscribeWorkspace.call(this, workspace);
       setTimeout(() => {
-        updateOriginalColors(workspace.getTheme());
+        /* We need to update originalColors if the user toggles the high contrast theme
+           while the addon is dynamically disabled. We shouldn't update them if the addon is
+           enabled because that would save the colors modified by the addon to originalColors. */
+        if (addon.self.disabled) {
+          updateOriginalColors(workspace.getTheme());
+        }
         updateColors(workspace);
       }, 0);
     };
@@ -1003,7 +1007,7 @@ export default async function ({ addon, console, msg }) {
     // Custom colors for "Add an input/label" block icons in the "Make a block" popup menu, by pumpkinhasapatch
     while (true) {
       // Wait until "Make a block" popup is opened and icon elements are created
-      const iconElement = await addon.tab.waitForElement("[class^=custom-procedures_option-icon_]", {
+      const iconElement = await addon.tab.waitForElement("[class*=custom-procedures_option-icon_]", {
         markAsSeen: true,
         reduxEvents: ["scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES"],
         reduxCondition: (state) =>
@@ -1024,14 +1028,13 @@ export default async function ({ addon, console, msg }) {
         .replace("%outline%", tertiaryColor(myBlocksCategory))
         .replace("%labeltext%", isColoredTextMode() ? tertiaryColor(myBlocksCategory) : uncoloredTextColor());
 
-      //console.log(svg);
       iconElement.src = uriHeader + btoa(svg); // Re-encode image to base64 and replace img.src
     }
   })();
 
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(
-      "[class*=menu-bar_menu-bar-menu_] > ul > li:last-child ul",
+      "[class*=menu-bar_menu-bar-menu_] > ul > li:last-child [class*=menu_menu_]",
       {
         markAsSeen: true,
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,

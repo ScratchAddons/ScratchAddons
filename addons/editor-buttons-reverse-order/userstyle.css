@@ -6,21 +6,17 @@
   flex-direction: row-reverse;
 }
 
-[dir="ltr"] [class*="stage-header_stage-size-toggle-group"],
-[dir="ltr"] .sa-debugger-container,
-[dir="ltr"] .sa-gamepad-container {
+.sa-fullscreen [dir="ltr"] .sa-gamepad-container {
   margin-right: 0;
-  margin-left: 0.2rem;
+  margin-left: 0.25rem;
 }
 
-[dir="rtl"] [class*="stage-header_stage-size-toggle-group"],
-[dir="rtl"] .sa-debugger-container,
-[dir="rtl"] .sa-gamepad-container {
+.sa-fullscreen [dir="rtl"] .sa-gamepad-container {
   margin-left: 0;
-  margin-right: 0.2rem;
+  margin-right: 0.25rem;
 }
 
-[class*="green-flag_green-flag_"] {
+[class*="green-flag_green-flag-button_"] {
   order: -1;
 }
 
@@ -28,7 +24,7 @@
   order: -2;
 }
 
-[class*="stop-all_stop-all_"] {
+[class*="stop-all_stop-all-button_"] {
   order: -3;
 }
 

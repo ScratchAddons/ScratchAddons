@@ -70,7 +70,7 @@ export default async function ({ addon, console, msg }) {
       return null;
     }
     const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
-    let storedSettingsMap = null;
+    let storedSettingsMap;
     try {
       const parsed = JSON.parse(jsonText);
       if (!parsed || typeof parsed !== "object") {
@@ -463,10 +463,14 @@ export default async function ({ addon, console, msg }) {
   gamepad.addEventListener("mouseup", handleGamepadMouseUp);
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
 
+  // Add button after Scratch adds the Set Thumbnail button - otherwise the order will be wrong
+  await addon.tab.redux.waitForState((state) =>
+    ["SHOWING_WITH_ID", "SHOWING_WITHOUT_ID"].includes(state.scratchGui.projectState.loadingState)
+  );
   while (true) {
     const target = await addon.tab.waitForElement(
       // Full screen button
-      '[class^="stage-header_stage-size-row"] [class^="button_outlined-button"], [class*="stage-header_unselect-wrapper_"] > [class^="button_outlined-button"]',
+      '[class*="stage-header_right"] > [class*="button_outlined-button_"]:last-child, [class*="stage-header_unselect-wrapper_"] > [class*="button_outlined-button_"]',
       {
         markAsSeen: true,
         reduxEvents: [
@@ -478,13 +482,13 @@ export default async function ({ addon, console, msg }) {
       }
     );
     container.dataset.editorMode = addon.tab.editorMode;
-    if (target.closest('[class^="stage-header_stage-size-row"]')) {
+    if (target.closest('[class*="stage-header_stage-size-row_"]')) {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
     } else {
       addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });
     }
 
-    const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
+    const monitorListScaler = document.querySelector("[class*='monitor-list_monitor-list-scaler_']");
     monitorListScaler.appendChild(virtualCursorElement);
   }
 }

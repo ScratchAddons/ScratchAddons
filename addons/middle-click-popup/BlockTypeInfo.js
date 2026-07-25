@@ -209,7 +209,10 @@ export class BlockInputEnum extends BlockInput {
     this.values = [];
     for (let i = 0; i < options.length; i++) {
       if (typeof options[i][1] === "string" && BlockInputEnum.INVALID_VALUES.indexOf(options[i][1]) === -1) {
-        this.values.push({ value: options[i][1], string: options[i][0].replaceAll(String.fromCharCode(160), " ") });
+        this.values.push({
+          value: options[i][1],
+          string: String(options[i][0]).replaceAll(String.fromCharCode(160), " "),
+        });
       }
     }
     this.isRound = isRound;
@@ -272,13 +275,10 @@ export class BlockInstance {
    * @returns {*} A 'workspace form' block.
    */
   createWorkspaceForm() {
-    if (this.typeInfo.id === "control_stop") {
-      this.typeInfo.domForm
-        .querySelector("mutation")
-        .setAttribute("hasnext", "" + (this.inputs[0].value === "other scripts in sprite"));
-    }
-
-    const block = this.typeInfo.Blockly.Xml.domToBlock(this.typeInfo.domForm, this.typeInfo.workspace);
+    const block = this.typeInfo.Blockly.serialization.blocks.append(
+      this.typeInfo.serializedForm,
+      this.typeInfo.workspace
+    );
     for (let i = 0; i < this.typeInfo.inputs.length; i++) {
       const inputValue = this.inputs[i];
       if (inputValue !== null) this.typeInfo.inputs[i].setValue(block, inputValue);
@@ -374,19 +374,11 @@ export class BlockTypeInfo {
    * @returns {BlockTypeInfo[]}
    */
   static getBlocks(Blockly, vm, workspace, locale) {
-    const flyoutWorkspace = workspace.getFlyout()?.getWorkspace();
+    const flyout = workspace.getFlyout();
+    const flyoutWorkspace = flyout?.getWorkspace();
     if (!flyoutWorkspace) return [];
 
     const blocks = [];
-
-    const flyoutDom = Blockly.Xml.workspaceToDom(flyoutWorkspace);
-    const flyoutDomBlockMap = {};
-    for (const blockDom of flyoutDom.children) {
-      if (blockDom.tagName.toUpperCase() === "BLOCK") {
-        let id = blockDom.getAttribute("id");
-        flyoutDomBlockMap[id] = blockDom;
-      }
-    }
     for (const workspaceBlock of flyoutWorkspace.getTopBlocks()) {
       blocks.push(
         ...BlockTypeInfo._createBlocks(
@@ -395,7 +387,7 @@ export class BlockTypeInfo {
           Blockly,
           locale,
           workspaceBlock,
-          flyoutDomBlockMap[workspaceBlock.id]
+          flyout.serializeBlock(workspaceBlock)
         )
       );
     }
@@ -403,7 +395,7 @@ export class BlockTypeInfo {
     return blocks;
   }
 
-  static _createBlocks(workspace, vm, Blockly, locale, workspaceForm, domForm) {
+  static _createBlocks(workspace, vm, Blockly, locale, workspaceForm, serializedForm) {
     let parts = [];
     let inputs = [];
 
@@ -413,10 +405,20 @@ export class BlockTypeInfo {
     };
 
     const addFieldInputs = (field, inputIdx, fieldIdx) => {
-      if (field instanceof Blockly.FieldDropdown) {
-        const options = field.getOptions();
-        addInput(new BlockInputEnum(options, inputIdx, fieldIdx, fieldIdx === -1));
-      } else if (field instanceof Blockly.FieldImage) {
+      let FieldColourSlider;
+      let FieldNumber;
+      let FieldVerticalSeparator;
+      if (Blockly.registry) {
+        // new Blockly
+        FieldColourSlider = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_colour_slider");
+        FieldNumber = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_number");
+        FieldVerticalSeparator = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_vertical_separator");
+      } else {
+        FieldColourSlider = Blockly.FieldColourSlider;
+        FieldNumber = Blockly.FieldNumber;
+        FieldVerticalSeparator = Blockly.FieldVerticalSeparator;
+      }
+      if (field instanceof Blockly.FieldImage) {
         switch (field.getValue().split("/").pop()) {
           case "green-flag.svg":
             parts.push(locale("/_general/blocks/green-flag"));
@@ -428,33 +430,21 @@ export class BlockTypeInfo {
             parts.push(locale("/_general/blocks/anticlockwise"));
             break;
         }
+      } else if (
+        field instanceof Blockly.FieldLabel ||
+        field instanceof FieldVerticalSeparator ||
+        (!Blockly.registry && field instanceof Blockly.FieldVariableGetter)
+      ) {
+        if (field.getText().trim().length !== 0) parts.push(field.getText());
+      } else if (field instanceof FieldColourSlider) {
+        addInput(new BlockInputColour(inputIdx, fieldIdx));
+      } else if (field instanceof FieldNumber) {
+        addInput(new BlockInputNumber(inputIdx, fieldIdx, field.getText()));
+      } else if (field instanceof Blockly.FieldDropdown) {
+        const options = field.getOptions();
+        addInput(new BlockInputEnum(options, inputIdx, fieldIdx, fieldIdx === -1));
       } else {
-        let FieldColourSlider;
-        let FieldNumber;
-        let FieldVerticalSeparator;
-        if (Blockly.registry) {
-          // new Blockly
-          FieldColourSlider = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_colour_slider");
-          FieldNumber = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_number");
-          FieldVerticalSeparator = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_vertical_separator");
-        } else {
-          FieldColourSlider = Blockly.FieldColourSlider;
-          FieldNumber = Blockly.FieldNumber;
-          FieldVerticalSeparator = Blockly.FieldVerticalSeparator;
-        }
-        if (
-          field instanceof Blockly.FieldLabel ||
-          field instanceof FieldVerticalSeparator ||
-          (!Blockly.registry && field instanceof Blockly.FieldVariableGetter)
-        ) {
-          if (field.getText().trim().length !== 0) parts.push(field.getText());
-        } else if (field instanceof FieldColourSlider) {
-          addInput(new BlockInputColour(inputIdx, fieldIdx));
-        } else if (field instanceof FieldNumber) {
-          addInput(new BlockInputNumber(inputIdx, fieldIdx, field.getText()));
-        } else {
-          addInput(new BlockInputString(inputIdx, fieldIdx, field.getText()));
-        }
+        addInput(new BlockInputString(inputIdx, fieldIdx, field.getText()));
       }
     };
 
@@ -545,7 +535,7 @@ export class BlockTypeInfo {
         ofParts[baseVarPartIdx] = ofInputs[baseVarInputIdx];
         ofParts[baseTargetPartIdx] = ofInputs[baseTargetInputIdx];
 
-        blocks.push(new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, ofParts, ofInputs));
+        blocks.push(new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, ofParts, ofInputs));
       }
 
       return blocks;
@@ -566,19 +556,28 @@ export class BlockTypeInfo {
       newBlockParts[parts.indexOf(oldInput)] = newInput;
 
       return [
-        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs, BlockShape.End),
-        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, newBlockParts, [newInput], BlockShape.Stack),
+        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, parts, inputs, BlockShape.End),
+        new BlockTypeInfo(
+          workspace,
+          Blockly,
+          vm,
+          workspaceForm,
+          serializedForm,
+          newBlockParts,
+          [newInput],
+          BlockShape.Stack
+        ),
       ];
     } else {
-      return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs)];
+      return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, serializedForm, parts, inputs)];
     }
   }
 
-  constructor(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs, shape) {
+  constructor(workspace, Blockly, vm, workspaceForm, serializedForm, parts, inputs, shape) {
     /** @type {string} */
     this.id = workspaceForm.type;
     this.workspaceForm = workspaceForm;
-    this.domForm = domForm;
+    this.serializedForm = serializedForm;
     /** @type {BlockShape} */
     this.shape = shape ?? BlockShape.getBlockShape(this.workspaceForm);
     /** @type {BlockCategory} */

@@ -174,11 +174,11 @@ export default async function ({ addon, msg, console }) {
       // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
       // Blockly.onKeyDown_:
       // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
-      // onKeyDown() in Blockly.inject module:
-      // https://github.com/google/blockly/blob/089179b/core/inject.ts#L294
+      // globalShortcutHandler() in Blockly:
+      // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/common.ts#L322
       // KeyboardShortcutsHOC.handleKeyPress:
       // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
-      let isTargetInput = false;
+      let isTargetInput;
       if (Blockly.registry)
         isTargetInput = Blockly.browserEvents.isTargetInput(e); // new Blockly
       else isTargetInput = Blockly.utils.isTargetInput(e);
@@ -408,7 +408,7 @@ export default async function ({ addon, msg, console }) {
           continue;
         }
 
-        let eventName = "";
+        let eventName;
         if (broadcastInput.type === "event_broadcast_menu") {
           eventName = broadcastInput.inputList[0].fieldRow[0].getText();
         } else {
@@ -534,7 +534,7 @@ export default async function ({ addon, msg, console }) {
       let cls = item.data.cls;
       if (cls === "costume" || cls === "sound") {
         // Viewing costumes/sounds - jump to selected costume/sound
-        const assetPanel = document.querySelector("[class^=asset-panel_wrapper]");
+        const assetPanel = document.querySelector("[class*=asset-panel_wrapper_]");
         if (assetPanel) {
           const reactInstance = assetPanel[addon.tab.traps.getInternalKey(assetPanel)];
           const reactProps = reactInstance.pendingProps.children[0].props;
@@ -546,7 +546,7 @@ export default async function ({ addon, msg, console }) {
             inline: "start",
           });
           // The wrapper seems to scroll when we use the function above.
-          let wrapper = assetPanel.closest("div[class*=gui_flex-wrapper]");
+          let wrapper = assetPanel.closest("[class*=gui_flex-wrapper_]");
           wrapper.scrollTop = 0;
         }
       } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {

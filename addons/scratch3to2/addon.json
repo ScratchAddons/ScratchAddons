@@ -45,10 +45,6 @@
       "matches": ["https://scratch.mit.edu/ideas"]
     },
     {
-      "url": "about.css",
-      "matches": ["https://scratch.mit.edu/about"]
-    },
-    {
       "url": "project.css",
       "matches": ["projects", "projectEmbeds"]
     },

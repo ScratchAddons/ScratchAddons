@@ -70,10 +70,7 @@
       "id": "autoPlay",
       "name": "Auto-play projects",
       "type": "boolean",
-      "default": false,
-      "if": {
-        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
-      }
+      "default": false
     },
     {
       "id": "enableTWAddons",
