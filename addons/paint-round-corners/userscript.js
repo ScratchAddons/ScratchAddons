@@ -399,13 +399,11 @@ export default async function ({ addon }) {
           }
         }
 
-        if (!anyNodeSelected) {
-          corners.push(...pathCornersAll);
-        } else if (pathCornersSelected.length > 0) {
+        if (anyNodeSelected && pathCornersSelected.length > 0) {
           corners.push(...pathCornersSelected);
         } else {
-          // If selected nodes are not roundable corners, do not hide all
-          // handles for the path.
+          // No nodes selected, or selected nodes are not roundable corners:
+          // show all corners for the path.
           corners.push(...pathCornersAll);
         }
       }
