@@ -926,8 +926,10 @@ export default async function ({ addon }) {
   });
 
   addon.self.addEventListener("disabled", () => stopOverlay());
+  addon.self.addEventListener("reenabled", () => {
+    if (addon.tab.redux.state?.scratchPaint?.mode === "RESHAPE") startOverlay();
+  });
 
-  // Resume automatically if the addon loads (or is enabled) while Reshape is
-  // already the active mode.
+  // Start automatically if the addon loads while Reshape is already active.
   if (addon.tab.redux.state?.scratchPaint?.mode === "RESHAPE") startOverlay();
 }
