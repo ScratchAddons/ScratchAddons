@@ -16,3 +16,11 @@ Third-party libraries included are:
 - [Roboto](https://fonts.google.com/specimen/Roboto) (Apache-2.0)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
+
+Included third-party icons may come from the following sets:
+- [Ant Design Icons](https://ant.design/components/icon) (MIT)
+- [Bootstrap Icons](https://icons.getbootstrap.com/) (MIT)
+- [Google Material Icons](https://fonts.google.com/icons) (Apache-2.0)
+- [HeroIcons](https://heroicons.com/) (Apache-2.0)
+- [Material Design Icons](https://pictogrammers.com/library/mdi/) (MIT)
+- [Unicons](https://iconscout.com/unicons) (Apache-2.0)

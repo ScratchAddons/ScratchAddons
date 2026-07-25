@@ -90,5 +90,28 @@
   },
   "blockly": {
     "license": "Apache-2.0"
+  },
+  "ant-design-icons": {
+    "year": "2018-present",
+    "fullname": "Ant UED, https://xtech.antfin.com/",
+    "license": "MIT"
+  },
+  "bootstrap-icons": {
+    "year": "2019-2024",
+    "fullname": "The Bootstrap Authors",
+    "license": "MIT"
+  },
+  "google-material-icons": {
+    "license": "Apache-2.0"
+  },
+  "heroicons": {
+    "fullname": "Tailwind Labs, Inc.",
+    "license": "MIT"
+  },
+  "material-design-icons": {
+    "license": "Apache-2.0"
+  },
+  "unicons": {
+    "license": "Apache-2.0"
   }
 }
