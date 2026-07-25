@@ -1,5 +1,5 @@
 ﻿import { applyHotfixes } from "./hotfixes.js";
-import { patchToolbarBreakpoint } from "./breakpoint-patch.js";
+import { createPaintToolbarController } from "./toolbar-controller.js";
 import {
   applyStyle,
   cleanResult,
@@ -76,9 +76,7 @@ export default async function ({ addon, msg }) {
 
   // ── More-popover item factory ──────────────────────────────────────────
   // Builds a button matching the native More popover item structure.
-  // CSS classes are lazily copied from native items when the popover first opens.
-  let moreItemBtnClass = "";
-  let moreItemIconClass = "";
+  // Disabled-state classes are copied from native items when the popover opens.
   let moreItemDisabledClasses = [];
 
   const makeMoreItem = (iconFile, label, op) => {
@@ -699,184 +697,51 @@ export default async function ({ addon, msg }) {
   };
 
   addon.self.addEventListener("disabled", () => {
-    shapingSection?.remove();
     modeToolsOCBtn?.remove();
   });
 
-  // ── Main loop ─────────────────────────────────────────────────────────────
-  // Waits for the paint editor toolbar to appear, injects our sections, and
-  // wires up all observers. Loops so it re-injects after sprite switches.
-  const toolsLoop = async () => {
-    let hasRunOnce = false;
-    let lastFrontBackRow = null;
-    // Tracks the current fixedToolsRow so the breakpoint patch always acts on
-    // the live element — the paint editor can remount on tab switches, giving
-    // a fresh DOM node with new React fibers.
-    let currentFixedToolsRow = null;
-    let applyPatch = null;
-    while (true) {
-      const frontBackRow = await addon.tab.waitForElement("[class*='fixed-tools_row_'][class*='input-group_']", {
-        markAsSeen: true,
-        reduxCondition: (state) =>
-          state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
-      });
-      lastFrontBackRow = frontBackRow;
-      currentFixedToolsRow = frontBackRow.parentElement;
-      const fixedToolsRow = currentFixedToolsRow;
-      frontBackRow.after(shapingSection);
-      shapingSection.style.display = "";
-
-      // Re-apply the separator on every loop iteration: frontBackRow is a React
-      // element that gets replaced when the toolbar re-renders at the breakpoint,
-      // so the class must be added to each new instance, not just the first one.
-      if (dashedBorderClass) frontBackRow.classList.add(dashedBorderClass);
-
-      // Re-apply the breakpoint patch on every iteration so freshly remounted
-      // fibers get their native MQL disposed and our state pushed.
-      if (applyPatch) applyPatch();
-
-      if (!hasRunOnce) {
-        hasRunOnce = true;
-
-        // Extract layout and separator classes from native toolbar elements.
-        const nativeDashedGroup = fixedToolsRow.querySelector("[class*='mod-dashed-border_']");
-        dashedBorderClass = nativeDashedGroup
-          ? [...nativeDashedGroup.classList].find((c) => c.includes("mod-dashed-border")) ?? ""
-          : "";
-
-        // Add a dashed separator to the LEFT of our section (right border on preceding group).
-        if (dashedBorderClass) frontBackRow.classList.add(dashedBorderClass);
-        // Separators between the three inline groups: [unite/subtract/intersect] | [combine] | [expand].
-        if (dashedBorderClass) intersectBtn.classList.add(dashedBorderClass);
-        if (dashedBorderClass) compoundBtn.classList.add(dashedBorderClass);
-
-        // Copy input-group layout classes (height, flex, alignment) onto our
-        // section so the trigger button sits at the right height in the toolbar.
-        // Strip the dashed-border class — no right-side separator after us.
-        if (nativeDashedGroup) {
-          const base = [...nativeDashedGroup.classList].filter((c) => !c.includes("mod-dashed-border")).join(" ");
-          shapingSection.className = base + " sa-shaping-section";
-        }
-
-        // Capture native button / icon / label classes to apply to our inline items.
-        const anyBtn = fixedToolsRow.querySelector("[class*='labeled-icon-button_mod-edit-field_']");
-        const anyIcon = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-icon_']");
-        const anyTitle = fixedToolsRow.querySelector("[class*='labeled-icon-button_edit-field-title_']");
-
-        const anyDisabled = document.querySelector("[class*='button_mod-disabled_']");
-        modDisabledClass = anyDisabled ? [...anyDisabled.classList].find((c) => c.includes("mod-disabled")) ?? "" : "";
-
-        // Style all inline operation items.
-        for (const btn of shapingSection.querySelectorAll(".sa-shaping-item")) {
-          if (anyBtn) btn.className += " " + anyBtn.className;
-          if (modDisabledClass) btn.classList.add(modDisabledClass);
-        }
-        for (const icon of shapingSection.querySelectorAll(".sa-shaping-item-icon")) {
-          if (anyIcon) icon.className += " " + anyIcon.className;
-        }
-        for (const lbl of shapingSection.querySelectorAll(".sa-shaping-item-label")) {
-          if (anyTitle) lbl.className += " " + anyTitle.className;
-        }
-
-        // ── Patch React's MediaQuery breakpoint ───────────────────────────
-        // react-responsive captures window.matchMedia at bundle evaluation time,
-        // so we drive the toolbar layout by patching the fiber tree directly.
-        // See breakpoint-patch.js for implementation details.
-        applyPatch = patchToolbarBreakpoint({
-          getFixedToolsRow: () => currentFixedToolsRow,
-          onMatchChange: (matches) => {
-            shapingSection.style.display = matches ? "" : "none";
-          },
-          isDisabled: () => addon.self.disabled,
-        });
-
-        // Cache the editor container. Re-query only when React has replaced it
-        // (isConnected goes false), so we're never holding a stale reference.
-        let editorContainer = null;
-        const getEditorContainer = () => {
-          if (!editorContainer?.isConnected)
-            editorContainer = document.querySelector("[class*='paint-editor_editor-container_']");
-          return editorContainer;
-        };
-        document.addEventListener("mouseup", (e) => {
-          if (addon.self.disabled) return;
-          if (getEditorContainer()?.contains(e.target)) deferUpdateButtonStates();
-        });
-        document.addEventListener("keyup", (e) => {
-          if (addon.self.disabled) return;
-          if (getEditorContainer()?.contains(e.target)) deferUpdateButtonStates();
-        });
-        updateButtonStates();
-
-        // Re-inject the Open/Close button into mode-tools whenever React
-        // rebuilds the mode-tools children. Observe the stable fixedToolsRow
-        // ancestor (always in DOM) so the observer works even if the mode-tools
-        // container is absent at setup time (e.g. during dynamic re-enable).
-        const modeToolsObserver = new MutationObserver(() => {
-          if (addon.self.disabled) return;
-          injectModeToolsBtn();
-        });
-        modeToolsObserver.observe(fixedToolsRow, { childList: true, subtree: true });
-
-        // Inject our items into the native More popover when it opens.
-        const injectMoreItems = (menu) => {
-          if (menu.querySelector("[data-sa-op]")) return; // already injected
-          // Lazily copy classes from the first native item (a span with an img child).
-          if (!moreItemBtnClass) {
-            const refItem = [...menu.children].find((el) => el.tagName === "SPAN" && el.querySelector("img"));
-            if (refItem) {
-              moreItemDisabledClasses = [...refItem.classList].filter((c) => c.includes("mod-disabled"));
-              moreItemBtnClass = [...refItem.classList].filter((c) => !c.includes("mod-disabled")).join(" ");
-              const refImg = refItem.querySelector("img");
-              if (refImg) moreItemIconClass = refImg.className;
-            }
-          }
-          for (const btn of allMoreItems) {
-            btn.className = moreItemBtnClass;
-            const img = btn.querySelector("img");
-            if (img && moreItemIconClass) img.className = moreItemIconClass;
-            menu.appendChild(btn);
-          }
-          deferUpdateButtonStates();
-        };
-
-        const moreMenuObserver = new MutationObserver((mutations) => {
-          if (addon.self.disabled) return;
-          for (const mutation of mutations) {
-            for (const node of mutation.addedNodes) {
-              if (node.nodeType !== Node.ELEMENT_NODE) continue;
-              const menu = node.querySelector("[class*='mod-context-menu']");
-              if (menu) {
-                injectMoreItems(menu);
-                return;
-              }
-            }
-          }
-        });
-        moreMenuObserver.observe(document.body, { childList: true });
-
-        addon.self.addEventListener("disabled", () => modeToolsObserver.disconnect());
-        addon.self.addEventListener("disabled", () => moreMenuObserver.disconnect());
-        addon.self.addEventListener("reenabled", () => {
-          modeToolsObserver.observe(fixedToolsRow, { childList: true, subtree: true });
-          moreMenuObserver.observe(document.body, { childList: true });
-          applyPatch();
-          // Re-insert shapingSection immediately in wide mode — waitForElement
-          // won't fire again for an already-seen frontBackRow.
-          if (lastFrontBackRow?.isConnected && shapingSection.style.display !== "none") {
-            lastFrontBackRow.after(shapingSection);
-          }
-          injectModeToolsBtn();
-        });
-        // Initial injection attempt.
-        injectModeToolsBtn();
+  const toolbarController = createPaintToolbarController({
+    addon,
+    inlineSection: shapingSection,
+    inlineSectionClass: "sa-shaping-section",
+    inlineItemSelector: ".sa-shaping-item",
+    inlineIconSelector: ".sa-shaping-item-icon",
+    inlineLabelSelector: ".sa-shaping-item-label",
+    overflowItems: allMoreItems,
+    onNativeClasses: ({ dashedBorderClass: nativeDashedBorderClass, disabledClass }) => {
+      dashedBorderClass = nativeDashedBorderClass;
+      if (dashedBorderClass) {
+        intersectBtn.classList.add(dashedBorderClass);
+        compoundBtn.classList.add(dashedBorderClass);
       }
-    }
-  };
+      if (disabledClass) modDisabledClass = disabledClass;
+    },
+    onToolbarMutation: injectModeToolsBtn,
+    onOverflowItemsMounted: ({ disabledClasses }) => {
+      moreItemDisabledClasses = disabledClasses;
+      deferUpdateButtonStates();
+    },
+    onReady: () => {
+      // Cache the editor container. Re-query only when React replaces it.
+      let editorContainer = null;
+      const getEditorContainer = () => {
+        if (!editorContainer?.isConnected)
+          editorContainer = document.querySelector("[class*='paint-editor_editor-container_']");
+        return editorContainer;
+      };
+      document.addEventListener("mouseup", (e) => {
+        if (!addon.self.disabled && getEditorContainer()?.contains(e.target)) deferUpdateButtonStates();
+      });
+      document.addEventListener("keyup", (e) => {
+        if (!addon.self.disabled && getEditorContainer()?.contains(e.target)) deferUpdateButtonStates();
+      });
+      updateButtonStates();
+    },
+  });
 
   // ── Apply paper.js hotfixes ───────────────────────────────────────────
   const paper = await addon.tab.traps.getPaper();
   applyHotfixes(addon, paper);
 
-  toolsLoop();
+  toolbarController.start();
 }

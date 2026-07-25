@@ -1,5 +1,5 @@
 // ── breakpoint-patch.js ───────────────────────────────────────────────────
-// scratch-paint uses react-responsive to decide whether the Front/Back buttons
+// Scratch Paint uses react-responsive to decide whether the Front/Back buttons
 // appear inline or collapse into the More dropdown. The built-in breakpoint
 // (1274px) is too narrow once we add our five shaping buttons — the toolbar
 // overflows before that point is reached.
@@ -7,19 +7,13 @@
 // The normal fix would be to intercept window.matchMedia, but react-responsive
 // captures it once at bundle load time and never reads it again. So instead we
 // reach directly into the React fiber tree, silence the built-in breakpoint
-// listener, and drive the layout ourselves with a new MQL at the right width.
-//
-// Public API: patchToolbarBreakpoint({ getFixedToolsRow, onMatchChange, isDisabled })
-//   getFixedToolsRow — called on every apply to get the current toolbar DOM element
-//                      (the element can change when the paint editor remounts)
-//   onMatchChange    — called with (matches: boolean) whenever our breakpoint fires
-//   isDisabled       — function returning true when the addon is disabled
-// Returns: applyPatch() — call this to re-apply the patch (e.g. on re-enable)
+// listener, and drive the layout ourselves with a new media query.
 
 // 1580px: wide at 100% zoom on 1920px displays, narrow at 125% zoom (1536px
 // logical) where sub-pixel rounding at 1.25x DPR causes a 1px overflow.
 const WIDE_BREAKPOINT = 1580;
 const COMPACT_BREAKPOINT = 1140;
+const NATIVE_BREAKPOINT = 1274;
 
 // Returns true if the compact-editor addon is currently enabled. Its style
 // element is always present in the DOM; we check the disabled attribute.
@@ -28,16 +22,32 @@ const isCompactEditorActive = () => {
   return el !== null && !el.disabled;
 };
 
-// Returns the window width at which the toolbar should switch to More mode.
-const getBreakpoint = () => (isCompactEditorActive() ? COMPACT_BREAKPOINT : WIDE_BREAKPOINT);
+// Once the native listener is removed, continue emulating Scratch's original
+// breakpoint while the addon is disabled so its toolbar remains responsive.
+const getBreakpoint = (isDisabled) => {
+  if (isDisabled()) return NATIVE_BREAKPOINT;
+  return isCompactEditorActive() ? COMPACT_BREAKPOINT : WIDE_BREAKPOINT;
+};
 
 // Unhooks the built-in matchMedia listener from a MediaQuery fiber so it can
-// no longer override our dispatch calls. The listener lives at hook slot 4
-// in react-responsive's internal hook chain.
+// no longer override our dispatch calls. Find the media-query object and the
+// effect that subscribed to it by shape instead of relying on hook positions.
 const disposeNativeMql = (fiber) => {
+  const hooks = [];
   let hook = fiber.memoizedState;
-  for (let h = 0; h < 4; h++) hook = hook?.next;
-  hook?.memoizedState?.dispose?.();
+  while (hook) {
+    hooks.push(hook);
+    hook = hook.next;
+  }
+  const nativeMql = hooks
+    .map((h) => h.memoizedState)
+    .find((state) => state?.addListener && state?.removeListener && state?.dispose);
+  if (!nativeMql) return;
+  for (const h of hooks) {
+    const effect = h.memoizedState;
+    if (effect?.deps?.includes(nativeMql)) effect.destroy?.();
+  }
+  nativeMql.dispose();
 };
 
 // Gets the React state setter that controls whether a MediaQuery fiber
@@ -55,6 +65,7 @@ const getDispatch = (fiber) => {
 // the More dropdown). We identify them by the presence of a minWidth or
 // maxWidth prop, which only the MediaQuery components carry.
 const findMediaQueryFibers = (fixedToolsRow) => {
+  if (!fixedToolsRow) return [];
   const fiberKey = Object.keys(fixedToolsRow).find((k) => k.startsWith("__reactFiber"));
   if (!fiberKey) return [];
   const fibers = [];
@@ -69,17 +80,23 @@ const findMediaQueryFibers = (fixedToolsRow) => {
   return fibers;
 };
 
-// Replaces the toolbar's built-in 1274px breakpoint with our own, wires up a
-// real MQL listener to keep it responsive, and re-applies whenever the
-// compact-editor addon is toggled. Call the returned applyPatch() function to
-// manually re-apply (e.g. when the addon is re-enabled).
+/**
+ * Takes control of Scratch's toolbar breakpoint and returns a function that
+ * reapplies it after a toolbar remount or addon state change.
+ *
+ * @param {object} options
+ * @param {Function} options.getFixedToolsRow - Returns the current outer toolbar element.
+ * @param {Function} options.onMatchChange - Receives whether the wide layout should be shown.
+ * @param {Function} options.isDisabled - Returns whether the addon is disabled.
+ * @returns {Function} Reapplies the breakpoint to the current toolbar.
+ */
 export const patchToolbarBreakpoint = ({ getFixedToolsRow, onMatchChange, isDisabled }) => {
   let mql = null;
 
   // Silences the built-in listener and pushes our current matches value into
   // React's state, causing the toolbar to re-render at our breakpoint.
   const applyPatch = () => {
-    const bp = getBreakpoint();
+    const bp = getBreakpoint(isDisabled);
     const query = `(min-width: ${bp}px)`;
 
     // Swap the MQL if the breakpoint changed.
@@ -103,7 +120,6 @@ export const patchToolbarBreakpoint = ({ getFixedToolsRow, onMatchChange, isDisa
   };
 
   const onMqlChange = () => {
-    if (isDisabled()) return;
     applyPatch();
   };
 
