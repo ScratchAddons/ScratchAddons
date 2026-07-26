@@ -21,7 +21,7 @@ export default async function ({ addon, console, msg }) {
     remixtree.id = "scratchAddonsRemixTreeBtn";
     remixtree.appendChild(remixtreeSpan);
     remixtree.addEventListener("click", () => {
-      window.open(`https://retree.quuq.dev/tree#${window.location.href.split("projects")[1].split("/")[1]}`, "_blank");
+      window.open(`https://retree.quuq.dev/tree#${window.location.href.split("projects")[1].split("/")[1]}`, "_blank", "noopener,noreferrer");
     });
     addon.tab.appendToSharedSpace({ space: "afterCopyLinkButton", element: remixtree, order: 0 });
   }
