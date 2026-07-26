@@ -17,7 +17,7 @@ export default async function ({ addon, console, msg }) {
     const remixtreeSpan = document.createElement("span");
     remixtreeSpan.innerText = msg("remix-tree");
     addon.tab.displayNoneWhileDisabled(remixtree);
-    remixtree.className = "button action-button remixtree-button";
+    remixtree.className = "button action-button sa-remixtree-button";
     remixtree.id = "scratchAddonsRemixTreeBtn";
     remixtree.appendChild(remixtreeSpan);
     remixtree.addEventListener("click", () => {
