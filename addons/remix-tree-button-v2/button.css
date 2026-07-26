@@ -1,4 +1,4 @@
-.remixtree-button::before {
+.sa-remixtree-button::before {
   background-image: url("https://scratch.mit.edu/svgs/project/remix-white.svg");
   display: inline-block;
   margin-right: 0.25rem;
@@ -12,7 +12,7 @@
 }
 
 @media (max-width: 767px) /* $tablet-portrait - 1px */ {
-  .remixtree-button {
+  .sa-remixtree-button {
     display: none;
   }
 }
