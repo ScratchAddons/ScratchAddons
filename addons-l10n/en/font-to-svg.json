@@ -1,0 +1,15 @@
+{
+  "font-to-svg/fonts": "Fonts",
+  "font-to-svg/remove": "Remove",
+  "font-to-svg/googlefont": "Google Font",
+  "font-to-svg/variant": "Variant",
+  "font-to-svg/text": "Text",
+  "font-to-svg/size": "Size",
+  "font-to-svg/seperatecharacters": "Split Characters",
+  "font-to-svg/bezieraccuracy": "Bezier Accuracy",
+  "font-to-svg/fill": "Fill",
+  "font-to-svg/outline": "Outline",
+  "font-to-svg/outlinewidth": "Outline Width",
+  "font-to-svg/nonscalingoutline": "Non-scaling outline",
+  "font-to-svg/save": "Save as Vector (svg)"
+}
