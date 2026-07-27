@@ -35,7 +35,6 @@ export default [
         Comlink: "readonly",
         idb: "readonly",
         Scratch: "readonly",
-        Blockly: "readonly",
         Clipboard: "readonly",
         ClipboardItem: "readonly",
       },
