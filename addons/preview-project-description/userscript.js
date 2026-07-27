@@ -72,7 +72,7 @@ export default async function ({ addon, console, msg }) {
    * @returns {void}
    */
   function togglePreview(override = !currentlyEnabled) {
-    const oldCurentlyEnabled = currentlyEnabled;
+    const oldCurrentlyEnabled = currentlyEnabled;
     currentlyEnabled = override;
 
     if (currentlyEnabled === true && !wasEverEnabled) {
@@ -80,11 +80,11 @@ export default async function ({ addon, console, msg }) {
       addTraps();
     }
 
-    if (oldCurentlyEnabled === false && currentlyEnabled === true) {
+    if (oldCurrentlyEnabled === false && currentlyEnabled === true) {
       enablePreview();
     }
 
-    if (oldCurentlyEnabled === true && currentlyEnabled === false) {
+    if (oldCurrentlyEnabled === true && currentlyEnabled === false) {
       // Disabling the preview is as simple as forcing a React
       // rerender.
       forceReactRerender();
