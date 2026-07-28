@@ -23,13 +23,11 @@ export function modifiedCreateAllInputs(connectionMap) {
     // Don't treat %l as an argument
     if (component.substring(0, 1) === "%" && component.substring(1, 2) !== "l") {
       const argumentType = component.substring(1, 2);
-      if (
-        !(
-          argumentType === ArgumentType.NUMBER ||
-          argumentType === ArgumentType.BOOLEAN ||
-          argumentType === ArgumentType.STRING
-        )
-      ) {
+      if (!(
+        argumentType === ArgumentType.NUMBER ||
+        argumentType === ArgumentType.BOOLEAN ||
+        argumentType === ArgumentType.STRING
+      )) {
         throw new Error("Found an custom procedure with an invalid type: " + argumentType);
       }
       labelText = component.substring(2).trim();
