@@ -1,0 +1,18 @@
+.unsavedChangesDialog {
+  box-sizing: border-box;
+  width: 400px;
+  max-height: 76vh;
+  max-width: 85%;
+  margin: 12vh auto;
+  overflow-y: auto;
+}
+
+.unsavedChangesDialog .sa-editor-modal-content {
+  padding: 1.5rem 2.25rem;
+}
+
+.unsavedChangesDialog-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

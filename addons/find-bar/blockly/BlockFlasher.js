@@ -7,10 +7,16 @@ export default class BlockFlasher {
    * @param block the block to flash
    */
   static flash(block) {
+    const getSvgPath = (block) => {
+      if (!block) return null;
+      if (block.pathObject) return block.pathObject.svgPath; // new Blockly
+      return block.svgPath_;
+    };
+
     if (myFlash.timerID > 0) {
       clearTimeout(myFlash.timerID);
-      if (myFlash.block.svgPath_) {
-        myFlash.block.svgPath_.style.fill = "";
+      if (getSvgPath(myFlash.block)) {
+        getSvgPath(myFlash.block).style.fill = "";
       }
     }
 
@@ -23,8 +29,8 @@ export default class BlockFlasher {
      * @private
      */
     function _flash() {
-      if (myFlash.block.svgPath_) {
-        myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : "";
+      if (getSvgPath(myFlash.block)) {
+        getSvgPath(myFlash.block).style.fill = flashOn ? "#ffff80" : "";
       }
       flashOn = !flashOn;
       count--;

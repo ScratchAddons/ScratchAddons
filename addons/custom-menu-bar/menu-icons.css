@@ -1,5 +1,16 @@
 [class*="settings-menu_dropdown-label"],
 [class*="menu-bar_collapsible-label"],
-[class*="menu-bar_tutorials-label"] {
+[class*="menu-bar_tutorials-label"],
+[class*="menu-bar_debug-label_"] {
   display: none;
+}
+
+[class*="settings-menu_dropdown-label"] + img,
+[class*="menu-bar_collapsible-label"] + img {
+  /* dropdown arrow */
+  margin-inline-start: 0.125rem;
+}
+
+[class*="menu-bar_help-icon_"] {
+  margin: 0;
 }

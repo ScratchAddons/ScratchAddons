@@ -228,8 +228,6 @@ export default async function ({ addon, console, msg }) {
       statusTip.innerText = msg("progress-tip", { number: (currentPage - 2) * 40 });
       // Detect if the next page of projects exists
       let fetchUrl;
-      let ascSort,
-        descSort = "";
       let sort = document.querySelectorAll(".dropdown.button.grey.small");
       if (window.location.href.includes("galleries")) {
         // Ignore "hosted/curated by me" because the API endpoints are broken
@@ -247,8 +245,8 @@ export default async function ({ addon, console, msg }) {
           fetchUrl = "projects/all";
         }
       }
-      ascSort = sort.getAttribute("data-ascsort") || "";
-      descSort = sort.getAttribute("data-descsort") || "";
+      const ascSort = sort.getAttribute("data-ascsort") || "";
+      const descSort = sort.getAttribute("data-descsort") || "";
       fetchUrl = `https://scratch.mit.edu/site-api/${fetchUrl}/?page=${currentPage}&ascsort=${ascSort}&descsort=${descSort}`;
       await fetch(fetchUrl)
         .then(async (response) => {

@@ -20,7 +20,7 @@ export default async function ({ addon, console, msg }) {
     if (vm.editingTarget) {
       let handler = null;
       while (true) {
-        const topBar = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
+        const topBar = await addon.tab.waitForElement("[class*='menu-bar_main-menu_']", {
           markAsSeen: true,
           reduxEvents: [
             "scratch-gui/mode/SET_PLAYER",

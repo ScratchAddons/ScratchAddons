@@ -1,0 +1,70 @@
+<template>
+  <div v-click-outside="closeDropdowns" @keydown="handleKeys">
+    <button
+      aria-haspopup="true"
+      :aria-expanded="(isOpen) ? 'true' : 'false'"
+      :class="['dropdown-btn', buttonClass, {'open': isOpen}]"
+      :disabled="disabled"
+      :title="buttonTitle"
+      v-el:button
+      @click="toggle"
+    >
+      <img src="../../images/icons/expand.svg" class="icon-type" draggable="false" />
+    </button>
+    <ul class="dropdown-list" @click="listClick" role="menu" v-el:list>
+      <slot></slot>
+    </ul>
+  </div>
+</template>
+
+<style>
+  .dropdown-parent {
+    position: relative;
+  }
+
+  .dropdown-list {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    margin: 0;
+    min-width: 100px;
+    padding: 6px 0;
+    display: none;
+    z-index: 3;
+    border-radius: 4px;
+    background: var(--button-background);
+    color: var(--content-text);
+    border: 1px solid var(--control-border);
+    box-shadow: var(--large-shadow);
+  }
+
+  .dropdown-btn.open + ul {
+    display: block;
+  }
+
+  .dropdown-list li {
+    padding: 6px 12px;
+    list-style: none;
+    white-space: nowrap;
+    text-align: start;
+    transition: 0.2s ease;
+    user-select: none;
+    cursor: pointer;
+  }
+
+  .dropdown-list li:hover {
+    background: var(--button-hover-background);
+  }
+
+  @media (max-width: 700px) {
+    .dropdown-list {
+      right: auto;
+      left: 0;
+    }
+
+    [dir="rtl"] .dropdown-list {
+      left: auto;
+      right: 0;
+    }
+  }
+</style>

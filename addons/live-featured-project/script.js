@@ -12,7 +12,7 @@ export default async function ({ addon, msg }) {
   const featuredProject = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`, { method: "HEAD" });
   if (featuredProject.status >= 400) return; // project is probably unshared
 
-  const enabledAddons = await addon.self.getEnabledAddons("editor");
+  const enabledAddons = await addon.self.getEnabledAddons("player");
   const username = await addon.auth.fetchUsername();
 
   // Create and append elements
@@ -61,8 +61,8 @@ export default async function ({ addon, msg }) {
         "load",
         function callback() {
           const observer = new MutationObserver(() => {
-            if (iframeElement.contentDocument.querySelector("[class^='loader_fullscreen']") === null) {
-              iframeElement.contentDocument.querySelector("[class^='green-flag_green-flag']").click();
+            if (iframeElement.contentDocument.querySelector("[class*='loader_fullscreen_']") === null) {
+              iframeElement.contentDocument.querySelector("[class*='green-flag_green-flag_']").click();
               observer.disconnect();
             }
           });

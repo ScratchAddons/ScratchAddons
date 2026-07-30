@@ -1,5 +1,5 @@
 {
-  "name": "Remove autocomplete from search bar",
+  "name": "Disable search bar autocomplete",
   "description": "Stops web browsers from autocompleting suggestions in the navigation bar's search bar.",
   "tags": ["community"],
   "credits": [
@@ -13,7 +13,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["https://scratch.mit.edu/*", "https://scratch.mit.edu/403", "https://scratch.mit.edu/404"],
       "runAtComplete": false
     }
   ],

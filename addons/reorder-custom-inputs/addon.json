@@ -36,5 +36,6 @@
   "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": false,
   "dynamicEnable": true,
-  "dynamicDisable": true
+  "dynamicDisable": true,
+  "libraries": ["scratch-blocks"]
 }

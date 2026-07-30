@@ -1,16 +1,36 @@
+let RESIZE_BUTTON_OFFSET;
+
 export default async function ({ addon, console }) {
+  if (document.querySelector(".blocklyToolboxCategoryGroup")) {
+    // new Blockly
+    RESIZE_BUTTON_OFFSET = 31;
+  } else {
+    RESIZE_BUTTON_OFFSET = 36;
+  }
+
   let originalBackpack;
 
   // Event listeners that add dynamic enable/disable
   addon.self.addEventListener("reenabled", () => changeBackpackVisibility());
   addon.self.addEventListener("disabled", () => {
-    moveResizeButtons(0);
+    moveResizeButtons(addon, 0);
     originalBackpack.style.display = "block";
     window.dispatchEvent(new Event("resize"));
   });
 
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (
+      ["scratch-gui/settings/SET_COLOR_MODE", "scratch-gui/settings/SET_THEME"].includes(e.detail.action.type) &&
+      !addon.self.disabled
+    ) {
+      // queueMicrotask isn't enough on new Blockly
+      setTimeout(changeBackpackVisibility, 0);
+    }
+  });
+
   while (true) {
-    originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
+    originalBackpack = await addon.tab.waitForElement("[class*=backpack_backpack-header_]", {
       markAsSeen: true,
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
@@ -21,7 +41,7 @@ export default async function ({ addon, console }) {
     originalBackpack.style.display = "none";
     let backpackEl = document.querySelector(".sa-backpack-button");
     if (backpackEl) {
-      moveResizeButtons(36);
+      moveResizeButtons(addon, RESIZE_BUTTON_OFFSET);
     } else {
       createBackpackButton(addon);
     }
@@ -31,13 +51,17 @@ export default async function ({ addon, console }) {
 }
 
 function isBackpackOpen() {
-  return !!document.querySelector("[class^=backpack_backpack-list_]");
+  return !!document.querySelector("[class*=backpack_backpack-list_]");
 }
 
 // Create default backpack button
 function createBackpackButton(addon) {
   let backpackButton = document.createElement("div");
   backpackButton.classList.add("sa-backpack-button");
+  if (document.querySelector(".blocklyToolboxCategoryGroup")) {
+    // new Blockly
+    backpackButton.classList.add("sa-new-blockly");
+  }
   // Can't use displayNoneWhileDisabled because it updates after the resize event
   backpackButton.style.display = "none"; // overridden by userstyle if the addon is enabled
   backpackButton.title = addon.tab.scratchMessage("gui.backpack.header");
@@ -46,9 +70,10 @@ function createBackpackButton(addon) {
     Object.assign(document.createElement("img"), {
       src: `${addon.self.dir}/backpack.svg`,
       alt: "",
+      draggable: false,
     })
   );
-  moveResizeButtons(36);
+  moveResizeButtons(addon, RESIZE_BUTTON_OFFSET);
 
   document.querySelector("[class*='gui_tabs_']").appendChild(backpackButton);
 }
@@ -62,14 +87,21 @@ function toggleBackpack() {
     // Backpack is closed and will be opened
     document.body.classList.add("sa-backpack-open");
   }
-  document.querySelector("[class^=backpack_backpack-header_]").click();
+  document.querySelector("[class*=backpack_backpack-header_]").click();
   window.dispatchEvent(new Event("resize"));
 }
 
 // Move resize buttons to top
-function moveResizeButtons(distance) {
+function moveResizeButtons(addon, distance) {
   const resizeElements = document.querySelectorAll(".blocklyZoom > image");
-  resizeElements[0].setAttribute("y", (44 - distance).toString());
-  resizeElements[1].setAttribute("y", (0 - distance).toString());
-  resizeElements[2].setAttribute("y", (88 - distance).toString());
+  if (document.querySelector(".blocklyToolboxCategoryGroup")) {
+    // new Blockly
+    const workspace = addon.tab.traps.getWorkspace();
+    const zoomControls = workspace.getComponentManager().getComponent("zoomControls");
+    zoomControls.MARGIN_VERTICAL = 20 + distance;
+  } else {
+    resizeElements[0].setAttribute("y", (44 - distance).toString());
+    resizeElements[1].setAttribute("y", (0 - distance).toString());
+    resizeElements[2].setAttribute("y", (88 - distance).toString());
+  }
 }

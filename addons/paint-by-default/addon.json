@@ -12,6 +12,12 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "../../libraries/common/cs/react-tooltip.css",
+      "matches": ["projects"]
+    }
+  ],
   "settings": [
     {
       "id": "sprite",

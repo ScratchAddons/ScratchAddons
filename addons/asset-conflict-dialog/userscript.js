@@ -87,14 +87,14 @@ export default async function ({ addon, console, msg }) {
       const optTargetId =
         type === "costume" ? args[2] : type === "backdrop" ? this.runtime.getTargetForStage() : args[1];
       // the only difference between backdrop and costume is backdrop has stage as target id
-      if (type == "backdrop") type = "costume";
+      if (type === "backdrop") type = "costume";
       const assetObj = type === "costume" ? args[1] : args[0];
 
       // handle new costume or sound via Paint/Record
       // abuses the fact that new costumes don't have an asset property and new sounds have a format property set to ""
       const isNewAsset =
         (type === "costume" && !assetObj.asset && assetObj?.skinId === null) ||
-        (type === "sound" && assetObj.format === "" && !assetObj.asset.clean);
+        (type === "sound" && assetObj.format === "" && !assetObj.asset?.clean);
       if (isNewAsset) return originalFn.call(this, ...args);
 
       // folders addon compatibility

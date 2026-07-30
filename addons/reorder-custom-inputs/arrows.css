@@ -1,6 +1,6 @@
-.blocklyTextShiftArrow {
+.sa-reorder-inputs-arrow {
   position: absolute;
-  top: -50px;
+  top: -49px;
   left: 50%;
   margin-left: -12.5px;
   cursor: pointer;

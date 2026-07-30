@@ -1,0 +1,97 @@
+// Event emitter for updateAllBlocks
+const updateAllBlocksEvents = new EventTarget();
+
+export async function updateAllBlocks(
+  tab,
+  { updateMainWorkspace = true, updateFlyout = true, updateCategories = false, updateRenderer = false } = {}
+) {
+  // Don't try to update if project hasn't loaded
+  if (!tab.traps.vm.editingTarget) return;
+
+  const blockly = await tab.traps.getBlockly();
+  const workspace = tab.traps.getWorkspace();
+  const toolbox = workspace.getToolbox();
+  const flyout = workspace.getFlyout();
+
+  // Calling Events.disable() will:
+  // - prevent changes to the workspace from being added to the undo stack;
+  // - prevent project change events from being triggered.
+  // From scratch-blocks source code: "Every call to this function MUST also call enable."
+  blockly.Events.disable();
+
+  if (workspace) {
+    if (updateRenderer) {
+      workspace.renderer.refreshDom(workspace.getSvgGroup(), workspace.getTheme(), workspace.getInjectionDiv());
+      if (flyout) {
+        const flyoutWorkspace = flyout.getWorkspace();
+        flyoutWorkspace.renderer.refreshDom(flyoutWorkspace.getSvgGroup(), flyoutWorkspace.getTheme(), null);
+      }
+    }
+    if (updateMainWorkspace) {
+      const xml = blockly.Xml.workspaceToDom(workspace);
+      if (xml.querySelector("variables")) {
+        xml.querySelector("variables").remove();
+      }
+      // Add all variables, including unused ones, to the XML document
+      const variables = blockly.utils.xml.createElement("variables");
+      const globalVariables = Object.values(tab.traps.vm.runtime.getTargetForStage().variables);
+      const localVariables = tab.traps.vm.editingTarget.isStage
+        ? []
+        : Object.values(tab.traps.vm.editingTarget.variables);
+      for (const variable of globalVariables) {
+        variables.appendChild(blockly.utils.xml.textToDom(variable.toXML()));
+      }
+      for (const variable of localVariables) {
+        variables.appendChild(blockly.utils.xml.textToDom(variable.toXML(true)));
+      }
+      xml.appendChild(variables);
+      blockly.clearWorkspaceAndLoadFromXml(xml, workspace);
+    }
+    if (toolbox && flyout && (updateFlyout || updateCategories)) {
+      if (updateFlyout) {
+        if (blockly.registry) {
+          // new Blockly: can't use clearWorkspaceAndLoadFromXml() here because it breaks the flyout
+          // Events have to be reenabled here because flyout.show() creates new blocks with new IDs
+          // and the VM needs to be notified about that.
+          blockly.Events.enable();
+          flyout.setRecyclingEnabled(false);
+          flyout.show(toolbox.getInitialFlyoutContents());
+          flyout.setRecyclingEnabled(true);
+          blockly.Events.disable();
+        } else {
+          const flyoutWorkspace = flyout.getWorkspace();
+          blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+        }
+      }
+      if (updateCategories) {
+        const selectedItemId = toolbox.getSelectedItem().id_;
+        if (blockly.registry) {
+          // new Blockly
+          toolbox.render(workspace.options.languageTree);
+          toolbox.selectItem_(null, toolbox.contents.get(selectedItemId));
+        } else {
+          toolbox.categoryMenu_.populate(workspace.options.languageTree);
+          toolbox.selectCategoryById(selectedItemId, false);
+        }
+      }
+      toolbox.refreshSelection();
+    }
+    workspace.toolboxRefreshEnabled_ = true;
+  }
+
+  blockly.Events.enable();
+
+  // Emit event to notify that blocks have been updated
+  updateAllBlocksEvents.dispatchEvent(
+    new CustomEvent("blocksUpdated", {
+      detail: {
+        updateMainWorkspace,
+        updateFlyout,
+        updateCategories,
+      },
+    })
+  );
+}
+
+// Export the event emitter for external subscriptions
+export { updateAllBlocksEvents };

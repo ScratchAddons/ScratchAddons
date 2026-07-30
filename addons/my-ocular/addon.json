@@ -69,17 +69,17 @@
       "default": true
     },
     {
-      "name": "Show statuses",
+      "name": "Show statuses on...",
       "id": "show-status",
       "type": "select",
       "potentialValues": [
         {
           "id": "everywhere",
-          "name": "Everywhere"
+          "name": "All profiles"
         },
         {
           "id": "others",
-          "name": "Only on others' profiles"
+          "name": "Others' profiles only"
         }
       ],
       "default": "everywhere"

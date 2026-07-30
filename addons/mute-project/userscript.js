@@ -9,6 +9,7 @@ export default async function ({ addon, console }) {
   icon.src = addon.self.dir + "/mute.svg";
   icon.className = "sa-mute-project-icon";
   icon.style.userSelect = "none";
+  icon.draggable = false;
   addon.tab.displayNoneWhileDisabled(icon);
 
   const updateIcon = () => {
@@ -32,7 +33,7 @@ export default async function ({ addon, console }) {
   });
 
   while (true) {
-    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
+    let button = await addon.tab.waitForElement("[class*='green-flag_green-flag-button_']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });

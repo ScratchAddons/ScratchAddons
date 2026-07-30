@@ -1,0 +1,14 @@
+/* scratch-www */
+#navigation .link > a,
+#navigation .inner > ul > li.search,
+.account-nav .user-info,
+.account-nav .dropdown > li.divider,
+/* scratchr2 */
+#topnav ul.site-nav li,
+#topnav ul.site-nav li.last,
+#topnav ul.account-nav > li,
+#topnav ul.account-nav > li.join-scratch,
+#topnav ul.account-nav.logged-in > li,
+#topnav ul.account-nav ul.user-nav li.logout.divider {
+  border-color: var(--darkWww-navbar-scratchr2Divider, rgba(255, 255, 255, 0.1));
+}

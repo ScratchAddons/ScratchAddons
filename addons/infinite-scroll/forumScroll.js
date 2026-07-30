@@ -1,4 +1,6 @@
 export default async function ({ addon, console, msg }) {
+  document.body.classList.add("sa-collapse-footer");
+
   // Present on forum pages with tbody. Used as a switch to
   // query for table and posts, and determine append/insert location.
   let vf = document.getElementById("vf");

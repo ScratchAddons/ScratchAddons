@@ -5,8 +5,6 @@ const STATUS_YIELD = 2;
 const STATUS_YIELD_TICK = 3;
 const STATUS_DONE = 4;
 
-const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-
 let vm;
 
 let paused = false;
@@ -418,11 +416,13 @@ export const setup = (addon) => {
       reduxEvents: ["scratch-gui/modals/OPEN_MODAL"],
     })
     .then(() => {
-      const soundTab = document.querySelector(
-        "[class*='gui_tab-panel_']:nth-child(4) [class*='asset-panel_detail-area_']"
-      );
-      const reactInternalKey = Object.keys(soundTab).filter((key) => key.startsWith(REACT_INTERNAL_PREFIX));
-      const soundLibraryInstance = soundTab[reactInternalKey].child.sibling.child.child.stateNode;
+      const soundLibrary = document.querySelector("[class*='modal_modal-content_']");
+      const reactInternalKey = addon.tab.traps.getInternalKey(soundLibrary);
+      let reactInternalInstance = soundLibrary[reactInternalKey];
+      while (!reactInternalInstance.stateNode?.audioEngine) {
+        reactInternalInstance = reactInternalInstance.return;
+      }
+      const soundLibraryInstance = reactInternalInstance.stateNode;
       const SoundLibrary = soundLibraryInstance.constructor;
       const AudioEngine = soundLibraryInstance.audioEngine.constructor;
       const soundLibraryContext = new AudioContext();

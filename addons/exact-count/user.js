@@ -1,11 +1,11 @@
 export default async function ({ addon }) {
   const CACHE = {
     projects: null,
-    favorites: null,
+    // favorites: null,
     followers: null,
     following: null,
-    studios: null,
-    studios_following: null,
+    // studios: null,
+    // studios_following: null,
   };
   const details = Object.keys(CACHE);
   const username = Scratch.INIT_DATA.PROFILE.model.username;
@@ -29,6 +29,15 @@ export default async function ({ addon }) {
   });
 
   for (const detail of details) {
+    if (detail === "projects") {
+      const boxheadName = getBoxHead("projects")?.querySelector("h4");
+      if (!boxheadName) continue;
+      if (!boxheadName.innerText.endsWith("100+)")) {
+        // Page already shows exact project count!
+        continue;
+      }
+    }
+
     fetch(`https://scratch.mit.edu/users/${username}/${detail}/`, { credentials: "omit" })
       .then((res) => res.text())
       .then((html) => {

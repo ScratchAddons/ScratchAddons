@@ -1,5 +1,5 @@
 body:not(.sa-backpack-open) [class*="blocks_blocks_"] .injectionDiv,
-body:not(.sa-backpack-open) [class*="gui_extension-button-container_"], /* for editor-stage-left */
+body:not(.sa-backpack-open) [class*="extension-button_extension-button-container_"], /* for editor-stage-left */
 body:not(.sa-backpack-open) [class*="asset-panel_wrapper_"] {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;

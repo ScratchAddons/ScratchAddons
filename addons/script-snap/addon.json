@@ -2,6 +2,7 @@
   "name": "Snap scripts to grid",
   "description": "Drag a script to automatically align its position to the code area dots.",
   "tags": ["editor", "codeEditor", "featured"],
+  "relatedAddons": ["paint-snap", "workspace-dots"],
   "credits": [
     {
       "name": "CST1229",

@@ -1,0 +1,1 @@
+{"costume-editor-shortcuts/@name":"造型编辑器键盘快捷键","costume-editor-shortcuts/@description":"允许使用 Ctrl + 左 / 右 切换造型，并使用键盘快捷键（类似于 TurboWarp）在造型编辑器中选择工具。悬停在工具上方以查看其快捷键","costume-editor-shortcuts/@info-cmdKey":"在 macOS 上，用 Cmd 键代替 Ctrl 键","costume-editor-shortcuts/@update":"现在可以通过 Ctrl+ 左/右 切换服装。这以前是 “开发人员工具” 插件的一个隐藏功能"}

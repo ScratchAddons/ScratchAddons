@@ -1,4 +1,5 @@
 .sa-emoji-picker {
+  display: inline-block;
   cursor: auto;
   position: absolute;
   width: 390px;
@@ -54,15 +55,18 @@
   vertical-align: middle;
   font-weight: bold;
 }
+/* scratchr2 */
 .button.small.sa-emoji-button-container {
+  display: inline-block;
   user-select: none;
   cursor: pointer;
-  display: inline-block;
   position: relative;
   margin-left: auto;
 }
+/* scratch-www */
 .comments-container .sa-emoji-button-container,
 .studio-compose-container .sa-emoji-button-container {
+  display: inline-block;
   margin-left: 1em;
 }
 .sa-emoji-picker-divider {

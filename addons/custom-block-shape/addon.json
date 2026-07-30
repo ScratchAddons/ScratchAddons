@@ -16,6 +16,7 @@
       "link": "https://scratch.mit.edu/users/GarboMuffin/"
     }
   ],
+  "relatedAddons": ["editor-theme3", "editor-square-inputs", "custom-block-text", "cat-blocks"],
   "versionAdded": "1.12.0",
   "enabledByDefault": false,
   "dynamicEnable": true,
@@ -23,6 +24,10 @@
   "userscripts": [
     {
       "url": "userscript.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "modern-blockly.js",
       "matches": ["projects"]
     }
   ],
@@ -100,5 +105,6 @@
         "notchSize": 0
       }
     }
-  ]
+  ],
+  "libraries": ["scratch-blocks"]
 }

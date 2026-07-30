@@ -1,11 +1,7 @@
 import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
-import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
-import { init, saveConfig, isOverwritingEnabled, blockOverwriting } from "./persistent-thumb.js";
 
 export default async function ({ addon, console, msg }) {
-  init(console);
   let projectId = location.href.match(/\d+/)?.[0];
-  if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   const createModal = () => {
     // User Interface
     let ignoreClickOutside = false;
@@ -14,56 +10,16 @@ export default async function ({ addon, console, msg }) {
       container,
       content,
       closeButton: headerCloseButton,
+      open,
       remove,
     } = addon.tab.createModal(msg("set-thumbnail"), {
-      isOpen: true,
+      isOpen: false,
+      useEditorClasses: addon.tab.editorMode === "editor",
     });
     container.classList.add("sa-animated-thumb-popup");
     content.classList.add("sa-animated-thumb-popup-content");
-    content.appendChild(
-      Object.assign(document.createElement("p"), {
-        textContent: msg("description"),
-        className: "sa-animated-thumb-text",
-      })
-    );
-    const modalButtons = Object.assign(document.createElement("div"), {
-      className: "flex-row action-buttons sa-animated-thumb-popup-actions",
-    });
-    const uploadFromFileButton = Object.assign(document.createElement("button"), {
-      textContent: msg("select-file"),
-      className: "button action-button sa-animated-thumb-popup-action",
-    });
-    const uploadFromStageButton = Object.assign(document.createElement("button"), {
-      textContent: msg("use-stage"),
-      className: "button action-button sa-animated-thumb-popup-action",
-    });
-    modalButtons.appendChild(uploadFromFileButton);
-    modalButtons.appendChild(uploadFromStageButton);
-    content.appendChild(modalButtons);
-    const stopOverwritingRow = Object.assign(document.createElement("p"), {
-      className: "sa-animated-thumb-text",
-    });
-    const stopOverwritingCheckbox = Object.assign(document.createElement("input"), {
-      type: "checkbox",
-      checked: true,
-      id: "sa-animated-thumb-stop-overwrite",
-    });
-    const stopOverwritingLabel = Object.assign(document.createElement("label"), {
-      textContent: msg("keep-thumb"),
-      htmlFor: "sa-animated-thumb-stop-overwrite",
-    });
-    stopOverwritingRow.appendChild(stopOverwritingCheckbox);
-    stopOverwritingRow.appendChild(stopOverwritingLabel);
-    content.appendChild(stopOverwritingRow);
-    content.appendChild(
-      Object.assign(document.createElement("p"), {
-        textContent: msg("keep-thumb-desc"),
-        className: "sa-animated-thumb-text",
-      })
-    );
     const modalResultArea = Object.assign(document.createElement("div"), {
-      className: "sa-animated-thumb-popup-result",
-      hidden: true,
+      className: "sa-animated-thumb-result-failure hidden",
     });
     content.appendChild(modalResultArea);
 
@@ -128,10 +84,10 @@ export default async function ({ addon, console, msg }) {
             if (canceled) return;
             thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
             content.classList.add("sa-animated-thumb-successful");
-            saveConfig(projectId, stopOverwritingCheckbox.checked);
+            open();
           },
           (status) => {
-            modalResultArea.hidden = false;
+            modalResultArea.classList.remove("hidden");
             switch (status) {
               case 503:
               case 500:
@@ -143,61 +99,117 @@ export default async function ({ addon, console, msg }) {
               default:
                 modalResultArea.textContent = msg("error");
             }
+            open();
           }
         )
         .finally(() => {
           ignoreClickOutside = false;
-          uploadFromFileButton.removeAttribute("disabled");
-          uploadFromStageButton.removeAttribute("disabled");
         });
 
     const upload = () => {
-      modalResultArea.className = "sa-animated-thumb-popup-result sa-animated-thumb-popup-result-none";
-      uploadFromFileButton.setAttribute("disabled", "true");
-      uploadFromStageButton.setAttribute("disabled", "true");
+      modalResultArea.classList.add("hidden");
     };
 
-    uploadFromFileButton.addEventListener("click", () => {
+    const uploadFromFile = () => {
       upload();
       setter.addFileInput();
       ignoreClickOutside = true; // To stop modal from being closed
       setter.showInput();
+    };
+    uploadFromFile();
+  };
+
+  let dropdownContainer = null;
+  let uploadButton = null;
+
+  const closeDropdown = () => {
+    if (!uploadButton) return;
+    uploadButton.remove();
+    uploadButton = null;
+  };
+
+  const toggleDropdown = (parent) => {
+    if (uploadButton) {
+      closeDropdown();
+      return;
+    }
+    uploadButton = Object.assign(document.createElement("button"), {
+      className: addon.tab.scratchClass("button_outlined-button", {
+        others: "sa-set-thumbnail-upload-button",
+      }),
+      textContent: msg("dropdown-upload"),
+      title: msg("added-by"),
     });
-    uploadFromStageButton.addEventListener("click", () => {
-      upload();
-      addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: true });
-      addon.tab.traps.vm.renderer.requestSnapshot((dataURL) => {
-        addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: false });
-        setter.upload(dataURLToBlob(dataURL));
-      });
-      addon.tab.traps.vm.renderer.draw();
+    uploadButton.insertBefore(
+      Object.assign(document.createElement("img"), {
+        src: addon.self.dir + "/upload.svg",
+      }),
+      uploadButton.firstChild
+    );
+    uploadButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      createModal();
+    });
+    parent.appendChild(uploadButton);
+    document.addEventListener("click", () => closeDropdown(), { once: true });
+  };
+
+  const addDropdown = (setThumbnailButton) => {
+    // Add class to parent so that it doesn't get overridden by Scratch
+    setThumbnailButton.parentElement.classList.add("sa-has-dropdown");
+    dropdownContainer = Object.assign(document.createElement("div"), {
+      className: "sa-set-thumbnail-dropdown-container",
+    });
+    const dropdownButton = Object.assign(document.createElement("button"), {
+      className: addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button", {
+        others: "sa-set-thumbnail-dropdown-button",
+      }),
+    });
+    dropdownButton.appendChild(
+      Object.assign(document.createElement("img"), {
+        src: "/static/blocks-media/default/dropdown-arrow-dark.svg",
+        draggable: false,
+      })
+    );
+    dropdownButton.addEventListener("click", (e) => {
+      toggleDropdown(dropdownContainer);
+      e.stopPropagation();
+    });
+    dropdownContainer.appendChild(dropdownButton);
+    addon.tab.displayNoneWhileDisabled(dropdownContainer);
+    addon.tab.appendToSharedSpace({
+      space: "stageHeader",
+      order: -1,
+      element: dropdownContainer,
     });
   };
 
-  addon.tab.addEventListener("urlChange", () => {
-    projectId = location.href.match(/\d+/)?.[0] || projectId;
-    if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
-  });
-
-  localStorage.removeItem("saAnimatedThumbShowTooltip");
-
+  await addon.tab.redux.waitForState((state) => state.scratchGui.projectState.loadingState === "SHOWING_WITH_ID");
   while (true) {
-    await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    });
-    if (!document.querySelector(".form-group.project-title")) continue;
-    const element = Object.assign(document.createElement("button"), {
-      textContent: msg("set-thumbnail"),
-      className: "button action-button sa-set-thumbnail-button",
-      title: msg("added-by"),
-    });
-    addon.tab.displayNoneWhileDisabled(element);
-    element.addEventListener("click", () => createModal());
-    addon.tab.appendToSharedSpace({
-      space: "beforeProjectActionButtons",
-      order: 0,
-      element,
-    });
+    await addon.tab.waitForElement(
+      // Full screen button
+      // (need an element that's recreated every time when entering/exiting full screen)
+      '[class*="stage-header_right"] > [class*="button_outlined-button_"]:last-child, [class*="stage-header_unselect-wrapper_"] > [class*="button_outlined-button_"]',
+      {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "scratch-gui/mode/SET_FULL_SCREEN",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+      }
+    );
+    const setThumbnailButton = document.querySelector(
+      '[class*="stage-header_stage-size-row_"] > [class*="stage-header_stage-button_"]:first-child',
+      { markAsSeen: true }
+    );
+    if (dropdownContainer) {
+      dropdownContainer.remove();
+      dropdownContainer = null;
+    }
+    if (setThumbnailButton) {
+      addDropdown(setThumbnailButton);
+    }
   }
 }

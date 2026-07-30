@@ -2,6 +2,7 @@
   "name": "Better emojis",
   "description": "Replaces the emojis in comments on the website with improved vector designs.",
   "tags": ["community", "comments"],
+  "relatedAddons": ["emoji-picker"],
   "credits": [
     {
       "name": "getbent",

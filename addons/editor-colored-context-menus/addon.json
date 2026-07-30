@@ -23,5 +23,6 @@
     }
   ],
   "tags": ["editor", "codeEditor", "theme", "featured"],
+  "relatedAddons": ["editor-theme3"],
   "enabledByDefault": false
 }

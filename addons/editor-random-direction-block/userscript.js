@@ -1,4 +1,4 @@
-export default async function ({ addon, global, cons, msg }) {
+export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   function appendRandomOption(menuOptions) {
@@ -24,7 +24,7 @@ export default async function ({ addon, global, cons, msg }) {
   };
 
   const updateExistingBlocks = () => {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const flyout = workspace && workspace.getFlyout();
     if (workspace && flyout) {
       const allBlocks = [...workspace.getAllBlocks(), ...flyout.getWorkspace().getAllBlocks()];

@@ -39,7 +39,7 @@
 
 .sa-tw-iframe {
   width: 100%;
-  /* TW scratch-gui/src/lib/screen-utils.js, line 57
+  /* https://github.com/TurboWarp/scratch-gui/blob/854135f/src/lib/screen-utils.js#L59-L61
      The stage height should be 360px
      innerHeight = 360px + 44px + 12px = 416px = 100% + 10px */
   height: calc(100% + 10px);

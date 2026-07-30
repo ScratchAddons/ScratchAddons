@@ -26,5 +26,7 @@
   "dynamicDisable": true,
   "versionAdded": "1.17.0",
   "tags": ["community", "studios", "featured"],
-  "enabledByDefault": false
+  "relatedAddons": ["old-studio-layout"],
+  "enabledByDefault": false,
+  "libraries": ["scratch-www"]
 }

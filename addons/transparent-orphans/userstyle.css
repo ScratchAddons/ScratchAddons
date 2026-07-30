@@ -2,14 +2,8 @@
 .blocklyFlyout > .blocklyWorkspace > .blocklyBlockCanvas > .blocklyDraggable {
   opacity: calc(1 - var(--transparentOrphans-block) / 100);
 }
-.blocklyWsDragSurface > .blocklyBlockCanvas > .blocklyDraggable[data-shapes*="hat"] {
-  opacity: calc(1 - var(--transparentOrphans-block) / 100);
-}
 
-.blocklySvg > .blocklyWorkspace > .blocklyBlockCanvas > .blocklyDraggable:not([data-shapes*="hat"]) {
-  opacity: calc(1 - var(--transparentOrphans-orphan) / 100);
-}
-.blocklyWsDragSurface > .blocklyBlockCanvas > .blocklyDraggable:not([data-shapes*="hat"]) {
+.blocklySvg > .blocklyWorkspace > .blocklyBlockCanvas > .blocklyDraggable:not([data-shapes*="hat"], .blocklyComment) {
   opacity: calc(1 - var(--transparentOrphans-orphan) / 100);
 }
 

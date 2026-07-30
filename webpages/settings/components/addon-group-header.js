@@ -18,6 +18,9 @@ export default async function ({ template }) {
       toggle() {
         this.group.expanded = !this.group.expanded;
       },
+      msg(...params) {
+        return this.$root.msg(...params);
+      },
     },
   });
   Vue.component("addon-group-header", AddonGroup);

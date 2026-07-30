@@ -1,3 +1,5 @@
+import { isFirefox } from "../../libraries/common/cs/detect-browser.js";
+
 let console = window.console;
 
 /*
@@ -153,7 +155,7 @@ class GamepadData {
   }
 
   resetMappings() {
-    this.hints = this.gamepadLib.getHints();
+    this.hints = this.gamepadLib.getHints(this.gamepad.id, this.gamepad.index);
     this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
     this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
   }
@@ -450,11 +452,11 @@ class GamepadLib extends EventTarget {
     });
   }
 
-  getHints() {
-    return Object.assign(defaultHints(), this.getUserHints());
+  getHints(gamepadId, gamepadIndex) {
+    return Object.assign(defaultHints(), this.getUserHints(gamepadId, gamepadIndex));
   }
 
-  getUserHints() {
+  getUserHints(gamepadId, gamepadIndex) {
     // to be overridden by users
     return {};
   }
@@ -652,7 +654,7 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   // Firefox on Linux before version 123 has a broken gamepad API that results in strange and unusable mappings
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1680982
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1643835
-  if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Linux")) {
+  if (isFirefox() && navigator.userAgent.includes("Linux")) {
     const agentMatch = navigator.userAgent.match(/Firefox\/(\d+)/);
     // If we couldn't find the version number, we'll assume that this is some distant future version of
     // Firefox that we just can't comprehend with the technology of today. Surely gamepad will work well
@@ -662,7 +664,7 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   }
   // Firefox on macOS has other bugs that result in strange and unusable mappings
   // eg. https://bugzilla.mozilla.org/show_bug.cgi?id=1434408
-  if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Mac OS")) {
+  if (isFirefox() && navigator.userAgent.includes("Mac OS")) {
     return true;
   }
   return false;
@@ -1083,19 +1085,21 @@ class GamepadEditor extends EventTarget {
     }
   }
 
-  export() {
-    const selectedId = this.selector.value;
-    if (!selectedId) {
-      return null;
-    }
-    const gamepadData = this.gamepadLib.gamepads.get(selectedId);
-    if (!gamepadData) {
-      return null;
-    }
-    return {
-      axes: gamepadData.axesMappings.map(prepareAxisMappingForExport),
-      buttons: gamepadData.buttonMappings.map(prepareButtonMappingForExport),
-    };
+  exportSettings() {
+    const settingsMap = new Map();
+    // Add information about each gamepad to gamepadArray
+    this.gamepadLib.gamepads.forEach((gamepadData, gamepadKey, map) => {
+      // Add the gamepad's id (type), index, and current mappings to gamepadArray
+      settingsMap.set(gamepadKey, {
+        id: gamepadData.gamepad.id,
+        index: gamepadData.gamepad.index,
+        settings: {
+          axes: gamepadData.axesMappings.map(prepareAxisMappingForExport),
+          buttons: gamepadData.buttonMappings.map(prepareButtonMappingForExport),
+        },
+      });
+    });
+    return settingsMap;
   }
 
   changed() {

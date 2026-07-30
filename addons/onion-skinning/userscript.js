@@ -1,7 +1,7 @@
 export default async function ({ addon, console, msg }) {
   const paper = await addon.tab.traps.getPaper();
 
-  const paintEditorCanvasContainer = await addon.tab.waitForElement("[class^='paint-editor_canvas-container']");
+  const paintEditorCanvasContainer = await addon.tab.waitForElement("[class*='paint-editor_canvas-container_']");
   try {
     if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
       console.error("Detected new paint editor; this will be supported in future versions.");
@@ -11,8 +11,11 @@ export default async function ({ addon, console, msg }) {
     // The check can technically fail when Redux isn't supported (rare cases)
     // Just ignore in this case
   }
-  const paperCanvas =
-    paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)].child.child.child.stateNode;
+  let reactInternalInstance = paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)];
+  while (!reactInternalInstance.stateNode?.recalibrateSize) {
+    reactInternalInstance = reactInternalInstance.child;
+  }
+  const paperCanvas = reactInternalInstance.stateNode;
 
   let paperCenter;
   const storedOnionLayers = [];
@@ -307,6 +310,23 @@ export default async function ({ addon, console, msg }) {
       if (svgAttrs && svgAttrs[0].indexOf("xmlns=") === -1) {
         asset = asset.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
       }
+
+      // After the above, we apply sanitization. Reference:
+      // https://github.com/scratchfoundation/scratch-paint/commit/cc837ae481a3be5be379665ef3bd107a71aac670
+      //
+      // This is a rough approximation of:
+      // https://github.com/scratchfoundation/scratch-editor/blob/develop/packages/scratch-svg-renderer/src/sanitize-svg.js#L176
+      //
+      // We don't have a good way to access that function directly, but isomorphic-dompurify exports the
+      // DOMPurify on Window which we can access. This is the same DOMPurify used by Scratch internally,
+      // so we get all the hooks Scratch has configured. The only important part of that function is
+      // calling DOMPurify, which we can easily copy the right arguments for.
+      asset = window.DOMPurify.sanitize(asset, {
+        USE_PROFILES: { svg: true },
+        FORBID_TAGS: ["a", "audio", "canvas", "video"],
+        ADD_DATA_URI_TAGS: ["image"],
+      });
+
       const parser = new DOMParser();
       const svgDom = parser.parseFromString(asset, "text/xml");
       const viewBox = svgDom.documentElement.attributes.viewBox
@@ -571,7 +591,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   const toggleControlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(toggleControlsGroup, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(toggleControlsGroup);
 
   const toggleButton = createButton();
   toggleButton.dataset.enabled = settings.enabled;
@@ -582,6 +602,7 @@ export default async function ({ addon, console, msg }) {
   const settingButton = createButton();
   settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
   settingButton.title = msg("settings");
+  settingButton.classList.add("sa-onion-arrow");
   settingButton.appendChild(createButtonImage("settings"));
 
   document.body.addEventListener("click", (e) => {
@@ -764,7 +785,7 @@ export default async function ({ addon, console, msg }) {
   const controlsLoop = async () => {
     let hasRunOnce = false;
     while (true) {
-      const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
+      const canvasControls = await addon.tab.waitForElement("[class*='paint-editor_canvas-controls_']", {
         markAsSeen: true,
         reduxEvents: [
           "scratch-gui/navigation/ACTIVATE_TAB",
@@ -776,7 +797,7 @@ export default async function ({ addon, console, msg }) {
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
-      const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
+      const zoomControlsContainer = canvasControls.querySelector("[class*='paint-editor_zoom-controls_']");
 
       addon.tab.appendToSharedSpace({
         space: "paintEditorZoomControls",

@@ -1,10 +1,10 @@
 {
-  "name": "Higher character limit in \"What I'm Working On\"",
+  "name": "Longer \"What I'm Working On\"",
   "description": "Allows you to type 55 more characters in your profile's \"What I'm Working On\". Everyone on Scratch will see the extra characters.",
   "credits": [
     {
-      "name": "RedGuy7",
-      "link": "https://github.com/RedGuy12"
+      "name": "cobalt",
+      "link": "https://github.com/cobaltt7"
     }
   ],
   "dynamicEnable": true,

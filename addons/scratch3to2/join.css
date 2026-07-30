@@ -1,0 +1,13 @@
+/* Page */
+.modal-overlay {
+  background-color: #5e85f3;
+}
+
+/* "Next" button */
+.modal-flush-bottom-button {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.next-step-title {
+  color: var(--darkWww-button-scratchr2ButtonText, white);
+}

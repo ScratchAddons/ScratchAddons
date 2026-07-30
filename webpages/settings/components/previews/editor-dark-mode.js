@@ -1,8 +1,9 @@
+import cssVariables from "../../../../libraries/common/vue-css-variables.js";
 import { textColor, multiply, alphaBlend, makeHsv } from "../../../../libraries/common/cs/text-color.esm.js";
 
 export default async function ({ template }) {
   const EditorDarkModePreview = Vue.extend({
-    props: ["options", "settings", "hoveredSettingId"],
+    props: ["settings", "hoveredSettingId"],
     template,
     data() {
       return {
@@ -83,11 +84,7 @@ export default async function ({ template }) {
       toggleFullScreenView() {
         this.fullScreenView = !this.fullScreenView;
       },
-      cssVariables(obj) {
-        return Object.entries(obj)
-          .map(([name, value]) => `${name}: ${value};`)
-          .join("\n");
-      },
+      cssVariables,
     },
   });
   Vue.component("preview-editor-dark-mode", EditorDarkModePreview);

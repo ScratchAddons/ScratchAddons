@@ -13,6 +13,7 @@ export default async function ({ addon, console, msg }) {
   tab.tabIndex = -1; // unselected tabs should only be focusable using arrow keys
   img.src = addon.self.dir + "/user.svg";
   img.className = "tab-icon sa-search-profile-icon";
+  img.draggable = false;
   span.innerText = msg("profile");
   addon.tab.displayNoneWhileDisabled(tab);
 
@@ -29,7 +30,7 @@ export default async function ({ addon, console, msg }) {
     fetch(`https://api.scratch.mit.edu/users/${user}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.code == "NotFound") {
+        if (data.code === "NotFound") {
           setInvalidUsername();
         } else if (!data.code) {
           span.innerText = "@" + data.username;
@@ -40,7 +41,7 @@ export default async function ({ addon, console, msg }) {
 
     nav.addEventListener("keydown", (event) => {
       // Keyboard navigation
-      // Modified code from scratch-www/src/components/tabs/tabs.jsx
+      // Modified code from https://github.com/scratchfoundation/scratch-www/blob/1938b3d/src/components/tabs/tabs.jsx
       if (!["ArrowLeft", "ArrowRight", "Home", "End", "Enter", " "].includes(event.key)) {
         return;
       }

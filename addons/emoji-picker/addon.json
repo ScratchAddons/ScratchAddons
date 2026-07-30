@@ -24,5 +24,6 @@
   "dynamicDisable": true,
   "versionAdded": "1.21.0",
   "tags": ["community", "comments", "featured"],
+  "relatedAddons": ["better-emojis"],
   "enabledByDefault": false
 }

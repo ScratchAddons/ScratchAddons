@@ -11,15 +11,19 @@ const periods = [
     mins: 60,
   },
   {
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("4hours")) || "4 hours",
+    mins: 240,
+  },
+  {
     name: (chrome.i18n.getMessage && chrome.i18n.getMessage("8hours")) || "8 hours",
     mins: 480,
   },
   {
-    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("24hours")) || "24 hours",
-    mins: 1440,
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("untilTomorrow")) || "Until tomorrow",
+    mins: "tomorrow",
   },
   {
-    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("untilEnabled")) || "Until I turn it back on",
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("untilEnabled")) || "Until turned off",
     mins: Infinity,
   },
 ];
@@ -37,9 +41,18 @@ let currentMenuItem = null;
 
 chrome.contextMenus?.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
   if (parentMenuItemId === "mute") {
-    const mins = Number(menuItemId.split("_")[1]);
+    const mins = menuItemId.split("_")[1];
     contextMenuMuted();
-    muteForMins(mins);
+    if (mins === "tomorrow") {
+      const now = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(now.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      const differenceinMins = Math.ceil(tomorrow.getTime() / 60000 - now.getTime() / 60000);
+      muteForMins(differenceinMins);
+    } else {
+      muteForMins(Number(mins));
+    }
   } else if (menuItemId === "unmute") {
     contextMenuUnmuted();
     unmute();

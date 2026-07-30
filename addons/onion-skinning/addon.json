@@ -52,6 +52,7 @@
     {
       "id": "opacityStep",
       "name": "Opacity Step (%)",
+      "description": "Sets how much the overlays fade out with each consecutive costume.",
       "type": "integer",
       "min": 0,
       "max": 100,
@@ -65,7 +66,7 @@
       "potentialValues": [
         {
           "id": "front",
-          "name": "Front"
+          "name": "In front"
         },
         {
           "id": "behind",
@@ -106,5 +107,6 @@
   "tags": ["editor", "costumeEditor", "recommended"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "libraries": ["scratch-paint"]
 }

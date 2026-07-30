@@ -26,14 +26,17 @@
   "1hour": {
     "message": "For 1 hour"
   },
+  "4hours": {
+    "message": "For 4 hours"
+  },
   "8hours": {
     "message": "For 8 hours"
   },
-  "24hours": {
-    "message": "For 24 hours"
+  "untilTomorrow": {
+    "message": "Until tomorrow"
   },
   "untilEnabled": {
-    "message": "Until I turn it back on"
+    "message": "Until turned off"
   },
   "muteFor": {
     "message": "Do not disturb"
@@ -62,6 +65,9 @@
   "forEditor": {
     "message": "For editor"
   },
+  "forPlayer": {
+    "message": "For project player"
+  },
   "forWebsite": {
     "message": "For website"
   },
@@ -89,14 +95,14 @@
   "codeEditorFeatures": {
     "message": "Code Editor"
   },
+  "playerFeatures": {
+    "message": "Project Player Features"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
   "profilesFeatures": {
     "message": "Profiles"
-  },
-  "projectPlayerFeatures": {
-    "message": "Project Player"
   },
   "projectPageFeatures": {
     "message": "Project Pages"
@@ -113,8 +119,32 @@
   "websiteThemes": {
     "message": "Website Themes"
   },
+  "playerThemes": {
+    "message": "Project Player Themes"
+  },
   "popupFeatures": {
     "message": "Extension Popup Features"
+  },
+  "easterEggs": {
+    "message": "Easter Eggs"
+  },
+  "editorFeature": {
+    "message": "Editor feature"
+  },
+  "playerFeature": {
+    "message": "Project player feature"
+  },
+  "websiteFeature": {
+    "message": "Website feature"
+  },
+  "themeAddon": {
+    "message": "Theme"
+  },
+  "popupFeature": {
+    "message": "Extension popup feature"
+  },
+  "easterEgg": {
+    "message": "Easter egg"
   },
   "theme": {
     "message": "Theme:"
@@ -131,6 +161,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "toggleSidebar": {
+    "message": "Toggle sidebar"
+  },
   "close": {
     "message": "Close"
   },
@@ -140,14 +173,47 @@
   "resetToDefault": {
     "message": "Reset to default settings"
   },
+  "importExport": {
+    "message": "Export/import settings"
+  },
+  "relatedAddons": {
+    "message": "Related addons:"
+  },
+  "relatedTo": {
+    "message": "Related to: $1"
+  },
   "creditTo": {
     "message": "Credit to:"
   },
   "viewLicenses": {
     "message": "View library licenses"
   },
+  "infoMessage": {
+    "message": "Information"
+  },
+  "noticeMessage": {
+    "message": "Notice"
+  },
+  "warningMessage": {
+    "message": "Warning"
+  },
+  "back": {
+    "message": "Go back"
+  },
+  "clear": {
+    "message": "Clear"
+  },
+  "collapse": {
+    "message": "Collapse"
+  },
+  "expand": {
+    "message": "Expand"
+  },
   "reset": {
     "message": "Reset"
+  },
+  "resetTo": {
+    "message": "Reset to..."
   },
   "default": {
     "message": "Default"
@@ -158,6 +224,21 @@
   "preview": {
     "message": "Preview"
   },
+  "addRow": {
+    "message": "Add row"
+  },
+  "addPresetRow": {
+    "message": "Add preset row"
+  },
+  "moveUp": {
+    "message": "Move up"
+  },
+  "moveDown": {
+    "message": "Move down"
+  },
+  "deleteRow": {
+    "message": "Delete row"
+  },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
   },
@@ -167,8 +248,17 @@
   "light": {
     "message": "Light"
   },
+  "switchLight": {
+    "message": "Switch to light theme"
+  },
   "dark": {
     "message": "Dark"
+  },
+  "switchDark": {
+    "message": "Switch to dark theme"
+  },
+  "loading": {
+    "message": "Loading..."
   },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
@@ -198,19 +288,13 @@
     "message": "report it here"
   },
   "forumWarning": {
-    "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
+    "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled. This can be done by going to $2 and turning every extension off, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
   },
   "forumWarningGeneral": {
     "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found a bug, please $1."
   },
   "search": {
     "message": "Search"
-  },
-  "permissionsTitle": {
-    "message": "Permissions - Scratch Addons"
-  },
-  "permissions": {
-    "message": "Permissions"
   },
   "enablePermissionsTitle": {
     "message": "Please enable site access"
@@ -230,6 +314,9 @@
   "clickAllowDescription": {
     "message": "Click \"Allow\". Scratch Addons will reload and the addons will start working correctly again"
   },
+  "permissionsAllowed": {
+    "message": "Site access was enabled successfully. Scratch Addons will reload."
+  },
   "permissionsDenied": {
     "message": "Site access could not be enabled. Try again."
   },
@@ -242,9 +329,12 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_38": {
-    "message": "This is an experimental update that we're releasing to a portion of our user base. It contains some behind-the-scenes changes to support the new extension architecture required by browsers (Manifest V3). If you encounter any issues or unexpected behavior, please $1. There is also a button to send feedback in the settings page.",
-    "description": "!! The placeholder is \"send feedback\"."
+  "extensionUpdateImageAlt_v1_45": {
+    "message": "Screenshot of dragging a costume in the costume list"
+  },
+  "extensionUpdateInfo1_v1_45": {
+    "message": "The new \"Improved dragging of costumes and sounds\" addon, which is enabled by default, makes the costume and sound lists scroll automatically when reordering items. Check it out in $1.",
+    "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
@@ -252,8 +342,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_38": {
-    "message": "This update doesn't introduce any new features, but stay tuned for upcoming updates."
+  "extensionUpdateInfo2_v1_45": {
+    "message": "This update also adds an optional confirmation for signing out of the Scratch website, in the \"Confirmations\" addon."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
@@ -261,6 +351,9 @@
   },
   "blogPost": {
     "message": "blog post"
+  },
+  "watchUpdateVideo": {
+    "message": "Watch update video"
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -316,6 +409,9 @@
   "importFailed": {
     "message": "The settings file is invalid. Please try again."
   },
+  "incorrectAddonImport": {
+    "message": "The selected file is for the \"$1\" addon."
+  },
   "confirmImport": {
     "message": "Confirm"
   },
@@ -336,10 +432,10 @@
     "description": "Used as a category name for recently used addons"
   },
   "settingsPagePermission": {
-    "message": "To enable the \"$1\" addon, go to the full screen settings page."
+    "message": "To enable the \"$1\" addon, go to the settings page."
   },
   "openFullSettings": {
-    "message": "Open full screen settings"
+    "message": "Open settings page"
   },
   "skipOpenFullSettings": {
     "message": "Cancel"
@@ -350,9 +446,6 @@
   },
   "searchNotFound": {
     "message": "No results found. Perhaps try different keywords?"
-  },
-  "searchNotFoundInCategory": {
-    "message": "No results found in \"$1\". Perhaps try different keywords?"
   },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: your comment mentions a browser extension. The $1 urges Scratchers not to advertise them, as the Scratch Team have not reviewed them for safety and can't possibly check every single one. Please follow the aforementioned policy by avoiding any references to browser extensions when posting on Scratch.",
@@ -366,6 +459,18 @@
   },
   "captureCommentConfirm": {
     "message": "Posting this comment may lead to automatic muting of your account, temporarily preventing you from commenting. Persistent muting can result in your account being blocked from Scratch. Are you sure you want to post this comment?"
+  },
+  "myVariable": {
+    "message": "my variable",
+    "description": "Used as a placeholder for a variable name."
+  },
+  "myList": {
+    "message": "my list",
+    "description": "Used as a placeholder for a list name."
+  },
+  "thing": {
+    "message": "thing",
+    "description": "Used as a placeholder for a list item."
   },
   "extensionStoreDescription1": {
     "message": "Choose from 100+ options:",

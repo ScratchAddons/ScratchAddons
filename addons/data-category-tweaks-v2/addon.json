@@ -37,5 +37,6 @@
     }
   ],
   "tags": ["editor", "codeEditor", "recommended"],
+  "relatedAddons": ["columns", "recolor-custom-blocks"],
   "enabledByDefault": false
 }

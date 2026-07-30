@@ -1,0 +1,4 @@
+.blocklyInsertionMarker > .blocklyPath {
+  fill-opacity: calc(var(--editorTheme3-fillOpacity) * 0.01);
+  stroke-opacity: calc(var(--editorTheme3-strokeOpacity) * 0.01);
+}

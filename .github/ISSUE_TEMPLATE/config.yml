@@ -1,4 +1,4 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
   - name: 💬 GitHub Discussions
     url: https://github.com/ScratchAddons/ScratchAddons/discussions
@@ -6,9 +6,9 @@ contact_links:
   - name: 📝 Send feedback
     url: https://scratchaddons.com/feedback
     about: Send a general feedback on our website
-  - name: 🏠 Community Discord
+  - name: 🧑‍💻 Support Discord
     url: https://discord.gg/R5NBqwMjNc
-    about: Discuss about Scratch Addons on our community Discord server (recommended)
+    about: Open a support ticket on Discord
   - name: 🔧 Development Discord
     url: https://discord.gg/Ak8sCDQ
     about: Discuss about Scratch Addons on our development Discord server

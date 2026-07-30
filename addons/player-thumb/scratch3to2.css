@@ -1,0 +1,8 @@
+:root:not(.sa-editor) [class*="stage-wrapper_stage-wrapper"] {
+  position: relative;
+}
+:root:not(.sa-editor) .sa-loader-background {
+  border-radius: 0;
+  top: 40px;
+  height: calc(100% - 41px);
+}

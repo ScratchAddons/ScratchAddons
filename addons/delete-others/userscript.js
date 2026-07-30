@@ -28,7 +28,7 @@ export default async function ({ addon, console, msg }) {
           useEditorClasses: true,
         })
       ) {
-        const type = ctx.type === "costume" ? "Costume" : "Sound";
+        const type = ctx.type === "costume" ? "costume" : "sound";
 
         deletedItems = [];
         target = vm.editingTarget;
@@ -94,6 +94,6 @@ export default async function ({ addon, console, msg }) {
 
     // We know that shouldChangeRestoreButtonText = true
     const { deletedItem } = addon.tab.redux.state.scratchGui.restoreDeletion;
-    restoreButton.innerText = msg(`multi${deletedItem}s`);
+    restoreButton.innerText = msg(`/_general/restore/${deletedItem}s`);
   }
 }

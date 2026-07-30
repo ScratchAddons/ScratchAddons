@@ -66,11 +66,17 @@ body > #pagewrapper {
   background: none;
   border-top: none;
 }
-#forum-search-input {
-  width: calc(85% - 8px);
+#forum-search-input,
+#forum-search-filter-input {
   margin-right: 8px;
   height: 48px;
   padding: 4px 20px;
+}
+#forum-search-dropdown {
+  margin-right: 8px;
+}
+#forum-search-form .button {
+  padding: 4px 16px;
 }
 .forum-search-list {
   width: 942px;
@@ -254,6 +260,7 @@ body > #pagewrapper {
   overflow: visible;
   background-color: var(--darkWww-gray, #f2f2f2);
   color: var(--darkWww-gray-text, #575e75);
+  text-shadow: none;
   box-shadow: 1px 0 var(--darkWww-box-border, #d9d9d9);
 }
 .djangobb .blockpost dl {
@@ -285,7 +292,7 @@ body > #pagewrapper {
 .searchposts .postleft a {
   font-size: 16px;
 }
-.postavatar img {
+.postavatar img:not(.avatar-badge) {
   margin: 1px;
   box-shadow: 0 0 0 1px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
   border-radius: 5px;

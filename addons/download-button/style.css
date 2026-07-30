@@ -1,3 +1,5 @@
+@import url("../../libraries/common/cs/spinner.css");
+
 #sa-download-button:before {
   background-image: url("./download.svg");
   display: inline-block;
@@ -17,26 +19,6 @@
   pointer-events: none;
 }
 
-@keyframes spin-intro {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(359deg);
-  }
-}
-
 #sa-download-button.loading:before {
   background-image: url(https://scratch.mit.edu/svgs/modal/spinner-white.svg);
   background-size: 100%;
@@ -46,4 +28,10 @@
   animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
   animation-delay: 0s, 0.25s;
   animation-iteration-count: 1, infinite;
+}
+
+@media (max-width: 767px) /* $tablet-portrait - 1px */ {
+  #sa-download-button {
+    display: none;
+  }
 }

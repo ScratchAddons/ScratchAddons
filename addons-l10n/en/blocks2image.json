@@ -1,7 +1,9 @@
 {
-  "blocks2image/export_selected_to_SVG": "Export block as SVG",
-  "blocks2image/export_all_to_SVG": "Export all as SVG",
-  "blocks2image/export_selected_to_PNG": "Export block as PNG",
-  "blocks2image/export_all_to_PNG": "Export all as PNG",
-  "blocks2image/error_blocks_not_added": "Add blocks to workspace!"
+  "blocks2image/saveAll": "Save All as Image",
+  "blocks2image/save": "Save as Image",
+  "blocks2image/modalTitle": "Save as Image",
+  "blocks2image/clipboard": "Copy",
+  "blocks2image/svg": "Download as SVG",
+  "blocks2image/png": "Download as PNG",
+  "blocks2image/loading": "Loading preview..."
 }

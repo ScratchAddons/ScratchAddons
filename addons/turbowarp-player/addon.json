@@ -64,5 +64,6 @@
     }
   ],
   "versionAdded": "1.18.0",
-  "tags": ["community", "projectPage", "featured"]
+  "tags": ["community", "projectPage", "featured"],
+  "relatedAddons": ["60fps"]
 }

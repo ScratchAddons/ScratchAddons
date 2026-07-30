@@ -1,5 +1,5 @@
 {
-  "name": "Bitmap images copying",
+  "name": "Bitmap image copying",
   "description": "Allows you to copy a bitmap image from the costume editor into the system clipboard, so that you can paste it in other websites or software.",
   "info": [
     {
@@ -19,5 +19,6 @@
   "versionAdded": "1.0.0",
   "tags": ["editor", "costumeEditor"],
   "permissions": ["clipboardWrite"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "libraries": ["scratch-gui"]
 }

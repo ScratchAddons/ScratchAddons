@@ -98,14 +98,14 @@
   filter: var(--editorDarkMode-primary-filter, none);
 }
 
-.sa-hide-flyout-not-fullscreen .sa-body-editor [class*="gui_stage-and-target-wrapper"] {
+.sa-editor:not(.sa-fullscreen) [class*="gui_stage-and-target-wrapper"] {
   position: relative;
   /* We need to be above these to hide the flyout while dragging blocks: */
   /* .blocklyFlyout (z-index: 20) */
   /* .blocklyFlyoutScrollbar (z-index: 30) */
   /* and above these so that dragged sprites aren't obscured: */
-  /* .blocklyToolboxDiv (z-index: 40) */
-  /* .gui_extension-button-container_b4rCs (z-index: 42) */
+  /* .blocklyToolbox (z-index: 40) */
+  /* .extension-button_extension-button-container_##### (z-index: 42) */
   z-index: 43;
   padding-inline: 0.5rem;
   background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));

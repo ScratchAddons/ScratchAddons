@@ -1,5 +1,6 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
+import { setUserAsActive } from "./imports/inactivity.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
@@ -223,6 +224,7 @@ const csInfoCache = new Map();
 // (example: on browser startup, with a Scratch page opening on startup).
 chrome.webRequest.onBeforeRequest.addListener(
   async (request) => {
+    setUserAsActive();
     if (!scratchAddons.localState.allReady) return;
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
     const loadingObj = { loading: true };
@@ -246,26 +248,20 @@ chrome.webRequest.onBeforeRequest.addListener(
 // Example: going to https://scratch.mit.edu/studios/104 (no slash after 104)
 // will redirect to /studios/104/ (with a slash)
 // If a cache entry is too old, remove it
-const alarmFrequency =
-  typeof browser !== "undefined"
-    ? // ↓ Firefox (event page)
-      1
-    : // ↓ Chromium (service worker)
-      5;
-chrome.alarms.create("cleanCsInfoCache", { periodInMinutes: alarmFrequency });
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "cleanCsInfoCache") {
-    csInfoCache.forEach((obj, key) => {
-      if (!obj.loading) {
-        const currentTimestamp = Date.now();
-        const objTimestamp = obj.timestamp;
-        if (currentTimestamp - objTimestamp > 45000) {
-          csInfoCache.delete(key);
-        }
+setInterval(() => {
+  csInfoCache.forEach((obj, key) => {
+    if (!obj.loading) {
+      const currentTimestamp = Date.now();
+      const objTimestamp = obj.timestamp;
+      if (currentTimestamp - objTimestamp > 45000) {
+        csInfoCache.delete(key);
       }
-    });
-  }
-});
+    }
+  });
+}, 30000);
+// This interval may possibly be missed if the background context gets
+// killed or stopped - but at that point, the csInfoCache no longer
+// exists, so we have nothing to clear anyway.
 
 chrome.webRequest.onResponseStarted.addListener(
   (request) => {
@@ -351,21 +347,30 @@ const WELL_KNOWN_PATTERNS = {
   // scratch-www routes, not including project pages
   // Matches /projects (an error page) but not /projects/<id>
   scratchWWWNoProject:
-    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects|cookies|accounts\/bad-username)\/?)?$/,
+    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps?)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects|cookies|accounts\/bad-username)\/?)?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {
   isNotScratchWWW: (match) => {
     const { projects, projectEmbeds, scratchWWWNoProject } = WELL_KNOWN_PATTERNS;
-    // Server errors and emails are neither r2 nor www
     return !(
       projects.test(match) ||
       projectEmbeds.test(match) ||
       scratchWWWNoProject.test(match) ||
-      /^\/(?:50[03]\/?$|cdn\/|emails\/)/.test(match)
+      EXCLUDE_PATTERN.test(match)
     );
   },
 };
+
+// Addons don't run on these pages unless they explicitly ask to:
+// - error pages
+// - emails
+// - My Classes
+const EXCLUDE_PATTERN = /^\/(?:[0-9]{3}\/?$|cdn\/|emails\/|educators\/classes\/?$)/;
+
+// These match all Scratch URLs except the excluded pages listed above
+const EVERYTHING_MATCH = "*";
+const LEGACY_EVERYTHING_MATCH = "https://scratch.mit.edu/*";
 
 function matchesIf(injectable, settings) {
   // injectable.if is guaranteed to exist
@@ -422,8 +427,9 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
   const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
   const scratchOrigin = parsedURL.port === "8333" ? "http://localhost:8333" : "https://scratch.mit.edu";
   const isScratchOrigin = parsedOrigin === scratchOrigin;
-  // "*" is used for any URL on Scratch origin
-  if (matches === "*") return isScratchOrigin;
+  if (matches === EVERYTHING_MATCH) {
+    return isScratchOrigin && !EXCLUDE_PATTERN.test(parsedPathname);
+  }
   // matches becomes RegExp if it is a string that starts with ^
   // See load-addon-manifests.js
   if (matches instanceof RegExp) {
@@ -431,7 +437,9 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
     return matches.test(matchURL);
   }
   for (const match of matches) {
-    if (match instanceof RegExp) {
+    if (match === LEGACY_EVERYTHING_MATCH) {
+      if (isScratchOrigin && !EXCLUDE_PATTERN.test(parsedPathname)) return true;
+    } else if (match instanceof RegExp) {
       if (match._scratchDomainImplied && !isScratchOrigin) continue;
       if (match.test(match._scratchDomainImplied ? parsedPathname : originPath)) {
         return true;

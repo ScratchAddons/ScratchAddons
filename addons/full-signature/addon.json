@@ -13,31 +13,37 @@
       "link": "https://scratch.mit.edu/users/TheColaber/"
     },
     {
-      "name": "RedGuy7",
-      "link": "https://github.com/RedGuy12"
+      "name": "cobalt",
+      "link": "https://github.com/cobaltt7"
     }
   ],
   "settings": [
     {
-      "name": "Show scroll for \"What I've been doing\"",
+      "name": "What I've been doing",
       "id": "whatworkingon",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show scroll for \"What's Happening?\"",
+      "name": "What's Happening?",
       "id": "whathappen",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show scroll for forum signatures",
+      "name": "Project titles",
+      "id": "titles",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Forum signatures",
       "id": "signature",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show scroll for forum Scratchblocks",
+      "name": "Forum Scratchblocks",
       "id": "blocks",
       "type": "boolean",
       "default": true
@@ -55,6 +61,10 @@
       "url": "happen.js",
       "matches": ["https://scratch.mit.edu/"],
       "runAtComplete": false
+    },
+    {
+      "url": "resetScroll.js",
+      "matches": ["projects", "profiles", "topics"]
     }
   ],
   "userstyles": [
@@ -85,9 +95,22 @@
       "if": {
         "settings": { "whathappen": true }
       }
+    },
+    {
+      "url": "titles.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "titles": true }
+      }
     }
   ],
   "versionAdded": "1.0.0",
-  "tags": ["community", "forums", "recommended", "profiles"],
+  "latestUpdate": {
+    "version": "1.43.0",
+    "newSettings": ["titles"],
+    "isMajor": true
+  },
+  "tags": ["community", "forums", "recommended", "profiles", "projectPage"],
+  "relatedAddons": ["infinite-scroll"],
   "enabledByDefault": true
 }

@@ -24,7 +24,7 @@
 .tabs button:disabled:hover,
 .tabs button:disabled:active {
   background-color: transparent;
-  border: none;
+  border-color: transparent;
 }
 
 .tabs button:not(.active) .tab-icon.sa-search-profile-profilepic {

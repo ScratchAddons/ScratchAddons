@@ -12,13 +12,15 @@ export default async function ({ addon, console, msg }) {
   const isOwn = username === projectAuthor;
   const shared = addon.tab.redux.state.preview.projectInfo.is_published;
 
-  async function download() {
+  async function download(beginFilenameWithId) {
     const downloadButton = document.querySelector(".sa-download-button");
     downloadButton.classList.add("loading");
     try {
       const project = await vm.saveProjectSb3();
       const title = isOwn ? document.querySelector(".project-title input") : document.querySelector(".project-title");
-      downloadBlob(`${isOwn ? title.value : title.innerText}.sb3`, project);
+      const titleStr = isOwn ? title.value : title.innerText;
+      const projectId = window.location.pathname.split("/")[2];
+      downloadBlob((beginFilenameWithId ? `${projectId} ` : "") + titleStr + ".sb3", project);
     } finally {
       downloadButton.classList.remove("loading");
     }
@@ -26,7 +28,9 @@ export default async function ({ addon, console, msg }) {
 
   const downloadButton = document.createElement("button");
   downloadButton.innerText = msg("download");
-  downloadButton.onclick = download;
+  downloadButton.onclick = (e) => {
+    download(e.shiftKey);
+  };
   downloadButton.classList = "button action-button sa-download-button waiting";
   downloadButton.id = "sa-download-button";
 
@@ -48,6 +52,8 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+      resizeEvent: true,
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
     addbutton();

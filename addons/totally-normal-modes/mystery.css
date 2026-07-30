@@ -1,0 +1,12 @@
+.sa-mode {
+  background-image: radial-gradient(
+    circle at 125px 125px,
+    transparent 22px,
+    rgba(0, 0, 0, 0.5) 72px,
+    rgba(0, 0, 0, 0.3) 96px,
+    black 110px
+  );
+  background-size: calc(100% + 125px) calc(100% + 125px);
+  background-position: calc(var(--sa-mouse-x, -10000px) - 125px) calc(var(--sa-mouse-y, -10000px) - 125px);
+  opacity: 0.9;
+}

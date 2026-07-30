@@ -1,102 +1,72 @@
-.sb3-motion,
-.sb3-looks,
-.sb3-sound,
-.sb3-events,
-.sb3-control,
-.sb3-sensing,
-.sb3-operators,
-.sb3-variables,
-.sb3-list,
-.sb3-custom,
-.sb3-custom-arg,
-.sb3-extension,
-.sb3-pen {
+svg[class*="scratchblocks-style-scratch3"] .sb3-motion,
+svg[class*="scratchblocks-style-scratch3"] .sb3-looks,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sound,
+svg[class*="scratchblocks-style-scratch3"] .sb3-events,
+svg[class*="scratchblocks-style-scratch3"] .sb3-control,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sensing,
+svg[class*="scratchblocks-style-scratch3"] .sb3-operators,
+svg[class*="scratchblocks-style-scratch3"] .sb3-variables,
+svg[class*="scratchblocks-style-scratch3"] .sb3-list,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom-arg,
+svg[class*="scratchblocks-style-scratch3"] .sb3-extension,
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete {
   stroke: var(--sa-block-color);
 }
-.sb3-grey {
-  stroke: #949494;
-}
-.sb3-obsolete {
-  stroke: #ed4242;
-}
 
-.sb-motion ~ .sb-label,
-.sb-looks ~ .sb-label,
-.sb-sound ~ .sb-label,
-.sb-events ~ .sb-label,
-.sb-control ~ .sb-label,
-.sb-sensing ~ .sb-label,
-.sb-operators ~ .sb-label,
-.sb-variables ~ .sb-label,
-.sb-list ~ .sb-label,
-.sb-custom ~ .sb-label,
-.sb-custom-arg ~ .sb-label,
-.sb-extension ~ .sb-label,
-.sb-pen ~ .sb-label,
-.sb3-motion ~ .sb3-label,
-.sb3-looks ~ .sb3-label,
-.sb3-sound ~ .sb3-label,
-.sb3-events ~ .sb3-label,
-.sb3-control ~ .sb3-label,
-.sb3-sensing ~ .sb3-label,
-.sb3-operators ~ .sb3-label,
-.sb3-variables ~ .sb3-label,
-.sb3-list ~ .sb3-label,
-.sb3-custom ~ .sb3-label,
-.sb3-custom-arg ~ .sb3-label,
-.sb3-extension ~ .sb3-label,
-.sb3-pen ~ .sb3-label {
+svg[class*="scratchblocks-style-scratch3"] .sb3-motion ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-looks ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sound ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-events ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-control ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sensing ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-operators ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-variables ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-list ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom-arg ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-extension ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey ~ .sb3-label,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete ~ .sb3-label {
   fill: var(--sa-block-color);
 }
-.sb-grey ~ .sb-label,
-.sb3-grey ~ .sb3-label {
-  fill: #949494;
-}
-.sb-obsolete ~ .sb-label {
-  fill: #d42828;
-}
-.sb3-obsolete ~ .sb3-label {
-  fill: #ed4242;
-}
 
-.sb-darker {
-  fill: var(--sa-block-color);
-  fill-opacity: 0.25;
-  filter: none;
-}
-.sb3-motion-alt,
-.sb3-looks-alt,
-.sb3-sound-alt,
-.sb3-events-alt,
-.sb3-control-alt,
-.sb3-sensing-alt,
-.sb3-operators-alt,
-.sb3-variables-alt,
-.sb3-list-alt,
-.sb3-custom-alt,
-.sb3-custom-arg-alt,
-.sb3-extension-alt,
-.sb3-pen-alt {
+svg[class*="scratchblocks-style-scratch3"] .sb3-motion-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-looks-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sound-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-events-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-control-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sensing-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-operators-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-variables-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-list-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-extension-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey-alt,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete-alt {
   fill: var(--sa-block-color) !important;
   fill-opacity: 0.15;
 }
-.sb3-motion-dark,
-.sb3-looks-dark,
-.sb3-sound-dark,
-.sb3-events-dark,
-.sb3-control-dark,
-.sb3-sensing-dark,
-.sb3-operators-dark,
-.sb3-variables-dark,
-.sb3-list-dark,
-.sb3-custom-dark,
-.sb3-custom-arg-dark,
-.sb3-extension-dark,
-.sb3-pen-dark {
+svg[class*="scratchblocks-style-scratch3"] .sb3-motion-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-looks-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sound-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-events-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-control-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-sensing-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-operators-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-variables-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-list-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-custom-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-extension-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-grey-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete-dark {
   fill: var(--sa-block-color);
   fill-opacity: 0.25;
 }
-.sb3-extension-line {
-  stroke: var(--sa-block-color);
-  stroke-opacity: 0.15;
+
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete-dark,
+svg[class*="scratchblocks-style-scratch3"] .sb3-obsolete ~ .sb3-label {
+  --sa-block-color: #fc6666;
 }

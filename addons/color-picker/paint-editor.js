@@ -59,7 +59,7 @@ export default async ({ addon, console, msg }) => {
     }, 50);
   }
   while (true) {
-    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
+    const element = await addon.tab.waitForElement('[class*="color-picker_swatch-row_"]', {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
@@ -78,7 +78,7 @@ export default async ({ addon, console, msg }) => {
     const saColorPicker = Object.assign(document.createElement("div"), {
       className: "sa-color-picker sa-color-picker-paint",
     });
-    addon.tab.displayNoneWhileDisabled(saColorPicker, { display: "flex" });
+    addon.tab.displayNoneWhileDisabled(saColorPicker);
     const saColorPickerColor = Object.assign(document.createElement("input"), {
       className: "sa-color-picker-color sa-color-picker-paint-color",
       type: "color",

@@ -7,6 +7,12 @@
     },
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "Google",
+      "note": "search icon",
+      "id": "searchIcon",
+      "link": "https://fonts.google.com/icons?icon.set=Material+Icons"
     }
   ],
   "userscripts": [

@@ -10,7 +10,7 @@ Be sure to follow our [code of conduct](https://github.com/ScratchAddons/Scratch
 
 Found a bug? Have an idea? You can [open an issue](https://github.com/ScratchAddons/ScratchAddons/issues/new/choose) to report bugs and send feedback! But first, be sure to [search for existing issues](https://github.com/ScratchAddons/ScratchAddons/issues). If there are no similar issues, you can create a new one. You can also open a [discussion](https://github.com/ScratchAddons/ScratchAddons/discussions) to suggest ideas or ask questions. We will take a look at it.
 
-We also have a [feedback form](https://scratchaddons.com/feedback) on our website, which you can access by clicking "Send Feedback" in Scratch Addons' full screen settings page.
+We also have a [feedback form](https://scratchaddons.com/feedback) on our website, which you can access by clicking "Send Feedback" in Scratch Addons' settings page.
 
 ## Contributing code
 
@@ -36,7 +36,7 @@ Testing changes once you have downloaded the source code is very easy and you do
 
 ### Guidelines and tips
 
-We format our code with Prettier to make sure all of it follows the same style and looks nice and neat. You can install [Prettier for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) or enable the "Format code using Prettier" workflow on your fork (by going to the Actions tab) to have Prettier format your code. If your pull request has formatting issues and you don't have Prettier, don't worry, we can fix it for you.
+We format our code with [Prettier](https://www.npmjs.com/package/prettier) to make sure all of it follows the same style and looks nice and neat. To have your code automatically formatted, enable Actions on your fork of the repository (in the Actions tab). If your pull request has formatting issues, don't worry, we can also fix it for you.
 
 It's a good idea to check "allow edits from maintainers" so that we can make adjustments and help fix things (like formatting) for you.
 

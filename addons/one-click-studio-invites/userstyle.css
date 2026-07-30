@@ -1,4 +1,5 @@
 .sa-curator-invite-button {
+  display: block;
   text-align: center;
 }
 .sa-curator-invite-button.loading {

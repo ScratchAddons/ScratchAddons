@@ -29,9 +29,7 @@ export function initUI({ addon, msg }) {
   };
 
   const controlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(controlsGroup, {
-    display: "flex",
-  });
+  addon.tab.displayNoneWhileDisabled(controlsGroup);
 
   const settingPageWrapper = document.createElement("div");
   settingPageWrapper.className = "sa-paint-snap-settings-wrapper";
@@ -74,6 +72,7 @@ export function initUI({ addon, msg }) {
   const settingButton = createButton();
   settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
   settingButton.title = msg("settings");
+  settingButton.classList.add("sa-paint-snap-arrow");
   settingButton.appendChild(createButtonImage("settings"));
   controlsGroup.appendChild(settingButton);
 
@@ -283,7 +282,7 @@ export function initUI({ addon, msg }) {
   const controlsLoop = async () => {
     let hasRunOnce = false;
     while (true) {
-      const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
+      const canvasControls = await addon.tab.waitForElement("[class*='paint-editor_canvas-controls_']", {
         markAsSeen: true,
         reduxEvents: [
           "scratch-gui/navigation/ACTIVATE_TAB",
@@ -295,7 +294,7 @@ export function initUI({ addon, msg }) {
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
-      const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
+      const zoomControlsContainer = canvasControls.querySelector("[class*='paint-editor_zoom-controls_']");
       addon.tab.appendToSharedSpace({
         space: "paintEditorZoomControls",
         element: controlsGroup,

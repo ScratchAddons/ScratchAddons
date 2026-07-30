@@ -49,7 +49,7 @@ export default async function ({ addon, console, msg }) {
             emptyProjectPromise.then((projectJsonText) => addon.tab.traps.vm.loadProject(projectJsonText));
             break;
           default: {
-            if (typeof addon.tab.traps.vm.runtime?.storage?.setProjectToken === "function") {
+            if (typeof addon.tab.redux.state.scratchGui.config?.storage?.setProjectToken === "function") {
               addon.auth
                 .fetchXToken()
                 .then((xToken) =>
@@ -67,7 +67,7 @@ export default async function ({ addon, console, msg }) {
                 .catch((exc) => console.error(`Fetching default project ${projectId} 's token failed`, exc))
                 .then((resp) => {
                   if (resp?.project_token) {
-                    addon.tab.traps.vm.runtime.storage.setProjectToken(resp.project_token);
+                    addon.tab.redux.state.scratchGui.config.storage.setProjectToken(resp.project_token);
                   }
                   addon.tab.traps.vm.downloadProjectId(projectId);
                 });

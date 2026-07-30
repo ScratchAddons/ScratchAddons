@@ -1,5 +1,6 @@
 name: 🐛 Bug
 description: Report a bug.
+type: Bug
 labels: ["status: needs triage", "type: bug"]
 body:
   - type: markdown

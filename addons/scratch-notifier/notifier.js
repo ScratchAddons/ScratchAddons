@@ -135,7 +135,7 @@ async function notifyMessage({
         url = `https://scratch.mit.edu/studios/${element_id}/`;
         break;
       case "remixproject":
-        notificationTitle = msg("notif-remix", { actor, parent_title, title });
+        notificationTitle = msg("notif-remix", { actor, parent_title });
         url = `https://scratch.mit.edu/projects/${element_id}/`;
         break;
       case "studioactivity":

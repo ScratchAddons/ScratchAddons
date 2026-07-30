@@ -1,0 +1,30 @@
+body [class*="monitor_monitor-container_"],
+[class*="monitor_list-body_"] {
+  background-color: var(--stageMonitor-monitor);
+  color: var(--stageMonitor-monitorLabel);
+}
+
+[class*="monitor_list-index_"] {
+  color: var(--stageMonitor-monitorLabel);
+}
+
+[class*="monitor_label_"],
+[class*="monitor_list-empty_"] {
+  color: var(--stageMonitor-monitorLabel) !important;
+}
+
+[class*="monitor_list-header_"],
+[class*="monitor_list-footer_"] {
+  background-color: var(--stageMonitor-listHeader);
+  color: var(--stageMonitor-listHeaderText);
+}
+
+body [class*="monitor_monitor-container_"],
+body [class*="monitor_large-value_"] {
+  border-radius: calc(var(--stageMonitor-monitorRadius) * 1px);
+}
+
+[class*="monitor_value_"],
+[class*="monitor_list-value_"] {
+  border-radius: calc(var(--stageMonitor-valueRadius) * 1px);
+}
