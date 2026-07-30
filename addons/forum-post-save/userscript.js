@@ -3,17 +3,19 @@ export default async function ({ addon, console }) {
   const box = document.querySelector(".markItUpContainer .markItUpEditor");
   if (!box) return;
 
-  const getTopics = () => JSON.parse(sessionStorage.getItem("sa-forum-post-save-topics") || "[]");
-  const setTopics = (topics) => sessionStorage.setItem("sa-forum-post-save-topics", JSON.stringify(topics));
+  // Temporary storage for submitted drafts in case post fails
+  const getSubmitted = () => JSON.parse(sessionStorage.getItem("sa-forum-post-save-submitted") || "[]");
+  const setSubmitted = (topics) => sessionStorage.setItem("sa-forum-post-save-submitted", JSON.stringify(topics));
+
   const postError = () => Boolean(document.querySelector(".errorlist"));
   // On page load, delete cache if last post was successful
-  const topics = getTopics();
+  const topics = getSubmitted();
   if (topics.includes(topicId) && !postError()) {
     const cache = _getAllCache();
     delete cache[topicId];
     localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
 
-    setTopics(topics.filter((topic) => topic !== topicId));
+    setSubmitted(topics.filter((topic) => topic !== topicId));
   }
 
   // Purge cache which is over two weeks old
@@ -53,9 +55,9 @@ export default async function ({ addon, console }) {
 
   document.querySelector("[name=AddPostForm]")?.addEventListener("click", (e) => {
     // Store topic ID
-    const ids = getTopics();
+    const ids = getSubmitted();
     ids.push(topicId);
-    setTopics(ids);
+    setSubmitted(ids);
   });
 
   function updateCache(topic) {
@@ -66,7 +68,7 @@ export default async function ({ addon, console }) {
     };
     const stored = _getAllCache();
     const cache = Object.assign({ ...stored }, update);
-    if (cache === stored) return; // if no diff, return
+    if (cache === stored) return;
     if (!cache[topic].cache.trim()) delete cache[topic]; // Delete posts with only whitespace
     localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
   }
