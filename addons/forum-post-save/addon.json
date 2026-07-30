@@ -1,6 +1,6 @@
 {
   "name": "Save draft posts",
-  "description": "Temporarily saves forum posts that you haven't submitted and restores them when you come back to where you wrote them.",
+  "description": "Temporarily saves forum posts that you haven't submitted and restores them when you come back to the same topic.",
   "credits": [
     {
       "name": "Weredime (9gr)",
