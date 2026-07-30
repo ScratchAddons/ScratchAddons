@@ -22,5 +22,5 @@ Included third-party icons may come from the following sets:
 - [Bootstrap Icons](https://icons.getbootstrap.com/) (MIT)
 - [Google Material Icons](https://fonts.google.com/icons) (Apache-2.0)
 - [HeroIcons](https://heroicons.com/) (MIT)
-- [Material Design Icons](https://pictogrammers.com/library/mdi/) (Apache-2.0)
+- [Pictogrammers Material Design Icons](https://pictogrammers.com/library/mdi/) (Apache-2.0)
 - [Unicons](https://iconscout.com/unicons) (Apache-2.0)
