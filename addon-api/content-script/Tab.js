@@ -904,6 +904,7 @@ export default class Tab extends Listenable {
    * @param {boolean=} opts.border - whether to add a border at the top or not.
    * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
    * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
+  * @param {object[]=} opts.children - nested submenu items shown when hovering over this item.
    */
   createEditorContextMenu(...args) {
     addContextMenu(this, ...args);

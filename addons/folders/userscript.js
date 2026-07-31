@@ -760,6 +760,107 @@ export default async function ({ addon, console, msg }) {
     const component = getSpriteSelectorItemFromElement(ctx.target);
     const data = getItemData(component.props);
     if (!data) return;
+
+    const deleteFolderContents = async (folder = data.folder) => {
+      const type = component.props.dragType.toLowerCase();
+      if (
+        await addon.tab.confirm(
+          msg(`delete-${folder ? 'folder-contents' : 'ungrouped'}-prompt-title`),
+          msg(`delete-${type}s-${folder ? 'folder-contents' : 'ungrouped'}-prompt`),
+          {
+            useEditorClasses: true,
+          }
+        )
+      ) {
+        if (type === "sprite") {
+          const targets = vm.runtime.targets;
+          restorationFunctions = [];
+
+          for (let i = targets.length - 1; i > -1; i--) {
+            // Don't try to delete the Stage
+            if (targets[i].sprite.name !== "Stage") {
+              if (getFolderFromName(targets[i].sprite.name) === folder) {
+                let deleted = vm.deleteSprite(targets[i].id);
+                if (deleted) restorationFunctions.push(deleted);
+              }
+            }
+          }
+
+          window.getSpriteSelectorItemFromElement = getSpriteSelectorItemFromElement;
+
+          addon.tab.redux.dispatch({
+            type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
+            state: {
+              restoreFun: restore.bind(this, type, null),
+              deletedItem: "Sprite",
+            },
+          });
+          queueMicrotask(() => {
+            if (restorationFunctions.length > 1) {
+              restoreButtonMsg = "/_general/restore/sprites";
+            }
+          });
+        } else if (type === "costume" || type === "sound") {
+          restorationFunctions = [];
+          const assets = type === "costume" ? vm.editingTarget.sprite.costumes : vm.editingTarget.sprite.sounds;
+
+          for (let i = assets.length - 1; i > -1; i--) {
+            if (getFolderFromName(assets[i].name) === folder) {
+              let deleted = type === "costume" ? vm.deleteCostume(i) : vm.deleteSound(i);
+              if (deleted) restorationFunctions.push(deleted);
+            }
+          }
+
+          vm.emitTargetsUpdate();
+
+          let lastCostumeRemoved = null;
+          if (folder) {
+            // If removing from folder, and not outside folders, remove at least the last costume from folder since it cannot be deleted
+            if (type === "costume" && assets.length === 1 && getFolderFromName(assets[0].name) === folder) {
+              lastCostumeRemoved = {
+                assetId: assets[0].assetId,
+                name: assets[0].name,
+                target: vm.editingTarget,
+              };
+              vm.renameCostume(0, getNameWithoutFolder(assets[0].name));
+            }
+          }
+
+          addon.tab.redux.dispatch({
+            type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
+            state: {
+              restoreFun: restore.bind(this, type, lastCostumeRemoved),
+              deletedItem: type === "costume" ? "Costume" : "Sound",
+            },
+          });
+          queueMicrotask(() => {
+            if (restorationFunctions.length + (lastCostumeRemoved !== null) > 1) {
+              restoreButtonMsg = `/_general/restore/${type}s`;
+            }
+          });
+        }
+      }
+    };
+
+    const deleteOutsideFolders = () => {
+      deleteFolderContents(null);
+    }
+
+    const checkIfTheresUngrouped = () => {
+      const type = component.props.dragType.toLowerCase();
+      const itemlist = (type === "sprite" ? vm.runtime.targets : vm.editingTarget.sprite[`${type}s`]);
+      let ungrouped = false;
+      // If there's only one costume, regardless if it's ungrouped, it cannot be deleted
+      if (type === "costume" && itemlist.length === 1) return false;
+      itemlist.forEach(item => {
+        if ((type === "sprite" && item.sprite.name !== "Stage" && !getFolderFromName(item.sprite.name))
+            || (type !== "sprite" && !getFolderFromName(item.name))) {
+              ungrouped = true;
+          }
+      })
+      return ungrouped;
+    }
+
     if (typeof data.folder === "string") {
       ctx.target.setAttribute("sa-folders-context-type", "folder");
 
@@ -823,84 +924,9 @@ export default async function ({ addon, console, msg }) {
         renameItems(null);
       };
 
-      const deleteFolderContents = async () => {
-        const type = component.props.dragType.toLowerCase();
-        if (
-          await addon.tab.confirm(
-            msg("delete-folder-contents-prompt-title"),
-            msg(`delete-${type}s-folder-contents-prompt`),
-            {
-              useEditorClasses: true,
-            }
-          )
-        ) {
-          if (type === "sprite") {
-            const targets = vm.runtime.targets;
-            restorationFunctions = [];
-
-            for (let i = targets.length - 1; i > -1; i--) {
-              if (getFolderFromName(targets[i].sprite.name) === data.folder) {
-                let deleted = vm.deleteSprite(targets[i].id);
-                if (deleted) restorationFunctions.push(deleted);
-              }
-            }
-
-            window.getSpriteSelectorItemFromElement = getSpriteSelectorItemFromElement;
-
-            addon.tab.redux.dispatch({
-              type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
-              state: {
-                restoreFun: restore.bind(this, type, null),
-                deletedItem: "Sprite",
-              },
-            });
-            queueMicrotask(() => {
-              if (restorationFunctions.length > 1) {
-                restoreButtonMsg = "/_general/restore/sprites";
-              }
-            });
-          } else if (type === "costume" || type === "sound") {
-            restorationFunctions = [];
-            const assets = type === "costume" ? vm.editingTarget.sprite.costumes : vm.editingTarget.sprite.sounds;
-
-            for (let i = assets.length - 1; i > -1; i--) {
-              if (getFolderFromName(assets[i].name) === data.folder) {
-                let deleted = type === "costume" ? vm.deleteCostume(i) : vm.deleteSound(i);
-                if (deleted) restorationFunctions.push(deleted);
-              }
-            }
-
-            vm.emitTargetsUpdate();
-
-            // The last costume cannot be deleted, but at least it can be removed from the folder
-            let lastCostumeRemoved = null;
-            if (type === "costume" && assets.length === 1 && getFolderFromName(assets[0].name) === data.folder) {
-              lastCostumeRemoved = {
-                assetId: assets[0].assetId,
-                name: assets[0].name,
-                target: vm.editingTarget,
-              };
-              vm.renameCostume(0, getNameWithoutFolder(assets[0].name));
-            }
-
-            addon.tab.redux.dispatch({
-              type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
-              state: {
-                restoreFun: restore.bind(this, type, lastCostumeRemoved),
-                deletedItem: type === "costume" ? "Costume" : "Sound",
-              },
-            });
-            queueMicrotask(() => {
-              if (restorationFunctions.length + (lastCostumeRemoved !== null) > 1) {
-                restoreButtonMsg = `/_general/restore/${type}s`;
-              }
-            });
-          }
-        }
-      };
-
       return [
         {
+          border: true,
           className: "sa-folders-rename-folder",
           label: msg("rename-folder"),
           callback: renameFolder,
@@ -922,12 +948,22 @@ export default async function ({ addon, console, msg }) {
           order: 12,
           dangerous: true,
         },
+        ...(checkIfTheresUngrouped() ? [{
+          className: "sa-folders-delete-ungrouped",
+          label: msg("delete-ungrouped"),
+          callback: deleteOutsideFolders,
+          position: "assetContextMenuAfterDelete",
+          order: 13,
+          dangerous: true,
+        }] : [])
       ];
     } else {
       ctx.target.setAttribute("sa-folders-context-type", "asset");
+
       const setFolder = (folder) => {
         if (component.props.dragType === "SPRITE") {
           const target = vm.runtime.getTargetById(component.props.id);
+          if (!target || target.isStage) return;
           vm.renameSprite(component.props.id, ensureNotReserved(setFolderOfName(target.getName(), folder)));
           fixTargetOrder();
           vm.emitWorkspaceUpdate();
@@ -942,6 +978,51 @@ export default async function ({ addon, console, msg }) {
           const index = data.realIndex;
           const asset = vm.editingTarget.sprite.sounds[index];
           vm.renameSound(vm.editingTarget.sprite.sounds.indexOf(asset), setFolderOfName(asset.name, folder));
+          fixSoundOrder();
+        }
+      };
+
+      const setAdjacentItemsFolder = (folder, removePreceding) => {
+        if (typeof data.realIndex !== "number") {
+          return;
+        }
+
+        // Adjacent items are selected from the same source folder as the current item.
+        // This can be a string folder name, or null (ungrouped items).
+        const sourceFolder = typeof currentFolder === "string" ? currentFolder : null;
+
+        if (component.props.dragType === "SPRITE") {
+          for (let i = 0; i < vm.runtime.targets.length; i++) {
+            const target = vm.runtime.targets[i];
+            if (!target.isOriginal || target.isStage) continue; // don't touch clones or Stage
+            const targetName = target.getName();
+            const inSameSourceFolder = getFolderFromName(targetName) === sourceFolder;
+            const shouldChange = removePreceding ? i < data.realIndex : i > data.realIndex;
+            if (inSameSourceFolder && shouldChange) {
+              vm.renameSprite(target.id, ensureNotReserved(setFolderOfName(targetName, folder)));
+            }
+          }
+          vm.emitWorkspaceUpdate();
+          fixTargetOrder();
+        } else if (component.props.dragType === "COSTUME") {
+          for (let i = 0; i < vm.editingTarget.sprite.costumes.length; i++) {
+            const costume = vm.editingTarget.sprite.costumes[i];
+            const inSameSourceFolder = getFolderFromName(costume.name) === sourceFolder;
+            const shouldChange = removePreceding ? i < data.realIndex : i > data.realIndex;
+            if (inSameSourceFolder && shouldChange) {
+              vm.renameCostume(i, setFolderOfName(costume.name, folder));
+            }
+          }
+          fixCostumeOrder();
+        } else if (component.props.dragType === "SOUND") {
+          for (let i = 0; i < vm.editingTarget.sprite.sounds.length; i++) {
+            const sound = vm.editingTarget.sprite.sounds[i];
+            const inSameSourceFolder = getFolderFromName(sound.name) === sourceFolder;
+            const shouldChange = removePreceding ? i < data.realIndex : i > data.realIndex;
+            if (inSameSourceFolder && shouldChange) {
+              vm.renameSound(i, setFolderOfName(sound.name, folder));
+            }
+          }
           fixSoundOrder();
         }
       };
@@ -962,14 +1043,23 @@ export default async function ({ addon, console, msg }) {
         }
         setFolder(name);
       };
+
       const base = [
+        ...( checkIfTheresUngrouped() ? [{
+          className: "sa-folders-delete-ungrouped",
+          label: msg("delete-ungrouped"),
+          callback: deleteOutsideFolders,
+          position: "assetContextMenuAfterDelete",
+          order: 13,
+          dangerous: true,
+        }] : []),
         {
           border: true,
           className: "sa-folders-create-folder",
           label: msg("create-folder"),
           callback: createFolder,
           position: "assetContextMenuAfterDelete",
-          order: 13,
+          order: 14,
         },
       ];
       const currentFolder = data.inFolder;
@@ -977,9 +1067,25 @@ export default async function ({ addon, console, msg }) {
         base.push({
           className: "sa-folders-remove-from-folder",
           label: msg("remove-from-folder"),
-          callback: () => setFolder(null),
           position: "assetContextMenuAfterDelete",
-          order: 14,
+          order: 15,
+          children: [
+            {
+              className: "sa-folders-this-item",
+              label: msg("this-item"),
+              callback: () => setFolder(null),
+            },
+            {
+              className: "sa-folders-preceeding-items",
+              label: msg("preceeding-items"),
+              callback: () => setAdjacentItemsFolder(null, true),
+            },
+            {
+              className: "sa-folders-following-items",
+              label: msg("following-items"),
+              callback: () => setAdjacentItemsFolder(null, false),
+            },
+          ]
         });
       }
       return base.concat(
@@ -991,9 +1097,25 @@ export default async function ({ addon, console, msg }) {
               label: msg("add-to-folder", {
                 folder,
               }),
-              callback: () => setFolder(folder),
               position: "assetContextMenuAfterDelete",
               order: 20 + i,
+              children: [
+                {
+                  className: "sa-folders-this-item",
+                  label: msg("this-item"),
+                  callback: () => setFolder(folder),
+                },
+                {
+                  className: "sa-folders-preceeding-items",
+                  label: msg("preceeding-items"),
+                  callback: () => setAdjacentItemsFolder(folder, true),
+                },
+                {
+                  className: "sa-folders-following-items",
+                  label: msg("following-items"),
+                  callback: () => setAdjacentItemsFolder(folder, false),
+                },
+              ],
             };
           })
       );
