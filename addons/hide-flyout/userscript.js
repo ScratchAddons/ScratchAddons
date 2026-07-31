@@ -229,8 +229,8 @@ export default async function ({ addon, console, msg }) {
         return oldShowContextMenu.call(this, ...args);
       };
 
-      const oldShowInlineEditor = Blockly.FieldTextInput.prototype.showInlineEditor_;
-      Blockly.FieldTextInput.prototype.showInlineEditor_ = function (...args) {
+      const oldShowInlineEditor = Blockly.FieldTextInput.prototype.showInlineEditor;
+      Blockly.FieldTextInput.prototype.showInlineEditor = function (...args) {
         widgetDivOwner = this;
         return oldShowInlineEditor.call(this, ...args);
       };
