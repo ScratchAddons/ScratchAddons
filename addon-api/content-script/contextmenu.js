@@ -132,6 +132,7 @@ const onReactContextMenu = async function (e) {
       });
       itemElem.role = "menuitem";
       itemElem.tabIndex = "-1";
+
       if (hasChildren) {
         itemElem.setAttribute("aria-haspopup", "menu");
         itemElem.setAttribute("aria-expanded", "false");
@@ -143,6 +144,10 @@ const onReactContextMenu = async function (e) {
       const label = document.createElement("span");
       label.textContent = item.label;
       label.style.flex = 1;
+      label.style.maxWidth = "250px";
+      label.style.overflow = "hidden";
+      label.style.whiteSpace = "nowrap";
+      label.style.textOverflow = "ellipsis";
       itemElem.append(label);
 
       let submenuElem = null;
