@@ -37,17 +37,12 @@
 #profile-data .box-head .profile-details .group {
   border-right-color: white;
 }
-#profile-data .box-head .portrait img {
+#profile-data .box-head .portrait img:not(.avatar-badge) {
   border: none;
 }
 #profile-data .box-head .buttons {
   z-index: 1;
   flex-shrink: 0;
-}
-#profile-data .box-head .buttons ~ img {
-  /* membership badge */
-  position: relative;
-  z-index: 1;
 }
 #better-featured-project-name {
   color: white;

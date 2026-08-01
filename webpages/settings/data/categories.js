@@ -88,7 +88,6 @@ export default [
     id: "popup",
     icon: "popup",
     name: chrome.i18n.getMessage("popupFeatures"),
-    marginBottom: true,
   },
   {
     id: "easterEgg",

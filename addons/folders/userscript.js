@@ -320,7 +320,7 @@ export default async function ({ addon, console, msg }) {
       const Backpack = backpackInstance.constructor;
       return (
         typeof Backpack.prototype.handleDrop === "function" &&
-        typeof Backpack.prototype.componentDidUpdate === "undefined"
+        typeof Backpack.prototype.componentDidUpdate === "function"
       );
     } catch {
       return false;
@@ -1518,7 +1518,9 @@ export default async function ({ addon, console, msg }) {
       }
     };
 
+    const originalComponentDidUpdate = Backpack.prototype.componentDidUpdate;
     Backpack.prototype.componentDidUpdate = function (prevProps, prevState) {
+      originalComponentDidUpdate.call(this, prevProps, prevState);
       if (!this.state.loading && prevState.loading && !this.state.error) {
         this.sa_loadNextItem();
       }

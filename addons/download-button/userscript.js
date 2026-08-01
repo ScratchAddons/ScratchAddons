@@ -12,15 +12,18 @@ export default async function ({ addon, console, msg }) {
   const isOwn = username === projectAuthor;
   const shared = addon.tab.redux.state.preview.projectInfo.is_published;
 
-  async function download(beginFilenameWithId) {
+  async function download(endFilenameWithId) {
     const downloadButton = document.querySelector(".sa-download-button");
     downloadButton.classList.add("loading");
     try {
       const project = await vm.saveProjectSb3();
       const title = isOwn ? document.querySelector(".project-title input") : document.querySelector(".project-title");
-      const titleStr = isOwn ? title.value : title.innerText;
-      const projectId = window.location.pathname.split("/")[2];
-      downloadBlob((beginFilenameWithId ? `${projectId} ` : "") + titleStr + ".sb3", project);
+      let titleStr = isOwn ? title.value : title.innerText;
+      if (endFilenameWithId) {
+        const projectId = window.location.pathname.split("/")[2];
+        titleStr += "-" + projectId;
+      }
+      downloadBlob(titleStr + ".sb3", project);
     } finally {
       downloadButton.classList.remove("loading");
     }
