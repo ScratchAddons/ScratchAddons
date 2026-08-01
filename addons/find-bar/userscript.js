@@ -66,11 +66,9 @@ export default async function ({ addon, msg, console }) {
       const visible = tab === 0 || tab === 1 || tab === 2;
       this.findBarOuter.hidden = !visible;
       if (visible) {
-        this.findInput.placeholder = [
-          msg("find-placeholder"),
-          msg("costume-placeholder"),
-          msg("sound-placeholder"),
-        ][tab];
+        this.findInput.placeholder = [msg("find-placeholder"), msg("costume-placeholder"), msg("sound-placeholder")][
+          tab
+        ];
       }
     }
 
