@@ -436,27 +436,36 @@ export default async function ({ addon, msg }) {
   const performCombine = async () => {
     const paper = await addon.tab.traps.getPaper();
     convertTextItems(paper);
-    const selected = paper.project.selectedItems
-      .filter((item) => item instanceof paper.Path || item instanceof paper.CompoundPath)
-      .sort((a, b) => a.index - b.index); // back→front
+    const selectedRoots = getTopLevelSelected(paper);
+    const selected = selectedRoots
+      .flatMap((item) => getLeafPaths(item, paper))
+      .filter((item) => item instanceof paper.Path || item instanceof paper.CompoundPath);
     if (selected.length < 2) return;
 
     // Style from the backmost (bottom) shape.
     const bottomStyle = cloneStyle(selected[0]);
 
-    // Collect all leaf Path nodes, flattening any nested CompoundPaths.
+    // Collect all leaf Path nodes, flattening Groups and CompoundPaths.
     const leafPaths = [];
     for (const item of selected) {
-      item.selected = false; // must deselect BEFORE remove so paper clears it from selectedItems
+      // A selected Group also selects its descendants. Bake each descendant's
+      // full ancestor transform before moving it into the top-level CompoundPath.
+      const matrix = item.globalMatrix.clone();
+      const clone = item.clone();
+      clone.remove();
+      clone.matrix = matrix;
+      clone.applyMatrix = true;
       if (item instanceof paper.CompoundPath) {
-        for (const child of item.children.slice()) {
-          leafPaths.push(child.clone());
-        }
-        item.remove();
+        leafPaths.push(...clone.removeChildren());
+        clone.remove();
       } else {
-        leafPaths.push(item.clone());
-        item.remove();
+        leafPaths.push(clone);
       }
+    }
+
+    for (const item of selectedRoots) {
+      item.selected = false; // must deselect BEFORE remove so paper clears it from selectedItems
+      item.remove();
     }
 
     const cp = new paper.CompoundPath({ children: leafPaths });
