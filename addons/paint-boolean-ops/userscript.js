@@ -54,7 +54,20 @@ export default async function ({ addon, msg }) {
   const intersectBtn = makeItem("intersect.svg", msg("intersect"), msg("intersect-alt"), "intersect");
   const compoundBtn = makeItem("combine.svg", msg("combine"), msg("combine-desc"), "combine");
   const expandBtn = makeItem("expand.svg", msg("expand"), msg("expand-desc"), "expand");
-  shapingSection.append(uniteBtn, subtractBtn, intersectBtn, compoundBtn, expandBtn);
+
+  // Each group gets native input-group classes (flex layout, inter-group spacing) once
+  // known. A dashed-border separator goes on a group div, never on a button directly -
+  // that class assumes a group-div's box model and strips borders/padding meant for
+  // separators when applied to a button (e.g. under the compact-editor addon).
+  const makeGroup = (...items) => {
+    const group = document.createElement("div");
+    group.append(...items);
+    return group;
+  };
+  const booleanOpsGroup = makeGroup(uniteBtn, subtractBtn, intersectBtn);
+  const compoundGroup = makeGroup(compoundBtn);
+  const expandGroup = makeGroup(expandBtn);
+  shapingSection.append(booleanOpsGroup, compoundGroup, expandGroup);
 
   // ── Click handler ─────────────────────────────────────────────────────
   // Routes clicks on any [data-sa-op] element to the correct operation.
@@ -715,10 +728,18 @@ export default async function ({ addon, msg }) {
     inlineIconSelector: ".sa-shaping-item-icon",
     inlineLabelSelector: ".sa-shaping-item-label",
     overflowItems: allMoreItems,
-    onNativeClasses: ({ dashedBorderClass: nativeDashedBorderClass, disabledClass }) => {
+    onNativeClasses: ({ dashedBorderClass: nativeDashedBorderClass, disabledClass, inputGroupClasses }) => {
       dashedBorderClass = nativeDashedBorderClass;
-      // Separates the boolean-set ops (unite/subtract/intersect) from compound/expand.
-      if (dashedBorderClass) intersectBtn.classList.add(dashedBorderClass);
+      if (inputGroupClasses.length) {
+        booleanOpsGroup.classList.add(...inputGroupClasses);
+        compoundGroup.classList.add(...inputGroupClasses);
+        expandGroup.classList.add(...inputGroupClasses);
+      }
+      // Separates the boolean-set ops group and the compound group from the one after it.
+      if (dashedBorderClass) {
+        booleanOpsGroup.classList.add(dashedBorderClass);
+        compoundGroup.classList.add(dashedBorderClass);
+      }
       if (disabledClass) modDisabledClass = disabledClass;
     },
     onToolbarMutation: injectModeToolsBtn,

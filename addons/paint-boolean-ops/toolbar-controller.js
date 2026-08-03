@@ -18,7 +18,7 @@ const MORE_MENU_SELECTOR = "[class*='fixed-tools_mod-context-menu_']";
  * @param {string} options.inlineIconSelector - Icons within the inline section.
  * @param {string} options.inlineLabelSelector - Labels within the inline section.
  * @param {HTMLElement[]} options.overflowItems - Matching controls shown in the More menu.
- * @param {Function} [options.onNativeClasses] - Receives Scratch's separator and disabled classes.
+ * @param {Function} [options.onNativeClasses] - Receives Scratch's separator, disabled, and input-group classes.
  * @param {Function} [options.onToolbarMutation] - Runs after Scratch changes the toolbar.
  * @param {Function} [options.onOverflowItemsMounted] - Runs after More-menu items are inserted.
  * @param {Function} [options.onReady] - Runs once after observers are attached.
@@ -59,11 +59,16 @@ export const createPaintToolbarController = ({
       ? [...nativeDashedGroup.classList].find((className) => className.includes("mod-dashed-border")) ?? ""
       : "";
 
-    if (nativeDashedGroup) {
-      const baseClasses = [...nativeDashedGroup.classList].filter(
-        (className) => !className.includes("mod-dashed-border")
-      );
-      inlineSection.className = [...baseClasses, inlineSectionClass].join(" ");
+    // Native input-group classes, e.g. flex layout and inter-group spacing. Callers
+    // apply these (not dashedBorderClass) to any button-group divs they build, since
+    // that class assumes a group-div's box model and strips borders/padding meant for
+    // separators when applied directly to a button (e.g. under the compact-editor addon).
+    const inputGroupClasses = nativeDashedGroup
+      ? [...nativeDashedGroup.classList].filter((className) => !className.includes("mod-dashed-border"))
+      : [];
+
+    if (inputGroupClasses.length) {
+      inlineSection.className = [...inputGroupClasses, inlineSectionClass].join(" ");
     }
 
     const nativeButton = fixedToolsRow.querySelector("[class*='labeled-icon-button_mod-edit-field_']");
@@ -85,7 +90,7 @@ export const createPaintToolbarController = ({
       if (nativeLabel) label.classList.add(...nativeLabel.classList);
     }
 
-    onNativeClasses({ dashedBorderClass, disabledClass });
+    onNativeClasses({ dashedBorderClass, disabledClass, inputGroupClasses });
   };
 
   // Scratch's rendered layout is the final authority for whether inline
