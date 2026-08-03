@@ -9,12 +9,12 @@
     },
     {
       "type": "info",
-      "text": "\"Subtract\" uses the front shape to cut a hole through every selected shape below it. Hold Shift to cut only the back shape, or Alt to keep the cutter.",
+      "text": "\"Subtract\" uses the front shape to cut a hole through every selected shape below it. Hold Shift to cut only the back shape, or Alt (Option on macOS) to keep the cutter.",
       "id": "infoSubtract"
     },
     {
       "type": "info",
-      "text": "\"Intersect\" keeps only the areas where the selected shapes overlap. Hold Alt to divide them into separate regions.",
+      "text": "\"Intersect\" keeps only the areas where the selected shapes overlap. Hold Alt (Option on macOS) to divide them into separate regions.",
       "id": "infoIntersect"
     },
     {
@@ -45,7 +45,7 @@
     }
   ],
   "tags": ["editor", "costumeEditor"],
-  "versionAdded": "1.45.0",
+  "versionAdded": "1.46.0",
   "enabledByDefault": false,
   "libraries": ["scratch-paint"],
   "userscripts": [
