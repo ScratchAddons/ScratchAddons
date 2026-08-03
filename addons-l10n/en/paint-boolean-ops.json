@@ -12,6 +12,8 @@
   "paint-boolean-ops/release-desc": "Release splits this compound path back into separate shapes.",
   "paint-boolean-ops/expand": "Expand",
   "paint-boolean-ops/expand-desc": "Expand grows the shape outward by half its outline width, moving the fill edge to where the outer edge of the outline was.",
-  "paint-boolean-ops/open-path": "Open Path",
-  "paint-boolean-ops/close-path": "Close Path"
+  "paint-boolean-ops/open-shape": "Open Shape",
+  "paint-boolean-ops/open-shape-desc": "Open Shape splits this shape into an outline at the selected point.",
+  "paint-boolean-ops/close-shape": "Close Shape",
+  "paint-boolean-ops/close-shape-desc": "Close Shape joins this outline's ends back into a shape."
 }

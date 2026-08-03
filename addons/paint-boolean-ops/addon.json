@@ -28,6 +28,11 @@
       "id": "infoExpand"
     },
     {
+      "type": "info",
+      "text": "In Reshape mode, \"Open Shape\" splits a closed shape into an outline at the selected point, and \"Close Shape\" joins an open outline's ends back into a shape.",
+      "id": "infoOpenClose"
+    },
+    {
       "type": "notice",
       "text": "The shape operation buttons may move into the \"More\" menu on smaller screens.",
       "id": "moreMenu"

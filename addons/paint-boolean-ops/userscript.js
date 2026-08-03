@@ -171,14 +171,15 @@ export default async function ({ addon, msg }) {
     moreCompoundBtn.dataset.saOp = compoundOp;
     moreCompoundBtn.querySelector("img").src = `${addon.self.dir}/icons/${compoundOp}.svg`;
     moreCompoundBtn.querySelector("span").textContent = msg(compoundOp);
-    // Open/Close button morphs: "Open Path" when selection is closed, "Close Path" when open.
+    // Open/Close button morphs: "Open Shape" when selection is closed, "Close Shape" when open.
     const paths = sel.filter((item) => item instanceof paper.Path);
     const allOpen = paths.length > 0 && paths.every((p) => !p.closed);
-    const openCloseLabel = allOpen ? msg("close-path") : msg("open-path");
+    const openCloseLabel = allOpen ? msg("close-shape") : msg("open-shape");
+    const openCloseDesc = allOpen ? msg("close-shape-desc") : msg("open-shape-desc");
     // Update the mode-tools context bar button if it exists.
     if (modeToolsOCLbl) modeToolsOCLbl.textContent = openCloseLabel;
     if (modeToolsOCBtn) {
-      modeToolsOCBtn.title = openCloseLabel;
+      modeToolsOCBtn.title = openCloseDesc;
       if (modDisabledClass) modeToolsOCBtn.classList.toggle(modDisabledClass, !hasPaths);
     }
     if (modDisabledClass) compoundBtn.classList.toggle(modDisabledClass, !(totalCount >= 2 || hasCompound));
@@ -647,7 +648,7 @@ export default async function ({ addon, msg }) {
     modeToolsOCIcon.draggable = false;
     modeToolsOCIcon.src = `${addon.self.dir}/icons/open-close.svg`;
     modeToolsOCLbl = document.createElement("span");
-    modeToolsOCLbl.textContent = msg("open-path");
+    modeToolsOCLbl.textContent = msg("open-shape");
     modeToolsOCBtn.appendChild(modeToolsOCIcon);
     modeToolsOCBtn.appendChild(modeToolsOCLbl);
     modeToolsOCBtn.addEventListener("click", () => {
