@@ -1,0 +1,19 @@
+{
+  "paint-boolean-ops/unite": "Unite",
+  "paint-boolean-ops/unite-desc": "Unite merges selected shapes into one and fills all overlapping areas.",
+  "paint-boolean-ops/subtract": "Subtract",
+  "paint-boolean-ops/subtract-alt": "Subtract cuts the front shape out of every selected shape beneath it. Hold Alt (Option on macOS) to keep the cutter, or Shift to subtract all front shapes from the back shape only.",
+  "paint-boolean-ops/intersect": "Intersect",
+  "paint-boolean-ops/intersect-alt": "Intersect keeps only the areas where shapes overlap. Hold Alt (Option on macOS) to divide at every intersection.",
+  "paint-boolean-ops/divide": "Divide",
+  "paint-boolean-ops/combine": "Combine",
+  "paint-boolean-ops/combine-desc": "Combine joins shapes into a compound path, making overlapping areas transparent.",
+  "paint-boolean-ops/release": "Release",
+  "paint-boolean-ops/release-desc": "Release splits this compound path back into separate shapes.",
+  "paint-boolean-ops/expand": "Expand",
+  "paint-boolean-ops/expand-desc": "Expand grows the shape outward by half its outline width, moving the fill edge to where the outer edge of the outline was.",
+  "paint-boolean-ops/open-shape": "Open Shape",
+  "paint-boolean-ops/open-shape-desc": "Open Shape splits this shape into an outline at the selected point.",
+  "paint-boolean-ops/close-shape": "Close Shape",
+  "paint-boolean-ops/close-shape-desc": "Close Shape joins this outline's ends back into a shape."
+}

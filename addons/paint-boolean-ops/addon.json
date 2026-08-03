@@ -1,0 +1,60 @@
+{
+  "name": "Boolean shape operations",
+  "description": "Adds shape operations to the vector costume editor: Unite, Subtract, Intersect, Combine/Release, and Expand.",
+  "info": [
+    {
+      "type": "info",
+      "text": "\"Unite\" merges all selected shapes into one filled shape.",
+      "id": "infoUnite"
+    },
+    {
+      "type": "info",
+      "text": "\"Subtract\" uses the front shape to cut a hole through every selected shape below it. Hold Shift to cut only the back shape, or Alt (Option on macOS) to keep the cutter.",
+      "id": "infoSubtract"
+    },
+    {
+      "type": "info",
+      "text": "\"Intersect\" keeps only the areas where the selected shapes overlap. Hold Alt (Option on macOS) to divide them into separate regions.",
+      "id": "infoIntersect"
+    },
+    {
+      "type": "info",
+      "text": "\"Combine\" joins selected shapes into a compound path, making overlapping areas transparent. \"Release\" splits a compound path back into separate shapes.",
+      "id": "infoCombine"
+    },
+    {
+      "type": "info",
+      "text": "\"Expand\" grows each selected shape outward by half its outline width, moving the fill edge to where the outer edge of the outline was.",
+      "id": "infoExpand"
+    },
+    {
+      "type": "info",
+      "text": "In Reshape mode, \"Open Shape\" splits a closed shape into an outline at the selected point, and \"Close Shape\" joins an open outline's ends back into a shape.",
+      "id": "infoOpenClose"
+    },
+    {
+      "type": "notice",
+      "text": "The shape operation buttons may move into the \"More\" menu on smaller screens.",
+      "id": "moreMenu"
+    }
+  ],
+  "credits": [
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor"],
+  "versionAdded": "1.46.0",
+  "enabledByDefault": false,
+  "libraries": ["scratch-paint"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

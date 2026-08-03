@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <!-- Three sides of a rectangle — open on the right, showing a gap -->
+  <path d="M15 5 L5 5 L5 15 L15 15" fill="none" stroke="#855CD6" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Endpoint dots at the open ends -->
+  <circle cx="15" cy="5"  r="2" fill="#855CD6"/>
+  <circle cx="15" cy="15" r="2" fill="#855CD6"/>
+</svg>
