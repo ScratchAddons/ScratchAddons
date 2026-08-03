@@ -1,6 +1,6 @@
 export default async function ({ addon }) {
-  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
-             || navigator.userAgent.toLowerCase().includes('mac');
+  const isMac =
+    navigator.platform.toUpperCase().indexOf("MAC") >= 0 || navigator.userAgent.toLowerCase().includes("mac");
   const settings = {
     none: 0,
     hundredth: 0.01,
