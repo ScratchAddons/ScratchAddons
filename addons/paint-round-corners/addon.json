@@ -1,0 +1,23 @@
+{
+  "name": "Round corners in costume editor",
+  "description": "Use the Reshape tool in the costume editor to reveal draggable handles for rounding a shape's corners. Shift-click to select specific corners; with none selected, all corners are rounded together.",
+  "credits": [
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
+    }
+  ],
+  "tags": ["editor", "costumeEditor"],
+  "relatedAddons": ["paint-skew"],
+  "versionAdded": "1.46.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "libraries": ["scratch-paint"],
+  "enabledByDefault": false
+}
