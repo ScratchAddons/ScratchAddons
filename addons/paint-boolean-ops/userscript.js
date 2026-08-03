@@ -102,10 +102,13 @@ export default async function ({ addon, msg }) {
   const allMoreItems = [moreUniteBtn, moreSubtractBtn, moreIntersectBtn, moreCompoundBtn, moreExpandBtn];
 
   // ── Enable/disable buttons based on current paper.js selection ─────────
-  // Schedules updateButtonStates after React's next two paint frames. This is
-  // necessary because triggerUpdateImage() round-trips through Redux, resetting
-  // paper.js selectedItems — we must read selection only after that settles.
-  const deferUpdateButtonStates = () => requestAnimationFrame(() => requestAnimationFrame(updateButtonStates));
+  // Runs fn after React's next two paint frames. This is necessary because
+  // triggerUpdateImage() round-trips through Redux, resetting paper.js
+  // selectedItems — callers must read selection only after that settles.
+  const afterReduxRoundTrip = (fn) => requestAnimationFrame(() => requestAnimationFrame(fn));
+
+  // Schedules updateButtonStates once the round-trip above has settled.
+  const deferUpdateButtonStates = () => afterReduxRoundTrip(updateButtonStates);
 
   // Reads the current paper.js selection and enables or disables each button
   // accordingly. Also morphs the Combine/Release and Open/Close buttons.
@@ -605,6 +608,7 @@ export default async function ({ addon, msg }) {
   // ── Trigger scratch-paint undo snapshot ───────────────────────────────────
   // Walks up the React fiber tree to call handleUpdateImage(), which commits
   // the current paper.js canvas state to Redux and records an undo entry.
+  // Also refreshes the bounding-box handles, since a boolean op can resize them.
   const triggerUpdateImage = () => {
     const canvasContainer = document.querySelector("[class*='paint-editor_canvas-container_']");
     if (!canvasContainer) return;
@@ -615,6 +619,8 @@ export default async function ({ addon, msg }) {
     if (typeof fiber?.stateNode?.handleUpdateImage === "function") {
       fiber.stateNode.handleUpdateImage();
     }
+    // Same refresh mechanism scratch-paint uses after zooming.
+    afterReduxRoundTrip(() => addon.tab.redux.dispatch({ type: "scratch-paint/select/REDRAW_SELECTION_BOX" }));
   };
 
   // ── Open/Close button in the mode-tools context bar ───────────────────
