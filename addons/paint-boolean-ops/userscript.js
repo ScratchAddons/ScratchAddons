@@ -710,10 +710,8 @@ export default async function ({ addon, msg }) {
     overflowItems: allMoreItems,
     onNativeClasses: ({ dashedBorderClass: nativeDashedBorderClass, disabledClass }) => {
       dashedBorderClass = nativeDashedBorderClass;
-      if (dashedBorderClass) {
-        intersectBtn.classList.add(dashedBorderClass);
-        compoundBtn.classList.add(dashedBorderClass);
-      }
+      // Separates the boolean-set ops (unite/subtract/intersect) from compound/expand.
+      if (dashedBorderClass) intersectBtn.classList.add(dashedBorderClass);
       if (disabledClass) modDisabledClass = disabledClass;
     },
     onToolbarMutation: injectModeToolsBtn,
