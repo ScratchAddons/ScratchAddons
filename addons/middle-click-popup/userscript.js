@@ -138,13 +138,11 @@ export default async function ({ addon, msg, console }) {
     popupInput.focus();
     updateInput();
 
-    // @ts-ignore - registry exists in scratch-blocks but not in standard Blockly types
     if (Blockly.registry) {
       // new Blockly: register delete area (remove first in case a previous open didn't clean up)
       workspace.getComponentManager().removeComponent("saMiddleClickPopup");
       const component = new Blockly.DeleteArea();
       component.id = "saMiddleClickPopup";
-      // @ts-ignore - Blockly type mismatch between versions
       component.getClientRect = () => {
         const rect = popupContainer.getBoundingClientRect();
         return new Blockly.utils.Rect(rect.top, rect.bottom, rect.left, rect.right);
@@ -544,15 +542,11 @@ export default async function ({ addon, msg, console }) {
 
   // Open on mouse wheel button
   const doWorkspaceClickMethodName = Blockly.registry ? "doWorkspaceClick" : "doWorkspaceClick_";
-  // @ts-ignore - Blockly prototype modification
   const _doWorkspaceClick_ = Blockly.Gesture.prototype[doWorkspaceClickMethodName];
-  // @ts-ignore - Blockly prototype modification
   Blockly.Gesture.prototype[doWorkspaceClickMethodName] = function () {
-    // @ts-ignore - Blockly internal property access
     const event = /** @type {MouseEvent} */ (Blockly.registry ? this.mostRecentEvent : this.mostRecentEvent_);
     if (event.button === 1 || event.shiftKey) openPopup();
     mousePosition = { x: event.clientX, y: event.clientY };
-    // @ts-ignore - calling saved function
     _doWorkspaceClick_.call(this);
   };
 
