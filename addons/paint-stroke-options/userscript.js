@@ -122,6 +122,7 @@
         btn.dataset.saOp = op;
         btn.dataset.saVal = value;
         btn.title = msg(titleKey);
+        btn.setAttribute("aria-label", msg(titleKey));
         const img = document.createElement("img");
         img.draggable = false;
         img.src = `${addon.self.dir}/icons/${op}-${value}.svg`;
