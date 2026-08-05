@@ -1,14 +1,7 @@
 {
   "name": "Horizontally aligned comments",
-  "description": "While moving a comment attached to a block, hold the Shift key to align the comment so that its connection is perpendicular to the block.",
+  "description": "While moving a comment attached to a block, hold the Shift key to keep its connection line perfectly horizontal.",
   "tags": ["editor", "codeEditor", "featured"],
-  "info": [
-    {
-      "id": "fix-comments-update",
-      "type": "notice",
-      "text": "If you had the \"Keep connections straight\" setting enabled in the former addon \"Better editor comments\", this addon will be enabled automatically. For those who had, you now have the option to only straighten connections while holding Shift. If you prefer that, just disable the setting below."
-    }
-  ],
   "relatedAddons": ["editor-comment-previews"],
   "credits": [
     {
@@ -40,5 +33,10 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.46.0",
+  "latestUpdate": {
+    "version": "1.46.0",
+    "newSettings": ["invert"],
+    "temporaryNotice": "This feature was separated from the deprecated \"Better editor comments\" addon and updated so you can use the Shift key to control comment alignment."
+  },
   "enabledByDefault": false
 }
