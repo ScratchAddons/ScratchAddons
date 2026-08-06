@@ -197,7 +197,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       madeAnyChanges = true;
       addonsEnabled["editor-straight-comments"] = true;
       // Invert the activation so that the behavior is consistent with the old addon as per user settings
-      addonSettings["editor-straight-comments"].invert = true;
+      addonSettings["editor-straight-comments"] = { invert: true };
     }
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
