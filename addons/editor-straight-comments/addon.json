@@ -36,7 +36,7 @@
   "latestUpdate": {
     "version": "1.46.0",
     "newSettings": ["invert"],
-    "temporaryNotice": "This feature was separated from the deprecated \"Better editor comments\" addon and updated so you can use the Shift key to control comment alignment."
+    "temporaryNotice": "This feature was separated from the removed \"Better editor comments\" addon and updated so you can use the Shift key to control comment alignment."
   },
   "enabledByDefault": false
 }
