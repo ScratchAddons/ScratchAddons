@@ -552,18 +552,16 @@ let fuse;
       manifest._groups = [];
 
       const [extMajor, extMinor] = vue.version.split(".");
-      const [addonAddedMajor, addonAddedMinor] = manifest.versionAdded.split(".");
+      const [addonAddedMajor, addonAddedMinor] = manifest.versionAdded?.split(".") || [];
+      const [addonUpdateMajor, addonUpdateMinor] = manifest.latestUpdate?.version?.split(".") || [];
       if (extMajor === addonAddedMajor && extMinor === addonAddedMinor) {
         manifest.tags.push("new");
         manifest._groups.push(
           manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
         );
-      } else if (manifest.latestUpdate) {
-        const [addonUpdateMajor, addonUpdateMinor] = manifest.latestUpdate.version.split(".");
-        if (extMajor === addonUpdateMajor && extMinor === addonUpdateMinor) {
-          manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
-          manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
-        }
+      } else if (extMajor === addonUpdateMajor && extMinor === addonUpdateMinor) {
+        manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
+        manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
       }
 
       // Sort tags to preserve consistent order
