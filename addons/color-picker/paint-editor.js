@@ -2,6 +2,7 @@ import { normalizeHex, getHexRegex } from "../../libraries/common/cs/normalize-c
 import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
+  let pickerContainer;
   let prevEventHandler;
   // 250-ms rate limit
   const rateLimiter = new RateLimiter(250);
@@ -26,23 +27,7 @@ export default async ({ addon, console, msg }) => {
   };
   const setColor = (hex, element) => {
     hex = normalizeHex(hex);
-    if (!addon.tab.redux.state || !addon.tab.redux.state.scratchPaint) return;
-    // The only way to reliably set color is to invoke eye dropper via click()
-    // then faking that the eye dropper reported the value.
-    const onEyeDropperOpened = ({ detail }) => {
-      if (detail.action.type !== "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") return;
-      addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
-      setTimeout(() => {
-        const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
-        if (previousTool) previousTool.activate();
-        addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(tinycolor(hex).toHexString());
-        addon.tab.redux.dispatch({
-          type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
-        });
-      }, 50);
-    };
-    addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
-    element.children[1].children[0].click();
+    pickerContainer.props.onChangeColor(tinycolor(hex).toHexString());
   };
   function updateColor(element) {
     setTimeout(() => {
@@ -63,6 +48,13 @@ export default async ({ addon, console, msg }) => {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
+    const colorPicker = element.parentElement;
+    const internalKey = addon.tab.traps.getInternalKey(colorPicker);
+    let internalInstance = colorPicker[internalKey];
+    while (!internalInstance.stateNode?.props?.onChangeColor) {
+      internalInstance = internalInstance.return;
+    }
+    pickerContainer = internalInstance.stateNode;
     rateLimiter.abort(false);
     addon.tab.redux.initialize();
     if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
