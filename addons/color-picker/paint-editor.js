@@ -39,7 +39,7 @@ export default async ({ addon, console, msg }) => {
         addon.tab.redux.dispatch({
           type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
         });
-      }, 50);
+      }, 0);
     };
     addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
     element.children[1].children[0].click();
