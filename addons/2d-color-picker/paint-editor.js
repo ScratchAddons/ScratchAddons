@@ -1,7 +1,6 @@
-export default async ({ addon, console, msg }) => {
-  const SLIDER_PADDING = 11;
-  const SLIDER_SIZE = 150 - 2 * SLIDER_PADDING;
+import ShadePicker from "./shade-picker.js";
 
+export default async ({ addon, console, msg }) => {
   let pickerContainer;
   let setPickerState;
 
@@ -12,11 +11,6 @@ export default async ({ addon, console, msg }) => {
       s: pickerContainer.state.saturation / 100,
       v: pickerContainer.state.brightness / 100,
     }
-  };
-
-  // for the color picker's background color
-  const convertToGeneralColor = (h) => {
-    return tinycolor({ h, s: 1, v: 1 }).toHex();
   };
 
   // le loop
@@ -41,9 +35,7 @@ export default async ({ addon, console, msg }) => {
 
     // update the bg color of the picker
     function updateColor() {
-      const { h, s, v } = getColor();
-      updateShade(s, v);
-      saColorPicker.style.background = "#" + convertToGeneralColor(h);
+      shadePicker.setColor(getColor());
     }
 
     setPickerState = pickerContainer.setState.bind(pickerContainer);
@@ -54,116 +46,22 @@ export default async ({ addon, console, msg }) => {
       })
     };
 
-    // get the color
     let defaultColor = getColor();
-
-    // create the color picker element and all it's child elements
-    const saColorPicker = document.createElement("div");
-    saColorPicker.className = "sa-2dcolor-picker";
-    saColorPicker.style.background = "#" + convertToGeneralColor(defaultColor.h);
-
-    const saColorPickerImage = Object.assign(document.createElement("img"), {
-      className: "sa-2dcolor-picker-image",
-      src: addon.self.dir + "/assets/sv-gradient.svg",
-      draggable: false,
-    });
-    const saColorPickerHandle = Object.assign(document.createElement("div"), {
-      className: addon.tab.scratchClass("slider_handle"),
-    });
-    saColorPickerHandle.style.pointerEvents = "none";
-
-    // create the label
-    const saColorLabel = document.createElement("div");
-    saColorLabel.className = addon.tab.scratchClass("color-picker_row-header", { others: "sa-2dcolor-label" });
-    const saColorLabelName = document.createElement("span");
-    saColorLabelName.className = addon.tab.scratchClass("color-picker_label-name", { others: "sa-2dcolor-label-name" });
-    saColorLabelName.innerText = msg("shade");
-    const saColorLabelVal = document.createElement("span");
-    saColorLabelVal.className = addon.tab.scratchClass("color-picker_label-readout", {
-      others: "sa-2dcolor-label-val",
-    });
-    saColorLabel.appendChild(saColorLabelName);
-    saColorLabel.appendChild(saColorLabelVal);
-
-    let keyPressed = null;
-    let originalHandlePos = { x: 0, y: 0 };
-    let originalMousePos = { x: 0, y: 0 };
-    window.addEventListener("keydown", (e) => (keyPressed = e.key));
-    window.addEventListener("keyup", () => (keyPressed = null));
-
-    let mousemovefunc = function (e) {
-      onDrag(e);
-      return false;
-    };
-
-    let mouseupfunc = function (e) {
-      window.removeEventListener("pointermove", mousemovefunc);
-      window.removeEventListener("pointerup", mouseupfunc);
-    };
-
-    function onDrag(e) {
-      let dx = e.clientX - originalMousePos.x;
-      let dy = e.clientY - originalMousePos.y;
-      let newHandleX = Math.min(Math.max(originalHandlePos.x + dx, 0), SLIDER_SIZE);
-      let newHandleY = Math.min(Math.max(originalHandlePos.y + dy, 0), SLIDER_SIZE);
-      if (keyPressed === "Shift") {
-        if (Math.abs(dx) > Math.abs(dy)) newHandleY = originalHandlePos.y;
-        else newHandleX = originalHandlePos.x;
-      }
-
-      let color = tinycolor(getColor()).toHsv();
-      let s = newHandleX / SLIDER_SIZE;
-      let v = 1 - newHandleY / SLIDER_SIZE;
+    const shadePicker = new ShadePicker(addon, msg);
+    const [shadeSlider, shadeLabel] = shadePicker.createElements(defaultColor);
+    shadePicker.addEventListener("change", (e) => {
+      const { s, v } = e.detail;
       setPickerState({ saturation: 100 * s, brightness: 100 * v }, () => {
         pickerContainer.handleColorChange();
       });
-
-      updateShade(s, v);
-    }
-
-    function updateShade(s, v) {
-      saColorPickerHandle.style.left = s * SLIDER_SIZE + "px";
-      saColorPickerHandle.style.top = (1 - v) * SLIDER_SIZE + "px";
-      saColorLabelVal.innerText = `${Math.round(s * 100)}, ${Math.round(v * 100)}`;
-    }
-
-    updateShade(defaultColor.s, defaultColor.v);
-
-    saColorPicker.addEventListener("pointerdown", (e) => {
-      e.preventDefault();
-
-      if (e.target === saColorPickerHandle) {
-        originalHandlePos = {
-          x: parseFloat(saColorPickerHandle.style.left),
-          y: parseFloat(saColorPickerHandle.style.top),
-        };
-      } else {
-        // Drag started outside handle
-        // Move handle to mouse position first
-        originalHandlePos = {
-          x: Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x - SLIDER_PADDING, 0), SLIDER_SIZE),
-          y: Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y - SLIDER_PADDING, 0), SLIDER_SIZE),
-        };
-      }
-      originalMousePos = {
-        x: e.clientX,
-        y: e.clientY,
-      }
-
-      onDrag(e);
-
-      window.addEventListener("pointermove", mousemovefunc);
-      window.addEventListener("pointerup", mouseupfunc);
     });
-    saColorPicker.appendChild(saColorPickerImage);
-    saColorPicker.appendChild(saColorPickerHandle);
 
     const [colorSlider, saturationSlider, brightnessSlider] = [
       ...colorPicker.querySelectorAll('[class*="color-picker_row-header_"]'),
     ].map((i) => i.parentElement);
     saturationSlider.style.display = "none";
     brightnessSlider.style.display = "none";
-    colorSlider.insertAdjacentElement("afterend", saColorPicker);
-    colorSlider.insertAdjacentElement("afterend", saColorLabel);
+    colorSlider.insertAdjacentElement("afterend", shadeSlider);
+    colorSlider.insertAdjacentElement("afterend", shadeLabel);
   }
 };
