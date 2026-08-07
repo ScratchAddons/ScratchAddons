@@ -172,6 +172,8 @@ iframe {
   }
 
   .popup-name {
+    background-color: ButtonFace;
+    color: ButtonText;
     transition: none;
   }
   .popup-name.sel {
