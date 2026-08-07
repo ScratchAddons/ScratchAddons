@@ -1,5 +1,6 @@
 export default async ({ addon, console, msg }) => {
-  const SLIDER_SIZE = 150;
+  const SLIDER_PADDING = 11;
+  const SLIDER_SIZE = 150 - 2 * SLIDER_PADDING;
 
   let pickerContainer;
   let setPickerState;
@@ -63,7 +64,7 @@ export default async ({ addon, console, msg }) => {
 
     const saColorPickerImage = Object.assign(document.createElement("img"), {
       className: "sa-2dcolor-picker-image",
-      src: addon.self.dir + "/assets/sv-gr.png",
+      src: addon.self.dir + "/assets/sv-gradient.svg",
       draggable: false,
     });
     const saColorPickerHandle = Object.assign(document.createElement("div"), {
@@ -85,12 +86,13 @@ export default async ({ addon, console, msg }) => {
     saColorLabel.appendChild(saColorLabelVal);
 
     let keyPressed = null;
-    let originalPos = { x: 0, y: 0 };
+    let originalHandlePos = { x: 0, y: 0 };
+    let originalMousePos = { x: 0, y: 0 };
     window.addEventListener("keydown", (e) => (keyPressed = e.key));
     window.addEventListener("keyup", () => (keyPressed = null));
 
     let mousemovefunc = function (e) {
-      dragHandler(e, keyPressed, originalPos);
+      onDrag(e);
       return false;
     };
 
@@ -99,17 +101,19 @@ export default async ({ addon, console, msg }) => {
       window.removeEventListener("pointerup", mouseupfunc);
     };
 
-    function dragHandler(e, keyPressed, originalPos) {
-      let cx = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), SLIDER_SIZE);
-      let cy = Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y, 0), SLIDER_SIZE);
+    function onDrag(e) {
+      let dx = e.clientX - originalMousePos.x;
+      let dy = e.clientY - originalMousePos.y;
+      let newHandleX = Math.min(Math.max(originalHandlePos.x + dx, 0), SLIDER_SIZE);
+      let newHandleY = Math.min(Math.max(originalHandlePos.y + dy, 0), SLIDER_SIZE);
       if (keyPressed === "Shift") {
-        if (Math.abs(cx - originalPos.x) > Math.abs(cy - originalPos.y)) cy = originalPos.y;
-        else cx = originalPos.x;
+        if (Math.abs(dx) > Math.abs(dy)) newHandleY = originalHandlePos.y;
+        else newHandleX = originalHandlePos.x;
       }
 
       let color = tinycolor(getColor()).toHsv();
-      let s = cx / SLIDER_SIZE;
-      let v = 1 - cy / SLIDER_SIZE;
+      let s = newHandleX / SLIDER_SIZE;
+      let v = 1 - newHandleY / SLIDER_SIZE;
       setPickerState({ saturation: 100 * s, brightness: 100 * v }, () => {
         pickerContainer.handleColorChange();
       });
@@ -118,8 +122,8 @@ export default async ({ addon, console, msg }) => {
     }
 
     function updateShade(s, v) {
-      saColorPickerHandle.style.left = s * SLIDER_SIZE - 8 + "px";
-      saColorPickerHandle.style.top = (1 - v) * SLIDER_SIZE - 8 + "px";
+      saColorPickerHandle.style.left = s * SLIDER_SIZE + "px";
+      saColorPickerHandle.style.top = (1 - v) * SLIDER_SIZE + "px";
       saColorLabelVal.innerText = `${Math.round(s * 100)}, ${Math.round(v * 100)}`;
     }
 
@@ -128,12 +132,25 @@ export default async ({ addon, console, msg }) => {
     saColorPicker.addEventListener("pointerdown", (e) => {
       e.preventDefault();
 
-      originalPos = {
-        x: parseFloat(saColorPickerHandle.style.left) + 8,
-        y: parseFloat(saColorPickerHandle.style.top) + 8,
-      };
+      if (e.target === saColorPickerHandle) {
+        originalHandlePos = {
+          x: parseFloat(saColorPickerHandle.style.left),
+          y: parseFloat(saColorPickerHandle.style.top),
+        };
+      } else {
+        // Drag started outside handle
+        // Move handle to mouse position first
+        originalHandlePos = {
+          x: Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x - SLIDER_PADDING, 0), SLIDER_SIZE),
+          y: Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y - SLIDER_PADDING, 0), SLIDER_SIZE),
+        };
+      }
+      originalMousePos = {
+        x: e.clientX,
+        y: e.clientY,
+      }
 
-      dragHandler(e);
+      onDrag(e);
 
       window.addEventListener("pointermove", mousemovefunc);
       window.addEventListener("pointerup", mouseupfunc);
