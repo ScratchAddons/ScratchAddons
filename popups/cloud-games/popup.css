@@ -117,3 +117,9 @@ body {
   background: var(--blue);
   border-color: var(--blue-variant);
 }
+
+@media (forced-colors: active) {
+  .loading-progress {
+    background-color: CanvasText;
+  }
+}
