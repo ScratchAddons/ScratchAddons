@@ -103,3 +103,8 @@
     align-items: center;
   }
 }
+@media (forced-colors: active) {
+  .step-number {
+    outline: 1px solid CanvasText;
+  }
+}
