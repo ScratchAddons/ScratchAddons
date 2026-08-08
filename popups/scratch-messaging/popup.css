@@ -22,6 +22,12 @@ button {
 .message-type-title:hover .btn-dropdown {
   background: var(--hover-highlight);
 }
+@media (forced-colors: active) {
+  .btn-dropdown {
+    background-color: ButtonFace;
+    outline: 1px solid ButtonBorder;
+  }
+}
 
 .reverted {
   transform: rotate(180deg);

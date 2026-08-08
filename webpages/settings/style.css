@@ -364,7 +364,9 @@ button.setting-input.color {
 }
 
 @media (forced-colors: active) {
-  .header-button {
+  .header-button,
+  .categories-shrink,
+  .arrow-button {
     background-color: ButtonFace;
     outline: 1px solid ButtonBorder;
     outline-offset: -1px;
