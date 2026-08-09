@@ -18,28 +18,6 @@ export default async function ({ template }) {
       shouldShow() {
         return this.visible && (this.$root.searchInput === "" ? this.groupExpanded : true);
       },
-      addonIconSrc() {
-        const map = {
-          editor: "puzzle",
-          player: "player",
-          community: "web",
-          theme: "brush",
-          easterEgg: "egg-easter",
-          popup: "popup",
-        };
-        return `../../images/icons/${map[this.addon._icon]}.svg`;
-      },
-      addonIconAlt() {
-        const map = {
-          editor: "editorFeature",
-          player: "playerFeature",
-          community: "websiteFeature",
-          theme: "themeAddon",
-          easterEgg: "easterEgg",
-          popup: "popupFeature",
-        };
-        return chrome.i18n.getMessage(map[this.addon._icon]);
-      },
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];
       },
