@@ -9,6 +9,7 @@
   margin: 8px;
   position: relative;
   user-select: none;
+  touch-action: none;
 }
 
 .scratchColourPicker .sa-2dcolor-picker {
