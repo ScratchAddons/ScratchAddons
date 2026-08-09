@@ -1,4 +1,8 @@
 /* Enable this addon? menu */
+dialog .clickable-area {
+  margin-inline-start: 7px;
+  cursor: auto;
+}
 .actions {
   display: flex;
   gap: 10px;
