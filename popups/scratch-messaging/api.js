@@ -11,41 +11,6 @@ export class DetailedError extends Error {
   }
 }
 
-export async function deleteComment(addon, { resourceType, resourceId, commentId }) {
-  if (resourceType === "user") return deleteLegacyComment(addon, { resourceType, resourceId, commentId });
-  const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
-  const xToken = await addon.auth.fetchXToken();
-  return fetch(
-    `https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}/comment/${commentId}?sareferer`,
-    {
-      headers: {
-        "content-type": "application/json",
-        "x-csrftoken": addon.auth.csrfToken,
-        "x-token": xToken,
-      },
-      method: "DELETE",
-    }
-  ).then((resp) => {
-    if (!resp.ok)
-      throw HTTPError.fromResponse(`Deleting ${resourceTypeUrl} comment ${commentId} of ${resourceId} failed`, resp);
-  });
-}
-
-const deleteLegacyComment = async (addon, { resourceType, resourceId, commentId }) => {
-  return fetch(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, {
-    headers: {
-      "content-type": "application/json",
-      "x-csrftoken": addon.auth.csrfToken,
-      "x-requested-with": "XMLHttpRequest",
-    },
-    body: JSON.stringify({ id: String(commentId) }),
-    method: "POST",
-  }).then((resp) => {
-    if (!resp.ok)
-      throw HTTPError.fromResponse(`Deleting ${resourceType} comment ${commentId} of ${resourceId} failed`, resp);
-  });
-};
-
 export async function dismissAlert(addon, alertId) {
   return fetch("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
     headers: {
