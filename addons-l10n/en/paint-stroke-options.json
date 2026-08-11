@@ -1,0 +1,9 @@
+{
+  "paint-stroke-options/corner": "Corner",
+  "paint-stroke-options/cap": "End",
+  "paint-stroke-options/join-miter": "Sharp corner (miter)",
+  "paint-stroke-options/join-round": "Round corner",
+  "paint-stroke-options/cap-butt": "Flat end (butt)",
+  "paint-stroke-options/cap-round": "Round end",
+  "paint-stroke-options/cap-square": "Square end"
+}
