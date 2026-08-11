@@ -2,11 +2,12 @@ const SLIDER_PADDING = 11;
 const SLIDER_SIZE = 150 - 2 * SLIDER_PADDING;
 
 export default class ShadePicker extends EventTarget {
-  constructor(addon, msg) {
+  constructor(addon, msg, { roundMethod = Math.round } = {}) {
     super();
 
     this.addon = addon;
     this.msg = msg;
+    this.round = roundMethod;
 
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
@@ -100,7 +101,7 @@ export default class ShadePicker extends EventTarget {
   setShade(s, v) {
     this.handle.style.left = s * SLIDER_SIZE + "px";
     this.handle.style.top = (1 - v) * SLIDER_SIZE + "px";
-    this.labelVal.innerText = `${Math.round(s * 100)}, ${Math.round(v * 100)}`;
+    this.labelVal.innerText = `${this.round(s * 100)}, ${this.round(v * 100)}`;
   }
 
   onDrag(e) {

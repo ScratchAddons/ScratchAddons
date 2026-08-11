@@ -7,7 +7,7 @@ export default async function ({ addon, console, msg }) {
   Blockly.FieldColourSlider.prototype.showEditor_ = function (...args) {
     oldShowEditor.call(this, ...args);
 
-    this.saShadePicker = new ShadePicker(addon, msg);
+    this.saShadePicker = new ShadePicker(addon, msg, { roundMethod: Math.floor });
     const [shadeSlider, shadeLabel] = this.saShadePicker.createElements({
       h: this.hue_,
       s: this.saturation_,
