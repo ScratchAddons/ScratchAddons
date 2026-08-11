@@ -1,0 +1,6 @@
+.project-loves.loved::before {
+  background-image: url("assets/love.svg");
+}
+.project-favorites.favorited::before {
+  background-image: url("assets/fav.svg");
+}
