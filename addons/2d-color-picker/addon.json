@@ -20,6 +20,8 @@
       "matches": ["projects"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "libraries": ["tinycolor2"],
   "versionAdded": "1.12.0",
   "enabledByDefault": false

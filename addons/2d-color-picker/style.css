@@ -2,6 +2,10 @@
   margin-inline-start: 10px;
 }
 
+.sa-2dcolor-hidden {
+  display: none;
+}
+
 .sa-2dcolor-picker {
   width: 150px;
   height: 150px;

@@ -20,10 +20,10 @@ export default async function ({ addon, console, msg }) {
       this.setValue(Blockly.utils.colour.hsvToHex(this.hue_, this.saturation_, this.brightness_), true);
     });
 
-    this.saturationSlider_.style.display = "none";
-    this.saturationSlider_.previousSibling.style.display = "none";
-    this.brightnessSlider_.style.display = "none";
-    this.brightnessSlider_.previousSibling.style.display = "none";
+    this.saturationSlider_.classList.add("sa-2dcolor-hidden");
+    this.saturationSlider_.previousSibling.classList.add("sa-2dcolor-hidden");
+    this.brightnessSlider_.classList.add("sa-2dcolor-hidden");
+    this.brightnessSlider_.previousSibling.classList.add("sa-2dcolor-hidden");
     this.hueSlider_.insertAdjacentElement("afterend", shadeSlider);
     this.hueSlider_.insertAdjacentElement("afterend", shadeLabel);
   };

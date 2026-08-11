@@ -49,6 +49,7 @@ export default class ShadePicker extends EventTarget {
     });
     label.appendChild(labelName);
     label.appendChild(this.labelVal);
+    addon.tab.displayNoneWhileDisabled(label);
 
     this.setShade(defaultColor.s, defaultColor.v);
 
@@ -81,6 +82,7 @@ export default class ShadePicker extends EventTarget {
 
     this.slider.appendChild(sliderImage);
     this.slider.appendChild(this.handle);
+    addon.tab.displayNoneWhileDisabled(this.slider);
 
     return [this.slider, label];
   }

@@ -59,8 +59,8 @@ export default async ({ addon, console, msg }) => {
     const [colorSlider, saturationSlider, brightnessSlider] = [
       ...colorPicker.querySelectorAll('[class*="color-picker_row-header_"]'),
     ].map((i) => i.parentElement);
-    saturationSlider.style.display = "none";
-    brightnessSlider.style.display = "none";
+    saturationSlider.classList.add("sa-2dcolor-hidden");
+    brightnessSlider.classList.add("sa-2dcolor-hidden");
     colorSlider.insertAdjacentElement("afterend", shadeSlider);
     colorSlider.insertAdjacentElement("afterend", shadeLabel);
   }
