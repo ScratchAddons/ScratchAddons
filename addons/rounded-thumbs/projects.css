@@ -1,0 +1,7 @@
+.thumbnail-image {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px) !important;
+}
+
+.thumbnail-image img {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px) !important;
+}
