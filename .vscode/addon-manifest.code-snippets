@@ -1,0 +1,81 @@
+{
+  "Addon manifest template": {
+    "scope": "json",
+    "isFileTemplate": true,
+    "prefix": "addon.json",
+    "body": [
+      "{",
+      "\t\"name\": \"$1\",",
+      "\t\"description\": \"$2\",",
+      "\t\"credits\": [",
+      "\t\t{",
+      "\t\t\t\"name\": \"$3\",",
+      "\t\t\t\"link\": \"https://scratch.mit.edu/users/${4:$3}/\"",
+      "\t\t}",
+      "\t],",
+      "\t\"${7|userscripts,userstyles|}\": [",
+      "\t\t{",
+      "\t\t\t\"url\": \"${8|userscript.js,userstyle.css|}\",",
+      "\t\t\t\"matches\": [$9]",
+      "\t\t}",
+      "\t],",
+      "\t\"settings\": [$0],",
+      "\t\"dynamicEnable\": false,",
+      "\t\"dynamicDisable\": false,",
+      "\t\"tags\": [$5],",
+      "\t\"versionAdded\": \"1.${6:0}.0\",",
+      "\t\"enabledByDefault\": false",
+      "}",
+      ""
+    ],
+    "description": "addon.json template"
+  },
+
+  "Boolean setting": {
+    "scope": "json",
+    "prefix": "settingBoolean",
+    "body": [
+      "{",
+      "\t\"name\": \"$1\",",
+      "\t\"id\": \"$2\",",
+      "\t\"type\": \"boolean\",",
+      "\t\"default\": ${3|false,true|}",
+      "}$0"
+    ],
+    "description": "Boolean setting"
+  },
+
+  "Integer setting": {
+    "scope": "json",
+    "prefix": "settingInteger",
+    "body": [
+      "{",
+      "\t\"name\": \"$1\",",
+      "\t\"id\": \"$2\",",
+      "\t\"type\": \"integer\",",
+      "\t\"min\": ${3:0},",
+      "\t\"max\": ${4:100},",
+      "\t\"default\": ${5:0}",
+      "}$0"
+    ],
+    "description": "Integer setting"
+  },
+
+  "Select setting": {
+    "scope": "json",
+    "prefix": "settingSelect",
+    "body": [
+      "{",
+      "\t\"name\": \"$1\",",
+      "\t\"id\": \"$2\",",
+      "\t\"type\": \"select\",",
+      "\t\"potentialValues\": [",
+      "\t\t{\n\t\t\t\"id\": \"$3\",\n\t\t\t\"name\": \"$4\"\n\t\t},",
+      "\t\t${0:{\n\t\t\t\"id\": \"$5\",\n\t\t\t\"name\": \"$6\"\n\t\t\\}}",
+      "\t],",
+      "\t\"default\": \"$3\"",
+      "}"
+    ],
+    "description": "Select setting"
+  }
+}
