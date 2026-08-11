@@ -1,11 +1,15 @@
 {
   "name": "2D color picker",
-  "description": "Replaces saturation and brightness sliders in the costume editor with a 2D color picker. Hold Shift while dragging the cursor to change the values on a single axis.",
+  "description": "Replaces saturation and brightness sliders with a 2D color picker. Hold Shift while dragging the cursor to change the values on a single axis.",
   "tags": ["editor", "costumeEditor"],
   "credits": [
     {
       "name": "Ucrash",
       "link": "https://github.com/gducrash"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "userscripts": [
@@ -24,5 +28,9 @@
   "dynamicDisable": true,
   "libraries": ["tinycolor2"],
   "versionAdded": "1.12.0",
+  "latestUpdate": {
+    "version": "1.46.0",
+    "temporaryNotice": "Now works with blocks such as \"touching color\" and \"set pen color\"."
+  },
   "enabledByDefault": false
 }
