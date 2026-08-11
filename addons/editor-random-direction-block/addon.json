@@ -1,6 +1,6 @@
 {
-  "name": "Point towards random direction block",
-  "description": "Adds a \"random direction\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
+  "name": "Extended block menus",
+  "description": "Adds more menu options to some block dropdowns. These will work for everyone using the project.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -8,10 +8,48 @@
     }
   ],
   "versionAdded": "1.35.0",
-  "tags": ["editor", "codeEditor"],
+  "latestUpdate": {
+    "version": "1.46.0",
+    "newSettings": ["sameSprite", "nextCostume", "previousCostume"]
+  },
+  "info": [
+    {
+      "id": "nameChange",
+      "text": "This used to be the \"Point towards random direction block\" addon."
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "relatedAddons": ["editor-extra-keys"],
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "settings": [
+    {
+      "name": "Current sprite",
+      "id": "sameSprite",
+      "type": "boolean",
+      "description": "Allows you to select the current sprite in sprite menus, useful to refer to the parent sprite of a clone.",
+      "default": true
+    },
+    {
+      "name": "(Point towards) random direction",
+      "id": "randomDirection",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "(Switch to) next costume",
+      "id": "nextCostume",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "(Switch to) previous costume",
+      "id": "previousCostume",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "credits": [
     {
       "name": "Tacodiva",
@@ -23,6 +61,14 @@
     },
     {
       "name": "emir4169"
+    },
+    {
+      "name": "d016",
+      "link": "https://scratch.mit.edu/users/d016/"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ]
 }
