@@ -2,6 +2,8 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
   const MAX_RECORD_TIME = 600; // seconds
+  const MIN_SCALE = 0.0001;
+  const SCALE_LIMIT = 20;
   const DEFAULT_SETTINGS = {
     secs: 30,
     delay: 0,
@@ -9,8 +11,11 @@ export default async ({ addon, console, msg }) => {
     micEnabled: false,
     waitUntilFlag: true,
     useStopSign: true,
+    stageScale: 1,
   };
   const LOCALSTORAGE_ENTRY = "sa-record-options";
+
+  const vm = addon.tab.traps.vm;
 
   let isRecording = false;
   let isWaitingForFlag = false;
@@ -18,6 +23,7 @@ export default async ({ addon, console, msg }) => {
   let abortController = null;
   let stopSignFunc = null;
   let recordBuffer = [];
+  let stageScale = 1;
   let recorder;
   let timeout;
 
@@ -45,6 +51,30 @@ export default async ({ addon, console, msg }) => {
     "video/webm",
   ].find((i) => MediaRecorder.isTypeSupported(i));
   const fileExtension = mimeType.split(";")[0].split("/")[1];
+
+  function getStageWidth() {
+    // TurboWarp compatibility
+    return vm.runtime?.stageWidth ?? vm.runtime.constructor.STAGE_WIDTH;
+  }
+  function getStageHeight() {
+    // TurboWarp compatibility
+    return vm.runtime?.stageHeight ?? vm.runtime.constructor.STAGE_HEIGHT;
+  }
+
+  // When recording, resize stage canvas with the resolution scale
+  const oldResize = vm.runtime.renderer.constructor.prototype.resize;
+  let actualWidth = vm.runtime.renderer.gl?.canvas?.width ?? getStageWidth();
+  let actualHeight = vm.runtime.renderer.gl?.canvas?.height ?? getStageHeight();
+  vm.runtime.renderer.constructor.prototype.resize = function (pixelsWide, pixelsTall) {
+    actualWidth = pixelsWide;
+    actualHeight = pixelsTall;
+    if (!isRecording) return oldResize.call(this, pixelsWide, pixelsTall);
+    const scale = Math.max(MIN_SCALE, stageScale);
+    return oldResize.call(this, Math.ceil(getStageWidth() * scale), Math.ceil(getStageHeight() * scale));
+  };
+  function forceRendererResize() {
+    vm.runtime.renderer.resize(actualWidth, actualHeight);
+  }
 
   while (true) {
     const referenceElem = await addon.tab.waitForElement(
@@ -192,6 +222,67 @@ export default async ({ addon, console, msg }) => {
         })
       );
 
+      // Video resolution.
+      // In the user interface this is shown as linked width/height inputs,
+      // but internally this is actually a scaling factor
+      // (which, for example, makes things simpler when storing the scale value with changing stage sizes)
+      const stageWidth = getStageWidth();
+      const stageHeight = getStageHeight();
+      const recordOptionScale = document.createElement("p");
+      const recordOptionScaleInputW = Object.assign(document.createElement("input"), {
+        type: "number",
+        min: Math.ceil(stageWidth * MIN_SCALE),
+        max: stageWidth * SCALE_LIMIT,
+        defaultValue: Math.ceil(stageWidth * (storedOptions.stageScale || 1)),
+        id: "recordOptionScaleInputW",
+        step: "any",
+        className: addon.tab.scratchClass("prompt_variable-name-text-input"),
+      });
+      const recordOptionScaleInputH = Object.assign(document.createElement("input"), {
+        type: "number",
+        min: Math.ceil(stageHeight * MIN_SCALE),
+        max: stageHeight * SCALE_LIMIT,
+        defaultValue: Math.ceil(stageHeight * (storedOptions.stageScale || 1)),
+        id: "recordOptionScaleInputH",
+        step: "any",
+        className: addon.tab.scratchClass("prompt_variable-name-text-input"),
+      });
+      const recordOptionScaleLabel = Object.assign(document.createElement("label"), {
+        htmlFor: "recordOptionScaleInput",
+        textContent: msg("video-resolution"),
+      });
+      const recordOptionScaleX = Object.assign(document.createElement("span"), {
+        textContent: "x",
+      });
+      recordOptionScale.appendChild(recordOptionScaleLabel);
+      recordOptionScale.appendChild(recordOptionScaleInputW);
+      recordOptionScale.appendChild(recordOptionScaleX);
+      recordOptionScale.appendChild(recordOptionScaleInputH);
+      content.appendChild(recordOptionScale);
+      const onScaleInputChange = (e) => {
+        const _value = Number(e.target.value);
+        let value = isNaN(_value) ? e.target.defaultValue : _value;
+        if (value <= e.target.min) {
+          value = e.target.min;
+        } else if (value > e.target.max) {
+          value = e.target.max;
+        }
+        e.target.value = value;
+      };
+
+      // Match aspect ratio
+      const onScaleInputWChange = () => {
+        recordOptionScaleInputH.value = Math.ceil(recordOptionScaleInputW.value / (stageWidth / stageHeight));
+      };
+      const onScaleInputHChange = () => {
+        recordOptionScaleInputW.value = Math.floor(recordOptionScaleInputH.value * (stageWidth / stageHeight));
+        onScaleInputWChange();
+      };
+      recordOptionScaleInputW.addEventListener("change", onScaleInputChange);
+      recordOptionScaleInputH.addEventListener("change", onScaleInputChange);
+      recordOptionScaleInputW.addEventListener("change", onScaleInputWChange);
+      recordOptionScaleInputH.addEventListener("change", onScaleInputHChange);
+
       // Audio enabled
       const recordOptionAudio = Object.assign(document.createElement("p"), {
         className: "mediaRecorderPopupOption",
@@ -263,6 +354,7 @@ export default async ({ addon, console, msg }) => {
             micEnabled: recordOptionMicInput.checked,
             waitUntilFlag: recordOptionFlagInput.checked,
             useStopSign: !recordOptionStopInput.disabled && recordOptionStopInput.checked,
+            stageScale: Number(recordOptionScaleInputW.value) / stageWidth,
           }),
         { once: true }
       );
@@ -273,6 +365,7 @@ export default async ({ addon, console, msg }) => {
     };
     const disposeRecorder = () => {
       isRecording = false;
+      forceRendererResize();
       recordElem.textContent = msg("record");
       recordElem.title = "";
       recorder = null;
@@ -280,13 +373,13 @@ export default async ({ addon, console, msg }) => {
       clearTimeout(timeout);
       timeout = 0;
       if (stopSignFunc) {
-        addon.tab.traps.vm.runtime.off("PROJECT_STOP_ALL", stopSignFunc);
+        vm.runtime.off("PROJECT_STOP_ALL", stopSignFunc);
         stopSignFunc = null;
       }
     };
     const stopRecording = (force) => {
       if (isWaitingForFlag) {
-        addon.tab.traps.vm.runtime.off("PROJECT_START", waitingForFlagFunc);
+        vm.runtime.off("PROJECT_START", waitingForFlagFunc);
         isWaitingForFlag = false;
         waitingForFlagFunc = null;
         abortController.abort();
@@ -313,7 +406,7 @@ export default async ({ addon, console, msg }) => {
       // Initialize MediaRecorder
       recordBuffer = [];
       isRecording = true;
-      const vm = addon.tab.traps.vm;
+      stageScale = opts.stageScale;
       let micStream;
       if (opts.micEnabled) {
         // Show permission dialog before green flag is clicked
@@ -351,6 +444,7 @@ export default async ({ addon, console, msg }) => {
         }
       }
       isWaitingForFlag = false;
+      forceRendererResize();
       waitingForFlagFunc = abortController = null;
       const stream = new MediaStream();
       const videoStream = vm.runtime.renderer.canvas.captureStream();
