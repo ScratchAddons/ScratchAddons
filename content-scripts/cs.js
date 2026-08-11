@@ -454,6 +454,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         disabledDynamicAddons.add(addonId);
         const style = document.createElement("style");
         style.dataset.saHideDisabledStyle = addonId;
+        // Quotes around the addon ID are necessary if it starts with a number
         style.textContent = `[data-sa-hide-disabled="${addonId}"] { display: none !important; }`;
         document.body.appendChild(style);
         _page_.fireEvent({ name: "disabled", addonId, target: "self" });
