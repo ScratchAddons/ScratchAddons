@@ -4,26 +4,33 @@ export default async function ({ addon, console }) {
     if (vm.editingTarget) return resolve();
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
-  const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
 
-  let ctrlKeyPressed = false;
-  const onMouseDown = function (e) {
-    ctrlKeyPressed = e.ctrlKey || e.metaKey;
-  };
-  document.addEventListener("mousedown", onMouseDown, { capture: true }); // for old Blockly
-  document.addEventListener("pointerdown", onMouseDown, { capture: true }); // for new Blockly
+  let lastClickTime = -Infinity;
+  let preventScriptRun;
+  document.addEventListener(
+    "pointerdown",
+    (e) => {
+      const isCtrlClick = e.ctrlKey || e.metaKey;
+      const isDoubleClick = e.timeStamp - lastClickTime < addon.settings.get("timeout");
+      lastClickTime = e.timeStamp;
 
-  // Limits all script running to CTRL + click
+      preventScriptRun = !isCtrlClick && !isDoubleClick;
+    },
+    { capture: true }
+  );
+
+  // Capture clicks on scripts
+  const oldBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
   const newBlocklyListen = function (e) {
     if (
       !addon.self.disabled &&
       // new Blockly || old Blockly
       ((e.type === "click" && e.targetType === "block") || e.element === "stackclick") &&
-      !ctrlKeyPressed
+      preventScriptRun
     ) {
-      return;
+      // Ignore
     } else {
-      originalBlocklyListen.call(this, e);
+      oldBlocklyListen.call(this, e);
     }
   };
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
