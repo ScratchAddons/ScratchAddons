@@ -73,7 +73,7 @@ export default class ShadePicker extends EventTarget {
       this.originalMousePos = {
         x: e.clientX,
         y: e.clientY,
-      }
+      };
 
       this.onDrag(e);
 
@@ -91,7 +91,7 @@ export default class ShadePicker extends EventTarget {
   // for the color picker's background color
   convertToGeneralColor(h) {
     return tinycolor({ h, s: 1, v: 1 }).toHex();
-  };
+  }
 
   setColor({ h, s, v }) {
     this.setShade(s, v);

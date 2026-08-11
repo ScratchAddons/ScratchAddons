@@ -7,10 +7,10 @@ export default async ({ addon, console, msg }) => {
   // get the color from scratch
   const getColor = () => {
     return {
-      h: pickerContainer.state.hue / 100 * 360,
+      h: (pickerContainer.state.hue / 100) * 360,
       s: pickerContainer.state.saturation / 100,
       v: pickerContainer.state.brightness / 100,
-    }
+    };
   };
 
   // le loop
@@ -43,7 +43,7 @@ export default async ({ addon, console, msg }) => {
       setPickerState(state, (...args) => {
         if (typeof callback === "function") callback(...args);
         updateColor();
-      })
+      });
     };
 
     let defaultColor = getColor();
