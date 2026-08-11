@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Transpilation",
+  "description": "Introduces new commonly-requested blocks that are transpiled back to vanilla scratch for non-SA users",
+  "credits": [
+    {
+      "name": "pufferfish101007",
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "beta"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "enabledByDefault": true,
+  "dynamicEnable": false,
+  "dynamicDisable": false,
+  "libraries": ["scratch-blocks"]
+}
