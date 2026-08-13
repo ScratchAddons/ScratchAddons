@@ -1,4 +1,6 @@
 [
+  "../clear-backpack",
+  "editor-searchable-dropdowns",
   "editor-searchable-dropdowns",
   "editor-devtools",
   "forum-search",
