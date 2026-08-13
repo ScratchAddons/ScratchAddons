@@ -1,0 +1,17 @@
+{
+  "name": "Clear Backpack Button",
+  "description": "Adds a button to the editor backpack header to wipe all stored assets with a single click.",
+  "credits": [
+    {
+      "name": "Hamdancoding"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": true
+}
