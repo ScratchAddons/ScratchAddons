@@ -38,6 +38,9 @@
 .filter-option:hover {
   background: var(--button-hover-background);
 }
+.filter-options input:focus-visible {
+  outline: none;
+}
 .filter-options input:focus-visible + label {
   outline: 2px solid var(--content-text);
 }
