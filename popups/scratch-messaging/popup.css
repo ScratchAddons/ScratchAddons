@@ -27,6 +27,9 @@ button {
     background-color: ButtonFace;
     outline: 1px solid ButtonBorder;
   }
+  .btn-dropdown:focus {
+    outline: revert;
+  }
 }
 
 .reverted {

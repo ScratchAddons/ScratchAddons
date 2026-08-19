@@ -83,4 +83,9 @@
     color: HighlightText;
     forced-color-adjust: preserve-parent-color;
   }
+
+  .filter-options input:focus-visible + label {
+    outline-color: HighlightText;
+    outline-offset: -3px;
+  }
 }

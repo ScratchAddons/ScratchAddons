@@ -68,4 +68,8 @@
   .switch:checked::before {
     background-color: SelectedItemText;
   }
+
+  .switch:focus-visible {
+    outline-offset: 3px;
+  }
 }

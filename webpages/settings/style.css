@@ -371,6 +371,11 @@ button.setting-input.color {
     outline: 1px solid ButtonBorder;
     outline-offset: -1px;
   }
+  .header-button:focus,
+  .categories-shrink:focus,
+  .arrow-button:focus {
+    outline: revert;
+  }
 
   .addons-block-header {
     border-color: Canvas;

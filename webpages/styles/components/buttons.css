@@ -93,4 +93,9 @@
     outline: 1px solid ButtonBorder;
     outline-offset: -1px;
   }
+
+  .large-button:focus-visible,
+  .icon-button:focus-visible {
+    outline: revert;
+  }
 }

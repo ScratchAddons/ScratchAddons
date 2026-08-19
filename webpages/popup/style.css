@@ -176,6 +176,9 @@ iframe {
     outline: 1px solid ButtonBorder;
     outline-offset: -1px;
   }
+  .header-button:focus {
+    outline: revert;
+  }
 
   .popup-name {
     background-color: ButtonFace;
