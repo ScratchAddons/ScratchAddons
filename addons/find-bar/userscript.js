@@ -43,7 +43,6 @@ export default async function ({ addon, msg, console }) {
       // for <label>
       this.findInput.id = "sa-find-input";
       this.findInput.type = "search";
-      this.findInput.placeholder = msg("find-placeholder");
       this.findInput.autocomplete = "off";
 
       this.dropdownOut.appendChild(this.dropdown.createDom());
@@ -66,6 +65,11 @@ export default async function ({ addon, msg, console }) {
       const tab = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
       const visible = tab === 0 || tab === 1 || tab === 2;
       this.findBarOuter.hidden = !visible;
+      if (visible) {
+        this.findInput.placeholder = [msg("find-placeholder"), msg("costume-placeholder"), msg("sound-placeholder")][
+          tab
+        ];
+      }
     }
 
     inputChange() {
