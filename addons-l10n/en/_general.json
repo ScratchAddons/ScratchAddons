@@ -5,6 +5,7 @@
   "_general/blocks/green-flag": "flag",
   "_general/blocks/clockwise": "clockwise",
   "_general/blocks/anticlockwise": "anti-clockwise",
+  "_general/blocks/sa-category": "Debugger",
 
   "_general/restore/sprites": "Restore Sprites",
   "_general/restore/costumes": "Restore Costumes",
