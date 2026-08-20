@@ -102,7 +102,6 @@
   "emoji-picker",
   "editor-comment-previews",
   "swap-local-global",
-  "fix-editor-comments",
   "hi-res-thumbnails",
   "block-count",
   "script-snap",
@@ -164,6 +163,7 @@
   "fix-costume-drag",
   "recolor-custom-blocks",
   "totally-normal-modes",
+  "editor-straight-comments",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
