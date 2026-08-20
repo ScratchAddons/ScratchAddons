@@ -115,9 +115,13 @@
   padding: 0;
 }
 
-/* https://github.com/ScratchAddons/ScratchAddons/issues/4896 */
 .Popover {
-  /* Above stage wrapper and target pane */
+  /* Must be above stage wrapper and target pane:
+     https://github.com/ScratchAddons/ScratchAddons/issues/4896
+
+     Putting it above the menu bar also fixes color pickers
+     appearing behind other elements when they're too tall:
+     https://github.com/ScratchAddons/ScratchAddons/issues/5986 */
   /* See editor-stage-left */
-  z-index: 51;
+  z-index: 492;
 }
