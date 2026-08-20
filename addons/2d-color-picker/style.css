@@ -1,15 +1,35 @@
+.sa-2dcolor-label-val {
+  margin-inline-start: 10px;
+}
+
+.sa-2dcolor-hidden {
+  display: none;
+}
+
 .sa-2dcolor-picker {
   width: 150px;
   height: 150px;
-  border-radius: 8px;
+  border-radius: 11px;
   margin: 8px;
   position: relative;
   user-select: none;
+  touch-action: none;
+}
+
+.scratchColourPicker .sa-2dcolor-picker {
+  /* code editor */
+  margin-top: 16px;
+  margin-bottom: 20px;
 }
 
 .sa-2dcolor-picker-image {
-  border-radius: 8px;
+  border-radius: 11px;
   width: 150px;
   height: 150px;
   user-select: none;
+}
+
+.sa-2dcolor-picker [class*="slider_handle_"] {
+  margin-left: -2px; /* same as margin-top, which is set by Scratch */
+  pointer-events: auto !important;
 }
