@@ -16,8 +16,10 @@ import {
 } from "./paper-helpers.js";
 
 export default async function ({ addon, msg }) {
-  // Redux must be initialized before waitForElement can use reduxCondition.
+  // Watch Redux so the button follows the Costume editor's active paint tool.
   addon.tab.redux.initialize();
+  // Wait until Scratch's generated More-menu disabled class is available.
+  await addon.tab.scratchClassReady();
 
   // Mangled disabled-state class, populated after first DOM injection.
   let modDisabledClass = "";
@@ -76,7 +78,8 @@ export default async function ({ addon, msg }) {
     const btn = e.target.closest("[data-sa-op]");
     if (!btn) return;
     const op = btn.dataset.saOp;
-    if (modDisabledClass && btn.classList.contains(modDisabledClass)) return;
+    // Inline and More buttons use different disabled classes, but both contain this marker.
+    if ([...btn.classList].some((className) => className.includes("mod-disabled"))) return;
     if (op === "combine") performCombine();
     else if (op === "release") performRelease();
     else if (op === "expand") performOffset();
@@ -89,8 +92,10 @@ export default async function ({ addon, msg }) {
 
   // ── More-popover item factory ──────────────────────────────────────────
   // Builds a button matching the native More popover item structure.
-  // Disabled-state classes are copied from native items when the popover opens.
-  let moreItemDisabledClasses = [];
+  // Disabled More items need both the menu class and the shared button class
+  // for correct behavior and opacity. Resolve the menu class directly because
+  // the menu may contain no disabled native item to copy.
+  const moreMenuDisabledClass = addon.tab.scratchClass("fixed-tools_mod-disabled");
 
   const makeMoreItem = (iconFile, label, op) => {
     const btn = document.createElement("span");
@@ -123,6 +128,10 @@ export default async function ({ addon, msg }) {
   // Schedules updateButtonStates once the round-trip above has settled.
   const deferUpdateButtonStates = () => afterReduxRoundTrip(updateButtonStates);
 
+  // Include paths inside Groups and CompoundPaths, not only top-level shapes.
+  const getOpenClosePaths = (paper) =>
+    paper.project.selectedItems.filter((item) => item.layer?.data?.isPaintingLayer && item instanceof paper.Path);
+
   // Reads the current paper.js selection and enables or disables each button
   // accordingly. Also morphs the Combine/Release and Open/Close buttons.
   const updateButtonStates = async () => {
@@ -144,34 +153,31 @@ export default async function ({ addon, msg }) {
     const textCount = paper.project.selectedItems.filter(
       (item) => item instanceof paper.PointText && item.parent instanceof paper.Layer
     ).length;
+    const openClosePaths = getOpenClosePaths(paper);
     const hasMultiple = sel.length >= 2;
     const hasCompound = sel.some((item) => item instanceof paper.CompoundPath);
-    const hasPaths = sel.some((item) => item instanceof paper.Path);
     const totalCount = sel.length + textCount;
     // Count only leaves that unite would actually operate on: CompoundPaths and closed Paths.
     // Open paths are left behind by unite, so they don't count toward the threshold.
     const effectiveLeafCount = sel
       .flatMap((item) => getLeafPaths(item, paper))
       .filter((l) => l instanceof paper.CompoundPath || (l instanceof paper.Path && l.closed)).length;
+    const isOperationEnabled = (op) => {
+      if (op === "unite") return textCount >= 1 || effectiveLeafCount >= 2;
+      if (op === "expand") return totalCount >= 1;
+      if (op === "combine" || op === "release") return totalCount >= 2 || hasCompound;
+      return totalCount >= 2; // subtract, intersect
+    };
     if (modDisabledClass) {
       for (const btn of shapingSection.querySelectorAll("[data-sa-op]")) {
-        const op = btn.dataset.saOp;
-        let enabled;
-        if (op === "unite") enabled = textCount >= 1 || effectiveLeafCount >= 2;
-        else if (op === "expand") enabled = totalCount >= 1;
-        else if (op === "combine" || op === "release") enabled = totalCount >= 2 || hasCompound;
-        else enabled = totalCount >= 2; // subtract, intersect
-        btn.classList.toggle(modDisabledClass, !enabled);
+        btn.classList.toggle(modDisabledClass, !isOperationEnabled(btn.dataset.saOp));
       }
-      if (moreItemDisabledClasses.length) {
-        for (const btn of allMoreItems) {
-          const op = btn.dataset.saOp;
-          let enabled;
-          if (op === "unite") enabled = textCount >= 1 || effectiveLeafCount >= 2;
-          else if (op === "expand") enabled = totalCount >= 1;
-          else if (op === "combine" || op === "release") enabled = totalCount >= 2 || hasCompound;
-          else enabled = totalCount >= 2; // subtract, intersect
-          for (const cls of moreItemDisabledClasses) btn.classList.toggle(cls, !enabled);
+    }
+    const moreDisabledClasses = [moreMenuDisabledClass, modDisabledClass].filter(Boolean);
+    if (moreDisabledClasses.length) {
+      for (const btn of allMoreItems) {
+        for (const disabledClass of moreDisabledClasses) {
+          btn.classList.toggle(disabledClass, !isOperationEnabled(btn.dataset.saOp));
         }
       }
     }
@@ -185,15 +191,14 @@ export default async function ({ addon, msg }) {
     moreCompoundBtn.querySelector("img").src = `${addon.self.dir}/icons/${compoundOp}.svg`;
     moreCompoundBtn.querySelector("span").textContent = msg(compoundOp);
     // Open/Close button morphs: "Open Shape" when selection is closed, "Close Shape" when open.
-    const paths = sel.filter((item) => item instanceof paper.Path);
-    const allOpen = paths.length > 0 && paths.every((p) => !p.closed);
+    const allOpen = openClosePaths.length > 0 && openClosePaths.every((path) => !path.closed);
     const openCloseLabel = allOpen ? msg("close-shape") : msg("open-shape");
     const openCloseDesc = allOpen ? msg("close-shape-desc") : msg("open-shape-desc");
     // Update the mode-tools context bar button if it exists.
     if (modeToolsOCLbl) modeToolsOCLbl.textContent = openCloseLabel;
     if (modeToolsOCBtn) {
       modeToolsOCBtn.title = openCloseDesc;
-      if (modDisabledClass) modeToolsOCBtn.classList.toggle(modDisabledClass, !hasPaths);
+      if (modDisabledClass) modeToolsOCBtn.classList.toggle(modDisabledClass, openClosePaths.length === 0);
     }
     if (modDisabledClass) compoundBtn.classList.toggle(modDisabledClass, !(totalCount >= 2 || hasCompound));
   };
@@ -547,13 +552,11 @@ export default async function ({ addon, msg }) {
   const performOpenClose = async () => {
     const paper = await addon.tab.traps.getPaper();
 
-    const sel = paper.project.selectedItems.filter(
-      (item) => item.layer?.data?.isPaintingLayer && item instanceof paper.Path && item.parent instanceof paper.Layer
-    );
+    const paths = getOpenClosePaths(paper);
 
-    if (!sel.length) return;
+    if (!paths.length) return;
 
-    for (const path of sel) {
+    for (const path of paths) {
       if (path.closed) {
         const n = path.segments.length;
 
@@ -647,13 +650,8 @@ export default async function ({ addon, msg }) {
   };
 
   // ── Open/Close button in the mode-tools context bar ───────────────────
-  // The mode-tools bar ([class*='mode-tools_mode-tools']) appears next to
-  // Fill/Outline/Stroke in the lower-toolbar and shows context-specific
-  // buttons (Curved, Pointed, Delete) when path-editing tools are active.
-  // We inject Open/Close there, using the same button/icon/label classes as
-  // the native buttons, so it looks like a first-class member of the bar.
-  // The injection is re-run on every CHANGE_MODE dispatch because React
-  // rebuilds the mode-tools children when the active tool changes.
+  // Scratch's mode-tools bar beside Fill/Outline/Stroke changes with the
+  // active paint tool. Open/Close belongs in Reshape's Curved/Pointed group.
 
   let modeToolsOCBtn = null; // <span role=button>
   let modeToolsOCIcon = null; // <img>
@@ -682,22 +680,22 @@ export default async function ({ addon, msg }) {
   buildModeToolsBtn();
 
   // ── Mode-tools injection ──────────────────────────────────────────────────
-  // Inserts the Open/Close button after "Pointed" in the Reshape mode-tools
-  // bar. Removes it in all other modes. Called on every CHANGE_MODE event
-  // because React rebuilds mode-tools children when the active tool changes.
-  const injectModeToolsBtn = () => {
-    const mode = addon.tab.redux.state?.scratchPaint?.mode;
-    if (mode !== "RESHAPE") {
-      modeToolsOCBtn.remove();
-      return;
-    }
+  // Reshape's mode-tools bar is separate from the fixed toolbar/More menu.
+  // Watching the fixed toolbar caused Open/Close to appear only after More opened.
+  const modeToolsGroupSelector = "[class*='mode-tools_mode-tools_'] [class*='mode-tools_mod-dashed-border_']";
+  const isReshapeState = (state) =>
+    state?.scratchGui?.editorTab?.activeTabIndex === 1 &&
+    !state.scratchGui?.mode?.isPlayerOnly &&
+    state.scratchPaint?.mode === "RESHAPE";
+  const isReshapeActive = () => !addon.self.disabled && isReshapeState(addon.tab.redux.state);
 
-    // Find the dashed-border group (contains Curved + Pointed in Reshape mode).
-    const dashedGroup = document.querySelector(
-      "[class*='mode-tools_mode-tools_'] [class*='mode-tools_mod-dashed-border_']"
-    );
-    if (!dashedGroup) {
-      modeToolsOCBtn.remove();
+  const removeModeToolsBtn = () => {
+    modeToolsOCBtn.remove();
+  };
+
+  const injectModeToolsBtn = (dashedGroup) => {
+    if (!isReshapeActive() || !dashedGroup) {
+      removeModeToolsBtn();
       return;
     }
 
@@ -725,9 +723,39 @@ export default async function ({ addon, msg }) {
     deferUpdateButtonStates();
   };
 
-  addon.self.addEventListener("disabled", () => {
-    modeToolsOCBtn?.remove();
+  // React can replace the Curved/Pointed group after tool or layout changes.
+  // Watch each new group so Open/Close is added without waiting for More.
+  const watchModeTools = async () => {
+    while (true) {
+      const dashedGroup = await addon.tab.waitForElement(modeToolsGroupSelector, {
+        markAsSeen: true,
+        condition: isReshapeActive,
+        reduxCondition: isReshapeState,
+      });
+      injectModeToolsBtn(dashedGroup);
+    }
+  };
+  watchModeTools();
+
+  // React can also reuse the same group, so recheck it after React updates.
+  const syncModeToolsBtn = () =>
+    afterReduxRoundTrip(() => injectModeToolsBtn(document.querySelector(modeToolsGroupSelector)));
+
+  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+    if (isReshapeState(detail.prev) === isReshapeState(detail.next)) return;
+    // Remove now so React cannot carry the button into Select or Text, then
+    // recheck after React finishes updating the mode-tools bar.
+    if (!isReshapeState(detail.next)) removeModeToolsBtn();
+    syncModeToolsBtn();
   });
+
+  addon.self.addEventListener("disabled", () => {
+    removeModeToolsBtn();
+  });
+  addon.self.addEventListener("reenabled", () => {
+    syncModeToolsBtn();
+  });
+  syncModeToolsBtn();
 
   const toolbarController = createPaintToolbarController({
     addon,
@@ -751,9 +779,7 @@ export default async function ({ addon, msg }) {
       }
       if (disabledClass) modDisabledClass = disabledClass;
     },
-    onToolbarMutation: injectModeToolsBtn,
-    onOverflowItemsMounted: ({ disabledClasses }) => {
-      moreItemDisabledClasses = disabledClasses;
+    onOverflowItemsMounted: () => {
       deferUpdateButtonStates();
     },
     onReady: () => {
