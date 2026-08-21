@@ -1750,34 +1750,18 @@
     {
       "name": "button-banner",
       "value": {
-        "type": "makeHsv",
-        "h": {
+        "type": "map",
+        "source": {
           "type": "settingValue",
-          "settingId": "button"
+          "settingId": "bannerColors"
         },
-        "s": {
-          "type": "map",
-          "source": {
-            "type": "settingValue",
-            "settingId": "darkBanners"
-          },
-          "options": {
-            "off": 0.57,
-            "darker": 0.57,
-            "desaturated": 0.3
-          }
+        "options": {
+          "#f2f2f2": "#ececec",
+          "#f2f2f2ff": "#ececec"
         },
-        "v": {
-          "type": "map",
-          "source": {
-            "type": "settingValue",
-            "settingId": "darkBanners"
-          },
-          "options": {
-            "off": 0.84,
-            "darker": 0.4,
-            "desaturated": 0.35
-          }
+        "default": {
+          "type": "settingValue",
+          "settingId": "bannerColors"
         }
       }
     },
@@ -2614,6 +2598,12 @@
       "id": "messageIndicatorOnMessagesPage",
       "type": "color",
       "default": "#cc4400"
+    },
+    {
+      "name": "Colored areas (New)",
+      "id": "bannerColors",
+      "type": "color",
+      "default": "#855cd6"
     },
     {
       "name": "Colored areas",
