@@ -84,7 +84,7 @@ export default async function ({ addon }) {
     } else if (el.matches("[class*=input_input-form_]")) {
       // The following elements have this in their class list
       if (el.matches("[class*=input_input-small_]")) {
-        // Inputs in sprite propeties (exluding sprite name)
+        // Inputs in sprite properties (excluding sprite name)
         return true;
       } else if (
         el.matches("[class*=paint-editor_editor-container-top_]" + inputSelector) &&

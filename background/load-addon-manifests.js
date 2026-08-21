@@ -122,7 +122,7 @@ const localizeSettings = (addonId, setting, tableId) => {
           injectable._scratchDomainImplied = !matches.startsWith("^https:");
           injectable.matches = new RegExp(matches, "u");
         } else if (Array.isArray(matches)) {
-          for (let i = matches.length; i--; ) {
+          for (let i = matches.length; i--;) {
             const match = matches[i];
             if (typeof match === "string" && match.startsWith("^")) {
               matches[i] = new RegExp(match, "u");
