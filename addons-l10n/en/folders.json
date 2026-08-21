@@ -6,6 +6,9 @@
   "folders/rename-folder": "rename folder",
   "folders/remove-folder": "remove folder",
   "folders/remove-from-folder": "remove from folder",
+  "folders/this-item": "this",
+  "folders/preceeding-items": "the preceeding items",
+  "folders/following-items": "the following items",
   "folders/rename-folder-prompt-title": "Rename Folder",
   "folders/rename-folder-prompt": "Rename folder to:",
   "folders/name-prompt-title": "Create Folder",
@@ -16,5 +19,10 @@
   "folders/delete-folder-contents-prompt-title": "Delete All in Folder",
   "folders/delete-sprites-folder-contents-prompt": "Are you sure you want to delete all sprites in the folder?\n\nThe deleted sprites can be restored by going to Edit \u2192 Restore Sprites.",
   "folders/delete-costumes-folder-contents-prompt": "Are you sure you want to delete all costumes in the folder?\n\nThe deleted costumes can be restored by going to Edit \u2192 Restore Costumes.",
-  "folders/delete-sounds-folder-contents-prompt": "Are you sure you want to delete all sounds in the folder?\n\nThe deleted sounds can be restored by going to Edit \u2192 Restore Sounds."
+  "folders/delete-sounds-folder-contents-prompt": "Are you sure you want to delete all sounds in the folder?\n\nThe deleted sounds can be restored by going to Edit \u2192 Restore Sounds.",
+  "folders/delete-ungrouped": "delete all outside folders",
+  "folders/delete-ungrouped-prompt-title": "Delete All Outside Any Folder",
+  "folders/delete-sprites-ungrouped-prompt": "Are you sure you want to delete all sprites outside a folder?\n\nThe deleted sprites can be restored by going to Edit \u2192 Restore Sprites.",
+  "folders/delete-costumes-ungrouped-prompt": "Are you sure you want to delete all costumes outside a folder?\n\nThe deleted costumes can be restored by going to Edit \u2192 Restore Costumes.",
+  "folders/delete-sounds-ungrouped-prompt": "Are you sure you want to delete all sounds outside a folder?\n\nThe deleted sounds can be restored by going to Edit \u2192 Restore Sounds."
 }
