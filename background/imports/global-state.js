@@ -3,6 +3,8 @@
 // Content scripts cannot modify global state, but they can always read from it.
 // Exception: authentication info is local state, but is stored here for historical reasons.
 
+import { isTrustedOrigin, guestUser } from "./trust-manager.js";
+
 const _globalState = {
   auth: {
     isLoggedIn: false,
@@ -46,9 +48,25 @@ class StateProxy {
 }
 
 function messageForAllTabs(message) {
-  chrome.tabs.query({}, (tabs) =>
-    tabs.forEach((tab) => tab.url && chrome.tabs.sendMessage(tab.id, message, () => void chrome.runtime.lastError))
-  );
+  chrome.tabs.query({}, (tabs) => {
+    tabs.forEach((tab) => {
+      if (!tab.url) return; // Skip tabs we don't have access to
+      const isTrustedTab = isTrustedOrigin(tab.url);
+      let messageToSend = message;
+      if (message.newGlobalState && !isTrustedTab) {
+        // For untrusted tabs, modify the message to remove account data
+        messageToSend = {
+          ...message,
+          newGlobalState: {
+            ...message.newGlobalState,
+            auth: guestUser,
+          },
+        };
+      }
+      chrome.tabs.sendMessage(tab.id, messageToSend, () => void chrome.runtime.lastError);
+    });
+  });
+
   scratchAddons.sendToPopups(message);
 }
 
