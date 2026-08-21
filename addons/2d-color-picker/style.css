@@ -1,3 +1,7 @@
+.Popover {
+  z-index: 492; /* above menu bar */
+}
+
 .sa-2dcolor-picker {
   width: 150px;
   height: 150px;

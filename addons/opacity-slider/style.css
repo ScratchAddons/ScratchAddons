@@ -1,3 +1,7 @@
+.Popover {
+  z-index: 492; /* above menu bar */
+}
+
 .sa-opacity-slider {
   /* overflow: hidden; */
   background-image: linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%),
