@@ -9,8 +9,7 @@ export default class BlockFlasher {
   static flash(block) {
     const getSvgPath = (block) => {
       if (!block) return null;
-      if (block.pathObject) return block.pathObject.svgPath; // new Blockly
-      return block.svgPath_;
+      return block.pathObject.svgPath;
     };
 
     if (myFlash.timerID > 0) {

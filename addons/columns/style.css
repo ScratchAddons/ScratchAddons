@@ -1,4 +1,3 @@
-[class*="blocks_blocks_"] .blocklyToolboxDiv,
 [class*="blocks_blocks_"] .blocklyToolbox {
   width: 310px;
   height: auto !important;
@@ -7,7 +6,6 @@
   border-bottom: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
 }
 
-.scratchCategoryMenu,
 .blocklyToolboxCategoryGroup {
   display: block;
   width: 100%;
@@ -16,23 +14,16 @@
   padding: 0.25rem;
 }
 
-.scratchCategorySecondMenu {
+.sa-extension-categories {
   columns: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   padding-bottom: 2.25rem;
 }
 
-.scratchCategorySecondMenu:empty {
+.sa-extension-categories:empty {
   padding-top: 0;
   padding-bottom: 2rem;
-}
-
-.scratchCategoryMenuItem {
-  display: inline-flex; /* inline so that it isn't split between both columns */
-  width: 100%;
-  padding: 0.25rem;
-  border-radius: 0.875rem;
 }
 
 .blocklyToolboxCategoryContainer {
@@ -49,15 +40,12 @@
   flex-direction: row;
 }
 
-.scratchCategoryItemBubble,
-.scratchCategoryItemIcon,
 .categoryBubble,
 .categoryIconBubble {
   margin: 0;
   margin-inline-end: 0.5rem;
 }
 
-.scratchCategoryMenuItemLabel,
 .blocklyToolboxCategoryLabel {
   flex: 1;
   display: flex;

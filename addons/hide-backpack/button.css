@@ -33,18 +33,10 @@
 }
 
 [dir="ltr"] .sa-backpack-button {
-  right: 22px;
-}
-
-[dir="rtl"] .sa-backpack-button {
-  left: 24px;
-}
-
-[dir="ltr"] .sa-backpack-button.sa-new-blockly {
   right: 30px;
 }
 
-[dir="rtl"] .sa-backpack-button.sa-new-blockly {
+[dir="rtl"] .sa-backpack-button {
   left: 32px;
 }
 

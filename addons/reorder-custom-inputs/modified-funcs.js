@@ -9,7 +9,6 @@ const ArgumentType = {
   BOOLEAN: "b",
 };
 
-// https://github.com/scratchfoundation/scratch-blocks/blob/f210e042988b91bcdc2abeca7a2d85e178edadb2/blocks_vertical/procedures.js#L205
 // https://github.com/scratchfoundation/scratch-blocks/blob/0f6a3f3/src/blocks/procedures.ts#L257
 export function modifiedCreateAllInputs(connectionMap) {
   // Split the proc into components, by %n, %b, %s and %l (ignoring escaped).
@@ -52,7 +51,6 @@ export function modifiedCreateAllInputs(connectionMap) {
   this.procCode_ = this.procCode_.replaceAll("%l ", "");
 }
 
-//https://github.com/scratchfoundation/scratch-blocks/blob/f210e042988b91bcdc2abeca7a2d85e178edadb2/blocks_vertical/procedures.js#L565
 //https://github.com/scratchfoundation/scratch-blocks/blob/0f6a3f3/src/blocks/procedures.ts#L676
 export function modifiedUpdateDeclarationProcCode(prefixLabels = false) {
   this.procCode_ = "";
