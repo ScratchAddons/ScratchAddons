@@ -35,13 +35,15 @@ export const cleanResult = (r) => {
 };
 
 // ── Style helpers ──────────────────────────────────────────────────────
-// Snapshots an item's fill, stroke colour, and stroke width. Boolean ops
-// in paper.js reliably lose style information, so we save before and
-// restore after every operation.
+// Snapshots an item's fill and stroke style. Boolean ops in paper.js reliably
+// lose style information, so we save before and restore after every operation.
 export const cloneStyle = (src) => ({
   fillColor: src.fillColor ? src.fillColor.clone() : null,
   strokeColor: src.strokeColor ? src.strokeColor.clone() : null,
   strokeWidth: src.strokeWidth,
+  strokeJoin: src.strokeJoin,
+  strokeCap: src.strokeCap,
+  miterLimit: src.miterLimit,
 });
 
 // Restores a previously snapshotted style onto an item.
@@ -49,6 +51,9 @@ export const applyStyle = (dst, style) => {
   dst.fillColor = style.fillColor;
   dst.strokeColor = style.strokeColor;
   dst.strokeWidth = style.strokeWidth;
+  dst.strokeJoin = style.strokeJoin;
+  dst.strokeCap = style.strokeCap;
+  dst.miterLimit = style.miterLimit;
 };
 
 // ── Path normalisation ─────────────────────────────────────────────────
@@ -227,11 +232,10 @@ export const convertTextItems = (paper) => {
   );
   let count = 0;
   for (const textItem of textItems) {
+    const style = cloneStyle(textItem);
     const path = TextToPath.convert(textItem, paper);
     if (!path) continue;
-    path.fillColor = textItem.fillColor ? textItem.fillColor.clone() : null;
-    path.strokeColor = textItem.strokeColor ? textItem.strokeColor.clone() : null;
-    path.strokeWidth = textItem.strokeWidth;
+    applyStyle(path, style);
     const idx = textItem.index;
     const layer = textItem.layer;
     textItem.selected = false;
