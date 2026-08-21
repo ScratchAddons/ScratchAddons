@@ -18,6 +18,9 @@
   </head>
 
   <body>
+    <div v-cloak class="turbo-warp-banner" v-if="turboWarpEnabled">
+      {{ messages.turboWarpBanner }}
+    </div>
     <div
       v-cloak
       class="loading"
