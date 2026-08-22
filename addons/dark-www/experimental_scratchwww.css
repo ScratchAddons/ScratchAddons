@@ -160,7 +160,6 @@ body {
 :root:not(.sa-editor) [class*="stage-header_stage-button_"],
 .studio-adder-section .studio-adder-row input,
 .avatar-item img,
-.join-flow-outer-content /* username change */,
 .conf2019-panel-flag,
 .plan .faq .short,
 .conf2017-panel-flag,
@@ -416,7 +415,6 @@ p.callout,
 .transfer-host-modal .transfer-outcome,
 .filter-container,
 .tab-choice-selected-sa,
-#bad-username-splash .admin-message /* username change */,
 .sa-annual-report-2020 .initiatives-section .year-in-review,
 .initiatives-section .initiatives-subsection-content .map,
 .sa-annual-report-2021 .leadership-section .leadership-scratch-team .avatar-item img,
@@ -429,7 +427,6 @@ p.callout,
 .empty h4,
 .thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .studio-page #view,
-#bad-username-splash .admin-message .admin-message-date /* username change */,
 .milestones-section h2 {
   color: var(--darkWww-blue-text);
 }
