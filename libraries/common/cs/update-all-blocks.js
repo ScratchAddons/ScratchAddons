@@ -28,11 +28,11 @@ export async function updateAllBlocks(
       }
     }
     if (updateMainWorkspace) {
-      const xml = blockly.Xml.workspaceToDom(workspace);
-      if (xml.querySelector("variables")) {
-        xml.querySelector("variables").remove();
-      }
-      // Add all variables, including unused ones, to the XML document
+      // blockly.Xml.workspaceToDom() doesn't serialize everything Scratch needs.
+      // Use the methods provided by scratch-vm instead.
+      const vm = tab.traps.vm;
+      const xml = blockly.utils.xml.createElement("xml");
+
       const variables = blockly.utils.xml.createElement("variables");
       const globalVariables = Object.values(tab.traps.vm.runtime.getTargetForStage().variables);
       const localVariables = tab.traps.vm.editingTarget.isStage
@@ -45,6 +45,18 @@ export async function updateAllBlocks(
         variables.appendChild(blockly.utils.xml.textToDom(variable.toXML(true)));
       }
       xml.appendChild(variables);
+
+      const workspaceComments = Object.values(vm.editingTarget.comments).filter((comment) => !comment.blockId);
+      for (const comment of workspaceComments) {
+        xml.appendChild(blockly.utils.xml.textToDom(comment.toXML()));
+      }
+      const scripts = vm.editingTarget.blocks.getScripts();
+      for (const script of scripts) {
+        xml.appendChild(
+          blockly.utils.xml.textToDom(vm.editingTarget.blocks.blockToXML(script, vm.editingTarget.comments))
+        );
+      }
+
       blockly.clearWorkspaceAndLoadFromXml(xml, workspace);
     }
     if (toolbox && flyout && (updateFlyout || updateCategories)) {
