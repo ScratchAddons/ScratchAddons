@@ -57,3 +57,15 @@ body:not(.iframe) .search-box:focus-within {
 .search-box > button:focus-visible > img {
   filter: none;
 }
+
+@media (forced-colors: active) {
+  .search-box > button {
+    background-color: ButtonFace;
+    outline: 1px solid ButtonBorder;
+  }
+
+  .search-box input:focus-visible,
+  .search-box > button:focus-visible {
+    outline: revert;
+  }
+}

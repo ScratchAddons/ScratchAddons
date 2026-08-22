@@ -47,6 +47,7 @@
   .modal-header.zero-height {
     height: 0;
     margin-bottom: 0;
+    align-items: flex-start;
   }
 
   .close {
@@ -54,6 +55,7 @@
     margin-left: auto;
     background-color: transparent;
     border: none;
+    line-height: 0;
     cursor: pointer;
   }
 
@@ -70,6 +72,21 @@
       max-height: 100%;
       box-sizing: border-box;
       border-radius: 0;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .modal {
+      outline: 1px solid;
+    }
+
+    .close {
+      background-color: ButtonFace;
+      outline: 1px solid ButtonBorder;
+    }
+
+    .close:focus {
+      outline: revert;
     }
   }
 </style>

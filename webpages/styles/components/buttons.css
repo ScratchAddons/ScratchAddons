@@ -86,3 +86,16 @@
 [dir="rtl"] .split-button-dropdown {
   border-radius: 4px 0 0 4px;
 }
+
+@media (forced-colors: active) {
+  .icon-button {
+    background-color: ButtonFace;
+    outline: 1px solid ButtonBorder;
+    outline-offset: -1px;
+  }
+
+  .large-button:focus-visible,
+  .icon-button:focus-visible {
+    outline: revert;
+  }
+}

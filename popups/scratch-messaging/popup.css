@@ -22,6 +22,15 @@ button {
 .message-type-title:hover .btn-dropdown {
   background: var(--hover-highlight);
 }
+@media (forced-colors: active) {
+  .btn-dropdown {
+    background-color: ButtonFace;
+    outline: 1px solid ButtonBorder;
+  }
+  .btn-dropdown:focus {
+    outline: revert;
+  }
+}
 
 .reverted {
   transform: rotate(180deg);
@@ -190,6 +199,12 @@ button > .small-icon {
   /*font-weight: 200;*/
   opacity: 0.5;
 }
+@media (forced-colors: active) {
+  .comment-time {
+    opacity: 1;
+    color: GrayText;
+  }
+}
 .popout-comment {
   cursor: pointer;
   height: 12px;
@@ -213,6 +228,12 @@ button > .small-icon {
   font-weight: bold;
   color: var(--red);
 }
+@media (forced-colors: active) {
+  .delete-btn,
+  .delete-confirm {
+    color: LinkText;
+  }
+}
 .child-comment {
   margin-inline-start: 3em;
 }
@@ -229,6 +250,11 @@ button > .small-icon {
   color: var(--blue-text);
   font-weight: 500;
   user-select: none;
+}
+@media (forced-colors: active) {
+  .reply-button-comment {
+    color: LinkText;
+  }
 }
 .comment:is(:hover, :focus-within) .reply-button-comment,
 .comment:is(:hover, :focus-within) .delete-btn {

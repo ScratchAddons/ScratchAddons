@@ -38,6 +38,9 @@
 .filter-option:hover {
   background: var(--button-hover-background);
 }
+.filter-options input:focus-visible {
+  outline: none;
+}
 .filter-options input:focus-visible + label {
   outline: 2px solid var(--content-text);
 }
@@ -63,5 +66,29 @@
   .filter-options > div {
     flex-grow: 1;
     text-align: center;
+  }
+}
+
+@media (forced-colors: active) {
+  .filter-options {
+    border-color: ButtonBorder;
+  }
+
+  .filter-option {
+    background-color: ButtonFace;
+    border-color: ButtonBorder;
+    color: ButtonText;
+    transition: none;
+  }
+
+  .filter-options input:checked + label {
+    background-color: Highlight;
+    color: HighlightText;
+    forced-color-adjust: preserve-parent-color;
+  }
+
+  .filter-options input:focus-visible + label {
+    outline-color: HighlightText;
+    outline-offset: -3px;
   }
 }

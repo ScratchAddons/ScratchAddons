@@ -79,3 +79,10 @@
 .filer-option.sel.lightblue {
   background: #1394bf;
 }
+
+@media (forced-colors: active) {
+  .badge {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
+}
