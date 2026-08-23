@@ -247,7 +247,7 @@ a.social-messages-profile-link:link,
 .studio-project-tile .studio-project-username,
 .studio-member-tile .studio-member-role,
 :root:not(.sa-editor) .join-flow-title,
-.join-flow-parental-consent-message,
+:root:not(.sa-editor) .join-flow-parental-consent-message,
 .registration-step .bold-link,
 .checkbox-container,
 .tou-modal .tou-step-inner-content .tou-step-info-wrapper .tou-step-title,
@@ -313,7 +313,7 @@ a.social-messages-profile-link:link,
 .projects-carousel .content .slick-track .thumbnail .thumbnail-info .thumbnail-title a {
   color: var(--darkWww-box-strongBlueText);
 }
-.validation-checkbox-required /* join flow */,
+:root:not(.sa-editor) .validation-checkbox-required /* join flow */,
 /* ToU acceptance */
 .tou-step-next-button-wrapper .tou-step-error,
 .parental-consent-form .validation-message,
@@ -618,10 +618,10 @@ p.callout,
 .download .download-header,
 .link .extension-header /* Scratch Link download */,
 .information-page .title-banner.masthead,
-.modal-flush-bottom-button {
+.modal-flush-bottom-button:where(:not(.sa-editor *)) {
   background-color: var(--darkWww-button-banner);
 }
-.modal-flush-bottom-button:hover {
+.modal-flush-bottom-button:where(:not(.sa-editor *)):hover {
   background-color: var(--darkWww-button-bannerVariant);
 }
 

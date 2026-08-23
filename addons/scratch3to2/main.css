@@ -522,18 +522,18 @@ a:hover {
 }
 
 /* Modals */
-.modal-overlay,
+.modal-overlay:where(:not(.sa-editor *)),
 .youtube-video-modal-overlay,
 .cards-modal-overlay {
   background-color: rgba(0, 0, 0, 0.8);
 }
-.modal-content,
+.modal-content:where(:not(.sa-editor *)),
 .youtube-video-modal-container,
 .cards-modal-container {
   border-radius: 6px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
 }
-.modal-content-close,
+.modal-content-close:where(:not(.sa-editor *)),
 .youtube-video-modal-container .cards-modal-header .close-button,
 .cards-modal-container .cards-modal-header .close-button {
   top: 12px;
@@ -549,17 +549,17 @@ a:hover {
   line-height: 13.5px;
   opacity: 0.25;
 }
-.modal-content-close:hover,
+.modal-content-close:where(:not(.sa-editor *)):hover,
 .youtube-video-modal-container .cards-modal-header .close-button:hover,
 .cards-modal-container .cards-modal-header .close-button:hover {
   opacity: 0.4;
 }
-.modal-content-close::before,
+.modal-content-close:where(:not(.sa-editor *))::before,
 .youtube-video-modal-container .cards-modal-header .close-button::after,
 .cards-modal-container .cards-modal-header .close-button::after {
   content: "\d7"; /* U+00D7 MULTIPLICATION SIGN */
 }
-.modal-content-close-img,
+.modal-content-close-img:where(:not(.sa-editor *)),
 .youtube-video-modal-container .cards-modal-header .close-button img {
   display: none;
 }
@@ -578,7 +578,7 @@ a:hover {
   height: auto;
   padding-top: 5px;
 }
-.modal-title,
+.modal-title:where(:not(.sa-editor *)),
 .report-content-label,
 .share-modal .title,
 .update-thumbnail-info-modal .update-thumbnail-info-modal-title,
