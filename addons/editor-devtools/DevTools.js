@@ -237,8 +237,15 @@ export default class DevTools {
     UndoGroup.startUndoGroup(wksp);
 
     const topBlocks = wksp.getTopBlocks();
-    const { pos: tPos, xMax: tXMax } = this.getBlockPosAndXMax(targetBlock);
+    // Use the root block so position and size are always measured from the top of the stack,
+    // not from whichever mid-stack block triggered makeSpace. A mid-stack block has an
+    // indented getRelativeToSurfaceXY(), so tPos.x and tXMax would be shifted right,
+    // causing the withinColumn check to miss scripts in the same visual column.
     const targetRoot = targetBlock.getRootBlock();
+    const { pos: tPos, xMax: tXMax } = this.getBlockPosAndXMax(targetRoot);
+    // Measure Y shifts from the bottom of the target stack so overlapping scripts
+    // are pushed far enough to clear it, not just its top.
+    const tBottomY = tPos.y + targetRoot.getHeightWidth().height;
     const isRTL = targetBlock.RTL;
 
     // TODO: move shift distances to a setting option defined in multiples of grid spacing
@@ -261,7 +268,7 @@ export default class DevTools {
       shouldShift.push([topBlock, shouldShiftX, shouldShiftY]);
 
       if (shouldShiftX && Math.abs(pos.x - tXMax) < minXShift) minXShift = Math.abs(pos.x - tXMax);
-      if (shouldShiftY && pos.y - tPos.y < minYShift) minYShift = pos.y - tPos.y;
+      if (shouldShiftY && pos.y - tBottomY < minYShift) minYShift = pos.y - tBottomY;
     }
 
     // in the second pass we apply a shift based on the min shift to all the blocks we found should be shifted in the first pass
