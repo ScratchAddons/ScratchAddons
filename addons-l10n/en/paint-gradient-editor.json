@@ -1,0 +1,7 @@
+{
+  "paint-gradient-editor/stop-start": "Start stop",
+  "paint-gradient-editor/stop-end": "End stop",
+  "paint-gradient-editor/midpoint": "Midpoint bias",
+  "paint-gradient-editor/angle": "Angle",
+  "paint-gradient-editor/pick-color": "Pick color from canvas"
+}
