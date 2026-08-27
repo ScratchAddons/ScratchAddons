@@ -3,7 +3,7 @@ export default {
   description: "",
   tags: [],
   _categories: ["editor"],
-  _icon: "editor",
+  _iconSrc: "../../images/icons/puzzle.svg",
   _displayedAddonId: "",
   _enabled: true,
   _addonId: "example",

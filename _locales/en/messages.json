@@ -56,8 +56,8 @@
   "danger": {
     "message": "Dangerous"
   },
-  "dangerWarning": {
-    "message": "Are you sure you want to enable the \"$1\" addon?"
+  "enableConfirmation": {
+    "message": "Enable this addon?"
   },
   "forums": {
     "message": "Forums"
@@ -76,6 +76,12 @@
   },
   "confirmReset": {
     "message": "Are you sure you want to reset this addon to default settings?"
+  },
+  "enableAddon": {
+    "message": "Enable"
+  },
+  "cancel": {
+    "message": "Cancel"
   },
   "settingsTitle": {
     "message": "Settings - Scratch Addons"
