@@ -6,6 +6,10 @@
     {
       "name": "ErrorGamer2000",
       "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
+    },
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch/"
     }
   ],
   "versionAdded": "1.13.0",
@@ -23,6 +27,13 @@
     }
   ],
   "settings": [
+    {
+      "name": "Extended scrolling limit for code area",
+      "id": "expandWorkspace",
+      "type": "boolean",
+      "default": true,
+      "description": "Add extra scrollable space around your blocks so you can scroll further in all directions"
+    },
     {
       "name": "Maximum Zoom (100-500%)",
       "id": "maxZoom",
