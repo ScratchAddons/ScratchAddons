@@ -19,17 +19,12 @@ export default async function ({ addon, console, msg }) {
   };
 
   const newVariable = (workspace, ...args) => {
-    if (Blockly.registry) {
-      // new Blockly
-      // https://github.com/scratchfoundation/scratch-blocks/blob/91c8b63/src/variables.ts#L126-L137
-      const VariableModel = Blockly.registry.getClass(Blockly.registry.Type.VARIABLE_MODEL, Blockly.registry.DEFAULT);
-      const variable = new VariableModel(workspace, ...args);
-      workspace.getVariableMap().addVariable(variable);
-      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(variable));
-      return variable;
-    } else {
-      return workspace.createVariable(...args);
-    }
+    // https://github.com/scratchfoundation/scratch-blocks/blob/91c8b63/src/variables.ts#L126-L137
+    const VariableModel = Blockly.registry.getClass(Blockly.registry.Type.VARIABLE_MODEL, Blockly.registry.DEFAULT);
+    const variable = new VariableModel(workspace, ...args);
+    workspace.getVariableMap().addVariable(variable);
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(variable));
+    return variable;
   };
 
   const ADDON_ITEMS = {
@@ -77,7 +72,7 @@ export default async function ({ addon, console, msg }) {
     noResultsMessage = document.createElement("div");
     noResultsMessage.textContent = msg("noResults");
     noResultsMessage.hidden = true;
-    noResultsMessage.classList.add("u-dropdown-no-results", "blocklyMenuItem", "goog-menuitem");
+    noResultsMessage.classList.add("u-dropdown-no-results", "blocklyMenuItem");
 
     blocklyDropdownMenu.insertBefore(noResultsMessage, blocklyDropdownMenu.firstChild);
     blocklyDropdownMenu.insertBefore(searchBar, noResultsMessage);
@@ -92,72 +87,35 @@ export default async function ({ addon, console, msg }) {
     updateSearch();
   };
 
-  if (Blockly.registry) {
-    // new Blockly
-    const oldFieldDropdownCreate = Blockly.FieldDropdown.prototype.dropdownCreate;
-    Blockly.FieldDropdown.prototype.dropdownCreate = function () {
-      oldFieldDropdownCreate.call(this);
-      this.menu_.saSearchable = true;
-      this.menu_.focus = () => {
-        // Only focus once - by default, Blockly focuses the menu every time it's hovered
-        this.menu_.focus = () => {};
-        if (searchBar) {
-          // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
-          blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
-          searchBar.focus();
-          setTimeout(() => searchBar.scrollIntoView(), 0);
-        }
-      };
-    };
-
-    // FieldDropdown.showEditor_() calls Menu.render(), then DropDownDiv.showPositionedByField().
-    // We override Menu.render() so that when showPositionedByField() is called, the search bar is
-    // already there and the correct size of the menu can be calculated.
-    const oldMenuRender = Blockly.Menu.prototype.render;
-    Blockly.Menu.prototype.render = function (...args) {
-      const menu = oldMenuRender.call(this, ...args);
-      if (this.saSearchable) {
-        blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
-        blocklyDropdownMenu = menu;
-        initSearchBar();
+  const oldFieldDropdownCreate = Blockly.FieldDropdown.prototype.dropdownCreate;
+  Blockly.FieldDropdown.prototype.dropdownCreate = function () {
+    oldFieldDropdownCreate.call(this);
+    this.menu_.saSearchable = true;
+    this.menu_.focus = () => {
+      // Only focus once - by default, Blockly focuses the menu every time it's hovered
+      this.menu_.focus = () => {};
+      if (searchBar) {
+        // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
+        blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
+        searchBar.focus();
+        setTimeout(() => searchBar.scrollIntoView(), 0);
       }
-      return menu;
     };
-  } else {
-    const oldDropDownDivShow = Blockly.DropDownDiv.show;
-    Blockly.DropDownDiv.show = function (...args) {
-      blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
-      if (!blocklyDropdownMenu) {
-        return oldDropDownDivShow.call(this, ...args);
-      }
+  };
 
-      blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
-
-      initSearchBar();
-
-      // Call the original show method after adding everything so that it can perform the correct size calculations
-      const ret = oldDropDownDivShow.call(this, ...args);
-
-      // Lock the size of the dropdown
+  // FieldDropdown.showEditor_() calls Menu.render(), then DropDownDiv.showPositionedByField().
+  // We override Menu.render() so that when showPositionedByField() is called, the search bar is
+  // already there and the correct size of the menu can be calculated.
+  const oldMenuRender = Blockly.Menu.prototype.render;
+  Blockly.Menu.prototype.render = function (...args) {
+    const menu = oldMenuRender.call(this, ...args);
+    if (this.saSearchable) {
       blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
-      blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
-      blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
-
-      // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
-      blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
-      searchBar.focus();
-
-      return ret;
-    };
-
-    const oldDropDownDivClearContent = Blockly.DropDownDiv.clearContent;
-    Blockly.DropDownDiv.clearContent = function () {
-      oldDropDownDivClearContent.call(this);
-      items = [];
-      searchedItems = [];
-      Blockly.DropDownDiv.content_.style.height = "";
-    };
-  }
+      blocklyDropdownMenu = menu;
+      initSearchBar();
+    }
+    return menu;
+  };
 
   const oldFieldDropdownGetOptions = Blockly.FieldDropdown.prototype.getOptions;
   Blockly.FieldDropdown.prototype.getOptions = function () {
@@ -180,9 +138,8 @@ export default async function ({ addon, console, msg }) {
     return options;
   };
 
-  const onItemSelectedMethodName = Blockly.registry ? "onItemSelected_" : "onItemSelected";
-  const oldFieldVariableOnItemSelected = Blockly.FieldVariable.prototype[onItemSelectedMethodName];
-  Blockly.FieldVariable.prototype[onItemSelectedMethodName] = function (menu, menuItem) {
+  const oldFieldVariableOnItemSelected = Blockly.FieldVariable.prototype.onItemSelected_;
+  Blockly.FieldVariable.prototype.onItemSelected_ = function (menu, menuItem) {
     const sourceBlock = this.sourceBlock_;
     if (sourceBlock && sourceBlock.workspace && searchBar.value.length !== 0) {
       const workspace = sourceBlock.workspace;
@@ -201,17 +158,10 @@ export default async function ({ addon, console, msg }) {
   };
 
   function selectItem(item, click) {
-    // You can't just use click() or focus() because Blockly uses mousedown and mouseup handlers, not click handlers.
-    if (Blockly.registry) {
-      // new Blockly
-      const previousSelection = item.parentElement.querySelector(".u-dropdown-selected-item");
-      if (previousSelection) previousSelection.classList.remove("u-dropdown-selected-item");
-      item.classList.add("u-dropdown-selected-item");
-      if (click) item.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
-    } else {
-      item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
-      if (click) item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
-    }
+    const previousSelection = item.parentElement.querySelector(".u-dropdown-selected-item");
+    if (previousSelection) previousSelection.classList.remove("u-dropdown-selected-item");
+    item.classList.add("u-dropdown-selected-item");
+    if (click) item.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
 
     // Scroll the item into view if it is offscreen.
     const itemTop = item.offsetTop;
@@ -304,7 +254,7 @@ export default async function ({ addon, console, msg }) {
       event.stopPropagation();
       event.preventDefault();
 
-      const selectedItem = document.querySelector(".goog-menuitem-highlight, .u-dropdown-selected-item");
+      const selectedItem = document.querySelector(".u-dropdown-selected-item");
       if (selectedItem && !selectedItem.hidden) {
         selectItem(selectedItem, true);
         return;
@@ -347,7 +297,7 @@ export default async function ({ addon, console, msg }) {
 
       let selectedIndex = -1;
       for (let i = 0; i < items.length; i++) {
-        if (items[i].element.matches(".goog-menuitem-highlight, .u-dropdown-selected-item")) {
+        if (items[i].element.matches(".u-dropdown-selected-item")) {
           selectedIndex = i;
           break;
         }

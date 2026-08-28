@@ -124,10 +124,7 @@ class Highlighter {
             return false;
           });
           if (!childblock) {
-            let svgPath;
-            if (block.pathObject)
-              svgPath = block.pathObject.svgPath; // new Blockly
-            else svgPath = block.svgPath_;
+            const svgPath = block.pathObject.svgPath;
             if (svgPath) elementsToHighlight.add(svgPath);
           }
         });

@@ -109,17 +109,10 @@ export default async function ({ addon, console, msg, safeMsg }) {
     return moveReportersToEnd(variables).concat(moveReportersToEnd(lists));
   };
 
-  let oldVariableCategoryCallback;
-  if (ScratchBlocks.registry) {
-    // new Blockly
-    oldVariableCategoryCallback = ScratchBlocks.ScratchVariables.getVariablesCategory;
-  } else {
-    oldVariableCategoryCallback = ScratchBlocks.DataCategory;
-  }
   let variableCategory;
   let listCategory;
   const variableCategoryCallback = (workspace) => {
-    let result = oldVariableCategoryCallback(workspace);
+    let result = ScratchBlocks.ScratchVariables.getVariablesCategory(workspace);
 
     if (!addon.self.disabled && addon.settings.get("moveReportersDown")) {
       result = moveReportersDown(result);
@@ -144,16 +137,12 @@ export default async function ({ addon, console, msg, safeMsg }) {
   };
 
   // Each time a new workspace is made, these callbacks are reset, so re-register whenever a flyout is shown.
-  // https://github.com/scratchfoundation/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
+  // https://github.com/RaspberryPiFoundation/blockly/blob/1e002dd/packages/blockly/core/flyout_base.ts#L624
   const oldShow = ScratchBlocks.Flyout.prototype.show;
-  ScratchBlocks.Flyout.prototype.show = function (xmlList) {
-    let workspace;
-    if (ScratchBlocks.registry)
-      workspace = this.targetWorkspace; // new Blockly
-    else workspace = this.workspace_;
-    workspace.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
-    workspace.registerToolboxCategoryCallback("LIST", listCategoryCallback);
-    return oldShow.call(this, xmlList);
+  ScratchBlocks.Flyout.prototype.show = function (flyoutDefinition) {
+    this.targetWorkspace.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
+    this.targetWorkspace.registerToolboxCategoryCallback("LIST", listCategoryCallback);
+    return oldShow.call(this, flyoutDefinition);
   };
 
   // Use Scratch's extension category mechanism to replace the data category with our own.
@@ -165,39 +154,26 @@ export default async function ({ addon, console, msg, safeMsg }) {
     const result = originalGetBlocksXML.call(this, target);
     hasSeparateListCategory = addon.settings.get("separateListCategory");
     if (!addon.self.disabled && hasSeparateListCategory) {
-      let dataPrimary;
-      let dataTertiary;
-      let listsPrimary;
-      let listsTertiary;
-      if (ScratchBlocks.registry) {
-        // New Blockly: we need a workspace (it doesn't matter which one) to get the block styles.
-        // tabAPI.traps.getWorkspace() sometimes throws an error if called inside this function.
-        const theme = ScratchBlocks.common.getMainWorkspace().getTheme();
-        dataPrimary = theme.blockStyles.data.colourPrimary;
-        dataTertiary = theme.blockStyles.data.colourTertiary;
-        listsPrimary = theme.blockStyles.data_lists.colourPrimary;
-        listsTertiary = theme.blockStyles.data_lists.colourTertiary;
-      } else {
-        dataPrimary = ScratchBlocks.Colours.data.primary;
-        dataTertiary = ScratchBlocks.Colours.data.tertiary;
-        listsPrimary = ScratchBlocks.Colours.data_lists.primary;
-        listsTertiary = ScratchBlocks.Colours.data_lists.tertiary;
-      }
+      // We need a workspace (it doesn't matter which one) to get the block styles.
+      // tabAPI.traps.getWorkspace() sometimes throws an error if called inside this function.
+      const theme = ScratchBlocks.common.getMainWorkspace().getTheme();
+      const dataColors = theme.blockStyles.data;
+      const listColors = theme.blockStyles.data_lists;
       result.push({
         id: "data",
         xml: `
         <category
           name="%{BKY_CATEGORY_VARIABLES}"
-          ${ScratchBlocks.registry ? "toolboxitemid" : "id"}="variables"
-          colour="${dataPrimary}"
-          secondaryColour="${dataTertiary}"
+          toolboxitemid="variables"
+          colour="${dataColors.colourPrimary}"
+          secondaryColour="${dataColors.colourTertiary}"
           custom="VARIABLE">
         </category>
         <category
           name="${safeMsg("list-category")}"
-          ${ScratchBlocks.registry ? "toolboxitemid" : "id"}="lists"
-          colour="${listsPrimary}"
-          secondaryColour="${listsTertiary}"
+          toolboxitemid="lists"
+          colour="${listColors.colourPrimary}"
+          secondaryColour="${listColors.colourTertiary}"
           custom="LIST">
         </category>`,
       });
@@ -217,13 +193,9 @@ export default async function ({ addon, console, msg, safeMsg }) {
   const updateFlyoutContent = () => {
     const workspace = addon.tab.traps.getWorkspace();
     if (!workspace) return;
-    if (ScratchBlocks.registry) {
-      ScratchBlocks.Events.disable();
-      workspace.getToolbox().forceRerender(); // new Blockly
-      ScratchBlocks.Events.enable();
-    } else {
-      workspace.refreshToolboxSelection_();
-    }
+    ScratchBlocks.Events.disable();
+    workspace.getToolbox().forceRerender();
+    ScratchBlocks.Events.enable();
   };
 
   addon.settings.addEventListener("change", (e) => {

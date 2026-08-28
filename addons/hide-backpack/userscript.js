@@ -1,13 +1,6 @@
-let RESIZE_BUTTON_OFFSET;
+const RESIZE_BUTTON_OFFSET = 31;
 
 export default async function ({ addon, console }) {
-  if (document.querySelector(".blocklyToolboxCategoryGroup")) {
-    // new Blockly
-    RESIZE_BUTTON_OFFSET = 31;
-  } else {
-    RESIZE_BUTTON_OFFSET = 36;
-  }
-
   let originalBackpack;
 
   // Event listeners that add dynamic enable/disable
@@ -58,10 +51,6 @@ function isBackpackOpen() {
 function createBackpackButton(addon) {
   let backpackButton = document.createElement("div");
   backpackButton.classList.add("sa-backpack-button");
-  if (document.querySelector(".blocklyToolboxCategoryGroup")) {
-    // new Blockly
-    backpackButton.classList.add("sa-new-blockly");
-  }
   // Can't use displayNoneWhileDisabled because it updates after the resize event
   backpackButton.style.display = "none"; // overridden by userstyle if the addon is enabled
   backpackButton.title = addon.tab.scratchMessage("gui.backpack.header");
@@ -94,14 +83,7 @@ function toggleBackpack() {
 // Move resize buttons to top
 function moveResizeButtons(addon, distance) {
   const resizeElements = document.querySelectorAll(".blocklyZoom > image");
-  if (document.querySelector(".blocklyToolboxCategoryGroup")) {
-    // new Blockly
-    const workspace = addon.tab.traps.getWorkspace();
-    const zoomControls = workspace.getComponentManager().getComponent("zoomControls");
-    zoomControls.MARGIN_VERTICAL = 20 + distance;
-  } else {
-    resizeElements[0].setAttribute("y", (44 - distance).toString());
-    resizeElements[1].setAttribute("y", (0 - distance).toString());
-    resizeElements[2].setAttribute("y", (88 - distance).toString());
-  }
+  const workspace = addon.tab.traps.getWorkspace();
+  const zoomControls = workspace.getComponentManager().getComponent("zoomControls");
+  zoomControls.MARGIN_VERTICAL = 20 + distance;
 }

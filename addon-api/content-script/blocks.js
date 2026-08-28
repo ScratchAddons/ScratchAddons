@@ -52,7 +52,7 @@ const getNamesIdsDefaults = (blockData) => [
 ];
 
 // This needs to function exactly as Scratch does:
-// https://github.com/scratchfoundation/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215
+// https://github.com/scratchfoundation/scratch-blocks/blob/e50d7b8/src/blocks/procedures.ts#L458-L467
 // Returns a list like ["%s", "%d"]
 const parseArguments = (code) =>
   code
@@ -142,50 +142,29 @@ const generateBlockXML = () => {
 
 const injectWorkspace = (ScratchBlocks) => {
   const isHighContrast = (workspace) => {
-    if (ScratchBlocks.registry)
-      return workspace.getTheme().name === "high-contrast"; // new Blockly
-    else return ScratchBlocks.Colours.text === "#000000";
+    return workspace.getTheme().name === "high-contrast";
   };
 
   const BlockSvg = ScratchBlocks.BlockSvg;
-  if (ScratchBlocks.registry) {
-    // new Blockly
-    const oldApplyColour = BlockSvg.prototype.applyColour;
-    BlockSvg.prototype.applyColour = function (...args) {
-      // procedures_prototype also have a procedure code but we do not want to color them.
-      if (!this.isInsertionMarker() && this.type === "procedures_call") {
-        const block = this.procCode_ && getCustomBlock(this.procCode_);
-        const color = isHighContrast(this.workspace) ? highContrastColor : defaultColor;
-        if (block) {
-          this.style = {
-            ...this.style,
-            colourPrimary: customColor.color || color.color,
-            colourSecondary: customColor.secondaryColor || color.secondaryColor,
-            colourTertiary: customColor.tertiaryColor || color.tertiaryColor,
-          };
-          this.pathObject.setStyle(this.style);
-          this.customContextMenu = null;
-        }
+  const oldApplyColour = BlockSvg.prototype.applyColour;
+  BlockSvg.prototype.applyColour = function (...args) {
+    // procedures_prototype also have a procedure code but we do not want to color them.
+    if (!this.isInsertionMarker() && this.type === "procedures_call") {
+      const block = this.procCode_ && getCustomBlock(this.procCode_);
+      const color = isHighContrast(this.workspace) ? highContrastColor : defaultColor;
+      if (block) {
+        this.style = {
+          ...this.style,
+          colourPrimary: customColor.color || color.color,
+          colourSecondary: customColor.secondaryColor || color.secondaryColor,
+          colourTertiary: customColor.tertiaryColor || color.tertiaryColor,
+        };
+        this.pathObject.setStyle(this.style);
+        this.customContextMenu = null;
       }
-      return oldApplyColour.call(this, ...args);
-    };
-  } else {
-    const oldUpdateColour = BlockSvg.prototype.updateColour;
-    BlockSvg.prototype.updateColour = function (...args) {
-      // procedures_prototype also have a procedure code but we do not want to color them.
-      if (!this.isInsertionMarker() && this.type === "procedures_call") {
-        const block = this.procCode_ && getCustomBlock(this.procCode_);
-        const color = ScratchBlocks.Colours.text === "#000000" ? highContrastColor : defaultColor;
-        if (block) {
-          this.colour_ = customColor.color || color.color;
-          this.colourSecondary_ = customColor.secondaryColor || color.secondaryColor;
-          this.colourTertiary_ = customColor.tertiaryColor || color.tertiaryColor;
-          this.customContextMenu = null;
-        }
-      }
-      return oldUpdateColour.call(this, ...args);
-    };
-  }
+    }
+    return oldApplyColour.call(this, ...args);
+  };
 
   // recolour existing procedure blocks incase this injection is called after the blocks have already been created
   for (const block of tabAPI.traps.getWorkspace().getAllBlocks(false)) {
@@ -200,18 +179,15 @@ const injectWorkspace = (ScratchBlocks) => {
   const originalGetBlocksXML = vm.runtime.getBlocksXML;
   vm.runtime.getBlocksXML = function (target) {
     const result = originalGetBlocksXML.call(this, target);
-    let workspace;
-    if (ScratchBlocks.registry) {
-      // New Blockly: we need a workspace (it doesn't matter which one) to get the theme name.
-      // tabAPI.traps.getWorkspace() sometimes throws an error if called inside this function.
-      workspace = ScratchBlocks.common.getMainWorkspace();
-    }
+    // We need a workspace (it doesn't matter which one) to get the theme name.
+    // tabAPI.traps.getWorkspace() sometimes throws an error if called inside this function.
+    const workspace = ScratchBlocks.common.getMainWorkspace();
     result.unshift({
       id: "sa-blocks",
       xml:
         "<category" +
         ` name="${escapeHTML(scratchAddons.l10n.get("debugger/@name", null, "Debugger"))}"` +
-        ` ${ScratchBlocks.registry ? "toolboxitemid" : "id"}="sa-blocks"` +
+        ' toolboxitemid="sa-blocks"' +
         ' colour="#ff7b26"' +
         ' secondaryColour="#ff7b26"' +
         ` iconURI="${isHighContrast(workspace) ? HIGH_CONTRAST_ICON : DEFAULT_ICON}"` +
@@ -219,42 +195,6 @@ const injectWorkspace = (ScratchBlocks) => {
     });
     return result;
   };
-
-  if (!ScratchBlocks.registry) {
-    // We can't override this function on new Blockly because it's a not exported.
-    // It isn't referenced anywhere outside procedures.js, so this shouldn't cause issues.
-    // ---
-    // Trick Scratch into thinking addon blocks are defined somewhere.
-    // This makes Scratch's "is this procedure used anywhere" check work when addon blocks exist.
-    // getDefineBlock is used in https://github.com/scratchfoundation/scratch-blocks/blob/37f12ae3e342480f4d8e7b6ba783c46e29e77988/core/block_dragger.js#L275-L297
-    // and https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/procedures.js
-    // Only block_dragger.js should be able to reference addon blocks, but if procedures.js does
-    // somehow, we shim enough of the API that things shouldn't break.
-    const originalGetDefineBlock = ScratchBlocks.Procedures.getDefineBlock;
-    ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
-      // If an actual definition with this code exists, return that instead of our shim.
-      const result = originalGetDefineBlock.call(this, procCode, workspace);
-      if (result) {
-        return result;
-      }
-      const block = getCustomBlock(procCode);
-      if (block) {
-        return {
-          workspace,
-          getInput() {
-            return {
-              connection: {
-                targetBlock() {
-                  return null;
-                },
-              },
-            };
-          },
-        };
-      }
-      return result;
-    };
-  }
 
   // Replace proc code with display name when initializing the block.
   const newCreateAllInputs = (originalCreateAllInputs) =>
@@ -285,25 +225,17 @@ const injectWorkspace = (ScratchBlocks) => {
       ScratchBlocks.Block.prototype.setFieldValue = originalSetFieldValue;
     };
 
-  if (ScratchBlocks.registry) {
-    // new Blockly
-    const originalBlockDoInit = ScratchBlocks.Block.prototype.doInit_;
-    ScratchBlocks.Block.prototype.doInit_ = function (...args) {
-      const result = originalBlockDoInit.call(this, args);
-      if (this.type === "procedures_call") {
-        const originalCreateAllInputs = this.createAllInputs_;
-        this.createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);
-        const originalPopulateArgument = this.populateArgument_;
-        this.populateArgument_ = newPopulateArgument(originalPopulateArgument);
-        return result;
-      }
-    };
-  } else {
-    const originalCreateAllInputs = ScratchBlocks.Blocks["procedures_call"].createAllInputs_;
-    ScratchBlocks.Blocks["procedures_call"].createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);
-    const originalPopulateArgument = ScratchBlocks.Blocks["procedures_call"].populateArgument_;
-    ScratchBlocks.Blocks["procedures_call"].populateArgument_ = newPopulateArgument(originalPopulateArgument);
-  }
+  const originalBlockDoInit = ScratchBlocks.Block.prototype.doInit_;
+  ScratchBlocks.Block.prototype.doInit_ = function (...args) {
+    const result = originalBlockDoInit.call(this, args);
+    if (this.type === "procedures_call") {
+      const originalCreateAllInputs = this.createAllInputs_;
+      this.createAllInputs_ = newCreateAllInputs(originalCreateAllInputs);
+      const originalPopulateArgument = this.populateArgument_;
+      this.populateArgument_ = newPopulateArgument(originalPopulateArgument);
+      return result;
+    }
+  };
 
   // Toolbox update may be required to make category appear in flyout
   queueToolboxUpdate();

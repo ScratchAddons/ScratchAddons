@@ -71,54 +71,27 @@ export default class DevTools {
   async addContextMenus() {
     const blockly = await this.addon.tab.traps.getBlockly();
 
-    const pasteCallback = () => {
-      let target;
-      if (blockly.registry)
-        target = document.querySelector(".injectionDiv"); // new Blockly
-      else target = document;
-      target.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          keyCode: 86,
-          ctrlKey: true,
-        })
-      );
-    };
-
-    if (blockly.registry) {
-      // new Blockly
-      blockly.ContextMenuRegistry.registry.register({
-        separator: true,
-        scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
-        id: "saPasteSeparator",
-        weight: 11, // after Save All as Image
-      });
-      blockly.ContextMenuRegistry.registry.register({
-        displayText: this.m("paste"),
-        preconditionFn: () => (this.clipboardHasData ? "enabled" : "disabled"),
-        callback: pasteCallback,
-        scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
-        id: "saPaste",
-        weight: 12, // after separator
-      });
-    } else {
-      this.addon.tab.createBlockContextMenu(
-        (items, block) => {
-          items.push(
-            {
-              separator: true,
-              _isDevtoolsFirstItem: true,
-            },
-            {
-              enabled: blockly.clipboardXml_,
-              text: this.m("paste"),
-              callback: pasteCallback,
-            }
-          );
-          return items;
-        },
-        { workspace: true }
-      );
-    }
+    blockly.ContextMenuRegistry.registry.register({
+      separator: true,
+      scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+      id: "saPasteSeparator",
+      weight: 11, // after Save All as Image
+    });
+    blockly.ContextMenuRegistry.registry.register({
+      displayText: this.m("paste"),
+      preconditionFn: () => (this.clipboardHasData ? "enabled" : "disabled"),
+      callback: () => {
+        document.querySelector(".injectionDiv").dispatchEvent(
+          new KeyboardEvent("keydown", {
+            keyCode: 86,
+            ctrlKey: true,
+          })
+        );
+      },
+      scopeType: blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
+      id: "saPaste",
+      weight: 12, // after separator
+    });
 
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
