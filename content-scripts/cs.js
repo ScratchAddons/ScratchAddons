@@ -209,7 +209,7 @@ function addStyle(addon) {
       style.textContent = userstyle.text;
       appendByIndex(style, styleIndex);
     } else {
-      const existingEl = addonStyles.find((style) => style.href === userstyle.href);
+      const existingEl = addonStyles.find((style) => style.dataset.styleHref === userstyle.href);
       if (existingEl) {
         existingEl.disabled = false;
         continue;
@@ -219,8 +219,9 @@ function addStyle(addon) {
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
       link.setAttribute("data-addon-index", styleIndex);
+      link.setAttribute("data-style-href", userstyle.href);
       link.classList.add("scratch-addons-style");
-      link.href = userstyle.href;
+      link.href = userstyle.href + `?${Date.now()}`;
       appendByIndex(link, styleIndex);
     }
   }
@@ -233,7 +234,7 @@ function removeAddonStyles(addonId) {
 }
 function removeAddonStylesPartial(addonId, stylesToRemove) {
   document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => {
-    if (stylesToRemove.includes(style.href || style.dataset.styleHref)) style.disabled = true;
+    if (stylesToRemove.includes(style.dataset.styleHref)) style.disabled = true;
   });
 }
 
