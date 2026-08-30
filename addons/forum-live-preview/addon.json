@@ -24,21 +24,21 @@
   ],
   "settings": [
     {
-      "name": "Refresh rate",
+      "name": "Refresh delay",
       "id": "rate",
       "type": "select",
       "potentialValues": [
         {
-          "id": "slow",
-          "name": "Slow"
+          "id": "fast",
+          "name": "Short"
         },
         {
           "id": "default",
           "name": "Default"
         },
         {
-          "id": "fast",
-          "name": "Fast"
+          "id": "slow",
+          "name": "Long"
         }
       ],
       "default": "default"
