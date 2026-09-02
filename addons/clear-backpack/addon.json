@@ -1,0 +1,17 @@
+{
+  "name": "Clear Backpack",
+  "description": "Adds a button to quickly empty your entire backpack with a confirmation warning.",
+  "tags": ["editor"],
+  "credits": [
+    {
+      "name": "Hamdancoding"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js"
+    }
+  ],
+  "libraries": [],
+  "settings": []
+}
