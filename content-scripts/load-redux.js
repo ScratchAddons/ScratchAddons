@@ -1,5 +1,13 @@
 function injectRedux() {
-  window.__scratchAddonsRedux = {};
+  let resolveReduxReady;
+  window.__scratchAddonsRedux = {
+    // Create the event channel before Scratch creates its store so early
+    // userscripts can subscribe without missing later Redux events.
+    target: new EventTarget(),
+    ready: new Promise((resolve) => {
+      resolveReduxReady = resolve;
+    }),
+  };
 
   // ReDucks: Redux ducktyped
   // Not actual Redux, but should be compatible
@@ -35,13 +43,14 @@ function injectRedux() {
   let newerCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
   function compose(...args) {
     const scratchAddonsRedux = window.__scratchAddonsRedux;
-    const reduxTarget = (scratchAddonsRedux.target = new EventTarget());
+    const reduxTarget = scratchAddonsRedux.target;
     scratchAddonsRedux.state = {};
     scratchAddonsRedux.dispatch = () => {};
 
     function middleware({ getState, dispatch }) {
       scratchAddonsRedux.dispatch = dispatch;
       scratchAddonsRedux.state = getState();
+      resolveReduxReady();
       return (next) => (action) => {
         const nextReturn = next(action);
         const ev = new CustomEvent("statechanged", {

@@ -116,6 +116,10 @@ export const createPaintToolbarController = ({
   };
 
   const syncToolbar = () => {
+    // Scratch Paint can add the fixed toolbar's groups after the row itself,
+    // so refresh the native classes whenever that toolbar changes.
+    const fixedToolsRow = getFixedToolsRow();
+    if (fixedToolsRow) adoptNativeClasses(fixedToolsRow);
     syncInlineSection();
     onToolbarMutation();
   };
@@ -162,7 +166,6 @@ export const createPaintToolbarController = ({
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
       currentFixedToolsRow = fixedToolsRow;
-      adoptNativeClasses(fixedToolsRow);
 
       // Observers and lifecycle listeners are shared across toolbar remounts.
       if (!toolbarObserver) {

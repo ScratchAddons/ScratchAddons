@@ -13,21 +13,25 @@ export default class ReduxHandler extends Listenable {
   }
 
   /**
-   * Initialize the handler. Must be called before adding events.
+   * Initialize the handler and wait until Redux has its first real state.
+   * Existing callers do not need to await this unless they use Redux immediately.
+   * @returns {Promise<void>}
    */
   initialize() {
-    if (!__scratchAddonsRedux.target || this.initialized) return;
-    this.initialized = true;
-    __scratchAddonsRedux.target.addEventListener("statechanged", ({ detail }) => {
-      const newEvent = new CustomEvent("statechanged", {
-        detail: {
-          action: detail.action,
-          prev: detail.prev,
-          next: detail.next,
-        },
+    if (__scratchAddonsRedux.target && !this.initialized) {
+      this.initialized = true;
+      __scratchAddonsRedux.target.addEventListener("statechanged", ({ detail }) => {
+        const newEvent = new CustomEvent("statechanged", {
+          detail: {
+            action: detail.action,
+            prev: detail.prev,
+            next: detail.next,
+          },
+        });
+        this.dispatchEvent(newEvent);
       });
-      this.dispatchEvent(newEvent);
-    });
+    }
+    return __scratchAddonsRedux.ready ?? Promise.resolve();
   }
 
   /**
@@ -55,8 +59,8 @@ export default class ReduxHandler extends Listenable {
    * @param {string=|string[]=} actions - the action(s) to check for.
    * @returns {Promise} a Promise resolved when the state meets the condition.
    */
-  waitForState(condition, opts = {}) {
-    this.initialize();
+  async waitForState(condition, opts = {}) {
+    await this.initialize();
     if (!__scratchAddonsRedux.target) return Promise.reject(new Error("Redux is unavailable"));
     if (condition(__scratchAddonsRedux.state)) return Promise.resolve();
     let actions = opts.actions || null;
