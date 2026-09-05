@@ -1,4 +1,8 @@
-import { insert, wrapSelection, getSelection } from "../../libraries/thirdparty/cs/text-field-edit.js";
+import {
+  insertTextIntoField,
+  wrapFieldSelection,
+  getFieldSelection,
+} from "../../libraries/thirdparty/cs/text-field-edit.js";
 export default async ({ addon, console, msg }) => {
   await addon.tab.waitForElement(".markItUpButton16");
   const textBox = document.querySelector(".markItUpEditor");
@@ -90,19 +94,19 @@ export default async ({ addon, console, msg }) => {
         cw = closeWith,
         rw = replaceWith;
       if (promptTag) {
-        const value = prompt(msg("prompt-" + name), defaultSelection ? getSelection(textBox).trim() : undefined);
+        const value = prompt(msg("prompt-" + name), defaultSelection ? getFieldSelection(textBox).trim() : undefined);
         if (value !== null) {
           ow = `[${tag}${value ? `=${value}` : ""}]`;
           cw = `[/${tag}]`;
         }
       } else if (promptContent) {
-        const value = getSelection(textBox) || prompt(msg("prompt-" + name));
+        const value = getFieldSelection(textBox) || prompt(msg("prompt-" + name));
         if (value !== null) rw = `[${tag}]${value}[/${tag}]`;
       }
       if (typeof rw === "string") {
-        insert(textBox, rw);
+        insertTextIntoField(textBox, rw);
       } else if (typeof ow === "string" || typeof cw === "string") {
-        wrapSelection(textBox, ow || "", cw || "");
+        wrapFieldSelection(textBox, ow || "", cw || "");
       } else if (callback) {
         callback();
       }

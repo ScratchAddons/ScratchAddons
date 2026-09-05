@@ -3,7 +3,7 @@ export default async function ({ addon, console }) {
   const root = document.documentElement;
 
   if (!(addon.settings.get("infiniteScroll") && enabledAddons.includes("infinite-scroll"))) {
-    // If the setting is enabled, infinate-scroll
+    // If the setting is enabled, infinite-scroll
     // adds the class on the pages it runs on instead
     document.body.classList.add("sa-collapse-footer");
   }

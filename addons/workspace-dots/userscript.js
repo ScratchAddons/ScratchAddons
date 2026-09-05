@@ -32,7 +32,7 @@ export default async function ({ addon, console }) {
       const CROSSHAIR_LENGTH = this.getSpacing() / 2.5;
       const NO_LENGTH = 0;
 
-      // We are mulitplying line1's (vertical line) and line2's (horizontal line)'s length based on the user's setting.
+      // We are multiplying line1's (vertical line) and line2's (horizontal line)'s length based on the user's setting.
       // Scratch calls it "width", so don't get confused.
       width *= (() => {
         switch (addon.settings.get("theme")) {

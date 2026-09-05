@@ -89,7 +89,7 @@ async function refetchSession(addon) {
 (async () => {
   const addonId = location.pathname.split("/")[2];
 
-  // The value returned on await of `chrome.runtime.sendMessage` is only permited in Chrome 99+
+  // The value returned on await of `chrome.runtime.sendMessage` is only permitted in Chrome 99+
   const sendMessage = (...args) => new Promise((resolve) => chrome.runtime.sendMessage(...args, resolve));
 
   const popupData = await sendMessage({
