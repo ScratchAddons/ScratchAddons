@@ -1,7 +1,0 @@
-/*
- * Adds a vertical scroll bar to comments that overflow.
- */
-.scratchCommentTextarea {
-  overflow-y: auto;
-  background-color: transparent;
-}
