@@ -14,10 +14,12 @@ export default class ReduxHandler extends Listenable {
 
   /**
    * Initialize the handler and wait until Redux has its first real state.
-   * Existing callers do not need to await this unless they use Redux immediately.
+   * Callers do not need to await this unless they use Redux immediately.
    * @returns {Promise<void>}
+   * @throws when the Redux readiness promise is unavailable.
    */
   initialize() {
+    if (!__scratchAddonsRedux.ready) throw new Error("Redux readiness promise is unavailable");
     if (__scratchAddonsRedux.target && !this.initialized) {
       this.initialized = true;
       __scratchAddonsRedux.target.addEventListener("statechanged", ({ detail }) => {
@@ -31,7 +33,7 @@ export default class ReduxHandler extends Listenable {
         this.dispatchEvent(newEvent);
       });
     }
-    return __scratchAddonsRedux.ready ?? Promise.resolve();
+    return __scratchAddonsRedux.ready;
   }
 
   /**
