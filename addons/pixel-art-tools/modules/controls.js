@@ -162,6 +162,15 @@ export function createControlsModule(
     }
   };
 
+  const onTargetsUpdate = () => {
+    // Running scripts also emit targetsUpdate for position and other sprite
+    // properties. Only refresh for costume changes while the editor is mounted.
+    if (addon.self.disabled || !isCostumeEditorActive() || !isBitmap() || !canvasAdjuster.isReady()) return;
+    if (state.restoreSafeSizePending || getCostumeInfo().key !== lastCostumeKey) {
+      updatePixelModeVisibility();
+    }
+  };
+
   const createInput = (dimension) => {
     const input = el("input", {
       type: "number",
@@ -340,6 +349,7 @@ export function createControlsModule(
     updateBrushSelection,
     updateBrushControlVisibility,
     updatePixelModeVisibility,
+    onTargetsUpdate,
     setupControls,
     handleDisabled,
     handleReenabled,

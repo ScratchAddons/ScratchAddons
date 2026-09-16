@@ -32,7 +32,7 @@ export default async function ({ addon, msg, console }) {
     selectedPaletteId: null,
     paletteDropdown: null,
     palettePanelReady: null,
-    teardownVmTargetsListener: null,
+    teardownVmListeners: null,
     selectedPaletteIndex: -1,
     editingPaletteIndex: -1,
     pendingSize: { width: addon.settings.get("defaultWidth"), height: addon.settings.get("defaultHeight") },
@@ -119,20 +119,11 @@ export default async function ({ addon, msg, console }) {
     controls.handleReenabled();
   });
 
-  // Settings change handler
-  addon.settings.addEventListener("change", () => {
-    state.pendingSize.width = addon.settings.get("defaultWidth");
-    state.pendingSize.height = addon.settings.get("defaultHeight");
-    if (state.widthInput) state.widthInput.value = state.pendingSize.width;
-    if (state.heightInput) state.heightInput.value = state.pendingSize.height;
-    controls.updatePixelModeVisibility();
-  });
-
   // Initialize all components
   compactEditorEventTarget.addEventListener("change", updateCompactEditorState);
   updateCompactEditorState();
   controls.setupControls();
-  vm.on("targetsUpdate", controls.updatePixelModeVisibility);
+  vm.on("targetsUpdate", controls.onTargetsUpdate);
   palette.setupPalettePanel();
   palette.updatePaletteSelection();
   animationPreview.setupPanel();

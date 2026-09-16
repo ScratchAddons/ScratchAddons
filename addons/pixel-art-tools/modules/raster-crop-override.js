@@ -27,9 +27,8 @@ export function installRasterCropOverride(addon, state, paper) {
     const isFirstStage = rect && typeof rect === "object" && "_width" in rect;
 
     if (!isFirstStage) {
-      const full = originalGetImageData.call(this); // full canvas
-      const canvasWidth = full?.width || this.width || 0;
-      const canvasHeight = full?.height || this.height || 0;
+      const canvasWidth = this.width;
+      const canvasHeight = this.height;
       const targetW = Math.min(state.pendingSize.width || canvasWidth, canvasWidth);
       const targetH = Math.min(state.pendingSize.height || canvasHeight, canvasHeight);
       // Keep the origin from the hitBounds rect to avoid shifting content; only clamp the size.

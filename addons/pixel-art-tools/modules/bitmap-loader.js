@@ -10,8 +10,8 @@ async function canvasToAsset(storage, canvas) {
 
 async function halveAsset(storage, asset) {
   const img = await createImageBitmap(await (await fetch(asset.encodeDataURI())).blob());
-  const w = img.width >> 1;
-  const h = img.height >> 1;
+  const w = Math.max(1, img.width >> 1);
+  const h = Math.max(1, img.height >> 1);
   // Scratch bitmap costumes are stored at 2x resolution, so pre-halve imported
   // rasters here before creating the asset we hand back to the VM.
   const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
@@ -59,7 +59,9 @@ export function wrapAddCostumeWait(addon, original, canvasAdjuster, state) {
       return result;
     }
 
-    if (ext === "svg") return original.call(this, md5ext, costumeObj, targetId, optId);
+    // autoBitmap is independent of pixel mode, but imported artwork should only
+    // be resized while pixel mode is active.
+    if (!state.enabled || ext === "svg") return original.call(this, md5ext, costumeObj, targetId, optId);
 
     // Pre-halve imported bitmaps (skip duplicates)
     const target = targetId ? this.runtime.getTargetById(targetId) : this.editingTarget;

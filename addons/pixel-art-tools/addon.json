@@ -11,7 +11,7 @@
     },
     {
       "type": "notice",
-      "text": "Imported costumes will be half their original size. Use the Looks block \"set size to 200%\" in your sprite's code to display them at full size.",
+      "text": "Costumes imported while pixel mode is active will be half their original size. Use the Looks block \"set size to 200%\" in your sprite's code to display them at full size.",
       "id": "importedCostumeSize"
     },
     {

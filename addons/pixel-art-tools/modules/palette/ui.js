@@ -1,5 +1,5 @@
 import { createElement as el } from "../create-element.js";
-import { createExportTXT, parseGPL, parseTXT, parseImage } from "./import-export.js";
+import { createExportGPL, parseGPL, parseTXT, parseImage } from "./import-export.js";
 import { sanitizeHex } from "./normalize-color.js";
 import { createPaletteHistory } from "./history.js";
 
@@ -44,7 +44,8 @@ export function createUIModule(addon, state, redux, msg, console) {
   // reducer. This listener also receives the mixed-color sentinel in vector mode.
   const normalizeFillColor = (value) => {
     if (value === null || value === "scratch-paint/style-path/mixed") return null;
-    return tinycolor(value).toHexString().toUpperCase();
+    const color = tinycolor(value);
+    return color.isValid() ? color.toHexString().toUpperCase() : null;
   };
 
   const setFillHex = (hex) => {
@@ -175,7 +176,7 @@ export function createUIModule(addon, state, redux, msg, console) {
     }
 
     if (palette.colors.length >= PALETTE_LIMIT) {
-      showPaletteMessage(msg("paletteFull"), "warning");
+      if (!silent) showPaletteMessage(msg("paletteFull"), "warning");
       return;
     }
 
@@ -278,7 +279,7 @@ export function createUIModule(addon, state, redux, msg, console) {
       const img = el("img", {
         src: `${addon.self.dir}/icons/${icon}`,
         alt: "",
-        className: "sa-pixel-art-icon" + (icon === "export.svg" ? " sa-pixel-art-icon--invert" : ""),
+        className: "sa-pixel-art-icon",
       });
       btn.appendChild(img);
       return btn;
@@ -289,7 +290,7 @@ export function createUIModule(addon, state, redux, msg, console) {
     importBtn.onclick = () => importInput.click();
 
     const exportBtn = makeActionBtn("export.svg", msg("exportPalette"));
-    exportBtn.onclick = createExportTXT(state);
+    exportBtn.onclick = createExportGPL(state);
 
     const deleteBtn = makeActionBtn("delete.svg", msg("deletePalette"), "sa-pixel-art-action-button--danger");
     deleteBtn.onclick = handleDeletePalette;

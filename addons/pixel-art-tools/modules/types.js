@@ -41,7 +41,7 @@
  * @property {PixelArtPalette[]} projectPalettes
  * @property {string | null} selectedPaletteId
  * @property {Promise<HTMLElement> | null} palettePanelReady
- * @property {(() => void) | null} teardownVmTargetsListener
+ * @property {(() => void) | null} teardownVmListeners
  * @property {boolean} updateImageActive
  */
 

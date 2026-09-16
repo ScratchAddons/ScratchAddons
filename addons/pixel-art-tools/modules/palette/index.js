@@ -55,22 +55,43 @@ export function createPaletteModule(addon, state, redux, msg, console) {
     if (persistCostume) storage.writeCostumePaletteId(paletteId);
   };
 
+  const isCostumeEditorActive = () =>
+    !addon.self.disabled &&
+    redux.state.scratchGui?.editorTab?.activeTabIndex === 1 &&
+    !redux.state.scratchGui?.mode?.isPlayerOnly;
+  let lastTarget = null;
+  let lastCostumeName = null;
+  let lastStage = null;
+  const getCostumeName = () => vm.editingTarget?.sprite?.costumes?.[vm.editingTarget.currentCostume]?.name;
+
   const syncPalette = () => {
+    if (!isCostumeEditorActive()) return;
+    const stage = runtime.getTargetForStage();
+    if (!stage || !vm.editingTarget) return;
+    const costumeName = getCostumeName();
+    const contextChanged = vm.editingTarget !== lastTarget || costumeName !== lastCostumeName;
     const currentId = state.selectedPaletteId;
     const loaded = storage.loadProjectPalettes();
-    if (loaded.length) state.projectPalettes = loaded;
+    const palettesChanged =
+      (loaded.length > 0 || stage !== lastStage) && JSON.stringify(loaded) !== JSON.stringify(state.projectPalettes);
+    if (palettesChanged) state.projectPalettes = loaded;
     ensureActivePalette();
     const paletteId = storage.readCostumePaletteId();
     const findId = (id) => state.projectPalettes.some((p) => p.id === id);
-    setActivePalette(
-      findId(paletteId) ? paletteId : findId(currentId) ? currentId : state.projectPalettes[0].id,
-      !findId(paletteId) && !findId(currentId)
-    );
+    const selectedId = findId(paletteId) ? paletteId : findId(currentId) ? currentId : state.projectPalettes[0].id;
+    lastTarget = vm.editingTarget;
+    lastCostumeName = costumeName;
+    lastStage = stage;
+    // Our own palette writes also emit PROJECT_CHANGED. Keep the existing DOM
+    // and swatch edit when the stored data already matches the current palette.
+    if (contextChanged || palettesChanged || selectedId !== state.selectedPaletteId) {
+      setActivePalette(selectedId, !findId(paletteId) && !findId(currentId));
+    }
   };
 
   let syncPending = false;
   const scheduleSync = () => {
-    if (syncPending) return;
+    if (syncPending || !isCostumeEditorActive()) return;
     syncPending = true;
     queueMicrotask(() => {
       syncPending = false;
@@ -158,15 +179,31 @@ export function createPaletteModule(addon, state, redux, msg, console) {
     }
   };
 
-  const attachVmListener = () => {
-    state.teardownVmTargetsListener?.();
-    const handler = scheduleSync;
-    vm.on("targetsUpdate", handler);
-    state.teardownVmTargetsListener = () => {
-      vm.removeListener("targetsUpdate", handler);
-      state.teardownVmTargetsListener = null;
+  const onTargetsUpdate = () => {
+    // Sprite movement emits this event too. Palette mappings only depend on
+    // the editing target and costume name, not position or bitmap encoding.
+    if (!isCostumeEditorActive()) return;
+    if (vm.editingTarget !== lastTarget || getCostumeName() !== lastCostumeName) scheduleSync();
+  };
+
+  const attachVmListeners = () => {
+    state.teardownVmListeners?.();
+    vm.on("targetsUpdate", onTargetsUpdate);
+    vm.on("PROJECT_CHANGED", scheduleSync);
+    vm.on("PROJECT_LOADED", scheduleSync);
+    state.teardownVmListeners = () => {
+      vm.removeListener("targetsUpdate", onTargetsUpdate);
+      vm.removeListener("PROJECT_CHANGED", scheduleSync);
+      vm.removeListener("PROJECT_LOADED", scheduleSync);
+      state.teardownVmListeners = null;
     };
   };
+
+  redux.addEventListener("statechanged", ({ detail: { action } }) => {
+    if (action.type === "scratch-gui/navigation/ACTIVATE_TAB" || action.type === "scratch-gui/mode/SET_PLAYER") {
+      scheduleSync();
+    }
+  });
 
   // Update palette mappings when costumes are renamed
   const installRenameHook = () => {
@@ -181,12 +218,12 @@ export function createPaletteModule(addon, state, redux, msg, console) {
   if (runtime.getTargetForStage()) installRenameHook();
   else runtime.once("PROJECT_LOADED", installRenameHook);
 
-  addon.self.addEventListener("disabled", () => state.teardownVmTargetsListener?.());
+  addon.self.addEventListener("disabled", () => state.teardownVmListeners?.());
   addon.self.addEventListener("reenabled", () => {
-    attachVmListener();
+    attachVmListeners();
     scheduleSync();
   });
-  attachVmListener();
+  attachVmListeners();
   scheduleSync();
 
   return {

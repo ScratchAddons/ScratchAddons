@@ -115,17 +115,19 @@ export const parseImage = (file) => {
 };
 
 /** @param {PixelArtState} state */
-export const createExportTXT = (state) => () => {
+export const createExportGPL = (state) => () => {
   const palette = state.projectPalettes.find((entry) => entry.id === state.selectedPaletteId);
   if (!palette || !palette.colors.length) return;
-  // Export the same compact comma-separated hex format that parseTXT accepts so
-  // palette text files round-trip without extra headers or metadata.
-  const text = palette.colors.map((h) => h.slice(1)).join(",");
-  const blob = new Blob([text], { type: "text/plain" });
+  const name = palette.name.replace(/[\r\n]+/g, " ");
+  const colors = palette.colors.map((h) =>
+    [h.slice(1, 3), h.slice(3, 5), h.slice(5, 7)].map((channel) => parseInt(channel, 16)).join(" ")
+  );
+  const text = ["GIMP Palette", `Name: ${name}`, "#", ...colors, ""].join("\n");
+  const blob = new Blob([text], { type: "application/x-gimp-palette" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "pixel-palette.txt";
+  a.download = `${name}.gpl`;
   document.body.appendChild(a);
   a.click();
   setTimeout(() => {
