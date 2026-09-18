@@ -172,54 +172,39 @@ export default async function ({ addon, console }) {
       throw new Error("Scratch VM extension manager not found.");
     }
 
-    if (
-      typeof extensionManager._registerInternalExtension !== "function"
-    ) {
-      throw new Error(
-        "Scratch VM does not expose _registerInternalExtension."
-      );
+    if (typeof extensionManager._registerInternalExtension !== "function") {
+      throw new Error("Scratch VM does not expose _registerInternalExtension.");
     }
 
     if (!extensionManager._loadedExtensions) {
-      throw new Error(
-        "Scratch VM does not expose _loadedExtensions."
-      );
+      throw new Error("Scratch VM does not expose _loadedExtensions.");
     }
 
     /*
      * Don't register the extension twice.
      */
-    if (
-      typeof extensionManager.isExtensionLoaded === "function" &&
-      extensionManager.isExtensionLoaded("customfps")
-    ) {
+    if (typeof extensionManager.isExtensionLoaded === "function" && extensionManager.isExtensionLoaded("customfps")) {
       state.registered = true;
 
       if (typeof extensionManager.refreshBlocks === "function") {
         await extensionManager.refreshBlocks();
       }
 
-      console.info(
-        "custom-fps: Custom FPS extension was already registered."
-      );
+      console.info("custom-fps: Custom FPS extension was already registered.");
     } else {
       const extensionInstance = new CustomFPS();
 
       /*
        * Register the internal extension.
        */
-      const serviceName =
-        extensionManager._registerInternalExtension(extensionInstance);
+      const serviceName = extensionManager._registerInternalExtension(extensionInstance);
 
       /*
        * IMPORTANT:
        * Tell the extension manager that customfps is loaded.
        * Without this, the Custom FPS category may not appear.
        */
-      extensionManager._loadedExtensions.set(
-        extensionInstance.getInfo().id,
-        serviceName
-      );
+      extensionManager._loadedExtensions.set(extensionInstance.getInfo().id, serviceName);
 
       state.registered = true;
 
@@ -233,10 +218,7 @@ export default async function ({ addon, console }) {
       console.info("custom-fps: Custom FPS blocks registered.");
     }
   } catch (error) {
-    console.error(
-      "custom-fps: Failed to register Custom FPS extension.",
-      error
-    );
+    console.error("custom-fps: Failed to register Custom FPS extension.", error);
 
     delete runtime.__customFpsAddon;
     delete runtime.__customFpsSetFPS;
@@ -289,10 +271,7 @@ export default async function ({ addon, console }) {
    * If Scratch is already running when the addon loads,
    * start the timer immediately.
    */
-  if (
-    runtime.paused === false &&
-    typeof runtime._step === "function"
-  ) {
+  if (runtime.paused === false && typeof runtime._step === "function") {
     startCustomTimer();
   }
 

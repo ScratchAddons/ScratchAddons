@@ -19,16 +19,10 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects",
-        "projectEmbeds"
-      ]
+      "matches": ["projects", "projectEmbeds"]
     }
   ],
-  "tags": [
-    "editor",
-    "player"
-  ],
+  "tags": ["editor", "player"],
   "versionAdded": "1.0.0",
   "enabledByDefault": false
 }
