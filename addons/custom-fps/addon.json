@@ -1,18 +1,33 @@
 {
-  "name": "custom-fps",
-  "description": "Adds blocks for changing the project's framerate.",
+  "name": "Custom project framerate",
+  "description": "Adds blocks that let projects set and change their own framerate and read the current FPS.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Changing the project framerate also changes how often Scratch code runs and how often the stage is rendered. Projects designed for 30 FPS may behave differently at other framerates.",
+      "id": "framerateNotice"
+    }
+  ],
   "credits": [
     {
       "name": "Your Name"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": [
-        "projects"
+        "projects",
+        "projectEmbeds"
       ]
     }
   ],
-  "tags": ["editor", "code"]
+  "tags": [
+    "editor",
+    "player"
+  ],
+  "versionAdded": "1.0.0",
+  "enabledByDefault": false
 }

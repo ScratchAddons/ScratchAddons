@@ -1,0 +1,1 @@
+    "custom-fps", // add above the NEW ADDONS ABOVE marker
