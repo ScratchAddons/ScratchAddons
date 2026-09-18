@@ -1,5 +1,5 @@
 {
-  "name": "Custom project framerate",
+  "name": "custom-fps",
   "description": "Adds blocks that let projects set and change their own framerate and read the current FPS.",
   "info": [
     {
