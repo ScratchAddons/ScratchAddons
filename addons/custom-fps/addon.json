@@ -10,7 +10,8 @@
   ],
   "credits": [
     {
-      "name": "Cloudberry Pi Technology"
+      "name": "Cloudberry Pi Technology",
+      "link": "https://github.com/cloudberrypitech"
     }
   ],
   "dynamicEnable": true,
