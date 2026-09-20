@@ -1,236 +1,217 @@
-import { startCache } from "./message-cache.js";
-import { openMessageCache } from "../libraries/common/message-cache.js";
-import { purgeDatabase } from "../addons/scratch-notifier/notifier.js";
-import { isFirefox } from "../libraries/common/cs/detect-browser.js";
+import { startCache } from './message-cache.js';
+import { openMessageCache } from '../libraries/common/message-cache.js';
+import { purgeDatabase } from '../addons/scratch-notifier/notifier.js';
+import { isFirefox } from '../libraries/common/cs/detect-browser.js';
 
+const CHROME_DEFAULT_STORE = '0';
+const FIREFOX_DEFAULT_STORE = 'firefox-default';
+
+const COOKIE_CHANGE_RATE_LIMIT = 5000;
+const MAX_COOKIE_QUEUE_SIZE = 8;
+
+let isChecking = false;
+let timer = null;
+let eventCount = 0;
+
+const queue = [];
+
+/**
+ * Get the browser's default cookie store.
+ *
+ * Chromium normally uses "0".
+ * Firefox normally uses "firefox-default".
+ *
+ * Some browser environments can return an empty array from
+ * chrome.cookies.getAllCookieStores(). An empty result is not
+ * considered a fatal error.
+ */
 async function getDefaultStoreId() {
-  const CHROME_DEFAULT = "0";
-  const FIREFOX_DEFAULT = "firefox-default";
+  const fallback = isFirefox()
+    ? FIREFOX_DEFAULT_STORE
+    : CHROME_DEFAULT_STORE;
 
   try {
-    const cookieStores = await chrome.cookies.getAllCookieStores();
+    if (
+      !chrome.cookies ||
+      typeof chrome.cookies.getAllCookieStores !==
+        'function'
+    ) {
+      console.warn(
+        'Scratch Addons: Cookie-store API unavailable. ' +
+          `Using "${fallback}".`
+      );
 
-    if (!cookieStores || cookieStores.length === 0) {
-      throw new Error("No cookie stores were found.");
+      scratchAddons.cookieStoreId = fallback;
+
+      return fallback;
     }
 
-    if (cookieStores.some((store) => store.id === CHROME_DEFAULT)) {
-      // Chrome
-      return (scratchAddons.cookieStoreId = CHROME_DEFAULT);
+    const cookieStores =
+      await chrome.cookies.getAllCookieStores();
+
+    if (Array.isArray(cookieStores) && cookieStores.length > 0) {
+      /*
+       * Prefer the normal Chromium store when available.
+       */
+      const chromeStore = cookieStores.find(
+        (store) => store.id === CHROME_DEFAULT_STORE
+      );
+
+      if (chromeStore) {
+        scratchAddons.cookieStoreId =
+          CHROME_DEFAULT_STORE;
+
+        return CHROME_DEFAULT_STORE;
+      }
+
+      /*
+       * Prefer the normal Firefox store when available.
+       */
+      const firefoxStore = cookieStores.find(
+        (store) => store.id === FIREFOX_DEFAULT_STORE
+      );
+
+      if (firefoxStore) {
+        scratchAddons.cookieStoreId =
+          FIREFOX_DEFAULT_STORE;
+
+        return FIREFOX_DEFAULT_STORE;
+      }
+
+      /*
+       * If the browser exposes another store, use it rather
+       * than failing authentication.
+       */
+      const firstStore = cookieStores[0];
+
+      if (firstStore?.id) {
+        scratchAddons.cookieStoreId = firstStore.id;
+
+        return firstStore.id;
+      }
     }
 
-    if (cookieStores.some((store) => store.id === FIREFOX_DEFAULT)) {
-      // Firefox
-      return (scratchAddons.cookieStoreId = FIREFOX_DEFAULT);
-    }
+    /*
+     * IMPORTANT:
+     *
+     * Do not throw here.
+     *
+     * An empty cookie-store list should not prevent Scratch
+     * Addons authentication from initializing.
+     */
+    console.warn(
+      'Scratch Addons: No cookie stores were returned. ' +
+        `Using browser default "${fallback}".`
+    );
 
-    return (scratchAddons.cookieStoreId = cookieStores[0].id);
+    scratchAddons.cookieStoreId = fallback;
+
+    return fallback;
   } catch (error) {
-    console.error(
-      "Scratch Addons: Failed to get the default cookie store:",
+    /*
+     * Cookie-store enumeration is not required for basic
+     * Scratch session authentication.
+     */
+    console.warn(
+      'Scratch Addons: Could not determine the cookie store. ' +
+        `Using "${fallback}".`,
       error
     );
 
-    throw error;
+    scratchAddons.cookieStoreId = fallback;
+
+    return fallback;
   }
 }
 
-/*
- * Initialize authentication and message cache.
- *
- * Catch errors here so an initialization failure does not produce:
- * "Uncaught (in promise)"
+/**
+ * Reset authentication state.
  */
-(async function initialize() {
-  try {
-    const defaultStoreId = await getDefaultStoreId();
+function resetAuthState() {
+  scratchAddons.globalState.auth = {
+    isLoggedIn: false,
+    username: null,
+    userId: null,
+    xToken: null,
+    csrfToken: null,
+    scratchLang:
+      typeof navigator !== 'undefined'
+        ? navigator.language
+        : 'en',
+  };
+}
 
-    console.log("Default cookie store ID:", defaultStoreId);
+/**
+ * Initialize authentication and message cache.
+ */
+async function initialize() {
+  try {
+    const defaultStoreId =
+      await getDefaultStoreId();
+
+    console.log(
+      `Scratch Addons: Using cookie store "${defaultStoreId}".`
+    );
 
     await checkSession(true);
 
-    startCache(defaultStoreId);
-
-    console.log("Scratch Addons: Authentication initialized.");
-  } catch (error) {
-    console.error(
-      "Scratch Addons: Failed to initialize authentication:",
-      error
-    );
-
     /*
-     * Keep the extension in a safe unauthenticated state
-     * instead of leaving partially initialized data behind.
+     * Start the message cache even if the cookie-store API
+     * returned an empty list. The fallback store is sufficient
+     * for the normal browser configuration.
      */
-    scratchAddons.cookieStoreId = null;
-
-    scratchAddons.globalState.auth = {
-      isLoggedIn: false,
-      username: null,
-      userId: null,
-      xToken: null,
-      csrfToken: null,
-      scratchLang: navigator.language,
-    };
-  }
-})();
-
-const onCookiesChanged = ({ cookie, cause, removed }) => {
-  /*
-   * We already know that this is true:
-   *
-   * cookie.name === "scratchsessionsid"
-   * || cookie.name === "scratchlanguage"
-   * || cookie.name === "scratchcsrftoken"
-   */
-
-  if (cookie.name === "scratchlanguage") {
-    setLanguage();
-  } else if (!scratchAddons.cookieStoreId) {
-    getDefaultStoreId()
-      .then(() => checkSession())
-      .catch((error) => {
-        console.error(
-          "Scratch Addons: Failed to update cookie store:",
-          error
-        );
-      });
-  } else if (
-    cookie.storeId === scratchAddons.cookieStoreId &&
-    !(
-      cookie.name === "scratchcsrftoken" &&
-      cookie.value === scratchAddons.globalState.auth.csrfToken
-    )
-  ) {
-    checkSession()
-      .then(() => {
-        if (cookie.name === "scratchsessionsid") {
-          startCache(scratchAddons.cookieStoreId, true);
-          purgeDatabase();
-        }
-      })
-      .catch((error) => {
-        console.error(
-          "Scratch Addons: Failed to check session after cookie change:",
-          error
-        );
-      });
-  } else if (cookie.name === "scratchsessionsid") {
-    /*
-     * Clear message cache for the store.
-     * This is not the main one, so we don't refetch here.
-     */
-    openMessageCache(cookie.storeId, true);
-  }
-
-  notify(cookie);
-};
-
-const COOKIE_CHANGE_RATE_LIMIT = 5000;
-
-// We store cookies.onChanged events here.
-const queue = [];
-
-// The integer ID returned by setInterval.
-let timer = null;
-
-// Resets to 0 after each burst ends.
-let n = 0;
-
-const process = ({ clearIntervalIfQueueEmpty }) => {
-  if (queue.length > 0) {
-    const item = queue.shift();
-
     try {
-      onCookiesChanged(item);
+      startCache(defaultStoreId);
     } catch (error) {
-      console.error(
-        "Scratch Addons: Failed to process cookie change:",
+      console.warn(
+        'Scratch Addons: Failed to start message cache:',
         error
       );
     }
 
-    if (clearIntervalIfQueueEmpty) {
-      console.log("Processed cookies.onChanged event from queue.");
-    }
-  }
-
-  if (clearIntervalIfQueueEmpty && queue.length === 0) {
-    if (timer !== null) {
-      clearInterval(timer);
-      timer = null;
-    }
-
-    n = 0;
-  }
-};
-
-const addToQueue = (item) => {
-  const { cookie } = item;
-
-  if (
-    cookie.name !== "scratchsessionsid" &&
-    cookie.name !== "scratchlanguage" &&
-    cookie.name !== "scratchcsrftoken"
-  ) {
-    // Ignore this event.
-    return;
-  }
-
-  queue.push(item);
-  n++;
-
-  if (timer === null) {
-    timer = setInterval(
-      () => process({ clearIntervalIfQueueEmpty: true }),
-      COOKIE_CHANGE_RATE_LIMIT
+    console.log(
+      'Scratch Addons: Authentication initialized.'
     );
-
-    /*
-     * setInterval may not work as expected in the extension
-     * background context, but worst that can happen is that
-     * we discard events instead of processing them later.
-     */
-  }
-
-  if (n <= 5) {
-    /*
-     * Process first 5 events immediately.
-     * This gets reset after receiving 0 events for
-     * COOKIE_CHANGE_RATE_LIMIT milliseconds.
-     */
-    process({ clearIntervalIfQueueEmpty: false });
-  }
-
-  if (queue.length > 8) {
-    // If queue has more than 8 items, remove the oldest one.
-    queue.shift();
-  }
-};
-
-chrome.cookies.onChanged.addListener((event) => {
-  try {
-    addToQueue(event);
   } catch (error) {
-    console.error(
-      "Scratch Addons: Failed to process cookies.onChanged event:",
+    /*
+     * Authentication problems should not terminate the
+     * background script.
+     */
+    console.warn(
+      'Scratch Addons: Authentication initialization ' +
+        'encountered an error:',
       error
     );
-  }
-});
 
+    resetAuthState();
+  }
+}
+
+void initialize();
+
+/**
+ * Safely read a cookie from Scratch.
+ */
 function getCookieValue(name) {
   return new Promise((resolve) => {
     try {
+      if (
+        !chrome.cookies ||
+        typeof chrome.cookies.get !== 'function'
+      ) {
+        resolve(null);
+        return;
+      }
+
       chrome.cookies.get(
         {
-          url: "https://scratch.mit.edu/",
+          url: 'https://scratch.mit.edu/',
           name,
         },
         (cookie) => {
           if (chrome.runtime.lastError) {
             console.warn(
-              `Scratch Addons: Failed to read cookie "${name}":`,
+              `Scratch Addons: Could not read cookie "${name}":`,
               chrome.runtime.lastError.message
             );
 
@@ -238,11 +219,7 @@ function getCookieValue(name) {
             return;
           }
 
-          if (cookie && cookie.value) {
-            resolve(cookie.value);
-          } else {
-            resolve(null);
-          }
+          resolve(cookie?.value || null);
         }
       );
     } catch (error) {
@@ -256,20 +233,30 @@ function getCookieValue(name) {
   });
 }
 
+/**
+ * Update the Scratch language stored by Scratch Addons.
+ */
 async function setLanguage() {
   try {
+    const language =
+      await getCookieValue('scratchlanguage');
+
     scratchAddons.globalState.auth.scratchLang =
-      (await getCookieValue("scratchlanguage")) || navigator.language;
+      language ||
+      (typeof navigator !== 'undefined'
+        ? navigator.language
+        : 'en');
   } catch (error) {
     console.warn(
-      "Scratch Addons: Failed to update language:",
+      'Scratch Addons: Failed to update language:',
       error
     );
   }
 }
 
-let isChecking = false;
-
+/**
+ * Check the current Scratch session.
+ */
 async function checkSession(firstTime = false) {
   if (isChecking) {
     return;
@@ -277,178 +264,419 @@ async function checkSession(firstTime = false) {
 
   isChecking = true;
 
-  let res;
-  let json;
-
   try {
-    const { scratchSession } =
-      (await chrome.storage.session?.get("scratchSession")) ?? {};
+    let session = null;
 
-    if (firstTime && scratchSession) {
-      console.log("Used cached /session info.");
-      json = scratchSession;
-    } else {
+    /*
+     * Try to use the cached session on startup.
+     */
+    if (
+      firstTime &&
+      chrome.storage?.session
+    ) {
       try {
-        res = await fetch("https://scratch.mit.edu/session/", {
-          headers: {
-            "X-Requested-With": "XMLHttpRequest",
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error(
-            `Session request failed with HTTP ${res.status}`
+        const stored =
+          await chrome.storage.session.get(
+            'scratchSession'
           );
-        }
 
-        json = await res.json();
-
-        try {
-          await chrome.storage.session?.set({
-            scratchSession: json,
-          });
-        } catch (storageError) {
-          console.warn(
-            "Scratch Addons: Failed to cache session:",
-            storageError
+        if (stored?.scratchSession) {
+          console.log(
+            'Scratch Addons: Using cached session.'
           );
+
+          session = stored.scratchSession;
         }
-      } catch (err) {
+      } catch (error) {
         console.warn(
-          "Scratch Addons: Failed to fetch Scratch session:",
-          err
+          'Scratch Addons: Failed to read cached session:',
+          error
+        );
+      }
+    }
+
+    /*
+     * Fetch a fresh session if there is no usable cache.
+     */
+    if (!session) {
+      try {
+        const response = await fetch(
+          'https://scratch.mit.edu/session/',
+          {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+            },
+          }
         );
 
-        /*
-         * If Scratch is down or there is no internet connection,
-         * recheck soon.
-         */
-        isChecking = false;
+        if (!response.ok) {
+          throw new Error(
+            `Session request returned HTTP ${response.status}.`
+          );
+        }
 
+        session = await response.json();
+      } catch (error) {
+        console.warn(
+          'Scratch Addons: Failed to fetch Scratch session:',
+          error
+        );
+
+        resetAuthState();
+
+        /*
+         * Scratch may be temporarily unavailable.
+         * Retry later without producing an unhandled promise.
+         */
         setTimeout(() => {
-          checkSession().catch((error) => {
-            console.warn(
-              "Scratch Addons: Scheduled session check failed:",
-              error
-            );
-          });
+          void checkSession();
         }, 60000);
 
-        scratchAddons.globalState.auth = {
-          isLoggedIn: false,
-          username: null,
-          userId: null,
-          xToken: null,
-          csrfToken: null,
-          scratchLang:
-            (await getCookieValue("scratchlanguage")) ||
-            navigator.language,
-        };
-
         return;
+      }
+
+      /*
+       * Cache the fresh session if possible.
+       */
+      if (chrome.storage?.session) {
+        try {
+          await chrome.storage.session.set({
+            scratchSession: session,
+          });
+        } catch (error) {
+          console.warn(
+            'Scratch Addons: Failed to cache session:',
+            error
+          );
+        }
       }
     }
 
     const scratchLang =
-      (await getCookieValue("scratchlanguage")) ||
-      navigator.language;
+      (await getCookieValue('scratchlanguage')) ||
+      (typeof navigator !== 'undefined'
+        ? navigator.language
+        : 'en');
 
     const csrfToken =
-      await getCookieValue("scratchcsrftoken");
+      await getCookieValue('scratchcsrftoken');
+
+    const user = session?.user || null;
 
     scratchAddons.globalState.auth = {
-      isLoggedIn: Boolean(json?.user),
-      username: json?.user ? json.user.username : null,
-      userId: json?.user ? json.user.id : null,
-      xToken: json?.user ? json.user.token : null,
+      isLoggedIn: Boolean(user),
+      username: user?.username || null,
+      userId: user?.id || null,
+      xToken: user?.token || null,
       csrfToken,
       scratchLang,
     };
   } catch (error) {
-    /*
-     * Catch unexpected errors so checkSession itself
-     * never produces an unhandled Promise rejection.
-     */
-    console.error(
-      "Scratch Addons: Unexpected error while checking session:",
+    console.warn(
+      'Scratch Addons: Unexpected session error:',
       error
     );
 
-    scratchAddons.globalState.auth = {
-      isLoggedIn: false,
-      username: null,
-      userId: null,
-      xToken: null,
-      csrfToken: null,
-      scratchLang: navigator.language,
-    };
+    resetAuthState();
   } finally {
     isChecking = false;
   }
 }
 
-function notify(cookie) {
-  if (cookie.name === "scratchlanguage") {
+/**
+ * Handle a Scratch cookie change.
+ */
+const onCookiesChanged = (event) => {
+  const { cookie } = event;
+
+  if (!cookie) {
     return;
   }
 
-  const storeId = cookie.storeId;
-  const cond = {};
+  /*
+   * Scratch language does not require a complete session check.
+   */
+  if (cookie.name === 'scratchlanguage') {
+    void setLanguage();
+    notify(cookie);
 
-  if (isFirefox()) {
-    cond.cookieStoreId = storeId;
+    return;
   }
 
   /*
-   * On Chrome this can cause unnecessary session re-fetch,
-   * but there should be no harm (aside from extra requests).
+   * If the cookie store is not known yet, determine it
+   * without allowing an error to escape.
    */
+  if (!scratchAddons.cookieStoreId) {
+    void getDefaultStoreId()
+      .then(() => checkSession())
+      .catch((error) => {
+        console.warn(
+          'Scratch Addons: Failed to recover cookie store:',
+          error
+        );
+      });
+
+    notify(cookie);
+
+    return;
+  }
+
+  /*
+   * Ignore a CSRF event when the token did not actually change.
+   */
+  const sameCsrfToken =
+    cookie.name === 'scratchcsrftoken' &&
+    cookie.value ===
+      scratchAddons.globalState.auth.csrfToken;
+
+  if (
+    cookie.storeId === scratchAddons.cookieStoreId &&
+    !sameCsrfToken
+  ) {
+    void checkSession()
+      .then(() => {
+        if (cookie.name === 'scratchsessionsid') {
+          try {
+            startCache(
+              scratchAddons.cookieStoreId,
+              true
+            );
+          } catch (error) {
+            console.warn(
+              'Scratch Addons: Failed to restart message cache:',
+              error
+            );
+          }
+
+          try {
+            purgeDatabase();
+          } catch (error) {
+            console.warn(
+              'Scratch Addons: Failed to purge message database:',
+              error
+            );
+          }
+        }
+      })
+      .catch((error) => {
+        console.warn(
+          'Scratch Addons: Failed to process session change:',
+          error
+        );
+      });
+
+    notify(cookie);
+
+    return;
+  }
+
+  /*
+   * Clear the message cache for a different cookie store.
+   */
+  if (cookie.name === 'scratchsessionsid') {
+    try {
+      openMessageCache(cookie.storeId, true);
+    } catch (error) {
+      console.warn(
+        'Scratch Addons: Failed to clear message cache:',
+        error
+      );
+    }
+  }
+
+  notify(cookie);
+};
+
+/**
+ * Process one queued cookie event.
+ */
+const processQueue = () => {
+  if (queue.length === 0) {
+    if (timer !== null) {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    eventCount = 0;
+
+    return;
+  }
+
+  const item = queue.shift();
+
+  try {
+    onCookiesChanged(item);
+  } catch (error) {
+    console.warn(
+      'Scratch Addons: Failed to process cookie change:',
+      error
+    );
+  }
+
+  if (queue.length === 0 && timer !== null) {
+    clearInterval(timer);
+    timer = null;
+    eventCount = 0;
+  }
+};
+
+/**
+ * Add a cookie event to the queue.
+ */
+const addToQueue = (item) => {
+  const { cookie } = item;
+
+  if (!cookie) {
+    return;
+  }
+
+  const relevantCookie =
+    cookie.name === 'scratchsessionsid' ||
+    cookie.name === 'scratchlanguage' ||
+    cookie.name === 'scratchcsrftoken';
+
+  /*
+   * Ignore unrelated cookies.
+   */
+  if (!relevantCookie) {
+    return;
+  }
+
+  queue.push(item);
+  eventCount++;
+
+  /*
+   * Prevent an unlimited queue during a cookie-change burst.
+   */
+  if (queue.length > MAX_COOKIE_QUEUE_SIZE) {
+    queue.shift();
+  }
+
+  /*
+   * Process the first few events immediately.
+   */
+  if (eventCount <= 5) {
+    processQueue();
+  }
+
+  /*
+   * Process remaining events at a controlled rate.
+   */
+  if (timer === null) {
+    timer = setInterval(
+      processQueue,
+      COOKIE_CHANGE_RATE_LIMIT
+    );
+  }
+};
+
+/**
+ * Listen for browser cookie changes.
+ */
+if (
+  chrome.cookies?.onChanged &&
+  typeof chrome.cookies.onChanged.addListener ===
+    'function'
+) {
+  chrome.cookies.onChanged.addListener((event) => {
+    try {
+      addToQueue(event);
+    } catch (error) {
+      console.warn(
+        'Scratch Addons: Failed to queue cookie change:',
+        error
+      );
+    }
+  });
+}
+
+/**
+ * Notify Scratch Addons tabs about authentication changes.
+ */
+function notify(cookie) {
+  if (!cookie) {
+    return;
+  }
+
+  /*
+   * Language changes do not require a session refetch.
+   */
+  if (cookie.name === 'scratchlanguage') {
+    return;
+  }
+
+  const cond = {};
+
+  /*
+   * Firefox supports cookie-store-specific tabs.
+   */
+  if (isFirefox() && cookie.storeId) {
+    cond.cookieStoreId = cookie.storeId;
+  }
+
+  if (
+    !chrome.tabs ||
+    typeof chrome.tabs.query !== 'function'
+  ) {
+    return;
+  }
+
   chrome.tabs.query(cond, (tabs) => {
     if (chrome.runtime.lastError) {
-      console.warn(
-        "Scratch Addons: Failed to query tabs:",
+      console.debug(
+        'Scratch Addons: Could not query tabs:',
         chrome.runtime.lastError.message
       );
+
       return;
     }
 
-    tabs.forEach((tab) => {
-      if (!tab.id) {
-        return;
+    if (!Array.isArray(tabs)) {
+      return;
+    }
+
+    for (const tab of tabs) {
+      if (!tab?.id) {
+        continue;
       }
 
       try {
         chrome.tabs.sendMessage(
           tab.id,
-          "refetchSession",
+          'refetchSession',
           () => {
             /*
-             * Ignore tabs where the content script isn't present.
-             * Reading lastError prevents Chrome from reporting
-             * an unchecked runtime error.
+             * Some tabs do not contain a Scratch Addons
+             * content script. Reading lastError prevents
+             * Chrome from reporting an unchecked error.
              */
             void chrome.runtime.lastError;
           }
         );
       } catch (error) {
-        console.warn(
-          "Scratch Addons: Failed to notify tab:",
+        /*
+         * The tab can disappear between query() and
+         * sendMessage().
+         */
+        console.debug(
+          'Scratch Addons: Could not notify tab:',
           error
         );
       }
-    });
+    }
   });
 
   /*
-   * Notify popups, since they also fetch sessions independently.
+   * Notify Scratch Addons popups.
    */
   try {
     scratchAddons.sendToPopups({
       refetchSession: true,
     });
   } catch (error) {
-    console.warn(
-      "Scratch Addons: Failed to notify popups:",
+    console.debug(
+      'Scratch Addons: Could not notify popups:',
       error
     );
   }
