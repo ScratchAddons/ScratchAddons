@@ -33,39 +33,15 @@ export default async function ({ addon, console }) {
   const state = {
     fps: FPS,
     step: STEP,
-
-    /*
-     * The timeout used by the custom clock.
-     */
     timer: null,
-
-    /*
-     * Whether our clock is currently active.
-     */
     running: false,
-
-    /*
-     * Absolute deadline for the next VM step.
-     */
     nextTick: 0,
-
-    /*
-     * Whether Scratch's runtime was running when the addon
-     * was disabled.
-     */
     wasRunningBeforeDisable: false,
-
-    /*
-     * Used to prevent an old timeout callback from starting
-     * another timer after the clock has been stopped.
-     */
     generation: 0
   };
 
   /*
-   * ----------------------------------------------------------
-   * Utility: clear our timer
-   * ----------------------------------------------------------
+   * Clear our timer.
    */
   const clearCustomTimer = () => {
     if (state.timer !== null) {
@@ -75,9 +51,7 @@ export default async function ({ addon, console }) {
   };
 
   /*
-   * ----------------------------------------------------------
-   * Stop the custom 120 Hz clock
-   * ----------------------------------------------------------
+   * Stop the custom 120 Hz clock.
    */
   const stopCustomTimer = () => {
     state.generation++;
@@ -89,9 +63,7 @@ export default async function ({ addon, console }) {
   };
 
   /*
-   * ----------------------------------------------------------
    * Schedule exactly one future VM step.
-   * ----------------------------------------------------------
    *
    * We use an absolute deadline rather than:
    *
@@ -136,9 +108,7 @@ export default async function ({ addon, console }) {
   };
 
   /*
-   * ----------------------------------------------------------
    * Execute exactly ONE VM step.
-   * ----------------------------------------------------------
    */
   const runStep = generation => {
     /*
@@ -180,10 +150,7 @@ export default async function ({ addon, console }) {
        */
       runtime._step();
     } catch (error) {
-      console.error(
-        "custom-fps: VM step failed.",
-        error
-      );
+      console.error("custom-fps: VM step failed.", error);
 
       stopCustomTimer();
 
@@ -216,9 +183,7 @@ export default async function ({ addon, console }) {
   };
 
   /*
-   * ----------------------------------------------------------
    * Start the custom 120 Hz clock.
-   * ----------------------------------------------------------
    */
   const startCustomTimer = () => {
     if (addon.self.disabled) {
@@ -230,9 +195,7 @@ export default async function ({ addon, console }) {
     }
 
     if (typeof runtime._step !== "function") {
-      console.warn(
-        "custom-fps: runtime._step() is unavailable."
-      );
+      console.warn("custom-fps: runtime._step() is unavailable.");
       return;
     }
 
@@ -284,16 +247,12 @@ export default async function ({ addon, console }) {
   };
 
   /*
-   * ----------------------------------------------------------
    * Original runtime.start()
-   * ----------------------------------------------------------
    */
   const originalStart = runtime.start;
 
   if (typeof originalStart !== "function") {
-    console.warn(
-      "custom-fps: runtime.start() is unavailable."
-    );
+    console.warn("custom-fps: runtime.start() is unavailable.");
     return;
   }
 
@@ -303,16 +262,14 @@ export default async function ({ addon, console }) {
   let customStart;
 
   /*
-   * ----------------------------------------------------------
    * Replace runtime.start()
-   * ----------------------------------------------------------
    *
    * Scratch's current Runtime.start():
    *
    *   if (_steppingInterval) return;
    *   _steppingInterval = setInterval(_step, interval);
    *
-   * Therefore we let the original function create Scratch's
+   * Therefore, we let the original function create Scratch's
    * normal timer, then immediately replace that timer with our
    * 120 Hz clock.
    */
@@ -335,10 +292,7 @@ export default async function ({ addon, console }) {
     try {
       result = originalStart.apply(this, args);
     } catch (error) {
-      console.error(
-        "custom-fps: Scratch runtime.start() failed.",
-        error
-      );
+      console.error("custom-fps: Scratch runtime.start() failed.", error);
       throw error;
     }
 
@@ -353,9 +307,7 @@ export default async function ({ addon, console }) {
   };
 
   /*
-   * ----------------------------------------------------------
-   * Register addon state
-   * ----------------------------------------------------------
+   * Register addon state.
    */
   runtime.__customFpsAddon = state;
   runtime.__customFpsOriginalStart = originalStart;
@@ -368,9 +320,7 @@ export default async function ({ addon, console }) {
   runtime.start = customStart;
 
   /*
-   * ----------------------------------------------------------
-   * Handle addon disabling
-   * ----------------------------------------------------------
+   * Handle addon disabling.
    *
    * When custom-fps is disabled, return Scratch to its normal
    * clock instead of leaving our timer running.
@@ -380,8 +330,7 @@ export default async function ({ addon, console }) {
      * Remember whether Scratch was running.
      */
     state.wasRunningBeforeDisable =
-      state.running ||
-      runtime._steppingInterval !== null;
+      state.running || runtime._steppingInterval !== null;
 
     /*
      * Stop our 120 Hz timer.
@@ -417,9 +366,7 @@ export default async function ({ addon, console }) {
   });
 
   /*
-   * ----------------------------------------------------------
-   * Handle addon re-enabling
-   * ----------------------------------------------------------
+   * Handle addon re-enabling.
    */
   addon.self.addEventListener("reenabled", () => {
     /*
@@ -439,9 +386,7 @@ export default async function ({ addon, console }) {
   });
 
   /*
-   * ----------------------------------------------------------
    * Protect against Scratch changing its timer internally.
-   * ----------------------------------------------------------
    *
    * Some Scratch operations can call start() again.
    *
@@ -450,10 +395,8 @@ export default async function ({ addon, console }) {
    */
 
   /*
-   * ----------------------------------------------------------
    * If the addon loads after Scratch is already running,
    * replace the existing Scratch clock immediately.
-   * ----------------------------------------------------------
    */
   if (
     runtime._steppingInterval !== null &&
@@ -463,9 +406,7 @@ export default async function ({ addon, console }) {
   }
 
   /*
-   * ----------------------------------------------------------
-   * Final information
-   * ----------------------------------------------------------
+   * Final information.
    */
   console.info(
     `custom-fps: Loaded. Target = ${FPS} Hz (${STEP.toFixed(6)} ms/step).`
