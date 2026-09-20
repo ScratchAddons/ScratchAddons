@@ -1,62 +1,35 @@
-name: Format code using Prettier
+name: Prettier
+
 on:
   push:
-    # Please also update the paths listed on .prettierignore.
-    paths-ignore:
-      - libraries/thirdparty/*
-      - '*.md'
-      - addons-l10n/*/*.json
-      - '!addons-l10n/en/*.json'
-      - _locales/*/messages.json
-      - '!_locales/en/messages.json'
-      - .github/*
-      - '!.github/*.mjs'
+    branches:
+      - main
+      - master
   pull_request:
-    paths-ignore:
-      - libraries/thirdparty/*
-      - '*.md'
-      - addons-l10n/*/*.json
-      - '!addons-l10n/en/*.json'
-      - _locales/*/messages.json
-      - '!_locales/en/messages.json'
-      - .github/*
-      - '!.github/*.mjs'
-  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  format:
-    name: Format
+  prettier:
+    name: Format code
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout code
+      # IMPORTANT:
+      # Checkout the actual branch instead of leaving Git in
+      # detached HEAD state.
+      - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Generate token
-        uses: tibdex/github-app-token@v2
-        id: generate-token
-        if: github.repository_owner == 'ScratchAddons'
-        continue-on-error: true
         with:
-          app_id: ${{ secrets.BOT_APP_ID }}
-          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
-          
-      - name: Prettify code (ScratchAddons)
-        if: steps.generate-token.outcome == 'success'
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+
+      # Run ScratchAddons' Prettier action
+      - name: Run Prettier
         uses: ScratchAddons/prettier_action@master
-        with:
-          prettier_options: --write .
-          prettier_version: 3.2.5
-          commit_message: Format code
-        env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          
-      - name: Prettify code (outside ScratchAddons)
-        if: steps.generate-token.outcome != 'success'
-        uses: ScratchAddons/prettier_action@master
-        with:
-          prettier_options: --write .
-          prettier_version: 3.2.5
-          commit_message: Format code
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prettier_options: --write .
+          prettier_version: 3.2.5

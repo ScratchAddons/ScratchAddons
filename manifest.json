@@ -7,10 +7,11 @@
   "default_locale": "en",
   "background": {
     "service_worker": "background/background.js",
-    "type": "module",
-    "page": "background/background.html"
+    "type": "module"
   },
-  "action": { "default_popup": "webpages/popup/index.html" },
+  "action": {
+    "default_popup": "webpages/popup/index.html"
+  },
   "icons": {
     "16": "images/icon-blue-16.png",
     "32": "images/icon-blue-32.png",
@@ -25,7 +26,11 @@
         "http://localhost:8601/*"
       ],
       "run_at": "document_start",
-      "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
+      "js": [
+        "libraries/thirdparty/cs/comlink.js",
+        "libraries/common/cs/text-color.js",
+        "content-scripts/cs.js"
+      ],
       "all_frames": true
     },
     {
@@ -36,7 +41,11 @@
         "http://localhost:8601/*"
       ],
       "run_at": "document_start",
-      "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"],
+      "js": [
+        "content-scripts/prototype-handler.js",
+        "content-scripts/load-redux.js",
+        "content-scripts/fix-console.js"
+      ],
       "all_frames": true
     }
   ],
@@ -56,14 +65,16 @@
   "permissions": [
     "cookies",
     "webRequest",
-    "webRequestBlocking",
     "declarativeNetRequestWithHostAccess",
     "storage",
     "contextMenus",
     "alarms",
     "scripting"
   ],
-  "optional_permissions": ["notifications", "clipboardWrite"],
+  "optional_permissions": [
+    "notifications",
+    "clipboardWrite"
+  ],
   "web_accessible_resources": [
     {
       "resources": [

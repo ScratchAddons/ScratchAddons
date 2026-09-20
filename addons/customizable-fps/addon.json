@@ -1,0 +1,28 @@
+{
+  "name": "120 FPS",
+  "description": "Sets stage framerate to 120.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Changing the project framerate also changes how often Scratch code runs and how often the stage is rendered. Projects designed for 30 FPS may behave differently at other framerates.",
+      "id": "framerateNotice"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Cloudberry Pi Technology",
+      "link": "https://github.com/cloudberrypitech"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects", "projectEmbeds"]
+    }
+  ],
+  "tags": ["editor", "player"],
+  "versionAdded": "1.0.0",
+  "enabledByDefault": false
+}
