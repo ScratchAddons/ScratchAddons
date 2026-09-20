@@ -3,71 +3,117 @@
  *
  * Cloudberry Pi Technology
  *
- * Automatically sets the VM stepping interval to 120 FPS.
+ * Runs the VM at a controlled 120 Hz simulation rate.
  */
 
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
 
   if (!vm || !vm.runtime) {
-    console.warn("custom-fps: VM/runtime unavailable.");
+    console.warn('custom-fps: VM/runtime unavailable.');
     return;
   }
 
   const runtime = vm.runtime;
 
-  // Don't install twice.
+  // Prevent the addon from being installed more than once.
   if (runtime.__customFpsAddon) {
     return;
   }
 
   const FPS = 120;
-  const interval = 1000 / FPS;
+  const STEP = 1000 / FPS;
 
   const state = {
     fps: FPS,
     timer: null,
     running: false,
+    lastTime: 0,
+    accumulator: 0,
   };
 
-  // Stop only the timer created by this addon.
+  /*
+   * Stop the timer created by this addon.
+   */
   const stopCustomTimer = () => {
     if (state.timer !== null) {
-      clearInterval(state.timer);
+      clearTimeout(state.timer);
       state.timer = null;
     }
 
     state.running = false;
+    state.lastTime = 0;
+    state.accumulator = 0;
   };
 
   /*
-   * Start the 120 FPS timer.
+   * Schedule the next VM step.
+   *
+   * setTimeout is only used to wake the loop. The actual timing
+   * is calculated using performance.now(), which prevents timer
+   * jitter from directly changing the simulation rate.
+   */
+  const scheduleNextStep = () => {
+    if (!state.running || addon.self.disabled) {
+      return;
+    }
+
+    const now = performance.now();
+    const elapsed = now - state.lastTime;
+
+    state.lastTime = now;
+
+    /*
+     * Prevent a large backlog after the browser has been
+     * suspended, throttled, or otherwise delayed.
+     */
+    state.accumulator += Math.min(elapsed, 100);
+
+    /*
+     * Run the VM according to elapsed real time.
+     *
+     * If the timer fires slightly early, no step is performed.
+     * If it fires slightly late, the accumulated time is used
+     * to compensate.
+     */
+    while (state.accumulator >= STEP) {
+      try {
+        runtime._step();
+      } catch (error) {
+        console.error('custom-fps: VM step failed.', error);
+        stopCustomTimer();
+        return;
+      }
+
+      state.accumulator -= STEP;
+    }
+
+    /*
+     * Calculate how long until the next 120 Hz step is due.
+     */
+    const delay = Math.max(0, STEP - state.accumulator);
+
+    state.timer = setTimeout(scheduleNextStep, delay);
+  };
+
+  /*
+   * Start the custom 120 Hz VM clock.
    */
   const startCustomTimer = () => {
     if (addon.self.disabled || state.running) {
       return;
     }
 
-    if (typeof runtime._step !== "function") {
-      console.warn("custom-fps: VM _step() is unavailable.");
+    if (typeof runtime._step !== 'function') {
+      console.warn('custom-fps: VM _step() is unavailable.');
       return;
     }
 
     state.running = true;
+    state.lastTime = performance.now();
+    state.accumulator = 0;
 
-    state.timer = setInterval(() => {
-      if (addon.self.disabled) {
-        stopCustomTimer();
-        return;
-      }
-
-      try {
-        runtime._step();
-      } catch (error) {
-        console.error("custom-fps: VM step failed.", error);
-        stopCustomTimer();
-      }
-    }, interval);
+    state.timer = setTimeout(scheduleNextStep, STEP);
   };
 
   /*
@@ -76,38 +122,40 @@ export default async function ({ addon, console }) {
   runtime.__customFpsAddon = state;
 
   /*
-   * Start our timer when Scratch starts.
+   * Hook runtime.start() so the custom clock starts when
+   * Scratch starts running.
    */
   const originalStart = runtime.start;
 
-  if (typeof originalStart === "function") {
-    if (!runtime.__customFpsStartWrapped) {
-      runtime.__customFpsStartWrapped = true;
-      runtime.__customFpsOriginalStart = originalStart;
+  if (
+    typeof originalStart === 'function' &&
+    !runtime.__customFpsStartWrapped
+  ) {
+    runtime.__customFpsStartWrapped = true;
+    runtime.__customFpsOriginalStart = originalStart;
 
-      runtime.start = function (...args) {
-        const result = originalStart.apply(this, args);
+    runtime.start = function (...args) {
+      const result = originalStart.apply(this, args);
 
-        if (!addon.self.disabled) {
-          startCustomTimer();
-        }
+      if (!addon.self.disabled) {
+        startCustomTimer();
+      }
 
-        return result;
-      };
-    }
+      return result;
+    };
   }
 
   /*
-   * Stop the custom timer when the addon is disabled.
+   * Stop the custom clock when the addon is disabled.
    */
-  addon.self.addEventListener("disabled", () => {
+  addon.self.addEventListener('disabled', () => {
     stopCustomTimer();
   });
 
   /*
-   * Restart the timer when the addon is re-enabled.
+   * Restart the custom clock when the addon is re-enabled.
    */
-  addon.self.addEventListener("reenabled", () => {
+  addon.self.addEventListener('reenabled', () => {
     if (!addon.self.disabled) {
       startCustomTimer();
     }
@@ -115,11 +163,11 @@ export default async function ({ addon, console }) {
 
   /*
    * If Scratch is already running when the addon loads,
-   * start the timer immediately.
+   * start the custom clock immediately.
    */
   if (
     runtime.paused === false &&
-    typeof runtime._step === "function"
+    typeof runtime._step === 'function'
   ) {
     startCustomTimer();
   }
