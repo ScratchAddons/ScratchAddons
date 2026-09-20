@@ -23,26 +23,35 @@ on:
       - '!.github/*.mjs'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   format:
     name: Format
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
-      - name: Generate token
-        uses: tibdex/github-app-token@v2
+
+      # Pull-request checkouts are detached merge refs. The prettier action
+      # commits and pushes, so it must not be run for pull_request events.
+      - name: Check formatting on pull requests
+        if: github.event_name == 'pull_request'
+        run: npx --yes prettier@3.2.5 --check .
+
+      - name: Generate token for ScratchAddons pushes
         id: generate-token
-        if: github.repository_owner == 'ScratchAddons'
+        if: github.event_name != 'pull_request' && github.repository_owner == 'ScratchAddons'
         continue-on-error: true
+        uses: tibdex/github-app-token@v2
         with:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
-          
-      - name: Prettify code (ScratchAddons)
-        if: steps.generate-token.outcome == 'success'
+
+      - name: Format code using the ScratchAddons token
+        if: github.event_name != 'pull_request' && steps.generate-token.outcome == 'success'
         uses: ScratchAddons/prettier_action@master
         with:
           prettier_options: --write .
@@ -50,9 +59,9 @@ jobs:
           commit_message: Format code
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          
-      - name: Prettify code (outside ScratchAddons)
-        if: steps.generate-token.outcome != 'success'
+
+      - name: Format code using the repository token
+        if: github.event_name != 'pull_request' && steps.generate-token.outcome != 'success'
         uses: ScratchAddons/prettier_action@master
         with:
           prettier_options: --write .
