@@ -3,12 +3,7 @@
  *
  * Cloudberry Pi Technology
  *
- * Adds:
- *   set FPS to (60)
- *   change FPS by (10)
- *   FPS
- *
- * The FPS value controls the VM's stepping interval.
+ * Automatically sets the VM stepping interval to 120 FPS.
  */
 
 export default async function ({ addon, console }) {
@@ -26,21 +21,13 @@ export default async function ({ addon, console }) {
     return;
   }
 
+  const FPS = 120;
+  const interval = 1000 / FPS;
+
   const state = {
-    fps: 30,
+    fps: FPS,
     timer: null,
     running: false,
-    registered: false,
-  };
-
-  const clampFPS = (value) => {
-    const number = Number(value);
-
-    if (!Number.isFinite(number)) {
-      return state.fps;
-    }
-
-    return Math.max(0, Math.min(240, number));
   };
 
   // Stop only the timer created by this addon.
@@ -54,25 +41,17 @@ export default async function ({ addon, console }) {
   };
 
   /*
-   * Start the custom FPS timer.
-   *
-   * This addon uses Scratch VM's internal _step() method.
+   * Start the 120 FPS timer.
    */
   const startCustomTimer = () => {
     if (addon.self.disabled || state.running) {
       return;
     }
 
-    /*
-     * FPS 0 means that the custom timer is disabled.
-     * Scratch's normal runtime timing is left alone.
-     */
-    if (state.fps === 0) {
-      state.running = false;
+    if (typeof runtime._step !== "function") {
+      console.warn("custom-fps: VM _step() is unavailable.");
       return;
     }
-
-    const interval = 1000 / state.fps;
 
     state.running = true;
 
@@ -91,146 +70,13 @@ export default async function ({ addon, console }) {
     }, interval);
   };
 
-  const setFPS = (value) => {
-    state.fps = clampFPS(value);
-
-    if (state.running) {
-      stopCustomTimer();
-      startCustomTimer();
-    }
-  };
-
-  runtime.__customFpsAddon = state;
-  runtime.__customFpsSetFPS = setFPS;
-
-  class CustomFPS {
-    getInfo() {
-      return {
-        id: "customfps",
-        name: "Custom FPS",
-
-        color1: "#5C4B8A",
-        color2: "#493B70",
-        color3: "#3F315F",
-
-        blocks: [
-          {
-            opcode: "setFPS",
-            blockType: "command",
-            text: "set FPS to [FPS]",
-            arguments: {
-              FPS: {
-                type: "number",
-                defaultValue: 60,
-              },
-            },
-          },
-          {
-            opcode: "changeFPS",
-            blockType: "command",
-            text: "change FPS by [AMOUNT]",
-            arguments: {
-              AMOUNT: {
-                type: "number",
-                defaultValue: 10,
-              },
-            },
-          },
-          {
-            opcode: "getFPS",
-            blockType: "reporter",
-            text: "FPS",
-          },
-        ],
-      };
-    }
-
-    setFPS(args) {
-      setFPS(args.FPS);
-    }
-
-    changeFPS(args) {
-      const amount = Number(args.AMOUNT);
-
-      if (Number.isFinite(amount)) {
-        setFPS(state.fps + amount);
-      }
-    }
-
-    getFPS() {
-      return state.fps;
-    }
-  }
-
   /*
-   * Register the extension with Scratch.
+   * Store addon state on the runtime.
    */
-  try {
-    const extensionManager = vm.extensionManager;
-
-    if (!extensionManager) {
-      throw new Error("Scratch VM extension manager not found.");
-    }
-
-    if (typeof extensionManager._registerInternalExtension !== "function") {
-      throw new Error("Scratch VM does not expose _registerInternalExtension.");
-    }
-
-    if (!extensionManager._loadedExtensions) {
-      throw new Error("Scratch VM does not expose _loadedExtensions.");
-    }
-
-    /*
-     * Don't register the extension twice.
-     */
-    if (typeof extensionManager.isExtensionLoaded === "function" && extensionManager.isExtensionLoaded("customfps")) {
-      state.registered = true;
-
-      if (typeof extensionManager.refreshBlocks === "function") {
-        await extensionManager.refreshBlocks();
-      }
-
-      console.info("custom-fps: Custom FPS extension was already registered.");
-    } else {
-      const extensionInstance = new CustomFPS();
-
-      /*
-       * Register the internal extension.
-       */
-      const serviceName = extensionManager._registerInternalExtension(extensionInstance);
-
-      /*
-       * IMPORTANT:
-       * Tell the extension manager that customfps is loaded.
-       * Without this, the Custom FPS category may not appear.
-       */
-      extensionManager._loadedExtensions.set(extensionInstance.getInfo().id, serviceName);
-
-      state.registered = true;
-
-      /*
-       * Refresh the Scratch block palette.
-       */
-      if (typeof extensionManager.refreshBlocks === "function") {
-        await extensionManager.refreshBlocks();
-      }
-
-      console.info("custom-fps: Custom FPS blocks registered.");
-    }
-  } catch (error) {
-    console.error("custom-fps: Failed to register Custom FPS extension.", error);
-
-    delete runtime.__customFpsAddon;
-    delete runtime.__customFpsSetFPS;
-
-    return;
-  }
+  runtime.__customFpsAddon = state;
 
   /*
    * Start our timer when Scratch starts.
-   *
-   * We wrap runtime.start rather than replacing Scratch's
-   * actual start implementation.
    */
   const originalStart = runtime.start;
 
@@ -271,9 +117,12 @@ export default async function ({ addon, console }) {
    * If Scratch is already running when the addon loads,
    * start the timer immediately.
    */
-  if (runtime.paused === false && typeof runtime._step === "function") {
+  if (
+    runtime.paused === false &&
+    typeof runtime._step === "function"
+  ) {
     startCustomTimer();
   }
 
-  console.info("custom-fps: Loaded successfully.");
+  console.info(`custom-fps: Loaded successfully at ${FPS} FPS.`);
 }
