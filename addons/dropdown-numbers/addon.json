@@ -1,0 +1,30 @@
+{
+  "name": "Costume numbers in block dropdowns",
+  "description": "Shows the numbers of costumes in block dropdowns.",
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    },
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "style.css"
+    }
+  ],
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "versionAdded": "1.45.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
