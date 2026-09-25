@@ -1,0 +1,14 @@
+.sa-color-inputs-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sa-color-inputs-row-header [class*="color-picker_label-readout"],
+.sa-color-inputs-row-header .scratchColourPickerReadout {
+  display: none;
+}
+
+.sa-color-input {
+  height: 1.5rem;
+}
