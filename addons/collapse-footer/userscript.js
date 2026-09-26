@@ -2,6 +2,26 @@ export default async function ({ addon, console }) {
   const enabledAddons = await addon.self.getEnabledAddons("community");
   const root = document.documentElement;
 
+  let collapseTimeout;
+
+  function collapseFooter(footer) {
+    collapseTimeout = setTimeout(() => {
+      footer.classList.remove("expanded");
+    }, 200);
+  }
+
+  function instantCollapseFooter(event, footer) {
+    // Only hide if the click is outside the footer
+    if (!footer.contains(event.target)) footer.classList.remove("expanded");
+  }
+
+  function expandFooter(footer) {
+    footer.classList.add("transition", "expanded");
+    if (collapseTimeout) {
+      clearTimeout(collapseTimeout);
+    }
+  }
+
   if (!(addon.settings.get("infiniteScroll") && enabledAddons.includes("infinite-scroll"))) {
     // If the setting is enabled, infinate-scroll
     // adds the class on the pages it runs on instead
@@ -27,19 +47,12 @@ export default async function ({ addon, console }) {
     footer.insertBefore(icon, footer.firstChild);
     addon.tab.displayNoneWhileDisabled(icon);
 
-    let collapseTimeout;
-
-    footer.addEventListener("mouseover", () => {
-      footer.classList.add("transition", "expanded");
-      if (collapseTimeout) {
-        clearTimeout(collapseTimeout);
-      }
-    });
-
-    footer.addEventListener("mouseout", () => {
-      collapseTimeout = setTimeout(() => {
-        footer.classList.remove("expanded");
-      }, 200);
-    });
+    if (addon.settings.get("mode") === "click") {
+      footer.addEventListener("click", () => expandFooter(footer));
+      document.addEventListener("mousedown", (event) => instantCollapseFooter(event, footer));
+    } else {
+      footer.addEventListener("mouseover", () => expandFooter(footer));
+      footer.addEventListener("mouseout", () => collapseFooter(footer));
+    }
   }
 }
