@@ -331,6 +331,7 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webk
 body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolbox::-webkit-scrollbar {
   display: none;
 }
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-button-container_"],
 body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="extension-button_extension-button-container_"] {
   height: 2rem;
 }
