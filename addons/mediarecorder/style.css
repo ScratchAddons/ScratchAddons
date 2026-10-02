@@ -29,7 +29,7 @@
   margin: 0.5rem auto;
 }
 
-.mediaRecorderPopup p :not(:first-child) {
+.mediaRecorderPopup p:not(.recordOptionDescription) :not(:first-child) {
   margin-left: 1rem;
 }
 
