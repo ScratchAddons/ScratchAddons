@@ -41,7 +41,7 @@ const localizeSettings = (addonId, setting, tableId) => {
   }
 };
 
-(async function () {
+async function loadAddonManifests() {
   const forceEnglish = await new Promise((resolve) => {
     chrome.storage.local.get("forceEnglish", (obj) => {
       resolve(!!obj.forceEnglish);
@@ -239,4 +239,18 @@ const localizeSettings = (addonId, setting, tableId) => {
   }
   scratchAddons.localState.ready.manifests = true;
   scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
-})();
+}
+loadAddonManifests();
+
+// Data reload required when toggling the forceEnglish setting
+chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
+  if (request === "reloadAddonManifests") {
+    // Only attempt to reload manifests if they are already loaded
+    if (!scratchAddons.localState.ready.manifests) return;
+
+    scratchAddons.localState.ready.manifests = false;
+    scratchAddons.manifests = [];
+    await loadAddonManifests();
+    sendResponse("done");
+  }
+});
