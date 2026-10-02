@@ -1,0 +1,4 @@
+#navigation > .inner,
+#topnav .container {
+  width: calc(100% - 30px);
+}
