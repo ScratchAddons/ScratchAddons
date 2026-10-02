@@ -50,9 +50,16 @@ p.mediaRecorderPopupOption {
 }
 
 #recordOptionSecondsInput,
-#recordOptionDelayInput {
+#recordOptionDelayInput,
+#recordOptionScaleInputW,
+#recordOptionScaleInputH {
   width: 5rem;
   margin-bottom: 0.25rem;
+}
+
+#recordOptionScaleInputW,
+#recordOptionScaleInputH {
+  width: 6rem;
 }
 
 .mediaRecorderSeparator {
