@@ -1,0 +1,5 @@
+.sa-dropdown-costume-numbers:not(.sa-dropdown-costume-numbers-cut-three) .goog-menuitem-content[data-index]::before {
+  content: attr(data-index) ". ";
+  opacity: 0.85;
+  font-weight: 400;
+}
