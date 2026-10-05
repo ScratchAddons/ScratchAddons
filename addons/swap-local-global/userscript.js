@@ -66,6 +66,18 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
+  // Rewrites all block field references from oldId to newId in a target's blocks.
+  const remapVariableReferencesInTarget = (target, oldId, newId, newName) => {
+    for (const block of Object.values(target.blocks._blocks)) {
+      for (const field of Object.values(block.fields)) {
+        if (field.id === oldId) {
+          field.id = newId;
+          field.value = newName;
+        }
+      }
+    }
+  };
+
   const syncBlockVariableNameWithActualVariableName = (workspace, id) => {
     const variable = workspace.getVariableMap().getVariableById(id);
     for (const block of workspace.getAllBlocks()) {
@@ -193,35 +205,23 @@ export default async function ({ addon, msg, console }) {
           alert(msg("cant-convert-stage"));
           return;
         }
-        // Variables used by unfocused sprites cannot be made local
-        // That includes cases where the variable is used by multiple sprites and where it's only used by an unfocused sprite
-        const targets = getTargetsThatUseVariable(id);
-        if (!targets.every((i) => i === editingTarget)) {
-          if (targets.length > 1) {
-            alert(
-              msg("cant-convert-to-local", {
-                sprites: targets.map(getTargetName).join(", "),
-              })
-            );
-          } else {
-            alert(
-              msg("cant-convert-used-elsewhere", {
-                sprite: getTargetName(targets[0]),
-              })
-            );
-          }
-          return;
+        // Give each other sprite that uses this variable its own local copy so their blocks keep working.
+        const globalVarValue = vm.runtime.getTargetForStage().variables[id].value;
+        for (const target of getTargetsThatUseVariable(id)) {
+          if (target === editingTarget) continue;
+          const newId = crypto.randomUUID();
+          target.createVariable(newId, name, type);
+          target.variables[newId].value = globalVarValue;
+          remapVariableReferencesInTarget(target, id, newId, name);
         }
       } else {
-        // Global variables must not conflict with any local variables
-        const targets = getTargetsWithLocalVariableNamed(name, type).filter((target) => target !== editingTarget);
-        if (targets.length > 0) {
-          alert(
-            msg("cant-convert-conflict", {
-              sprites: targets.map(getTargetName).join(", "),
-            })
-          );
-          return;
+        // Merge other sprites' same-named locals into this global: remap their blocks to the new global
+        // ID, then delete the now-redundant local.
+        for (const target of getTargetsWithLocalVariableNamed(name, type)) {
+          if (target === editingTarget) continue;
+          const conflictVar = target.lookupVariableByNameAndType(name, type, true);
+          remapVariableReferencesInTarget(target, conflictVar.id, id, name);
+          target.deleteVariable(conflictVar.id);
         }
       }
     }
