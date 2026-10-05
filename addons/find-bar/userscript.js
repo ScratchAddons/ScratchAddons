@@ -176,17 +176,11 @@ export default async function ({ addon, msg, console }) {
 
       // In Chrome, Ctrl+Z will undo edits to the find bar input even if it doesn't have focus.
       // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
-      // Blockly.onKeyDown_:
-      // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
       // globalShortcutHandler() in Blockly:
       // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/common.ts#L322
       // KeyboardShortcutsHOC.handleKeyPress:
       // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
-      let isTargetInput;
-      if (Blockly.registry)
-        isTargetInput = Blockly.browserEvents.isTargetInput(e); // new Blockly
-      else isTargetInput = Blockly.utils.isTargetInput(e);
-      if (!isTargetInput && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
+      if (!Blockly.browserEvents.isTargetInput(e) && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
         if (
           (ctrlKey || e.altKey) &&
           (e.keyCode === 90 || e.key === "z" || (e.shiftKey && e.key.toLowerCase() === "z"))
@@ -789,14 +783,13 @@ export default async function ({ addon, msg, console }) {
 
   const findBar = new FindBar();
 
-  const doBlockClickMethodName = Blockly.registry ? "doBlockClick" : "doBlockClick_";
-  const _doBlockClick_ = Blockly.Gesture.prototype[doBlockClickMethodName];
-  Blockly.Gesture.prototype[doBlockClickMethodName] = function () {
-    const event = Blockly.registry ? this.mostRecentEvent : this.mostRecentEvent_;
+  const _doBlockClick = Blockly.Gesture.prototype.doBlockClick;
+  Blockly.Gesture.prototype.doBlockClick = function () {
+    const event = this.mostRecentEvent;
     if (!addon.self.disabled && (event.button === 1 || event.shiftKey)) {
       // Wheel button...
       // Intercept clicks to allow jump to...?
-      let block = Blockly.registry ? this.startBlock : this.startBlock_;
+      let block = this.startBlock;
       for (; block; block = block.getSurroundParent()) {
         if (block.type === "procedures_definition" || (!this.jumpToDef && block.type === "procedures_call")) {
           let id = block.id ? block.id : block.getId ? block.getId() : null;
@@ -840,7 +833,7 @@ export default async function ({ addon, msg, console }) {
       }
     }
 
-    _doBlockClick_.call(this);
+    _doBlockClick.call(this);
   };
 
   addon.tab.redux.initialize();

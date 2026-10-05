@@ -118,12 +118,9 @@ class NavigationHistory {
   }
 
   scrollPosFromOffset({ left, top }, metrics) {
-    // New Blockly uses "scrollLeft" and "scrollTop" instead of "contentLeft" and "contentTop"
-    let scrollLeft = metrics.scrollLeft ?? metrics.contentLeft;
-    let scrollTop = metrics.scrollTop ?? metrics.contentTop;
     return {
-      sx: left - scrollLeft,
-      sy: top - scrollTop,
+      sx: left - metrics.scrollLeft,
+      sy: top - metrics.scrollTop,
     };
   }
 

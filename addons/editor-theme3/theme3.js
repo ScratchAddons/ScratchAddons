@@ -223,7 +223,7 @@ export default async function ({ addon, console, msg }) {
         else el.style.removeProperty("--sa-monitor-border");
       } else {
         /* If the addon is enabled but the monitors setting is disabled,
-            the default colors are used even if the Scratch theme is set to high contrast. */
+           the default colors are used even if the Scratch theme is set to high contrast. */
         el.style.setProperty("--sa-monitor-background", defaultColors[category.colorId].primary);
         el.style.setProperty("--sa-monitor-text", defaultColors.text);
         el.style.removeProperty("--sa-monitor-border");
@@ -279,21 +279,15 @@ export default async function ({ addon, console, msg }) {
       }
     }
   };
-  if (Blockly.registry) updateOriginalColors(addon.tab.traps.getWorkspace().getTheme());
-  else originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
+  updateOriginalColors(addon.tab.traps.getWorkspace().getTheme());
   originalColors.sa = {
     primary: "#29beb8",
     secondary: "#3aa8a4",
     tertiary: "#3aa8a4",
   };
 
-  let FieldNumber;
-  if (Blockly.registry) FieldNumber = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_number");
-  else FieldNumber = Blockly.FieldNumber;
+  const FieldNumber = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_number");
   const originalNumpadDeleteIcon = FieldNumber.NUMPAD_DELETE_ICON;
-
-  // Method that needs to be overridden to change field colors
-  const fieldMethodName = Blockly.registry ? "applyColour" : "init";
 
   const fieldBackground = (category) => {
     // Background color for open dropdowns and (in some textModes) Boolean inputs
@@ -372,36 +366,27 @@ export default async function ({ addon, console, msg }) {
     return arrow;
   };
 
-  // Blockly doesn't handle colors with transparency
-  if (Blockly.registry) {
-    // new Blockly
-    const oldValidatedBlockStyle = Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_;
-    Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_ = function (style) {
-      try {
-        return oldValidatedBlockStyle.call(this, style);
-      } catch {
-        return {
-          colourPrimary: style.colourPrimary || "#000",
-          colourSecondary: style.colourSecondary || "#000",
-          colourTertiary: style.colourTertiary || "#000",
-          colourQuaternary: style.colourQuaternary || "#000",
-          hat: style.hat || "",
-        };
-      }
-    };
-  } else {
-    const oldBlockMakeColor = Blockly.Block.prototype.makeColour_;
-    Blockly.Block.prototype.makeColour_ = function (color) {
-      if (typeof color === "string" && /^#(?:[0-9A-Za-z]{2}){3,4}$/.test(color)) return color;
-      return oldBlockMakeColor(color);
-    };
-  }
+  // Allow colors with transparency
+  const oldValidatedBlockStyle = Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_;
+  Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_ = function (style) {
+    try {
+      return oldValidatedBlockStyle.call(this, style);
+    } catch {
+      return {
+        colourPrimary: style.colourPrimary || "#000",
+        colourSecondary: style.colourSecondary || "#000",
+        colourTertiary: style.colourTertiary || "#000",
+        colourQuaternary: style.colourQuaternary || "#000",
+        hat: style.hat || "",
+      };
+    }
+  };
 
   const recolorExtensionIcon = (item) => {
     if (addon.self.disabled) return;
     const oldIconUri = item.iconURI;
     if (oldIconUri) {
-      const id = Blockly.registry ? item.getId() : item.id_;
+      const id = item.getId();
       if (!["sa-blocks", "videoSensing", "text2speech"].includes(id)) return oldIconUri;
 
       const match = dataUriRegex.exec(oldIconUri);
@@ -417,126 +402,81 @@ export default async function ({ addon, console, msg }) {
       }
     }
   };
-  if (Blockly.registry) {
-    // new Blockly
-    const ScratchContinuousCategory = Blockly.registry.getClass(
-      Blockly.registry.Type.TOOLBOX_ITEM,
-      Blockly.ToolboxCategory.registrationName
-    );
-    const oldCategoryCreateIconDom = ScratchContinuousCategory.prototype.createIconDom_;
-    ScratchContinuousCategory.prototype.createIconDom_ = function () {
-      // Category bubbles
-      const oldIconUri = this.iconURI;
-      recolorExtensionIcon(this);
-      if (!oldIconUri) {
-        const category = categories.find((item) => item.id === this.getId());
-        if (category) {
-          this.colour_ = isColoredTextMode() ? fieldBackground(category) : primaryColor(category);
-          this.secondaryColour = tertiaryColor(category);
-        }
+  const ScratchContinuousCategory = Blockly.registry.getClass(
+    Blockly.registry.Type.TOOLBOX_ITEM,
+    Blockly.ToolboxCategory.registrationName
+  );
+  const oldCategoryCreateIconDom = ScratchContinuousCategory.prototype.createIconDom_;
+  ScratchContinuousCategory.prototype.createIconDom_ = function () {
+    // Category bubbles
+    const oldIconUri = this.iconURI;
+    recolorExtensionIcon(this);
+    if (!oldIconUri) {
+      const category = categories.find((item) => item.id === this.getId());
+      if (category) {
+        this.colour_ = isColoredTextMode() ? fieldBackground(category) : primaryColor(category);
+        this.secondaryColour = tertiaryColor(category);
       }
-      const iconElement = oldCategoryCreateIconDom.call(this);
-      this.iconURI = oldIconUri;
-      return iconElement;
-    };
-  } else {
-    const oldCategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
-    Blockly.Toolbox.Category.prototype.createDom = function () {
-      // Category bubbles
-      if (addon.self.disabled) return oldCategoryCreateDom.call(this);
-      recolorExtensionIcon(this);
-      oldCategoryCreateDom.call(this);
-      if (this.iconURI_) return;
-      const category = categories.find((item) => item.id === this.id_);
-      if (!category) return;
-      this.bubble_.style.backgroundColor = isColoredTextMode() ? fieldBackground(category) : primaryColor(category);
-      this.bubble_.style.borderColor = tertiaryColor(category);
-    };
-  }
+    }
+    const iconElement = oldCategoryCreateIconDom.call(this);
+    this.iconURI = oldIconUri;
+    return iconElement;
+  };
 
-  if (Blockly.registry) {
-    // new Blockly
+  const oldThemeSetBlockStyle = Blockly.Theme.prototype.setBlockStyle;
+  Blockly.Theme.prototype.setBlockStyle = function (colorId, colors) {
+    // Extension blocks (color is set when extension is added)
+    if (colors.colourPrimary && colors.colourPrimary.toLowerCase() === originalColors.pen.primary.toLowerCase()) {
+      originalColors[colorId] = {
+        primary: colors.colourPrimary,
+        secondary: colors.colourSecondary,
+        tertiary: colors.colourTertiary,
+      };
+      colors = {
+        colourPrimary: primaryColor(extensionsCategory),
+        colourSecondary: secondaryColor(extensionsCategory),
+        colourTertiary: tertiaryColor(extensionsCategory),
+        colourQuaternary: fieldBackground(extensionsCategory),
+      };
+      if (!categories.find((category) => category.colorId === colorId)) {
+        categories.push({
+          id: colorId,
+          settingId: extensionsCategory.settingId,
+          colorId,
+        });
+      }
+    }
+    return oldThemeSetBlockStyle.call(this, colorId, colors);
+  };
 
-    const oldThemeSetBlockStyle = Blockly.Theme.prototype.setBlockStyle;
-    Blockly.Theme.prototype.setBlockStyle = function (colorId, colors) {
-      // Extension blocks (color is set when extension is added)
-      if (colors.colourPrimary && colors.colourPrimary.toLowerCase() === originalColors.pen.primary.toLowerCase()) {
-        originalColors[colorId] = {
-          primary: colors.colourPrimary,
-          secondary: colors.colourSecondary,
-          tertiary: colors.colourTertiary,
-        };
-        colors = {
-          colourPrimary: primaryColor(extensionsCategory),
-          colourSecondary: secondaryColor(extensionsCategory),
-          colourTertiary: tertiaryColor(extensionsCategory),
-          colourQuaternary: fieldBackground(extensionsCategory),
-        };
-        if (!categories.find((category) => category.colorId === colorId)) {
-          categories.push({
-            id: colorId,
-            settingId: extensionsCategory.settingId,
-            colorId,
-          });
-        }
+  const oldPathObjectApplyColour = Blockly.zelos.PathObject.prototype.applyColour;
+  Blockly.zelos.PathObject.prototype.applyColour = function (block) {
+    // Boolean inputs (called when theme changes)
+    oldPathObjectApplyColour.call(this, block);
+    if (isColoredTextMode()) {
+      for (const outline of this.outlines.values()) {
+        outline.setAttribute("fill", this.style.colourSecondary);
       }
-      return oldThemeSetBlockStyle.call(this, colorId, colors);
-    };
+    }
+  };
+  const oldPathObjectSetOutlinePath = Blockly.zelos.PathObject.prototype.setOutlinePath;
+  Blockly.zelos.PathObject.prototype.setOutlinePath = function (name, pathString) {
+    // Boolean inputs (called when a new block is created)
+    oldPathObjectSetOutlinePath.call(this, name, pathString);
+    if (isColoredTextMode()) {
+      this.getOutlinePath(name).setAttribute("fill", this.style.colourSecondary);
+    }
+  };
 
-    const oldPathObjectApplyColour = Blockly.zelos.PathObject.prototype.applyColour;
-    Blockly.zelos.PathObject.prototype.applyColour = function (block) {
-      // Boolean inputs (called when theme changes)
-      oldPathObjectApplyColour.call(this, block);
-      if (isColoredTextMode()) {
-        for (const outline of this.outlines.values()) {
-          outline.setAttribute("fill", this.style.colourSecondary);
-        }
-      }
-    };
-    const oldPathObjectSetOutlinePath = Blockly.zelos.PathObject.prototype.setOutlinePath;
-    Blockly.zelos.PathObject.prototype.setOutlinePath = function (name, pathString) {
-      // Boolean inputs (called when a new block is created)
-      oldPathObjectSetOutlinePath.call(this, name, pathString);
-      if (isColoredTextMode()) {
-        this.getOutlinePath(name).setAttribute("fill", this.style.colourSecondary);
-      }
-    };
-  } else {
-    const oldBlockSetColour = Blockly.Block.prototype.setColour;
-    Blockly.Block.prototype.setColour = function (colour, colourSecondary, colourTertiary) {
-      // Extension blocks (color is set by VM)
-      if (colour.toLowerCase() === originalColors.pen.primary.toLowerCase()) {
-        colour = primaryColor(extensionsCategory);
-        colourSecondary = secondaryColor(extensionsCategory);
-        colourTertiary = tertiaryColor(extensionsCategory);
-      }
-      return oldBlockSetColour.call(this, colour, colourSecondary, colourTertiary);
-    };
-
-    const oldBlockUpdateColour = Blockly.BlockSvg.prototype.updateColour;
-    Blockly.BlockSvg.prototype.updateColour = function () {
-      oldBlockUpdateColour.call(this);
-      // Boolean inputs
-      if (isColoredTextMode()) {
-        for (const input of this.inputList) {
-          if (input.outlinePath) {
-            input.outlinePath.setAttribute("fill", fieldBackground(this));
-          }
-        }
-      }
-    };
-  }
-
-  const recolorInsertionMarker = (originalBlock, markerBlock) => {
+  const oldCreateInsertionMarker = Blockly.InsertionMarkerPreviewer.prototype.createInsertionMarker;
+  Blockly.InsertionMarkerPreviewer.prototype.createInsertionMarker = function (originalBlock) {
+    const markerBlock = oldCreateInsertionMarker.call(this, originalBlock);
     if (!addon.self.disabled) {
       const styleColour = isColoredTextMode() ? originalBlock.getColourTertiary() : originalBlock.getColour();
       const fillStyle = addon.settings.get("fillStyle");
       const strokeStyle = addon.settings.get("strokeStyle");
 
-      let svgPath;
-      if (Blockly.registry)
-        svgPath = markerBlock.pathObject.svgPath; // new Blockly
-      else svgPath = markerBlock.svgPath_;
+      const svgPath = markerBlock.pathObject.svgPath;
       svgPath.style.fill = {
         none: "transparent",
         gray: "",
@@ -550,115 +490,42 @@ export default async function ({ addon, console, msg }) {
     }
     return markerBlock;
   };
-  if (Blockly.registry) {
-    // new Blockly
-    const oldCreateInsertionMarker = Blockly.InsertionMarkerPreviewer.prototype.createInsertionMarker;
-    Blockly.InsertionMarkerPreviewer.prototype.createInsertionMarker = function (originalBlock) {
-      const markerBlock = oldCreateInsertionMarker.call(this, originalBlock);
-      return recolorInsertionMarker(originalBlock, markerBlock);
-    };
-  } else {
-    const oldInsertionMarkerCreateMarkerBlock = Blockly.InsertionMarkerManager.prototype.createMarkerBlock_;
-    Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function (originalBlock) {
-      const markerBlock = oldInsertionMarkerCreateMarkerBlock.call(this, originalBlock);
-      return recolorInsertionMarker(originalBlock, markerBlock);
-    };
-  }
 
-  if (Blockly.registry) {
-    // New Blockly
-    const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu;
-    Blockly.BlockSvg.prototype.showContextMenu = function (e) {
-      const widgetDiv = Blockly.WidgetDiv.getDiv();
-      widgetDiv.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
-      return oldBlockShowContextMenu.call(this, e);
-    };
-  } else {
-    const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
-    Blockly.BlockSvg.prototype.showContextMenu_ = function (e) {
-      Blockly.WidgetDiv.DIV.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
-      return oldBlockShowContextMenu.call(this, e);
-    };
-  }
+  const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu;
+  Blockly.BlockSvg.prototype.showContextMenu = function (e) {
+    // editor-colored-context-menus compatibility
+    const widgetDiv = Blockly.WidgetDiv.getDiv();
+    widgetDiv.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
+    return oldBlockShowContextMenu.call(this, e);
+  };
 
-  if (Blockly.registry) {
-    // new Blockly
-    const oldFieldGetConstants = Blockly.Field.prototype.getConstants;
-    Blockly.Field.prototype.getConstants = function () {
-      const constants = oldFieldGetConstants.call(this);
-      for (const [name, settingId] of [["FIELD_BORDER_RECT_COLOUR", "input-color"]]) {
-        if (!Object.prototype.hasOwnProperty.call(originalConstants, name)) originalConstants[name] = constants[name];
-        if (addon.self.disabled) constants[name] = originalConstants[name];
-        else constants[name] = addon.settings.get(settingId);
-      }
-      return constants;
-    };
-  }
+  const oldFieldGetConstants = Blockly.Field.prototype.getConstants;
+  Blockly.Field.prototype.getConstants = function () {
+    const constants = oldFieldGetConstants.call(this);
+    for (const [name, settingId] of [["FIELD_BORDER_RECT_COLOUR", "input-color"]]) {
+      if (!Object.prototype.hasOwnProperty.call(originalConstants, name)) originalConstants[name] = constants[name];
+      if (addon.self.disabled) constants[name] = originalConstants[name];
+      else constants[name] = addon.settings.get(settingId);
+    }
+    return constants;
+  };
 
-  const oldFieldLabelInit = Blockly.FieldLabel.prototype[fieldMethodName];
-  Blockly.FieldLabel.prototype[fieldMethodName] = function () {
+  const oldFieldLabelApplyColour = Blockly.FieldLabel.prototype.applyColour;
+  Blockly.FieldLabel.prototype.applyColour = function () {
     // Labels
-    oldFieldLabelInit.call(this);
+    oldFieldLabelApplyColour.call(this);
     if (this.textElement_) this.textElement_.style.fill = textColor(this);
   };
 
-  if (!Blockly.registry) {
-    // old Blockly
-
-    const oldFieldTextInputInit = Blockly.FieldTextInput.prototype.init;
-    Blockly.FieldTextInput.prototype.init = function () {
-      // Text inputs
-      oldFieldTextInputInit.call(this);
-
-      // The background if editable fields in procedure_declaration are not changed by changing the block's color
-      // Manually setting the color here is not easily detectable by other addons, so we share this method
-      // so other addons (recolor-custom-blocks) can pass their own colors / fields in for compatibility
-      const updateBox_ = () => {
-        if (this.sourceBlock_.isShadow()) return;
-        // Labels in custom block editor
-        const recolorCustomBlock = this?.sourceBlock_?.recolorCustomBlock;
-        const colorTertiary = recolorCustomBlock?.isEdited // Use recolor-custom-block's colors if needed
-          ? recolorCustomBlock.colourTertiary
-          : this.sourceBlock_.getColourTertiary();
-        this.box_.setAttribute("fill", isColoredTextMode() ? fieldBackground(this) : colorTertiary);
-      };
-      shareMethod("editor-theme3", updateBox_, "updateBox_");
-      if (this.box_) {
-        updateBox_(this);
-      }
-    };
-
-    const oldFieldTextInputRemovableShowEditor = Blockly.FieldTextInputRemovable.prototype.showEditor_;
-    Blockly.FieldTextInputRemovable.prototype.showEditor_ = function () {
-      oldFieldTextInputRemovableShowEditor.call(this);
-      if (!this.sourceBlock_.isShadow()) {
-        // Labels in custom block editor
-        Blockly.WidgetDiv.DIV.classList.add("sa-theme3-editable-label");
-      }
-    };
-
-    const oldFieldNumberUpdateDisplay = Blockly.FieldNumber.updateDisplay_;
-    Blockly.FieldNumber.updateDisplay_ = function (...args) {
-      /* Called when editing a number input using the numpad. Scratch's implementation
-          only updates the HTML input. The addon hides the HTML input, so the field itself
-          needs to be updated to make the change visible. */
-      oldFieldNumberUpdateDisplay.call(this, ...args);
-      Blockly.FieldNumber.activeField_.onHtmlInputChange_(new Event(""));
-    };
-  }
-
-  if (Blockly.registry) {
-    // new Blockly
-    const oldFieldNumberShowNumPad = FieldNumber.prototype.showNumPad_;
-    FieldNumber.prototype.showNumPad_ = function () {
-      // Number pad
-      oldFieldNumberShowNumPad.call(this);
-      Blockly.DropDownDiv.setColour(
-        this.sourceBlock_.getParent().getColour(),
-        this.sourceBlock_.getParent().getColourTertiary()
-      );
-    };
-  }
+  const oldFieldNumberShowNumPad = FieldNumber.prototype.showNumPad_;
+  FieldNumber.prototype.showNumPad_ = function () {
+    // Number pad
+    oldFieldNumberShowNumPad.call(this);
+    Blockly.DropDownDiv.setColour(
+      this.sourceBlock_.getParent().getColour(),
+      this.sourceBlock_.getParent().getColourTertiary()
+    );
+  };
 
   const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
   Blockly.FieldImage.prototype.setValue = function (src) {
@@ -683,98 +550,55 @@ export default async function ({ addon, console, msg }) {
     return oldFieldImageSetValue.call(this, src);
   };
 
-  if (Blockly.registry) {
-    // new Blockly
-    const oldFieldImageApplyColour = Blockly.FieldImage.prototype.applyColour;
-    Blockly.FieldImage.prototype.applyColour = function () {
-      // Update icon
-      oldFieldImageApplyColour.call(this);
-      this.setValue(this.getValue()); // setValue() is overridden above
-    };
-  }
+  const oldFieldImageApplyColour = Blockly.FieldImage.prototype.applyColour;
+  Blockly.FieldImage.prototype.applyColour = function () {
+    // Update icon
+    oldFieldImageApplyColour.call(this);
+    this.setValue(this.getValue()); // setValue() is overridden above
+  };
 
-  let FieldDropdown;
-  if (Blockly.registry) {
-    /* new Blockly: most dropdowns are instances of ScratchFieldDropdown,
-       which is a subclass of Blockly.FieldDropdown. */
-    const ScratchFieldDropdown = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_dropdown");
-    FieldDropdown = ScratchFieldDropdown;
-
-    const oldFieldDropdownApplyColour = Blockly.FieldDropdown.prototype.applyColour;
-    Blockly.FieldDropdown.prototype.applyColour = function () {
-      // Dropdowns
-      oldFieldDropdownApplyColour.call(this);
-      if (this.textElement_) this.textElement_.style.setProperty("fill", textColor(this), "important");
-      if (this.svgArrow) {
-        this.svgArrow.remove();
-        this.svgArrow = makeDropdownArrow(textColor(this));
-        this.fieldGroup_.appendChild(this.svgArrow);
-        // Reposition arrow
-        this.renderSelectedText();
-      }
-    };
-
-    // Force all instances of Blockly.Dropdown to behave like ScratchFieldDropdown
-    // This fixes some dropdowns using tertiary instead of quaternary color when open
-    const oldBlocklyFieldDropdownShowEditor = Blockly.FieldDropdown.prototype.showEditor_;
-    Blockly.FieldDropdown.prototype.showEditor_ = function (e) {
-      if (this instanceof ScratchFieldDropdown || this.saPreventInfiniteRecursion) {
-        oldBlocklyFieldDropdownShowEditor.call(this, e);
-        return;
-      }
-      this.saPreventInfiniteRecursion = true;
-      ScratchFieldDropdown.prototype.showEditor_.call(this, e);
-      delete this.saPreventInfiniteRecursion;
-    };
-    const oldBlocklyFieldDropdownDispose = Blockly.FieldDropdown.prototype.dropdownDispose_;
-    Blockly.FieldDropdown.prototype.dropdownDispose_ = function (e) {
-      if (this instanceof ScratchFieldDropdown || this.saPreventInfiniteRecursion) {
-        oldBlocklyFieldDropdownDispose.call(this, e);
-        return;
-      }
-      this.saPreventInfiniteRecursion = true;
-      ScratchFieldDropdown.prototype.dropdownDispose_.call(this, e);
-      delete this.saPreventInfiniteRecursion;
-    };
-  } else {
-    FieldDropdown = Blockly.FieldDropdown;
-
-    const oldFieldDropdownInit = Blockly.FieldDropdown.prototype.init;
-    Blockly.FieldDropdown.prototype.init = function () {
-      // Dropdowns
-      oldFieldDropdownInit.call(this);
-      this.textElement_.style.setProperty("fill", textColor(this), "important");
-      this.arrow_.remove();
-      this.arrow_ = makeDropdownArrow(textColor(this));
-      // Redraw arrow
-      const text = this.text_;
-      this.text_ = null;
-      this.setText(text);
-    };
-  }
-
-  const oldFieldDropdownShowEditor = FieldDropdown.prototype.showEditor_;
-  FieldDropdown.prototype.showEditor_ = function () {
-    oldFieldDropdownShowEditor.call(this);
-
-    if (!Blockly.registry) {
-      // old Blockly
-      // Open dropdowns
-      if (!this.disableColourChange_) {
-        if (this.sourceBlock_.isShadow()) {
-          this.sourceBlock_.setShadowColour(fieldBackground(this));
-        } else if (this.box_) {
-          this.box_.setAttribute("fill", fieldBackground(this));
-        }
-      }
-
-      // Dropdown menus
-      let primaryColor;
-      if (this.sourceBlock_.isShadow() && this.sourceBlock_.getParent())
-        primaryColor = this.sourceBlock_.getParent().getColour();
-      else primaryColor = this.sourceBlock_.getColour();
-      Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
+  const oldFieldDropdownApplyColour = Blockly.FieldDropdown.prototype.applyColour;
+  Blockly.FieldDropdown.prototype.applyColour = function () {
+    // Dropdowns
+    oldFieldDropdownApplyColour.call(this);
+    if (this.textElement_) this.textElement_.style.setProperty("fill", textColor(this), "important");
+    if (this.svgArrow) {
+      this.svgArrow.remove();
+      this.svgArrow = makeDropdownArrow(textColor(this));
+      this.fieldGroup_.appendChild(this.svgArrow);
+      // Reposition arrow
+      this.renderSelectedText();
     }
+  };
+
+  const ScratchFieldDropdown = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_dropdown");
+
+  // Force all instances of Blockly.FieldDropdown to behave like ScratchFieldDropdown
+  // This fixes some dropdowns using tertiary instead of quaternary color when open
+  const oldBlocklyFieldDropdownShowEditor = Blockly.FieldDropdown.prototype.showEditor_;
+  Blockly.FieldDropdown.prototype.showEditor_ = function (e) {
+    if (this instanceof ScratchFieldDropdown || this.saPreventInfiniteRecursion) {
+      oldBlocklyFieldDropdownShowEditor.call(this, e);
+      return;
+    }
+    this.saPreventInfiniteRecursion = true;
+    ScratchFieldDropdown.prototype.showEditor_.call(this, e);
+    delete this.saPreventInfiniteRecursion;
+  };
+  const oldBlocklyFieldDropdownDispose = Blockly.FieldDropdown.prototype.dropdownDispose_;
+  Blockly.FieldDropdown.prototype.dropdownDispose_ = function (e) {
+    if (this instanceof ScratchFieldDropdown || this.saPreventInfiniteRecursion) {
+      oldBlocklyFieldDropdownDispose.call(this, e);
+      return;
+    }
+    this.saPreventInfiniteRecursion = true;
+    ScratchFieldDropdown.prototype.dropdownDispose_.call(this, e);
+    delete this.saPreventInfiniteRecursion;
+  };
+
+  const oldFieldDropdownShowEditor = ScratchFieldDropdown.prototype.showEditor_;
+  ScratchFieldDropdown.prototype.showEditor_ = function () {
+    oldFieldDropdownShowEditor.call(this);
     if (isColoredTextMode()) {
       Blockly.DropDownDiv.getContentDiv().style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
     } else {
@@ -782,26 +606,7 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
-  if (!Blockly.registry) {
-    // old Blockly
-    const oldFieldVariableInit = Blockly.FieldVariable.prototype.init;
-    Blockly.FieldVariable.prototype.init = function () {
-      // Variable dropdowns
-      oldFieldVariableInit.call(this);
-      this.textElement_.style.setProperty("fill", textColor(this), "important");
-    };
-
-    const oldFieldVariableGetterInit = Blockly.FieldVariableGetter.prototype.init;
-    Blockly.FieldVariableGetter.prototype.init = function () {
-      // Variable reporters
-      oldFieldVariableGetterInit.call(this);
-      this.textElement_.style.fill = textColor(this);
-    };
-  }
-
-  let FieldNote;
-  if (Blockly.registry) FieldNote = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_note");
-  else FieldNote = Blockly.FieldNote;
+  const FieldNote = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_note");
   const oldFieldNoteAddOctaveButton = FieldNote.prototype.addOctaveButton_;
   FieldNote.prototype.addOctaveButton_ = function (...args) {
     // Octave buttons in "play note" dropdown
@@ -813,12 +618,10 @@ export default async function ({ addon, console, msg }) {
   };
 
   // Matrix inputs
-  let FieldMatrix;
-  if (Blockly.registry) FieldMatrix = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_matrix");
-  else FieldMatrix = Blockly.FieldMatrix;
-  const oldFieldMatrixInit = FieldMatrix.prototype[fieldMethodName];
-  FieldMatrix.prototype[fieldMethodName] = function () {
-    oldFieldMatrixInit.call(this);
+  const FieldMatrix = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_matrix");
+  const oldFieldMatrixApplyColour = FieldMatrix.prototype.applyColour;
+  FieldMatrix.prototype.applyColour = function () {
+    oldFieldMatrixApplyColour.call(this);
     if (this.getValue()) this.updateMatrix_();
     if (!this.arrow_) return;
     const arrowTransform = this.arrow_.getAttribute("transform");
@@ -828,48 +631,16 @@ export default async function ({ addon, console, msg }) {
     this.arrow_.style.cursor = "default";
     this.fieldGroup_.appendChild(this.arrow_);
   };
-  if (!Blockly.registry) {
-    // old Blockly
-    const oldFieldMatrixShowEditor = Blockly.FieldMatrix.prototype.showEditor_;
-    Blockly.FieldMatrix.prototype.showEditor_ = function () {
-      oldFieldMatrixShowEditor.call(this);
-      let primaryColor;
-      if (this.sourceBlock_.isShadow() && this.sourceBlock_.getParent())
-        primaryColor = this.sourceBlock_.getParent().getColour();
-      else primaryColor = this.sourceBlock_.getColour();
-      Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
-    };
-    const oldFieldMatrixUpdateMatrix = FieldMatrix.prototype.updateMatrix_;
-    FieldMatrix.prototype.updateMatrix_ = function () {
-      oldFieldMatrixUpdateMatrix.call(this);
-      const matrix = this.getValue();
-      for (let i = 0; i < matrix.length; i++) {
-        if (matrix[i] !== "0") {
-          this.fillMatrixNode_(this.ledButtons_, i, uncoloredTextColor());
-          this.fillMatrixNode_(this.ledThumbNodes_, i, uncoloredTextColor());
-        }
-      }
-    };
-    const oldFieldMatrixCreateButton = FieldMatrix.prototype.createButton_;
-    FieldMatrix.prototype.createButton_ = function (fill) {
-      if (fill === "#FFFFFF") fill = uncoloredTextColor();
-      return oldFieldMatrixCreateButton.call(this, fill);
-    };
-  }
 
-  let FieldVerticalSeparator;
-  if (Blockly.registry)
-    FieldVerticalSeparator = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_vertical_separator");
-  else FieldVerticalSeparator = Blockly.FieldVerticalSeparator;
-  const oldFieldVerticalSeparatorInit = FieldVerticalSeparator.prototype[fieldMethodName];
-  FieldVerticalSeparator.prototype[fieldMethodName] = function () {
+  const FieldVerticalSeparator = Blockly.registry.getClass(Blockly.registry.Type.FIELD, "field_vertical_separator");
+  const oldFieldVerticalSeparatorApplyColour = FieldVerticalSeparator.prototype.applyColour;
+  FieldVerticalSeparator.prototype.applyColour = function () {
     // Vertical line between extension icon and block label
-    oldFieldVerticalSeparatorInit.call(this);
-    const lineElement = this.lineElement || this.lineElement_; // new Blockly || old Blockly
-    if (lineElement) {
+    oldFieldVerticalSeparatorApplyColour.call(this);
+    if (this.lineElement) {
       if (isColoredTextMode() || textMode() === "black")
-        lineElement.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
-      else lineElement.setAttribute("stroke", this.sourceBlock_.getColourSecondary());
+        this.lineElement.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
+      else this.lineElement.setAttribute("stroke", this.sourceBlock_.getColourSecondary());
     }
   };
 
@@ -885,123 +656,70 @@ export default async function ({ addon, console, msg }) {
       })) {
         document.documentElement.style.setProperty(`${prefix}-${name}`, value);
       }
-
-      if (!Blockly.registry) {
-        // old Blockly: update Blockly.Colours for categories
-        if (!Blockly.Colours[category.colorId]) continue;
-        Blockly.Colours[category.colorId].primary = primaryColor(category);
-        Blockly.Colours[category.colorId].secondary = secondaryColor(category);
-        Blockly.Colours[category.colorId].tertiary = tertiaryColor(category);
-      }
     }
-    if (Blockly.registry) {
-      // new Blockly: update theme
-      if (!workspace) workspace = addon.tab.traps.getWorkspace();
-      workspace.setTheme(
-        Blockly.Theme.defineTheme(
-          "default", // Scratch's CSS expects the name to be "default" or "high-contrast"
-          {
-            blockStyles: Object.fromEntries(
-              categories.map((category) => [
-                category.colorId,
-                {
-                  colourPrimary: primaryColor(category),
-                  colourSecondary: secondaryColor(category),
-                  colourTertiary: tertiaryColor(category),
-                  colourQuaternary: fieldBackground(category),
-                },
-              ])
-            ),
-          }
-        )
-      );
-      workspace.refreshTheme();
-      // used by Blockly and editor-colored-context-menus
-      document.body.style.setProperty("--colour-text", uncoloredTextColor());
-    }
+    // update theme
+    if (!workspace) workspace = addon.tab.traps.getWorkspace();
+    workspace.setTheme(
+      Blockly.Theme.defineTheme(
+        "default", // Scratch's CSS expects the name to be "default" or "high-contrast"
+        {
+          blockStyles: Object.fromEntries(
+            categories.map((category) => [
+              category.colorId,
+              {
+                colourPrimary: primaryColor(category),
+                colourSecondary: secondaryColor(category),
+                colourTertiary: tertiaryColor(category),
+                colourQuaternary: fieldBackground(category),
+              },
+            ])
+          ),
+        }
+      )
+    );
+    workspace.refreshTheme();
+    // used by Blockly and editor-colored-context-menus
+    document.body.style.setProperty("--colour-text", uncoloredTextColor());
     addon.tab.setCustomBlockColor({
       color: primaryColor(saCategory),
       secondaryColor: secondaryColor(saCategory),
       tertiaryColor: tertiaryColor(saCategory),
     });
-    if (!Blockly.registry) {
-      // old Blockly: update Blockly.Colours for UI elements
-      Blockly.Colours.textField = otherColor("input-color", "textField");
-      if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
-      else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
-      Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
-      // If the custom block editing modal is open, we need to apply our color changes
-      if (addon.tab.redux.state.scratchGui.customProcedures.active) {
-        // This should always be procedures_declaration, but it can crash if its not
-        const declarationBlock = Blockly.getMainWorkspace()?.getTopBlocks?.()?.[0];
-        if (declarationBlock?.type === "procedures_declaration") {
-          declarationBlock.updateDisplay_();
-        }
-      }
-    }
 
     const safeTextColor = encodeURIComponent(uncoloredTextColor());
     FieldNumber.NUMPAD_DELETE_ICON = originalNumpadDeleteIcon.replace("white", safeTextColor);
 
     updateAllBlocks(addon.tab, {
-      updateMainWorkspace: !Blockly.registry,
-      updateFlyout: !Blockly.registry,
+      updateMainWorkspace: false,
+      updateFlyout: false,
       updateCategories: true,
     });
   };
 
-  if (Blockly.registry) {
-    const updateAllWorkspaces = () => {
-      for (const workspace of Blockly.common.getAllWorkspaces()) {
-        updateColors(workspace);
-      }
-    };
-    updateAllWorkspaces();
-    addon.settings.addEventListener("change", updateAllWorkspaces);
-    addon.self.addEventListener("disabled", updateAllWorkspaces);
-    addon.self.addEventListener("reenabled", updateAllWorkspaces);
-  } else {
-    updateColors();
-    addon.settings.addEventListener("change", updateColors);
-    addon.self.addEventListener("disabled", updateColors);
-    addon.self.addEventListener("reenabled", updateColors);
-  }
+  const updateAllWorkspaces = () => {
+    for (const workspace of Blockly.common.getAllWorkspaces()) {
+      updateColors(workspace);
+    }
+  };
+  updateAllWorkspaces();
+  addon.settings.addEventListener("change", updateAllWorkspaces);
+  addon.self.addEventListener("disabled", updateAllWorkspaces);
+  addon.self.addEventListener("reenabled", updateAllWorkspaces);
 
-  if (Blockly.registry) {
-    // new Blockly: ThemeManager.subscribeWorkspace() is called when a new workspace is created
-    const oldThemeManagerSubscribeWorkspace = Blockly.ThemeManager.prototype.subscribeWorkspace;
-    Blockly.ThemeManager.prototype.subscribeWorkspace = function (workspace) {
-      oldThemeManagerSubscribeWorkspace.call(this, workspace);
-      setTimeout(() => {
-        /* We need to update originalColors if the user toggles the high contrast theme
-           while the addon is dynamically disabled. We shouldn't update them if the addon is
-           enabled because that would save the colors modified by the addon to originalColors. */
-        if (addon.self.disabled) {
-          updateOriginalColors(workspace.getTheme());
-        }
-        updateColors(workspace);
-      }, 0);
-    };
-  } else {
-    /* old Blockly: inject() and overrideColours() are called when a new Blockly instance is created,
-      which usually happens when changing the Scratch theme, language, or editor mode.
-      They will also be called when the Make a Block modal is opened. */
-    const oldInject = Blockly.inject;
-    Blockly.inject = function (...args) {
-      const workspace = oldInject.call(this, ...args);
-      /* Scratch doesn't pass color options to inject() when creating a custom block
-        editing workspace, so we don't need to call updateColors() in that case.
-        The custom block workspace doesn't have a toolbox. */
-      if (workspace.getToolbox()) updateColors();
-      return workspace;
-    };
-    Blockly.inject.bindDocumentEvents_ = oldInject.bindDocumentEvents_;
-    Blockly.inject.loadSounds_ = oldInject.loadSounds_;
-    Blockly.Colours.overrideColours = function (newColors) {
-      if (!newColors) return;
-      Object.assign(originalColors, newColors);
-    };
-  }
+  // ThemeManager.subscribeWorkspace() is called when a new workspace is created
+  const oldThemeManagerSubscribeWorkspace = Blockly.ThemeManager.prototype.subscribeWorkspace;
+  Blockly.ThemeManager.prototype.subscribeWorkspace = function (workspace) {
+    oldThemeManagerSubscribeWorkspace.call(this, workspace);
+    setTimeout(() => {
+      /* We need to update originalColors if the user toggles the high contrast theme
+         while the addon is dynamically disabled. We shouldn't update them if the addon is
+         enabled because that would save the colors modified by the addon to originalColors. */
+      if (addon.self.disabled) {
+        updateOriginalColors(workspace.getTheme());
+      }
+      updateColors(workspace);
+    }, 0);
+  };
 
   (async () => {
     // Custom colors for "Add an input/label" block icons in the "Make a block" popup menu, by pumpkinhasapatch
