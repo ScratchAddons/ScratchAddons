@@ -180,7 +180,16 @@
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
-            <div class="thread-list" v-for="invite of studioInvites">{{{ studioInviteHTML(invite) }}}</div>
+            <div class="thread-list" v-for="invite of studioInvites">
+              {{{ studioInviteHTML(invite) }}}
+              <button
+                v-if="showAcceptButton"
+                class="large-button"
+                @click="acceptStudioInvite(invite.studioId,$event.target)"
+              >
+                {{ uiMessages.acceptInviteButtonMsg }}
+              </button>
+            </div>
           </div>
         </div>
 
