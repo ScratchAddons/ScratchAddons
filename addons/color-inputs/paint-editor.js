@@ -20,23 +20,21 @@ export default async function ({ addon, msg, console }) {
     const color = ["hue", "saturation", "brightness"];
     color.forEach((c, i) => {
       const header = headers[i];
-      // TODO: move these styles into a userstyle and use header.classList.add
-      header.style.display = "flex";
-      header.style.alignItems = "center";
-      header.style.justifyContent = "space-between";
-      header.querySelector("[class*='color-picker_label-readout']").style.display = "none";
+      header.classList.add("sa-color-inputs-row-header");
       const input = document.createElement("input");
       input.type = "number";
       input.value = Math.round(pickerComponent.props[c] * 10) / 10;
       input.min = 0;
       input.max = 100;
-      input.className = addon.tab.scratchClass("input_input-form", "input_input-small", "input_input-small-range");
-      input.style.height = "1.5rem";
+      input.className = addon.tab.scratchClass("input_input-form", "input_input-small", "input_input-small-range", {
+        others: "sa-color-input",
+      });
       const _setState = pickerContainer.setState.bind(pickerContainer);
       pickerContainer.setState = function (state, callback) {
-        const [type, val] = Object.entries(state)[0];
-        if (type === c) {
-          input.value = Math.round(val * 10) / 10;
+        for (const [type, val] of Object.entries(state)) {
+          if (type === c) {
+            input.value = Math.round(val * 10) / 10;
+          }
         }
         _setState(state, callback);
       };
@@ -45,6 +43,7 @@ export default async function ({ addon, msg, console }) {
           pickerContainer.handleColorChange();
         });
       });
+      addon.tab.displayNoneWhileDisabled(input);
       header.append(input);
     });
   }
