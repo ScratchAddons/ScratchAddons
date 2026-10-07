@@ -22,12 +22,8 @@ export default async function ({ addon, console, msg }) {
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/workspace_svg.js#L979
   // https://github.com/scratchfoundation/scratch-blocks/blob/2884131/src/block_reporting.ts
-  function reportValue(id, value) {
-    let workspace;
-    if (ScratchBlocks.registry)
-      workspace = addon.tab.traps.getWorkspace(); // new Blockly
-    else workspace = this;
-
+  function onVisualReport({ id, value }) {
+    let workspace = addon.tab.traps.getWorkspace();
     let block = workspace.getBlockById(id) || workspace.getFlyout()?.getWorkspace().getBlockById(id);
     if (!block) {
       throw "Tried to report value on block that does not exist.";
@@ -70,47 +66,33 @@ export default async function ({ addon, console, msg }) {
     contentDiv.appendChild(valueReportBox);
 
     ScratchBlocks.DropDownDiv.setColour(
-      ScratchBlocks.Colours?.valueReportBackground || "#FFFFFF",
-      ScratchBlocks.Colours?.valueReportBorder || "#AAAAAA"
+      "#FFFFFF", // valueReportBackground
+      "#AAAAAA" // valueReportBorder
     );
 
-    if (ScratchBlocks.registry) {
-      // new Blockly
-      let field;
-      for (const input of block.inputList) {
-        for (const f of input.fieldRow) {
-          field = f;
-          break;
-        }
+    let field;
+    for (const input of block.inputList) {
+      for (const f of input.fieldRow) {
+        field = f;
+        break;
       }
-      if (!field) return;
-      ScratchBlocks.DropDownDiv.showPositionedByBlock(field, block);
-    } else {
-      ScratchBlocks.DropDownDiv.showPositionedByBlock(workspace, block);
     }
+    if (!field) return;
+    ScratchBlocks.DropDownDiv.showPositionedByBlock(field, block);
   }
 
-  if (ScratchBlocks.registry) {
-    // new Blockly
-    const onVisualReport = (data) => {
-      reportValue(data.id, data.value);
-    };
-
-    const vm = addon.tab.traps.vm;
-    for (const existingListener of vm.listeners("VISUAL_REPORT")) {
-      vm.removeListener("VISUAL_REPORT", existingListener);
-    }
-    vm.on("VISUAL_REPORT", onVisualReport);
-
-    const blocksWrapper = document.querySelector("[class*='gui_blocks-wrapper_']");
-    let reactInternalInstance = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
-    while (!reactInternalInstance.stateNode?.ScratchBlocks) {
-      reactInternalInstance = reactInternalInstance.child;
-    }
-    const blocksComponent = reactInternalInstance.stateNode;
-    const Blocks = blocksComponent.constructor;
-    Blocks.prototype.onVisualReport = onVisualReport;
-  } else {
-    ScratchBlocks.WorkspaceSvg.prototype.reportValue = reportValue;
+  const vm = addon.tab.traps.vm;
+  for (const existingListener of vm.listeners("VISUAL_REPORT")) {
+    vm.removeListener("VISUAL_REPORT", existingListener);
   }
+  vm.on("VISUAL_REPORT", onVisualReport);
+
+  const blocksWrapper = document.querySelector("[class*='gui_blocks-wrapper_']");
+  let reactInternalInstance = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
+  while (!reactInternalInstance.stateNode?.ScratchBlocks) {
+    reactInternalInstance = reactInternalInstance.child;
+  }
+  const blocksComponent = reactInternalInstance.stateNode;
+  const Blocks = blocksComponent.constructor;
+  Blocks.prototype.onVisualReport = onVisualReport;
 }

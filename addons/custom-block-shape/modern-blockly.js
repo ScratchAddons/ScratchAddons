@@ -2,7 +2,6 @@ import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js"
 
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
-  if (!Blockly.registry) return;
 
   const changeConstants = (constants) => {
     if (addon.self.disabled) return constants;

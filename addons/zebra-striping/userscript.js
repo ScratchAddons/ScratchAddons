@@ -3,9 +3,8 @@ import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js"
 export default async function ({ addon, msg, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
-  const renderMethodName = ScratchBlocks.registry ? "renderEfficiently" : "render";
-  const originalRender = ScratchBlocks.BlockSvg.prototype[renderMethodName];
-  ScratchBlocks.BlockSvg.prototype[renderMethodName] = function (...args) {
+  const originalRender = ScratchBlocks.BlockSvg.prototype.renderEfficiently;
+  ScratchBlocks.BlockSvg.prototype.renderEfficiently = function (...args) {
     // Any changes that affect block striping should bubble to the top block of the script.
     // The top block of the script is responsible for striping all of its children.
     // This way stripes are computed exactly once.
@@ -27,25 +26,15 @@ export default async function ({ addon, msg, console }) {
         }
         stripeState.set(block, isStriped);
 
-        const elements = [];
+        const elements = [block.pathObject.svgPath];
         if (block.type !== "procedures_prototype") {
-          if (block.pathObject) {
-            // new Blockly
-            elements.push(block.pathObject.svgPath);
-            if (block.pathObject.svgPathSelected) {
-              elements.push(block.pathObject.svgPathSelected);
-            }
-            for (const outlinePath of block.pathObject.outlines.values()) {
-              elements.push(outlinePath);
-            }
-          } else {
-            elements.push(block.svgPath_);
+          if (block.pathObject.svgPathSelected) {
+            elements.push(block.pathObject.svgPathSelected);
+          }
+          for (const outlinePath of block.pathObject.outlines.values()) {
+            elements.push(outlinePath);
           }
           for (const input of block.inputList) {
-            if (input.outlinePath) {
-              // old Blockly
-              elements.push(input.outlinePath);
-            }
             for (const field of input.fieldRow) {
               if (field.fieldGroup_) {
                 elements.push(field.fieldGroup_);

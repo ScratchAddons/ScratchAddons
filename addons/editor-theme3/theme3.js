@@ -344,12 +344,9 @@ export default async function ({ addon, console, msg }) {
   const iconPath = () => `${addon.self.dir}/icons/${useBlackIcons() ? "black_text" : "white_text"}`;
 
   const makeDropdownArrow = (color) => {
-    let createSvgElement;
-    if (Blockly.registry) createSvgElement = Blockly.utils.dom.createSvgElement;
-    else createSvgElement = Blockly.utils.createSvgElement;
-    const arrow = createSvgElement("g");
+    const arrow = Blockly.utils.dom.createSvgElement("g");
     arrow.appendChild(
-      createSvgElement("path", {
+      Blockly.utils.dom.createSvgElement("path", {
         d: arrowShadowPath,
         fill: arrowShadowColor,
         "fill-opacity": 0.1,
@@ -357,7 +354,7 @@ export default async function ({ addon, console, msg }) {
       })
     );
     arrow.appendChild(
-      createSvgElement("path", {
+      Blockly.utils.dom.createSvgElement("path", {
         d: arrowPath,
         fill: color,
         transform: "translate(0, 1.6)",
