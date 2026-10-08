@@ -551,24 +551,17 @@ let fuse;
       manifest._addonId = addonId;
       manifest._groups = [];
 
-      if (manifest.versionAdded) {
-        const [extMajor, extMinor, _] = vue.version.split(".");
-        const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
-        if (extMajor === addonMajor && extMinor === addonMinor) {
-          manifest.tags.push("new");
-          manifest._groups.push(
-            manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
-          );
-        }
-      }
-
-      if (manifest.latestUpdate) {
-        const [extMajor, extMinor, _] = vue.version.split(".");
-        const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
-        if (extMajor === addonMajor && extMinor === addonMinor) {
-          manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
-          manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
-        }
+      const [extMajor, extMinor] = vue.version.split(".");
+      const [addonAddedMajor, addonAddedMinor] = manifest.versionAdded?.split(".") || [];
+      const [addonUpdateMajor, addonUpdateMinor] = manifest.latestUpdate?.version?.split(".") || [];
+      if (extMajor === addonAddedMajor && extMinor === addonAddedMinor) {
+        manifest.tags.push("new");
+        manifest._groups.push(
+          manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
+        );
+      } else if (extMajor === addonUpdateMajor && extMinor === addonUpdateMinor) {
+        manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
+        manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
       }
 
       // Sort tags to preserve consistent order
