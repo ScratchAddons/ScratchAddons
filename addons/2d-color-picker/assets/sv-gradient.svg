@@ -1,0 +1,15 @@
+<svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="saturation">
+      <!-- 7.33% * 150px = 11px = SLIDER_PADDING -->
+      <stop offset="7.33%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="92.67%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="brightness" gradientTransform="rotate(90)">
+      <stop offset="7.33%" stop-color="#000000" stop-opacity="0" />
+      <stop offset="92.67%" stop-color="#000000" stop-opacity="1" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="150" height="150" fill="url(#saturation)" />
+  <rect x="0" y="0" width="150" height="150" fill="url(#brightness)" />
+</svg>
