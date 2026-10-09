@@ -387,6 +387,9 @@ let fuse;
           { once: true }
         );
       },
+      closeDialog(event) {
+        event.target.closest("dialog").close(event.target.value);
+      },
       groupShownCount(group) {
         if (group.id === "_iframeSearch") return -1;
         return this.addonListObjs.filter(
@@ -478,6 +481,15 @@ let fuse;
     });
   };
 
+  const iconMap = {
+    editor: { name: "puzzle", alt: chrome.i18n.getMessage("editorFeature") },
+    player: { name: "player", alt: chrome.i18n.getMessage("playerFeature") },
+    community: { name: "web", alt: chrome.i18n.getMessage("websiteFeature") },
+    theme: { name: "brush", alt: chrome.i18n.getMessage("themeAddon") },
+    easterEgg: { name: "egg-easter", alt: chrome.i18n.getMessage("easterEgg") },
+    popup: { name: "popup", alt: chrome.i18n.getMessage("popupFeature") },
+  };
+
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
     const cleanManifests = [];
@@ -544,7 +556,9 @@ let fuse;
       // it's categorized as an editor addon, not as easterEgg
       if (addonId === "cat-blocks") manifest._categories.push("easterEgg");
 
-      manifest._icon = manifest._categories[0];
+      const mainCategory = manifest._categories[0];
+      manifest._iconSrc = `../../images/icons/${iconMap[mainCategory].name}.svg`;
+      manifest._iconAlt = iconMap[mainCategory].alt;
 
       manifest._enabled = addonsEnabled[addonId];
       manifest._wasEverEnabled = manifest._enabled;

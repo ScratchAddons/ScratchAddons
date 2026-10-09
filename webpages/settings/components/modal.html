@@ -17,13 +17,17 @@
     background-color: var(--page-background);
     border: none;
     padding: 20px;
-    width: 50rem;
+    width: 30rem;
     max-width: 75%;
     border-radius: 10px;
     max-height: 75%;
   }
 
-  .modal.full-height {
+  .modal-full-width {
+    width: 50rem;
+  }
+
+  .modal-full-height {
     height: 75%;
   }
 
@@ -34,8 +38,10 @@
 
   .modal-content {
     height: 100%;
+    min-height: fit-content;
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
 
   .modal-header {
