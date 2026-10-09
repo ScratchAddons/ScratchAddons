@@ -2,6 +2,16 @@ body {
   padding-bottom: 1px; /* show margin below last game */
 }
 
+.turbo-warp-banner {
+  background-color: #3ddc84;
+  color: #1a1a1a;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  user-select: none;
+}
+
 .fade-transition {
   transition: opacity 0.2s ease;
 }
