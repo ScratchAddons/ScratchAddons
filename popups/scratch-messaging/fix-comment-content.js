@@ -18,7 +18,7 @@ export default (value, enabledAddons) => {
     node = fragment.body;
   }
   node.normalize();
-  for (let i = node.childNodes.length; i--; ) {
+  for (let i = node.childNodes.length; i--;) {
     const item = node.childNodes[i];
     let collapsed = item.textContent;
     if (!shouldInsertLinebreak) {
