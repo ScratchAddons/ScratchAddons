@@ -1,4 +1,6 @@
 export default async function ({ addon }) {
+  const isMac =
+    navigator.platform.toUpperCase().indexOf("MAC") >= 0 || navigator.userAgent.toLowerCase().includes("mac");
   const settings = {
     none: 0,
     hundredth: 0.01,
@@ -118,13 +120,18 @@ export default async function ({ addon }) {
     // If this is a number input, it will prevent the default browser behavior when pressing up/down in a
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
+    // Assign ctrlModifier based on platform
+    const ctrlModifier = isMac ? e.metaKey : e.ctrlKey;
+
     let changeBy = e.key === "ArrowUp" ? 1 : -1;
     if (addon.settings.get("useCustom")) {
-      let settingValue = e.shiftKey
-        ? addon.settings.get("shiftCustom")
-        : e.altKey
-          ? addon.settings.get("altCustom")
-          : addon.settings.get("regularCustom");
+      let settingValue = ctrlModifier
+        ? addon.settings.get("ctrlCustom")
+        : e.shiftKey
+          ? addon.settings.get("shiftCustom")
+          : e.altKey
+            ? addon.settings.get("altCustom")
+            : addon.settings.get("regularCustom");
       if (settingValue === "") settingValue = 0;
       let valueAsFloat = parseFloat(settingValue);
       if (valueAsFloat < 0) valueAsFloat *= -1; // If user typed a negative number, we make it positive
@@ -137,11 +144,13 @@ export default async function ({ addon }) {
         return;
       }
     } else {
-      changeBy *= e.shiftKey
-        ? settings[addon.settings.get("shift")]
-        : e.altKey
-          ? settings[addon.settings.get("alt")]
-          : settings[addon.settings.get("regular")];
+      changeBy *= ctrlModifier
+        ? settings[addon.settings.get("ctrl")]
+        : e.shiftKey
+          ? settings[addon.settings.get("shift")]
+          : e.altKey
+            ? settings[addon.settings.get("alt")]
+            : settings[addon.settings.get("regular")];
     }
 
     const decimalCount = Math.max(amountOfDecimals(e.target.value), amountOfDecimals(changeBy.toString()));

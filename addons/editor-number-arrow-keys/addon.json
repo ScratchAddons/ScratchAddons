@@ -127,7 +127,44 @@
       "max": 8,
       "if": { "settings": { "useCustom": true } }
     },
+    {
+      "name": "Change on Ctrl+Key (Cmd on Mac)",
+      "id": "ctrl",
+      "type": "select",
+      "default": "hundredth",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "hundredth",
+          "name": "0.01"
+        },
+        {
+          "id": "tenth",
+          "name": "0.1"
+        },
+        {
+          "id": "one",
+          "name": "1"
+        },
+        {
+          "id": "ten",
+          "name": "10"
+        }
+      ],
+      "if": { "settings": { "useCustom": false } }
+    },
 
+    {
+      "name": "Change on Ctrl+Key (Cmd on Mac)",
+      "id": "ctrlCustom",
+      "type": "untranslated",
+      "default": "0.01",
+      "max": 8,
+      "if": { "settings": { "useCustom": true } }
+    },
     {
       "name": "Use custom values",
       "id": "useCustom",
@@ -142,6 +179,10 @@
     },
     {
       "name": "World_Languages"
+    },
+    {
+      "name": "kalyzu",
+      "link": "https://github.com/kalyzu"
     }
   ],
   "dynamicDisable": true,
