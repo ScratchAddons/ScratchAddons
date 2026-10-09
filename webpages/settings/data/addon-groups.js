@@ -17,16 +17,6 @@ export default [
     fullscreenShow: false,
   },
   {
-    // Needed to create addonListObjs items for non-enabled addons
-    id: "_iframeSearch",
-    name: "",
-    addonIds: [],
-    expanded: true,
-    iframeShow: true,
-    fullscreenShow: false,
-  },
-
-  {
     id: "featuredNew",
     name: chrome.i18n.getMessage("featuredNew"),
     addonIds: [],
@@ -91,5 +81,14 @@ export default [
     expanded: false,
     iframeShow: false,
     fullscreenShow: true,
+  },
+  {
+    // Needed to create addonListObjs items for non-enabled addons
+    id: "_iframeSearch",
+    name: "",
+    addonIds: [],
+    expanded: true,
+    iframeShow: true,
+    fullscreenShow: false,
   },
 ];

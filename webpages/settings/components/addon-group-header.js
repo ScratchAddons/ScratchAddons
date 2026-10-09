@@ -13,6 +13,9 @@ export default async function ({ template }) {
       manifestsById() {
         return this.$root.manifestsById;
       },
+      label() {
+        return this.group.name + (this.$root.loaded ? ` (${this.shownCount})` : "");
+      },
     },
     methods: {
       toggle() {
