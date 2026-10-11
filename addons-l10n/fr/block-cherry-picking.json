@@ -1,1 +1,1 @@
-{"block-cherry-picking/@name":"Prendre un seul bloc avec la touche Ctrl","block-cherry-picking/@description":"Ajoutes la possibilité de déplacé les blocs un par un avec la touche Ctrl (plutôt que le script le suivant)","block-cherry-picking/@info-macContextDisabled":"Sur macOS, utilisé la touche cmd plutôt que la touche Ctrl.","block-cherry-picking/@settings-name-invertDrag":"Contrôle inversé"}
+{"block-cherry-picking/@info-macContextDisabled":"Sur macOS, utilisé la touche cmd plutôt que la touche Ctrl."}
