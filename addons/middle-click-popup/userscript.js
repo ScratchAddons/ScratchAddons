@@ -138,24 +138,19 @@ export default async function ({ addon, msg, console }) {
     popupInput.focus();
     updateInput();
 
-    if (Blockly.registry) {
-      // new Blockly: register delete area
-      const component = new Blockly.DeleteArea();
-      component.id = "saMiddleClickPopup";
-      component.getClientRect = () => {
-        const rect = popupContainer.getBoundingClientRect();
-        return new Blockly.utils.Rect(rect.top, rect.bottom, rect.left, rect.right);
-      };
-      workspace.getComponentManager().addComponent({
-        component,
-        weight: 1,
-        capabilities: [
-          Blockly.ComponentManager.Capability.DELETE_AREA,
-          Blockly.ComponentManager.Capability.DRAG_TARGET,
-        ],
-      });
-      workspace.recordDragTargets();
-    }
+    // Register delete area
+    const component = new Blockly.DeleteArea();
+    component.id = "saMiddleClickPopup";
+    component.getClientRect = () => {
+      const rect = popupContainer.getBoundingClientRect();
+      return new Blockly.utils.Rect(rect.top, rect.bottom, rect.left, rect.right);
+    };
+    workspace.getComponentManager().addComponent({
+      component,
+      weight: 1,
+      capabilities: [Blockly.ComponentManager.Capability.DELETE_AREA, Blockly.ComponentManager.Capability.DRAG_TARGET],
+    });
+    workspace.recordDragTargets();
   }
 
   function closePopup() {
@@ -165,12 +160,10 @@ export default async function ({ addon, msg, console }) {
       popupRoot.style.display = "none";
       blockTypes = null;
       querier.clearWorkspaceIndex();
-      if (Blockly.registry) {
-        // new Blockly: unregister delete area
-        const workspace = addon.tab.traps.getWorkspace();
-        workspace.getComponentManager().removeComponent("saMiddleClickPopup");
-        workspace.recordDragTargets();
-      }
+      // Unregister delete area
+      const workspace = addon.tab.traps.getWorkspace();
+      workspace.getComponentManager().removeComponent("saMiddleClickPopup");
+      workspace.recordDragTargets();
     }
   }
 
@@ -224,7 +217,7 @@ export default async function ({ addon, msg, console }) {
         updateSelection(resultIdx);
       };
 
-      const mouseDownListener = (e) => {
+      const pointerDownListener = (e) => {
         e.stopPropagation();
         e.preventDefault();
         updateSelection(resultIdx);
@@ -254,15 +247,11 @@ export default async function ({ addon, msg, console }) {
       svgBackground.setAttribute("height", height * previewScale + "px");
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
-      if (Blockly.registry)
-        svgBackground.addEventListener("pointerdown", mouseDownListener); // new Blockly
-      else svgBackground.addEventListener("mousedown", mouseDownListener);
+      svgBackground.addEventListener("pointerdown", pointerDownListener);
 
       const svgBlock = popupPreviewBlocks.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
       svgBlock.addEventListener("mousemove", mouseMoveListener);
-      if (Blockly.registry)
-        svgBlock.addEventListener("pointerdown", mouseDownListener); // new Blockly
-      else svgBlock.addEventListener("mousedown", mouseDownListener);
+      svgBlock.addEventListener("pointerdown", pointerDownListener);
       svgBlock.classList.add("sa-mcp-preview-block");
 
       const renderedBlock = renderBlock(result.block, svgBlock);
@@ -306,11 +295,9 @@ export default async function ({ addon, msg, console }) {
     updateCursor();
     updateScrollbar();
 
-    if (Blockly.registry) {
-      // new Blockly: update delete area after resizing popup
-      const workspace = addon.tab.traps.getWorkspace();
-      workspace.recordDragTargets();
-    }
+    // Update delete area after resizing popup
+    const workspace = addon.tab.traps.getWorkspace();
+    workspace.recordDragTargets();
   }
 
   function updateSelection(newIdx) {
@@ -409,11 +396,7 @@ export default async function ({ addon, msg, console }) {
         throw new Error("newBlock is not rendered.");
       }
 
-      let svgPath;
-      if (newBlock.pathObject)
-        svgPath = newBlock.pathObject.svgPath; // new Blockly
-      else svgPath = newBlock.svgPath_;
-      let blockBounds = svgPath.getBoundingClientRect();
+      let blockBounds = newBlock.pathObject.svgPath.getBoundingClientRect();
       let newBlockX = Math.floor((mousePosition.x - (blockBounds.left + blockBounds.right) / 2) / workspace.scale);
       let newBlockY = Math.floor((mousePosition.y - (blockBounds.top + blockBounds.bottom) / 2) / workspace.scale);
       newBlock.moveBy(newBlockX, newBlockY);
@@ -427,46 +410,38 @@ export default async function ({ addon, msg, console }) {
     let fakeEvent = {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
-      type: "mousedown",
+      type: "pointerdown",
+      pointerType: e.pointerType ?? "mouse",
       stopPropagation: function () {},
       preventDefault: function () {},
       target: selectedPreview.svgBlock,
     };
-    if (Blockly.registry) {
-      // new Blockly expects a pointerdown event
-      fakeEvent.type = "pointerdown";
-      fakeEvent.pointerType = e.pointerType ?? "mouse";
-      if ("pointerId" in e) {
-        // The block is being dragged using the mouse or touch. The correct pointerId
-        // needs to be set so that Blockly recognizes the associated pointerup event.
-        fakeEvent.pointerId = e.pointerId;
-      } else {
-        // The block was selected using the keyboard. Setting pointerId to an empty string
-        // allows any pointerup to end the "drag".
-        fakeEvent.pointerId = "";
-      }
-      // Start dragging the block
-      // Based on old Blockly's WorkspaceSvg.startDragWithFakeEvent() and Gesture.forceStartBlockDrag()
-      Blockly.Touch.clearTouchIdentifier();
-      Blockly.Touch.checkTouchIdentifier(fakeEvent);
-      const gesture = workspace.getGesture(fakeEvent);
-      gesture.handleBlockStart(fakeEvent, newBlock);
-      gesture.handleWsStart(fakeEvent, workspace);
-      gesture.dragging = true;
-      gesture.hasExceededDragRadius = true;
-      gesture.dragger = gesture.createDragger(newBlock, workspace);
-      gesture.dragger.onDragStart(fakeEvent);
-      if (e instanceof KeyboardEvent) {
-        // Blockly gets confused when it receives two pointerdown events (the fake one
-        // and a real one) without a pointerup in between. Prevent it from canceling
-        // our gesture when that happens.
-        gesture.gestureHasStarted = false;
-        gesture.handleWsStart = () => {};
-      }
+    if ("pointerId" in e) {
+      // The block is being dragged using the mouse or touch. The correct pointerId
+      // needs to be set so that Blockly recognizes the associated pointerup event.
+      fakeEvent.pointerId = e.pointerId;
     } else {
-      if (workspace.getGesture(fakeEvent)) {
-        workspace.startDragWithFakeEvent(fakeEvent, newBlock);
-      }
+      // The block was selected using the keyboard. Setting pointerId to an empty string
+      // allows any pointerup to end the "drag".
+      fakeEvent.pointerId = "";
+    }
+    // Start dragging the block
+    // Based on old Blockly's WorkspaceSvg.startDragWithFakeEvent() and Gesture.forceStartBlockDrag()
+    Blockly.Touch.clearTouchIdentifier();
+    Blockly.Touch.checkTouchIdentifier(fakeEvent);
+    const gesture = workspace.getGesture(fakeEvent);
+    gesture.handleBlockStart(fakeEvent, newBlock);
+    gesture.handleWsStart(fakeEvent, workspace);
+    gesture.dragging = true;
+    gesture.hasExceededDragRadius = true;
+    gesture.dragger = gesture.createDragger(newBlock, workspace);
+    gesture.dragger.onDragStart(fakeEvent);
+    if (e instanceof KeyboardEvent) {
+      // Blockly gets confused when it receives two pointerdown events (the fake one
+      // and a real one) without a pointerup in between. Prevent it from canceling
+      // our gesture when that happens.
+      gesture.gestureHasStarted = false;
+      gesture.handleWsStart = () => {};
     }
   }
 
@@ -533,31 +508,11 @@ export default async function ({ addon, msg, console }) {
   });
 
   // Open on mouse wheel button
-  const doWorkspaceClickMethodName = Blockly.registry ? "doWorkspaceClick" : "doWorkspaceClick_";
-  const _doWorkspaceClick_ = Blockly.Gesture.prototype[doWorkspaceClickMethodName];
-  Blockly.Gesture.prototype[doWorkspaceClickMethodName] = function () {
-    const event = Blockly.registry ? this.mostRecentEvent : this.mostRecentEvent_;
+  const _doWorkspaceClick = Blockly.Gesture.prototype.doWorkspaceClick;
+  Blockly.Gesture.prototype.doWorkspaceClick = function () {
+    const event = this.mostRecentEvent;
     if (event.button === 1 || event.shiftKey) openPopup();
     mousePosition = { x: event.clientX, y: event.clientY };
-    _doWorkspaceClick_.call(this);
+    _doWorkspaceClick.call(this);
   };
-
-  if (!Blockly.registry) {
-    // The popup should delete blocks dragged ontop of it
-    // For new Blockly, this is implemented using Blockly.ComponentManager instead
-    const _isDeleteArea = Blockly.WorkspaceSvg.prototype.isDeleteArea;
-    Blockly.WorkspaceSvg.prototype.isDeleteArea = function (e) {
-      if (popupPosition) {
-        if (
-          e.clientX > popupPosition.x &&
-          e.clientX < popupPosition.x + previewWidth &&
-          e.clientY > popupPosition.y &&
-          e.clientY < popupPosition.y + previewHeight
-        ) {
-          return Blockly.DELETE_AREA_TOOLBOX;
-        }
-      }
-      return _isDeleteArea.call(this, e);
-    };
-  }
 }
