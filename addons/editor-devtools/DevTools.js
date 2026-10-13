@@ -68,8 +68,17 @@ export default class DevTools {
     }
   }
 
+  getModifierKey(blockly) {
+    const userAgent = blockly.utils.userAgent;
+    if (userAgent.MAC || userAgent.IPHONE || userAgent.IPAD) {
+      return "metaKey";
+    }
+    return "ctrlKey";
+  }
+
   async addContextMenus() {
     const blockly = await this.addon.tab.traps.getBlockly();
+    const modifierKey = this.getModifierKey(blockly);
 
     blockly.ContextMenuRegistry.registry.register({
       separator: true,
@@ -84,7 +93,7 @@ export default class DevTools {
         document.querySelector(".injectionDiv").dispatchEvent(
           new KeyboardEvent("keydown", {
             keyCode: 86,
-            ctrlKey: true,
+            [modifierKey]: true,
           })
         );
       },
@@ -374,6 +383,7 @@ export default class DevTools {
 
   eventCopyClick(blockly, block, blockOnly) {
     let wksp = this.getWorkspace();
+    const modifierKey = this.getModifierKey(blockly);
 
     if (block) {
       block.select();
@@ -388,7 +398,7 @@ export default class DevTools {
       if (blockly.registry)
         target = document.querySelector(".injectionDiv"); // new Blockly
       else target = document;
-      target.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
+      target.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, [modifierKey]: true }));
       if (next || blockOnly === 2) {
         // wait until the event has been fired
         // see https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/events/utils.ts#L112-L114
