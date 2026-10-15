@@ -121,7 +121,7 @@ export default async function ({ addon }) {
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
     // Assign ctrlModifier based on platform
-    const ctrlModifier = isMac ? e.metaKey : e.ctrlKey;
+    const ctrlModifier = e.ctrlKey || (isMac && e.metaKey);
 
     let changeBy = e.key === "ArrowUp" ? 1 : -1;
     if (addon.settings.get("useCustom")) {
