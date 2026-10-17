@@ -53,6 +53,9 @@ export default async function ({ addon, msg }) {
             ["<", "<"],
             [">", ">"],
             ["~", "~"],
+            ["shift", "shift"],
+            ["delete", "delete"],
+            ["ctrl", "ctrl"]
           ]
         );
       }
