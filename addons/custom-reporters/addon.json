@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Custom reporter blocks",
+  "description": "custom reporters?!",
+  "credits": [
+    {
+      "name": "pufferfish101007",
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "beta"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.99.0",
+  "enabledByDefault": true,
+  "dynamicEnable": false,
+  "dynamicDisable": false,
+  "libraries": ["scratch-blocks"],
+  "settings": [
+    {
+      "name": "Transpiler mode",
+      "id": "transpilerMode",
+      "type": "select",
+      "default": "var",
+      "potentialValues": [
+        { "id": "var", "name": "variable" },
+        { "id": "list_no_gc", "name": "list (no GC)" }
+      ]
+    }
+  ]
+}
