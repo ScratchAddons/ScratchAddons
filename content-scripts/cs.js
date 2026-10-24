@@ -125,7 +125,11 @@ const cs = {
     });
   },
 };
-Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
+Comlink.expose(
+  cs,
+  Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow, location.origin),
+  [location.origin]
+);
 
 const moduleScript = document.createElement("script");
 moduleScript.type = "module";
@@ -135,7 +139,9 @@ moduleScript.src = chrome.runtime.getURL("content-scripts/inject/module.js");
   await new Promise((resolve) => {
     moduleScript.addEventListener("load", resolve);
   });
-  _page_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow));
+  _page_ = Comlink.wrap(
+    Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow, location.origin)
+  );
 })();
 
 document.documentElement.appendChild(moduleScript);
