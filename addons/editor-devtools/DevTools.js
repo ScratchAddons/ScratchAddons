@@ -17,10 +17,8 @@ export default class DevTools {
 
     this.mouseXY = { x: 0, y: 0 };
 
-    // On new Blockly, we can't access the clipboard data directly because it's
-    // a global variable in a module. Instead, we set this to true when something
-    // is copied. If the addon is enabled late, something might already be on the
-    // clipboard, so we initialize it to true.
+    // We set this to true when something is copied. If the addon is enabled late,
+    // something might already be on the clipboard, so we initialize it to true.
     this.clipboardHasData = addon.self.enabledLate;
   }
 
@@ -45,27 +43,14 @@ export default class DevTools {
   async patchPaste() {
     const devtools = this;
     const blockly = await this.addon.tab.traps.getBlockly();
-    // Support for new blockly.
-    if (blockly.registry) {
-      const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, "block").constructor;
-      const oldPasteFunc = BlockPaster.prototype.paste;
-      BlockPaster.prototype.paste = function (copyData, workspace, coords) {
-        if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
-          if (!devtools._canPaste()) return;
-        }
-        return oldPasteFunc.call(this, copyData, workspace, coords);
-      };
-    } else {
-      const oldPasteFunc = blockly.WorkspaceSvg.prototype.paste;
-      blockly.WorkspaceSvg.prototype.paste = function (data) {
-        if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
-          if (data.tagName.toLowerCase() !== "comment" && !devtools._canPaste()) {
-            return;
-          }
-        }
-        return oldPasteFunc.call(this, data);
-      };
-    }
+    const BlockPaster = blockly.registry.getClass(blockly.registry.Type.PASTER, "block").constructor;
+    const oldPasteFunc = BlockPaster.prototype.paste;
+    BlockPaster.prototype.paste = function (copyData, workspace, coords) {
+      if (devtools.addon.settings.get("enablePasteBlocksAtMouse")) {
+        if (!devtools._canPaste()) return;
+      }
+      return oldPasteFunc.call(this, copyData, workspace, coords);
+    };
   }
 
   async addContextMenus() {
@@ -164,10 +149,9 @@ export default class DevTools {
   async patchCopyShortcuts() {
     const devtools = this;
     const blockly = await this.addon.tab.traps.getBlockly();
-    if (!blockly.registry) return;
     const shortcuts = blockly.ShortcutRegistry.registry.getRegistry();
 
-    // Set this.clipboardHasData to true when something is copied on new Blockly
+    // Set this.clipboardHasData to true when something is copied
 
     const newCallback = (oldCallback) =>
       function (...args) {
@@ -325,11 +309,7 @@ export default class DevTools {
     for (const block of topBlocks) {
       if (!ids.has(block.id)) {
         let mouseXYClone = { x: this.mouseXY.x, y: this.mouseXY.y };
-        let svgPath;
-        if (block.pathObject)
-          svgPath = block.pathObject.svgPath; // new Blockly
-        else svgPath = block.svgPath_;
-        this.domHelpers.triggerDragAndDrop(svgPath, null, mouseXYClone);
+        this.domHelpers.triggerDragAndDrop(block.pathObject.svgPath, null, mouseXYClone);
       }
     }
   }
@@ -384,11 +364,9 @@ export default class DevTools {
       }
 
       // separate child temporarily
-      let target;
-      if (blockly.registry)
-        target = document.querySelector(".injectionDiv"); // new Blockly
-      else target = document;
-      target.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
+      document
+        .querySelector(".injectionDiv")
+        .dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
       if (next || blockOnly === 2) {
         // wait until the event has been fired
         // see https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/events/utils.ts#L112-L114
@@ -416,7 +394,7 @@ export default class DevTools {
     this.updateMousePosition(e);
   }
 
-  async initInner(root) {
+  initInner(root) {
     let guiTabs = root.childNodes;
 
     if (this.codeTab && guiTabs[0] !== this.codeTab) {
@@ -428,12 +406,12 @@ export default class DevTools {
     this.costTab = guiTabs[1];
     this.costTabBody = document.querySelector("div[aria-labelledby='" + this.costTab.id + "']");
 
-    const blockly = await this.addon.tab.traps.getBlockly();
-    let keyEventTarget;
-    if (blockly.registry)
-      keyEventTarget = document.querySelector(".injectionDiv"); // new Blockly
-    else keyEventTarget = document;
-    this.domHelpers.bindOnce(keyEventTarget, "keydown", (...e) => this.eventKeyDownBlockly(...e), true);
+    this.domHelpers.bindOnce(
+      document.querySelector(".injectionDiv"),
+      "keydown",
+      (...e) => this.eventKeyDownBlockly(...e),
+      true
+    );
 
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
     this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them

@@ -96,16 +96,10 @@ export default async function ({ addon, console }) {
       if (!this.themeColors) throw new Error("Cannot invoke without themeColors");
       return this.themeColors.colourQuaternary;
     }
-    // Old Blockly
-    setColour(color) {
-      this.valueCallback?.(color);
-    }
-    // New Blockly
     setValue(color) {
       super.setValue(color);
       this.valueCallback?.(color);
     }
-    // new Blockly needs this for it's init
     getValue() {
       return this.colour_;
     }
@@ -170,18 +164,8 @@ export default async function ({ addon, console }) {
   const getBlocklyColors = (prefix) => {
     const colorName = prefixColors[prefix];
     if (!colorName) return null;
-    if (Blockly.registry) {
-      const workspace = addon.tab.traps.getWorkspace();
-      return workspace.getTheme().blockStyles[colorName];
-    } else {
-      const colors = Blockly.Colours[colorName];
-      return {
-        colourPrimary: colors.primary,
-        colourSecondary: colors.secondary,
-        colourTertiary: colors.tertiary,
-        colourQuaternary: colors.quaternary,
-      };
-    }
+    const workspace = addon.tab.traps.getWorkspace();
+    return workspace.getTheme().blockStyles[colorName];
   };
 
   const blockHasColor = (block, colors) => {
@@ -261,29 +245,13 @@ export default async function ({ addon, console }) {
     const currentColorElement = getColorButton(block.colorMenu, prefix);
     setActiveColorButton(currentColorElement, prefix, colors); // Update modal color buttons
     setCustomProcedureOptionsColor(colors); // Update modal field buttons
-    if (Blockly.registry) {
-      // Wait a frame or the color gets reset
-      setTimeout(() => {
-        // In new Blockly, the text input ring color is set by the block category, instead of the colors
-        // so we need to manually recolor it.
-        const fieldInput = getFieldInput(block);
-        if (fieldInput) fieldInput.style.border = "0.9px solid " + colors.colourPrimary;
-      }, 0);
-    } else {
-      // In old Blockly, the background of fields in prototype_declaration aren't colored by the block colors
-      // As theme3 manually edits this color, we have it save the method which determines it's custom color,
-      // so we can manually call it when we recolor the block
-      for (const input of block.inputList) {
-        const declarationFieldBackground = input.fieldRow?.[0]?.box_;
-        if (declarationFieldBackground) {
-          // Try to call editor-theme3's box coloring method on the box
-          // If that doesn't exist or the addon's disabled, use our coloring
-          if (!callSharedMethod("editor-theme3", "updateBox_", declarationFieldBackground).exists) {
-            declarationFieldBackground.setAttribute("fill", colors.colourTertiary);
-          }
-        }
-      }
-    }
+    // Wait a frame or the color gets reset
+    setTimeout(() => {
+      // The text input ring color is set by the block category instead of the colors
+      // so we need to manually recolor it.
+      const fieldInput = getFieldInput(block);
+      if (fieldInput) fieldInput.style.border = "0.9px solid " + colors.colourPrimary;
+    }, 0);
   };
 
   const setBlockColor = (block, colors, isEdited, prefix) => {
@@ -301,32 +269,19 @@ export default async function ({ addon, console }) {
     // Some of procedures_declaration's colorings aren't caught by standard methods
     if (block.type === "procedures_declaration") setDeclarationColor(block, colors, prefix);
 
-    if (Blockly.registry) {
-      // In new Blockly, selected blocks have an additional layer called svgPathSelected, which is a copy of svgPath
-      // svgPathSelected is not currently not colored from the block's colors, and needs to be manually updated
-      const pathSelected = block.pathObject?.svgPathSelected;
-      if (pathSelected) {
-        // If another addon wants to change the coloring, it needs to be done manually here
-        pathSelected.setAttribute("fill", colors.colourPrimary);
-        pathSelected.setAttribute("stroke", colors.colourTertiary);
-      }
-      // Update the block's coloring
-      block.applyColour();
-      // Children block's stroke color is not updated by the parent's update
-      for (const child of block.getChildren()) {
-        child.applyColour();
-      }
-    } else {
-      // Update the block's coloring
-      block.updateColour(this);
-      const isProceduresPrototype = block.type === "procedures_prototype";
-      for (const child of block.getChildren()) {
-        // In old Blockly, procedures_prototype's child's stroke color is set from the parent's color
-        // so we have to manually change it after updating the parent's color
-        isProceduresPrototype && (child.colourTertiary_ = Blockly.Colours[child.getCategory() ?? "more"].tertiary);
-        // One more updateColour to be safe
-        child.updateColour();
-      }
+    // Selected blocks have an additional layer called svgPathSelected, which is a copy of svgPath
+    // svgPathSelected is not currently not colored from the block's colors, and needs to be manually updated
+    const pathSelected = block.pathObject?.svgPathSelected;
+    if (pathSelected) {
+      // If another addon wants to change the coloring, it needs to be done manually here
+      pathSelected.setAttribute("fill", colors.colourPrimary);
+      pathSelected.setAttribute("stroke", colors.colourTertiary);
+    }
+    // Update the block's coloring
+    block.applyColour();
+    // Children block's stroke color is not updated by the parent's update
+    for (const child of block.getChildren()) {
+      child.applyColour();
     }
   };
 
@@ -487,58 +442,33 @@ export default async function ({ addon, console }) {
   };
 
   // This is where the colors saved to block.recolorCustomBlock are used to recolor the block
-  if (Blockly.registry) {
-    const oldApplyColour = Blockly.BlockSvg.prototype.applyColour;
-    Blockly.BlockSvg.prototype.applyColour = function (...args) {
-      if (!this.isInsertionMarker() && this.getStyleName() === "more") {
-        const shouldModifyBlock = this.procCode_ && this.recolorCustomBlock;
-        // If the block has a procCode and has been set to be recolored, recolor it
-        if (shouldModifyBlock) {
-          const color = this.recolorCustomBlock;
-          this.style = {
-            ...this.style,
-            colourPrimary: color.colourPrimary,
-            colourSecondary: color.colourSecondary,
-            colourTertiary: color.colourTertiary,
-            colourQuaternary: color.colourQuaternary,
-          };
-          this.pathObject.setStyle(this.style);
-          // In new Blockly, procedures_prototype's children set their stroke color by the parent's tertiary color
-          // We need to revert this after calling applyColour
-          if (this.type === "procedures_prototype") {
-            const applyColorResult = oldApplyColour.call(this, ...args);
-            this.style.colourTertiary = color.colourTertiary;
-            this.pathObject.svgPath.setAttribute("stroke", color.colourTertiary);
-            return applyColorResult;
-          }
+  const oldApplyColour = Blockly.BlockSvg.prototype.applyColour;
+  Blockly.BlockSvg.prototype.applyColour = function (...args) {
+    if (!this.isInsertionMarker() && this.getStyleName() === "more") {
+      const shouldModifyBlock = this.procCode_ && this.recolorCustomBlock;
+      // If the block has a procCode and has been set to be recolored, recolor it
+      if (shouldModifyBlock) {
+        const color = this.recolorCustomBlock;
+        this.style = {
+          ...this.style,
+          colourPrimary: color.colourPrimary,
+          colourSecondary: color.colourSecondary,
+          colourTertiary: color.colourTertiary,
+          colourQuaternary: color.colourQuaternary,
+        };
+        this.pathObject.setStyle(this.style);
+        // procedures_prototype's children set their stroke color by the parent's tertiary color
+        // We need to revert this after calling applyColour
+        if (this.type === "procedures_prototype") {
+          const applyColorResult = oldApplyColour.call(this, ...args);
+          this.style.colourTertiary = color.colourTertiary;
+          this.pathObject.svgPath.setAttribute("stroke", color.colourTertiary);
+          return applyColorResult;
         }
       }
-      return oldApplyColour.call(this, ...args);
-    };
-  } else {
-    const oldUpdateColour = Blockly.BlockSvg.prototype.updateColour;
-    Blockly.BlockSvg.prototype.updateColour = function (...args) {
-      if (!this.isInsertionMarker() && this.getCategory?.() === null) {
-        const block = this.procCode_ && this.recolorCustomBlock;
-        if (block) {
-          const color = this.recolorCustomBlock;
-          this.colour_ = color.colourPrimary;
-          this.colourSecondary_ = color.colourSecondary;
-          this.colourTertiary_ = color.colourTertiary;
-          this.colourQuaternary_ = color.colourQuaternary;
-          // In old Blockly, procedures_prototype's children set their stroke color by the parent's tertiary color
-          // We need to revert this after calling applyColour
-          if (this.type === "procedures_prototype") {
-            const updateColorResult = oldUpdateColour.call(this, ...args);
-            this.colourTertiary_ = color.colourTertiary;
-            this.svgPath_.setAttribute("stroke", color.colourTertiary);
-            return updateColorResult;
-          }
-        }
-      }
-      return oldUpdateColour.call(this, ...args);
-    };
-  }
+    }
+    return oldApplyColour.call(this, ...args);
+  };
 
   // Method attached to createAllInputs which optionally hides color prefixes and calls for colors to be updated
   const customCreateAllInputs = (oldCreateAllInputs) => {
@@ -559,18 +489,13 @@ export default async function ({ addon, console }) {
   };
   // Pollute procedures_call's and procedures_prototype's createAllInputs_ functions
   for (const fn of ["procedures_call", "procedures_prototype"]) {
-    if (Blockly.registry) {
-      const oldInit = Blockly.Blocks[fn].init;
-      Blockly.Blocks[fn].init = function (...args) {
-        const initResult = oldInit.call(this, ...args);
-        const oldCreateAllInputs = this.createAllInputs_;
-        this.createAllInputs_ = customCreateAllInputs(oldCreateAllInputs);
-        return initResult;
-      };
-    } else {
-      const originalCreateAllInputs = Blockly.Blocks[fn].createAllInputs_;
-      Blockly.Blocks[fn].createAllInputs_ = customCreateAllInputs(originalCreateAllInputs);
-    }
+    const oldInit = Blockly.Blocks[fn].init;
+    Blockly.Blocks[fn].init = function (...args) {
+      const initResult = oldInit.call(this, ...args);
+      const oldCreateAllInputs = this.createAllInputs_;
+      this.createAllInputs_ = customCreateAllInputs(oldCreateAllInputs);
+      return initResult;
+    };
   }
 
   const updateExistingBlocks = () => {
@@ -596,27 +521,25 @@ export default async function ({ addon, console }) {
     }
   };
 
-  // In new Blockly toolbox.refreshTheme doesn't trigger applyColour or initSvg, so we need to apply our changes manually
-  if (Blockly.registry) {
-    const attachRefreshListener = (workspace) => {
-      const toolbox = workspace.getToolbox();
-      if (!toolbox || !toolbox.refreshTheme) return;
-      const oldRefreshTheme = toolbox.refreshTheme;
-      toolbox.refreshTheme = function (...args) {
-        console.warn("refreshCalled called");
+  // toolbox.refreshTheme doesn't trigger applyColour or initSvg, so we need to apply our changes manually
+  const attachRefreshListener = (workspace) => {
+    const toolbox = workspace.getToolbox();
+    if (!toolbox || !toolbox.refreshTheme) return;
+    const oldRefreshTheme = toolbox.refreshTheme;
+    toolbox.refreshTheme = function (...args) {
+      console.warn("refreshCalled called");
 
-        setTimeout(updateExistingBlocks, 0);
-        return oldRefreshTheme.call(this, ...args);
-      };
+      setTimeout(updateExistingBlocks, 0);
+      return oldRefreshTheme.call(this, ...args);
     };
-    const oldThemeManagerSubscribeWorkspace = Blockly.ThemeManager.prototype.subscribeWorkspace;
-    Blockly.ThemeManager.prototype.subscribeWorkspace = function (workspace) {
-      console.warn("subscribe called");
-      setTimeout(attachRefreshListener, 0, workspace);
-      return oldThemeManagerSubscribeWorkspace.call(this, workspace);
-    };
-    attachRefreshListener(addon.tab.traps.getWorkspace());
-  }
+  };
+  const oldThemeManagerSubscribeWorkspace = Blockly.ThemeManager.prototype.subscribeWorkspace;
+  Blockly.ThemeManager.prototype.subscribeWorkspace = function (workspace) {
+    console.warn("subscribe called");
+    setTimeout(attachRefreshListener, 0, workspace);
+    return oldThemeManagerSubscribeWorkspace.call(this, workspace);
+  };
+  attachRefreshListener(addon.tab.traps.getWorkspace());
 
   const enableAddon = () => {
     updateExistingBlocks();

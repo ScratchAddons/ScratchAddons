@@ -26,9 +26,7 @@ export default class UndoGroup {
     const undoStack = workspace.undoStack_;
     const includeLast = workspace._undoGroupIncludeLast;
     delete workspace._undoGroupIncludeLast;
-    // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
-    // https://github.com/scratchfoundation/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
-    // New Blockly uses a setTimeout inside requestAnimationFrame
+    // Events (responsible for undoStack updates) are delayed with a setTimeout inside requestAnimationFrame
     // https://github.com/RaspberryPiFoundation/blockly/blob/39c4b58/packages/blockly/core/events/utils.ts#L112-L114
     requestAnimationFrame(() => {
       setTimeout(() => {
@@ -44,7 +42,7 @@ export default class UndoGroup {
 }
 
 /**
- * https://github.com/scratchfoundation/scratch-blocks/blob/2e3a31e/core/utils.js#L610-L623
+ * https://github.com/RaspberryPiFoundation/blockly/blob/d28e057/packages/blockly/core/utils/idgenerator.ts#L33-L41
  * @returns {string}
  * @private
  */

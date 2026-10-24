@@ -23,10 +23,6 @@
   "dynamicDisable": true,
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["projects"]
-    },
-    {
       "url": "modern-blockly.js",
       "matches": ["projects"]
     }

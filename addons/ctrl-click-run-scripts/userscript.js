@@ -7,20 +7,17 @@ export default async function ({ addon, console }) {
   const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
 
   let ctrlKeyPressed = false;
-  const onMouseDown = function (e) {
-    ctrlKeyPressed = e.ctrlKey || e.metaKey;
-  };
-  document.addEventListener("mousedown", onMouseDown, { capture: true }); // for old Blockly
-  document.addEventListener("pointerdown", onMouseDown, { capture: true }); // for new Blockly
+  document.addEventListener(
+    "pointerdown",
+    function (e) {
+      ctrlKeyPressed = e.ctrlKey || e.metaKey;
+    },
+    { capture: true }
+  );
 
   // Limits all script running to CTRL + click
   const newBlocklyListen = function (e) {
-    if (
-      !addon.self.disabled &&
-      // new Blockly || old Blockly
-      ((e.type === "click" && e.targetType === "block") || e.element === "stackclick") &&
-      !ctrlKeyPressed
-    ) {
+    if (!addon.self.disabled && e.type === "click" && e.targetType === "block" && !ctrlKeyPressed) {
       return;
     } else {
       originalBlocklyListen.call(this, e);

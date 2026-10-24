@@ -32,8 +32,6 @@ export default async function ({ addon, console }) {
   //
   const boldCss = createStyle();
   boldCss.textContent = `
-    .blocklyText,
-    .blocklyHtmlInput,
     .scratch-renderer.default-theme .blocklyText,
     .scratch-renderer.default-theme .blocklyHtmlInput,
     .scratch-renderer.high-contrast-theme .blocklyText,
@@ -45,13 +43,10 @@ export default async function ({ addon, console }) {
   //
   const textShadowCss = createStyle();
   textShadowCss.textContent = `
-    .blocklyDraggable > .blocklyText,
     .blocklyDraggable > g > text,
     .scratch-renderer.default-theme .blocklyEditableField > .blocklyDropdownText {
       text-shadow: 1px 1px 0 var(--editorTheme3-text-shadow, rgba(0, 0, 0, 0.4));
     }
-    div[theme="high-contrast"] .blocklyDraggable > .blocklyText,
-    div[theme="high-contrast"] .blocklyDraggable > g > text,
     .high-contrast-theme .blocklyDraggable > .blocklyText,
     .high-contrast-theme .blocklyDraggable > g > text,
     .scratch-renderer.high-contrast-theme .blocklyEditableField > .blocklyDropdownText {
@@ -75,11 +70,7 @@ export default async function ({ addon, console }) {
   };
 
   const updateBlockly = () => {
-    if (!blocklyInstance.registry) {
-      // old Blockly
-      blocklyInstance.Field.cacheWidths_ = {}; // Clear text width cache
-    }
-    // If font size has changed, middle click popup needs to clear its cache too
+    // If font size has changed, middle click popup needs to clear its cache
     clearTextWidthCache();
 
     updateAllBlocks(addon.tab, { updateRenderer: true });

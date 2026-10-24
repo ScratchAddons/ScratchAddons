@@ -17,7 +17,7 @@ export default async function ({ addon, console }) {
       ["scratch-gui/settings/SET_COLOR_MODE", "scratch-gui/settings/SET_THEME"].includes(e.detail.action.type) &&
       !addon.self.disabled
     ) {
-      // queueMicrotask isn't enough on new Blockly
+      // queueMicrotask isn't enough
       setTimeout(changeBackpackVisibility, 0);
     }
   });

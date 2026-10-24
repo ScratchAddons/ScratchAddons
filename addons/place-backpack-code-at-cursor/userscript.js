@@ -23,8 +23,8 @@ export default async function ({ addon, console }) {
     const { targets } = redux.state.scratchGui.workspaceMetrics;
     const { isRtl } = redux.state.locales;
     const { hScroll, vScroll } = workspace.scrollbar;
-    const hScrollSvg = hScroll.outerSvg || hScroll.outerSvg_; // new Blockly || old Blockly
-    const vScrollSvg = vScroll.outerSvg || vScroll.outerSvg_;
+    const hScrollSvg = hScroll.outerSvg;
+    const vScrollSvg = vScroll.outerSvg;
     const { left, right } = hScrollSvg.getBoundingClientRect();
     const { top } = vScrollSvg.getBoundingClientRect();
 
