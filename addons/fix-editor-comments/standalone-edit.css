@@ -1,7 +1,0 @@
-/* 
- * On comments not attached to blocks, allows direct selection of text instead
- * needing to gain focus first.
- */
-rect.blocklyDraggable.scratchCommentTarget {
-  display: none;
-}
