@@ -314,7 +314,7 @@
       </div>
     </div>
     <modal
-      class="more-settings full-height"
+      class="more-settings modal-full-height modal-full-width"
       :is-open.sync="moreSettingsOpen"
       :title="msg('moreSettings')"
       v-cloak
@@ -375,7 +375,9 @@
               <div class="export-actions-group">
                 <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
                 <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
-                <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
+                <button class="large-button confirm-button hidden-button" id="confirmImport">
+                  {{ msg("confirmImport") }}
+                </button>
               </div>
               <div class="export-actions-group">
                 <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
@@ -404,7 +406,7 @@
               <span>Show addon names and descriptions in English</span>
               <div class="badge red">{{ msg("beta") }}</div>
               <button
-                class="large-button"
+                class="large-button confirm-button"
                 id="applyLanguageSettingsButton"
                 v-show="forceEnglishSetting !== null && forceEnglishSetting !== this.forceEnglishSettingInitial"
                 @click="applyLanguageSettings()"
@@ -437,7 +439,53 @@
         </p>
       </div>
     </modal>
-    <modal v-cloak v-el:permissions>
+    <modal :title="msg('enableConfirmation')" v-cloak v-el:enableaddon>
+      <div class="addon-body" v-if="addonToEnable">
+        <div class="addon-topbar">
+          <div class="clickable-area">
+            <img
+              :src="addonToEnable._iconSrc"
+              :title="addonToEnable._iconAlt"
+              class="icon-type addon-icon"
+              draggable="false"
+            />
+            <!-- prettier-ignore -->
+            <div class="addon-name-and-tags">
+              <div class="addon-name">
+                <span>{{ addonToEnable.name }}</span>
+              </div><!-- no space --><addon-tag v-for="tag of addonToEnable.tags" :tag="tag"></addon-tag>
+            </div>
+          </div>
+        </div>
+        <div class="addon-settings">
+          <span>{{ addonToEnable.description }}</span>
+          <!-- Element from addon-body.html: -->
+          <div v-for="info of addonToEnable.info">
+            <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
+              <img
+                :src="'../../images/icons/' + {
+                  'warning': 'warning.svg',
+                  'notice': 'notice.svg',
+                  'info': 'help.svg',
+                }[info.type || 'info']"
+                :alt="msg({
+                  'warning': 'warningMessage',
+                  'notice': 'noticeMessage',
+                  'info': 'infoMessage',
+                }[info.type || 'info'])"
+                draggable="false"
+              />{{ info.text }}
+            </div>
+          </div>
+          <div class="settings-column"><!-- empty, but still has margins --></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button value="no" @click="closeDialog" class="large-button">{{ msg("cancel") }}</button>
+        <button value="yes" @click="closeDialog" class="large-button danger-button">{{ msg("enableAddon") }}</button>
+      </div>
+    </modal>
+    <modal class="modal-full-width" v-cloak v-el:permissions>
       <div class="permissions-block">
         <h1>{{ msg("enablePermissionsTitle") }}</h1>
         <p>{{ msg("enablePermissionsDescription") }}</p>

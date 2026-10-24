@@ -39,6 +39,14 @@
   vertical-align: middle;
 }
 
+.confirm-button {
+  border-color: var(--orange);
+}
+
+.danger-button {
+  border-color: var(--warning-border);
+}
+
 .icon-button {
   display: flex;
   align-items: center;
