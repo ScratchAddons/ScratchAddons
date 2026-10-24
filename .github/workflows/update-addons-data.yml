@@ -14,11 +14,11 @@ jobs:
 
     steps:
       - name: Generate token
-        uses: tibdex/github-app-token@v2
+        uses: actions/create-github-app-token@v3
         id: generate-token
         with:
-          app_id: ${{ secrets.BOT_APP_ID }}
-          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+          client-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
 
       - name: Invoke workflow
         uses: benc-uk/workflow-dispatch@v1
