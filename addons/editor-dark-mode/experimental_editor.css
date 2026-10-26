@@ -290,6 +290,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="project-title-input_title-field_"]:focus,
 [class*="input_input-form_"],
 [class*="input_input-form_"],
+[class*="context-menu_context-menu_"],
 [class*="context-menu_context-menu-content_"],
 .blocklyWidgetDiv .blocklyMenu,
 [class*="filter_filter_"],
@@ -447,6 +448,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="context-menu_menu-item-danger_"]:hover {
   background-color: hsla(30, 100%, 55%, 1);
 }
+[class*="gui_extension-button-container_"],
 [class*="extension-button_extension-button-container_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="custom-procedures_button-row_"] button[class*="custom-procedures_ok-button_"],
@@ -648,6 +650,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [dir="rtl"] [class*="sound-editor_button-group_"] [class*="sound-editor_button_"]:first-of-type,
 .sa-var-manager td,
 [class*="library-item_library-item_"],
+[class*="context-menu_context-menu_"],
 [class*="context-menu_context-menu-content_"],
 .blocklyWidgetDiv .blocklyMenu,
 .scratchEyedropper,
