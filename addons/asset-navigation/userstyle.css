@@ -1,0 +1,4 @@
+[class*="selector_list-item"] {
+  scroll-margin-bottom: 100px;
+  scroll-margin-top: 10px;
+}
