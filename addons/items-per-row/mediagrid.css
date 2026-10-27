@@ -58,13 +58,18 @@
   height: auto;
   aspect-ratio: 17 / 10;
 }
-.user.thumb img {
+.media-grid .user.thumb.item .avatar-wrapper {
   width: calc(100% - 7px);
+  height: auto;
+  aspect-ratio: 30 / 41;
+}
+.user.thumb img {
+  width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
 }
 
-.items-per-row-users-min15 .user.thumb img {
+.items-per-row-users-min15 .user.thumb.item .avatar-wrapper {
   width: calc(100% - 2px);
   margin-bottom: 1px;
 }
