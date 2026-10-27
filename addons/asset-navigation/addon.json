@@ -1,0 +1,27 @@
+{
+  "name": "Costume/sound list keyboard navigation",
+  "description": "Use the PgUp, PgDown, Home, and End keys to navigate the costume/sound list.",
+  "tags": ["editor", "costumeEditor"],
+  "credits": [
+    {
+      "name": "mysinginmonsters",
+      "link": "https://scratch.mit.edu/users/mysinginmonsters/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false,
+  "versionAdded": "1.46.0"
+}
