@@ -20,7 +20,7 @@ export default class ShadePicker extends EventTarget {
   }
 
   createElements(defaultColor) {
-    // create the color picker element and all it's child elements
+    // create the color picker element and all its child elements
     const addon = this.addon;
     const msg = this.msg;
 
@@ -63,8 +63,8 @@ export default class ShadePicker extends EventTarget {
           y: parseFloat(this.handle.style.top),
         };
       } else {
-        // Drag started outside handle
-        // Move handle to mouse position first
+        // drag started outside handle
+        // move handle to mouse position first
         this.originalHandlePos = {
           x: Math.min(Math.max(e.clientX - this.slider.getBoundingClientRect().x - SLIDER_PADDING, 0), SLIDER_SIZE),
           y: Math.min(Math.max(e.clientY - this.slider.getBoundingClientRect().y - SLIDER_PADDING, 0), SLIDER_SIZE),
