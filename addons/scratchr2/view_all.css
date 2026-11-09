@@ -48,11 +48,14 @@ body,
 }
 .media-grid .thumb img {
   width: 100%;
+}
+.media-grid .thumb img:not(.avatar-badge) {
   border: none;
 }
-.media-grid .user.thumb img {
-  height: auto;
-  aspect-ratio: 1/1;
+.media-grid .user.thumb.item .avatar-wrapper {
+  margin: 3px;
+  margin-bottom: 0;
+  width: calc(100% - 6px);
 }
 .gallery.thumb span.image {
   vertical-align: middle;
@@ -66,9 +69,6 @@ body,
 }
 .gallery.thumb .stats {
   display: none;
-}
-.user.thumb img {
-  margin: 0;
 }
 .media-grid span.title,
 .media-grid span.owner {

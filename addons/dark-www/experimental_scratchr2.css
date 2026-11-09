@@ -484,11 +484,11 @@ input.link.black:active,
   border-color: var(--darkWww-border);
 }
 .sa-collapse-footer #footer,
-.thumb img,
+.thumb img:not(.avatar-badge),
 .djangobb blockquote,
 .media-list li,
 .media-item-content .media-thumb img,
-.slider-carousel .thumb img,
+.slider-carousel .thumb img:not(.avatar-badge),
 #comments #comments-enabled-box,
 .table td,
 #comments .sa-emoji-picker,
