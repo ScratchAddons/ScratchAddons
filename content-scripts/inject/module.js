@@ -35,7 +35,9 @@ const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
 const comlinkIframe2 = document.getElementById("scratchaddons-iframe-2");
 const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
 const comlinkIframe4 = document.getElementById("scratchaddons-iframe-4");
-const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
+const _cs_ = Comlink.wrap(
+  Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow, location.origin)
+);
 
 const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 
@@ -127,7 +129,11 @@ const page = {
     scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh(refreshFnOnce));
   },
 };
-Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
+Comlink.expose(
+  page,
+  Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow, location.origin),
+  [location.origin]
+);
 
 class SharedObserver {
   constructor() {
