@@ -75,6 +75,11 @@
     "year": "2016",
     "fullname": "Massachusetts Institute of Technology"
   },
+  "gif.js": {
+    "license": "MIT",
+    "year": "2013",
+    "fullname": "Johan Nordberg"
+  },
   "scratch-vm": {
     "license": "BSD-3-Clause",
     "year": "2016",
