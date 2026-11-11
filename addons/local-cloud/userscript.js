@@ -89,7 +89,11 @@ export default async function ({ addon, console, msg }) {
       return; // VM not available yet: no cloud connection can exist yet either
     }
     if (connection instanceof LocalCloudWebSocket || !(connection instanceof NativeWebSocket)) return;
-    if (connection.readyState === NativeWebSocket.CONNECTING || connection.readyState === NativeWebSocket.OPEN) {
+    if (connection.readyState === NativeWebSocket.OPEN) {
+      // Anything Scratch sent over this connection already reached the real server.
+      console.warn(msg("connected-before-start"));
+      connection.close();
+    } else if (connection.readyState === NativeWebSocket.CONNECTING) {
       connection.close();
     }
   };
