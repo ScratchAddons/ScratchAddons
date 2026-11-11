@@ -1,5 +1,5 @@
 import { createLocalCloudWebSocketClass, isCloudUrl } from "./fake-socket.js";
-import { LocalCloudConnection, STORAGE_PREFIX, parseEntry } from "./local-server.js";
+import { LocalCloudConnection, STORAGE_PREFIX, parseEntry, storageKey } from "./local-server.js";
 import { MAX_VALUE_LENGTH } from "./rules.js";
 
 export default async function ({ addon, console, msg }) {
@@ -105,4 +105,41 @@ export default async function ({ addon, console, msg }) {
   addon.self.addEventListener("reenabled", kickNativeCloudConnection);
 
   kickNativeCloudConnection();
+
+  // Badge next to the stop button: shows that the local cloud is active and
+  // resets this project's local values on click.
+  const currentProjectId = () => {
+    const connected = [...open].reverse().find((entry) => entry.conn.projectId);
+    return connected?.conn.projectId ?? location.pathname.match(/\/projects\/(\d+)/)?.[1] ?? null;
+  };
+  const resetProject = (projectId) => {
+    const prefix = storageKey(projectId, "");
+    try {
+      const keys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith(prefix)) keys.push(key);
+      }
+      for (const key of keys) localStorage.removeItem(key);
+    } catch {
+      console.warn(msg("storage-error"));
+    }
+  };
+  const badge = document.createElement("button");
+  badge.className = "sa-local-cloud-badge";
+  badge.textContent = msg("badge");
+  badge.title = msg("badge-tooltip");
+  badge.addEventListener("click", () => {
+    const projectId = currentProjectId();
+    if (projectId && confirm(msg("confirm-reset"))) resetProject(projectId);
+  });
+  addon.tab.displayNoneWhileDisabled(badge);
+
+  while (true) {
+    await addon.tab.waitForElement('[class*="controls_controls-container"]', {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
+    addon.tab.appendToSharedSpace({ space: "afterStopButton", element: badge, order: 10 });
+  }
 }
