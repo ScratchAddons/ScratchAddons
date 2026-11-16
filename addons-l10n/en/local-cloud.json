@@ -1,0 +1,11 @@
+{
+  "local-cloud/dropped": "{name} = {value} was dropped ({reason}). Other tabs won't see it, just like on Scratch.",
+  "local-cloud/reason-numbers": "only numbers are allowed",
+  "local-cloud/reason-length": "longer than {max} characters",
+  "local-cloud/reason-type": "not a finite number or text",
+  "local-cloud/storage-error": "Local cloud could not use this browser's storage. Cloud variables are disconnected.",
+  "local-cloud/badge": "Local cloud",
+  "local-cloud/badge-tooltip": "Cloud variables only sync between tabs in this browser. Click to reset this project's local values.",
+  "local-cloud/confirm-reset": "Reset all local cloud values of this project? Tabs that are already open keep their current values until they are reloaded.",
+  "local-cloud/connected-before-start": "This project was already connected to Scratch's cloud before Local cloud started. Values sent before this point may have reached the real cloud."
+}
