@@ -133,9 +133,13 @@ export default async function ({ addon, console, msg }) {
   badge.className = "sa-local-cloud-badge";
   badge.textContent = msg("badge");
   badge.title = msg("badge-tooltip");
-  badge.addEventListener("click", () => {
+  badge.addEventListener("click", async () => {
     const projectId = currentProjectId();
-    if (projectId && confirm(msg("confirm-reset"))) resetProject(projectId);
+    if (!projectId) return;
+    // addon.tab.confirm uses scratchClass, which requires this (the script runs before it is ready).
+    await addon.tab.scratchClassReady();
+    const confirmed = await addon.tab.confirm(msg("badge"), msg("confirm-reset"), { useEditorClasses: true });
+    if (confirmed) resetProject(projectId);
   });
   addon.tab.displayNoneWhileDisabled(badge);
 

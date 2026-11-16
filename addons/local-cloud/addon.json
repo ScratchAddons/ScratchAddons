@@ -30,7 +30,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "tags": ["editor"],
+  "tags": ["editor", "player"],
   "versionAdded": "1.46.0",
   "enabledByDefault": false
 }
