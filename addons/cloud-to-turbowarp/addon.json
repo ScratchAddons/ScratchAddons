@@ -1,0 +1,33 @@
+{
+  "name": "Cloud variables → TurboWarp",
+  "description": "Redirects cloud variable connections from Scratch's servers to TurboWarp's cloud servers. This allows projects with cloud variables to use TurboWarp's faster and more reliable cloud infrastructure.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "This redirects your cloud variable WebSocket connections to TurboWarp's servers. TurboWarp has separate cloud data, so values will not match Scratch's cloud variables.",
+      "id": "separateCloudData"
+    },
+    {
+      "type": "info",
+      "text": "TurboWarp's cloud servers support the same protocol as Scratch but are faster and have higher rate limits. Your Scratch username is sent to TurboWarp for identification.",
+      "id": "turboWarpInfo"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Ash-Luigi",
+      "link": "https://scratch.mit.edu/users/Ash-Luigi/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "versionAdded": "1.40.0",
+  "tags": ["community", "projectPage"],
+  "enabledByDefault": false
+}

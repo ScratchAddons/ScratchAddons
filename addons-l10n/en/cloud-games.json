@@ -14,5 +14,6 @@
   "cloud-games/add-studio": "Add this studio",
   "cloud-games/add-studio-desc": "Click to add the studio from the current tab to the list.",
   "cloud-games/added": "Added!",
-  "cloud-games/fetch-error": "Could not load cloud data for this project:"
+  "cloud-games/fetch-error": "Could not load cloud data for this project:",
+  "cloud-games/turbo-warp-banner": "Games data is from Scratch servers (Cloud variables → TurboWarp is active)"
 }
