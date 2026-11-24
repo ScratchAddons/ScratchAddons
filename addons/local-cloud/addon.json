@@ -1,0 +1,36 @@
+{
+  "name": "Local cloud",
+  "description": "Replaces cloud variables with a local copy that only syncs between tabs in this browser, so cloud projects can be tested without touching the real cloud data.",
+  "credits": [
+    {
+      "name": "EinFabo",
+      "link": "https://github.com/EinFabo"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Log dropped values to the console",
+      "id": "log-dropped",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["editor", "player"],
+  "versionAdded": "1.46.0",
+  "enabledByDefault": false
+}

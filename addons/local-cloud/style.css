@@ -1,0 +1,19 @@
+.sa-local-cloud-badge {
+  align-self: center;
+  margin-left: 0.5rem;
+  padding: 0 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.sa-local-cloud-badge:hover {
+  opacity: 1;
+}
