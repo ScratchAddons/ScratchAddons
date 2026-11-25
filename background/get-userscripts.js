@@ -1,6 +1,7 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
 import { setUserAsActive } from "./imports/inactivity.js";
+import { isTrustedOrigin, guestUser } from "./imports/trust-manager.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
@@ -174,7 +175,7 @@ async function getAddonData({ addonId, manifest, url }) {
   return { userscripts, userstyles, cssVariables: manifest.customCssVariables || [] };
 }
 
-async function getContentScriptInfo(url) {
+async function getContentScriptInfo(url, trust) {
   const data = {
     url,
     httpStatusCode: null, // Set by webRequest onResponseStarted listener
@@ -208,7 +209,12 @@ async function getContentScriptInfo(url) {
   await Promise.all(promises);
   data.globalState = scratchAddons.globalState._target;
 
-  return data;
+  if (trust) {
+    return data;
+  } else {
+    // Request came from an untrusted location, so don't include account data
+    return { ...data, globalState: { ...data.globalState, auth: guestUser } };
+  }
 }
 
 function createCsIdentity({ tabId, frameId, url }) {
@@ -226,10 +232,13 @@ chrome.webRequest.onBeforeRequest.addListener(
   async (request) => {
     setUserAsActive();
     if (!scratchAddons.localState.allReady) return;
+
+    const isTrustedRequest = isTrustedOrigin(request.url);
+
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
     const loadingObj = { loading: true };
     csInfoCache.set(identity, loadingObj);
-    const info = await getContentScriptInfo(request.url);
+    const info = await getContentScriptInfo(request.url, isTrustedRequest);
     if (csInfoCache.get(identity) !== loadingObj) {
       // Another content script with same identity took our
       // place in the csInfoCache map while the promise resolved
@@ -279,11 +288,17 @@ chrome.webRequest.onResponseStarted.addListener(
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (!request.contentScriptReady) return;
+  // This URL is what userscripts and userstyles are matched against.
+  // It may be a pseudo-URL.
+  const matchUrl = request.contentScriptReady.url;
+  // For security purposes, sender.url is the URL which the request actually came from.
+  const isTrustedRequest = isTrustedOrigin(sender.url);
+
   if (scratchAddons.localState.allReady) {
     const identity = createCsIdentity({
       tabId: sender.tab.id,
       frameId: sender.frameId,
-      url: request.contentScriptReady.url,
+      url: matchUrl,
     });
     const getCacheEntry = () => csInfoCache.get(identity);
     let cacheEntry = getCacheEntry();
@@ -305,7 +320,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         csInfoCache.delete(identity);
       }
     } else {
-      getContentScriptInfo(request.contentScriptReady.url).then((info) => {
+      getContentScriptInfo(matchUrl, isTrustedRequest).then((info) => {
         sendResponse(info);
       });
       return true;
@@ -315,7 +330,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     scratchAddons.localEvents.addEventListener(
       "ready",
       async () => {
-        const info = await getContentScriptInfo(request.contentScriptReady.url);
+        const info = await getContentScriptInfo(matchUrl, isTrustedRequest);
         sendResponse(info);
       },
       { once: true }
