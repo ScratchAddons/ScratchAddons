@@ -1,3 +1,16 @@
+/* Enable this addon? menu */
+dialog .clickable-area {
+  margin-inline-start: 7px;
+  cursor: auto;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+/* More Settings menu */
 .footer {
   text-align: center;
   color: var(--gray-text);
@@ -7,22 +20,16 @@
   color: var(--gray-text);
 }
 .settings-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin: 0 -20px;
   padding: 10px 20px; /* prevents shadows from being cut off */
   overflow-y: auto;
 }
-.more-settings .filter-selector {
-  margin: 0;
-}
-.more-settings .addon-body,
+.more-settings .filter-selector,
 .more-settings .addon-setting {
   margin-inline: 0;
-}
-.more-settings .addon-body:first-child {
-  margin-top: 0;
-}
-.more-settings .addon-body:last-child {
-  margin-bottom: 0;
 }
 .more-settings .addon-topbar {
   min-height: 36px;

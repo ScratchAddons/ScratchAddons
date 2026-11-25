@@ -18,28 +18,6 @@ export default async function ({ template }) {
       shouldShow() {
         return this.visible && (this.$root.searchInput === "" ? this.groupExpanded : true);
       },
-      addonIconSrc() {
-        const map = {
-          editor: "puzzle",
-          player: "player",
-          community: "web",
-          theme: "brush",
-          easterEgg: "egg-easter",
-          popup: "popup",
-        };
-        return `../../images/icons/${map[this.addon._icon]}.svg`;
-      },
-      addonIconAlt() {
-        const map = {
-          editor: "editorFeature",
-          player: "playerFeature",
-          community: "websiteFeature",
-          theme: "themeAddon",
-          easterEgg: "easterEgg",
-          popup: "popupFeature",
-        };
-        return chrome.i18n.getMessage(map[this.addon._icon]);
-      },
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];
       },
@@ -151,17 +129,30 @@ export default async function ({ template }) {
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
         };
+        const toggleSwitch = event.target;
+
+        // Confirmation for enabling dangerous addons
+        if (event.isTrusted && !this.addon._enabled && this.addon.tags.includes("danger")) {
+          event.preventDefault();
+          const dialog = this.$root.$els.enableaddon;
+          this.$root.addonToEnable = this.addon;
+          dialog.returnValue = null;
+          dialog.showModal();
+          dialog.addEventListener(
+            "close",
+            () => {
+              if (dialog.returnValue === "yes") {
+                toggleSwitch.click(); // Re-runs the function
+              }
+            },
+            { once: true }
+          );
+          return;
+        }
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>
           this.$root.browserLevelPermissions.includes(value)
         );
-        if (!this.addon._enabled && this.addon.tags.includes("danger")) {
-          const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
-          if (!confirmation) {
-            event.preventDefault();
-            return;
-          }
-        }
         if (!this.addon._enabled && requiredPermissions.length) {
           const result = requiredPermissions.every((p) => this.$root.grantedOptionalPermissions.includes(p));
           if (result === false) {
