@@ -40,16 +40,16 @@
       "type": "select",
       "potentialValues": [
         {
-          "id": "short",
-          "name": "Quick"
+          "id": "long",
+          "name": "Slow"
         },
         {
           "id": "default",
-          "name": "Default"
+          "name": "Normal"
         },
         {
-          "id": "long",
-          "name": "Slow"
+          "id": "short",
+          "name": "Fast"
         }
       ],
       "default": "default"
