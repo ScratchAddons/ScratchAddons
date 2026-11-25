@@ -52,6 +52,54 @@ export default async function ({ addon, console }) {
       linkifyTextNode(desc);
       break;
     }
+
+    case "messages":
+      while (true) {
+        const message = await addon.tab.waitForElement(".comment-text p", { markAsSeen: true });
+
+        if (message.textContent.length === 250) {
+          console.log(message);
+          // The message is truncated (unless it happens to be ecxactly 250 characters long), and so links may break. We now fetch the rest of the text for link making
+
+          const username = await addon.auth.fetchUsername();
+
+          const messageInfo = message.parentElement.parentElement.parentElement.firstChild;
+          const link = messageInfo.querySelector("a:not(.social-messages-profile-link)").href;
+
+          async function getContentFromResponse(response, message) {
+            const blob = await response.blob();
+            const usableResponse = JSON.parse(await blob.text());
+
+            // Yes, using innerHTML here, this is so the browser can handle things like &apos; for a comma
+            message.innerHTML = usableResponse.content;
+          }
+
+          if (link.includes("projects")) {
+            const regex = /\/projects\/(\d+)\/#comments-(\d+)/;
+            const match = link.match(regex);
+
+            const projectId = match[1];
+            const commentId = match[2];
+
+            const response = await fetch(
+              `https://api.scratch.mit.edu/users/${username}/projects/${projectId}/comments/${commentId}`
+            );
+
+            await getContentFromResponse(response, message);
+          } else if (link.includes("studios")) {
+            const regex = /\/studios\/(\d+)\/comments\/#comments-(\d+)/;
+            const match = link.match(regex);
+
+            const studioId = match[1];
+            const commentId = match[2];
+
+            const response = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/comments/${commentId}`);
+
+            await getContentFromResponse(response, message);
+          }
+        }
+        linkifyTextNode(message);
+      }
   }
 
   (async () => {
