@@ -1,0 +1,25 @@
+.project.thumb img {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
+}
+
+.gallery.thumb span.image {
+  border-radius: calc(
+    (var(--roundedThumbs-roundSize) * 1px + 6px) * (var(--roundedThumbs-roundSize) / var(--roundedThumbs-roundSize))
+  );
+}
+
+#profile-box .player,
+.media-grid .thumb,
+.gallery.thumb span.image img {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
+}
+
+.media-grid .gallery.thumb.item {
+  border-radius: calc(
+    (var(--roundedThumbs-roundSize) * 1px + 6px) * (var(--roundedThumbs-roundSize) / var(--roundedThumbs-roundSize))
+  );
+}
+
+#profile-box .player .stage img {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px) !important;
+}
