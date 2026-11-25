@@ -6,29 +6,34 @@
           <img src="../../images/icons/expand.svg" :class="{'reverted': expanded}" draggable="false" />
         </button>
         <img :src="addonIconSrc" :title="addonIconAlt" class="icon-type addon-icon" draggable="false" />
+        <div class="addon-name-and-tags" v-if="isPlaceholder">
+          <div class="addon-name tooltip"><span></span></div>
+        </div>
         <!-- prettier-ignore -->
-        <div class="addon-name-and-tags">
+        <div class="addon-name-and-tags" v-else>
           <div class="addon-name tooltip">
             <span>{{ addon.name }}</span>
             <span v-if="devMode" class="tooltiptext tooltiptexttop">{{ addon._addonId }}</span>
           </div><!-- no space --><addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
         </div>
       </div>
-      <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
-      <div class="addon-check">
-        <div v-show="expanded && addon._enabled" v-if="addon.settings" class="split-button dropdown-parent">
-          <button class="icon-button split-button-button" title="{{ msg('resetToDefault') }}" @click="loadDefaults">
-            <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
-          </button>
-          <dropdown button-class="icon-button split-button-dropdown" :button-title="msg('importExport')">
-            <li role="menuitem" tabindex="0" @click="exportPreset">{{ msg('export') }}</li>
-            <li role="menuitem" tabindex="0" @click="importPreset">{{ msg('import') }}</li>
-          </dropdown>
+      <template v-if="everWithinView">
+        <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
+        <div class="addon-check">
+          <div v-show="expanded && addon._enabled" v-if="addon.settings" class="split-button dropdown-parent">
+            <button class="icon-button split-button-button" title="{{ msg('resetToDefault') }}" @click="loadDefaults">
+              <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" />
+            </button>
+            <dropdown button-class="icon-button split-button-dropdown" :button-title="msg('importExport')">
+              <li role="menuitem" tabindex="0" @click="exportPreset">{{ msg('export') }}</li>
+              <li role="menuitem" tabindex="0" @click="importPreset">{{ msg('import') }}</li>
+            </dropdown>
+          </div>
+          <input type="checkbox" class="switch" v-model="addon._enabled" @click="toggleAddonRequest" />
         </div>
-        <input type="checkbox" class="switch" v-model="addon._enabled" @click="toggleAddonRequest" />
-      </div>
+      </template>
     </div>
-    <div class="addon-settings" v-if="everExpanded" v-show="expanded">
+    <div class="addon-settings" v-if="everWithinView && everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
       <div class="addon-message addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
