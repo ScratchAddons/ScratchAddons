@@ -125,7 +125,11 @@ export const setPaused = (_paused) => {
     if (!vm.runtime.ioDevices.clock._paused) {
       vm.runtime.ioDevices.clock.pause();
     }
-    vm.runtime.threads.forEach(pauseThread);
+    for (const thread of vm.runtime.threads) {
+      if (!canDeleteThreadBeforeEndOfTick(thread)) {
+        pauseThread(thread);
+      }
+    }
 
     const activeThread = vm.runtime.sequencer.activeThread;
     if (activeThread) {
@@ -290,6 +294,20 @@ export const isThreadStopped = (thread) => {
   return false;
 };
 
+const canDeleteThreadBeforeEndOfTick = (thread) => {
+  if (!isThreadStopped(thread)) {
+    // it is still running
+    return false;
+  }
+  const hatBlock = thread.target?.blocks?._blocks?.[thread.topBlock];
+  const hatInfo = vm.runtime._hats[hatBlock?.opcode];
+  if (hatInfo?.restartExistingThreads) {
+    // it might be restarted in-place by a broadcast block or something
+    return false;
+  }
+  return true;
+};
+
 const getThreadIndex = (thread) => {
   // We can't use vm.runtime.threads.indexOf(thread) because threads can be restarted.
   // This can happens when, for example, a "when I receive message1" script broadcasts message1.
@@ -429,7 +447,9 @@ export const setup = (addon) => {
       }
       const newThreads = originalStartHats.apply(this, args);
       for (const thread of newThreads) {
-        pauseThread(thread);
+        if (!canDeleteThreadBeforeEndOfTick(thread)) {
+          pauseThread(thread);
+        }
       }
       return newThreads;
     } else if (paused && !isUserInitiated) {
