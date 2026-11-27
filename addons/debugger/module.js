@@ -512,8 +512,14 @@ export const setup = (addon) => {
   // Save the thread list at "stop all" blocks to let stepping through the rest of them like the sequencer would do.
   // Can't do this earlier, because we wouldn't get the hat blocks started later in the tick, as the runtime replaces its thread list with a clone in each tick
   vm.runtime.on("PROJECT_STOP_ALL", function () {
-    if (blocksAreRunning && !savedThreadList) {
-      savedThreadList = vm.runtime.threads;
+    if (blocksAreRunning) {
+      if (!savedThreadList) {
+        savedThreadList = vm.runtime.threads;
+      }
+    } else {
+      // let stopping completely using the stop sign
+      savedThreadList = null;
+      steppingThread = null;
     }
   });
 
