@@ -310,9 +310,24 @@ export const singleStep = () => {
 
   // If we don't have a thread, than we are between VM steps and should search for a new thread
   if (!steppingThread) {
-    setSteppingThread(findNewSteppingThread(0));
+    // End of VM step.
 
-    // End of VM step, emulate one frame of time passing.
+    // Try to run edge activated hats
+    // Do this before incrementing the timer, to prevent breaking "when timer > (variable set to timer in last frame)"
+    pauseNewThreads = true;
+
+    const hats = vm.runtime._hats;
+    for (const hatType in hats) {
+      if (!Object.prototype.hasOwnProperty.call(hats, hatType)) continue;
+      const hat = hats[hatType];
+      if (hat.edgeActivated) {
+        vm.runtime.startHats(hatType);
+      }
+    }
+
+    pauseNewThreads = false;
+
+    // Emulate one frame of time passing.
     vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
     // Skip all sounds forward by vm.runtime.currentStepTime milliseconds so it's as
     //  if they where playing for one frame.
@@ -338,19 +353,8 @@ export const singleStep = () => {
       }
     }
 
-    // Try to run edge activated hats
-    pauseNewThreads = true;
-
-    const hats = vm.runtime._hats;
-    for (const hatType in hats) {
-      if (!Object.prototype.hasOwnProperty.call(hats, hatType)) continue;
-      const hat = hats[hatType];
-      if (hat.edgeActivated) {
-        vm.runtime.startHats(hatType);
-      }
-    }
-
-    pauseNewThreads = false;
+    // Select thread after starting hats, so that the new threads can also be selected
+    setSteppingThread(findNewSteppingThread(0));
   }
 
   eventTarget.dispatchEvent(new CustomEvent("step"));
