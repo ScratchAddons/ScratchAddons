@@ -17,7 +17,7 @@ let deletedClones = new WeakSet();
 let steppingThread = null;
 
 let savedThreadList = null;
-const getSteppingThreads = () => savedThreadList || vm.runtime.threads;
+export const getSteppingThreads = () => savedThreadList || vm.runtime.threads;
 
 const eventTarget = new EventTarget();
 

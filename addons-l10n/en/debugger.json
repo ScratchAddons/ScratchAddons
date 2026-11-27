@@ -7,6 +7,7 @@
   "debugger/step": "Step",
   "debugger/thread": "Thread {id}",
   "debugger/thread-stopped": "(stopped)",
+  "debugger/stop-all-separator": "-- stop all --",
   "debugger/enter-format": "Enter export format:",
   "debugger/unpause": "Resume",
   "debugger/unknown-sprite": "(unknown sprite)",
