@@ -276,7 +276,7 @@ const getRealStatus = (thread) => {
   return thread.status;
 };
 
-const isThreadStopped = (thread) => {
+export const isThreadStopped = (thread) => {
   if (thread.stack.length === 0 || (thread.stack.length === 1 && thread.stack[0] === fakeBlockIDtoPreventDespawning)) {
     // Stack is empty (or would be empty if it wasn't paused)
     return true;

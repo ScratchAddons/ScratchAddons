@@ -1,4 +1,4 @@
-import { onPauseChanged, isPaused, singleStep, onSingleStep, getRunningThread } from "./module.js";
+import { onPauseChanged, isPaused, singleStep, onSingleStep, getRunningThread, isThreadStopped } from "./module.js";
 import LogView from "./log-view.js";
 import Highlighter from "../editor-stepping/highlighter.js";
 
@@ -60,6 +60,13 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       if (preview) {
         root.appendChild(preview);
       }
+    }
+
+    if (row.type === "thread-stopped") {
+      const div = document.createElement("div");
+      div.textContent = msg("thread-stopped");
+      div.className = "sa-debugger-thread-stopped";
+      root.appendChild(div);
     }
 
     if (row.targetId && row.blockId) {
@@ -168,6 +175,13 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
             concatInPlace(result, createBlockInfo(block, i));
           }
         }
+      }
+
+      if (isThreadStopped(thread)) {
+        result.push({
+          type: "thread-stopped",
+          depth,
+        });
       }
 
       return result;
