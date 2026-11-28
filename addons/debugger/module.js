@@ -159,98 +159,98 @@ const singleStepThread = (thread) => {
   pauseNewThreads = true;
 
   try {
-  if (thread.status === STATUS_DONE || thread.status === STATUS_PROMISE_WAIT) {
-    return false;
-  }
-
-  const currentBlockId = thread.peekStack();
-  if (!currentBlockId) {
-    thread.popStack();
-
-    if (thread.stack.length === 0) {
-      thread.status = STATUS_DONE;
-      return false;
-    }
-  }
-
-  vm.runtime.sequencer.activeThread = thread;
-
-  /*
-    We need to call execute(this, thread) like the original sequencer. We don't
-    have access to that method, so we need to force the original stepThread to run
-    execute for us then exit before it tries to run more blocks.
-    So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
-    https://github.com/scratchfoundation/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
-    will end the function early. We then have to set it back to normal afterward.
-
-    Why are we here just to suffer?
-  */
-  const specialError = ["special error used by Scratch Addons for implementing single-stepping"];
-  Object.defineProperty(thread, "blockGlowInFrame", {
-    set(_block) {
-      throw specialError;
-    },
-  });
-
-  try {
-    thread.status = STATUS_RUNNING;
-
-    // Restart the warp timer on each step.
-    // If we don't do this, Scratch will think a lot of time has passed and may yield this thread.
-    if (thread.warpTimer) {
-      thread.warpTimer.start();
-    }
-
-    try {
-      vm.runtime.sequencer.stepThread(thread);
-    } catch (err) {
-      if (err !== specialError) throw err;
-    }
-
-    // in case a breakpoint was triggered
-    unpauseThread(thread);
-
-    if (thread.status !== STATUS_RUNNING) {
+    if (thread.status === STATUS_DONE || thread.status === STATUS_PROMISE_WAIT) {
       return false;
     }
 
-    if (thread.peekStack() === currentBlockId) {
-      thread.goToNextBlock();
-    }
-
-    while (!thread.peekStack()) {
+    const currentBlockId = thread.peekStack();
+    if (!currentBlockId) {
       thread.popStack();
 
       if (thread.stack.length === 0) {
         thread.status = STATUS_DONE;
         return false;
       }
+    }
 
-      const stackFrame = thread.peekStackFrame();
+    vm.runtime.sequencer.activeThread = thread;
 
-      if (stackFrame.isLoop) {
-        if (thread.peekStackFrame().warpMode) {
-          continue;
-        } else {
-          return false;
-        }
-      } else if (stackFrame.waitingReporter) {
+    /*
+      We need to call execute(this, thread) like the original sequencer. We don't
+      have access to that method, so we need to force the original stepThread to run
+      execute for us then exit before it tries to run more blocks.
+      So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
+      https://github.com/scratchfoundation/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
+      will end the function early. We then have to set it back to normal afterward.
+
+      Why are we here just to suffer?
+    */
+    const specialError = ["special error used by Scratch Addons for implementing single-stepping"];
+    Object.defineProperty(thread, "blockGlowInFrame", {
+      set(_block) {
+        throw specialError;
+      },
+    });
+
+    try {
+      thread.status = STATUS_RUNNING;
+
+      // Restart the warp timer on each step.
+      // If we don't do this, Scratch will think a lot of time has passed and may yield this thread.
+      if (thread.warpTimer) {
+        thread.warpTimer.start();
+      }
+
+      try {
+        vm.runtime.sequencer.stepThread(thread);
+      } catch (err) {
+        if (err !== specialError) throw err;
+      }
+
+      // in case a breakpoint was triggered
+      unpauseThread(thread);
+
+      if (thread.status !== STATUS_RUNNING) {
         return false;
       }
 
-      thread.goToNextBlock();
-    }
+      if (thread.peekStack() === currentBlockId) {
+        thread.goToNextBlock();
+      }
 
-    return true;
-  } finally {
-    vm.runtime.sequencer.activeThread = null;
-    Object.defineProperty(thread, "blockGlowInFrame", {
-      value: currentBlockId,
-      configurable: true,
-      enumerable: true,
-      writable: true,
-    });
-  }
+      while (!thread.peekStack()) {
+        thread.popStack();
+
+        if (thread.stack.length === 0) {
+          thread.status = STATUS_DONE;
+          return false;
+        }
+
+        const stackFrame = thread.peekStackFrame();
+
+        if (stackFrame.isLoop) {
+          if (thread.peekStackFrame().warpMode) {
+            continue;
+          } else {
+            return false;
+          }
+        } else if (stackFrame.waitingReporter) {
+          return false;
+        }
+
+        thread.goToNextBlock();
+      }
+
+      return true;
+    } finally {
+      vm.runtime.sequencer.activeThread = null;
+      Object.defineProperty(thread, "blockGlowInFrame", {
+        value: currentBlockId,
+        configurable: true,
+        enumerable: true,
+        writable: true,
+      });
+    }
   } finally {
     pauseNewThreads = false;
     pauseThread(thread);
