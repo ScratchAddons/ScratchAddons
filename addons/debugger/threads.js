@@ -1,4 +1,12 @@
-import { onPauseChanged, isPaused, singleStep, onSingleStep, getRunningThread } from "./module.js";
+import {
+  onPauseChanged,
+  isPaused,
+  singleStep,
+  onSingleStep,
+  getRunningThread,
+  getSteppingThreads,
+  isThreadStopped,
+} from "./module.js";
 import LogView from "./log-view.js";
 import Highlighter from "../editor-stepping/highlighter.js";
 
@@ -27,13 +35,13 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     const root = document.createElement("div");
     root.className = "sa-debugger-log";
 
-    const isHeader = row.type === "thread-header";
+    const isHeader = row.type === "thread-header" || row.type === "stop-all-separator";
     const indenter = document.createElement("div");
     indenter.className = "sa-debugger-thread-indent";
     indenter.style.setProperty("--level", isHeader ? row.depth : row.depth + 1);
     root.appendChild(indenter);
 
-    if (isHeader) {
+    if (row.type === "thread-header") {
       root.classList.add("sa-debugger-thread-title");
 
       if (row.depth > 0) {
@@ -60,6 +68,20 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       if (preview) {
         root.appendChild(preview);
       }
+    }
+
+    if (row.type === "thread-stopped") {
+      const div = document.createElement("div");
+      div.textContent = msg("thread-stopped");
+      div.className = "sa-debugger-thread-stopped";
+      root.appendChild(div);
+    }
+
+    if (row.type === "stop-all-separator") {
+      const div = document.createElement("div");
+      div.textContent = msg("stop-all-separator");
+      div.className = "sa-debugger-stop-all-separator";
+      root.appendChild(div);
     }
 
     if (row.targetId && row.blockId) {
@@ -93,7 +115,6 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     }
 
     const newRows = [];
-    const threads = vm.runtime.threads;
     const visitedThreads = new Set();
     const runningThread = getRunningThread();
 
@@ -170,16 +191,42 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         }
       }
 
+      if (isThreadStopped(thread)) {
+        result.push({
+          type: "thread-stopped",
+          depth,
+        });
+      }
+
       return result;
     };
 
-    for (let i = 0; i < threads.length; i++) {
-      const thread = threads[i];
-      // Do not display threads used to update variable and list monitors.
-      if (thread.updateMonitor) {
-        continue;
+    const createThreadListInfo = (threads) => {
+      const result = [];
+      for (let i = 0; i < threads.length; i++) {
+        const thread = threads[i];
+        // Do not display threads used to update variable and list monitors.
+        if (thread.updateMonitor) {
+          continue;
+        }
+        concatInPlace(result, createThreadInfo(thread, 0));
       }
-      concatInPlace(newRows, createThreadInfo(thread, 0));
+      return result;
+    };
+
+    const steppingThreads = getSteppingThreads();
+    const runtimeThreads = vm.runtime.threads;
+    if (steppingThreads === runtimeThreads) {
+      concatInPlace(newRows, createThreadListInfo(steppingThreads));
+    } else {
+      // calculate the after-stop-all threads first so that they always appear at the bottom, even if linked to "broadcast and wait" blocks
+      const runtimeThreadRows = createThreadListInfo(runtimeThreads);
+      concatInPlace(newRows, createThreadListInfo(steppingThreads));
+      newRows.push({
+        type: "stop-all-separator",
+        depth: 0,
+      });
+      concatInPlace(newRows, runtimeThreadRows);
     }
 
     logView.rows = newRows;
